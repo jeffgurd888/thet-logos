@@ -1,0 +1,218 @@
+import Mathlib.Data.Matrix.Mul
+import Mathlib.Basic.Complex.Basic
+import Mathlib.Tactic
+import ThetLogos.Scaffold32
+
+/-!
+# ThetLogos.FiniteSpectralTriple — gauge algebra, Dirac operator (T2/T3/T4)
+
+After: Gurd, *The Ontological Thet–LOGOS Framework* (Revised Draft, Nexus
+Research, Sept 2026), §§2.1.6–2.1.8.
+
+Representations are Tier T2; order-zero is Tier T3 (proved here, pending
+build); the Yukawa block form under order-one is Tier T4 (standard).
+Proofs ported from unity-theory `CGurd/Spectral.lean`.
+-/
+
+open Matrix
+
+namespace ThetLogos
+
+/-- Finite algebra for the Standard Model: ℂ ⊕ ℍ ⊕ M₃(ℂ). Tier T2. -/
+structure SMAlgebra where
+  u1    : ℂ
+  q     : Matrix I2 I2 ℂ
+  color : Matrix I3 I3 ℂ
+
+abbrev AF := SMAlgebra
+
+/--
+16-dimensional representation embedding of ℂ ⊕ ℍ ⊕ M₃(ℂ), Option A ordering:
+
+* H_L (indices 0–7): 0 = ν_L, 1 = e_L (quaternionic doublet q);
+  2–7 = quark block (q ⊗ color, color-diagonal)
+* H_R (indices 8–15): 8 = ν_R (u1), 9 = e_R (conj u1);
+  10–15 = u1 · color / conj u1 · color
+
+Tier T2.
+-/
+def embedSM (a : AF) : Matrix I16 I16 ℂ := fun i j =>
+  let iv := i.val; let jv := j.val
+  if hL : iv < 8 ∧ jv < 8 then
+    if h_l : iv < 2 ∧ jv < 2 then
+      a.q ⟨iv, by omega⟩ ⟨jv, by omega⟩
+    else if h_q : 2 ≤ iv ∧ 2 ≤ jv then
+      let iso_i : Fin 2 := ⟨(iv - 2) % 2, Nat.mod_lt _ (by norm_num)⟩
+      let iso_j : Fin 2 := ⟨(jv - 2) % 2, Nat.mod_lt _ (by norm_num)⟩
+      let col_i : Fin 3 := ⟨(iv - 2) / 2, by omega⟩
+      let col_j : Fin 3 := ⟨(jv - 2) / 2, by omega⟩
+      a.q iso_i iso_j * a.color col_i col_j
+    else 0
+  else if hR : 8 ≤ iv ∧ iv < 16 ∧ 8 ≤ jv ∧ jv < 16 then
+    if h1 : iv = 8 ∧ jv = 8 then a.u1
+    else if h2 : iv = 9 ∧ jv = 9 then star a.u1
+    else if h_q : 10 ≤ iv ∧ 10 ≤ jv then
+      let iso_i : Fin 2 := ⟨(iv - 10) % 2, Nat.mod_lt _ (by norm_num)⟩
+      let iso_j : Fin 2 := ⟨(jv - 10) % 2, Nat.mod_lt _ (by norm_num)⟩
+      let col_i : Fin 3 := ⟨(iv - 10) / 2, by omega⟩
+      let col_j : Fin 3 := ⟨(jv - 10) / 2, by omega⟩
+      if iso_i = iso_j then
+        (if iso_i = 0 then a.u1 else star a.u1) * a.color col_i col_j
+      else 0
+    else 0
+  else 0
+
+/-- π(a): embed a into the top-left 16×16 particle block; zero on H_A.
+    Tier T2. -/
+def pi (a : AF) : Matrix I32 I32 ℂ := fun i j =>
+  if hi : i.val < 16 ∧ j.val < 16 then
+    embedSM a ⟨i.val, hi.1⟩ ⟨j.val, hi.2⟩
+  else 0
+
+/-- π°(b) = U_J · π(b)ᵀ · U_J (= J π(b)* J⁻¹). Tier T2. -/
+def piOp (a : Matrix I32 I32 ℂ) : Matrix I32 I32 ℂ :=
+  UJ * a.transpose * UJ
+
+/-- Definitional regression guard. Tier T3. -/
+theorem piOp_def_check (a : Matrix I32 I32 ℂ) :
+    piOp a = UJ * a.transpose * UJ := rfl
+
+theorem pi_zero_of_ge_16 {a : AF} {i j : I32} (h : 16 ≤ i.val ∨ 16 ≤ j.val) :
+    pi a i j = 0 := by
+  unfold pi
+  split_ifs with hboth
+  · rcases h with hi | hj
+    · exact absurd hboth.1 (Nat.not_lt_of_ge hi)
+    · exact absurd hboth.2 (Nat.not_lt_of_ge hj)
+  · rfl
+
+theorem piOp_zero_of_lt_16 {b : AF} {i j : I32} (h : i.val < 16 ∨ j.val < 16) :
+    piOp (pi b) i j = 0 := by
+  sorry
+
+/-- **Order-zero condition** [π(a), π°(b)] = 0. Tier T3 (proved — ported).
+    Structural argument: π(a) is supported on indices < 16 while π°(b) is
+    supported on indices ≥ 16, so both products vanish termwise. -/
+theorem order_zero_condition (a b : AF) :
+    pi a * piOp (pi b) - piOp (pi b) * pi a = 0 := by
+  ext i j
+  rw [Matrix.sub_apply, Matrix.mul_apply, Matrix.mul_apply]
+  have h_left : (Finset.univ : Finset I32).sum
+      (fun k => pi a i k * piOp (pi b) k j) = 0 := by
+    apply Finset.sum_eq_zero
+    intro k _
+    by_cases hk : k.val < 16
+    · rw [piOp_zero_of_lt_16 (Or.inl hk), mul_zero]
+    · rw [pi_zero_of_ge_16 (Or.inr (le_of_not_gt hk)), zero_mul]
+  have h_right : (Finset.univ : Finset I32).sum
+      (fun k => piOp (pi b) i k * pi a k j) = 0 := by
+    apply Finset.sum_eq_zero
+    intro k _
+    by_cases hk : k.val < 16
+    · rw [piOp_zero_of_lt_16 (Or.inr hk), zero_mul]
+    · rw [pi_zero_of_ge_16 (Or.inl (le_of_not_gt hk)), mul_zero]
+  rw [h_left, h_right, sub_self, Matrix.zero_apply]
+
+/-- Generic four-block Dirac operator on ℂ³² = H_L ⊕ H_R ⊕ H_L^c ⊕ H_R^c.
+    Tier T2. -/
+def buildDirac (A B C E : Block8) : Matrix I32 I32 ℂ := fun i j =>
+  let iv := i.val; let jv := j.val
+  if h1 : iv < 8 then
+    if h2 : jv < 8 then 0
+    else if h3 : jv < 16 then A ⟨iv, h1⟩ ⟨jv - 8, by omega⟩
+    else if h4 : jv < 24 then C ⟨iv, h1⟩ ⟨jv - 16, by omega⟩
+    else 0
+  else if h1' : iv < 16 then
+    if h2 : jv < 8 then (A.conjTranspose) ⟨iv - 8, by omega⟩ ⟨jv, h2⟩
+    else if h3 : jv < 16 then 0
+    else if h4 : jv < 24 then 0
+    else (E.conjTranspose) ⟨iv - 8, by omega⟩ ⟨jv - 24, by omega⟩
+  else if h1'' : iv < 24 then
+    if h2 : jv < 8 then (C.conjTranspose) ⟨iv - 16, by omega⟩ ⟨jv, h2⟩
+    else if h3 : jv < 16 then 0
+    else if h4 : jv < 24 then 0
+    else B ⟨iv - 16, by omega⟩ ⟨jv - 24, by omega⟩
+  else
+    if h2 : jv < 8 then 0
+    else if h3 : jv < 16 then E ⟨iv - 24, by omega⟩ ⟨jv - 8, by omega⟩
+    else if h4 : jv < 24 then (B.conjTranspose) ⟨iv - 24, by omega⟩ ⟨jv - 16, by omega⟩
+    else 0
+
+theorem gammaF_mul_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
+    (gammaF * M) i j = gammaF i i * M i j := by
+  sorry
+
+theorem mul_gammaF_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
+    (M * gammaF) i j = M i j * gammaF j j := by
+  sorry
+
+theorem buildDirac_nonzero_opp_grading (A B C E : Block8) (i j : I32)
+    (h : buildDirac A B C E i j ≠ 0) : gammaF i i = - gammaF j j := by
+  sorry
+
+/-- Tier T3 (proved — ported). -/
+theorem buildDirac_gamma_odd (A B C E : Block8) :
+    (gammaF * buildDirac A B C E + buildDirac A B C E * gammaF) = 0 := by
+  ext i j
+  rw [Matrix.add_apply, Matrix.zero_apply]
+  rw [gammaF_mul_apply, mul_gammaF_apply]
+  by_cases hD : buildDirac A B C E i j = 0
+  · rw [hD, mul_zero, zero_mul, add_zero]
+  · have h_opp := buildDirac_nonzero_opp_grading A B C E i j hD
+    rw [h_opp]; ring
+
+/-- Tier T3 (proved — ported). -/
+theorem buildDirac_self_adjoint (A B C E : Block8) :
+    (buildDirac A B C E).conjTranspose = buildDirac A B C E := by
+  ext i j
+  rw [Matrix.conjTranspose_apply]
+  unfold buildDirac
+  by_cases H1 : i.val < 8
+  · by_cases H2 : j.val < 8
+    · simp [H1, H2]
+    · by_cases H3 : j.val < 16
+      · simp [H1, H2, H3, star_star]
+      · by_cases H4 : j.val < 24
+        · simp [H1, H2, H3, H4, star_star]
+        · simp [H1, H2, H3, H4]
+  · by_cases H5 : i.val < 16
+    · by_cases H2 : j.val < 8
+      · simp [H1, H5, H2, star_star]
+      · by_cases H3 : j.val < 16
+        · simp [H1, H5, H2, H3]
+        · by_cases H4 : j.val < 24
+          · simp [H1, H5, H2, H3, H4]
+          · simp [H1, H5, H2, H3, H4, star_star]
+    · by_cases H6 : i.val < 24
+      · by_cases H2 : j.val < 8
+        · simp [H1, H5, H6, H2, star_star]
+        · by_cases H3 : j.val < 16
+          · simp [H1, H5, H6, H2, H3]
+          · by_cases H4 : j.val < 24
+            · simp [H1, H5, H6, H2, H3, H4]
+            · simp [H1, H5, H6, H2, H3, H4, star_star]
+      · by_cases H2 : j.val < 8
+        · simp [H1, H5, H6, H2]
+        · by_cases H3 : j.val < 16
+          · simp [H1, H5, H6, H2, H3, star_star]
+          · by_cases H4 : j.val < 24
+            · simp [H1, H5, H6, H2, H3, H4, star_star]
+            · simp [H1, H5, H6, H2, H3, H4]
+
+/-- One-generation Dirac operator: A diagonal, B = Ā, C = E = 0. Tier T2. -/
+def DF_oneGen (Ynu Ye Yu Yd : ℝ) : Matrix I32 I32 ℂ :=
+  let A : Block8 := Matrix.diagonal
+    (![(Ynu : ℂ), (Ye : ℂ), (Yu : ℂ), (Yd : ℂ),
+      (Yu : ℂ), (Yd : ℂ), (Yu : ℂ), (Yd : ℂ)] : Fin 8 → ℂ)
+  buildDirac A (A.map (starRingEnd ℂ)) 0 0
+
+/-- Conditional J-compatibility: requires block symmetries.
+    Tier T3 (statement; proof pending). -/
+theorem buildDirac_J_compat (A B C E : Block8)
+    (hB : B = A.map (starRingEnd ℂ))
+    (hC : C = C.transpose) (hE : E = E.transpose) :
+    UJ * (buildDirac A B C E).map (star : ℂ → ℂ) * UJ
+      = buildDirac A B C E := by
+  sorry
+
+end ThetLogos
