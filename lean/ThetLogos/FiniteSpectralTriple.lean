@@ -198,9 +198,73 @@ theorem mul_gammaF_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
   · intro hcon
     exact absurd (Finset.mem_univ j) hcon
 
+/-- Nonzero Dirac entries connect opposite grading eigenspaces.
+    Tier T3 — proven in Lean; depends only on the standard axioms. -/
 theorem buildDirac_nonzero_opp_grading (A B C E : Block8) (i j : I32)
     (h : buildDirac A B C E i j ≠ 0) : gammaF i i = - gammaF j j := by
-  sorry
+  by_cases H1 : i.val < 8
+  · by_cases H2 : j.val < 8
+    · have h0 : buildDirac A B C E i j = 0 := by
+        unfold buildDirac; simp [H1, H2]
+      exact absurd h0 h
+    · by_cases H3 : j.val < 16
+      · have gi : gammaF i i = 1 := by unfold gammaF; simp [H1]
+        have gj : gammaF j j = -1 := by unfold gammaF; simp [H2, H3]
+        norm_num [gi, gj]
+      · by_cases H4 : j.val < 24
+        · have gi : gammaF i i = 1 := by unfold gammaF; simp [H1]
+          have gj : gammaF j j = -1 := by unfold gammaF; simp [H2, H3, H4]
+          norm_num [gi, gj]
+        · have h0 : buildDirac A B C E i j = 0 := by
+            unfold buildDirac; simp [H1, H2, H3, H4]
+          exact absurd h0 h
+  · by_cases H5 : i.val < 16
+    · by_cases H2 : j.val < 8
+      · have gi : gammaF i i = -1 := by unfold gammaF; simp [H1, H5]
+        have gj : gammaF j j = 1 := by unfold gammaF; simp [H2]
+        norm_num [gi, gj]
+      · by_cases H3 : j.val < 16
+        · have h0 : buildDirac A B C E i j = 0 := by
+            unfold buildDirac; simp [H1, H5, H2, H3]
+          exact absurd h0 h
+        · by_cases H4 : j.val < 24
+          · have h0 : buildDirac A B C E i j = 0 := by
+              unfold buildDirac; simp [H1, H5, H2, H3, H4]
+            exact absurd h0 h
+          · have gi : gammaF i i = -1 := by unfold gammaF; simp [H1, H5]
+            have gj : gammaF j j = 1 := by unfold gammaF; simp [H2, H3, H4]
+            norm_num [gi, gj]
+    · by_cases H6 : i.val < 24
+      · by_cases H2 : j.val < 8
+        · have gi : gammaF i i = -1 := by unfold gammaF; simp [H1, H5, H6]
+          have gj : gammaF j j = 1 := by unfold gammaF; simp [H2]
+          norm_num [gi, gj]
+        · by_cases H3 : j.val < 16
+          · have h0 : buildDirac A B C E i j = 0 := by
+              unfold buildDirac; simp [H1, H5, H6, H2, H3]
+            exact absurd h0 h
+          · by_cases H4 : j.val < 24
+            · have h0 : buildDirac A B C E i j = 0 := by
+                unfold buildDirac; simp [H1, H5, H6, H2, H3, H4]
+              exact absurd h0 h
+            · have gi : gammaF i i = -1 := by unfold gammaF; simp [H1, H5, H6]
+              have gj : gammaF j j = 1 := by unfold gammaF; simp [H2, H3, H4]
+              norm_num [gi, gj]
+      · by_cases H2 : j.val < 8
+        · have h0 : buildDirac A B C E i j = 0 := by
+            unfold buildDirac; simp [H1, H5, H6, H2]
+          exact absurd h0 h
+        · by_cases H3 : j.val < 16
+          · have gi : gammaF i i = 1 := by unfold gammaF; simp [H1, H5, H6]
+            have gj : gammaF j j = -1 := by unfold gammaF; simp [H2, H3]
+            norm_num [gi, gj]
+          · by_cases H4 : j.val < 24
+            · have gi : gammaF i i = 1 := by unfold gammaF; simp [H1, H5, H6]
+              have gj : gammaF j j = -1 := by unfold gammaF; simp [H2, H3, H4]
+              norm_num [gi, gj]
+            · have h0 : buildDirac A B C E i j = 0 := by
+                unfold buildDirac; simp [H1, H5, H6, H2, H3, H4]
+              exact absurd h0 h
 
 /-- Tier T3 (proved — ported). -/
 theorem buildDirac_gamma_odd (A B C E : Block8) :
