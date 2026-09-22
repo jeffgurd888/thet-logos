@@ -184,11 +184,19 @@ def buildDirac (A B C E : Block8) : Matrix I32 I32 ℂ := fun i j =>
 
 theorem gammaF_mul_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
     (gammaF * M) i j = gammaF i i * M i j := by
-  sorry
+  rw [Matrix.mul_apply, Finset.sum_eq_single i]
+  · intro k _ hki
+    rw [gammaF_apply_ne (Ne.symm hki), zero_mul]
+  · intro hcon
+    exact absurd (Finset.mem_univ i) hcon
 
 theorem mul_gammaF_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
     (M * gammaF) i j = M i j * gammaF j j := by
-  sorry
+  rw [Matrix.mul_apply, Finset.sum_eq_single j]
+  · intro k _ hkj
+    rw [gammaF_apply_ne hkj, mul_zero]
+  · intro hcon
+    exact absurd (Finset.mem_univ j) hcon
 
 theorem buildDirac_nonzero_opp_grading (A B C E : Block8) (i j : I32)
     (h : buildDirac A B C E i j ≠ 0) : gammaF i i = - gammaF j j := by
