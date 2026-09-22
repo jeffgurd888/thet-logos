@@ -288,12 +288,197 @@ def DF_oneGen (Ynu Ye Yu Yd : ℝ) : Matrix I32 I32 ℂ :=
   buildDirac A (A.map (starRingEnd ℂ)) 0 0
 
 /-- Conditional J-compatibility: requires block symmetries.
-    Tier T3 (statement; proof pending). -/
+    Proved by 16-case analysis using UJ_conj_apply. -/
 theorem buildDirac_J_compat (A B C E : Block8)
     (hB : B = A.map (starRingEnd ℂ))
     (hC : C = C.transpose) (hE : E = E.transpose) :
     UJ * (buildDirac A B C E).map (star : ℂ → ℂ) * UJ
       = buildDirac A B C E := by
-  sorry
+  have hCsym : ∀ a b : Fin 8, C a b = C b a := by
+    intro a b
+    conv_lhs => rw [hC]
+    rw [Matrix.transpose_apply]
+  have hEsym : ∀ a b : Fin 8, E a b = E b a := by
+    intro a b
+    conv_lhs => rw [hE]
+    rw [Matrix.transpose_apply]
+  ext i j
+  rw [UJ_conj_apply, Matrix.map_apply]
+  by_cases H1 : i.val < 8
+  · have hpi : (partner i).val = i.val + 16 := by
+      rw [partner_val_eq, ite_eq_left (show i.val < 16 by omega)]
+    have e1 : ¬ (i.val + 16) < 8 := by omega
+    have e2 : ¬ (i.val + 16) < 16 := by omega
+    have e3 : (i.val + 16) < 24 := by omega
+    by_cases H2 : j.val < 8
+    · -- (0,0)
+      have hpj : (partner j).val = j.val + 16 := by
+        rw [partner_val_eq, ite_eq_left (show j.val < 16 by omega)]
+      have f1 : ¬ (j.val + 16) < 8 := by omega
+      have f2 : ¬ (j.val + 16) < 16 := by omega
+      have f3 : (j.val + 16) < 24 := by omega
+      unfold buildDirac
+      simp only [hpi, hpj] at *
+      simp [H1, H2, e1, e2, e3, f1, f2, f3]
+    · by_cases H3 : j.val < 16
+      · -- (0,1)
+        have hpj : (partner j).val = j.val + 16 := by
+          rw [partner_val_eq, ite_eq_left H3]
+        have f1 : ¬ (j.val + 16) < 8 := by omega
+        have f2 : ¬ (j.val + 16) < 16 := by omega
+        have f3 : ¬ (j.val + 16) < 24 := by omega
+        unfold buildDirac
+        simp only [hpi, hpj] at *
+        simp [H1, H2, H3, e1, e2, e3, f1, f2, f3]
+        simp only [hB, Matrix.map_apply, starRingEnd_apply, star_star]
+      · by_cases H4 : j.val < 24
+        · -- (0,2)
+          have hpj : (partner j).val = j.val - 16 := by
+            rw [partner_val_eq, ite_eq_right (show ¬ j.val < 16 by omega)]
+          have f1 : (j.val - 16) < 8 := by omega
+          unfold buildDirac
+          simp only [hpi, hpj] at *
+          simp [H1, H2, H3, H4, e1, e2, e3, f1]
+          exact hCsym _ _
+        · -- (0,3)
+          have hpj : (partner j).val = j.val - 16 := by
+            rw [partner_val_eq, ite_eq_right (show ¬ j.val < 16 by omega)]
+          have f1 : ¬ (j.val - 16) < 8 := by omega
+          have f2 : (j.val - 16) < 16 := by omega
+          unfold buildDirac
+          simp only [hpi, hpj] at *
+          simp [H1, H2, H3, H4, e1, e2, e3, f1, f2]
+  · by_cases H5 : i.val < 16
+    · have hpi : (partner i).val = i.val + 16 := by
+        rw [partner_val_eq, ite_eq_left H5]
+      have e1 : ¬ (i.val + 16) < 8 := by omega
+      have e2 : ¬ (i.val + 16) < 16 := by omega
+      have e3 : ¬ (i.val + 16) < 24 := by omega
+      by_cases H2 : j.val < 8
+      · -- (1,0)
+        have hpj : (partner j).val = j.val + 16 := by
+          rw [partner_val_eq, ite_eq_left (show j.val < 16 by omega)]
+        have f1 : ¬ (j.val + 16) < 8 := by omega
+        have f2 : ¬ (j.val + 16) < 16 := by omega
+        have f3 : (j.val + 16) < 24 := by omega
+        unfold buildDirac
+        simp only [hpi, hpj] at *
+        simp [H1, H5, H2, e1, e2, e3, f1, f2, f3]
+        simp only [hB, Matrix.map_apply, starRingEnd_apply]
+      · by_cases H3 : j.val < 16
+        · -- (1,1)
+          have hpj : (partner j).val = j.val + 16 := by
+            rw [partner_val_eq, ite_eq_left H3]
+          have f1 : ¬ (j.val + 16) < 8 := by omega
+          have f2 : ¬ (j.val + 16) < 16 := by omega
+          have f3 : ¬ (j.val + 16) < 24 := by omega
+          unfold buildDirac
+          simp only [hpi, hpj] at *
+          simp [H1, H5, H2, H3, e1, e2, e3, f1, f2, f3]
+        · by_cases H4 : j.val < 24
+          · -- (1,2)
+            have hpj : (partner j).val = j.val - 16 := by
+              rw [partner_val_eq, ite_eq_right (show ¬ j.val < 16 by omega)]
+            have f1 : (j.val - 16) < 8 := by omega
+            unfold buildDirac
+            simp only [hpi, hpj] at *
+            simp [H1, H5, H2, H3, H4, e1, e2, e3, f1]
+          · -- (1,3)
+            have hpj : (partner j).val = j.val - 16 := by
+              rw [partner_val_eq, ite_eq_right (show ¬ j.val < 16 by omega)]
+            have f1 : ¬ (j.val - 16) < 8 := by omega
+            have f2 : (j.val - 16) < 16 := by omega
+            have hidx : (j.val - 16) - 8 = j.val - 24 := by omega
+            unfold buildDirac
+            simp only [hpi, hpj] at *
+            simp [H1, H5, H2, H3, H4, e1, e2, e3, f1, f2, hidx]
+            exact congrArg star (hEsym _ _)
+    · by_cases H6 : i.val < 24
+      · have hpi : (partner i).val = i.val - 16 := by
+          rw [partner_val_eq, ite_eq_right (show ¬ i.val < 16 by omega)]
+        have e1 : (i.val - 16) < 8 := by omega
+        by_cases H2 : j.val < 8
+        · -- (2,0)
+          have hpj : (partner j).val = j.val + 16 := by
+            rw [partner_val_eq, ite_eq_left (show j.val < 16 by omega)]
+          have f1 : ¬ (j.val + 16) < 8 := by omega
+          have f2 : ¬ (j.val + 16) < 16 := by omega
+          have f3 : (j.val + 16) < 24 := by omega
+          unfold buildDirac
+          simp only [hpi, hpj] at *
+          simp [H1, H5, H6, H2, e1, f1, f2, f3]
+          exact congrArg star (hCsym _ _)
+        · by_cases H3 : j.val < 16
+          · -- (2,1)
+            have hpj : (partner j).val = j.val + 16 := by
+              rw [partner_val_eq, ite_eq_left H3]
+            have f1 : ¬ (j.val + 16) < 8 := by omega
+            have f2 : ¬ (j.val + 16) < 16 := by omega
+            have f3 : ¬ (j.val + 16) < 24 := by omega
+            unfold buildDirac
+            simp only [hpi, hpj] at *
+            simp [H1, H5, H6, H2, H3, e1, f1, f2, f3]
+          · by_cases H4 : j.val < 24
+            · -- (2,2)
+              have hpj : (partner j).val = j.val - 16 := by
+                rw [partner_val_eq, ite_eq_right (show ¬ j.val < 16 by omega)]
+              have f1 : (j.val - 16) < 8 := by omega
+              unfold buildDirac
+              simp only [hpi, hpj] at *
+              simp [H1, H5, H6, H2, H3, H4, e1, f1]
+            · -- (2,3)
+              have hpj : (partner j).val = j.val - 16 := by
+                rw [partner_val_eq, ite_eq_right (show ¬ j.val < 16 by omega)]
+              have f1 : ¬ (j.val - 16) < 8 := by omega
+              have f2 : (j.val - 16) < 16 := by omega
+              have hidx : (j.val - 16) - 8 = j.val - 24 := by omega
+              unfold buildDirac
+              simp only [hpi, hpj] at *
+              simp [H1, H5, H6, H2, H3, H4, e1, f1, f2, hidx]
+              simp only [hB, Matrix.map_apply]
+      · have hpi : (partner i).val = i.val - 16 := by
+          rw [partner_val_eq, ite_eq_right (show ¬ i.val < 16 by omega)]
+        have e1 : ¬ (i.val - 16) < 8 := by omega
+        have e2 : (i.val - 16) < 16 := by omega
+        by_cases H2 : j.val < 8
+        · -- (3,0)
+          have hpj : (partner j).val = j.val + 16 := by
+            rw [partner_val_eq, ite_eq_left (show j.val < 16 by omega)]
+          have f1 : ¬ (j.val + 16) < 8 := by omega
+          have f2 : ¬ (j.val + 16) < 16 := by omega
+          have f3 : (j.val + 16) < 24 := by omega
+          unfold buildDirac
+          simp only [hpi, hpj] at *
+          simp [H1, H5, H6, H2, e1, e2, f1, f2, f3]
+        · by_cases H3 : j.val < 16
+          · -- (3,1)
+            have hpj : (partner j).val = j.val + 16 := by
+              rw [partner_val_eq, ite_eq_left H3]
+            have f1 : ¬ (j.val + 16) < 8 := by omega
+            have f2 : ¬ (j.val + 16) < 16 := by omega
+            have f3 : ¬ (j.val + 16) < 24 := by omega
+            have hidx : (i.val - 16) - 8 = i.val - 24 := by omega
+            unfold buildDirac
+            simp only [hpi, hpj] at *
+            simp [H1, H5, H6, H2, H3, e1, e2, f1, f2, f3, hidx]
+            exact hEsym _ _
+          · by_cases H4 : j.val < 24
+            · -- (3,2)
+              have hpj : (partner j).val = j.val - 16 := by
+                rw [partner_val_eq, ite_eq_right (show ¬ j.val < 16 by omega)]
+              have f1 : (j.val - 16) < 8 := by omega
+              have hidx : (i.val - 16) - 8 = i.val - 24 := by omega
+              unfold buildDirac
+              simp only [hpi, hpj] at *
+              simp [H1, H5, H6, H2, H3, H4, e1, e2, f1, hidx]
+              simp only [star_star, hB, Matrix.map_apply, starRingEnd_apply]
+            · -- (3,3)
+              have hpj : (partner j).val = j.val - 16 := by
+                rw [partner_val_eq, ite_eq_right (show ¬ j.val < 16 by omega)]
+              have f1 : ¬ (j.val - 16) < 8 := by omega
+              have f2 : (j.val - 16) < 16 := by omega
+              unfold buildDirac
+              simp only [hpi, hpj] at *
+              simp [H1, H5, H6, H2, H3, H4, e1, e2, f1, f2]
 
 end ThetLogos
