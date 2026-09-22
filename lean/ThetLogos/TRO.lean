@@ -35,11 +35,11 @@ theorem ternary_assoc_scalar' (a b c d e : ℂ) :
   simp only [ternary, star_mul, star_star]
   ring
 
-/-- TRO associativity for complex matrices. Tier T3 (statement; the
-    entrywise proof is future work — cf. "complete Lean archive", T5). -/
+/-- TRO associativity for complex matrices. Tier T3 (proved). -/
 theorem ternaryMat_assoc {n : ℕ} (a b c d e : Matrix (Fin n) (Fin n) ℂ) :
     ternaryMat (ternaryMat a b c) d e = ternaryMat a (ternaryMat d c b) e := by
-  sorry
+  simp only [ternaryMat, Matrix.conjTranspose_mul,
+    Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
 
 /-- Abstract TRO class: associativity law as fields. Tier T2/T3. -/
 class IsTRO (T : Type*) [Mul T] [Star T] where
