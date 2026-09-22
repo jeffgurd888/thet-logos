@@ -49,6 +49,41 @@ def UJ : Matrix I32 I32 ℂ := fun i j => UJ_matrix i j
 
 @[simp] theorem UJ_apply (i j : I32) : UJ i j = UJ_matrix i j := rfl
 
+/-- UJ-conjugation permutes matrix indices by the partner involution.
+    Tier T3 — proven in Lean; depends only on the standard axioms. -/
+theorem UJ_conj_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
+    (UJ * M * UJ) i j = M (partner i) (partner j) := by
+  have hzero : ∀ a b : I32, b ≠ partner a → UJ a b = 0 := by
+    intro a b hab
+    rw [UJ_apply]
+    unfold UJ_matrix
+    exact ite_eq_right hab
+  have hone : ∀ a : I32, UJ a (partner a) = 1 := by
+    intro a
+    rw [UJ_apply]
+    unfold UJ_matrix
+    exact ite_eq_left rfl
+  have hone' : ∀ a : I32, UJ (partner a) a = 1 := by
+    intro a
+    rw [UJ_apply]
+    unfold UJ_matrix
+    exact ite_eq_left (partner_involutive a).symm
+  rw [Matrix.mul_apply, Finset.sum_eq_single (partner j)]
+  · rw [Matrix.mul_apply, Finset.sum_eq_single (partner i)]
+    · rw [hone i, hone' j, one_mul, mul_one]
+    · intro l _ hl
+      rw [hzero i l hl, zero_mul]
+    · intro hcon
+      exact absurd (Finset.mem_univ (partner i)) hcon
+  · intro k _ hkj
+    have hkj2 : j ≠ partner k := by
+      intro hcon
+      apply hkj
+      rw [hcon, partner_involutive]
+    rw [hzero k j hkj2, mul_zero]
+  · intro hcon
+    exact absurd (Finset.mem_univ (partner j)) hcon
+
 /-- Grading γ_F = diag(+I₈, -I₈, -I₈, +I₈) on (H_L, H_R, H_L^c, H_R^c).
     Tier T2. -/
 def gammaF : Matrix I32 I32 ℂ := fun i j =>
@@ -134,9 +169,65 @@ theorem UJ_mul_self : UJ * UJ = 1 := by
       rw [h0, zero_mul]
 
 /-- KO-dim 6 real-structure grading sign: U_J · star(γ_F) · U_J = -γ_F.
-    Tier T3 (statement; proof pending — the ported case analysis needs
-    rework for the current Mathlib; cf. "complete Lean archive", T5). -/
+    Tier T3 — proven in Lean; depends only on the standard axioms. -/
 theorem UJ_gamma_anticomm :
     UJ * gammaF.map (star : ℂ → ℂ) * UJ = -gammaF := by
-  sorry
+  ext i j
+  rw [UJ_conj_apply, Matrix.map_apply, Matrix.neg_apply]
+  by_cases hij : i = j
+  · subst hij
+    by_cases h1 : i.val < 8
+    · have h16 : i.val < 16 := by omega
+      have hpeq : (partner i).val = i.val + 16 := by
+        rw [partner_val_eq, ite_eq_left h16]
+      have gi : gammaF i i = 1 := by unfold gammaF; simp [h1]
+      have gp : gammaF (partner i) (partner i) = -1 := by
+        have e1 : ¬ (partner i).val < 8 := by omega
+        have e2 : ¬ (partner i).val < 16 := by omega
+        have e3 : (partner i).val < 24 := by omega
+        unfold gammaF
+        rw [dite_eq_ite, ite_eq_left rfl, ite_eq_right e1, ite_eq_right e2,
+          ite_eq_left e3]
+      rw [gp, gi]
+      simp
+    · by_cases h5 : i.val < 16
+      · have hpeq : (partner i).val = i.val + 16 := by
+          rw [partner_val_eq, ite_eq_left h5]
+        have gi : gammaF i i = -1 := by unfold gammaF; simp [h1, h5]
+        have gp : gammaF (partner i) (partner i) = 1 := by
+          have e1 : ¬ (partner i).val < 8 := by omega
+          have e2 : ¬ (partner i).val < 16 := by omega
+          have e3 : ¬ (partner i).val < 24 := by omega
+          unfold gammaF
+          rw [dite_eq_ite, ite_eq_left rfl, ite_eq_right e1, ite_eq_right e2,
+            ite_eq_right e3]
+        rw [gp, gi]
+        simp
+      · by_cases h6 : i.val < 24
+        · have hpeq : (partner i).val = i.val - 16 := by
+            rw [partner_val_eq, ite_eq_right h5]
+          have gi : gammaF i i = -1 := by unfold gammaF; simp [h1, h5, h6]
+          have gp : gammaF (partner i) (partner i) = 1 := by
+            have e1 : (partner i).val < 8 := by omega
+            unfold gammaF
+            rw [dite_eq_ite, ite_eq_left rfl, ite_eq_left e1]
+          rw [gp, gi]
+          simp
+        · have hpeq : (partner i).val = i.val - 16 := by
+            rw [partner_val_eq, ite_eq_right h5]
+          have gi : gammaF i i = 1 := by unfold gammaF; simp [h1, h5, h6]
+          have gp : gammaF (partner i) (partner i) = -1 := by
+            have e1 : ¬ (partner i).val < 8 := by omega
+            have e2 : (partner i).val < 16 := by omega
+            unfold gammaF
+            rw [dite_eq_ite, ite_eq_left rfl, ite_eq_right e1, ite_eq_left e2]
+          rw [gp, gi]
+          simp
+  · have hpij : partner i ≠ partner j := by
+      intro hcon
+      apply hij
+      have h2 := congrArg partner hcon
+      rwa [partner_involutive, partner_involutive] at h2
+    rw [gammaF_apply_ne hpij, gammaF_apply_ne hij]
+    simp
 end ThetLogos

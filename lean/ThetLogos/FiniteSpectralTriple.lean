@@ -86,41 +86,6 @@ theorem pi_zero_of_ge_16 {a : AF} {i j : I32} (h : 16 ≤ i.val ∨ 16 ≤ j.val
     · exact absurd hboth.2 (Nat.not_lt_of_ge hj)
   · rfl
 
-/-- UJ-conjugation permutes matrix indices by the partner involution.
-    Tier T3 — proven in Lean; depends only on the standard axioms. -/
-theorem UJ_conj_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
-    (UJ * M * UJ) i j = M (partner i) (partner j) := by
-  have hzero : ∀ a b : I32, b ≠ partner a → UJ a b = 0 := by
-    intro a b hab
-    rw [UJ_apply]
-    unfold UJ_matrix
-    exact ite_eq_right hab
-  have hone : ∀ a : I32, UJ a (partner a) = 1 := by
-    intro a
-    rw [UJ_apply]
-    unfold UJ_matrix
-    exact ite_eq_left rfl
-  have hone' : ∀ a : I32, UJ (partner a) a = 1 := by
-    intro a
-    rw [UJ_apply]
-    unfold UJ_matrix
-    exact ite_eq_left (partner_involutive a).symm
-  rw [Matrix.mul_apply, Finset.sum_eq_single (partner j)]
-  · rw [Matrix.mul_apply, Finset.sum_eq_single (partner i)]
-    · rw [hone i, hone' j, one_mul, mul_one]
-    · intro l _ hl
-      rw [hzero i l hl, zero_mul]
-    · intro hcon
-      exact absurd (Finset.mem_univ (partner i)) hcon
-  · intro k _ hkj
-    have hkj2 : j ≠ partner k := by
-      intro hcon
-      apply hkj
-      rw [hcon, partner_involutive]
-    rw [hzero k j hkj2, mul_zero]
-  · intro hcon
-    exact absurd (Finset.mem_univ (partner j)) hcon
-
 theorem piOp_zero_of_lt_16 {b : AF} {i j : I32} (h : i.val < 16 ∨ j.val < 16) :
     piOp (pi b) i j = 0 := by
   have hpi : ∀ k : I32, k.val < 16 → 16 ≤ (partner k).val := by
