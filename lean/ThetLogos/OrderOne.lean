@@ -9,9 +9,11 @@ import ThetLogos.FiniteSpectralTriple
 After: Gurd, *The Ontological Thet–LOGOS Framework* (Revised Draft, Nexus
 Research, Sept 2026), §2.1.8.
 
-- The single-probe reduction is Tier T3 (numerical check in
-  `examples/order_one_probe.py`); its Lean statement is proof-pending
-  AND MAY BE FALSE AS FORMULATED (see warning on `order_one_probe`).
+- The single-probe reduction was Tier T3, but the Lean statement
+  (`order_one_probe`) was FALSE and has been REMOVED (2026-09-22).
+  Counterexample documented in the file. The numerical check in
+  `examples/order_one_probe.py` uses a different probe and does not
+  establish the converse.
 - The vanishing of C, E and the Yukawa block form are Tier T4
   (standard one-generation NCG; no new mass predictions claimed).
 - The full 576-pair condition is Tier T5 ("complete Lean archive").
@@ -75,21 +77,21 @@ def Pplus : Matrix I32 I32 ℂ := fun i j =>
 def Pminus : Matrix I32 I32 ℂ := fun i j =>
   if i = j ∧ 16 ≤ i.val then 1 else 0
 
-/-- Single-probe order-one: [[D_F, P₊], P₋] = 0 forces C = E = 0.
-    Tier T3 (statement; numerical check in `examples/order_one_probe.py`).
+/- REMOVED (2026-09-22): `order_one_probe` claimed that a vanishing single
+    ⟨1,0,0⟩ commutator forces `C = 0 ∧ E = 0`. This is FALSE.
 
-    WARNING (2026-09-22): This statement is NOT VERIFIED and may be FALSE as
-    formulated. The numerical check in `examples/order_one_probe.py` uses a
-    DIFFERENT probe ([[D,P+],P-] with 16×16 projectors, not the ⟨1,0,0⟩
-    commutator stated here) and only verifies the FORWARD direction
-    (nonzero C,E → nonzero probe) on random instances. It does NOT establish
-    the CONVERSE claimed here (vanishing single ⟨1,0,0⟩ commutator → C=E=0).
-    A single 32×32 matrix equation is unlikely to force 128 complex parameters
-    (C,E blocks) to vanish. Do not treat this as established. -/
-theorem order_one_probe (A B C E : Block8)
-    (h : orderOneComm (buildDirac A B C E) ⟨1, 0, 0⟩ ⟨1, 0, 0⟩ = 0) :
-    C = 0 ∧ E = 0 := by
-  sorry
+    Counterexample: take `A = B = E = 0`, `C = I` (8×8 identity).
+    Then `pi ⟨1,0,0⟩` is supported only on indices {8,9} (the `u1` entries;
+    `q = 0` and `color = 0` kill everything else), and `piOp` moves this to
+    {24,25}. The probe `[[D,P],Q]` therefore only touches rows/cols
+    {8,9,24,25}, i.e. blocks 1↔3 (the E sector). But C lives in blocks
+    (0,2) and (2,0) (rows 0–7/cols 16–23 and rows 16–23/cols 0–7),
+    disjoint from the probe's support. Direct computation gives
+    `[D,P] = 0`, hence the probe vanishes, while `C = I ≠ 0`.
+
+    The ⟨1,0,0⟩ probe is blind to C by construction. No proof is possible.
+    The numerical check in `examples/order_one_probe.py` uses a different
+    probe and does not establish the converse. -/
 
 /-- Tier T4 (standard): under order-one the Dirac operator takes the
     Yukawa block form (A, B = Ā) with C = E = 0, isolating the fermion
