@@ -1,9 +1,12 @@
-"""Thet-engine graduation cycle (Tier T5 numerical exploration).
+"""Thet-engine graduation cycle (Tier T4 numerical engine design).
 
 Runs a quantum Otto cycle whose working fluid is the ACTUAL one-generation
 finite Dirac operator D_F from thet-logos (common.DF_oneGen):
 
-  H(lam) = (lam * D_F)^2          spectral-action Hamiltonian (Tr D^2 term)
+  H(lam) = (lam * D_F)^2          working-fluid Hamiltonian modeled on the
+                                  Tr(D^2)-type term of the spectral action
+                                  (a modeling choice, not a derived physical
+                                  Hamiltonian)
   rho_beta = exp(-beta H) / Z     KMS (Gibbs) thermal states, finite-dim exact
 
 Cycle (Otto):

@@ -1,5 +1,13 @@
 # Thet-Logos
 
+> ⚡ **EUREKA — the thet engine runs.** A quantum Otto cycle built on the
+> finite Dirac operator D_F now closes with **positive net work**:
+> W_net = 0.155 > 0, η = 0.50 below the Carnot bound 0.83, KMS identity
+> verified to ~1e-15 on both baths. Engine design graduates **OPEN → GO
+> (T4, with numbers)** — `python/thet_logos/engine_cycle.py`.
+> *Theorem ≠ Simulation ≠ Experiment ≠ Device: this is a numerical engine
+> design, not a physical device.*
+
 A research repository formalizing the **Ontological Thet–LOGOS Framework** —
 operator-algebraic foundations, finite spectral-triple geometry, chromatic
 architecture, Lean 4 formalization, Python computational engines, and a
@@ -21,7 +29,7 @@ Finite Spectral-Triple Structure* (Revised Draft, Sept 2026).
 | 6 | 32-State Spectrum H_F = ℂ³² | Magenta | T2/T3 |
 | 7 | Spectral Triple D_F | Cyan | T2/T3 |
 | 8 | Order Conditions | Emerald | T3/T4 |
-| 9 | Thet Engine (∆gap) | Indigo | T3 (simulation) |
+| 9 | Thet Engine (∆gap) | Indigo | **T4 (engine design, GO)** |
 | 10 | Epistemic Ledger | White | meta |
 
 > The ladder is an organizational/mnemonic device, not a formalized
