@@ -2,7 +2,7 @@
 import sys
 import traceback
 
-from thet_logos import tro, order_zero, order_one, spectral_gap, modular_flow
+from thet_logos import tro, order_zero, order_one, spectral_gap, modular_flow, engine_cycle
 
 ENGINES = [
     ("tro (TRO identities + tripotent census)", tro.main),
@@ -10,6 +10,7 @@ ENGINES = [
     ("order_one (probes + 576-pair census)", order_one.main),
     ("spectral_gap (Thet Engine simulation)", spectral_gap.main),
     ("modular_flow (thermal time)", modular_flow.main),
+    ("engine_cycle (thet-engine graduation: Otto on D_F^2)", engine_cycle.main),
 ]
 
 

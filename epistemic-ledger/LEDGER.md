@@ -34,6 +34,7 @@ it is a T3 statement, not a proof.
 | KMS cyclicity of Gibbs state | T3 | Numerical (`modular_flow.py`) |
 | Haar-averaged K^G = ∫ π(g)Kπ(g)†dg, Z_F(β) (definitions) | T2 | `spectral/modular-flow.md` |
 | Haar integral implementation | T5 | Open — not implemented |
+| **Thet-engine graduation: quantum Otto cycle on H = D_F²** | **T4** | **GO (engine design)** — `python/thet_logos/engine_cycle.py`: Gibbs/KMS baths at T_c=0.5, T_h=3.0 (KMS identity verified ~1e-15), uniform gap-scaling strokes; W_net = 0.155 > 0, η = 0.50 < η_Carnot = 0.83. Numerical only: Theorem ≠ Simulation ≠ Experiment ≠ Device — no device asserted |
 
 ## Rung 5 — Tripotent Variety
 
