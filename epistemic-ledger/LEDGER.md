@@ -35,6 +35,7 @@ it is a T3 statement, not a proof.
 | Haar-averaged K^G = ∫ π(g)Kπ(g)†dg, Z_F(β) (definitions) | T2 | `spectral/modular-flow.md` |
 | Haar integral implementation | T5 | Open — not implemented |
 | **Thet-engine graduation: quantum Otto cycle on H = D_F²** | **T4** | **GO (engine design)** — `python/thet_logos/engine_cycle.py`: Gibbs/KMS baths at T_c=0.5, T_h=3.0 (KMS identity verified ~1e-15), uniform gap-scaling strokes; W_net = 0.155 > 0, η = 0.50 < η_Carnot = 0.83. Numerical only: Theorem ≠ Simulation ≠ Experiment ≠ Device — no device asserted |
+| **Dynamic density-matrix thermalization (engine #7)** | **T4** | **GO (engine design)** — `python/thet_logos/thermalize.py`: Lindblad evolution of the 32-state ρ(t) with detailed-balance jumps (g_{m→n} = κ/(1+e^{β(E_n−E_m)}), Gibbs stationary to 1.2e-15); pure |E_max⟩ initial state (S=0) thermalizes to ρ_β (S=3.234039 exact, trace_dist 4.4e-16); modular-Hamiltonian clock readout K(t) = −log ρ(t) → β(H−F) (err 5.1e-15); clock-settling time t≈1.0 at κ=1. Numerical only: Theorem ≠ Simulation ≠ Experiment ≠ Device — no device asserted |
 
 ## Rung 5 — Tripotent Variety
 
