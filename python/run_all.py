@@ -2,7 +2,7 @@
 import sys
 import traceback
 
-from thet_logos import tro, order_zero, order_one, spectral_gap, modular_flow, engine_cycle, thermalize
+from thet_logos import tro, order_zero, order_one, spectral_gap, modular_flow, engine_cycle, thermalize, protolingua
 
 ENGINES = [
     ("tro (TRO identities + tripotent census)", tro.main),
@@ -12,6 +12,7 @@ ENGINES = [
     ("modular_flow (thermal time)", modular_flow.main),
     ("engine_cycle (thet-engine graduation: Otto on D_F^2)", engine_cycle.main),
     ("thermalize (dynamic density-matrix thermalization: Lindblad -> Gibbs, K(t) clock)", thermalize.main),
+    ("protolingua (THET Proto-Lingua Greek: L0 alphabet + Theta sectors + LOGOS cycle)", protolingua.main),
 ]
 
 
