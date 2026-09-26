@@ -50,6 +50,12 @@ EXPERIMENTS:
 Theorem != Simulation != Experiment != Device: toy lattice matrices
 only. No physical claim about gravity is made; the engine tests whether
 the ternary fixed-point problem is well-posed and convergent.
+
+Refinement (2026-09-25, spectral/modular-time.md): in the corrected formal
+core T is not a primitive -- it is derived as the modular flow of the
+(rho, D, beta) triple, TIME = ModularFlow[Information, Heat, Geometry].
+The T_dt readout above is the observable trace of that derived flow.
+Numerics unchanged.
 """
 import numpy as np
 import scipy.linalg as la

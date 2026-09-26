@@ -13,12 +13,26 @@ Research, Sept 2026), §2.1.4 (Rung 4, Crimson) and Table 1.
 For a positive density state `ρ` (finite-dimensional: `ρ > 0`, `Tr ρ = 1`):
 
 ```
-K = −log ρ            (modular operator / modular Hamiltonian)
-σ_s(A) = e^{isK} A e^{−isK}     (modular time flow — thermal-time hypothesis)
+K_ρ = −log ρ          (modular Hamiltonian — definition, cf. correction 2026-09-25)
+σ_s(A) = e^{isK_ρ} A e^{−isK_ρ}   (modular time flow — thermal-time hypothesis)
 ```
 
+For the thermal state `ρ = e^{−βD_F²}/Z`: `K_ρ = βD_F² + (ln Z)·I`, and the
+scalar `(ln Z)·I` commutes with everything, so it cancels in conjugation:
+
+```
+σ_s(A) = e^{isβD_F²} A e^{−isβD_F²}.
+```
+
+The flow sees only `βD_F²`. Time is derived from the triple `(ρ, D_F, β)`
+— no independent time operator is postulated. Full corrected treatment:
+`spectral/modular-time.md`; Lean: `ThetLogos.ModularTime`.
+
 Time as the flow of the statistical state; KMS equilibrium is associated
-with the flow (Framework §2.1.4).
+with the flow (Framework §2.1.4). The flow is trivial iff `[ρ, A] = 0`; on
+the full matrix algebra M_N(ℂ) this means `ρ = I/N` (maximally mixed —
+maximal ignorance). Nontrivial time requires ρ non-central *relative to
+the observable algebra*.
 
 Python (`python/thet_logos/modular_flow.py`) verifies on random `ρ`
 (T3 numerical):
