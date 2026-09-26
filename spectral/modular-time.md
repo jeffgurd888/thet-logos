@@ -1,10 +1,26 @@
 # Modular time: the corrected formal core
 
-**Status.** Tier T2 (definitions) with Tier T1 targets in
+**Status.** Tier T1 (proved) + Tier T2 (definitions) in
 `lean/ThetLogos/ModularTime.lean`; numerical checks Tier T3/T4 in
 `python/thet_logos/`. This document records four mathematical corrections
-(2026-09-25) to the Heat–Gravity–Time program. Nothing here is a physical
+(2026-09-25) to the Heat–Gravity–Time program, plus the proved T1
+scalar-flow triviality (2026-09-26). Nothing here is a physical
 derivation: see *Three claims* below.
+
+**Proved 2026-09-26 (Tier T1, no sorry).** In the eigenbasis, with
+σ_s(a) = ρ^{is}aρ^{−is}:
+- `[ρ,a] = 0 ⟹ σ_s(a) = a` (`diagFlow_trivial_of_commute`): where two
+  weights coincide the modular phases cancel; where they differ, the
+  commutator forces the matrix entry to vanish.
+- Scalar modular unitaries act trivially (`scalar_conj_trivial`).
+- At constant weights the flow is scalar conjugation
+  (`diagFlow_const_eq_scalarConj`), hence trivial
+  (`diagFlow_trivial_of_const`).
+- **Maximal ignorance gives trivial modular flow**
+  (`maximallyMixed_flow_trivial`); non-central information gives temporal
+  flow. The converse (trivial flow on all of an algebra ⟹ ρ = I/N) is
+  deliberately not formalized: on a proper subalgebra a non-scalar ρ can
+  lie in the commutant.
 
 ## 1. The synthesis
 
