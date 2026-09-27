@@ -117,6 +117,15 @@ These three are never conflated.
 |---|---|---|
 | Five-tier system itself | (meta) | Framework §5; this directory |
 
+## Rung 9c — Finite-Lattice Kohn-Sham DFT (Engine #12, SPEC ONLY)
+
+| Component | Tier | Evidence |
+|---|---|---|
+| Engine #12 specification | T5 | `whitepaper/engine12-dft-spec.md`; no implementation yet |
+| Falsifiable targets T1–T4 (convergence, BALDA vs exact, HK inversion, dissociation) | T5 | Defined, not run |
+| Kill criteria K1–K4 | T5 | Defined; 2-day time box |
+| Claim of any molecular/chemistry result | T5 | Explicitly excluded — lattice Hubbard only |
+
 ## Cross-cutting
 
 | Component | Tier | Evidence |
