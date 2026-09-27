@@ -107,3 +107,28 @@ result. The classification is now complete (T4 numerical, not a theorem).
 - This report: `attack4_corrected/THREE_GEN.md`
 - Lean T2/T3: `lean/ThetLogos/ThreeGen.lean` (definitions + Γ₃ blockwise lemmas;
   diagonal-case full proofs deferred, arbitrary-case is T4-only)
+
+## Step 5: Spectral action over the 84 selected directions (COMPLETE 2026-09-27)
+
+New script `spectral_action_84.py`; full write-up:
+**[SPECTRAL_ACTION_84.md](SPECTRAL_ACTION_84.md)**.
+
+D_96 parameterized by the 84 physical parameters (Y_ν,Y_e,Y_u,Y_d 3×3
+complex + symmetric 3×3 M_R); inner fluctuations OFF (finite-triple traces
+only). Derived structural formulas, verified by brute force:
+
+- **Tr(D²)** = 4·(‖Y_ν‖²_F + ‖Y_e‖²_F + 3‖Y_u‖²_F + 3‖Y_d‖²_F) + 2‖M_R‖²_F
+- **Tr(D⁴)** = 4·[q(Y_ν)+q(Y_e)+3q(Y_u)+3q(Y_d)] − 2q(Y_ν)
+  + ‖Y_ν†Y_ν + M_R†M_R‖²_F + ‖conj(Y_ν†Y_ν) + M_RM_R†‖²_F + 4‖Y_νM_R†‖²_F
+  (q(Y) = Tr((Y†Y)²)); Tr(D) = Tr(D³) = 0.
+
+Three parameter points (hierarchical, random, CKM-like mixing): brute vs
+structural agree to machine precision (worst rel. err 1.8e-16); D²
+slot-block structure audited on a fresh seed (36 nonzero blocks, worst
+residual 7.7e-15). Monomial structure matches Chamseddine–Connes–Marcolli
+𝔞…𝔢 qualitatively (uniform factor-4 normalization from our block
+convention, stated). Hierarchical point: 𝔞 ≈ 3.008 ≈ 3y_t² (top dominance).
+
+Two formula bugs caught by the random point and fixed (off-diagonal D²
+slot blocks; slot-24 conj slip) — see report §6. Cutoff moments f_k stay
+symbolic: no Higgs-mass or cosmological-constant prediction claimed. T4.

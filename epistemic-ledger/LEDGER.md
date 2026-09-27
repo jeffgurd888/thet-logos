@@ -274,3 +274,22 @@ masses) is input. Order-one does not select the SM (402 admitted, 84 selected
 by charge conservation + one-Higgs minimality). T4 ≠ T3. The 36 extra 1-gen
 directions (DIRECTIONS_36.md) are now characterized at 3-gen (MIXING_264.md):
 per pair, 16 flipped + 54 exotic join the 18 SM-like mixing dims.
+
+**Spectral action over the 84 selected directions (2026-09-27, T4)**
+(`attack4_corrected/spectral_action_84.py`, write-up
+`attack4_corrected/SPECTRAL_ACTION_84.md`; THREE_GEN.md Step 5 complete):
+- D_96 on the 84 physical params (4× 3×3 complex Yukawas + symmetric 3×3 M_R);
+  inner fluctuations OFF — finite-triple traces only.
+- Structural formulas derived and brute-force verified (3 points: hierarchical,
+  random, CKM-like; worst rel. err 1.8e-16):
+  Tr(D²) = 4(‖Yν‖²_F+‖Ye‖²_F+3‖Yu‖²_F+3‖Yd‖²_F) + 2‖MR‖²_F;
+  Tr(D⁴) = 4[q(Yν)+q(Ye)+3q(Yu)+3q(Yd)] − 2q(Yν)
+    + ‖Yν†Yν+MR†MR‖²_F + ‖conj(Yν†Yν)+MRMR†‖²_F + 4‖YνMR†‖²_F.
+  Tr(D)=Tr(D³)=0. D² slot-block audit on fresh seed: 36 nonzero blocks, 7.7e-15.
+- Monomial structure matches CCM 𝔞…𝔢 qualitatively (uniform factor-4 block
+  normalization, stated). Hierarchical point: 𝔞≈3.008≈3y_t² (top dominance).
+- Two formula bugs caught by the random point and fixed (off-diagonal D² slot
+  blocks (0,24)/(8,16); slot-24 conj(Yν†Yν) slip). Lesson: random O(1) points
+  are load-bearing; hierarchical points hide cross terms.
+- f_k symbolic: NO Higgs-mass / cosmological-constant prediction. Unfluctuated:
+  a_2/a_4 physical reading is standard interpretation, not a new computation.
