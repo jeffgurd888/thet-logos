@@ -3,7 +3,7 @@ title: "The Three-Generation Map: Complete Order-One Classification of the Finit
 author: "Jeffrey Gurd"
 affiliation: "Nexus Research (independent research)"
 date: "2026-09-27"
-version: "v1.0"
+version: "v1.1"
 status: "Research report. Numerical results (T4) unless marked machine-proven (T3). Not peer-reviewed."
 ---
 
@@ -19,9 +19,11 @@ finite spectral triple Dirac operator for three generations
 = 0 admits a 402-real-dimensional space of Dirac operators: 3 x 46
 generation-diagonal plus 3 x 88 generation-mixing directions (residuals
 ~10^-15). Every direction is classified by support, species, and generation
-structure. Applying charge conservation and one-Higgs minimality selects
-84 directions: 4 x 18 Yukawa plus 12 Majorana — exactly the Standard Model
-flavour parameter count. The triplication is imposed, not derived; flavour
+structure. Applying [D, C_F] = 0 (the literature's "massless photon"
+condition) and one-Higgs minimality selects
+84 directions: 4 x 18 Yukawa plus 12 Majorana — the raw coefficient count
+of the Standard Model's flavour matrices (basis redundancies reduce
+physical parameters further). The triplication is imposed, not derived; flavour
 structure is input. Order-one admits; physics selects; the count matches.
 
 ## 1. The framework
@@ -50,7 +52,7 @@ is 46-dimensional. Classified (DIRECTIONS_36.md):
 |---|---|---|
 | SM Yukawa + Majorana | 10 | selected (physical input) |
 | Flipped Yukawas | 8 | shelved (one-Higgs minimality) |
-| Exotic Majorana | 28 | 27 killed by charge conservation |
+| Exotic Majorana | 28 | all fail [D, C_F] = 0 |
 
 Structural invariants: C-block numerically zero; B = conj(A); the 36 extras
 are grading-odd, J-compatible, self-adjoint — genuine order-one directions,
@@ -81,7 +83,7 @@ sum of slot-disjoint subspaces (joint projection residual 4.7 x 10^-15):
 |---|---|---|---|
 | SM-like mixing | 18 | 8 Yukawa + 1 MR | **survives** |
 | Flipped Yukawa mixing | 16 | 8 | shelved (one-Higgs minimality) |
-| Exotic Majorana mixing | 54 | 27 | **killed by charge conservation** |
+| Exotic Majorana mixing | 54 | 27 | **all fail [D, C_F] = 0** |
 
 The 18 SM-like mixing directions per pair are the off-diagonal entries of
 the flavour matrices — the CKM/PMNS-type directions. Structural facts:
@@ -103,8 +105,9 @@ via (g,g')/(g',g) ordering (16 -> 32); the Majorana sector relaxes (30 -> 56).
 | **Total selected** | | **84** |
 
 84 = 4 x 18 (four 3x3 complex Yukawa matrices) + 12 (symmetric 3x3 M_R) —
-**exactly the Standard Model flavour parameter count.** Order-one admits 402;
-charge conservation plus one-Higgs minimality selects 84; the Standard Model
+the raw coefficient count of the Standard Model's flavour matrices
+(before basis redundancies). Order-one admits 402;
+[D, C_F] = 0 plus one-Higgs minimality selects 84; the Standard Model
 uses 84.
 
 ## 6. Numerical rigor
@@ -130,14 +133,27 @@ uses 84.
 | Flavour structure (CKM/PMNS) | input | not derived; arbitrary matrices |
 | "Order-one selects the SM" | false | order-one admits; physics selects |
 
-## 8. Next steps
+## 8. Since v1.0: the C_F mechanism and novelty
 
-1. Composition theorem for thet-language v2 (order-one analog for composed
-   thet events), precisely stated — K3.
-2. Second instantiation of the repeat operator R beyond the finite triple — K1.
-3. Spectral action / EFT over the selected 84-direction space.
-4. Pre-registered harmonic series for one mass ratio, or permanent quarantine
-   of the mass-ratio program — K2.
+After v1.0, the selection mechanism was sharpened (2026-09-27): the precise
+killer of all 36 extra directions is [D, C_F] = 0 — verified numerically
+(||[D, C_F]|| >= 0.48 for all 36 extras; exactly 0 for all 10 SM directions).
+"Charge conservation" was an imprecise proxy and has been retired. A
+literature audit (Chamseddine–Connes–Marcolli hep-th/0610241, Definition
+2.20) found the 46/402 census apparently novel: the published uniqueness
+theorem bakes [D, C_F] = 0 into its definition of "Dirac operator," so the
+order-one-only nullspace was never computed. The v1.0 next steps are now
+resolved: the composition theorem (K3) and the modular-Hamiltonian second
+instantiation of R (K1) are published; the mass-ratio program (K2) was
+executed and permanently quarantined — no legitimate pre-registerable
+harmonic series exists in the current axioms.
+
+## 9. Next steps
+
+1. Three-generation order-one reduction in Lean 4 (diagonal sector).
+2. Inner-fluctuated spectral action / Higgs potential over the 84-direction
+   space.
+3. arXiv/journal submission of the order-one census paper (endorser needed).
 
 *Repository: github.com/jeffgurd888/thet-logos. Reports: attack4_corrected/
 DIRECTIONS_36.md, THREE_GEN.md, MIXING_264.md. Lean sources:
