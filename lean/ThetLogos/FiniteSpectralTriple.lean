@@ -147,6 +147,36 @@ def buildDirac (A B C E : Block8) : Matrix I32 I32 ℂ := fun i j =>
     else if h4 : jv < 24 then (B.conjTranspose) ⟨iv - 24, by omega⟩ ⟨jv - 16, by omega⟩
     else 0
 
+/-- Entry of `buildDirac` in the B† region (i in [24,32), j in [16,24)). -/
+theorem buildDirac_Bdag_entry (A B C E : Block8) (i j : I32)
+    (hi1 : ¬i.val < 8) (hi2 : ¬i.val < 16) (hi3 : ¬i.val < 24)
+    (hj1 : ¬j.val < 8) (hj2 : ¬j.val < 16) (hj3 : j.val < 24) :
+    buildDirac A B C E i j
+      = (B.conjTranspose) ⟨i.val - 24, by omega⟩ ⟨j.val - 16, by omega⟩ := by
+  unfold buildDirac
+  simp only []
+  simp [hi1, hi2, hi3, hj1, hj2, hj3]
+
+/-- Entry of `buildDirac` in the E† region (i in [8,16), j in [24,32)). -/
+theorem buildDirac_Edag_entry (A B C E : Block8) (i j : I32)
+    (hi1 : ¬i.val < 8) (hi2 : i.val < 16)
+    (hj1 : ¬j.val < 8) (hj2 : ¬j.val < 16) (hj3 : ¬j.val < 24) :
+    buildDirac A B C E i j
+      = (E.conjTranspose) ⟨i.val - 8, by omega⟩ ⟨j.val - 24, by omega⟩ := by
+  unfold buildDirac
+  simp only []
+  simp [hi1, hi2, hj1, hj2, hj3]
+
+/-- Entry of `buildDirac` in the B region (i in [16,24), j in [24,32)). -/
+theorem buildDirac_B_entry (A B C E : Block8) (i j : I32)
+    (hi1 : ¬i.val < 8) (hi2 : ¬i.val < 16) (hi3 : i.val < 24)
+    (hj1 : ¬j.val < 8) (hj2 : ¬j.val < 16) (hj3 : ¬j.val < 24) :
+    buildDirac A B C E i j
+      = B ⟨i.val - 16, by omega⟩ ⟨j.val - 24, by omega⟩ := by
+  unfold buildDirac
+  simp only []
+  simp [hi1, hi2, hi3, hj1, hj2, hj3]
+
 theorem gammaF_mul_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
     (gammaF * M) i j = gammaF i i * M i j := by
   rw [Matrix.mul_apply, Finset.sum_eq_single i]
