@@ -237,3 +237,31 @@ not derive the ansatz and does not uniquely select the Standard Model — the
 Attack 4 T4 NO-GO stands (46 vs 10 real dimensions, ~36 extra directions
 uncharacterized). One generation only; ℂ⁹⁶ untested; flavour placement
 conventional.
+
+## 2026-09-27 — Three-generation triplication: T4 census + T2/T3 Lean scaffolding
+
+**Status**: T4 numerical (Steps 1–3 complete); T2/T3 Lean (definitions + Γ₃ lemmas proven; full diagonal-case proofs deferred)
+
+**T4 Numerical** (`attack4_corrected/attack4_3gen.py`, `attack4_corrected/THREE_GEN.md`):
+- Imposed ℂ⁹⁶ = ℂ³² ⊗ ℂ³ with arbitrary complex 3×3 Yukawas (Yν,Ye,Yu,Yd),
+  complex symmetric 3×3 M_R. Triplication is IMPOSED, not derived.
+- 3 random trials: exact zeros for grading-oddness, self-adjointness,
+  J-compatibility, order-one (144 SM-selected + 144 all-lifted pairs).
+  Non-vacuous: ‖[D,X₀]‖ ≈ 17–19. J-compat breaks (6.70e+00) for non-symmetric M_R.
+- Admissible dim at ℂ⁹⁶: 2352 (= 3×272 diag + 3×512 off-diag).
+- **Order-one nullity: 402** (= 3×46 diagonal + 3×88 mixing-pair).
+  Diagonal 46 reproduces 1-gen; mixing 88 is new. Confirms predicted 402 ≠ 414.
+- Step 4 (classification of 88 mixing directions) incomplete: tensordot shape bug.
+
+**T2/T3 Lean** (`lean/ThetLogos/ThreeGen.lean`, imports into `ThetLogos.lean`):
+- Definitions: `I96`, `gamma3`, `UJ3`, `smGen3`, `smGenOp3`, `smDirac3diag`.
+- Proven (zero sorrys, full `lake build` passes): `gamma3_apply`, `gamma3_diag`,
+  `gamma3_mul_apply`, `mul_gamma3_apply` (blockwise Γ₃ action).
+- Deferred: full diagonal-case grading-odd/self-adjoint/J-compat/order-one
+  proofs (mathematics is D₁⊗I₃ Kronecker reduction; tactic engineering deferred).
+- Arbitrary-matrix case remains T4-only by design.
+
+**Honesty boundary**: Three generations are imposed. Flavour structure (CKM/PMNS,
+masses) is input. Order-one does not select the SM (402 ≫ 30 conventional
+directions). T4 ≠ T3. The 36 extra 1-gen directions (DIRECTIONS_36.md) remain
+uncharacterized at 3-gen.
