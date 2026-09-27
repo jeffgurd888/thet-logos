@@ -16,6 +16,8 @@ This module installs the CORRECTED scaffold:
 - §2 proves what the algebra-side filters CAN do (SM-type candidate passes)
   and what they CANNOT do (explicit non-uniqueness: the filters provably do
   not classify);
+- §2b discharges the minimal block multiplicity equality
+  (1×1×1) + (4×1×2) + (1×3×1) = 12 with remainder 16 − 12 = 4;
 - §3 states the CCM-with-`[D,C_F]=0` classification target, with the analytic
   work itemized as labeled T3 sorrys (cf. BlockedQuestions.lean Q3).
 
@@ -105,6 +107,41 @@ theorem filters_do_not_classify :
       totalRepDim A = 16 ∧ IsFaithful A = true ∧ HasComplexUnit A = true ∧
         A ≠ smFactors :=
   ⟨altFactors, by decide, by decide, by decide, by decide⟩
+
+/-! ## §2b. Minimal block lemma (multiplicity equality)
+
+Block inventory of H_L = ℂ^16 by defining representation:
+- 1 × (1-dim defining rep of ℂ) — the complex-unit direction;
+- 4 × (2-dim defining rep of ℍ) — the weak-doublet directions;
+- 1 × (3-dim defining rep of M₃(ℂ)) — the color-triplet directions.
+Total: (1×1×1) + (4×1×2) + (1×3×1) = 1 + 8 + 3 = 12. Remainder: 16 − 12 = 4.
+
+READING (T4 physical interpretation, documented here — not Lean-proved):
+the 4 remainder dimensions are the color-singlet directions of H_L,
+{ν_L, e_L, ν̄_R, ē_R}: two left-handed particles and two right-handed
+antiparticles. Refinement: the right-handed neutrino ν_R proper lives in
+H_R (γ_F = −1), so "right-handed neutrino/singlet" is loose for
+"color-singlet".
+
+CAVEAT: this is a block inventory ("directions"), NOT a direct-sum
+decomposition of H_L. In the true SM representation the quark blocks overlap
+(weak⊗color tensor structure: four color triplets = 12 color dims, not 3).
+The Lean content is the arithmetic. Contrast `smFactors` (§2), the
+diagonal-model census solution 2·1 + 1·2 + 4·3 = 16: different multiplicity
+assignments answer different questions.
+-/
+
+/-- The minimal block configuration as a factor multiset. -/
+def minimalBlocks : List RepFactor :=
+  [{ n := 1, alg := .C, mult := 1 },
+   { n := 1, alg := .H, mult := 4 },
+   { n := 3, alg := .C, mult := 1 }]
+
+/-- Multiplicity equality: (1×1×1) + (4×1×2) + (1×3×1) = 12. -/
+theorem minimalBlock_sum : totalRepDim minimalBlocks = 12 := by decide
+
+/-- The 4 remainder dimensions: 16 − 12 = 4. -/
+theorem singlet_remainder : 16 - totalRepDim minimalBlocks = 4 := by decide
 
 /-! ## §3. The Dirac side (the load-bearing filter)
 
