@@ -1,0 +1,57 @@
+=== Attack 1: candidate-algebra scan, parallel (T4 exploratory, 2 workers) ===
+catalogue: 6494 candidate algebras (real dim <= 32)
+[theta] solution-space real dim = 544; verify JtJ^-1=t^d err 0.00e+00, GtG=-t err 0.00e+00
+[control] SM triple order-zero residual: 0.00e+00 (PASS)
+[control] SM algebra, doubled (balanced) rep residual: 2.00e+00 (FAIL -- asymmetry forced)
+[plan] balanced probe: 304 algebras at budget 600 (rdim=24), 1487 at budget 120 (rdim<24), 4703 asymmetric-only (rdim>24)
+
+[result] algebras with a passing (nonzero) rep: 6494/6494
+[result] algebras with a passing BALANCED rep: 584/6494
+  of which 168 commutative (all patterns pass -- proved, diagonal-matrix argument)
+  balanced survivors (noncommutative shown):
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + H rdim= 24 example mults=(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0) resid=0.00e+00 (tested 408, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M2(R) rdim= 24 example mults=(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0) resid=0.00e+00 (tested 408, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + H rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 425, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + M2(R) rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 425, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + H rdim= 23 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + M2(R) rdim= 23 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + H rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 8) resid=0.00e+00 (tested 376, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + M2(R) rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 8) resid=0.00e+00 (tested 376, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + H rdim= 22 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + M2(R) rdim= 22 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M2(C) rdim= 24 example mults=(2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8) resid=0.00e+00 (tested 395, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + H rdim= 23 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + M2(R) rdim= 23 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + H rdim= 21 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + M2(R) rdim= 21 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M3(R) rdim= 24 example mults=(2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0) resid=0.00e+00 (tested 408, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + C + H rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 8) resid=0.00e+00 (tested 352, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + C + M2(R) rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 8) resid=0.00e+00 (tested 352, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + H rdim= 22 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + M2(R) rdim= 22 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + H rdim= 20 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + H + H rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 4) resid=0.00e+00 (tested 455, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + H + M2(R) rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 8) resid=0.00e+00 (tested 432, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + M2(R) rdim= 20 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + M2(R) + M2(R) rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 4) resid=0.00e+00 (tested 455, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + M2(C) rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 425, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + C + H rdim= 23 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + C + M2(R) rdim= 23 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + H rdim= 21 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + M2(R) rdim= 21 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + H rdim= 19 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + M2(R) rdim= 19 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + M2(C) rdim= 23 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8) resid=0.00e+00 (tested 64, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + M3(R) rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5) resid=0.00e+00 (tested 429, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + C + C + H rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 8) resid=0.00e+00 (tested 349, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + C + C + M2(R) rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 8) resid=0.00e+00 (tested 349, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + C + H rdim= 22 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + C + M2(R) rdim= 22 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + H rdim= 20 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 8) resid=0.00e+00 (tested 59, TRUNCATED)
+    M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + C + C + H + H rdim= 24 example mults=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 4, 4) resid=0.00e+00 (tested 439, TRUNCATED)
+    ... and 376 more
+[result] theta filter changes survivor list: NO (theta relations are triple-level; nullity=544 > 0)
+[honesty] balanced search truncated (deterministic slice) for 1760 algebras: M1(R) + M1(R), M1(R) + M1(R) + M1(R), M1(R) + M1(R) + M1(R) + M1(R), M1(R) + M1(R) + M1(R) + M1(R) + M1(R), M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R), M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R) + M1(R)...
+[honesty] 4703 algebras (rdim > 24) got the asymmetric probe only -- no balanced search (out of peer range)
+[done] T4 exploratory scan complete -- see module docstring for limitations.
+EXIT:0

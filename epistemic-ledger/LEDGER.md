@@ -90,7 +90,6 @@ These three are never conflated.
 | Full 576-pair order-one machine check | T5 | Open ("complete Lean archive") |
 
 ## Rung 9 — Thet Engine (∆gap)
-
 | Component | Tier | Evidence |
 |---|---|---|
 | ∆ = min{\|λ\| ∈ spec(D_F) : \|λ\| > 0} (definition) | T2 | `ThetLogos.ThermalKMS`, `python/thet_logos/spectral_gap.py` |
@@ -98,6 +97,19 @@ These three are never conflated.
 | Exchange-flux closed form | T5 | Formula missing from source |
 | Mass-gap closed form | T5 | Formula missing from source |
 | Hardware realization of Thet Engine | T5 | **Not asserted** (Framework §2.1.9) |
+
+## Rung 9b — FRG Constitutive Pipeline (Engine #11)
+
+| Component | Tier | Evidence |
+|---|---|---|
+| Wetterich flow, Litim regulator, one-loop truncation | T4 | `python/thet_logos/frg_constitutive.py`; flow reproduces analytic Drude to 3.3e-8 |
+| ε_eff(ω) extraction at k₀ = 2π/d | T4 | Validated vs analytic; plasma edge correct |
+| Kramers–Kronig compliance | T4 | Cauchy-PV numerical audit, residual 2.2e-9 |
+| Passivity Im(ε) > 0 | T4 | min 1.7e-3 on ω > 0 |
+| Cubic (O_h) isotropy | T4 | Anisotropy/off-diagonal exactly 0 |
+| μ_eff = 1, ξ_eff = 0 | T4 | Truncation artifacts (non-magnetic, achiral UV), reported not hidden |
+| Spatial dispersion (q-dependence) | T5 | Not implemented; optical q→0 only |
+| Real metamaterial prediction | T5 | Not asserted — Drude UV is calibration, not discovery |
 
 ## Rung 10 — Epistemic Ledger
 
@@ -115,3 +127,29 @@ These three are never conflated.
 | Formal Möbius-bundle chromatic topology | T5 | Open (Framework §2: "does not yet constitute") |
 | Coupling unification; mass predictions | T5 | Open/withdrawn as predictions |
 | Complete Lean archive (zero-sorry) | T5 | Open — this pass ends with 10 documented sorrys; `lake build` green 2026-09-21 |
+
+## 2026-09-27 — Order-zero COMPLETE (144/144, zero sorrys)
+
+**Status**: T1 (machine-checked proof, Lean 4, zero sorrys in MartinettiRep.lean)
+
+**Result**: All 144 generator pairs satisfy [smGen g1, smGenOp g2] = 0.
+
+**Sectors proven**:
+- C/C°: 1 pair (order_zero_C_C)
+- H/H°: 9 pairs (order_zero_H_H)
+- M/M°: 64 pairs (order_zero_M_M)
+- C/H°, H/C°: 3+3 pairs
+- C/M°, M/C°: 8+8 pairs
+- H/M°: 24 pairs (order_zero_H_M, tensor-product structure)
+- M/H°: 24 pairs (order_zero_M_H, via duality: transpose + UJ conjugation)
+
+**Key techniques**:
+- order_zero_H_M: tensor-product factorization on indices 2-7 (flavour ⊗ colour)
+- order_zero_M_H: duality from order_zero_H_M using UJᵀ=UJ and UJ*UJ=1
+- smGen_order_zero: structured 144-case split
+
+**Commit**: 668daf5 (local, push pending auth)
+
+**Honesty boundary**: Order-zero is ONE axiom. Still open: order-one, J²=1,
+JΓ=-ΓJ, unitality, faithfulness, D_F construction, Yukawa derivation.
+A verified representation is not a verified SM derivation.
