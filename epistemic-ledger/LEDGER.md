@@ -69,7 +69,7 @@ These three are never conflated.
 |---|---|---|
 | H_F = ℂ³² = ℂ⁸⊕ℂ⁸⊕ℂ⁸⊕ℂ⁸; A_F = ℂ⊕ℍ⊕M₃(ℂ); π, π° = Jπ*J⁻¹ (definitions) | T2 | `ThetLogos.Scaffold32`, `ThetLogos.FiniteSpectralTriple` |
 | p² = 1; γ_F² = 1, γ_F* = γ_F; U_J² = 1 | T3 | Lean proved (`gammaF_self_adjoint`, `gammaF_involutive`, `UJ_mul_self`) + numerical |
-| J_F γ_F = −γ_F J_F | T3 | Lean statement `UJ_gamma_anticomm` (sorry); numerical check exact |
+| J_F γ_F = −γ_F J_F | T3 | Lean proved (`UJ_gammaF_anticommute`, via `gammaF_partner_flip`) |
 | Three generations (ℂ⁹⁶ or ℂ³²⊗ℂ³) | T5 | Open (Framework §2.1.6) |
 
 ## Rung 7 — Spectral Triple D_F
@@ -159,6 +159,7 @@ These three are never conflated.
 
 **Commit**: 668daf5 (local, push pending auth)
 
-**Honesty boundary**: Order-zero is ONE axiom. Still open: order-one, J²=1,
-JΓ=-ΓJ, unitality, faithfulness, D_F construction, Yukawa derivation.
+**Honesty boundary**: Order-zero is ONE axiom. J²=1 and JΓ=-ΓJ now Lean-proven
+(`UJ_mul_self`, `UJ_gammaF_anticommute`). Still open: order-one,
+unitality, faithfulness, D_F construction, Yukawa derivation.
 A verified representation is not a verified SM derivation.

@@ -230,4 +230,101 @@ theorem UJ_gamma_anticomm :
       rwa [partner_involutive, partner_involutive] at h2
     rw [gammaF_apply_ne hpij, gammaF_apply_ne hij]
     simp
+
+/-- The grading eigenvalue flips under the partner involution.
+    Tier T3. -/
+theorem gammaF_partner_flip (i : I32) :
+    gammaF (partner i) (partner i) = -gammaF i i := by
+  have h1 : i.val < 32 := i.isLt
+  by_cases h8 : i.val < 8
+  · -- i in 0-7 (γ=+1), partner in 16-23 (γ=-1)
+    have hpi : (partner i).val = i.val + 16 := by
+      rw [partner_val_eq]; simp [show i.val < 16 by omega]
+    have gi : gammaF i i = 1 := by unfold gammaF; simp [h8]
+    have gp : gammaF (partner i) (partner i) = -1 := by
+      have e1 : ¬ (partner i).val < 8 := by omega
+      have e2 : ¬ (partner i).val < 16 := by omega
+      have e3 : (partner i).val < 24 := by omega
+      unfold gammaF
+      rw [dite_eq_ite, ite_eq_left rfl, ite_eq_right e1, ite_eq_right e2, ite_eq_left e3]
+    rw [gp, gi]
+  · by_cases h16 : i.val < 16
+    · -- i in 8-15 (γ=-1), partner in 24-31 (γ=+1)
+      have hpi : (partner i).val = i.val + 16 := by
+        rw [partner_val_eq]; simp [h16]
+      have gi : gammaF i i = -1 := by unfold gammaF; simp [h8, h16]
+      have gp : gammaF (partner i) (partner i) = 1 := by
+        have e1 : ¬ (partner i).val < 8 := by omega
+        have e2 : ¬ (partner i).val < 16 := by omega
+        have e3 : ¬ (partner i).val < 24 := by omega
+        unfold gammaF
+        rw [dite_eq_ite, ite_eq_left rfl, ite_eq_right e1, ite_eq_right e2, ite_eq_right e3]
+      rw [gp, gi]; simp
+    · by_cases h24 : i.val < 24
+      · -- i in 16-23 (γ=-1), partner in 0-7 (γ=+1)
+        have hpi : (partner i).val = i.val - 16 := by
+          rw [partner_val_eq]; simp [show ¬ i.val < 16 by omega]
+        have gi : gammaF i i = -1 := by unfold gammaF; simp [h8, h16, h24]
+        have gp : gammaF (partner i) (partner i) = 1 := by
+          have e1 : (partner i).val < 8 := by omega
+          unfold gammaF
+          rw [dite_eq_ite, ite_eq_left rfl, ite_eq_left e1]
+        rw [gp, gi]; simp
+      · -- i in 24-31 (γ=+1), partner in 8-15 (γ=-1)
+        have hpi : (partner i).val = i.val - 16 := by
+          rw [partner_val_eq]; simp [show ¬ i.val < 16 by omega]
+        have gi : gammaF i i = 1 := by unfold gammaF; simp [h8, h16, h24]
+        have gp : gammaF (partner i) (partner i) = -1 := by
+          have e1 : ¬ (partner i).val < 8 := by omega
+          have e2 : (partner i).val < 16 := by omega
+          unfold gammaF
+          rw [dite_eq_ite, ite_eq_left rfl, ite_eq_right e1, ite_eq_left e2]
+        rw [gp, gi]
+
+/-- Real structure anticommutes with grading: JΓ = -ΓJ.
+    Tier T3. -/
+theorem UJ_gammaF_anticommute : UJ * gammaF = -gammaF * UJ := by
+  ext i j
+  -- LHS entry
+  have hLHS : (UJ * gammaF) i j = gammaF (partner i) j := by
+    simp only [Matrix.mul_apply]
+    rw [Finset.sum_eq_single (partner i)]
+    · have h1 : UJ i (partner i) = 1 := by
+        rw [UJ_apply]; unfold UJ_matrix; exact ite_eq_left rfl
+      rw [h1, one_mul]
+    · intro k _ hk
+      have h0 : UJ i k = 0 := by
+        rw [UJ_apply]; unfold UJ_matrix; exact ite_eq_right hk
+      rw [h0, zero_mul]
+    · intro hcon
+      exact absurd (Finset.mem_univ (partner i)) hcon
+  -- RHS entry: ((-gammaF) * UJ) i j = -(gammaF i i * UJ i j)
+  have hRHS : ((-gammaF) * UJ) i j = -(gammaF i i * UJ i j) := by
+    rw [Matrix.mul_apply]
+    -- Goal: ∑ k, (-gammaF) i k * UJ k j = -(gammaF i i * UJ i j)
+    calc ∑ k : I32, (-gammaF) i k * UJ k j
+        = ∑ k : I32, -(gammaF i k * UJ k j) := by
+          apply Finset.sum_congr rfl
+          intro k _
+          rw [Matrix.neg_apply]; ring
+      _ = -(∑ k : I32, gammaF i k * UJ k j) := by
+          rw [Finset.sum_neg_distrib]
+      _ = -(gammaF i i * UJ i j) := by
+          congr 1
+          rw [Finset.sum_eq_single i (fun k _ hk => by
+            rw [gammaF_apply_ne (Ne.symm hk), zero_mul]) (by simp)]
+  rw [hLHS, hRHS]
+  -- Now: gammaF (partner i) j = -(gammaF i i * UJ i j)
+  have hUJij : UJ i j = if j = partner i then 1 else 0 := by
+    rw [UJ_apply]; unfold UJ_matrix
+    by_cases h : j = partner i <;> simp [h]
+  by_cases hj : j = partner i
+  · subst hj
+    rw [hUJij, if_pos rfl, mul_one]
+    have hflip := gammaF_partner_flip i
+    -- goal: gammaF (partner i) (partner i) = -gammaF i i
+    exact hflip
+  · rw [hUJij, if_neg hj, mul_zero, neg_zero]
+    exact gammaF_apply_ne (fun h => hj h.symm)
+
 end ThetLogos
