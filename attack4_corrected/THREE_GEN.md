@@ -3,7 +3,7 @@
 **Date:** 2026-09-27  
 **Tier:** T4 (numerical evidence only — NOT a Lean theorem)  
 **Script:** `attack4_corrected/attack4_3gen.py`  
-**Status:** Steps 1–3 complete; Step 4 (classification) hit a shape bug
+**Status:** Steps 1–4 complete (classification done 2026-09-27; see MIXING_264.md)
 
 ## What was imposed
 
@@ -69,22 +69,25 @@ This confirms the parameter-count prediction of 402, NOT 9×46=414:
 The diagonal nullity 46 reproduces the one-generation result. The mixing-pair
 nullity 88 reflects the additional flavour-mixing directions.
 
-## Step 4: Classification (INCOMPLETE)
+## Step 4: Classification (COMPLETE 2026-09-27)
 
-The script crashed in Step 4 with:
-```
-ValueError: shape-mismatch for sum
-  File ".../attack4_3gen.py", line 231, in <module>
-    Mnull = np.tensordot(vecs.T, P_off, axes=([0],[0]))
-```
+Step 4 is done. New script `classify_mixing.py` (bug fixed; N_off cached in
+`results3gen/`), independently verified by `verify_mixing.py`. Full write-up:
+**[MIXING_264.md](MIXING_264.md)**.
 
-The null-space basis vectors (`vecs`) have a different leading dimension than
-expected for the tensordot with `P_off`. The classification of the 88
-mixing-pair null directions into Yukawa-like vs Majorana-like (and the
-Yukawa/Majorana split of the 46 diagonal directions) was not completed.
+Per unordered generation pair, the 88 real dims decompose as a direct sum:
+- **SM-like mixing: 18** (8 complex Yukawa mixing + 1 complex MR mixing).
+- **Flipped Yukawa mixing: 16** (8 complex; mixing analogue of 1-gen flipped).
+- **Exotic Majorana mixing: 54** (27 complex; E-symmetry dropped vs 1-gen).
+- B=conj(A), Bd=conj(Ad), C=0; Ed = real-linear fn of E; color locking holds.
+
+Charge conservation kills all 54 exotic (every exotic E entry is charged);
+one-Higgs minimality shelves the 16 flipped. **18 SM-like survive per pair.**
+Total physics-selected: 3×18 (mixing) + 3×10 (diagonal) = **84** =
+4×18 Yukawa + 12 MR = the SM flavor parameter count.
 
 **This does not affect the nullity counts** (Steps 1–3), which are the primary
-result. The classification is a refinement for future work.
+result. The classification is now complete (T4 numerical, not a theorem).
 
 ## Honesty boundary
 
@@ -94,7 +97,8 @@ result. The classification is a refinement for future work.
 - **No flavour physics derived.** CKM/PMNS, masses, and hierarchies remain inputs.
 - **Order-one does not select the SM.** The 402 null directions include many
   beyond the 10 conventional SM Yukawa+Majorana directions per generation.
-- **Step 4 incomplete.** The 88 mixing directions are counted but not classified.
+- **Step 4 complete (2026-09-27).** The 88 mixing directions per pair are
+  classified: 18 SM-like + 16 flipped + 54 exotic Majorana (MIXING_264.md).
 
 ## Files
 

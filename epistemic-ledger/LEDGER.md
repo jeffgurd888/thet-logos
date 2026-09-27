@@ -251,7 +251,15 @@ conventional.
 - Admissible dim at ℂ⁹⁶: 2352 (= 3×272 diag + 3×512 off-diag).
 - **Order-one nullity: 402** (= 3×46 diagonal + 3×88 mixing-pair).
   Diagonal 46 reproduces 1-gen; mixing 88 is new. Confirms predicted 402 ≠ 414.
-- Step 4 (classification of 88 mixing directions) incomplete: tensordot shape bug.
+- Step 4 (classification of 88 mixing directions) **complete 2026-09-27**
+  (`attack4_corrected/classify_mixing.py`, verified by `verify_mixing.py`,
+  write-up `attack4_corrected/MIXING_264.md`): per pair, 18 SM-like mixing
+  (8 complex Yukawa + 1 complex MR) + 16 flipped Yukawa mixing (8 complex) +
+  54 exotic Majorana mixing (27 complex; E-symmetry dropped). B=conj(A),
+  Bd=conj(Ad), C=0, Ed real-linear in E, color locking holds. Direct-sum
+  verified to ~1e-15. Charge conservation kills all 54 exotic; one-Higgs
+  shelves the 16 flipped; 18 SM-like survive per pair → 3×18+3×10 = 84 =
+  SM flavor count (T4).
 
 **T2/T3 Lean** (`lean/ThetLogos/ThreeGen.lean`, imports into `ThetLogos.lean`):
 - Definitions: `I96`, `gamma3`, `UJ3`, `smGen3`, `smGenOp3`, `smDirac3diag`.
@@ -262,6 +270,7 @@ conventional.
 - Arbitrary-matrix case remains T4-only by design.
 
 **Honesty boundary**: Three generations are imposed. Flavour structure (CKM/PMNS,
-masses) is input. Order-one does not select the SM (402 ≫ 30 conventional
-directions). T4 ≠ T3. The 36 extra 1-gen directions (DIRECTIONS_36.md) remain
-uncharacterized at 3-gen.
+masses) is input. Order-one does not select the SM (402 admitted, 84 selected
+by charge conservation + one-Higgs minimality). T4 ≠ T3. The 36 extra 1-gen
+directions (DIRECTIONS_36.md) are now characterized at 3-gen (MIXING_264.md):
+per pair, 16 flipped + 54 exotic join the 18 SM-like mixing dims.
