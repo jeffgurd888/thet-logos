@@ -203,8 +203,20 @@ theorem inner_fluctuation_preserves_order_one
     simp
   -- Combine by linearity: [[D+A+Ao, X], Y] = [[D,X],Y] + [[A,X],Y] + [[Ao,X],Y].
   -- Each term vanishes by h_D, h_term2, h_term3 respectively.
-  -- The distributivity is routine linear algebra; the substantive content
-  -- is in the two helper lemmas above.
-  sorry
+  have h_expand : (((D_F + A + oppositeOneForm A) * smGen x
+        - smGen x * (D_F + A + oppositeOneForm A)) * smGenOp y
+        - smGenOp y * ((D_F + A + oppositeOneForm A) * smGen x
+          - smGen x * (D_F + A + oppositeOneForm A)))
+      = (((D_F * smGen x - smGen x * D_F) * smGenOp y
+          - smGenOp y * (D_F * smGen x - smGen x * D_F))
+        + ((A * smGen x - smGen x * A) * smGenOp y
+          - smGenOp y * (A * smGen x - smGen x * A))
+        + ((oppositeOneForm A * smGen x - smGen x * oppositeOneForm A) * smGenOp y
+          - smGenOp y * (oppositeOneForm A * smGen x
+            - smGen x * oppositeOneForm A))) := by
+    simp only [Matrix.add_mul, Matrix.mul_add, Matrix.sub_mul, Matrix.mul_sub]
+    abel
+  rw [h_expand, h_D, h_term2, h_term3]
+  simp
 
 end ThetLogos
