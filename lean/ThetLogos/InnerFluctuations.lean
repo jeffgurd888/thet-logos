@@ -46,16 +46,16 @@ def fluctuatedDirac (D_F A : Matrix I32 I32 ℂ) : Matrix I32 I32 ℂ :=
 
 /-- Order-zero condition: the representation commutes with its opposite.
     This is the finite-geometry axiom [π(a), π°(b)] = 0.
-    STATUS: Axiom (T2) — provable from the explicit smGen/smGenOp definitions
-    by entrywise computation, deferred as explicit certificate. -/
-axiom order_zero_comm (a b : Fin 12) :
-    smGen a * smGenOp b = smGenOp b * smGen a
+    STATUS: Proved from smGen_order_zero in MartinettiRep.lean. -/
+theorem order_zero_comm (a b : Fin 12) :
+    smGen a * smGenOp b = smGenOp b * smGen a :=
+  sub_eq_zero.mp (smGen_order_zero a b)
 
 /-- Symmetric order-zero: [π°(a), π(b)] = 0.
-    STATUS: Axiom (T2) — follows from order_zero_comm by the symmetry of the
-    finite spectral triple axioms. -/
-axiom order_zero_comm_symm (a b : Fin 12) :
-    smGenOp a * smGen b = smGen b * smGenOp a
+    STATUS: Proved from smGen_order_zero (arguments swapped). -/
+theorem order_zero_comm_symm (a b : Fin 12) :
+    smGenOp a * smGen b = smGen b * smGenOp a :=
+  (sub_eq_zero.mp (smGen_order_zero b a)).symm
 
 /-! ## §4. Helper Lemma 1: 1-forms commute with opposite algebra -/
 
