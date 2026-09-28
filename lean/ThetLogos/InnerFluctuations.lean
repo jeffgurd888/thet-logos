@@ -368,4 +368,81 @@ theorem inner_fluctuation_preserves_order_one
   rw [h_expand, h_D, h_term2, h_term3]
   simp
 
+
+/-! ## §7. Self-adjointness of the fluctuated Dirac -/
+
+/-- UJ is real: all entries are 0 or 1, so entrywise conjugation fixes it. -/
+theorem UJ_real : UJ.map (star : ℂ → ℂ) = UJ := by
+  ext i j
+  simp only [UJ, UJ_matrix, Matrix.map_apply]
+  split_ifs <;> simp
+
+/-- UJ is self-adjoint: real and symmetric. -/
+theorem UJ_self_adjoint : UJ.conjTranspose = UJ := by
+  show (UJ.map (star : ℂ → ℂ)).transpose = UJ
+  rw [UJ_real, UJ_transpose_eq]
+
+/-- Dagger intertwines the opposite 1-form:
+    `(JAJ⁻¹)† = J A† J⁻¹`. Uses UJ† = UJ and `(Aᵀ)† = (A†)ᵀ = Ā`. -/
+theorem oppositeOneForm_conjTranspose (A : Matrix I32 I32 ℂ) :
+    (oppositeOneForm A).conjTranspose = oppositeOneForm (A.conjTranspose) := by
+  show (UJ * A.transpose * UJ).conjTranspose = UJ * (A.conjTranspose).transpose * UJ
+  rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, UJ_self_adjoint]
+  have h1 : (A.transpose).conjTranspose = A.map (star : ℂ → ℂ) := by
+    show ((A.transpose).map (star : ℂ → ℂ)).transpose = _
+    rw [Matrix.transpose_map, Matrix.transpose_transpose]
+  have h2 : (A.conjTranspose).transpose = A.map (star : ℂ → ℂ) := by
+    show (((A.map (star : ℂ → ℂ)).transpose)).transpose = _
+    rw [Matrix.transpose_transpose]
+  rw [h1, h2, Matrix.mul_assoc]
+
+/-- The fluctuated Dirac is self-adjoint when D_F and A are.
+    `D_A† = D_F† + A† + (JAJ⁻¹)† = D_F + A + JAJ⁻¹ = D_A`. -/
+theorem fluctuatedDirac_self_adjoint
+    (D_F A : Matrix I32 I32 ℂ)
+    (hD : IsSelfAdjoint D_F) (hA : IsSelfAdjoint A) :
+    IsSelfAdjoint (fluctuatedDirac D_F A) := by
+  have hD' : D_F.conjTranspose = D_F := hD
+  have hA' : A.conjTranspose = A := hA
+  show (D_F + A + oppositeOneForm A).conjTranspose = D_F + A + oppositeOneForm A
+  rw [Matrix.conjTranspose_add, Matrix.conjTranspose_add,
+    oppositeOneForm_conjTranspose, hD', hA']
+
+/-- J-compatibility of the SM Dirac ansatz, in transpose form:
+    `UJ * D_Fᵀ * UJ = D_F`.
+    From `smDirac_J_compat` (`UJ·D̄ = D·UJ`) and `smDirac_self_adjoint`
+    (`D̄ = Dᵀ`), plus `UJ² = 1`. -/
+theorem smDirac_IsJCompatible (yNu yE yU yD yR : ℂ) :
+    IsJCompatible (smDirac yNu yE yU yD yR) := by
+  show UJ * (smDirac yNu yE yU yD yR).transpose * UJ = smDirac yNu yE yU yD yR
+  have h_sa := smDirac_self_adjoint yNu yE yU yD yR
+  have h_map : (smDirac yNu yE yU yD yR).map (star : ℂ → ℂ)
+      = (smDirac yNu yE yU yD yR).transpose := by
+    have h1 : ((smDirac yNu yE yU yD yR).map (star : ℂ → ℂ)).transpose
+        = smDirac yNu yE yU yD yR := h_sa
+    have h2 := congrArg Matrix.transpose h1
+    simp only [Matrix.transpose_transpose] at h2
+    exact h2
+  rw [← h_map]
+  have hJ := smDirac_J_compat yNu yE yU yD yR
+  calc UJ * (smDirac yNu yE yU yD yR).map (star : ℂ → ℂ) * UJ
+      = (UJ * (smDirac yNu yE yU yD yR).map (star : ℂ → ℂ)) * UJ := by
+        rw [Matrix.mul_assoc]
+    _ = (smDirac yNu yE yU yD yR * UJ) * UJ := by rw [hJ]
+    _ = smDirac yNu yE yU yD yR * (UJ * UJ) := by rw [← Matrix.mul_assoc]
+    _ = smDirac yNu yE yU yD yR := by rw [UJ_mul_self, Matrix.mul_one]
+
+/-- Hypothesis loop closed: for the SM Dirac ansatz, inner fluctuations
+    preserve order-one with no remaining hypotheses on `D_F`.
+    `IsJCompatible` is supplied by `smDirac_IsJCompatible`;
+    `OrderOneHolds` by `OrderOneHolds_smDirac`. -/
+theorem inner_fluctuation_preserves_order_one_smDirac
+    (yNu yE yU yD yR : ℂ) (A : Matrix I32 I32 ℂ)
+    (h_A_form : IsAlgebraicOneForm A (smDirac yNu yE yU yD yR)) :
+    OrderOneHolds (fluctuatedDirac (smDirac yNu yE yU yD yR) A) :=
+  inner_fluctuation_preserves_order_one _ _
+    (smDirac_IsJCompatible yNu yE yU yD yR)
+    (OrderOneHolds_smDirac yNu yE yU yD yR)
+    h_A_form
+
 end ThetLogos
