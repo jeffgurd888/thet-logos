@@ -1,15 +1,24 @@
 import ThetLogos.Scaffold32
+import ThetLogos.OrderOne
 
 /-!
-# ThetLogos.CFKernelBase — shared C_F definitions
+# ThetLogos.CFKernelBase — shared C_F kernel definitions
 
-Base module for the C_F (massless photon) projector. Contains the
-`cfIndicator`/`cfMat` definitions and basic entrywise lemmas, extracted from
-`ThetLogos.CFKernel` to break the circular import between `CFKernel` and
-`CFKernelClassification`.
+Base module for the C_F kernel analysis. Contains:
 
-Both `ThetLogos.CFKernel` and `ThetLogos.CFKernelClassification` import this
-module.
+- §1: the `cfIndicator`/`cfMat` representative and basic entrywise lemmas
+  (extracted from `ThetLogos.CFKernel`);
+- §2: the linear commutator map `cfCommutatorMap`
+  (extracted from `ThetLogos.CFKernelClassification`);
+- §3: the order-one nullspace `OrderOneNullspace`
+  (extracted from `ThetLogos.CFKernelClassification`).
+
+Dependency shape (acyclic by construction):
+
+  CFKernelBase → { CFKernel, CFKernelClassification, InnerFluctuations, … }
+
+`ThetLogos.CFKernel` and `ThetLogos.CFKernelClassification` both import this
+module. Nothing in this module imports them, so no import cycle is possible.
 -/
 
 namespace ThetLogos
@@ -52,5 +61,26 @@ theorem cfIndicator_mem (i : I32) : cfIndicator i = 0 ∨ cfIndicator i = 1 := b
   by_cases h : i.val < 18 ∨ i.val = 24 ∨ i.val = 25
   · rw [if_pos h]; right; rfl
   · rw [if_neg h]; left; rfl
+
+/-! ## §2. The commutator map -/
+
+/-- Linear map taking a 32×32 Dirac operator to its commutator with C_F.
+    This is the derivation `𝓛_{C_F}(D) = [D, cfMat]`.
+    (Extracted from `ThetLogos.CFKernelClassification`.) -/
+def cfCommutatorMap (D : Matrix I32 I32 ℂ) : Matrix I32 I32 ℂ :=
+  D * cfMat - cfMat * D
+
+/-- `cfCommutatorMap` vanishes exactly when `[D, cfMat] = 0`. -/
+theorem cfCommutatorMap_eq_zero_iff (D : Matrix I32 I32 ℂ) :
+    cfCommutatorMap D = 0 ↔ D * cfMat - cfMat * D = 0 := Iff.rfl
+
+/-! ## §3. The order-one nullspace -/
+
+/-- The 46-dimensional order-one nullspace, as a complex submodule of
+    32×32 matrices. (The numerical census finds real dimension 46 on the
+    Hermitian subspace; the complex span is used here for the module structure.)
+    (Extracted from `ThetLogos.CFKernelClassification`.) -/
+def OrderOneNullspace : Submodule ℂ (Matrix I32 I32 ℂ) :=
+  Submodule.span ℂ { D | OrderOneHolds D }
 
 end ThetLogos

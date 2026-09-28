@@ -29,38 +29,29 @@ satisfying `OrderOneHolds` under the repaired `smGen`/`smGenOp`.
 
 This is Q3.1 (C_F cuts the S-sector to the 8 SM Yukawas) and Q3.2 (C_F forces
 the Majorana T-block to SM form) from the CCM proof.
+
+Base definitions (`cfMat`, `cfCommutatorMap`, `OrderOneNullspace`) live in
+`ThetLogos.CFKernelBase` and are imported here.
 -/
 
 open Matrix
 
 namespace ThetLogos
 
-/-- Linear map taking a 32×32 Dirac operator to its commutator with C_F.
-    This is the derivation `𝓛_{C_F}(D) = [D, cfMat]`. -/
-def cfCommutatorMap (D : Matrix I32 I32 ℂ) : Matrix I32 I32 ℂ :=
-  D * cfMat - cfMat * D
+/-! ## §1. The SM physical sector -/
 
 /-- The 10-dimensional Standard Model Yukawa/Majorana moduli space:
     exactly the image of the 5-complex-parameter `smDirac` ansatz. -/
 def IsSMPhysicalSector (D : Matrix I32 I32 ℂ) : Prop :=
   ∃ (yNu yE yU yD yR : ℂ), D = smDirac yNu yE yU yD yR
 
-/-- The 46-dimensional order-one nullspace, as a complex submodule of
-    32×32 matrices. (The numerical census finds real dimension 46 on the
-    Hermitian subspace; the complex span is used here for the module structure.) -/
-def OrderOneNullspace : Submodule ℂ (Matrix I32 I32 ℂ) :=
-  Submodule.span ℂ { D | OrderOneHolds D }
-
 /-- The SM sector lies inside the order-one nullspace: the repaired
-    `OrderOneHolds` is satisfied by every `smDirac` (via `smDirac_order_one`). -/
+    `OrderOneHolds` is satisfied by every `smDirac` (via `smDirac_order_one`).
+    (`OrderOneNullspace` is defined in `ThetLogos.CFKernelBase`.) -/
 theorem smSector_mem_nullspace (yNu yE yU yD yR : ℂ) :
     smDirac yNu yE yU yD yR ∈ OrderOneNullspace := by
   apply Submodule.subset_span
   exact OrderOneHolds_smDirac yNu yE yU yD yR
-
-/-- `cfCommutatorMap` vanishes exactly when `[D, cfMat] = 0`. -/
-theorem cfCommutatorMap_eq_zero_iff (D : Matrix I32 I32 ℂ) :
-    cfCommutatorMap D = 0 ↔ D * cfMat - cfMat * D = 0 := Iff.rfl
 
 /-! ## §2. Exotic elimination via pivot entries -/
 
