@@ -86,6 +86,19 @@ theorem pi_zero_of_ge_16 {a : AF} {i j : I32} (h : 16 ≤ i.val ∨ 16 ≤ j.val
     · exact absurd hboth.2 (Nat.not_lt_of_ge hj)
   · rfl
 
+/-- Structural fact (Option A): a pure-color algebra element acts trivially.
+    In `embedSM` the quark block needs `a.q ≠ 0` and the H_R block needs
+    `a.u1 ≠ 0`; for `⟨0, 0, m⟩` both vanish, so `pi ⟨0,0,m⟩ = 0`.
+    Consequence: the 18 color AFGenerators drop out of every order-one pair. -/
+theorem pi_pure_color_zero (m : Matrix I3 I3 ℂ) : pi ⟨0, 0, m⟩ = 0 := by
+  ext i j
+  unfold pi
+  split_ifs with h16
+  · unfold embedSM
+    dsimp only
+    split_ifs <;> simp_all
+  · rfl
+
 theorem piOp_zero_of_lt_16 {b : AF} {i j : I32} (h : i.val < 16 ∨ j.val < 16) :
     piOp (pi b) i j = 0 := by
   have hpi : ∀ k : I32, k.val < 16 → 16 ≤ (partner k).val := by
@@ -146,6 +159,36 @@ def buildDirac (A B C E : Block8) : Matrix I32 I32 ℂ := fun i j =>
     else if h3 : jv < 16 then E ⟨iv - 24, by omega⟩ ⟨jv - 8, by omega⟩
     else if h4 : jv < 24 then (B.conjTranspose) ⟨iv - 24, by omega⟩ ⟨jv - 16, by omega⟩
     else 0
+
+/-- Entry of `buildDirac` in the B† region (i in [24,32), j in [16,24)). -/
+theorem buildDirac_Bdag_entry (A B C E : Block8) (i j : I32)
+    (hi1 : ¬i.val < 8) (hi2 : ¬i.val < 16) (hi3 : ¬i.val < 24)
+    (hj1 : ¬j.val < 8) (hj2 : ¬j.val < 16) (hj3 : j.val < 24) :
+    buildDirac A B C E i j
+      = (B.conjTranspose) ⟨i.val - 24, by omega⟩ ⟨j.val - 16, by omega⟩ := by
+  unfold buildDirac
+  simp only []
+  simp [hi1, hi2, hi3, hj1, hj2, hj3]
+
+/-- Entry of `buildDirac` in the E† region (i in [8,16), j in [24,32)). -/
+theorem buildDirac_Edag_entry (A B C E : Block8) (i j : I32)
+    (hi1 : ¬i.val < 8) (hi2 : i.val < 16)
+    (hj1 : ¬j.val < 8) (hj2 : ¬j.val < 16) (hj3 : ¬j.val < 24) :
+    buildDirac A B C E i j
+      = (E.conjTranspose) ⟨i.val - 8, by omega⟩ ⟨j.val - 24, by omega⟩ := by
+  unfold buildDirac
+  simp only []
+  simp [hi1, hi2, hj1, hj2, hj3]
+
+/-- Entry of `buildDirac` in the B region (i in [16,24), j in [24,32)). -/
+theorem buildDirac_B_entry (A B C E : Block8) (i j : I32)
+    (hi1 : ¬i.val < 8) (hi2 : ¬i.val < 16) (hi3 : i.val < 24)
+    (hj1 : ¬j.val < 8) (hj2 : ¬j.val < 16) (hj3 : ¬j.val < 24) :
+    buildDirac A B C E i j
+      = B ⟨i.val - 16, by omega⟩ ⟨j.val - 24, by omega⟩ := by
+  unfold buildDirac
+  simp only []
+  simp [hi1, hi2, hi3, hj1, hj2, hj3]
 
 theorem gammaF_mul_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
     (gammaF * M) i j = gammaF i i * M i j := by

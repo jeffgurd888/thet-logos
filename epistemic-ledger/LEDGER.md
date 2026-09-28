@@ -69,7 +69,8 @@ These three are never conflated.
 |---|---|---|
 | H_F = ℂ³² = ℂ⁸⊕ℂ⁸⊕ℂ⁸⊕ℂ⁸; A_F = ℂ⊕ℍ⊕M₃(ℂ); π, π° = Jπ*J⁻¹ (definitions) | T2 | `ThetLogos.Scaffold32`, `ThetLogos.FiniteSpectralTriple` |
 | p² = 1; γ_F² = 1, γ_F* = γ_F; U_J² = 1 | T3 | Lean proved (`gammaF_self_adjoint`, `gammaF_involutive`, `UJ_mul_self`) + numerical |
-| J_F γ_F = −γ_F J_F | T3 | Lean statement `UJ_gamma_anticomm` (sorry); numerical check exact |
+| J_F γ_F = −γ_F J_F | T3 | Lean proved (`UJ_gammaF_anticommute`, via `gammaF_partner_flip`) |
+| Unitality P_C + P_H + P_M = 1 | T3 | Lean proved (`unitality`): `-(genC²)` projects onto 8–15,16,17,24,25; `(genH k)²` onto 0–7 (`genH_sq_proj`); `(3/16)·∑ₐ(genM a)²` onto triplets 18–23,26–31 (`genM_sq_sum_proj`); supports partition 0–31 (`unitality_arith`). Zero sorrys. |
 | Three generations (ℂ⁹⁶ or ℂ³²⊗ℂ³) | T5 | Open (Framework §2.1.6) |
 
 ## Rung 7 — Spectral Triple D_F
@@ -78,13 +79,16 @@ These three are never conflated.
 |---|---|---|
 | D_F block matrix (A,B,C,E) (definition) | T2 | `ThetLogos.FiniteSpectralTriple.buildDirac` |
 | D_F* = D_F; γ_F D_F + D_F γ_F = 0 | T3 | Lean proved (`buildDirac_self_adjoint`, `buildDirac_gamma_odd`) |
-| J_F D_F = D_F J_F (conditional on B = Ā, C,E symmetric) | T3 | Lean statement `buildDirac_J_compat` (sorry) |
+| J_F D_F = D_F J_F (conditional on B = Ā, C,E symmetric) | T3 | Lean proved (`buildDirac_J_compat`, 16-case analysis; ledger previously mislabeled this as sorry — corrected 2026-09-27) |
+| One-generation SM ansatz D_F: complex Yukawas (yν,yE,yU,yD) + Majorana yR; B = Ā, C = 0; conventional flavour slots (ν_L(0)↔ν_R(8), e_L(1)↔e_R(9), u/d colours) | T2 | `ThetLogos.MartinettiRep.smDirac` (definition). **ANSATZ — imposed, not derived**: order-one alone leaves a 46-dim nullspace (T4); 36 extra dims uncharacterized |
+| Ansatz: {Γ,D_F} = 0; D_F* = D_F; UJ·D̄_F = D_F·UJ (KO-dim 6: JD = DJ) | T3 | Lean proved (`smDirac_grading_odd`, `smDirac_self_adjoint`, `smDirac_J_compat`). Zero sorrys. |
 
 ## Rung 8 — Order Conditions
 
 | Component | Tier | Evidence |
 |---|---|---|
 | Order-zero [π(a), π°(b)] = 0 | T3 | Lean proof (`order_zero_condition`, pending build) + numerical < 1e-14 (`order_zero.py`, `examples/`) |
+| Order-one [[D_F,π(a)],π°(b)] = 0 for the SM ansatz (12 selected generators, 144 pairs) | T3 | Lean proved 2026-09-27 (`ThetLogos.MartinettiRep.smDirac_order_one`): all 144 double commutators vanish for arbitrary complex (yν,yE,yU,yD,yR); zero sorrys. **Imposed ansatz, not derived**: T4 evidence stands — 46-dim order-one nullspace, ~36 extra directions (`attack4_corrected/REPORT.md`) |
 | Single-probe [[D_F,P₊],P₋] = 0 ⇒ C = E = 0 | T3 | Numerical (`examples/order_one_probe.py`) |
 | Vanishing cross-terms under order-one; Yukawa form (Y_u,Y_d,Y_e,Y_ν, Y_R) | T4 | Standard one-generation NCG; no new mass predictions claimed |
 | Full 576-pair order-one machine check | T5 | Open ("complete Lean archive") |
@@ -116,6 +120,15 @@ These three are never conflated.
 | Component | Tier | Evidence |
 |---|---|---|
 | Five-tier system itself | (meta) | Framework §5; this directory |
+
+## Rung 9c — Finite-Lattice Kohn-Sham DFT (Engine #12, SPEC ONLY)
+
+| Component | Tier | Evidence |
+|---|---|---|
+| Engine #12 specification | T5 | `whitepaper/engine12-dft-spec.md`; no implementation yet |
+| Falsifiable targets T1–T4 (convergence, BALDA vs exact, HK inversion, dissociation) | T5 | Defined, not run |
+| Kill criteria K1–K4 | T5 | Defined; 2-day time box |
+| Claim of any molecular/chemistry result | T5 | Explicitly excluded — lattice Hubbard only |
 
 ## Cross-cutting
 
@@ -150,6 +163,133 @@ These three are never conflated.
 
 **Commit**: 668daf5 (local, push pending auth)
 
-**Honesty boundary**: Order-zero is ONE axiom. Still open: order-one, J²=1,
-JΓ=-ΓJ, unitality, faithfulness, D_F construction, Yukawa derivation.
+**Honesty boundary**: Order-zero is ONE axiom. J²=1 and JΓ=-ΓJ now Lean-proven
+(`UJ_mul_self`, `UJ_gammaF_anticommute`). Unitality now Lean-proven
+(`unitality`, zero sorrys): ℂ-projection `-genC²` (`genC_sq_proj`,
+`genC_sq_proj_offdiag`); ℍ-projection `(genH k)²` onto 0–7 (`genH_sq_proj`,
+`genH_sq_offdiag`, via Pauli square `pauli_sq`); M₃-projection
+`(3/16)·∑ₐ(genM a)²` onto the colour triplets (`genM_sq_sum_proj`,
+`genM_sq_sum_offdiag`, via Gell-Mann square sum `gellMann_sq_sum`); the three
+supports partition all 32 dimensions (`unitality_arith`). Faithfulness
+(kernel = {0}) now Lean-proven (`faithful_blocks`:
+block-form independence using `genC_faithful`, `genH_linear_independent`,
+`genM_linear_independent` on disjoint supports; zero sorrys in
+`MartinettiRep.lean`). Still open: order-one, D_F construction, Yukawa derivation.
 A verified representation is not a verified SM derivation.
+
+## 2026-09-27 — CB1 + CB2: colour-blindness of imposed smDirac ansatz (T3)
+
+**Status**: T1 (machine-checked proof, Lean 4, zero new sorrys in MartinettiRep.lean)
+
+**Results**:
+- **CB1** (`CB1`): `[smDirac yNu yE yU yD yR, genM a] = 0` for arbitrary complex
+  Yukawas and all 8 colour generators. The imposed one-generation Dirac ansatz
+  is colour-blind: D acts as a scalar on each colour triplet (via
+  `smDirac_triplet_row`/`smDirac_triplet_val`), genM acts via Gell-Mann.
+- **CB2** (`CB2`): `[smDirac yNu yE yU yD yR, UJ*(genM a)ᵀ*UJ] = 0`.
+  Proof via: genM Hermitian (`genM_herm`, from Gell-Mann entrywise Hermiticity
+  `gellMann_herm`), J-compatibility (`smDirac_J_compat`), UJ²=1 (`UJ_mul_self`).
+  Key step: `[D̄, Gᵀ]=0` (`Dbar_Gt_comm`) from `[D, (Ḡ)ᵀ]=0` via `map star`,
+  then UJ-conjugation.
+- **jacobi_reorder**: `[[D,G1],G2°] = [[D,G2°],G1]` when `[G1,G2°]=0` (order-zero).
+
+**Order-one coverage**: CB1 gives `[[D,genM _], _°]=0` (M-row, 96 pairs).
+CB2 + jacobi_reorder gives `[[D,_], (genM _)°]=0` (M°-column, 96 pairs,
+64 overlap). **Remaining**: 16 pairs with (C/H, C°/H°) — require support/
+diagonal-constancy arguments (numerical audit: `[D,C]` on 0↔8 Yukawa blocks,
+`C°` diagonal-constant there; `[D,H]` on 0–15, `H°` on 16–23, disjoint).
+
+**Commit**: b4b5c7e (local, no push from subagent)
+
+**Honesty boundary**: The ansatz is **imposed**, not derived. CB1/CB2 do not
+alter the corrected Attack 4 T4 verdict (2026-09-27): 46-dimensional order-one
+nullspace, 10 expected SM directions, ~36 extra uncharacterized directions,
+nullity gap 0.36 — **NO-GO** for order-one uniquely selecting the SM ansatz.
+One generation only; ℂ⁹⁶ untested.
+
+## 2026-09-27 — Full order-one: all 144 pairs machine-proven (T3)
+
+**Status**: T3 (machine-checked proof, Lean 4, zero sorrys; full `lake build` passes, 3316 jobs)
+
+**Theorem**: `ThetLogos.MartinettiRep.smDirac_order_one` — for arbitrary complex
+(yν, yE, yU, yD, yR), `smDiracOrderOne` holds: all 144 double commutators
+`[[D, smGen g1], smGenOp g2]` vanish.
+
+**Proof structure**:
+- (C,C°) `orderOne_C_C`: `[D,genC]` supported on indices < 16 (`DC_cases`,
+  `DC_supp16`); C° diagonal and constant on its support (`Cop_diag_val`,
+  `DC_Cop_const`); commutes via `diag_mul_comm_of_const_on_supp`.
+- (H,C°) `orderOne_H_C`: same via `DH_Cop_const` / `DH_supp16`.
+- (C,H°) `orderOne_C_H` and (H,H°) `orderOne_H_H`: `[D,genC]`/`[D,genH k]`
+  live on < 16, H° on 16–23 (`UJ_genH_transpose_UJ_supp`); both products
+  vanish by `disjoint_mul_zero`.
+- M-row `orderOne_M_row` (96 pairs): CB1 makes `[D, genM a] = 0`.
+- M°-column `orderOne_M_col` (96 pairs, 64 overlap): `jacobi_reorder` +
+  `orderZero_genM_op` + CB2.
+- Assembly `smDirac_order_one`: `fin_cases` over all 144 (g1, g2).
+
+**Coverage**: 144/144 selected pairs. Single commutators `[D,genC]`, `[D,genH]`
+are genuinely nonzero (not claimed zero); only the double commutators vanish.
+
+**Honesty boundary**: Order-one is machine-proven **for the imposed
+one-generation SM ansatz over the selected 12-generator family**. This does
+not derive the ansatz and does not uniquely select the Standard Model — the
+Attack 4 T4 NO-GO stands (46 vs 10 real dimensions, ~36 extra directions
+uncharacterized). One generation only; ℂ⁹⁶ untested; flavour placement
+conventional.
+
+## 2026-09-27 — Three-generation triplication: T4 census + T2/T3 Lean scaffolding
+
+**Status**: T4 numerical (Steps 1–3 complete); T2/T3 Lean (definitions + Γ₃ lemmas proven; full diagonal-case proofs deferred)
+
+**T4 Numerical** (`attack4_corrected/attack4_3gen.py`, `attack4_corrected/THREE_GEN.md`):
+- Imposed ℂ⁹⁶ = ℂ³² ⊗ ℂ³ with arbitrary complex 3×3 Yukawas (Yν,Ye,Yu,Yd),
+  complex symmetric 3×3 M_R. Triplication is IMPOSED, not derived.
+- 3 random trials: exact zeros for grading-oddness, self-adjointness,
+  J-compatibility, order-one (144 SM-selected + 144 all-lifted pairs).
+  Non-vacuous: ‖[D,X₀]‖ ≈ 17–19. J-compat breaks (6.70e+00) for non-symmetric M_R.
+- Admissible dim at ℂ⁹⁶: 2352 (= 3×272 diag + 3×512 off-diag).
+- **Order-one nullity: 402** (= 3×46 diagonal + 3×88 mixing-pair).
+  Diagonal 46 reproduces 1-gen; mixing 88 is new. Confirms predicted 402 ≠ 414.
+- Step 4 (classification of 88 mixing directions) **complete 2026-09-27**
+  (`attack4_corrected/classify_mixing.py`, verified by `verify_mixing.py`,
+  write-up `attack4_corrected/MIXING_264.md`): per pair, 18 SM-like mixing
+  (8 complex Yukawa + 1 complex MR) + 16 flipped Yukawa mixing (8 complex) +
+  54 exotic Majorana mixing (27 complex; E-symmetry dropped). B=conj(A),
+  Bd=conj(Ad), C=0, Ed real-linear in E, color locking holds. Direct-sum
+  verified to ~1e-15. Charge conservation kills all 54 exotic; one-Higgs
+  shelves the 16 flipped; 18 SM-like survive per pair → 3×18+3×10 = 84 =
+  SM flavor count (T4).
+
+**T2/T3 Lean** (`lean/ThetLogos/ThreeGen.lean`, imports into `ThetLogos.lean`):
+- Definitions: `I96`, `gamma3`, `UJ3`, `smGen3`, `smGenOp3`, `smDirac3diag`.
+- Proven (zero sorrys, full `lake build` passes): `gamma3_apply`, `gamma3_diag`,
+  `gamma3_mul_apply`, `mul_gamma3_apply` (blockwise Γ₃ action).
+- Deferred: full diagonal-case grading-odd/self-adjoint/J-compat/order-one
+  proofs (mathematics is D₁⊗I₃ Kronecker reduction; tactic engineering deferred).
+- Arbitrary-matrix case remains T4-only by design.
+
+**Honesty boundary**: Three generations are imposed. Flavour structure (CKM/PMNS,
+masses) is input. Order-one does not select the SM (402 admitted, 84 selected
+by charge conservation + one-Higgs minimality). T4 ≠ T3. The 36 extra 1-gen
+directions (DIRECTIONS_36.md) are now characterized at 3-gen (MIXING_264.md):
+per pair, 16 flipped + 54 exotic join the 18 SM-like mixing dims.
+
+**Spectral action over the 84 selected directions (2026-09-27, T4)**
+(`attack4_corrected/spectral_action_84.py`, write-up
+`attack4_corrected/SPECTRAL_ACTION_84.md`; THREE_GEN.md Step 5 complete):
+- D_96 on the 84 physical params (4× 3×3 complex Yukawas + symmetric 3×3 M_R);
+  inner fluctuations OFF — finite-triple traces only.
+- Structural formulas derived and brute-force verified (3 points: hierarchical,
+  random, CKM-like; worst rel. err 1.8e-16):
+  Tr(D²) = 4(‖Yν‖²_F+‖Ye‖²_F+3‖Yu‖²_F+3‖Yd‖²_F) + 2‖MR‖²_F;
+  Tr(D⁴) = 4[q(Yν)+q(Ye)+3q(Yu)+3q(Yd)] − 2q(Yν)
+    + ‖Yν†Yν+MR†MR‖²_F + ‖conj(Yν†Yν)+MRMR†‖²_F + 4‖YνMR†‖²_F.
+  Tr(D)=Tr(D³)=0. D² slot-block audit on fresh seed: 36 nonzero blocks, 7.7e-15.
+- Monomial structure matches CCM 𝔞…𝔢 qualitatively (uniform factor-4 block
+  normalization, stated). Hierarchical point: 𝔞≈3.008≈3y_t² (top dominance).
+- Two formula bugs caught by the random point and fixed (off-diagonal D² slot
+  blocks (0,24)/(8,16); slot-24 conj(Yν†Yν) slip). Lesson: random O(1) points
+  are load-bearing; hierarchical points hide cross terms.
+- f_k symbolic: NO Higgs-mass / cosmological-constant prediction. Unfluctuated:
+  a_2/a_4 physical reading is standard interpretation, not a new computation.

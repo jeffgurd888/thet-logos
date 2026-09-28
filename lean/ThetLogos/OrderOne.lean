@@ -2,6 +2,7 @@ import Mathlib.Data.Matrix.Mul
 import Mathlib.Basic.Complex.Basic
 import Mathlib.Tactic
 import ThetLogos.FiniteSpectralTriple
+import ThetLogos.MartinettiRep
 
 /-!
 # ThetLogos.OrderOne — the order-one condition (Tiers T3/T4/T5)
@@ -58,17 +59,37 @@ def AFGenerators (m : Fin 24) : AF :=
 def orderOneComm (D : Matrix I32 I32 ℂ) (a b : AF) : Matrix I32 I32 ℂ :=
   (D * pi a - pi a * D) * piOp (pi b) - piOp (pi b) * (D * pi a - pi a * D)
 
-/-- **Order-one condition** (predicate): the 24 × 24 = 576 commutator pairs
-    all vanish. Tier T5 (open — "complete Lean archive").
+/-- **Order-one condition, Option-A version (DEFECTIVE — SUPERSEDED).**
 
-    CORRECTION (2026-09-22): This was previously stated as a `theorem` claiming
-    that self-adjointness (`Dᴴ = D`) plus `gammaF`-oddness implies the 576
-    commutators vanish. That implication is FALSE — order-one is an independent
-    axiom in noncommutative geometry, not a consequence of `hD` and `hOdd`.
-    It is now correctly formulated as a predicate (a condition on `D`),
-    not as a theorem. -/
-def OrderOneHolds (D : Matrix I32 I32 ℂ) : Prop :=
+    This predicate uses the Option-A `pi`, which zeroes pure-color actions and
+    misses antiparticle support. It is UNSATISFIABLE for the SM Dirac ansatz:
+    `not_OrderOneHolds_optionA_smDirac` (OrderOneFull.lean) proves
+    `¬ OrderOneHolds_optionA (smDirac 0 0 0 0 1)` via the `(8,24)` entry
+    `-conj(yR)`. Kept only to document the defect. Use `OrderOneHolds`
+    (the repaired Martinetti version) for all new work. -/
+def OrderOneHolds_optionA (D : Matrix I32 I32 ℂ) : Prop :=
   ∀ m n : Fin 24, orderOneComm D (AFGenerators m) (AFGenerators n) = 0
+
+/-- **Order-one condition** (predicate, REPAIRED 2026-09-28): the
+    12 × 12 = 144 double commutators `[[D, smGen g1], smGenOp g2]` all vanish,
+    where `smGen`/`smGenOp` are the repaired Martinetti representation
+    (correct particle/antiparticle support across `ℂ³²`).
+
+    This replaces the defective Option-A `OrderOneHolds_optionA`, which was
+    unsatisfiable for the SM ansatz. The repaired predicate IS satisfied by
+    the SM Dirac: `OrderOneHolds_smDirac` (proved via `smDirac_order_one`,
+    zero sorrys). -/
+def OrderOneHolds (D : Matrix I32 I32 ℂ) : Prop :=
+  ∀ g1 g2 : Fin 12,
+    (D * smGen g1 - smGen g1 * D) * smGenOp g2
+      - smGenOp g2 * (D * smGen g1 - smGen g1 * D) = 0
+
+/-- The SM Dirac ansatz satisfies the repaired order-one predicate.
+    This discharges the `OrderOneHolds D` hypothesis of
+    `cf_kernel_classification` non-vacuously. -/
+theorem OrderOneHolds_smDirac (yNu yE yU yD yR : ℂ) :
+    OrderOneHolds (smDirac yNu yE yU yD yR) :=
+  smDirac_order_one yNu yE yU yD yR
 
 /-- Particle/antiparticle projectors. Tier T2. -/
 def Pplus : Matrix I32 I32 ℂ := fun i j =>

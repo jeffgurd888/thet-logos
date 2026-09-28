@@ -1,0 +1,57 @@
+== Step 1: 24-generator certification ==
+  real rank of generator set : 24 (expect 24)
+  real rank of C block       : 2
+  real rank of H block       : 4
+  real rank of M3 block       : 18
+  ||P_C+P_H+P_M - I||_F        : 0.00e+00
+  max ||[Gamma, pi(a)]||       : 0.00e+00
+  max ||[pi(a), pi^circ(b)]||  : 0.00e+00
+  CERTIFIED: True
+== Step 2: admissible D_F basis (grading-odd, self-adjoint, J-compatible) ==
+  admissible dimension        : 272 (expect 272)
+  max ||{B, Gamma}||          : 6.02e-15
+  max ||UJ conj(B) - B UJ||    : 6.85e-15
+  max |(||B_k|| - 1)|         : 1.33e-15
+  real rank of D basis        : 272
+== Step 3: order-one nullspace (24^2 = 576 pairs) ==
+  ... generator 1/24 done (6s)  ... generator 2/24 done (13s)  ... generator 3/24 done (19s)  ... generator 4/24 done (26s)  ... generator 5/24 done (32s)  ... generator 6/24 done (39s)  ... generator 7/24 done (45s)  ... generator 8/24 done (51s)  ... generator 9/24 done (58s)  ... generator 10/24 done (64s)  ... generator 11/24 done (71s)  ... generator 12/24 done (77s)  ... generator 13/24 done (83s)  ... generator 14/24 done (90s)  ... generator 15/24 done (96s)  ... generator 16/24 done (103s)  ... generator 17/24 done (110s)  ... generator 18/24 done (116s)  ... generator 19/24 done (122s)  ... generator 20/24 done (129s)  ... generator 21/24 done (135s)  ... generator 22/24 done (142s)  ... generator 23/24 done (148s)  ... generator 24/24 done (155s)
+  equations stacked           : 272 x 272
+  order-one nullity           : 46 (previous 23-gen scan: 46)
+  normalized spectral gap     : 0.360
+  singular values straddling cutoff : [6.00e+00 6.00e+00 6.00e+00 1.77e-13 1.68e-13 1.61e-13]
+  max |R v| over nullspace    : 7.66e-14 (must be ~0)
+  time                        : 155s
+== Step 4: SM Yukawa + Majorana directions vs nullspace ==
+  max ||UJ conj(D) - D UJ|| on SM dirs : 0.00e+00
+  max ||{D, Gamma}|| on SM dirs      : 0.00e+00
+  Re(Ynu)     rel. order-one residual: 1.05e-13   nullspace fraction: 1.000000
+  Im(Ynu)     rel. order-one residual: 2.16e-13   nullspace fraction: 1.000000
+  Re(Ye)      rel. order-one residual: 2.11e-13   nullspace fraction: 1.000000
+  Im(Ye)      rel. order-one residual: 2.02e-13   nullspace fraction: 1.000000
+  Re(Yu)      rel. order-one residual: 1.74e-13   nullspace fraction: 1.000000
+  Im(Yu)      rel. order-one residual: 1.68e-13   nullspace fraction: 1.000000
+  Re(Yd)      rel. order-one residual: 1.84e-13   nullspace fraction: 1.000000
+  Im(Yd)      rel. order-one residual: 1.89e-13   nullspace fraction: 1.000000
+  Re(Y_R)     rel. order-one residual: 1.89e-13   nullspace fraction: 1.000000
+  Im(Y_R)     rel. order-one residual: 1.82e-13   nullspace fraction: 1.000000
+  rank of 10 SM directions            : 10
+  rank of SM directions in nullspace  : 10
+== Step 5: spectral gap sweep ==
+  Delta_gap(tY rows, tM cols), t = top-Yukawa / Majorana scale:
+  tY\tM      1e-02     3e-02     1e-01     3e-01     1e+00     3e+00     1e+01
+      1e-02  1.00e-05  1.00e-05  1.00e-05  1.00e-05  1.00e-05  1.00e-05  1.00e-05
+      3e-02  3.16e-05  3.16e-05  3.16e-05  3.16e-05  3.16e-05  3.16e-05  3.16e-05
+      1e-01  1.00e-04  1.00e-04  1.00e-04  1.00e-04  1.00e-04  1.00e-04  1.00e-04
+      3e-01  3.16e-04  3.16e-04  3.16e-04  3.16e-04  3.16e-04  3.16e-04  3.16e-04
+      1e+00  1.00e-03  1.00e-03  1.00e-03  1.00e-03  1.00e-03  1.00e-03  1.00e-03
+      3e+00  1.00e-09  3.16e-10  3.16e-03  3.16e-03  3.16e-03  3.16e-03  3.16e-03
+      1e+01  1.00e-08  3.16e-09  1.00e-09  3.16e-10  1.00e-02  1.00e-02  1.00e-02
+  (Delta_gap scales linearly with tY at tM=0; Majorana lifts the zero-mode floor)
+Traceback (most recent call last):
+  File "/home/hatch/workspace/thet-logos/attack4_corrected/attack4_corrected.py", line 441, in <module>
+    main()
+  File "/home/hatch/workspace/thet-logos/attack4_corrected/attack4_corrected.py", line 426, in main
+    "singular_values_at_cutoff": [float(x) for x in s[max(0, n - nullity - 3):n - nullity + 3]],
+                                                             ^
+NameError: name 'n' is not defined. Did you mean: 'np'?
+exit: 1

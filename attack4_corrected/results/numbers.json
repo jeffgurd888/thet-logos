@@ -1,0 +1,22 @@
+{
+  "generators": 24,
+  "real_rank_generators": 24,
+  "grading_even_residual": 0.0,
+  "order_zero_residual": 0.0,
+  "admissible_D_dim": 272,
+  "order_one_pairs": 576,
+  "order_one_nullity": 46,
+  "order_one_gap": 0.35999999999999616,
+  "order_one_gap_def": "s[n-nullity-1]/s[0]: smallest non-null singular value over largest",
+  "singular_values_at_cutoff": [
+    6.000000000000002,
+    5.999999999999984,
+    5.999999999999954,
+    1.7705486742351486e-13,
+    1.6831250585759163e-13,
+    1.6057421500332818e-13
+  ],
+  "sm_rank": 10,
+  "seconds": 185.08521938323975,
+  "tier": "T4 numerical exploration only; not a theorem, not a Lean proof"
+}

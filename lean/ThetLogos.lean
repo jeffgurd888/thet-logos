@@ -8,3 +8,4 @@ import ThetLogos.ThermalKMS
 import ThetLogos.ModularTime
 import ThetLogos.Chromatic
 import ThetLogos.BlockedQuestions
+import ThetLogos.ThreeGen

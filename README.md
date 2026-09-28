@@ -1,5 +1,13 @@
 # Thet-Logos
 
+> ✅ **MACHINE-PROVEN: Order-zero holds for all 144 generator pairs.**
+> Lean 4 has verified that every pair of generators in the finite spectral
+> triple satisfies the order-zero condition — **144/144, zero `sorry`s** in
+> `lean/ThetLogos/MartinettiRep.lean`. This is a compiled, machine-checked
+> proof, not a numerical check.
+> *Order-zero is one axiom, not a Standard Model derivation — the ledger
+> tracks exactly what is and isn't proven.*
+
 > ⚡ **EUREKA — the thet engine runs.** A quantum Otto cycle built on the
 > finite Dirac operator D_F now closes with **positive net work**:
 > W_net = 0.155 > 0, η = 0.50 below the Carnot bound 0.83, KMS identity
@@ -82,3 +90,13 @@ component, gaps, next steps).
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## Support this research
+
+Independent research, no institutional funding. If the machine-checked
+proofs or the engine designs are useful to you, you can support the work:
+
+- **Cash App:** [$Gurd888](https://cash.app/$Gurd888)
+
+Every contribution goes directly to continuing the formalization program
+(order-one, Dirac operator construction, and the uniqueness problem).

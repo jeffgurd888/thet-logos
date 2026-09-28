@@ -1,0 +1,74 @@
+== Step 1: 24-generator certification ==
+  real rank of generator set : 24 (expect 24)
+  real rank of C block       : 2
+  real rank of H block       : 4
+  real rank of M3 block       : 18
+  ||P_C+P_H+P_M - I||_F        : 0.00e+00
+  max ||[Gamma, pi(a)]||       : 0.00e+00
+  max ||[pi(a), pi^circ(b)]||  : 0.00e+00
+  CERTIFIED: True
+== Step 2: admissible D_F basis (grading-odd, self-adjoint, J-compatible) ==
+  admissible dimension        : 272 (expect 272)
+  max ||{B, Gamma}||          : 6.02e-15
+  max ||UJ conj(B) - B UJ||    : 6.85e-15
+  max |(||B_k|| - 1)|         : 1.33e-15
+  real rank of D basis        : 272
+== Step 3: order-one nullspace (24^2 = 576 pairs) ==
+  ... generator 1/24 done (7s)  ... generator 2/24 done (14s)  ... generator 3/24 done (21s)  ... generator 4/24 done (27s)  ... generator 5/24 done (33s)  ... generator 6/24 done (40s)  ... generator 7/24 done (46s)  ... generator 8/24 done (52s)  ... generator 9/24 done (59s)  ... generator 10/24 done (66s)  ... generator 11/24 done (73s)  ... generator 12/24 done (80s)  ... generator 13/24 done (87s)  ... generator 14/24 done (94s)  ... generator 15/24 done (101s)  ... generator 16/24 done (109s)  ... generator 17/24 done (116s)  ... generator 18/24 done (123s)  ... generator 19/24 done (130s)  ... generator 20/24 done (137s)  ... generator 21/24 done (145s)  ... generator 22/24 done (152s)  ... generator 23/24 done (160s)  ... generator 24/24 done (170s)
+  equations stacked           : 272 x 272
+  order-one nullity           : 46 (previous 23-gen scan: 46)
+  normalized spectral gap     : 0.360
+  singular values straddling cutoff : [6.00e+00 6.00e+00 6.00e+00 1.77e-13 1.68e-13 1.61e-13]
+  max |R v| over nullspace    : 7.66e-14 (must be ~0)
+  time                        : 170s
+== Step 4: SM Yukawa + Majorana directions vs nullspace ==
+  max ||UJ conj(D) - D UJ|| on SM dirs : 0.00e+00
+  max ||{D, Gamma}|| on SM dirs      : 0.00e+00
+  Re(Ynu)     rel. order-one residual: 1.05e-13   nullspace fraction: 1.000000
+  Im(Ynu)     rel. order-one residual: 2.16e-13   nullspace fraction: 1.000000
+  Re(Ye)      rel. order-one residual: 2.11e-13   nullspace fraction: 1.000000
+  Im(Ye)      rel. order-one residual: 2.02e-13   nullspace fraction: 1.000000
+  Re(Yu)      rel. order-one residual: 1.74e-13   nullspace fraction: 1.000000
+  Im(Yu)      rel. order-one residual: 1.68e-13   nullspace fraction: 1.000000
+  Re(Yd)      rel. order-one residual: 1.84e-13   nullspace fraction: 1.000000
+  Im(Yd)      rel. order-one residual: 1.89e-13   nullspace fraction: 1.000000
+  Re(Y_R)     rel. order-one residual: 1.89e-13   nullspace fraction: 1.000000
+  Im(Y_R)     rel. order-one residual: 1.82e-13   nullspace fraction: 1.000000
+  rank of 10 SM directions            : 10
+  rank of SM directions in nullspace  : 10
+== Step 5: spectral gap sweep ==
+  Delta_gap(tY rows, tM cols), t = top-Yukawa / Majorana scale:
+  tY\tM      1e-02     3e-02     1e-01     3e-01     1e+00     3e+00     1e+01
+      1e-02  1.00e-05  1.00e-05  1.00e-05  1.00e-05  1.00e-05  1.00e-05  1.00e-05
+      3e-02  3.16e-05  3.16e-05  3.16e-05  3.16e-05  3.16e-05  3.16e-05  3.16e-05
+      1e-01  1.00e-04  1.00e-04  1.00e-04  1.00e-04  1.00e-04  1.00e-04  1.00e-04
+      3e-01  3.16e-04  3.16e-04  3.16e-04  3.16e-04  3.16e-04  3.16e-04  3.16e-04
+      1e+00  1.00e-03  1.00e-03  1.00e-03  1.00e-03  1.00e-03  1.00e-03  1.00e-03
+      3e+00  1.00e-09  3.16e-10  3.16e-03  3.16e-03  3.16e-03  3.16e-03  3.16e-03
+      1e+01  1.00e-08  3.16e-09  1.00e-09  3.16e-10  1.00e-02  1.00e-02  1.00e-02
+  (Delta_gap scales linearly with tY at tM=0; Majorana lifts the zero-mode floor)
+
+DONE in 185s. Results in /home/hatch/workspace/thet-logos/attack4_corrected/results
+{
+  "generators": 24,
+  "real_rank_generators": 24,
+  "grading_even_residual": 0.0,
+  "order_zero_residual": 0.0,
+  "admissible_D_dim": 272,
+  "order_one_pairs": 576,
+  "order_one_nullity": 46,
+  "order_one_gap": 0.35999999999999616,
+  "order_one_gap_def": "s[n-nullity-1]/s[0]: smallest non-null singular value over largest",
+  "singular_values_at_cutoff": [
+    6.000000000000002,
+    5.999999999999984,
+    5.999999999999954,
+    1.7705486742351486e-13,
+    1.6831250585759163e-13,
+    1.6057421500332818e-13
+  ],
+  "sm_rank": 10,
+  "seconds": 185.08521938323975,
+  "tier": "T4 numerical exploration only; not a theorem, not a Lean proof"
+}
+exit: 0
