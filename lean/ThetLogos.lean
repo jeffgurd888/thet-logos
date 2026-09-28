@@ -3,6 +3,7 @@ import ThetLogos.TRO
 import ThetLogos.Scaffold32
 import ThetLogos.FiniteSpectralTriple
 import ThetLogos.MartinettiRep
+import ThetLogos.XYZTripotents
 import ThetLogos.OrderOne
 import ThetLogos.ThermalKMS
 import ThetLogos.ModularTime
