@@ -213,4 +213,23 @@ theorem cf_kernel_classification_46_10
   rw [h_D_eq]
   exact h_SM
 
+/-- Full spectral-triple version: order-one + `[D, C_F] = 0` + self-adjointness
+    + J-compatibility + grading-oddness forces `D` to be SM-type.
+
+    The J_F and γ_F hypotheses are preserved by the 46→10 reduction: the 10 SM
+    generators satisfy J-compatibility and grading-oddness by construction
+    (smDirac is self-adjoint, J-compatible, and grading-odd for all parameters).
+    Hence this reduces directly to `cf_kernel_classification_46_10`. -/
+theorem cf_kernel_classification_full (D : Matrix I32 I32 ℂ)
+    (h_oo : OrderOneHolds D)
+    (h_cf : D * cfMat - cfMat * D = 0)
+    (h_sa : D.conjTranspose = D)
+    (h_J : UJ * D.map (star : ℂ → ℂ) = D * UJ)
+    (h_g : gammaF * D + D * gammaF = 0) :
+    ∃ yNu yE yU yD yR : ℂ, D = smDirac yNu yE yU yD yR := by
+  -- The J/γ/self-adjoint hypotheses select the physical real form; the
+  -- 46→10 kernel reduction needs only order-one + commutator.
+  have h_comm : cfCommutatorMap D = 0 := h_cf
+  exact cf_kernel_classification_46_10 D h_oo h_comm
+
 end ThetLogos

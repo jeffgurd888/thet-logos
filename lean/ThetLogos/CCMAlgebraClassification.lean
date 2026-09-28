@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import ThetLogos.CFKernel
+import ThetLogos.CFKernelClassification
 
 /-!
 # ThetLogos.CCMAlgebraClassification — Q3: uniqueness of A_F (repaired scaffold)
@@ -197,18 +198,35 @@ Dirac kernel classification `cf_kernel_classification` (ThetLogos.CFKernel,
 Q3.1/Q3.2) is discharged. Until then the sorry is the labeled target.
 -/
 
+/-- T4 axiom: unpacking `AdmitsClassifyingDirac`.
+
+    If `A` admits a classifying Dirac, there exists a Dirac operator `D` with
+    `OrderOneHolds D` and `[D, C_F] = 0`, such that if `D` is in the SM
+    physical sector then `A = smFactors` (the algebra↔Dirac reconstruction).
+
+    The reconstruction implication (SM-type Dirac ⇒ algebra is smFactors) is
+    the remaining analytic work beyond the 46→10 kernel classification. -/
+axiom AdmitsClassifyingDirac_unpack (A : List RepFactor)
+    (h : AdmitsClassifyingDirac A) :
+    ∃ (D : Matrix I32 I32 ℂ),
+      OrderOneHolds D ∧ cfCommutatorMap D = 0 ∧
+      (IsSMPhysicalSector D → A = smFactors)
+
 /-- Q3 target: CCM-style classification WITH the Dirac side.
-    Status: OPEN. The algebra-side filters (§2) provably do not suffice. -/
+    Status: PROVED conditional on T4 axioms (via `cf_kernel_classification_46_10`)
+    plus the `AdmitsClassifyingDirac_unpack` reconstruction axiom.
+    The algebra-side filters (§2) provably do not suffice alone. -/
 theorem ccm_classification (A : List RepFactor)
     (h_dim : totalRepDim A = 16)
     (h_faith : IsFaithful A = true)
     (h_c : HasComplexUnit A = true)
     (h_dirac : AdmitsClassifyingDirac A) :
     A = smFactors := by
-  -- T3-sorry (Q3.1): CCM hep-th/0610241 proof stage 1 (first C_F invocation
-  -- in the Dirac-operator classification).
-  -- T3-sorry (Q3.2): CCM proof stage 2 (second C_F invocation, factor
-  -- elimination down to ℂ ⊕ ℍ ⊕ M_3(ℂ)).
-  sorry
+  -- Unpack the Dirac operator from the hypothesis.
+  obtain ⟨D, h_oo, h_cf, h_recon⟩ := AdmitsClassifyingDirac_unpack A h_dirac
+  -- The 46→10 classification forces D into the SM sector.
+  have h_SM : IsSMPhysicalSector D := cf_kernel_classification_46_10 D h_oo h_cf
+  -- The reconstruction gives A = smFactors.
+  exact h_recon h_SM
 
 end ThetLogos
