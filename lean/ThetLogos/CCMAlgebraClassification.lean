@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import ThetLogos.CFKernel
 
 /-!
 # ThetLogos.CCMAlgebraClassification — Q3: uniqueness of A_F (repaired scaffold)
@@ -170,6 +171,31 @@ Evidence ledger for `AdmitsClassifyingDirac smFactors`:
     Yukawa shape." Kept opaque until the Dirac analysis is formalized;
     see BlockedQuestions.lean Q3. -/
 opaque AdmitsClassifyingDirac : List RepFactor → Prop
+
+/-! ## §3b. The C_F mechanism, grounded (PROVED)
+
+CORRECTION (2026-09-27): an earlier draft specified the C_F representative as
+"diag(0, I_3⊗I_2, …)". That does not match the working representation of the
+repo: the census (`attack4_corrected.py`) uses π(λ,λ,0) = λ·(P_C + P_H), i.e.
+the diagonal projector `cfMat` (ThetLogos.CFKernel) with support
+{0,…,17,24,25} — spectrally diag(0×12, 1×20). There is no separate
+`CF_matrix` definition here; `cfMat` IS the grounded C_F representative, and
+`cfMat_comm_forces_block` is its proved consequence: any D with
+[D, cfMat] = 0 is block-diagonal across the 20/12 support split
+(`cf_support_card`). That lemma is the proved formal core of CCM's Q3.1
+stage. It does not mention M_3(ℂ) "projections": with the grounded matrix,
+the C_F action is the support split, not a color-block projector.
+
+What remains open for `ccm_classification` (line 202): the opaque predicate
+`AdmitsClassifyingDirac A` carries the Dirac-side analysis (order-one over
+the correct generator family + [D,cfMat] = 0 + J-compat + grading + the
+algebra↔Dirac reconstruction). It cannot be discharged by casing on the
+scaffold list `A` — the opaque hypothesis yields no usable data, and
+`filters_do_not_classify` already proves the algebra-side filters are
+insufficient. The honest dependency: `ccm_classification` closes when the
+Dirac kernel classification `cf_kernel_classification` (ThetLogos.CFKernel,
+Q3.1/Q3.2) is discharged. Until then the sorry is the labeled target.
+-/
 
 /-- Q3 target: CCM-style classification WITH the Dirac side.
     Status: OPEN. The algebra-side filters (§2) provably do not suffice. -/

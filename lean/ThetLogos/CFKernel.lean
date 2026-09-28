@@ -26,6 +26,9 @@ exact, all 36 extras fail with min norm 0.48 — T4 numerical, order-one census)
 PROVED here (T3):
 - `smDirac_comm_cfMat`: [smDirac(yν,yE,yU,yD,yR), cfMat] = 0 for arbitrary
   complex Yukawas — the 5 SM Yukawa/Majorana matrices lie in the C_F kernel.
+- `cfMat_comm_forces_block`: [D, cfMat] = 0 forces D to respect the C_F
+  support split (no S ↔ complement entries) — the proved mechanism of Q3.1.
+- `cf_support_card`: the C_F support has 20 dimensions (complement 12).
 
 TARGET (OPEN, labeled T3 sorrys — Q3.1/Q3.2, the two CCM C_F proof stages):
 - `cf_kernel_classification`: order-one + [D,C_F] = 0 (+ J, γ, self-adjoint)
@@ -263,6 +266,52 @@ theorem smDirac_comm_cfMat (yNu yE yU yD yR : ℂ) :
   · rw [hD]; simp
   · have hcf := smDirac_cf_supp yNu yE yU yD yR i j hD
     rw [hcf]; ring
+
+/-! ## §4. The C_F mechanism (PROVED)
+
+For a diagonal 0/1 projector P, [D, P] = 0 forces D to respect the
+support split: D_ij = 0 whenever P_ii ≠ P_jj. This is the proved
+formal core of CCM's Q3.1 stage — the mechanism by which C_F cuts the
+order-one nullspace. (It does not by itself classify the kernel; the
+order-one + J + γ analysis of Q3.1/Q3.2 is §5.)
+-/
+
+/-- The indicator takes only the values 0 and 1. -/
+theorem cfIndicator_mem (i : I32) : cfIndicator i = 0 ∨ cfIndicator i = 1 := by
+  unfold cfIndicator
+  by_cases h : (i.val < 18 ∨ i.val = 24 ∨ i.val = 25)
+  · rw [if_pos h]; exact Or.inr rfl
+  · rw [if_neg h]; exact Or.inl rfl
+
+/-- Commutation with C_F forces block structure: if [D, cfMat] = 0 then D
+    cannot connect the C_F support S = {0,…,17,24,25} to its complement.
+    Proof: (DP − PD)_ij = D_ij·(cf_j − cf_i); with cf values in {0,1} and
+    cf_i ≠ cf_j, the factor (cf_j − cf_i) = ±1 is a unit, so D_ij = 0. -/
+theorem cfMat_comm_forces_block (D : Matrix I32 I32 ℂ)
+    (h : D * cfMat - cfMat * D = 0) (i j : I32)
+    (hij : cfIndicator i ≠ cfIndicator j) : D i j = 0 := by
+  have hcomm : D * cfMat = cfMat * D := by
+    have := h; rw [sub_eq_zero] at this; exact this
+  have hij' : (D * cfMat) i j = (cfMat * D) i j :=
+    congrArg (fun M : Matrix I32 I32 ℂ => M i j) hcomm
+  rw [mul_cfMat_apply, cfMat_mul_apply] at hij'
+  -- hij' : D i j * cfIndicator j = cfIndicator i * D i j
+  have hdiff : cfIndicator j - cfIndicator i ≠ 0 := by
+    rcases cfIndicator_mem i with hi | hi <;> rcases cfIndicator_mem j with hj | hj
+    · rw [hi, hj] at hij; exact absurd rfl hij
+    · rw [hi, hj]; norm_num
+    · rw [hi, hj]; norm_num
+    · rw [hi, hj] at hij; exact absurd rfl hij
+  have hprod : D i j * (cfIndicator j - cfIndicator i) = 0 := by
+    rw [mul_sub, hij']; ring
+  rcases mul_eq_zero.mp hprod with hD | hcon
+  · exact hD
+  · exact absurd hcon hdiff
+
+/-- The C_F support has 20 dimensions (complement: 12). -/
+theorem cf_support_card :
+    (Finset.univ.filter (fun i : I32 => decide (i.val < 18 ∨ i.val = 24 ∨ i.val = 25))).card = 20 := by
+  decide
 
 /-! ## §5. Classification target (OPEN) -/
 
