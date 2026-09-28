@@ -55,6 +55,32 @@ theorem UJ_invol (X : Matrix I32 I32 ℂ) : UJ * (UJ * X * UJ) * UJ = X := by
   rw [hUJ]
   simp
 
+/-- UJ distributes over products by inserting UJ*UJ=1:
+    UJ * (X * Y) * UJ = (UJ * X * UJ) * (UJ * Y * UJ). -/
+theorem UJ_conj_mul (X Y : Matrix I32 I32 ℂ) :
+    UJ * (X * Y) * UJ = (UJ * X * UJ) * (UJ * Y * UJ) := by
+  have hUJ : UJ * UJ = 1 := UJ_mul_self
+  calc UJ * (X * Y) * UJ
+      = UJ * X * Y * UJ := by simp only [Matrix.mul_assoc]
+    _ = UJ * X * (UJ * UJ) * Y * UJ := by rw [hUJ]; simp only [Matrix.mul_one]
+    _ = (UJ * X * UJ) * (UJ * Y * UJ) := by simp only [Matrix.mul_assoc]
+
+/-- J-conjugation of the commutator transpose (given J-compatibility of D_F):
+    UJ * [D_F, smGen b]ᵀ * UJ = -[D_F, smGenOp b].
+    The minus sign arises because transpose reverses the commutator order. -/
+theorem UJ_conj_transpose_commutator
+    (D_F : Matrix I32 I32 ℂ) (b : Fin 12)
+    (hJ : UJ * D_F.transpose * UJ = D_F) :
+    UJ * (D_F * smGen b - smGen b * D_F).transpose * UJ
+      = -(D_F * smGenOp b - smGenOp b * D_F) := by
+  rw [Matrix.transpose_sub, Matrix.transpose_mul, Matrix.transpose_mul]
+  rw [Matrix.mul_sub, Matrix.sub_mul]
+  rw [UJ_conj_mul, UJ_conj_mul]
+  have hOp : ∀ g : Fin 12, UJ * (smGen g).transpose * UJ = smGenOp g := by
+    intro g; rfl
+  rw [hOp b, hJ]
+  simp [neg_sub]
+
 /-! ## §1. Algebraic 1-forms via smGen -/
 
 /-- An algebraic 1-form: A = ∑ᵢ smGen(aᵢ)[D_F, smGen(bᵢ)]. -/
