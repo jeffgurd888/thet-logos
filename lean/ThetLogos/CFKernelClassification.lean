@@ -1,5 +1,6 @@
 import ThetLogos.OrderOne
 import ThetLogos.MartinettiRep
+import ThetLogos.CFKernelBase
 import ThetLogos.CFKernel
 
 /-!

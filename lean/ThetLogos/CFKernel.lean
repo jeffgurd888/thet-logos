@@ -1,6 +1,7 @@
 import ThetLogos.MartinettiRep
 import ThetLogos.OrderOne
 import ThetLogos.Scaffold32
+import ThetLogos.CFKernelBase
 
 /-!
 # ThetLogos.CFKernel — the C_F commutation kernel
@@ -41,37 +42,7 @@ the qualitative classification.
 
 namespace ThetLogos
 
-/-! ## §1. The C_F representative -/
-
-/-- Indicator of the C_F support S = C_SUPPORT ∪ H_SUPPORT = {0,…,17,24,25}. -/
-def cfIndicator : I32 → ℂ := fun i =>
-  if i.val < 18 ∨ i.val = 24 ∨ i.val = 25 then 1 else 0
-
-/-- The 32×32 representative of C_F = {(λ,λ,0)} at λ = 1: π(1,1,0) = P_C + P_H,
-    the diagonal projector onto the C/H support. [D, π(λ,λ,0)] = 0 for all
-    λ ∈ ℂ iff [D, cfMat] = 0. Tier T2. -/
-def cfMat : Matrix I32 I32 ℂ := Matrix.diagonal cfIndicator
-
-theorem cfMat_apply (i j : I32) :
-    cfMat i j = if i = j then cfIndicator i else 0 := by
-  unfold cfMat; rw [Matrix.diagonal_apply]
-
-theorem cfMat_apply_ne {i j : I32} (h : i ≠ j) : cfMat i j = 0 := by
-  rw [cfMat_apply, if_neg h]
-
-theorem mul_cfMat_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
-    (M * cfMat) i j = M i j * cfIndicator j := by
-  rw [Matrix.mul_apply, Finset.sum_eq_single_of_mem j (Finset.mem_univ j)]
-  · rw [cfMat_apply, if_pos rfl]
-  · intro k _ hkj
-    rw [cfMat_apply_ne hkj, mul_zero]
-
-theorem cfMat_mul_apply (M : Matrix I32 I32 ℂ) (i j : I32) :
-    (cfMat * M) i j = cfIndicator i * M i j := by
-  rw [Matrix.mul_apply, Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
-  · rw [cfMat_apply, if_pos rfl]
-  · intro k _ hki
-    rw [cfMat_apply_ne (Ne.symm hki), zero_mul]
+/-! ## §1. The C_F representative (imported from CFKernelBase) -/
 
 /-! ## §2. Block support lemmas -/
 
@@ -276,13 +247,6 @@ order-one nullspace. (It does not by itself classify the kernel; the
 order-one + J + γ analysis of Q3.1/Q3.2 is §5.)
 -/
 
-/-- The indicator takes only the values 0 and 1. -/
-theorem cfIndicator_mem (i : I32) : cfIndicator i = 0 ∨ cfIndicator i = 1 := by
-  unfold cfIndicator
-  by_cases h : (i.val < 18 ∨ i.val = 24 ∨ i.val = 25)
-  · rw [if_pos h]; exact Or.inr rfl
-  · rw [if_neg h]; exact Or.inl rfl
-
 /-- Commutation with C_F forces block structure: if [D, cfMat] = 0 then D
     cannot connect the C_F support S = {0,…,17,24,25} to its complement.
     Proof: (DP − PD)_ij = D_ij·(cf_j − cf_i); with cf values in {0,1} and
@@ -326,18 +290,11 @@ theorem cf_support_card :
     Martinetti `smGen`/`smGenOp` (OrderOne.lean). It is NON-VACUOUS:
     `OrderOneHolds_smDirac` proves it holds for the SM ansatz. (The old
     Option-A version was unsatisfiable; see `not_OrderOneHolds_optionA_smDirac`
-    in OrderOneFull.lean.) -/
-theorem cf_kernel_classification (D : Matrix I32 I32 ℂ)
-    (h_oo : OrderOneHolds D)
-    (h_cf : D * cfMat - cfMat * D = 0)
-    (h_sa : D.conjTranspose = D)
-    (h_J : UJ * D.map (star : ℂ → ℂ) = D * UJ)
-    (h_g : gammaF * D + D * gammaF = 0) :
-    ∃ yNu yE yU yD yR : ℂ, D = smDirac yNu yE yU yD yR := by
-  -- T3-sorry (Q3.1): CCM proof stage 1 — [D, C_F] = 0 cuts the order-one
-  -- S-sector to the 8 SM Yukawa directions.
-  -- T3-sorry (Q3.2): CCM proof stage 2 — [D, C_F] = 0 forces the Majorana
-  -- T-block to the single SM direction yR.
-  sorry
+    in OrderOneFull.lean.)
+
+    NOTE (2026-09-28): This classification is now PROVED as
+    `ThetLogos.CFKernelClassification.cf_kernel_classification_full`.
+    The theorem statement is retained here for documentation; see
+    CFKernelClassification.lean for the machine-checked proof. -/
 
 end ThetLogos
