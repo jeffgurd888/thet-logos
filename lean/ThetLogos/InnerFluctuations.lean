@@ -152,58 +152,149 @@ lemma one_form_opposite_comm
 
 /-! ## §5. Helper Lemma 2: Opposite 1-forms commute with algebra -/
 
-/-- The J_F-conjugate of a 1-form expands in the opposite representation:
-    J A J⁻¹ = ∑ᵢ π°(aᵢ)[D_F, π°(bᵢ)].
-    Uses J π(a) J⁻¹ = π°(a) and J[D_F,π(b)]J⁻¹ = [D_F,π°(b)]. -/
-axiom opposite_one_form_expand
+/-- J-conjugation inverts smGenOp back to smGen:
+    `UJ * (smGenOp g)ᵀ * UJ = smGen g`. -/
+theorem smGenOp_involution (g : Fin 12) :
+    UJ * (smGenOp g).transpose * UJ = smGen g := by
+  have h1 : (smGenOp g).transpose = UJ * smGen g * UJ := by
+    simp only [smGenOp, Matrix.transpose_mul, UJ_transpose_eq,
+      Matrix.transpose_transpose, Matrix.mul_assoc]
+  rw [h1]
+  exact UJ_invol (smGen g)
+
+/-! ## §5. J-compatibility and the honest opposite 1-form expansion -/
+
+/-- J-compatibility of the Dirac operator: `UJ * D_Fᵀ * UJ = D_F`.
+    Finite form of `J_F D_F = D_F J_F` under the transpose convention.
+    Required for the opposite 1-form calculus; false for arbitrary `D_F`. -/
+def IsJCompatible (D_F : Matrix I32 I32 ℂ) : Prop :=
+  UJ * D_F.transpose * UJ = D_F
+
+/-- The J_F-conjugate of a 1-form expands in the opposite representation,
+    with the factor order REVERSED by transposition:
+    `J A J⁻¹ = -∑ᵢ [D_F, π°(bᵢ)] π°(aᵢ)`.
+    The swap (`[D,b°]a°` not `a°[D,b°]`) is the matrix feature
+    `(XY)ᵀ = YᵀXᵀ`; the minus sign is the transpose reversing the
+    commutator. Proved from `UJ_conj_transpose_commutator`. -/
+theorem opposite_one_form_expand
     (D_F A : Matrix I32 I32 ℂ)
+    (hJ : IsJCompatible D_F)
     (h_A : IsAlgebraicOneForm A D_F) :
     ∃ (k : ℕ) (a b : Fin k → Fin 12),
       oppositeOneForm A
-        = ∑ i : Fin k, (smGenOp (a i) * (D_F * smGenOp (b i) - smGenOp (b i) * D_F))
+        = -∑ i : Fin k, ((D_F * smGenOp (b i) - smGenOp (b i) * D_F) * smGenOp (a i)) := by
+  obtain ⟨k, a, b, hA_eq⟩ := h_A
+  use k, a, b
+  show UJ * A.transpose * UJ = _
+  rw [hA_eq]
+  rw [Matrix.transpose_sum]
+  simp only [Matrix.transpose_mul]
+  rw [Matrix.mul_sum, Matrix.sum_mul]
+  have h_neg : (-∑ i : Fin k, ((D_F * smGenOp (b i) - smGenOp (b i) * D_F) * smGenOp (a i)))
+      = ∑ i : Fin k, (-((D_F * smGenOp (b i) - smGenOp (b i) * D_F) * smGenOp (a i))) := by
+    rw [Finset.sum_neg_distrib]
+  rw [h_neg]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [UJ_conj_mul]
+  rw [UJ_conj_transpose_commutator D_F (b i) hJ]
+  have hOp : UJ * (smGen (a i)).transpose * UJ = smGenOp (a i) := rfl
+  rw [hOp, neg_mul]
 
-/-- Swapped order-one: [[D_F, π°(b)], π(a)] = 0.
-    STATUS: Axiom (T2) — the finite spectral triple axioms are symmetric
-    under exchanging the representation with its opposite. -/
-axiom order_one_swapped (D_F : Matrix I32 I32 ℂ)
+/-- Swapped order-one: `[[D_F, π°(b)], π(a)] = 0`.
+    Requires J-compatibility of `D_F` (false for arbitrary `D_F`).
+    Proof by J-conjugation: write `[D_F, π°(b)] = -UJ·[D_F,π(b)]ᵀ·UJ`
+    and `π(a) = UJ·π°(a)ᵀ·UJ`; the products collapse via `UJ_conj_mul`
+    to `UJ·[C,S]ᵀ·UJ` where `[C,S] = 0` is the ordinary order-one. -/
+theorem order_one_swapped (D_F : Matrix I32 I32 ℂ)
+    (hJ : IsJCompatible D_F)
     (h : OrderOneHolds D_F) (b a : Fin 12) :
     (D_F * smGenOp b - smGenOp b * D_F) * smGen a
-      - smGen a * (D_F * smGenOp b - smGenOp b * D_F) = 0
+      - smGen a * (D_F * smGenOp b - smGenOp b * D_F) = 0 := by
+  -- [D_F, π°(b)] = -UJ·[D_F,π(b)]ᵀ·UJ  (from UJ_conj_transpose_commutator)
+  have h_Dop : D_F * smGenOp b - smGenOp b * D_F
+      = -(UJ * (D_F * smGen b - smGen b * D_F).transpose * UJ) := by
+    have hc := UJ_conj_transpose_commutator D_F b hJ
+    rw [hc, neg_neg]
+  -- π(a) = UJ·π°(a)ᵀ·UJ  (smGenOp_involution)
+  have h_a : smGen a = UJ * (smGenOp a).transpose * UJ :=
+    (smGenOp_involution a).symm
+  -- Ordinary order-one: [[D_F,π(b)], π°(a)] = 0
+  have h_ord : (D_F * smGen b - smGen b * D_F) * smGenOp a
+      - smGenOp a * (D_F * smGen b - smGen b * D_F) = 0 :=
+    h b a
+  -- Substitute the J-conjugate forms
+  rw [h_Dop, h_a]
+  -- Collapse via UJ_conj_mul: (UJ·X·UJ)(UJ·Y·UJ) = UJ·(XY)·UJ
+  have e1 : (-(UJ * (D_F * smGen b - smGen b * D_F).transpose * UJ))
+        * (UJ * (smGenOp a).transpose * UJ)
+      = -(UJ * ((D_F * smGen b - smGen b * D_F).transpose * (smGenOp a).transpose) * UJ) := by
+    rw [neg_mul, ← UJ_conj_mul]
+  have e2 : (UJ * (smGenOp a).transpose * UJ)
+        * (-(UJ * (D_F * smGen b - smGen b * D_F).transpose * UJ))
+      = -(UJ * ((smGenOp a).transpose * (D_F * smGen b - smGen b * D_F).transpose) * UJ) := by
+    rw [mul_neg, ← UJ_conj_mul]
+  rw [e1, e2]
+  -- (XᵀYᵀ) = (YX)ᵀ
+  rw [← Matrix.transpose_mul (D_F * smGen b - smGen b * D_F) (smGenOp a),
+    ← Matrix.transpose_mul (smGenOp a) (D_F * smGen b - smGen b * D_F)]
+  -- Now: -UJ·(S*C)ᵀ·UJ + UJ·(C*S)ᵀ·UJ where C=[D_F,π(b)], S=π°(a)
+  -- = UJ·((CS)ᵀ - (SC)ᵀ)·UJ = UJ·((CS - SC)ᵀ)·UJ
+  have e3 : UJ * ((D_F * smGen b - smGen b * D_F) * smGenOp a).transpose * UJ
+        - UJ * (smGenOp a * (D_F * smGen b - smGen b * D_F)).transpose * UJ
+      = UJ * ((D_F * smGen b - smGen b * D_F) * smGenOp a
+          - smGenOp a * (D_F * smGen b - smGen b * D_F)).transpose * UJ := by
+    simp only [Matrix.transpose_sub, Matrix.mul_sub, Matrix.sub_mul]
+  -- Combine: the difference of the two terms equals UJ·[C,S]ᵀ·UJ
+  have h_diff : -(UJ * (smGenOp a * (D_F * smGen b - smGen b * D_F)).transpose * UJ)
+        - (-(UJ * ((D_F * smGen b - smGen b * D_F) * smGenOp a).transpose * UJ))
+      = UJ * ((D_F * smGen b - smGen b * D_F) * smGenOp a
+          - smGenOp a * (D_F * smGen b - smGen b * D_F)).transpose * UJ := by
+    have h1 : -(UJ * (smGenOp a * (D_F * smGen b - smGen b * D_F)).transpose * UJ)
+        - (-(UJ * ((D_F * smGen b - smGen b * D_F) * smGenOp a).transpose * UJ))
+        = UJ * ((D_F * smGen b - smGen b * D_F) * smGenOp a).transpose * UJ
+          - UJ * (smGenOp a * (D_F * smGen b - smGen b * D_F)).transpose * UJ := by
+      abel
+    rw [h1, e3]
+  rw [h_diff, h_ord]
+  simp
 
 /-- Opposite 1-forms commute directly with algebra elements.
-    Proof: A° = ∑ᵢ π°(aᵢ)[D_F,π°(bᵢ)]. Then
-    [π°(aᵢ)[D_F,π°(bᵢ)], π(x)]
-      = π°(aᵢ)[[D_F,π°(bᵢ)],π(x)] + [π°(aᵢ),π(x)][D_F,π°(bᵢ)] = 0
-    by swapped order-one and order-zero. -/
+    Proof: `A° = -∑ᵢ [D_F,π°(bᵢ)] π°(aᵢ)`. By the derivation rule,
+    `[[D,bᵢ°]aᵢ°, π(x)] = [[D,bᵢ°],π(x)]aᵢ° + [D,bᵢ°][aᵢ°,π(x)] = 0`
+    by swapped order-one and order-zero; the overall sign is irrelevant. -/
 lemma opposite_one_form_algebra_comm
     (D_F A : Matrix I32 I32 ℂ) (x : Fin 12)
+    (hJ : IsJCompatible D_F)
     (h_D_one : OrderOneHolds D_F)
     (h_A : IsAlgebraicOneForm A D_F) :
     oppositeOneForm A * smGen x = smGen x * oppositeOneForm A := by
-  obtain ⟨k, a, b, hA_eq⟩ := opposite_one_form_expand D_F A h_A
-  -- Each summand commutes via the two commutativity facts.
+  obtain ⟨k, a, b, hA_eq⟩ := opposite_one_form_expand D_F A hJ h_A
+  -- Each summand [D_F,π°(bᵢ)]*π°(aᵢ) commutes with π(x) by the derivation rule.
   have h_each : ∀ i : Fin k,
-      (smGenOp (a i) * (D_F * smGenOp (b i) - smGenOp (b i) * D_F)) * smGen x
-      = smGen x * (smGenOp (a i) * (D_F * smGenOp (b i) - smGenOp (b i) * D_F)) := by
+      ((D_F * smGenOp (b i) - smGenOp (b i) * D_F) * smGenOp (a i)) * smGen x
+      = smGen x * ((D_F * smGenOp (b i) - smGenOp (b i) * D_F) * smGenOp (a i)) := by
     intro i
     have h1_comm : (D_F * smGenOp (b i) - smGenOp (b i) * D_F) * smGen x
         = smGen x * (D_F * smGenOp (b i) - smGenOp (b i) * D_F) := by
-      have h := order_one_swapped D_F h_D_one (b i) x
+      have h := order_one_swapped D_F hJ h_D_one (b i) x
       rw [sub_eq_zero] at h
       exact h
     have h2_comm : smGenOp (a i) * smGen x = smGen x * smGenOp (a i) :=
       order_zero_comm_symm (a i) x
-    -- By Commute.mul_left: if X commutes with Z and B commutes with Z,
-    -- then (X*B) commutes with Z.
-    have h_comm : Commute (smGenOp (a i) * (D_F * smGenOp (b i) - smGenOp (b i) * D_F))
+    -- Derivation rule: [PQ, X] = [P,X]Q + P[Q,X]; both vanish here.
+    -- Via Commute.mul_left: if P commutes with X and Q commutes with X,
+    -- then (P*Q) commutes with X.
+    have h_comm : Commute ((D_F * smGenOp (b i) - smGenOp (b i) * D_F) * smGenOp (a i))
         (smGen x) :=
-      Commute.mul_left h2_comm h1_comm
+      Commute.mul_left h1_comm h2_comm
     exact h_comm.eq
-  -- Sum of commuting terms.
-  rw [hA_eq, Finset.sum_mul, Finset.mul_sum]
+  -- Sum of commuting terms; the overall negation preserves commutation.
+  rw [hA_eq, neg_mul, mul_neg, Finset.sum_mul, Finset.mul_sum,
+    ← Finset.sum_neg_distrib, ← Finset.sum_neg_distrib]
   apply Finset.sum_congr rfl
   intro i _
-  exact h_each i
+  rw [h_each i]
 
 /-! ## §6. Main theorem: order-one preservation -/
 
@@ -216,6 +307,7 @@ lemma opposite_one_form_algebra_comm
     - Third term: 0 by opposite_one_form_algebra_comm ([A°,π(x)] = 0). -/
 theorem inner_fluctuation_preserves_order_one
     (D_F A : Matrix I32 I32 ℂ)
+    (hJ : IsJCompatible D_F)
     (h_D_one : OrderOneHolds D_F)
     (h_A_form : IsAlgebraicOneForm A D_F) :
     OrderOneHolds (fluctuatedDirac D_F A) := by
@@ -228,7 +320,7 @@ theorem inner_fluctuation_preserves_order_one
   have h_A_comm : Commute A (smGenOp y) :=
     sub_eq_zero.mp (one_form_opposite_comm D_F A y h_D_one h_A_form)
   have h_Ao_comm : Commute (oppositeOneForm A) (smGen x) :=
-    opposite_one_form_algebra_comm D_F A x h_D_one h_A_form
+    opposite_one_form_algebra_comm D_F A x hJ h_D_one h_A_form
   have h_x_comm : Commute (smGen x) (smGenOp y) :=
     order_zero_comm x y
   -- Term 2: [[A, π(x)], π°(y)] = 0.
