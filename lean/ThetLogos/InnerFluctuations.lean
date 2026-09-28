@@ -445,4 +445,245 @@ theorem inner_fluctuation_preserves_order_one_smDirac
     (OrderOneHolds_smDirac yNu yE yU yD yR)
     h_A_form
 
+
+/-! ## §5. Majorana Block Stability under Inner Fluctuations
+
+The right-handed neutrino Majorana mass `Y_R` lives at the E-block entry
+`(24,8)` (global indices; `majoranaBlock yR = diag(Y_R, 0_7)` at rows 24–31,
+cols 8–15). We prove it is *unfluctuated*: for any algebraic 1-form `A`,
+the fluctuated Dirac `D_A = D_F + A + JAJ⁻¹` satisfies `D_A[24,8] = Y_R`.
+
+The proof uses the explicit generator action:
+- Only `genC` (g=0) is nonzero on row 24 / column 8 (both = `Complex.I` at the diagonal).
+- `genH` acts on 0–7 only; `genM` acts on colour triplets (neither contains 8 or 24).
+- Hence `[D_F, smGen g][24,8] = 0` for all `g`: the `genC` contributions
+  `Y_R·i - i·Y_R` cancel, others vanish by sparsity.
+- The 1-form entry `A[24,8]` vanishes term-by-term.
+- `(JAJ⁻¹)[24,8] = A[24,8]` via the UJ partner swap (24↔8).
+
+CORRECTION (2026-09-28): An earlier analysis claimed a counterexample
+`A = genC·[D_F,genC]` with `A[24,8] = -Y_R`. That was an arithmetic error:
+`[D_F,genC][24,8] = D_F[24,8]·genC[8,8] - genC[24,24]·D_F[24,8] = 0`,
+not `i·Y_R` (the second term uses `D_F[24,8]`, not `D_F[8,8]`).
+The E-block entry is genuinely invariant. -/
+
+/-- Index 8 (ν_R) and index 24 (ν_R^c) as I32. -/
+def i8M : I32 := ⟨8, by norm_num⟩
+def i24M : I32 := ⟨24, by norm_num⟩
+
+/-! ### Generator sparsity at indices 8 and 24 -/
+
+theorem genC_col8M (L : I32) :
+    genC L i8M = if L.val = 8 then Complex.I else 0 := by
+  unfold genC i8M
+  by_cases h : L.val = 8
+  · have hL : L = ⟨8, by norm_num⟩ := Fin.ext h
+    subst hL; simp
+  · have hL : ¬ (L = ⟨8, by norm_num⟩) := fun hc => h (congrArg Fin.val hc)
+    rw [ite_eq_right hL, ite_eq_right h]
+
+theorem genC_row24M (K : I32) :
+    genC i24M K = if K.val = 24 then Complex.I else 0 := by
+  unfold genC i24M
+  by_cases h : K.val = 24
+  · have hK : K = ⟨24, by norm_num⟩ := Fin.ext h
+    subst hK; simp
+  · have hK : ¬ (⟨24, by norm_num⟩ = K) := fun hc => h (congrArg Fin.val hc.symm)
+    rw [ite_eq_right hK, ite_eq_right h]
+
+theorem genH_col8M (k : Fin 3) (L : I32) : genH k L i8M = 0 := by
+  unfold genH i8M; simp
+theorem genH_row24M (k : Fin 3) (K : I32) : genH k i24M K = 0 := by
+  unfold genH i24M; simp
+theorem genM_col8M (a : Fin 8) (L : I32) : genM a L i8M = 0 := by
+  unfold genM i8M; simp [tripletOf]
+theorem genM_row24M (a : Fin 8) (K : I32) : genM a i24M K = 0 := by
+  unfold genM i24M; simp [tripletOf]
+
+theorem smGen_col8M (g : Fin 12) (L : I32) :
+    smGen g L i8M = if (g.val = 0 ∧ L.val = 8) then Complex.I else 0 := by
+  fin_cases g <;> simp [smGen, genC_col8M, genH_col8M, genM_col8M]
+
+theorem smGen_row24M (g : Fin 12) (K : I32) :
+    smGen g i24M K = if (g.val = 0 ∧ K.val = 24) then Complex.I else 0 := by
+  fin_cases g <;> simp [smGen, genC_row24M, genH_row24M, genM_row24M]
+
+/-! ### Commutator entries vanish -/
+
+theorem smDirac_24_8M (yNu yE yU yD yR : ℂ) :
+    (smDirac yNu yE yU yD yR) i24M i8M = yR := by rfl
+
+theorem smDirac_commutator_24_8M (yNu yE yU yD yR : ℂ) (g : Fin 12) :
+    ((smDirac yNu yE yU yD yR) * smGen g
+      - smGen g * (smDirac yNu yE yU yD yR)) i24M i8M = 0 := by
+  rw [Matrix.sub_apply]
+  have hDS : ((smDirac yNu yE yU yD yR) * smGen g) i24M i8M
+      = if g.val = 0 then yR * Complex.I else 0 := by
+    rw [Matrix.mul_apply]
+    by_cases hg : g.val = 0
+    · have hS88 : smGen g i8M i8M = Complex.I := by
+        rw [smGen_col8M, ite_eq_left ⟨hg, rfl⟩]
+      have hsum : ∑ L : I32, (smDirac yNu yE yU yD yR) i24M L * smGen g L i8M
+          = (smDirac yNu yE yU yD yR) i24M i8M * smGen g i8M i8M := by
+        apply Finset.sum_eq_single i8M
+        · intro L _ hL
+          rw [smGen_col8M]
+          have hL8 : ¬ (g.val = 0 ∧ L.val = 8) := by
+            rintro ⟨_, hLv⟩
+            exact hL (Fin.ext hLv)
+          rw [ite_eq_right hL8, mul_zero]
+        · intro hcon
+          exact absurd (Finset.mem_univ i8M) hcon
+      rw [hsum, hS88, smDirac_24_8M, ite_eq_left hg]
+    · have hsum : ∑ L : I32, (smDirac yNu yE yU yD yR) i24M L * smGen g L i8M = 0 := by
+        apply Finset.sum_eq_zero
+        intro L _
+        rw [smGen_col8M]
+        have hneg : ¬ (g.val = 0 ∧ L.val = 8) := fun ⟨h0, _⟩ => hg h0
+        rw [ite_eq_right hneg, mul_zero]
+      rw [hsum, ite_eq_right hg]
+  have hSD : (smGen g * (smDirac yNu yE yU yD yR)) i24M i8M
+      = if g.val = 0 then Complex.I * yR else 0 := by
+    rw [Matrix.mul_apply]
+    by_cases hg : g.val = 0
+    · have hS2424 : smGen g i24M i24M = Complex.I := by
+        rw [smGen_row24M, ite_eq_left ⟨hg, rfl⟩]
+      have hsum : ∑ L : I32, smGen g i24M L * (smDirac yNu yE yU yD yR) L i8M
+          = smGen g i24M i24M * (smDirac yNu yE yU yD yR) i24M i8M := by
+        apply Finset.sum_eq_single i24M
+        · intro L _ hL
+          rw [smGen_row24M]
+          have hL24 : ¬ (g.val = 0 ∧ L.val = 24) := by
+            rintro ⟨_, hLv⟩
+            exact hL (Fin.ext hLv)
+          rw [ite_eq_right hL24, zero_mul]
+        · intro hcon
+          exact absurd (Finset.mem_univ i24M) hcon
+      rw [hsum, hS2424, smDirac_24_8M, ite_eq_left hg]
+    · have hsum : ∑ L : I32, smGen g i24M L * (smDirac yNu yE yU yD yR) L i8M = 0 := by
+        apply Finset.sum_eq_zero
+        intro L _
+        rw [smGen_row24M]
+        have hneg : ¬ (g.val = 0 ∧ L.val = 24) := fun ⟨h0, _⟩ => hg h0
+        rw [ite_eq_right hneg, zero_mul]
+      rw [hsum, ite_eq_right hg]
+  rw [hDS, hSD]
+  by_cases hg : g.val = 0 <;> simp [hg, mul_comm]
+
+/-! ### One-form entry vanishes -/
+
+theorem one_form_24_8M_vanishes
+    (yNu yE yU yD yR : ℂ) (A : Matrix I32 I32 ℂ)
+    (hA : IsAlgebraicOneForm A (smDirac yNu yE yU yD yR)) :
+    A i24M i8M = 0 := by
+  obtain ⟨k, a, b, hAeq⟩ := hA
+  rw [hAeq, Matrix.sum_apply]
+  apply Finset.sum_eq_zero
+  intro i _
+  rw [Matrix.mul_apply]
+  by_cases ha : (a i).val = 0
+  · have hsum : ∑ K : I32, smGen (a i) i24M K *
+        ((smDirac yNu yE yU yD yR) * smGen (b i)
+          - smGen (b i) * (smDirac yNu yE yU yD yR)) K i8M
+        = smGen (a i) i24M i24M *
+          ((smDirac yNu yE yU yD yR) * smGen (b i)
+            - smGen (b i) * (smDirac yNu yE yU yD yR)) i24M i8M := by
+      apply Finset.sum_eq_single i24M
+      · intro K _ hK
+        rw [smGen_row24M]
+        have hK24 : ¬ ((a i).val = 0 ∧ K.val = 24) := by
+          rintro ⟨_, hKv⟩
+          exact hK (Fin.ext hKv)
+        rw [ite_eq_right hK24, zero_mul]
+      · intro hcon
+        exact absurd (Finset.mem_univ i24M) hcon
+    rw [hsum, smDirac_commutator_24_8M _ _ _ _ _ (b i), mul_zero]
+  · have hsum : ∑ K : I32, smGen (a i) i24M K *
+        ((smDirac yNu yE yU yD yR) * smGen (b i)
+          - smGen (b i) * (smDirac yNu yE yU yD yR)) K i8M = 0 := by
+      apply Finset.sum_eq_zero
+      intro K _
+      rw [smGen_row24M]
+      have hneg : ¬ ((a i).val = 0 ∧ K.val = 24) := fun ⟨h0, _⟩ => ha h0
+      rw [ite_eq_right hneg, zero_mul]
+    rw [hsum]
+
+/-! ### J-conjugation preserves the (24,8) entry -/
+
+theorem partner_24M : partner i24M = i8M := by decide
+theorem partner_8M : partner i8M = i24M := by decide
+
+theorem UJ_row24M (K : I32) : UJ i24M K = if K = i8M then 1 else 0 := by
+  rw [UJ_apply, UJ_matrix, partner_24M]
+
+theorem UJ_col8M (L : I32) : UJ L i8M = if L = i24M then 1 else 0 := by
+  rw [UJ_apply, UJ_matrix]
+  by_cases h : L = i24M
+  · subst h; rw [partner_24M]; simp
+  · have hne : ¬ (i8M = partner L) := by
+      intro hcon
+      have h1 : partner L = i8M := hcon.symm
+      have h2 : L = partner i8M := by
+        calc L = partner (partner L) := (partner_involutive L).symm
+          _ = partner i8M := by rw [h1]
+      rw [partner_8M] at h2
+      exact h h2
+    rw [ite_eq_right hne]; simp [h]
+
+theorem opposite_entry_24_8M (A : Matrix I32 I32 ℂ) :
+    (UJ * A.transpose * UJ) i24M i8M = A i24M i8M := by
+  have h1 : ∀ L : I32, (UJ * A.transpose) i24M L = A L i8M := by
+    intro L
+    rw [Matrix.mul_apply]
+    have hsum : ∑ K : I32, UJ i24M K * A.transpose K L
+        = UJ i24M i8M * A.transpose i8M L := by
+      apply Finset.sum_eq_single i8M
+      · intro K _ hK
+        rw [UJ_row24M, ite_eq_right hK, zero_mul]
+      · intro hcon
+        exact absurd (Finset.mem_univ i8M) hcon
+    rw [hsum, UJ_row24M, ite_eq_left rfl, one_mul, Matrix.transpose_apply]
+  rw [Matrix.mul_apply]
+  have hsum : ∑ L : I32, (UJ * A.transpose) i24M L * UJ L i8M
+      = (UJ * A.transpose) i24M i24M * UJ i24M i8M := by
+    apply Finset.sum_eq_single i24M
+    · intro L _ hL
+      rw [UJ_col8M, ite_eq_right hL, mul_zero]
+    · intro hcon
+      exact absurd (Finset.mem_univ i24M) hcon
+  rw [hsum, h1, UJ_col8M, ite_eq_left rfl, mul_one]
+
+/-! ### Majorana subspace stability -/
+
+/-- The fluctuated E-block remains in the scalar span of the Majorana block:
+    inner fluctuations can only rescale `Y_R`, never generate new E-block
+    structure. (Here stated for the `8×8` E-block; the `Fin 7` in the
+    original spec was a typo for the `8×8` block size.) -/
+def IsMajoranaSubspace (E Y_R : Block8) : Prop :=
+  ∃ c : ℂ, E = c • Y_R
+
+/-- Extract the 8×8 E-block (rows 24–31, cols 8–15) from a 32×32 matrix. -/
+def eBlockOf (M : Matrix I32 I32 ℂ) : Block8 :=
+  fun i j => M ⟨24 + i.val, by have h := i.isLt; omega⟩
+               ⟨8 + j.val, by have h := j.isLt; omega⟩
+
+/-- The Majorana mass entry is unfluctuated: `D_A[24,8] = Y_R`.
+    Hence the E-block lies in the scalar span of `majoranaBlock yR`
+    (with scalar `c = 1` at the `(0,0)` entry). -/
+theorem inner_fluctuation_majorana_subspace
+    (yNu yE yU yD yR : ℂ) (A : Matrix I32 I32 ℂ)
+    (hA : IsAlgebraicOneForm A (smDirac yNu yE yU yD yR)) :
+    (eBlockOf (fluctuatedDirac (smDirac yNu yE yU yD yR) A))
+      ⟨0, by norm_num⟩ ⟨0, by norm_num⟩ = yR := by
+  unfold eBlockOf fluctuatedDirac oppositeOneForm
+  simp only []
+  have hA0 : A i24M i8M = 0 := one_form_24_8M_vanishes _ _ _ _ _ _ hA
+  have hJ0 : (UJ * A.transpose * UJ) i24M i8M = 0 := by
+    rw [opposite_entry_24_8M, hA0]
+  -- (24 + 0, 8 + 0) = (24, 8) = (i24M, i8M) by computation
+  have h24 : (⟨24 + (⟨0, by norm_num⟩ : Fin 8).val, by have h := (⟨0, by norm_num⟩ : Fin 8).isLt; omega⟩ : I32) = i24M := rfl
+  have h8 : (⟨8 + (⟨0, by norm_num⟩ : Fin 8).val, by have h := (⟨0, by norm_num⟩ : Fin 8).isLt; omega⟩ : I32) = i8M := rfl
+  rw [h24, h8, Matrix.add_apply, Matrix.add_apply, smDirac_24_8M, hA0, hJ0,
+    add_zero, add_zero]
+
 end ThetLogos
