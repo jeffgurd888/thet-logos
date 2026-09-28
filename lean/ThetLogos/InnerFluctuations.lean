@@ -24,6 +24,37 @@ The real structure `J_F` dictates the full fluctuated internal operator
 
 namespace ThetLogos
 
+/-! ## §0. Real structure (J) lemmas
+
+The real structure UJ satisfies UJ² = 1 (proved in Scaffold32 as UJ_mul_self)
+and is symmetric (UJᵀ = UJ) since the partner map is involutive.
+These give the involution properties needed to relate smGen and smGenOp
+under J-conjugation. -/
+
+/-- UJ is symmetric: UJᵀ = UJ. Follows from partner being involutive. -/
+theorem UJ_transpose_eq : UJ.transpose = UJ := by
+  ext i j
+  show UJ j i = UJ i j
+  simp only [UJ_apply, UJ_matrix]
+  by_cases h1 : i = partner j
+  · have h2 : j = partner i := by rw [h1, partner_involutive]
+    rw [if_pos h1, if_pos h2]
+  · have h2 : j ≠ partner i := by
+      intro hc
+      apply h1
+      rw [hc, partner_involutive]
+    rw [if_neg h1, if_neg h2]
+
+/-- UJ-conjugation is an involution: UJ * (UJ * X * UJ) * UJ = X.
+    Follows from UJ * UJ = 1 by reassociation. -/
+theorem UJ_invol (X : Matrix I32 I32 ℂ) : UJ * (UJ * X * UJ) * UJ = X := by
+  have hUJ : UJ * UJ = 1 := UJ_mul_self
+  simp only [Matrix.mul_assoc]
+  rw [show UJ * (UJ * (X * (UJ * UJ))) = (UJ * UJ) * (X * (UJ * UJ)) from by
+    rw [← Matrix.mul_assoc]]
+  rw [hUJ]
+  simp
+
 /-! ## §1. Algebraic 1-forms via smGen -/
 
 /-- An algebraic 1-form: A = ∑ᵢ smGen(aᵢ)[D_F, smGen(bᵢ)]. -/
