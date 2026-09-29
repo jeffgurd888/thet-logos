@@ -205,4 +205,71 @@ theorem kms_identity_diagonal {N : ℕ} (w : Fin N → ℝ) (hw : ∀ j, 0 < w j
       = Matrix.trace (diagState w * B * A) := by
   sorry
 
+/-- Modular flux φ := i[K, D]: the infinitesimal generator of the modular
+    orbit of D — the tangent vector to s ↦ σ_s(D) = e^{isK}De^{−isK} at s = 0
+    [Intended Interpretation / Formal Proof Open: the derivative identity
+    d/ds|₀ σ_s(D) = φ is not yet machine-checked; `eigenvalue_rigidity`
+    below is the proved first-order consequence].
+    φ = 0 means D is stationary under the modular flow (thermal equilibrium
+    of the geometry). φ ≠ 0 means D moves along its orbit: SPECTRAL FLOW,
+    not spectral deformation — the operator representation moves
+    (eigenspaces rotate, [D,a] and Connes distance change) while spec(D)
+    is exactly preserved, since unitary conjugation is isospectral.
+    Genuine eigenvalue drift would need state-dependence beyond fixed-K
+    modular flow (e.g. ρ(s)), which the present construction does not include.
+    Notation doctrine (2026-09-29): lowercase φ is the working quantity;
+    uppercase Φ is the ontological glyph (phi the axis). Tier T2 (definition).
+    Intended instantiation: K = K_ρ (e.g. `diagModularK`), D = D_F. -/
+noncomputable def modularFlux {N : ℕ} (K D : Matrix (Fin N) (Fin N) ℂ) :
+    Matrix (Fin N) (Fin N) ℂ :=
+  Complex.I • (K * D - D * K)
+
+/-- The modular flux is an observable: self-adjoint whenever K and D are
+    (Tier T1 — proved). -/
+theorem modularFlux_selfAdjoint {N : ℕ} {K D : Matrix (Fin N) (Fin N) ℂ}
+    (hK : K.IsHermitian) (hD : D.IsHermitian) :
+    (modularFlux K D).IsHermitian := by
+  have hsub : (K * D - D * K)ᴴ = -(K * D - D * K) := by
+    have e1 : (K * D)ᴴ = D * K := by
+      rw [Matrix.conjTranspose_mul, hK.eq, hD.eq]
+    have e2 : (D * K)ᴴ = K * D := by
+      rw [Matrix.conjTranspose_mul, hD.eq, hK.eq]
+    rw [Matrix.conjTranspose_sub, e1, e2, neg_sub]
+  unfold modularFlux
+  rw [Matrix.IsHermitian, Matrix.conjTranspose_smul, hsub]
+  have hI : star Complex.I = -Complex.I := Complex.conj_I
+  rw [hI, neg_smul, smul_neg, neg_neg]
+
+/-- First-order eigenvalue rigidity (Tier T1 — proved): the modular flux
+    has vanishing expectation in every D-eigenstate. A non-zero
+    φ = i[K, D] drives eigenbasis rotation and distance deformation, but
+    the instantaneous first-order eigenvalue shift is δλ = 0. This is the
+    machine-checked form of "spectral flow, not spectral deformation":
+    matrix state evolution is formally disconnected from immediate
+    eigenvalue shift. -/
+theorem eigenvalue_rigidity {N : ℕ} {K D : Matrix (Fin N) (Fin N) ℂ}
+    {v : Fin N → ℂ} {lam : ℝ}
+    (hD : D.IsHermitian) (hev : D *ᵥ v = (lam : ℂ) • v) :
+    star v ⬝ᵥ (modularFlux K D *ᵥ v) = 0 := by
+  -- Bra eigenvector identity: v† D = λ v† (λ real), via hermiticity.
+  have hbra : (star v) ᵥ* D = (lam : ℂ) • star v := by
+    have e1 : (star v) ᵥ* Dᴴ = (star v) ᵥ* D := by rw [hD.eq]
+    rw [← e1, ← Matrix.star_mulVec, hev]
+    ext i
+    simp only [Pi.star_apply, Pi.smul_apply, smul_eq_mul, star_mul,
+      Complex.star_def, Complex.conj_ofReal, mul_comm]
+  -- Expand the commutator on the eigenvector.
+  have hexpand : (K * D - D * K) *ᵥ v
+      = (lam : ℂ) • (K *ᵥ v) - D *ᵥ (K *ᵥ v) := by
+    rw [Matrix.sub_mulVec, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, hev,
+      Matrix.mulVec_smul]
+  -- The D-term collapses onto the K-term via the bra identity.
+  have key : star v ⬝ᵥ (D *ᵥ (K *ᵥ v))
+      = (lam : ℂ) • (star v ⬝ᵥ (K *ᵥ v)) := by
+    rw [Matrix.dotProduct_mulVec, hbra, smul_dotProduct]
+  -- Assemble: both terms are equal, so their difference vanishes.
+  unfold modularFlux
+  rw [Matrix.smul_mulVec, hexpand, dotProduct_smul, dotProduct_sub,
+    dotProduct_smul, key, sub_self, smul_zero]
+
 end ThetLogos

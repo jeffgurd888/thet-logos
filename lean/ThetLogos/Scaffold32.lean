@@ -26,7 +26,27 @@ abbrev I2  := Fin 2
 
 abbrev Block8 := Matrix I8 I8 ℂ
 
-/-- Particle ↔ antiparticle index swap: i ↦ (i + 16) mod 32. Tier T2. -/
+/-- Particle ↔ antiparticle index swap: i ↦ (i + 16) mod 32. Tier T2.
+
+    Canonical basis index map for ℂ³² (Option A ordering) — the four
+    8-dimensional sectors, in row/column order:
+    * indices 0–7:   H_L   (particles, left-handed)
+    * indices 8–15:  H_R   (particles, right-handed)
+    * indices 16–23: H_L^c (antiparticles of H_L)
+    * indices 24–31: H_R^c (antiparticles of H_R)
+
+    Within-sector enumeration (from `embedSM`, Option A):
+    * H_L: 0 = ν_L, 1 = e_L; 2–7 = quark block, index 2+2c+s
+      with s ∈ {0,1} (isospin) and c ∈ {0,1,2} (color r,g,b)
+    * H_R: 8 = ν_R, 9 = e_R; 10–15 = 10+2c+s, same (s,c) scheme
+    * H_L^c: index 16+i is the antiparticle partner of i, for i ∈ [0,8)
+    * H_R^c: index 24+i is the antiparticle partner of 8+i, for i ∈ [0,8)
+
+    The antiparticle ordering is FIXED by this map: any matrix-sector
+    correspondence stated as "canonical" is canonical only relative to
+    this explicit enumeration. Do not assert matrix-element equivalence
+    against a differently-ordered basis without re-deriving the
+    permutation. -/
 def partner (i : I32) : I32 :=
   if h : i.val < 16 then ⟨i.val + 16, by omega⟩
   else ⟨i.val - 16, by omega⟩

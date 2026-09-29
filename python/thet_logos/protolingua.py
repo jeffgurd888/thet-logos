@@ -1,3 +1,18 @@
+# ===============================================================================
+# THET/LOGOS ENGINE #8: FIBONACCI SPECTRAL TOWER NUMERICS (TIER T4)
+# ===============================================================================
+# EPISTEMIC BOUNDARY & DISAMBIGUATION (2026-09-29):
+# 1. NUMERICAL SCOPE: Computes the spectrum of the 2D matrix M = [[1, 1], [1, 0]]
+#    yielding the scalar golden ratio varphi = (1 + sqrt(5)) / 2 to float64
+#    precision (~4.4e-16).
+# 2. DECOUPLING: The scalar varphi computed here is mathematically distinct from
+#    the Hermitian modular flux operator phi = i[K, D_F] defined in Lean 4
+#    (ThetLogos/ModularTime.lean, proved self-adjoint: modularFlux_selfAdjoint).
+# 3. PHYSICAL KILL CONDITION: Real fermion mass ratios do not exhibit
+#    varphi-power scaling. This script represents an isolated symbolic toy model
+#    and DOES NOT derive the Standard Model algebra A_F or generation count.
+#    (Placed as # comments to preserve the module docstring below.)
+# ===============================================================================
 """THET Proto-Lingua Greek: pre-spatiotemporal operator alphabet (Tier T4 numerical).
 
 Engine #8. Implements the Rung-4 proto-linguistic layer as runnable algebra.
