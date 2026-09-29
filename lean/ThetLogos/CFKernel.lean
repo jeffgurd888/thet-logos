@@ -279,12 +279,15 @@ theorem cf_support_card :
 
 /-! ## §5. Classification target (OPEN) -/
 
-/-- Classification target: order-one + [D, C_F] = 0 (+ J-compatibility,
+/- Classification target: order-one + [D, C_F] = 0 (+ J-compatibility,
     grading-oddness, self-adjointness) forces D to be SM-type — exactly the
     5 Yukawa/Majorana matrices. This is the two CCM C_F proof stages:
     Q3.1 (C_F cuts the S-sector to the 8 SM Yukawas) and Q3.2 (C_F forces the
     Majorana T-block to SM form). Status: OPEN — the analytic classification
     is not yet formalized.
+
+    (Kept as a plain block comment: this documents a theorem proved in
+    CFKernelClassification.lean, so no docstring target follows here.)
 
     NOTE (2026-09-28): `OrderOneHolds` is now the REPAIRED predicate via the
     Martinetti `smGen`/`smGenOp` (OrderOne.lean). It is NON-VACUOUS:

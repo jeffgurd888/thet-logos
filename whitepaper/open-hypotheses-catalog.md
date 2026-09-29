@@ -102,11 +102,10 @@ This document is the project's idea inventory. Nothing in §2 is proved. Nothing
 **What would kill it:** A proof that no closed form exists in the stated terms.
 
 ### H13 — Full Majorana block (prove or rename)
-**Status:** OPEN · **Tier:** T3-adjacent
+**Status:** PROVED 2026-09-28 · **Tier:** T3 logic on T4 foundation
 **Statement:** For order-one D with [D,C_F]=0, the 8×8 E-block (rows 24–31, cols 8–15) is exactly ℂ·(single-entry form) — extracted from the 46→10 machinery.
-**What would prove it:** The rigidity lemma against `cf_kernel_classification_46_10`.
-**What would kill it:** The lemma failing — in which case the existing theorem is *renamed* to the single (24,8) entry it actually covers. Either way OP12 closes.
-**Note:** The most contained item in this catalog. Pinned fallback both directions.
+**Proof record:** `ThetLogos.majorana_Eblock_rigidity` (InnerFluctuations.lean): `IsMajoranaSubspace (eBlockOf D) (majoranaBlock 1)` — i.e., ∃ c, eBlockOf D = c • majoranaBlock 1. Via `cf_kernel_classification_46_10` (D = smDirac …) + `smDirac_E_block` + `majoranaBlock_eq_smul_one`. Zero sorrys, zero new axioms; depends on the pre-existing T4 `exotic_decomposition`/`exoticBasisAux` axioms (unchanged).
+**Note:** Prove path succeeded — no rename needed. OP12 closes.
 
 ### H14 — Tripotent status of genM 1–6
 **Status:** OPEN (conjectured) · **Tier:** T5
@@ -181,4 +180,5 @@ The claim "every tripotent has spectrum ⊆ {-1,0,1}" is refuted by X = i·I (tr
 - A hypothesis enters §2 with a statement, a status, a tier, a proof condition, and a kill condition. Vague entries are returned for precision.
 - A hypothesis leaves §2 by **proof** (→ the proof record, with its Lean theorem names) or by **kill/veto** (→ §3, with the reason and date).
 - §3 entries are permanent. Reopening requires new evidence, stated in the open.
+- **Relabeling is allowed** (2026-09-28, Jeff's decision): a killed or vetoed claim may be restated in a weaker, precise form — but the restatement is a *new* entry with its own statement, status, and proof/kill conditions. The original verdict stands untouched, and the restatement crosses the boundary only by proof. Examples: the dead general spectrum claim lives on honestly as `tripotent_selfadjoint_spectrum` (self-adjoint hypothesis added, proved); the vetoed item-3 instinct lives on honestly as H3 (weakened XYZ existence, still open). What relabeling never does: close the original claim, or move an unproved statement across the boundary by renaming it.
 - The boundary — proofs vs. hypotheses — is crossed only by proof. This catalog exists so that crossing is always visible.

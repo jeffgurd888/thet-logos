@@ -1,4 +1,5 @@
 import ThetLogos.CFKernelBase
+import ThetLogos.CFKernelClassification
 import ThetLogos.MartinettiRep
 import ThetLogos.OrderOne
 
@@ -685,5 +686,71 @@ theorem inner_fluctuation_majorana_subspace
   have h8 : (⟨8 + (⟨0, by norm_num⟩ : Fin 8).val, by have h := (⟨0, by norm_num⟩ : Fin 8).isLt; omega⟩ : I32) = i8M := rfl
   rw [h24, h8, Matrix.add_apply, Matrix.add_apply, smDirac_24_8M, hA0, hJ0,
     add_zero, add_zero]
+
+/-! ### Full E-block rigidity from the 46→10 classification (H13 — proved)
+
+The theorem above covers only the single `(24,8)` entry. The full 8×8
+E-block rigidity — all 64 entries controlled by the one complex parameter
+`yR` — follows from the 46→10 classification
+(`cf_kernel_classification_46_10`): order-one + `[D, C_F] = 0` eliminates
+the 36 exotic directions, forcing `D = smDirac yNu yE yU yD yR`, whose
+E-block is exactly `majoranaBlock yR = yR • majoranaBlock 1`. -/
+
+/-- Entry of `buildDirac` in the E region (i in [24,32), j in [8,16)). -/
+theorem buildDirac_E_entry (A B C E : Block8) (i j : I32)
+    (hi1 : ¬i.val < 8) (hi2 : ¬i.val < 16) (hi3 : ¬i.val < 24)
+    (hj1 : ¬j.val < 8) (hj2 : j.val < 16) :
+    buildDirac A B C E i j
+      = E ⟨i.val - 24, by omega⟩ ⟨j.val - 8, by omega⟩ := by
+  unfold buildDirac
+  simp only []
+  simp [hi1, hi2, hi3, hj1, hj2]
+
+/-- The E-block of the SM ansatz is exactly `majoranaBlock yR`. -/
+theorem smDirac_E_block (yNu yE yU yD yR : ℂ) :
+    eBlockOf (smDirac yNu yE yU yD yR) = majoranaBlock yR := by
+  ext i j
+  unfold eBlockOf smDirac
+  have h1 : ¬(24 + i.val) < 8 := by have h := i.isLt; omega
+  have h2 : ¬(24 + i.val) < 16 := by have h := i.isLt; omega
+  have h3 : ¬(24 + i.val) < 24 := by omega
+  have h4 : ¬(8 + j.val) < 8 := by omega
+  have h5 : (8 + j.val) < 16 := by have h := j.isLt; omega
+  rw [buildDirac_E_entry _ _ _ _ _ _ h1 h2 h3 h4 h5]
+  have e1 : (⟨24 + i.val - 24, by have h := i.isLt; omega⟩ : Fin 8) = i := by
+    ext; simp
+  have e2 : (⟨8 + j.val - 8, by have h := j.isLt; omega⟩ : Fin 8) = j := by
+    ext; simp
+  rw [e1, e2]
+
+/-- `majoranaBlock yR` is the scalar multiple `yR • majoranaBlock 1`. -/
+theorem majoranaBlock_eq_smul_one (yR : ℂ) :
+    majoranaBlock yR = yR • majoranaBlock 1 := by
+  ext i j
+  simp only [majoranaBlock, Matrix.diagonal_apply, Matrix.smul_apply, smul_eq_mul]
+  by_cases h : i = j
+  · subst h
+    by_cases h0 : i.val = 0 <;> simp [h0]
+  · simp [h]
+
+/-- Full E-block rigidity (H13 — proved): for order-one `D` with `[D, C_F] = 0`,
+    the 8×8 E-block (rows 24–31, cols 8–15) lies in the scalar span of the
+    single-entry Majorana form `majoranaBlock 1` — all 64 entries are
+    controlled by the one complex parameter `yR`.
+
+    Proof: the 46→10 classification (`cf_kernel_classification_46_10`)
+    eliminates the 36 exotic directions, forcing
+    `D = smDirac yNu yE yU yD yR`, whose E-block is `majoranaBlock yR`
+    (`smDirac_E_block`), which is `yR • majoranaBlock 1`
+    (`majoranaBlock_eq_smul_one`).
+
+    Tier: T3 logic conditional on the T4 `exotic_decomposition` axiom
+    (inherited from the classification — that axiom is unchanged).
+    Zero sorrys, zero new axioms. -/
+theorem majorana_Eblock_rigidity (D : Matrix I32 I32 ℂ)
+    (h_oo : OrderOneHolds D) (h_cf : cfCommutatorMap D = 0) :
+    IsMajoranaSubspace (eBlockOf D) (majoranaBlock 1) := by
+  obtain ⟨yNu, yE, yU, yD, yR, hD⟩ := cf_kernel_classification_46_10 D h_oo h_cf
+  exact ⟨yR, by rw [hD, smDirac_E_block, majoranaBlock_eq_smul_one]⟩
 
 end ThetLogos
