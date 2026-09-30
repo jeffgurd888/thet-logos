@@ -110,7 +110,15 @@ axiom exoticBasisAux : Fin 36 → Matrix I32 I32 ℂ
     invertible.
 
     Justification: T4 numerical census constructs the 36-dim exotic complement
-    via SVD; the pivot matrix has cond ≈ 5.25e2. -/
+    via SVD; the pivot matrix has cond ≈ 5.25e2.
+
+    ⚠ UNSOUND AS STATED — flagged 2026-09-30 (H4 retarget 46→22). FALSE AS
+    STATED: its domain is the weak 144-pair `OrderOneHolds` nullspace, while
+    the 46-dimensional census was computed in the 272-real-dimensional
+    admissible subspace. Per the relabeling rule the statement stands
+    unmodified; the corrected classification is proved as new entries in
+    `ThetLogos.CFKernelRetarget`. See whitepaper/gut-roadmap-2026-09-29.md,
+    Step D. -/
 axiom exotic_decomposition (D : Matrix I32 I32 ℂ) (h_oo : OrderOneHolds D) :
   ∃ (D_SM : Matrix I32 I32 ℂ) (β : Fin 36 → ℝ)
     (pivotMat : Matrix (Fin 36) (Fin 36) ℝ),
@@ -152,6 +160,14 @@ theorem exotic_coefficients_zero (β : Fin 36 → ℝ)
 
 /-- Classification target Q3.1/Q3.2 (46→10 form): order-one + `[D, C_F] = 0`
     forces `D` into the SM physical sector — the 10-dimensional moduli space.
+
+    ⚠ UNSOUND AS STATED — flagged 2026-09-30 (H4 retarget 46→22). The
+    2026-09-29 census found the admissible+order-one+commutant space is
+    22-dimensional, not 10-dimensional; this theorem is false as stated
+    (it rests on the false-as-stated `exotic_decomposition` axiom). Per the
+    relabeling rule the statement stands unmodified; the corrected
+    classification is proved as new entries in `ThetLogos.CFKernelRetarget`.
+    See whitepaper/gut-roadmap-2026-09-29.md, Step D.
 
     This is the streamlined version focusing on the commutator kernel. The
     fuller version with self-adjointness, J-compatibility, and grading-oddness
@@ -207,6 +223,13 @@ theorem cf_kernel_classification_46_10
 
 /-- Full spectral-triple version: order-one + `[D, C_F] = 0` + self-adjointness
     + J-compatibility + grading-oddness forces `D` to be SM-type.
+
+    ⚠ UNSOUND AS STATED — flagged 2026-09-30 (H4 retarget 46→22). False as
+    stated via its dependence on `cf_kernel_classification_46_10` (flagged
+    above). Per the relabeling rule the statement stands unmodified; the
+    corrected classification is proved as new entries in
+    `ThetLogos.CFKernelRetarget`. See whitepaper/gut-roadmap-2026-09-29.md,
+    Step D.
 
     The J_F and γ_F hypotheses are preserved by the 46→10 reduction: the 10 SM
     generators satisfy J-compatibility and grading-oddness by construction

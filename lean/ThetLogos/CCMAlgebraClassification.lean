@@ -215,7 +215,13 @@ axiom AdmitsClassifyingDirac_unpack (A : List RepFactor)
 /-- Q3 target: CCM-style classification WITH the Dirac side.
     Status: PROVED conditional on T4 axioms (via `cf_kernel_classification_46_10`)
     plus the `AdmitsClassifyingDirac_unpack` reconstruction axiom.
-    The algebra-side filters (§2) provably do not suffice alone. -/
+    The algebra-side filters (§2) provably do not suffice alone.
+
+    ⚠ UNSOUND AS STATED — flagged 2026-09-30 (H4 retarget 46→22). False as
+    stated via its dependence on the flagged `cf_kernel_classification_46_10`.
+    Per the relabeling rule the statement stands unmodified; the corrected
+    classification is proved as new entries in `ThetLogos.CFKernelRetarget`.
+    See whitepaper/gut-roadmap-2026-09-29.md, Step D. -/
 theorem ccm_classification (A : List RepFactor)
     (h_dim : totalRepDim A = 16)
     (h_faith : IsFaithful A = true)

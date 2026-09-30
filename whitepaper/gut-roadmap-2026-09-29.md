@@ -73,8 +73,32 @@ no SM-specific choices smuggled in:
    What exists: imposed triplication with proved *inheritance*
    (`ThreeGen.lean`, e.g. `smDirac3diag_smDirac_order_one`), i.e.
    consistency, not derivation (H11).
+4. **The spectral gap Δ — the GUToE Gate.** The three-scale bridge
+   (β⁻¹ ∼ Δ⁻¹, G_N ∼ Δ⁻², ω_modular ∼ Δ²) is a *correspondence* until
+   Δ itself is an output of the structure rather than a fitted input.
 
-Until (1)–(3) exist, the program is a **verified construction**, not a
+   **GUToE Gate: can the axioms determine Δ without inserting
+   empirical Yukawa data?**
+
+   | Outcome | Interpretation |
+   |---|---|
+   | Δ uniquely fixed | Strong evidence for genuine parameter reduction |
+   | Discrete allowed Δ's | Potential quantization/prediction mechanism |
+   | Continuous family of Δ's | Δ-bridge remains parametrized |
+   | Only experimental Yukawas fix Δ | Δ-bridge is a correspondence, not a first-principles derivation |
+
+   *Provenance note (2026-09-30):* the exact three-scale formulas
+   (β = Δ/c_H, G_N = 3π/(16f_2c_G²Δ²), ω_modular = c_TΔ²/ℏ) appear in
+   neither the repo nor the GUToE whitepaper — they entered as
+   audit/extension material (2026-09-29/30 scale-invariance analysis)
+   and must not be attributed to either. The scale-invariant
+   combination is G_N·ω_modular (dividing by β² breaks it, scaling
+   k⁻² under D_F → kD_F); (G_N·ω·Δ²)/β² = 3πc_Tc_H²/(16f_2c_G²ℏ) is
+   also invariant. Invariance does not establish parameter-free
+   prediction while the c's are fitted — that is precisely what the
+   Gate tests.
+
+Until (1)–(4) exist, the program is a **verified construction**, not a
 derivation. That is the honest position and the external review's verdict.
 
 ---
@@ -133,19 +157,61 @@ derivation. That is the honest position and the external review's verdict.
   hypotheses until the classification becomes provable, rather than
   narrowing the claims. No shame in the correction; the aim is to come
   back stronger.
-- **First gate (viability probe):** candidate admissibility constraints
-  must hold for `smDirac` itself — if they exclude the SM Dirac, the
-  repair is dead on arrival. Then: prove in Lean that the constraints
-  force the classification.
-- **Character:** open research, weeks to months, may fail. Never
-  force-push.
-- **Related feasible sub-task (independent of the decision):** H4's
-  exact-pivot certificate — bounded probe for an exact ℚ(√3)-basis of
-  the exotic 36-space pinned to `exoticPivotTable`, then Lean
-  instantiation via the already-proved checker
-  `det_ne_zero_of_mul_eq_one` / `rational_pivot_nonsingular`
-  (`RationalPivot.lean`). Feasible formalization + numerics; demotes to
-  QUARANTINED if the probe fails within budget.
+- **Step 0 census (done 2026-09-29, /tmp/h4-step0-census.txt):** fresh
+  numerics in the current 144-pair formulation. CONFIRMED: 324 complex
+  nullspace dims; 272 coordinate units; 272-real-dim admissible space;
+  **46 real dims** (admissible + order one). CORRECTED: admissible +
+  order one + `[D,cfMat]=0` gives **22 real dims, not 10** — the target
+  is 46→22 under current constraints, not 46→10. The 200 figure is a
+  coordinate-unit count, not a dimension. `E_(0,0)` confirmed as the
+  counterexample to the unrestricted claim, excluded by admissibility.
+- **Exact-pivot certificate route: NO-GO (definitive, 2026-09-29).**
+  The weak nullspace has 52 genuinely non-coordinate complex directions
+  and zero coordinate-unit directions survive all admissible conditions —
+  a singleton-equation certificate cannot cover it. Retired; any future
+  exact Lean certificate needs J-symmetrized multi-term basis vectors.
+- **Constraint hunt (done 2026-09-29):** all three candidates NO-GO.
+  Second-order `[[D²,a],b°]=0` is already implied by (admissible +
+  order-one + commutant) — cuts 0 dims (real fact, useless as a cutter).
+  Center exhausted: only the imposed `cfMat` direction survives the
+  `smDirac` gate (`[D₀,P_C−P_H]=4.24≠0`). Orientability / Poincaré
+  duality constrain `(π,J,γ)`, not `D` — wrong type. The standard
+  spectral-triple axiom toolkit has no legitimate 22→10 cutter left.
+- **Decision (user, 2026-09-29):** retarget to 46→22. The "10" is
+  retired as a census artifact; the repaired classification targets the
+  22-dim space (10 SM + 12 exotic survivors). Old theorems stand flagged
+  unsound-as-stated per the relabeling rule; new theorems will be proved
+  as new entries (e.g. `cf_kernel_classification_46_22`).
+- **Phase 1 (done 2026-09-29):** the 10+12 split is exact and has
+  closed form — the 12 exotic survivors are precisely the
+  color-universal flavour-violating couplings the SM ansatz sets to
+  zero (ν_L↔e_R, e_L↔ν_R, u_L↔d_R and d_L↔u_R color-universal, plus
+  Majorana-type ν_R↔ē_R and e_R↔ē_R). SM and exotic supports are
+  disjoint. Basis + characterization saved in h4-spike/ (untracked
+  scratch).
+- **Phase 2a (done 2026-09-29):** `CFKernelRetarget.lean` created and
+  compiling with the 12 explicit exotic definitions + working proof
+  pattern. The grading discrepancy is RESOLVED: Phase 1's closed form
+  is correct — the agent's check used the wrong gammaF
+  (particle/antiparticle split instead of the chiral
+  diag(+1×8,−1×8,−1×8,+1×8)); the wrong operator reproduces the exact
+  reported failure signature. All 12 satisfy all five W22 conditions.
+- **Phase 2b (done 2026-09-30):** all 48 verification lemmas proved
+  (self-adjoint, grading-odd, J-compatible, cfMat commutant × 12) with
+  the correct chiral gammaF; `lake build ThetLogos.CFKernelRetarget`
+  green, zero errors.
+- **Phase 2c (reframed 2026-09-30 — positive result, not
+  elimination):** Phase 1 verified the 12 exotic matrices satisfy
+  order-one, so they are NOT candidates for commutator-witness
+  elimination — pivot-killing them would be mathematically
+  inappropriate. The correct questions are (a) prove each
+  E_k ∈ ker[E ↦ [[E,π(a)],π°(b)]] (the 12 `OrderOneHolds` proofs;
+  row-sparsity strategy), and (b) prove the 12 are linearly
+  independent (Σc_kE_k = 0 ⟹ all c_k = 0 — a rank test, e.g. a
+  nonzero 22×22 determinant for the full 10+12 set). Pivot-
+  triangulation "kill the 12 via commutator witnesses": adjudicated
+  NO-GO as stated (2026-09-29) — the pivots cannot exist for matrices
+  in the nullspace by construction.
 
 ### Step E — Three generations: derivation vs. imposed triplication (H11)
 - **What:** inheritance is proved (imposed triplication is consistent).
@@ -172,6 +238,17 @@ derivation. That is the honest position and the external review's verdict.
   obligation. No timetable is honest here.
 
 ### Feasible small wins (any order)
+- **Test B → formal theorem:** `[D_F²,D_F] = 0` proved directly from
+  matrix associativity — no hypothesis on D_F needed (structural
+  mathematics, not a physical assumption). Then K = βD_F² + H_t gives
+  Φ = i[H_t,D_F]: the equilibrium/thermal D_F² piece contributes no
+  exchange flux; nonzero flux is entirely the torsion/nonthermal
+  term. Clean separation: [D_F²,D_F]=0 is structural, [H_t,D_F]≠0 is
+  the dynamical input. (ModularTime.lean; complements the proved
+  `eigenvalue_rigidity`, which is the correct formal mechanism for
+  exact Δ-preservation under unitary modular flow — the
+  |H|_op < Δ/2 bound belongs to additive perturbations D_F+H, a
+  different question.)
 - **H14:** genM 1–6 tripotent status — six applications of the proved
   uniform criterion `tripotent_of_hermitian_sq_proj` (sharp boundary
   from `not_tripotent_genM7`). Routine formalization.
@@ -203,6 +280,11 @@ derivation. That is the honest position and the external review's verdict.
 - **ϕ-tower growth factor** — kill condition triggered (real mass
   ratios 206.8, 16.8 are not ϕ-scaled); stays an isolated T4/T5
   symbolic model, never a physical claim.
+- **Pivot-triangulation "kill the 12 exotics" checklist** —
+  adjudicated NO-GO as stated (2026-09-29): the 12 survivors satisfy
+  order-one by construction (Phase 1), so nonzero commutator pivots
+  cannot exist; linear independence is the correct question, proved
+  by entry pivots/rank, not commutator witnesses.
 
 Reopening any §3 entry requires new evidence, stated in the open.
 

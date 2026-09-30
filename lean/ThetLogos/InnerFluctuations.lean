@@ -738,6 +738,12 @@ theorem majoranaBlock_eq_smul_one (yR : ℂ) :
     single-entry Majorana form `majoranaBlock 1` — all 64 entries are
     controlled by the one complex parameter `yR`.
 
+    ⚠ UNSOUND AS STATED — flagged 2026-09-30 (H4 retarget 46→22). The
+    statement itself was not refuted, but the proof rests on the
+    false-as-stated `exotic_decomposition` axiom via the flagged
+    `cf_kernel_classification_46_10`. Per the relabeling rule the statement
+    stands unmodified; see whitepaper/gut-roadmap-2026-09-29.md, Step D.
+
     Proof: the 46→10 classification (`cf_kernel_classification_46_10`)
     eliminates the 36 exotic directions, forcing
     `D = smDirac yNu yE yU yD yR`, whose E-block is `majoranaBlock yR`
