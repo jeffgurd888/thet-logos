@@ -25,11 +25,13 @@ parameters) and 12 exotic directions (real and imaginary parts of six
 complex color-universal exotic cross-sector couplings). Each direction is
 verified in the Lean 4 proof assistant to satisfy all five conditions,
 including the first-order condition; the 22 are proved linearly
-independent. Our main result is a classification theorem, machine-checked
-in Lean 4 modulo one explicit numerical hypothesis: assuming the real
-dimension of W_{22} equals 22 (Hypothesis H, established by a Python numerical
-census and currently being formalized), every admissible D is a real linear
-combination of the 22 explicit directions. We state precisely what is
+independent. Our main result is a classification theorem, unconditionally
+machine-checked
+in Lean 4: the real dimension of W_{22} is proved to be 22 in Lean
+(via an injective pivot map giving an upper bound, matched by 22
+explicit independent directions), so every admissible D is a real linear
+combination of the 22 explicit directions — zero sorrys, no numerical
+hypotheses. We state precisely what is
 machine-checked, what is numerical, and what remains open. In particular we
 make no claim that the exotic directions correspond to physical fields, and
 no claim of a machine-verified grand unified theory.
@@ -65,10 +67,13 @@ and prove, in Lean 4, that each satisfies all five admissibility
 conditions, including the first-order condition (144 pairs each). Second,
 we prove the 22 directions (10 Standard Model tangents plus 12 exotics)
 linearly independent by an explicit pivot argument, also machine-checked.
-Third, we prove a conditional classification theorem: every admissible D
-lies in the real span of the 22 directions, assuming dim_R W_{22} = 22
-(Hypothesis H). The dimension count is established by a Python numerical
-census; its Lean formalization is in progress and we describe the strategy.
+Third, we prove the classification theorem unconditionally: every
+admissible D lies in the real span of the 22 directions. The upper bound
+dim_R W_{22} ≤ 22 is itself machine-checked, via an injective pivot map
+from W_{22} into ℂ¹¹ (eleven pivot pairs); the 22 independent directions
+give the matching lower bound. The Python numerical census that
+originally suggested the count is retained as independent corroborating
+evidence (Section 7).
 
 We emphasize what this paper does not do. It does not derive the Yukawa
 couplings, which remain inputs. It does not assign physical meaning to the
@@ -236,16 +241,17 @@ particular we do not claim they correspond to particles or fields.
 Let dirs22 : Fin 22 -> M_32(C) enumerate the ten Standard Model directions
 followed by the twelve exotic directions.
 
-Hypothesis H (dimension count, numerical). The real vector space W22 has
-real dimension 22:
+Dimension bound (machine-checked). The real vector space W22 satisfies
 
-    Module.finrank R W22 = 22.
+    Module.finrank R W22 = 22,
 
-Hypothesis H is established by the Python numerical census described in
-Section 7. It is not machine-checked; its Lean formalization is in
-progress (Section 8).
+proved in Lean with zero sorrys: an injective pivot map
+(pivotMapC_injective, eleven pivot pairs) gives finrank ≤ 22, and the
+22 linearly independent directions give finrank ≥ 22. No numerical
+hypothesis is assumed; the Python census of Section 7 is independent
+corroborating evidence.
 
-Theorem (cf_kernel_classification_46_22, conditional). Assume Hypothesis H.
+Theorem (cf_kernel_classification_46_22, unconditional).
 For every D in M_32(C) satisfying IsW22 D,
 
     D in Submodule.span R (Set.range dirs22);
@@ -256,11 +262,11 @@ of the 22 explicit directions.
 Proof. Each of the 22 directions satisfies IsW22 (the membership lemmas of
 Section 6), so span_R(dirs22) is a submodule of W22. The 22 directions are
 linearly independent (Section 6, pivot argument), so the span has real
-dimension 22. By Hypothesis H, W22 also has real dimension 22; a submodule
-of full rank is the whole space. All steps except Hypothesis H are
+dimension 22. The machine-checked upper bound gives W22 itself real
+dimension 22; a submodule of full rank is the whole space. Every step is
 machine-checked in Lean 4. ∎
 
-Corollary. Modulo Hypothesis H, the admissible deformation space of the
+Corollary. The admissible deformation space of the
 finite Dirac operator is exactly 22-dimensional: 10 Standard Model
 directions and 12 exotic directions.
 
@@ -314,9 +320,10 @@ The following is an exact inventory.
     vanish there; disjointness of the Standard Model and exotic supports
     separates the two families.
 
-(f) The conditional classification theorem cf_kernel_classification_46_22
-    (ThetLogos/CFKernel22.lean), whose only non-formalized assumption is
-    Hypothesis H.
+(f) The unconditional classification theorem cf_kernel_classification_46_22
+    (ThetLogos/CFKernel22.lean): zero sorrys, no numerical hypotheses,
+    axioms limited to Lean's standard propext, Classical.choice,
+    Quot.sound.
 
 6.2. Proof techniques.
 
@@ -326,10 +333,13 @@ reasoning, avoiding brute-force case analysis over the 32x32 indices.
 The independence proof reduces 22-dimensional linear algebra to 11
 independent 2-dimensional pivot extractions.
 
-7. THE NUMERICAL DIMENSION CENSUS
+7. THE NUMERICAL DIMENSION CENSUS (INDEPENDENT CORROBORATION)
 
-Hypothesis H is established computationally with Python (NumPy/SciPy)
-scripts accompanying the Lean development [25]. The pipeline is:
+The dimension count dim_R W22 = 22 was first suggested by a Python
+numerical census and is now proved unconditionally in Lean (Section 5).
+This section documents the census as independent corroborating evidence;
+it is no longer a hypothesis of the classification theorem. The pipeline,
+with scripts accompanying the Lean development [25], is:
 
 (i)   The four linear conditions (grading-oddness, [D, cfMat] = 0,
       self-adjointness, J-compatibility) are assembled as a real
