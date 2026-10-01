@@ -1,0 +1,240 @@
+W22 characterization — H4 retarget Phase 1 (2026-09-29)
+W22 = admissible (Hermitian + grading-odd + J-compatible) ∩ 144-pair
+OrderOneHolds ∩ [D,cfMat]=0.  dim_R = 22 = 10 SM + 12 exotic.
+Sectors: H_L 0-7, H_R 8-15, H_L^c 16-23, H_R^c 24-31.
+partner(i) = i+16 (i<16) else i-16. J: E[p(i),p(j)] = conj(E[i,j]).
+Grading-odd: nonzero only between {H_L,H_R^c} and {H_R,H_L^c}.
+
+SM TANGENTS (10, orthonormal, real inner product):
+  T1: Re(yNu)
+  T2: Im(yNu)
+  T3: Re(yE)
+  T4: Im(yE)
+  T5: Re(yU)
+  T6: Im(yU)
+  T7: Re(yD)
+  T8: Im(yD)
+  T9: Re(yR)
+  T10: Im(yR)
+
+EXOTIC SURVIVORS (12, orthonormal):
+
+--- survivor 1/12: 38 nonzero entries, max|.|=0.302, J-res=6.1e-16
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = +0.189356-0.082019i   [H_L->H_R]
+      ( 1, 8) = +0.061157+0.195592i   [H_L->H_R]
+      ( 2,11) = -0.073930-0.123094i   [H_L->H_R]
+      ( 3,10) = -0.006510+0.055524i   [H_L->H_R]
+      ( 4,13) = -0.073930-0.123094i   [H_L->H_R]
+      ( 5,12) = -0.006510+0.055524i   [H_L->H_R]
+      ( 6,15) = -0.073930-0.123094i   [H_L->H_R]
+      ( 7,14) = -0.006510+0.055524i   [H_L->H_R]
+      ( 8,25) = +0.132269+0.271707i   [H_R->H_Rc]
+      ( 9,25) = +0.072977+0.020426i   [H_R->H_Rc]
+
+--- survivor 2/12: 38 nonzero entries, max|.|=0.414, J-res=1.6e-15
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = +0.239942-0.014177i   [H_L->H_R]
+      ( 1, 8) = -0.118321-0.054737i   [H_L->H_R]
+      ( 2,11) = -0.008275+0.105101i   [H_L->H_R]
+      ( 3,10) = +0.113368+0.032518i   [H_L->H_R]
+      ( 4,13) = -0.008275+0.105101i   [H_L->H_R]
+      ( 5,12) = +0.113368+0.032518i   [H_L->H_R]
+      ( 6,15) = -0.008275+0.105101i   [H_L->H_R]
+      ( 7,14) = +0.113368+0.032518i   [H_L->H_R]
+      ( 8,25) = -0.073084+0.095566i   [H_R->H_Rc]
+      ( 9,25) = -0.205879-0.359140i   [H_R->H_Rc]
+
+--- survivor 3/12: 38 nonzero entries, max|.|=0.329, J-res=5.9e-16
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = -0.082340-0.007727i   [H_L->H_R]
+      ( 1, 8) = +0.024436-0.220265i   [H_L->H_R]
+      ( 2,11) = -0.047105-0.013672i   [H_L->H_R]
+      ( 3,10) = +0.184377-0.027348i   [H_L->H_R]
+      ( 4,13) = -0.047105-0.013672i   [H_L->H_R]
+      ( 5,12) = +0.184377-0.027348i   [H_L->H_R]
+      ( 6,15) = -0.047105-0.013672i   [H_L->H_R]
+      ( 7,14) = +0.184377-0.027348i   [H_L->H_R]
+      ( 8,25) = -0.011592+0.168191i   [H_R->H_Rc]
+      ( 9,25) = +0.046929+0.325811i   [H_R->H_Rc]
+
+--- survivor 4/12: 38 nonzero entries, max|.|=0.295, J-res=3.5e-16
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = +0.193630-0.074210i   [H_L->H_R]
+      ( 1, 8) = -0.126828-0.215542i   [H_L->H_R]
+      ( 2,11) = -0.030097+0.028304i   [H_L->H_R]
+      ( 3,10) = -0.159720-0.066440i   [H_L->H_R]
+      ( 4,13) = -0.030097+0.028304i   [H_L->H_R]
+      ( 5,12) = -0.159720-0.066440i   [H_L->H_R]
+      ( 6,15) = -0.030097+0.028304i   [H_L->H_R]
+      ( 7,14) = -0.159720-0.066440i   [H_L->H_R]
+      ( 8,25) = +0.005788+0.077325i   [H_R->H_Rc]
+      ( 9,25) = -0.150225+0.254027i   [H_R->H_Rc]
+
+--- survivor 5/12: 38 nonzero entries, max|.|=0.356, J-res=1.2e-15
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = +0.095165-0.030557i   [H_L->H_R]
+      ( 1, 8) = +0.334561-0.120677i   [H_L->H_R]
+      ( 2,11) = -0.015848-0.084807i   [H_L->H_R]
+      ( 3,10) = -0.018785+0.032362i   [H_L->H_R]
+      ( 4,13) = -0.015848-0.084807i   [H_L->H_R]
+      ( 5,12) = -0.018785+0.032362i   [H_L->H_R]
+      ( 6,15) = -0.015848-0.084807i   [H_L->H_R]
+      ( 7,14) = -0.018785+0.032362i   [H_L->H_R]
+      ( 8,25) = -0.262476-0.062089i   [H_R->H_Rc]
+      ( 9,25) = -0.160123-0.053231i   [H_R->H_Rc]
+
+--- survivor 6/12: 38 nonzero entries, max|.|=0.341, J-res=7.4e-16
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = +0.119686-0.031054i   [H_L->H_R]
+      ( 1, 8) = +0.118120+0.048311i   [H_L->H_R]
+      ( 2,11) = +0.053322+0.110154i   [H_L->H_R]
+      ( 3,10) = +0.026109+0.161384i   [H_L->H_R]
+      ( 4,13) = +0.053322+0.110154i   [H_L->H_R]
+      ( 5,12) = +0.026109+0.161384i   [H_L->H_R]
+      ( 6,15) = +0.053322+0.110154i   [H_L->H_R]
+      ( 7,14) = +0.026109+0.161384i   [H_L->H_R]
+      ( 8,25) = +0.139689-0.124937i   [H_R->H_Rc]
+      ( 9,25) = -0.099086+0.326445i   [H_R->H_Rc]
+
+--- survivor 7/12: 38 nonzero entries, max|.|=0.460, J-res=7.9e-16
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = +0.158995+0.431708i   [H_L->H_R]
+      ( 1, 8) = -0.073271+0.025854i   [H_L->H_R]
+      ( 2,11) = +0.044814-0.067459i   [H_L->H_R]
+      ( 3,10) = +0.014579+0.000918i   [H_L->H_R]
+      ( 4,13) = +0.044814-0.067459i   [H_L->H_R]
+      ( 5,12) = +0.014579+0.000918i   [H_L->H_R]
+      ( 6,15) = +0.044814-0.067459i   [H_L->H_R]
+      ( 7,14) = +0.014579+0.000918i   [H_L->H_R]
+      ( 8,25) = -0.055413-0.016305i   [H_R->H_Rc]
+      ( 9,25) = +0.008332+0.131331i   [H_R->H_Rc]
+
+--- survivor 8/12: 38 nonzero entries, max|.|=0.187, J-res=4.2e-16
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = +0.099665-0.131058i   [H_L->H_R]
+      ( 1, 8) = +0.039454+0.169243i   [H_L->H_R]
+      ( 2,11) = +0.186884+0.007955i   [H_L->H_R]
+      ( 3,10) = +0.045045-0.138157i   [H_L->H_R]
+      ( 4,13) = +0.186884+0.007955i   [H_L->H_R]
+      ( 5,12) = +0.045045-0.138157i   [H_L->H_R]
+      ( 6,15) = +0.186884+0.007955i   [H_L->H_R]
+      ( 7,14) = +0.045045-0.138157i   [H_L->H_R]
+      ( 8,25) = -0.103845+0.057990i   [H_R->H_Rc]
+      ( 9,25) = -0.009210+0.142729i   [H_R->H_Rc]
+
+--- survivor 9/12: 38 nonzero entries, max|.|=0.250, J-res=6.1e-16
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = -0.127780+0.123358i   [H_L->H_R]
+      ( 1, 8) = +0.096417+0.190366i   [H_L->H_R]
+      ( 2,11) = -0.087337+0.143606i   [H_L->H_R]
+      ( 3,10) = -0.049001-0.021407i   [H_L->H_R]
+      ( 4,13) = -0.087337+0.143606i   [H_L->H_R]
+      ( 5,12) = -0.049001-0.021407i   [H_L->H_R]
+      ( 6,15) = -0.087337+0.143606i   [H_L->H_R]
+      ( 7,14) = -0.049001-0.021407i   [H_L->H_R]
+      ( 8,25) = -0.157531+0.193636i   [H_R->H_Rc]
+      ( 9,25) = -0.149434+0.110585i   [H_R->H_Rc]
+
+--- survivor 10/12: 38 nonzero entries, max|.|=0.345, J-res=3.1e-16
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = +0.185323-0.037422i   [H_L->H_R]
+      ( 1, 8) = +0.018287+0.088993i   [H_L->H_R]
+      ( 2,11) = -0.143317+0.053172i   [H_L->H_R]
+      ( 3,10) = +0.041236-0.084177i   [H_L->H_R]
+      ( 4,13) = -0.143317+0.053172i   [H_L->H_R]
+      ( 5,12) = +0.041236-0.084177i   [H_L->H_R]
+      ( 6,15) = -0.143317+0.053172i   [H_L->H_R]
+      ( 7,14) = +0.041236-0.084177i   [H_L->H_R]
+      ( 8,25) = -0.072029-0.211793i   [H_R->H_Rc]
+      ( 9,25) = +0.335213+0.081393i   [H_R->H_Rc]
+
+--- survivor 11/12: 38 nonzero entries, max|.|=0.323, J-res=1.0e-15
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = +0.020643+0.083992i   [H_L->H_R]
+      ( 1, 8) = +0.178795+0.003050i   [H_L->H_R]
+      ( 2,11) = -0.040638+0.001051i   [H_L->H_R]
+      ( 3,10) = +0.031997-0.141875i   [H_L->H_R]
+      ( 4,13) = -0.040638+0.001051i   [H_L->H_R]
+      ( 5,12) = +0.031997-0.141875i   [H_L->H_R]
+      ( 6,15) = -0.040638+0.001051i   [H_L->H_R]
+      ( 7,14) = +0.031997-0.141875i   [H_L->H_R]
+      ( 8,25) = +0.291558-0.070857i   [H_R->H_Rc]
+      ( 9,25) = -0.311523-0.084587i   [H_R->H_Rc]
+
+--- survivor 12/12: 38 nonzero entries, max|.|=0.432, J-res=7.9e-16
+    38/38 entries outside SM support
+    sector blocks: {('H_L', 'H_R'): 8, ('H_R', 'H_L'): 8, ('H_R', 'H_Rc'): 3, ('H_Lc', 'H_Rc'): 8, ('H_Rc', 'H_R'): 3, ('H_Rc', 'H_Lc'): 8}
+    orbit representatives (i,j)=value:
+      ( 0, 9) = -0.051065-0.091582i   [H_L->H_R]
+      ( 1, 8) = -0.202905+0.152956i   [H_L->H_R]
+      ( 2,11) = -0.069478-0.093573i   [H_L->H_R]
+      ( 3,10) = +0.050316+0.013346i   [H_L->H_R]
+      ( 4,13) = -0.069478-0.093573i   [H_L->H_R]
+      ( 5,12) = +0.050316+0.013346i   [H_L->H_R]
+      ( 6,15) = -0.069478-0.093573i   [H_L->H_R]
+      ( 7,14) = +0.050316+0.013346i   [H_L->H_R]
+      ( 8,25) = -0.098612-0.149366i   [H_R->H_Rc]
+      ( 9,25) = -0.400201+0.163982i   [H_R->H_Rc]
+
+================================================================
+CLOSED FORM OF THE EXOTIC SPACE (verified 2026-09-29, residuals ~1e-15)
+================================================================
+The 12 exotic survivors are EXACTLY the 12 real color-universal
+flavour-violating couplings below (span equality verified both ways;
+each basis vector independently verified in W22, i.e. order-one and
+[D,cfMat]=0 are AUTOMATIC on this space).
+
+6 complex couplings (Re/Im = 12 real). Each line: orbit representative,
+then the full orbit under Hermitian (j,i) and J: (p(i),p(j)),p(i)=i+16/i-16:
+
+1. nuL_eR : (0,9)  nu_L <-> e_R
+   orbit: (0,9),(9,0),(16,25),(25,16)
+2. eL_nuR : (1,8)  e_L <-> nu_R
+   orbit: (1,8),(8,1),(17,24),(24,17)
+3. uL_dR (color-universal): (2,11),(4,13),(6,15)  u_L^c <-> d_R^c, same for c=1,2,3
+   orbit: + h.c. + J-partners (18,27),(20,29),(22,31) + h.c.  [12 entries]
+4. dL_uR (color-universal): (3,10),(5,12),(7,14)  d_L^c <-> u_R^c, same for c=1,2,3
+   orbit: + h.c. + J-partners (19,26),(21,28),(23,30) + h.c.  [12 entries]
+5. nuR_ebarR : (8,25)  nu_R <-> ebar_R
+   orbit: (8,25),(25,8),(24,9),(9,24)
+6. eR_ebarR : (9,25)  e_R <-> ebar_R   [J-degenerate orbit: p(9)=25]
+   orbit: (9,25),(25,9)
+
+PARAMETRIZATION (for the Lean decomposition lemma):
+Every D in W22 equals buildDirac(A, Abar, 0, E) with
+  A[0,0]=yNu, A[1,1]=yE, A[0,1],A[1,0] exotic (lepton swap);
+  A[2,2]=A[4,4]=A[6,6]=yU, A[3,3]=A[5,5]=A[7,7]=yD,
+  A[2,3]=A[4,5]=A[6,7]=c, A[3,2]=A[5,4]=A[7,6]=d (color-universal quark swap);
+  all other A entries 0;
+  E[0,0]=yR (SM Majorana), E[1,0],E[1,1] exotic; all other E entries 0.
+Count: A: 8 complex = 16 real; E: 3 complex = 6 real; total 22. C=0 and the
+(H_L,H_Rc)/(H_R,H_Lc) blocks vanish identically on W22.
+The 10 SM directions are Re/Im of (yNu,yE,yU,yD,yR); the 12 exotic are
+Re/Im of (a,b,c,d,e10,e11). The two sets have DISJOINT support (34 vs 38
+entries), hence are trivially linearly independent.
+Closed-form orthonormal basis saved as 'exotic_closedform' in w22_basis.npz
+with names in 'exotic_closedform_names'.
+================================================================

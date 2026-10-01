@@ -1,5 +1,16 @@
 # Thet-Logos
 
+> ✅ **MACHINE-PROVEN: 22-direction classification of the order-one commutant
+> W₂₂.** Lean 4 has verified `cf_kernel_classification_46_22` with **zero
+> `sorry`s** — 12 `OrderOneHolds` proofs, linear independence, and spanning,
+> unconditional (no census hypothesis). Axioms: only `propext`,
+> `Classical.choice`, `Quot.sound`. Full build green (3323 jobs).
+> `lean/ThetLogos/CFKernel22.lean`, `CFKernel22Dim.lean`.
+> *What this proves: the finite spectral triple's order-one constraint
+> system admits exactly a 22-dimensional real solution space (10 SM + 12
+> exotic directions). What it doesn't: the exotic directions are explicit
+> non-claims — not physical fields. Theorem ≠ Simulation ≠ Experiment.*
+
 > ✅ **MACHINE-PROVEN: Order-zero holds for all 144 generator pairs.**
 > Lean 4 has verified that every pair of generators in the finite spectral
 > triple satisfies the order-zero condition — **144/144, zero `sorry`s** in
