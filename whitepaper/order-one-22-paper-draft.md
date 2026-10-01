@@ -58,9 +58,9 @@ matrices D satisfying five conditions: the first-order condition in a
 self-adjointness, compatibility with the real structure J, and
 grading-oddness. Our main result is that W_{22} is spanned by 22 explicit
 directions -- 10 from the Standard Model itself and 12 exotic
-color-universal couplings -- conditional on a single explicit numerical
-dimension hypothesis, and that this classification is machine-checked in
-the Lean 4 proof assistant [23] modulo that hypothesis.
+color-universal couplings -- unconditionally, and that this
+classification is machine-checked in the Lean 4 proof assistant [23]
+with zero sorrys and no numerical hypotheses.
 
 The contribution is threefold. First, we give 12 explicit exotic matrices
 and prove, in Lean 4, that each satisfies all five admissibility
@@ -362,16 +362,15 @@ so the first-order condition forces D(i,j) = 0 whenever both eigenvalue
 differences are nonzero. Sixteen diagonal-diagonal generator pairs
 suffice to annihilate all 104 entries outside the 72-entry support; the
 remaining color-copy identifications are forced by off-diagonal pairs.
-This mechanism is the basis of the ongoing Lean proof of Hypothesis H.
+This mechanism is the numerical counterpart of the now machine-checked Lean pivot-map argument.
 
 8. DISCUSSION AND OPEN PROBLEMS
 
 We state the open problems and the explicit non-claims.
 
-(1) Unconditional dimension bound. The Lean formalization of Hypothesis H
-    via diagonal-pair killing and color-universality is in progress. Its
-    completion would remove the sole numerical assumption from the
-    classification theorem.
+(1) Physical identification. The 12 exotic directions are distinguished
+    solution-space directions, not claimed physical fields; their physical
+    interpretation, if any, is open.
 
 (2) Physical status of the exotic directions. The twelve exotic directions
     are distinguished directions in the solution space of the linearized
@@ -389,8 +388,8 @@ We state the open problems and the explicit non-claims.
     couplings.
 
 Explicit non-claims. This paper does not claim a machine-verified grand
-unified theory, does not claim that Hypothesis H is proved, and does not
-claim physical reality for the exotic couplings. Theorem, numerical
+unified theory and does not claim physical reality for the exotic
+couplings. Theorem, numerical
 evidence, and interpretation are separated throughout.
 
 ACKNOWLEDGMENTS
