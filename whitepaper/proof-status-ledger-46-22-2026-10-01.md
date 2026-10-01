@@ -93,3 +93,55 @@ proof or evidence — never by rewording.
 New entries go here with date and verdict before they enter any paper, proposal, or
 announcement. An external proposal is recorded in §4 with its audit result even when
 declined — the record of refusal is part of the ledger.
+
+## §7 — Audited future research program (conditional, 2026-10-01)
+
+Source: external 11-item future-program sketch. Audit verdict: **CONDITIONAL GO**
+with the corrections below. Its governing distinction is adopted as ledger law:
+
+> "If the research succeeds, what door does that open?" ≠ "therefore the theory predicts X."
+
+A positive result at any step makes the next direction more interesting; it does not
+by itself establish a physical interpretation. This matches the relabeling rule:
+every step earns the next.
+
+**Corrections applied at audit (the sketch as received is not adopted verbatim):**
+
+- C1 — Notation. The sketch writes "ker L" / "dim ker L = 12" throughout. In this
+  source, `dim_R ker L = 4` (Tier-2, VORTEX-005, §2.1). The "12" is the exotic part
+  of the 22-dimensional order-one subspace `W22`. All eleven items are re-lettered
+  accordingly; the research questions transfer, the notation does not.
+- C2 — Item 7 (complete Lean formalization, zero sorrys) is **already true** of the
+  current theorem (§1.6–§1.8). Future formalization work targets the *next* theorems
+  (deformations, N-generation extensions), not this one.
+- C3 — Item 2 (N generations) must credit `ThreeGen.lean`: 16 proved three-generation
+  inheritance theorems already exist. N = 3 is partially covered, not open territory.
+- C4 — Item 5 (spectral-action fingerprints) is tied to the frozen SA program
+  (SA-1…SA-7), specifically SA-4 (finite spectral action). It does not float free.
+- C5 — Item 8 (independent reproduction) notes the existing Python Tier-4 census as
+  partial independent corroboration, not a blank slate.
+
+**The eleven directions (corrected):**
+
+| # | Direction | Door it would open |
+|---|-----------|-------------------|
+| 7.1 | Decompose the 12-dim exotic part into canonical invariant pieces | "12" becomes architecture, not a number; possible classification theorem |
+| 7.2 | Generalize the construction to N generations (`H_F ⊗ ℂ^N`) | A family-level framework; does **not** by itself explain why N = 3 in nature |
+| 7.3 | Representation-theoretic classification of the exotic part | Selection rules; connection to established representation theory |
+| 7.4 | Stability of the 12-dim exotic part under symmetry-preserving perturbations | Rigidity: axioms ⇒ the structure, vs. one calculation giving 12 |
+| 7.5 | Spectral-action consequences (`Tr f(D²/Λ²)` fingerprints) | First bridge from the finite result to the larger framework — via SA-4 |
+| 7.6 | `V_eff` moduli exploration over the 22-dim space | Preferred configurations *within the model*; **numerical minimum ≠ physical vacuum** |
+| 7.7 | Formalize the *next* theorems in Lean | Reusable foundation; already achieved for the current theorem |
+| 7.8 | Full independent reproduction (definitions → matrices → constraints → kernel) | Implementation-independence; exact divergence-point diagnosis |
+| 7.9 | Classify admissible deformations `D_F → D_F + δD` (all axioms preserved) | Finite-dimensional moduli space of valid spectral geometries |
+| 7.10 | Finite-to-continuum correspondence | A controlled route toward physical equations — a major program, not an assumption |
+| 7.11 | Experimental prediction | The final gate: abstract structure → quantitative, testable prediction |
+
+**Ladder (adopted):** Find → Understand → Prove → Stress-test → Generalize →
+Connect → Predict → Test. Each rung is conditional on the previous one; no rung
+assumes the final physical interpretation.
+
+**Boundary:** no item in §7 may be cited as an established result, a prediction of
+the theory, or evidence for a physical interpretation of the exotic directions
+until its own proof or measurement exists. Items graduate to §1–§3 only by meeting
+those sections' evidence bars.
