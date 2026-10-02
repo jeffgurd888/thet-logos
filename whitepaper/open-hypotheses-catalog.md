@@ -141,6 +141,38 @@ This document is the project's idea inventory. Nothing in §2 is proved. Nothing
 **What would prove it:** A derived interpretation, or a theorem that they carry no independent physical content under stated conditions.
 **What would kill it:** N/A — this is interpretive; it resolves by construction, not by refutation.
 
+### H19 — Relational primacy (RSD program)
+**Status:** OPEN · **Tier:** T5
+**Statement:** The fundamental description of the finite system is carried by algebraic and operatorial relations (algebra, states, operators, spectrum); spacetime is not assumed as a primitive stage — no background coordinates x^μ, no background metric g_μν in the foundations.
+**What would prove it:** A complete dynamical formulation of the finite triple in which geometric and temporal notions appear only as derived quantities, with the derivation exhibited.
+**What would kill it:** A demonstration that the dynamics cannot be formulated without primitive background coordinates or a primitive metric (relational formulation impossible in principle).
+**Note:** Entered 2026-10-01 as the head of the Relational Spectral Dynamics program (Engine 13 commissioned). The program's far rungs (continuum, Lorentzian recovery) are quarantined; only the finite rung is worked.
+
+### H20 — Spectral geometry emergence (finite rung)
+**Status:** OPEN · **Tier:** T5
+**Statement:** Spectral data of the finite Dirac operator (spectrum, Connes spectral distance) yields a stable effective geometric structure — a genuine metric geometry of the finite state space, robust under the permitted inner fluctuations.
+**What would prove it:** Finite, nontrivial spectral distances that are stable under inner fluctuations, matured toward a coarse-graining account of how the finite metric structure scales. (The scaling/continuum step is quarantined until the continuum program opens.)
+**What would kill it:** No stable metric-like structure at the finite rung — distances trivial (all 0 or all ∞), or destroyed by arbitrarily small permitted fluctuations.
+**Note:** Spectral *dimension* approaching 4 is NOT part of H20's finite-rung content — see locked correction C1 below.
+
+### H21 — Emergent temporal structure
+**Status:** OPEN · **Tier:** T5 — CLOCK IDENTIFICATION QUARANTINED
+**Statement:** A suitable nontracial physical state ρ of the finite system produces nontrivial modular flow σ_s^ρ, potentially relatable to operational time.
+**What would prove it:** Exhibition of an admissible physical state with nontrivial, robust modular flow, plus a derived operational clock with verified clock properties. (The clock half is quarantined — not worked in Engine 13.)
+**What would kill it:** No admissible state gives nontrivial flow, or a proof that the flow cannot be related to any operational clock even in principle.
+**Note:** See locked correction C2 below. E13-C is an inventory, not a clock search. Adjacent open entry: H9 (physical clock from modular flow).
+
+### H22 — Relativistic recovery
+**Status:** QUARANTINED (K2) · **Tier:** T5
+**Statement:** An appropriate continuum limit of the relational spectral system recovers Lorentzian relativistic physics (effective metric, relativistic dynamics).
+**What would prove it:** A controlled continuum-limit construction with the Lorentzian structure derived, not assumed.
+**What would kill it:** The continuum theory, once constructed, fails to recover observed relativistic dynamics.
+**Note:** Quarantined with the K2 continuum/cosmology quarantine, 2026-10-01. Listed so its absence from active work is visibly deliberate. Adjacent open entry: H10 (controlled continuum limit).
+
+### Locked corrections — RSD program (2026-10-01)
+**C1 — Finite spectral dimension is a control, not an emergence test.** For the finite D_F, K(t) = Tr(e^{−tD_F²}) is a finite sum of exponentials, so d_spec(t) = −2 d log K/d log t → 0 in both the UV (t→0) and IR (t→∞) limits — a theorem about finite matrices, verified numerically on the actual D_F (28 nonzero eigenvalues; d_spec ≈ 0.05 at small t, collapse at large t; the mid-range transient is log-derivative underflow artifact, not a dimension). Engine 13 uses d_spec only to confirm this no-go. Any d_spec → 4 program belongs to the continuum quarantine.
+**C2 — Tracial state ⇒ trivial flow; no established physical temporal dynamics.** ρ = I/N gives σ_s^ρ(a) = a for all a. The finite modular-flow probes to date (modular_flow.py: T3 mathematical checks pass; finite_thermal_flow.py: KILLED as a force probe — u(1) inert, su(2) signal = mass splitting only) establish no physical temporal dynamics. E13-C inventories which states give nontrivial flow; it does not identify the modular parameter with clock time.
+
 ---
 
 ## §3. Vetoed and killed — permanently logged, do not relitigate

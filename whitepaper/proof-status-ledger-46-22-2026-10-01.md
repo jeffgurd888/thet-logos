@@ -145,3 +145,40 @@ assumes the final physical interpretation.
 the theory, or evidence for a physical interpretation of the exotic directions
 until its own proof or measurement exists. Items graduate to §1–§3 only by meeting
 those sections' evidence bars.
+
+## §8 — Temporary lifting of the SA freeze and K2/H22 quarantines (2026-10-02)
+
+**Authority:** Jeff, 2026-10-02 ("unfreeze and lift quarantines temporarily";
+terms confirmed; E13-E Phase 4 commissioned).
+
+**Lifted, temporarily and scoped:** the spectral-action program freeze
+(incl. SA-4), the K2 continuum quarantine, and H22's quarantine — for
+E13-E Phase 4 (product Seeley–DeWitt computation on M₄ × S¹_β × F₃₂) and
+directly supporting continuum-bridge work only.
+
+**Not lifted:** the semantic law (12-dim algebraic exotic component ≠ 12
+physical fields); rejected vocabulary (E₁–E₁₂, `Nullspace22.lean`,
+`MatrixDecomp.lean`); killed claims (relabeling rule stands); the honesty
+tiers themselves. This is permission to investigate, not a promotion of any
+claim.
+
+**Re-freeze condition:** the lifting expires when Phase 4 returns its verdict
+(PASS/FAIL/KILL) or on Jeff's word, whichever comes first. Surviving results
+keep whatever tier they earn; the wall then goes back up.
+
+**Status:** LOCAL amendment — not pushed. Public ledger update requires
+Jeff's explicit push authorization.
+
+### §8.1 — Re-freeze (2026-10-02)
+
+E13-E Phase 4 returned its verdict: **PASS** (no kill condition triggered;
+cross term derived, anchors green, assumptions explicit;
+`whitepaper/e13e-phase4-seeley-dewitt.md`). Per §8's re-freeze condition, the
+temporary lifting **expires with this verdict**: the spectral-action program
+freeze and the K2/H22 quarantines are reinstated in full. Surviving Phase 4
+results keep their earned tiers (Tier-2 computation; Tier-5 physical
+reading). Any further SA/continuum work requires a new lifting under the
+same terms.
+
+**Status:** LOCAL amendment — not pushed. Public ledger update requires
+Jeff's explicit push authorization.
