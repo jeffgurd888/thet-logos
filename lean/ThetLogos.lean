@@ -7,6 +7,7 @@ import ThetLogos.XYZTripotents
 import ThetLogos.OrderOne
 import ThetLogos.ThermalKMS
 import ThetLogos.ModularTime
+import ThetLogos.ModularFlux
 import ThetLogos.Chromatic
 import ThetLogos.BlockedQuestions
 import ThetLogos.ThreeGen
