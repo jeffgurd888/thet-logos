@@ -193,6 +193,52 @@ theorem blockedQ4_closedFormGap (nYuk N : ℕ)
       e.eval y = spectrumGap (diracSpec y) := by
   sorry
 
+/-! ## Q4 amendment: why the closed form is blocked (2026-10-05)
+
+Two distinct obstructions, kept separate because they have different
+epistemic status.
+
+**Obstruction 1 — conditional Galois barrier (unproved antecedent).**
+`D_F ∈ Herm₃₂(ℂ)` is built from Yukawa inputs, so `Δ` is a root of a
+parametric characteristic polynomial of degree ≤ 32. *If* the sectoral
+factors of that polynomial have Galois group `S_d` with `d ≥ 5`, *then*
+Abel–Ruffini forbids any expression in radicals (and a fortiori in the
+`ClosedForm` language, which allows only `+`, `×`, `√`) covering the full
+parameter space. But no Galois group has been computed for this
+polynomial — the barrier is conditional, not a proved impossibility.
+Stating it as "mathematically impossible" would be an overclaim.
+
+**Obstruction 2 — the min-selection is non-analytic (structural).**
+`Δ(Y) = min spec_{>0}(|D_F(Y)|)` is the lower envelope of eigenvalue
+curves. At level-crossing submanifolds two branches exchange the minimum
+and `Δ(Y)` develops cusps: it is generically only Lipschitz, piecewise
+smooth at best. A single closed-form expression cannot capture a
+non-smooth selection operator over continuous parameter space. This
+obstruction does not depend on any unproved lemma.
+
+**Load-bearing unproved lemma.** Both the barrier argument and the
+factorization path below need the sectoral decomposition of
+`charpoly(D_F)` from the gauge/color symmetry
+(`A_F = ℂ ⊕ ℍ ⊕ M₃(ℂ)`, `SU(3)_c` multiplicities): the claim that it
+splits into sector polynomials of degree ≤ 4 in `λ²`. Nothing of this
+form exists in the codebase (verified 2026-10-05). It is the key lemma,
+not an established fact.
+
+**Unblock paths (each a new, weaker entry — never "the" closed form):**
+- **A. Conditional spectral bounds.** `Δ(Y) ≥ f(Y) > 0` via matrix-norm
+  and trace inequalities (Frobenius, Gershgorin, Rayleigh quotient) on
+  Yukawa domains bounded away from crossings. Formulas to be supplied.
+- **B. Sectoral factorization.** Prove the degree-≤-4-in-`λ²` splitting
+  in Lean or computer algebra. A biquartic sector *is* radical-solvable
+  (solve the quartic in `μ = λ²`, take square roots) — so this path
+  yields closed forms *per sector*, before the `min` selection.
+- **C. Tier-4 numerical gap maps.** Eigenvalue sweeps over realistic
+  Yukawa slices (PDG moduli); locate crossing manifolds empirically.
+
+Status of this amendment: Tier 5 diagnosis with Tier 2 fragments (the
+min-selection analysis). It sharpens the question; it does not unblock it.
+-/
+
 /-! ## Q5. From engine design to physical device
 
 **Classical.** Can the thermal cycles studied as finite-triple engine designs
