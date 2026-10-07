@@ -182,3 +182,73 @@ gauntlet `whitepaper/gauntlet-report-2026-10-06.md` ·
 flow lab `whitepaper/modular-flow-lab-2026-10-07.md` ·
 Lean sources `lean/ThetLogos/` (builds green, zero sorrys, axioms
 `[propext, Classical.choice, Quot.sound]` throughout).*
+
+---
+
+## Appendix A. Kernel destruction — formal manuscript section
+
+### A.1 The structural mechanism as a machine-checked lemma
+
+Let (A, H_F, D_F) be a finite noncommutative spectral triple over H_F = ℂ³².
+Let σ_s : B(H_F) → B(H_F) be the one-parameter modular flow by unitary
+conjugation, σ_s(X) = e^{isK} X e^{-isK}, with K = −ln ρ the modular
+Hamiltonian. Let A′ = {T : [T, π(a)] = 0 ∀a ∈ A} be the commutant of the
+represented algebra. The represented kernel at flow parameter s is the
+intersection of the transported commutant with the algebra:
+
+K(s) = Ad_{σ_s}(A′) ∩ π(A).
+
+The mechanism is formalized in `lean/ThetLogos/FlowKernel.lean` (builds green,
+zero sorrys, axioms `[propext, Classical.choice, Quot.sound]`):
+
+- **Transport** (`commutant_transport`): unitary conjugation transports
+  commutants — [UDUᴴ, X] = 0 ↔ [D, UᴴXU] = 0. The flow moves the kernel
+  rigidly, without internal deformation.
+- **Identity** (`represented_kernel_identity`): the represented kernel at
+  flow time is the transported commutant intersected with the algebra.
+- **Criterion** (`kernel_destruction_criterion`): the conditional theorem —
+  if the only commutant elements the flow can bring into the algebra lie
+  along the s = 0 generator (rigidity), and the flow moves that generator
+  out (exit), then the represented kernel vanishes for all s ≠ 0.
+- **Base input** (`kernel_dim_one_at_zero`): under rigidity the s = 0
+  represented kernel is exactly span{X₀} — the observed 1-dimensional kernel.
+- **Instantiation** (`destruction_of_satisfies`): the criterion applied to
+  pinned concrete data; `satisfiesDestruction` states the actual 32×32 triple
+  meets the hypotheses (T5 — finite linear-algebra verification task, not a
+  mathematical gap).
+
+### A.2 The 32×32 instantiation and numerical findings
+
+In the 32×32 finite Dirac operator (Yukawa matrices Y_u, Y_d, Y_e, Y_ν,
+Majorana block E), the Modular Flow Laboratory finds an abrupt transition:
+
+| Flow parameter s | Kernel dim | Infinite-distance probe pairs | Geometry | Epistemic tier |
+|---|---|---|---|---|
+| s = 0 | 1 | 20 / 36 | Fragmented / disconnected | T4 numerical; T5 pinned |
+| s ≠ 0 (down to ±0.001) | 0 | 0 / 36 | Connected / healed | T4 numerical; T5 pinned |
+
+At s = 0 the 1-dimensional kernel leaves 20 of 36 probe pairs at infinite
+Connes distance — the internal space is topologically disconnected. For any
+nonzero flow parameter the kernel is gone and all distances are finite.
+The mechanism is verified real, not a tolerance artifact
+(`whitepaper/modular-flow-lab-2026-10-07.md`).
+
+### A.3 Epistemic tier mapping
+
+- **T1 (proved):** the general algebraic mechanism — rigid unitary transport
+  of a commutant out of an algebra destroys their intersection. Five theorems,
+  zero sorrys.
+- **T4 (numerical):** the 32×32 observation — kernel 1 → 0, distances
+  ∞ → finite, mechanism confirmed against tolerance.
+- **T5 (pinned):** `satisfiesDestruction` — the concrete triple meets the
+  criterion's hypotheses. Promotion to T1 is a finite matrix-rank computation
+  over exact algebraic entries: a task, not a gap.
+
+### A.4 Geometric reading
+
+Thermal/modular flow acts as a geometric regulator: by rigidly shifting the
+commutant out of alignment with the represented algebra, it removes the
+obstruction to spectral distance computation — a fragmented internal geometry
+made whole. This is a *reading* of the proved mechanism and the numerical
+observation, not a further claim: it is T5 until the flow's geometric content
+is formalized (see the KMS-flow question, Rung 5).
