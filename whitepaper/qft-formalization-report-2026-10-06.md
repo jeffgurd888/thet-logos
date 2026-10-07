@@ -203,3 +203,107 @@ lemma). No mathematical obstacle; purely formalization work.
 
 **Zero `sorry`s.** **No physical claims.** Nothing pushed; commit is the
 parent's call.
+
+---
+
+## Rung 3 (constructive QFT) — beachhead run, 2026-10-07
+
+**Context:** Rung 2 (renormalization) is complete at the bialgebra level.
+Rung 3 is the field's wall: no interacting 4D Wightman QFT has ever been
+constructed (undisputed; it is the Clay problem's difficulty). The beachhead
+is therefore the FREE field — the one QFT that provably exists
+(Streater–Wightman 1964) — plus the Haag–Kastler and Osterwalder–Schrader
+frameworks pinned as statements.
+
+### Target 1 (primary): the free scalar field — algebraic core
+
+**File:** `lean/ThetLogos/FreeField.lean` — builds green
+(`lake build ThetLogos.FreeField`), full project build green (3324 jobs).
+
+**Infrastructure survey (Mathlib 2026) — what exists and what doesn't:**
+- HAS: `SymmetricAlgebra` (bosonic Fock, algebraic) with universal
+  property (`lift`), induction principle, augmentation map
+  (`algebraMapInv`); `ExteriorAlgebra` (fermionic analogue);
+  `CliffordAlgebra` contraction; Hilbert `ℓ²` spaces (`PiL2`, `l2Space`).
+- LACKS: Fock inner product (the `n!`/permanent formula on `Sym(V)`);
+  Schwartz distribution theory (`𝒮`, `𝒮'`); annihilation operators
+  (need the inner product); unbounded-operator theory for fields;
+  the mass shell `Hₘ⁺` with Lorentz-invariant measure as a ready object;
+  second quantization functor `Γ`; Minlos' theorem / nuclear spaces.
+
+### PROVED (T1, zero sorrys, axioms `[propext, Classical.choice, Quot.sound]`)
+
+- `bosonicFock V := SymmetricAlgebra ℂ V` — the algebraic Fock space;
+  `fockVacuum := 1`; `vacuumExp := SymmetricAlgebra.algebraMapInv`
+  (the augmentation map as vacuum expectation functional).
+- `onePoint_vanishes`: `⟨0| a†(v) |0⟩ = 0` — the 1-point function vanishes
+  (`algebraMapInv_ι` read in field language).
+- `twoPoint_algebraic_trivial`: the algebraic vacuum functional gives a
+  *trivial* 2-point function (`⟨0|ι(v)ι(w)|0⟩ = 0`). This is the honest,
+  checked location of the gap: the quantum 2-point function `⟪v,w⟫` lives
+  entirely in the missing Fock inner product. Not a bug — a measurement.
+- `create_commute`: `[a†(v), a†(w)] = 0` — creation operators commute
+  (via `mul_left_comm` on the commutative symmetric algebra).
+- `vacuum_cyclic`: `Algebra.adjoin ℂ (range (ι ℂ V)) = ⊤` — every Fock
+  vector is a polynomial in creators applied to the vacuum. The algebraic
+  shadow of Wightman W5, proved via `SymmetricAlgebra.induction`.
+
+**Build note (honest):** two elaboration traps were hit and fixed, both
+worth recording. (1) `SymmetricAlgebra.algebraMapInv` takes `R M`
+*implicit* while `SymmetricAlgebra.ι` takes them *explicit* — the file's
+`variable (R M : Type*)` line is misleading; `#check` is authoritative.
+(2) The first `create_commute` attempt used `mul_comm` where the goal
+needed `mul_left_comm` — the error surfaced as a spurious `sorryAx`
+downstream, a reminder that axiom-footprint anomalies get investigated,
+not ignored.
+
+### Per-axiom ledger: free field vs. W0–W6
+
+| Axiom | Verdict | Gap (infrastructure vs. mathematical) |
+|---|---|---|
+| W0 (Hilbert space) | BLOCKED | infrastructure: Fock inner product absent |
+| W1 (fields as OVDs) | BLOCKED | infrastructure: no `𝒮'`; annihilation needs W0's inner product |
+| W2 (Poincaré covariance) | BLOCKED | infrastructure: mass-shell `L²` + second quantization `Γ` |
+| W3 (spectrum) | geometry T1 (in `WightmanAxioms.lean`); operator statement BLOCKED on W0/W1 | mixed |
+| W4 (locality) | BLOCKED | infrastructure: full CCR needs annihilation; Pauli–Jordan `Δ` needs `𝒮'`; shadow `[create,create]=0` PROVED |
+| W5 (vacuum cyclicity) | algebraic shadow PROVED (`vacuum_cyclic`); Hilbert density BLOCKED on W0 | mixed |
+| W6 (clustering) | BLOCKED | infrastructure: explicit `Δ₊` + spacelike decay analysis |
+
+### Target 2: Haag–Kastler axioms — PINNED (T5)
+
+**File:** `lean/ThetLogos/HaagKastler.lean` — builds green.
+`HaagKastlerAxioms` structure (net, isotony, locality, Poincaré covariance,
+spectrum condition, vacuum, irreducibility — all opaque Props);
+`InteractingHaagKastlerNet` / `HaagKastlerExistence` pinned (open problem).
+One T1-adjacent contribution: `SpacelikeSeparated` defined directly from
+the checked Minkowski inner product. Dependency ledger: HK avoids
+distributions but needs C*-net machinery Mathlib lacks; neither framework
+is formalizable past the statement.
+
+### Target 3: Osterwalder–Schrader axioms + reconstruction — PINNED (T5)
+
+**File:** `lean/ThetLogos/OsterwalderSchrader.lean` — builds green.
+`OsterwalderSchraderAxioms` (E0–E4: temperedness, Euclidean covariance,
+reflection positivity, symmetry, clustering — opaque Props);
+`OSReconstruction : Prop` (OS ⇒ Wightman, proved 1975, not formalized —
+analytic gap named: Bargmann–Hall–Wightman analytic continuation,
+edge-of-the-wedge, no Mathlib infrastructure); `InteractingOSMeasure`
+pinned (open). Noted honestly: even the *free* field's OS verification
+needs Minlos' theorem + distribution kernels — T5 for now.
+
+### Updated ledger (Rung 3)
+
+| Item | Status | Axioms |
+|---|---|---|
+| Free field: Fock space, vacuum, vacuum functional | PROVED | propext, Classical.choice, Quot.sound |
+| 1-point vanishes; 2-point algebraic-trivial | PROVED | same |
+| `[a†,a†] = 0` | PROVED | same |
+| Algebraic vacuum cyclicity (W5 shadow) | PROVED | same |
+| W0,W1,W2,W4,W6 for free field | BLOCKED (infrastructure, precisely named) | — |
+| W3 geometry | PROVED (prior wave) | same |
+| Haag–Kastler axioms + existence | PINNED (T5) | — |
+| OS axioms + reconstruction + OS existence | PINNED (T5) | — |
+
+**Zero `sorry`s. No interacting-QFT existence claims — the map documents
+that none exist in 4D, and this run doesn't change that.** Nothing pushed;
+commit is the parent's call.
