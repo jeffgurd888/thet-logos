@@ -116,4 +116,79 @@ theorem gap_closes : ∃ t : ℝ, diagGap t = 0 :=
 theorem gap_closes_arbitrarily : ∀ ε : ℝ, 0 < ε → ∃ t : ℝ, diagGap t < ε :=
   fun ε hε => ⟨1, by unfold diagGap; norm_num; exact hε⟩
 
+/-!
+## The mass-gap condition, sharpened (Rung 4 dossier, 2026-10-07)
+
+The Clay problem quantifies over *all* compact simple groups; the physics
+literature means the SU(3) case. Both are pinned below, with the implication
+one way only. The gap condition gets its isolated-point formulation plus
+three genuine T1 lemmas (gap algebra, no analysis needed).
+-/
+
+/-- The Clay statement for a named compact simple group (SU(3) in the
+    physics literature): the concrete case. `ClayProblem` (all compact
+    simple G) implies this for every such group; the converse is not
+    claimed. No Lie theory is formalized — `G` is a parameter standing
+    for the group. -/
+def ClaySU3 (G : CompactSimpleGroup) (_hc : G.isCompact) (_hs : G.isSimple) : Prop :=
+  ClayYangMills G
+
+/-- `ClayProblem` implies the named-group case (Tier T1 — immediate). -/
+theorem clayProblem_to_named (G : CompactSimpleGroup) (hc : G.isCompact)
+    (hs : G.isSimple) : ClayProblem → ClaySU3 G hc hs :=
+  fun h => h G hc hs
+
+/-- Equivalent formulation: 0 is isolated in the spectrum from above —
+    nothing sits strictly between 0 and Δ. -/
+def HasMassGapIsolated {G : CompactSimpleGroup} (T : QuantumYangMillsTheory G) : Prop :=
+  ∃ Δ : ℝ, 0 < Δ ∧ ∀ E ∈ T.hamiltonianSpectrum, E < Δ → E = 0
+
+/-- The two gap formulations coincide (Tier T1). -/
+theorem hasMassGap_iff_isolated {G : CompactSimpleGroup} (T : QuantumYangMillsTheory G) :
+    HasMassGap T ↔ HasMassGapIsolated T := by
+  constructor
+  · rintro ⟨Δ, hΔ, h⟩
+    exact ⟨Δ, hΔ, fun E hE hEΔ => by
+      rcases h E hE with rfl | hle
+      · rfl
+      · linarith⟩
+  · rintro ⟨Δ, hΔ, h⟩
+    exact ⟨Δ, hΔ, fun E hE => by
+      by_cases hEΔ : E < Δ
+      · exact Or.inl (h E hE hEΔ)
+      · exact Or.inr (le_of_not_gt hEΔ)⟩
+
+/-- A smaller gap bound works too (Tier T1). -/
+theorem gap_shrink {G : CompactSimpleGroup} {T : QuantumYangMillsTheory G}
+    {Δ Δ' : ℝ} (hle : Δ' ≤ Δ)
+    (h : ∀ E ∈ T.hamiltonianSpectrum, E = 0 ∨ Δ ≤ E) :
+    ∀ E ∈ T.hamiltonianSpectrum, E = 0 ∨ Δ' ≤ E := by
+  intro E hE
+  rcases h E hE with rfl | hge
+  · exact Or.inl rfl
+  · exact Or.inr (le_trans hle hge)
+
+/-- The max of two working gaps works (Tier T1). -/
+theorem gap_max {G : CompactSimpleGroup} {T : QuantumYangMillsTheory G}
+    {Δ₁ Δ₂ : ℝ}
+    (h₁ : ∀ E ∈ T.hamiltonianSpectrum, E = 0 ∨ Δ₁ ≤ E)
+    (h₂ : ∀ E ∈ T.hamiltonianSpectrum, E = 0 ∨ Δ₂ ≤ E) :
+    ∀ E ∈ T.hamiltonianSpectrum, E = 0 ∨ max Δ₁ Δ₂ ≤ E := by
+  intro E hE
+  rcases h₁ E hE with rfl | hge₁
+  · exact Or.inl rfl
+  · rcases h₂ E hE with rfl | hge₂
+    · exact Or.inl rfl
+    · exact Or.inr (max_le hge₁ hge₂)
+
+/-- No spectrum strictly between 0 and a working gap (Tier T1). -/
+theorem gap_excludes_interval {G : CompactSimpleGroup} {T : QuantumYangMillsTheory G}
+    {Δ : ℝ} (_hΔ : 0 < Δ)
+    (h : ∀ E ∈ T.hamiltonianSpectrum, E = 0 ∨ Δ ≤ E) :
+    ∀ E ∈ T.hamiltonianSpectrum, E < Δ → E = 0 := by
+  intro E hE hlt
+  rcases h E hE with rfl | hge
+  · rfl
+  · linarith
+
 end ThetLogos

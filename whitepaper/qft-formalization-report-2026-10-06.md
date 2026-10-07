@@ -307,3 +307,81 @@ needs Minlos' theorem + distribution kernels — T5 for now.
 **Zero `sorry`s. No interacting-QFT existence claims — the map documents
 that none exist in 4D, and this run doesn't change that.** Nothing pushed;
 commit is the parent's call.
+
+---
+
+## Rung 4 — the Clay mass gap, dossier run (2026-10-07)
+
+**Scope of this run:** the $1M wall. No one has proved the mass gap, and
+this run does not attempt the proof. The honest beachhead is the problem's
+*precise shape*: the exact statement sharpened, the known partial results
+with their exact scope, and why our finite results don't transfer.
+
+### Target 1: Clay statement sharpened — EXTENDED (T1 + T5)
+
+**File:** `lean/ThetLogos/ClayStatement.lean` — extended, builds green.
+
+- `ClaySU3 (G) (hc) (hs)`: the named-group case (SU(3) in the physics
+  literature) — `ClayProblem` (all compact simple G) implies it;
+  the converse is not claimed. No Lie theory formalized; `G` is a
+  parameter standing for the group.
+- `clayProblem_to_named`: `ClayProblem → ClaySU3 G hc hs` (T1, immediate).
+- `HasMassGapIsolated`: the gap as "0 is isolated in the spectrum from
+  above" — `∃ Δ > 0, ∀ E ∈ spec, E < Δ → E = 0`.
+- `hasMassGap_iff_isolated`: the two gap formulations coincide (T1).
+- Gap algebra (T1, no analysis needed): `gap_shrink` (a smaller bound
+  works), `gap_max` (the max of two working gaps works),
+  `gap_excludes_interval` (no spectrum strictly between 0 and Δ).
+
+### Target 2: partial results pinned with exact scope — PINNED (T5)
+
+**File:** `lean/ThetLogos/MassGapDossier.lean` (new) — builds green.
+Each result is a structure with opaque Props: the statement, its exact
+scope, and what is NOT claimed.
+
+| Result | Source | Scope | NOT claimed |
+|---|---|---|---|
+| `LatticeStrongCouplingGap` | Osterwalder–Seiler, *Ann. Phys.* 110 (1978) | Lattice-regularized YM, strong coupling (small β): exponential clustering, Wilson area law | The continuum limit (a → 0) |
+| `BalabanRGProgram` | Balaban, *Commun. Math. Phys.* 1987–1995 (~500 pp) | Block-spin RG: continuum-limit existence + convergence at small bare coupling — closest approach to the existence half | A positive mass gap; large-field control has open issues (critics incl. Jaffe) |
+| `Phi4Triviality` | Aizenman–Duminil-Copin, *Ann. Math.* 194 (2021) | 4D φ⁴/Ising scaling limits are Gaussian — the scalar route is closed | Anything about Yang–Mills |
+| `AbelianHiggs2D` | Brydges–Fröhlich–Seiler, *Ann. Phys.* 121 (1979) + sequels | The only complete interacting gauge theory satisfying the axioms | Anything in 4D |
+| `SpectralGapUndecidability` | Cubitt–Perez-Garcia–Wolf, *Nature* 528 (2015) | No gap-deciding algorithm for *arbitrary* 2D lattice Hamiltonians | Per `GapUndecidabilityScope`: nothing about the single YM Hamiltonian |
+
+### Target 3: transfer obstructions formalized — PINNED + 1 T1
+
+**File:** `lean/ThetLogos/MassGapDossier.lean` — the four load-bearing
+walls as `TransferObstruction`:
+
+1. **Different objects** — `FiniteDiracGap` (structure) + the bridge
+   implication `FiniteGapImpliesClayGap : FiniteDiracGap → ClayYangMills G`,
+   pinned OPEN. The Clay gap is `inf (spec H ∖ {0})` for a *constructed*
+   4D QFT; a 32×32 matrix gap is a different object.
+2. **Branch crossings** — T1: `obstruction2_is_T1` references the checked
+   `gap_closes` (naive finite-matrix gaps close at crossings).
+3. **No continuum/thermodynamic limit** — `UniformContinuumBridge`
+   (uniform gap + OS control in the limit ⇒ continuum gap), pinned OPEN;
+   its hypotheses are Rung 3's open problems.
+4. **Conditional lemmas don't compose** — `ConditionalLemmaScope`: our
+   spectral-gap result is a conditional finite-matrix lemma
+   (`BlockedQuestions.lean` Q4), not a mass-gap theorem.
+
+### Updated ledger (Rung 4)
+
+| Item | Status | Axioms |
+|---|---|---|
+| Clay statement sharpened (SU(3) case, isolated-point form) | PINNED (T5) | — |
+| Gap algebra (`iff_isolated`, `shrink`, `max`, `excludes_interval`) | PROVED | propext, Classical.choice, Quot.sound |
+| 5 partial results with exact scope | PINNED (T5) | — |
+| 4 transfer obstructions named in Lean | PINNED (T5) + 1 T1 | same (T1 part) |
+
+**Zero `sorry`s. No mass-gap proof attempted, no "approach" language —
+the dossier documents the problem; it doesn't solve it.** Nothing pushed;
+commit is the parent's call.
+
+### Where the prize stands relative to our work (one line)
+
+The Clay mass gap is `inf (spec H ∖ {0}) > 0` for a *constructed*,
+non-trivial 4D quantum Yang–Mills theory satisfying the axioms; we have
+pinned its statement, proved finite-matrix gap algebra, and named the
+four walls between the two. Nothing in this run shortens the distance —
+it measures it.
