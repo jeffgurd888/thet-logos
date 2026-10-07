@@ -187,68 +187,146 @@ Lean sources `lean/ThetLogos/` (builds green, zero sorrys, axioms
 
 ## Appendix A. Kernel destruction — formal manuscript section
 
-### A.1 The structural mechanism as a machine-checked lemma
+### A.1 Setup
 
-Let (A, H_F, D_F) be a finite noncommutative spectral triple over H_F = ℂ³².
-Let σ_s : B(H_F) → B(H_F) be the one-parameter modular flow by unitary
-conjugation, σ_s(X) = e^{isK} X e^{-isK}, with K = −ln ρ the modular
-Hamiltonian. Let A′ = {T : [T, π(a)] = 0 ∀a ∈ A} be the commutant of the
-represented algebra. The represented kernel at flow parameter s is the
-intersection of the transported commutant with the algebra:
+Let (A, H_F, D_F) be a finite noncommutative spectral triple over H_F = ℂ³²,
+with D_F the 32×32 Dirac operator built from Yukawa matrices
+(Y_u, Y_d, Y_e, Y_ν) and Majorana block E. Let ρ be a faithful state and
+K = −ln ρ the synthesized modular Hamiltonian (hermitized). The modular flow
+is the one-parameter unitary group
 
-K(s) = Ad_{σ_s}(A′) ∩ π(A).
+σ_s(X) = e^{isK} X e^{−isK},   U_s = e^{isK},   s ∈ ℝ.
 
-The mechanism is formalized in `lean/ThetLogos/FlowKernel.lean` (builds green,
-zero sorrys, axioms `[propext, Classical.choice, Quot.sound]`):
+Let π(A) ⊂ B(H_F) be the represented algebra and
+A′ = {T ∈ B(H_F) : [T, π(a)] = 0 ∀a ∈ A} its commutant. The *represented
+kernel* at flow parameter s is
 
-- **Transport** (`commutant_transport`): unitary conjugation transports
-  commutants — [UDUᴴ, X] = 0 ↔ [D, UᴴXU] = 0. The flow moves the kernel
-  rigidly, without internal deformation.
-- **Identity** (`represented_kernel_identity`): the represented kernel at
-  flow time is the transported commutant intersected with the algebra.
-- **Criterion** (`kernel_destruction_criterion`): the conditional theorem —
-  if the only commutant elements the flow can bring into the algebra lie
-  along the s = 0 generator (rigidity), and the flow moves that generator
-  out (exit), then the represented kernel vanishes for all s ≠ 0.
-- **Base input** (`kernel_dim_one_at_zero`): under rigidity the s = 0
-  represented kernel is exactly span{X₀} — the observed 1-dimensional kernel.
-- **Instantiation** (`destruction_of_satisfies`): the criterion applied to
-  pinned concrete data; `satisfiesDestruction` states the actual 32×32 triple
-  meets the hypotheses (T5 — finite linear-algebra verification task, not a
-  mathematical gap).
+K(s) = {X ∈ π(A) : [σ_s(D_F), X] = 0} = Ad_{σ_s}(A′) ∩ π(A),
 
-### A.2 The 32×32 instantiation and numerical findings
+the intersection of the transported commutant with the represented algebra.
+The Lean conventions match the numerical lab exactly: `φ = i[K, D]`,
+`K = −ln ρ`, `σ_s(D) = e^{isK}De^{−isK}`.
 
-In the 32×32 finite Dirac operator (Yukawa matrices Y_u, Y_d, Y_e, Y_ν,
-Majorana block E), the Modular Flow Laboratory finds an abrupt transition:
+### A.2 The structural mechanism as machine-checked lemmas
 
-| Flow parameter s | Kernel dim | Infinite-distance probe pairs | Geometry | Epistemic tier |
+File: `lean/ThetLogos/FlowKernel.lean` — builds green, zero sorrys, zero
+warnings, axioms `[propext, Classical.choice, Quot.sound]` on all theorems.
+
+**Theorem 1 — commutant transport** (`commutant_transport`). For unitary U
+(UᴴU = UUᴴ = 1):
+
+[UDUᴴ, X] = 0  ↔  [D, UᴴXU] = 0.
+
+*Proof idea.* Four conjugation identities (e1–e4): sandwiching each side of
+the commutator equation with Uᴴ·U or U·Uᴴ and cancelling via the unitarity
+hypotheses. The flow moves the commutant rigidly — the full commutant is
+carried along by σ, so any change in the *represented* kernel comes from the
+algebra side, never from the commutant itself.
+
+**Theorem 2 — represented kernel identity** (`represented_kernel_identity`):
+
+{X ∈ A : [σ(D), X] = 0} = σ '' {Y : [D, Y] = 0 ∧ σ(Y) ∈ A}.
+
+*Proof idea.* Round-trip cancellation lemmas (`conj_cancel_left/right`):
+U(UᴴXU)Uᴴ = X. Forward: pull X back through the flow, apply transport,
+push forward. Backward: symmetric. Every kernel element at flow time is the
+flow-image of a base commutant element that lands in A.
+
+**Theorem 3 — kernel-destruction criterion** (`kernel_destruction_criterion`).
+Let X₀ ∈ A with [D, X₀] = 0 (the s = 0 generator). Hypotheses — exactly what
+the laboratory observed (T4):
+- *(rigidity)* every commutant element the flow can bring into A lies along
+  X₀: [D,Y] = 0 ∧ UYUᴴ ∈ A → ∃c, Y = c·X₀;
+- *(exit)* the flow moves X₀ itself out: UX₀Uᴴ ∉ A.
+
+Then every X ∈ A with [UDUᴴ, X] = 0 satisfies X = 0.
+
+*Proof idea.* Pull X back to Y = UᴴXU; transport gives [D, Y] = 0 and
+UYUᴴ = X ∈ A; rigidity forces Y = c·X₀, hence X = c·(UX₀Uᴴ). If c = 0, done.
+If c ≠ 0, then UX₀Uᴴ = c⁻¹·X ∈ A by subspace closure — contradicting exit.
+
+**Theorem 4 — the s = 0 input** (`kernel_dim_one_at_zero`). At the identity
+flow (U = 1), rigidity says the represented kernel is exactly span{X₀} —
+the 1-dimensional kernel observed at s = 0.
+
+**Theorem 5 — instantiation** (`destruction_of_satisfies`). The criterion
+applied to pinned concrete data. `satisfiesDestruction` (T5) states the
+actual 32×32 triple (D_F, K = −lnρ, Option-A representation) meets the
+hypotheses, with T4 numerical evidence cited and the T1 promotion path named
+(concrete entries via `Scaffold32.lean` / `MartinettiRep.lean`). Separately
+pinned (T5, realistic T1 target): `modularUnitary_unitary` — exp of a
+skew-adjoint operator is unitary.
+
+### A.3 The 32×32 instantiation and numerical findings
+
+Instrument: `scripts/modular_flow_lab.py` (all parameters playable:
+`MODE`, `S_MAX`, `N_S`, `BETA`, `PERTURB`, `RUN_WHATIF`). Figures:
+`whitepaper/figs/modular-flow-lab/` (7 plots).
+
+**Sanity checks — all green.** φ Hermitian (exact); eigenvalue rigidity
+⟨v|φ|v⟩ = 0 to 3.6e−14; KMS (β = 1) to 1.4e−13; equilibrium/tracial →
+φ = 0 exactly across three states (`thermal_flux_vanishes`); active mode →
+‖φ‖_F = 1.6e3 ≠ 0 (`exists_activeDriver`). The T1 theorems hold numerically.
+
+**The spectrum stands still.** Max eigenvalue drift over s ∈ [−2, 2]:
+1.3e−12 — machine precision. Flat lines are the *correct* result (unitary
+conjugation is isospectral).
+
+**Everything else moves.**
+- Positive-energy eigenspaces rotate up to **1.54 rad** (≈ π/2 — some
+  directions fully rotate), quasi-periodic in s.
+- Commutator norms ‖[D_s, a_k]‖ vary **~106–117**, and are *minimal at
+  s = 0* — the flow drives the geometry away from its most commutative point.
+- Mean finite Connes distance over probe pairs deforms **0.0047 → 0.0102**.
+
+**The finding: kernel destruction.** At s = 0 exactly, ker[D_s, ·] is
+1-dimensional and 20/36 probe pairs sit at infinite Connes distance —
+disconnected components. For any s ≠ 0 down to ±0.001, the kernel is
+0-dimensional and all pairs connect finitely. Mechanism (real, not a
+tolerance artifact): ker[σ_s(D),·] ≠ 0 ⟺ σ_s(ker[D,·]) ∩ π(A_F) ≠ 0, and the
+small-s commutator grows linearly, well above the 1e−8 kernel cutoff.
+*Caveat:* Option-A represented triple (2-dim represented algebra; M₃(ℂ)
+summand killed — documented artifact).
+
+**What-if track (speculative, beyond the Lean construction).** Deforming
+D(t) = D + t·φ̂ along the flux direction itself: eigenvalues *can* move, but
+the drift onset is purely quadratic (drift/t² flat at 2.52e−3; log-log slope
+exactly 2; linear ruled out) — the numerical content of
+`eigenvalue_rigidity`: the flux rotates the eigenbasis at first order and
+drifts eigenvalues only at second order.
+
+| Flow parameter s | Kernel dim | Infinite-distance pairs | Geometry | Tier |
 |---|---|---|---|---|
 | s = 0 | 1 | 20 / 36 | Fragmented / disconnected | T4 numerical; T5 pinned |
-| s ≠ 0 (down to ±0.001) | 0 | 0 / 36 | Connected / healed | T4 numerical; T5 pinned |
+| s ≠ 0 | 0 | 0 / 36 | Connected / healed | T4 numerical; T5 pinned |
 
-At s = 0 the 1-dimensional kernel leaves 20 of 36 probe pairs at infinite
-Connes distance — the internal space is topologically disconnected. For any
-nonzero flow parameter the kernel is gone and all distances are finite.
-The mechanism is verified real, not a tolerance artifact
-(`whitepaper/modular-flow-lab-2026-10-07.md`).
-
-### A.3 Epistemic tier mapping
+### A.4 Epistemic tier mapping
 
 - **T1 (proved):** the general algebraic mechanism — rigid unitary transport
-  of a commutant out of an algebra destroys their intersection. Five theorems,
-  zero sorrys.
+  of a commutant out of an algebra destroys their intersection. Five
+  theorems, zero sorrys, minimal axiom footprint.
 - **T4 (numerical):** the 32×32 observation — kernel 1 → 0, distances
-  ∞ → finite, mechanism confirmed against tolerance.
+  ∞ → finite, mechanism confirmed against tolerance, all T1 sanity checks
+  green.
 - **T5 (pinned):** `satisfiesDestruction` — the concrete triple meets the
   criterion's hypotheses. Promotion to T1 is a finite matrix-rank computation
-  over exact algebraic entries: a task, not a gap.
+  over exact algebraic entries: a task, not a gap. `modularUnitary_unitary`
+  likewise pinned, realistic T1 target.
 
-### A.4 Geometric reading
+### A.5 Geometric reading, and the BW contrast
 
 Thermal/modular flow acts as a geometric regulator: by rigidly shifting the
 commutant out of alignment with the represented algebra, it removes the
 obstruction to spectral distance computation — a fragmented internal geometry
 made whole. This is a *reading* of the proved mechanism and the numerical
-observation, not a further claim: it is T5 until the flow's geometric content
-is formalized (see the KMS-flow question, Rung 5).
+observation, not a further claim (T5 until the flow's geometric content is
+formalized; see the KMS-flow question, Rung 5).
+
+On Bisognano–Wichmann: we observe **no boost signature and claim none.** The
+finite flow is a compact quasi-periodic orbit — the opposite of a boost's
+hyperbolic non-compact action. The BW moral survives only in miniature: the
+flow moves the *representation* (eigenspaces, commutators, distances) while
+the spectrum — the Casimir-like invariant — stands still. A genuine BW-type
+claim needs the Lorentzian/twisted extension of Rung 1, which does not
+exist. Anyone reading boosts into these plots is seeing what they want
+to see.
