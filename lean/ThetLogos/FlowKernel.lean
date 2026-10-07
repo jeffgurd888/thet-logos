@@ -185,14 +185,39 @@ noncomputable def modularUnitary (K : Matrix (Fin N) (Fin N) ℂ) (s : ℝ) :
     Matrix (Fin N) (Fin N) ℂ :=
   NormedSpace.exp ((Complex.I * (s : ℂ)) • K)
 
-/-- Unitarity of the modular unitary for Hermitian `K` (T5 — pinned).
-    Standard: `exp` of a skew-adjoint operator is unitary. The proof needs
-    `exp`/`conjTranspose` commutation lemmas not yet assembled here;
-    realistic T1 target. -/
-def modularUnitary_unitary : Prop :=
-  ∀ (K : Matrix (Fin 32) (Fin 32) ℂ), K.IsHermitian →
+/-- Unitarity of the modular unitary for Hermitian `K` (T1 — proved).
+    `exp` of a skew-adjoint operator is unitary: `(exp X)ᴴ = exp (Xᴴ)` by
+    `Matrix.exp_conjTranspose`, `Xᴴ = -X` from the Hermitian hypothesis, and
+    the inverse law via `Matrix.exp_add_of_commute` (the matrix version,
+    which carries the correct `Add`/`Mul` instances). -/
+theorem modularUnitary_unitary :
+    ∀ (K : Matrix (Fin 32) (Fin 32) ℂ), K.IsHermitian →
     ∀ s : ℝ, (modularUnitary K s)ᴴ * (modularUnitary K s) = 1 ∧
-      (modularUnitary K s) * (modularUnitary K s)ᴴ = 1
+      (modularUnitary K s) * (modularUnitary K s)ᴴ = 1 := by
+  intro K hK s
+  have hsmul : ((Complex.I * (s : ℂ)) • K)ᴴ
+      = (starRingEnd ℂ (Complex.I * (s : ℂ))) • Kᴴ := by
+    ext i j
+    simp [Matrix.conjTranspose_apply, Matrix.smul_apply]
+  have hconj : starRingEnd ℂ (Complex.I * (s : ℂ)) = -(Complex.I * (s : ℂ)) := by
+    simp [map_mul]
+  have hKh : Kᴴ = K := hK
+  have hXskew : ((Complex.I * (s : ℂ)) • K)ᴴ = -((Complex.I * (s : ℂ)) • K) := by
+    rw [hsmul, hconj, hKh, neg_smul]
+  have hU : modularUnitary K s
+      = NormedSpace.exp ((Complex.I * (s : ℂ)) • K) := rfl
+  rw [hU, ← Matrix.exp_conjTranspose, hXskew]
+  constructor
+  · have hexp := Matrix.exp_add_of_commute
+      (-((Complex.I * (s : ℂ)) • K)) ((Complex.I * (s : ℂ)) • K)
+      ((Commute.refl _).neg_left)
+    rw [neg_add_cancel, NormedSpace.exp_zero] at hexp
+    exact hexp.symm
+  · have hexp := Matrix.exp_add_of_commute
+      ((Complex.I * (s : ℂ)) • K) (-((Complex.I * (s : ℂ)) • K))
+      ((Commute.refl _).neg_right)
+    rw [add_neg_cancel, NormedSpace.exp_zero] at hexp
+    exact hexp.symm
 
 /-- The concrete destruction data (T5 predicate): the finite triple's Dirac
     operator `D`, modular Hamiltonian `K`, represented algebra `π`, and the

@@ -385,3 +385,85 @@ non-trivial 4D quantum Yang–Mills theory satisfying the axioms; we have
 pinned its statement, proved finite-matrix gap algebra, and named the
 four walls between the two. Nothing in this run shortens the distance —
 it measures it.
+
+## Overnight prover (2026-10-07): T5→T1 promotions
+
+Three pinned targets attacked in order. One promoted, two with precise
+obstructions. All per-module builds green; zero `sorry`s in claimed proofs.
+
+### Target 1 — Antipode axiom: MAJOR FINDING (statement false)
+
+**`antipodeAxiom` as stated is FALSE.** Proved `antipodeAxiom_false :
+¬ antipodeAxiom` (T1, zero sorrys, `[propext, Classical.choice,
+Quot.sound]`).
+
+Counterexample: for `t = rket1`, `antipodeAxiomSum 1 rket1 =
+[(-1,[rket1]),(1,[rket1])] ≠ []`. The `SSum = List (ℤ × Forest)` type has
+no cancellation — `ssumNeg` flips signs but concatenation never cancels
+opposite pairs. The wave-2 "toList-fold congruence" obstruction was a
+misdiagnosis; the real problem is the missing quotient.
+
+**Corrected statement (T5):** `antipodeAxiomEval` — the antipode cancels
+the coproduct *in the group ring*, i.e., after evaluation via `ssumEval`
+(net coefficient at each forest, which has cancellation). Supporting
+`ssumEval` def and `ssumEval_add` proved. Full proof not yet attempted;
+proof sketch pinned in the docstring (cocycle expansion + eval-stability
+for pruned forests via `coprod_pruned_bound`).
+
+**Verdict:** As-stated axiom KILLED by refutation (T1). Corrected
+eval-formulation OPEN as T5. The Connes–Kreimer Hopf algebra is NOT yet
+complete — the antipode identity awaits the eval proof.
+
+### Target 2 — `satisfiesDestruction`: PRECISE OBSTRUCTION (stands)
+
+Cannot be promoted by finite computation. Three blockers:
+
+1. **No concrete matrices in Lean.** `DF_oneGen` takes symbolic real
+   Yukawas (`FiniteSpectralTriple.lean:327`); physical values exist only
+   as Python floats. No 32×32 `D_F` with exact algebraic entries exists
+   in the codebase.
+2. **`K = −ln ρ` has no exact symbolic form.** The modular Hamiltonian
+   requires a matrix logarithm; no closed-form exact expression is
+   available.
+3. **Hypotheses are universal.** `kernel_destruction_criterion` needs
+   `∀ s ≠ 0` (kernel trivial) and `∀ Y` (rigidity) — finite matrix-rank
+   computation cannot verify universal quantifiers.
+
+**Unblockers:** (a) Fix exact algebraic Yukawa values as a modeling
+choice; (b) analytic (not computational) proofs of rigidity and the
+exit mechanism. The analytic content is already T1
+(`kernel_destruction_criterion`).
+
+**Verdict:** STANDS as T5. Not a computation problem — a
+modeling/analysis problem.
+
+### Target 3 — `modularUnitary_unitary`: PROMOTED (T1)
+
+**Proved** (zero sorrys, `[propext, Classical.choice, Quot.sound]`).
+
+The report's "exp/conjugate-transpose commutation lemmas not yet
+assembled" was outdated — both exist in Mathlib:
+- `Matrix.exp_conjTranspose : (exp A)ᴴ = exp (Aᴴ)` for the adjoint.
+- `Matrix.exp_add_of_commute` (the **matrix** version) for the inverse
+  law. The general `NormedSpace.exp_add_of_commute` hits a `NormedRing`
+  instance diamond on matrices (`instDistribOfSemiring.toMul` vs matrix
+  `Mul` don't unify); the matrix wrapper (via `open scoped
+  Norms.Operator`) carries the correct instances.
+
+Proof: generator `(I*s) • K` is skew-adjoint (`starRingEnd ℂ (I*s) =
+-(I*s)` by `simp [map_mul]`, `Kᴴ = K` by hypothesis); then
+`(exp X)ᴴ = exp (Xᴴ) = exp (-X)`, and `exp (-X) * exp X = 1` via
+`exp_add_of_commute` + `neg_add_cancel` + `exp_zero`.
+
+**Verdict:** T1. The modular unitary is unitary for Hermitian `K`.
+
+### Updated ledger (overnight)
+
+| Item | Status | Axioms |
+|---|---|---|
+| `antipodeAxiom` as stated | KILLED by refutation (T1) | propext, Classical.choice, Quot.sound |
+| `antipodeAxiomEval` (corrected) | OPEN (T5) | — |
+| `satisfiesDestruction` 32×32 | STANDS (T5, obstruction) | — |
+| `modularUnitary_unitary` | PROVED (T1) | propext, Classical.choice, Quot.sound |
+
+**Zero `sorry`s. Nothing pushed — commit is the parent's call.**

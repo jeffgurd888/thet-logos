@@ -871,4 +871,112 @@ def antipodeAxiom : Prop :=
   ∀ (n : Nat) (t : RKTree), 0 < treeSize t →
     treeSize t ≤ n → antipodeAxiomSum n t = []
 
+/-! ### The as-stated antipode axiom is FALSE
+
+`SSum = List (ℤ × Forest)` is a free-monoid presentation with NO cancellation:
+`ssumNeg` merely flips coefficients, so concatenated signed sums never cancel
+to `[]`. The antipode identity `m(S⊗id)Δ = ηε` is true in the group ring, but
+`antipodeAxiom` states it as list-equality with `[]` — which is false. The
+wave-2 "toList-fold congruence" obstruction misdiagnosed the problem: no
+reindexing can close `antipodeAxiom`, because the statement itself is wrong.
+Counterexample: `n = 1`, `t = •` (the single-node tree).
+The corrected statement (evaluation into finitely supported functions) is
+`antipodeAxiomEval` below. -/
+
+/-- The antipode of the single-node tree, computed in closed form. -/
+theorem antipodeTree_rket1 : antipodeTree 1 rket1 = [(-1, [rket1])] := by
+  simp only [antipodeTree, forestCoprod, rket1, List.foldr_nil, List.foldr_cons,
+    Multiset.toList_singleton, ssumNeg, ssumAdd, ssumMul, ssumOne, antipodeForest,
+    List.flatMap_singleton, List.append_nil, mul_one, List.nil_append, List.map_singleton]
+
+/-- The forest antipode on `[•]`, computed in closed form. -/
+theorem antipodeForest_rket1 : antipodeForest 1 [rket1] = [(-1, [rket1])] := by
+  simp only [antipodeForest, antipodeTree_rket1, ssumOne, ssumMul,
+    List.flatMap_singleton, mul_one, List.append_nil]
+
+/-- Each axiom-sum term for `t = •` is a nonempty singleton list. -/
+theorem axiomTerm_rket1_ne_nil (pr : Forest × Forest)
+    (hmem : pr ∈ ({(([rket1], [])) , (([], [rket1]))} : Multiset (Forest × Forest))) :
+    ssumMul (antipodeForest 1 pr.1) [(1, pr.2)] ≠ [] := by
+  have hdisj : pr = (([rket1], [])) ∨ pr = (([], [rket1])) := by simpa using hmem
+  have e1 : ssumMul (antipodeForest 1 [rket1]) [(1, ([] : Forest))] = [(-1, [rket1])] := by
+    rw [antipodeForest_rket1]
+    simp only [ssumMul, List.flatMap_singleton, mul_one, List.append_nil]
+  have e2 : ssumMul (antipodeForest 1 ([] : Forest)) [(1, [rket1])] = [(1, [rket1])] := by
+    have h0 : antipodeForest 1 ([] : Forest) = [(1, [])] := by
+      simp only [antipodeForest, ssumOne]
+    rw [h0]
+    simp only [ssumMul, List.flatMap_singleton, mul_one, List.nil_append]
+  rcases hdisj with rfl | rfl
+  · rw [e1]; simp
+  · rw [e2]; simp
+
+/-- `ssumAdd` emptiness splits (it is list append). -/
+theorem ssumAdd_eq_nil_iff (x y : SSum) : ssumAdd x y = [] ↔ x = [] ∧ y = [] :=
+  List.append_eq_nil_iff
+
+/-- The as-stated antipode axiom is FALSE. At `n = 1`, `t = •`, the axiom sum
+    is the 2-element list `[(-1,[•]), (1,[•])]` (in some order), never `[]`. -/
+theorem antipodeAxiom_false : ¬ antipodeAxiom := by
+  intro h
+  have hle : treeSize rket1 ≤ 1 := by
+    have hr : treeSize rket1 = 1 := by simp [treeSize, rket1]
+    rw [hr]
+  have hcon := h 1 rket1 (treeSize_pos rket1) hle
+  unfold antipodeAxiomSum at hcon
+  rw [treeCoprod_single] at hcon
+  have hcard : Multiset.card ({(([rket1], [])) , (([], [rket1]))} :
+      Multiset (Forest × Forest)) = 2 := by
+    rw [Multiset.insert_eq_cons, Multiset.card_cons, Multiset.card_singleton]
+  have hlen : (Multiset.toList ({(([rket1], [])) , (([], [rket1]))} :
+      Multiset (Forest × Forest))).length = 2 := by
+    rw [Multiset.length_toList, hcard]
+  obtain ⟨p₁, p₂, hlist⟩ := List.length_eq_two.mp hlen
+  have hm1 : p₁ ∈ ({(([rket1], [])) , (([], [rket1]))} :
+      Multiset (Forest × Forest)) := by
+    rw [← Multiset.mem_toList, hlist]; simp
+  have hm2 : p₂ ∈ ({(([rket1], [])) , (([], [rket1]))} :
+      Multiset (Forest × Forest)) := by
+    rw [← Multiset.mem_toList, hlist]; simp
+  have ht1 := axiomTerm_rket1_ne_nil p₁ hm1
+  rw [hlist] at hcon
+  simp only [List.foldr_cons, List.foldr_nil] at hcon
+  rw [ssumAdd_eq_nil_iff] at hcon
+  exact ht1 hcon.1
+
+
+/-! ### Corrected antipode axiom: evaluation into the group ring -/
+
+/-- Classical decidability for forests (for coefficient evaluation). -/
+noncomputable instance decEqForest : DecidableEq Forest := Classical.decEq _
+
+/-- Evaluation of a signed sum at a forest: the net coefficient.
+    Unlike raw `SSum` lists, this has cancellation — which is what the
+    antipode identity needs. `ssumEval x F` sums the coefficients of all
+    pairs `(c, F')` in `x` with `F' = F`. -/
+noncomputable def ssumEval (x : SSum) (F : Forest) : ℤ :=
+  (x.map (fun pr => if pr.2 = F then pr.1 else 0)).sum
+
+/-- Evaluation distributes over concatenation. -/
+theorem ssumEval_add (x y : SSum) (F : Forest) :
+    ssumEval (x ++ y) F = ssumEval x F + ssumEval y F := by
+  unfold ssumEval
+  rw [List.map_append, List.sum_append]
+
+/-- Corrected antipode axiom (T5, statement): the antipode cancels the
+    coproduct *in the group ring* — i.e., after evaluation (which has
+    cancellation). For nonempty `t`, the net coefficient at every forest
+    is zero.
+    Proof sketch: induction on `n`. Expand `treeCoprod (.node ts)` by the
+    cocycle; the `([t],[])` term evaluates (via `ssumEval_add`/`ssumNeg`) to
+    minus the definitional sum, which cancels the remaining terms after the
+    `toList`-fold congruence (evaluation respects `List.Perm` via
+    `List.Perm.sum_eq`, so the two folds agree). The remaining analytic
+    step is eval-stability of `antipodeForest` in the bound `n` for pruned
+    forests (all strictly smaller by `coprod_pruned_bound`). -/
+def antipodeAxiomEval : Prop :=
+  ∀ (n : Nat) (t : RKTree), 0 < treeSize t →
+    treeSize t ≤ n → ∀ F : Forest, ssumEval (antipodeAxiomSum n t) F = 0
+
+
 end ThetLogos
