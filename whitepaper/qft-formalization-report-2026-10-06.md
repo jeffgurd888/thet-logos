@@ -102,3 +102,104 @@ mathematics, per the rungs map).
 
 **Zero `sorry`s** in either file (one docstring mentions the word only).
 **No physical claims** anywhere. Nothing pushed; commit is the parent's call.
+
+---
+
+## Second wave (2026-10-07): coassociativity falls, antipode defined
+
+**File:** `lean/ThetLogos/Renormalization.lean` — extended from 30 to 59
+theorems/defs, builds green, zero sorrys, axioms still
+`[propext, Classical.choice, Quot.sound]`.
+
+### Target 1 — Coassociativity: PROVED (T1)
+
+**Theorem:** `coassociativity_theorem : coassociativity` — the T5-pinned
+`coassociativity : Prop` from the first wave is now a theorem. Both
+parenthesizations `(Δ⊗id)∘Δ` and `(id⊗Δ)∘Δ` agree as multisets of
+forest-triples. With counity (both sides, first wave), the Connes–Kreimer
+**bialgebra axioms are complete** at the combinatorial (planar) level.
+
+**Method:** the standard cocycle-induction proof, following the size-bound
+mutual-induction pattern from `counity_left`:
+- `forestCoprod_append`: the forest coproduct is multiplicative
+  (`Δ̂(F++G) = Δ̂(F)·Δ̂(G)`), from the `foldr` definition. Key helper:
+  `bind_append_reindex` (pushing singleton-appends through a product of binds).
+- `bind_swap`: independent `Multiset.bind`s commute.
+- `forestTripleL_cons` / `forestTripleR_cons`: forest-level triple
+  coproducts split as products over cons (via multiplicativity + swap).
+- `forest_coassoc_of_tree`: forest-level coassociativity by list induction.
+- `tripleL_node` / `tripleR_node`: both sides expand to a common
+  `C₁ + C₂` plus `(forestTripleL/R ts).map` under third-component grafting.
+  Helpers `tripleL_rest`, `tripleR_rest`, `tripleR_deep` handle the
+  reindexing; `forestCoprod_singleton` bridges forest/tree coproducts.
+- `coassoc_aux`: strong induction on the size bound closes it.
+
+**What this means:** the "every term survives" obstruction from the first
+wave is resolved — not by a cut-bijection (the suggested unblocker), but by
+the cocycle induction, which achieves the same end via the recursive
+structure. The cut description remains valuable future work but is no longer
+blocking.
+
+### Target 2 — Antipode: DEFINED (termination resolved), axiom STATED
+
+**Termination (sub-problem a): RESOLVED.** The report's obstruction was
+"Lean can't see termination through `Multiset.bind` over `forestCoprod`."
+Resolved via size bounds + bounded recursion:
+- `forest_size_bound_of_tree` / `tree_size_bound_aux` /
+  `coprod_pruned_bound`: pruned forests in coproduct terms are size-bounded;
+  trees in `P` (for `(P,R) ∈ forestCoprod ts`) are strictly smaller than
+  `.node ts`. Proved by the same mutual-induction pattern.
+- `antipodeTree` / `antipodeForest` (mutual, `noncomputable`): defined by
+  recursion on the size bound `n`, not by well-founded recursion through
+  the multiset. The formula `S(.node ts) = -Σ_{(P,R)∈Δ̂(ts)} S(P)·[node R]`
+  (the `([],ts)` term contributes `[t]`, so no separate `-[t]` is needed —
+  correcting the report's formula which double-counted).
+- Sum over `Multiset.toList` with a classical `DecidableEq` instance
+  (already in the axiom footprint).
+
+**Convolution algebra (sub-problem b): SET UP.** `ssumAdd`/`ssumNeg`/
+`ssumMul`/`ssumOne` on `SSum = List (ℤ × Forest)`; `ssumMul` is the
+bilinear convolution `[(c₁,F₁)]*[(c₂,F₂)] = [(c₁*c₂, F₁++F₂)]`.
+
+**Axiom: STATED (T5).** `antipodeAxiom : Prop` with `antipodeAxiomSum`
+(formalizing `m(S⊗id)Δ = ηε` as a toList-fold sum). **Proof open.**
+Precise obstruction: the axiom follows from the definition by expanding
+`treeCoprod t` via the cocycle and matching the definitional fold against
+the axiom's fold — a routine but lengthy reindexing (the two folds traverse
+the same multiset in different orders; needs a `toList`-fold congruence
+lemma). No mathematical obstacle; purely formalization work.
+
+### Targets 3–4 (van Suijlekom Hopf ideal, Birkhoff): SCOPED, not attempted
+
+- **Target 3:** The rungs map rates this "feasible, moderate" but notes
+  "the hard part is formalizing Feynman-graph combinatorics with enough
+  fidelity." Our trees are the *skeleton* of the graph Hopf algebra, but
+  the Slavnov–Taylor identities are statements about *graphs* (with
+  external structure, insertion places). Formalizing the theorem needs the
+  graph combinatorics first. The abstract Hopf-ideal *definition* (ideal
+  `I` with `Δ(I) ⊆ I⊗H + H⊗I`) is statable at our level, but the
+  *theorem* is not. Precise next step: a `FeynmanGraph` type with the
+  Connes–Kreimer coproduct (subgraph contraction), then the ST ideal.
+- **Target 4 (Birkhoff):** Needs characters (`H → A` algebra maps),
+  convolution, and Rota–Baxter operators — substantial algebraic
+  infrastructure beyond the current combinatorial level. Downstream of a
+  full algebra packaging (the file notes "bialgebra packaging is future
+  work").
+
+### Updated ledger
+
+| Item | Status | Axioms |
+|---|---|---|
+| Coproduct + B₊ + examples | PROVED | propext, Classical.choice, Quot.sound |
+| Right counity | PROVED | same |
+| Left counity | PROVED | same |
+| **Coassociativity** | **PROVED (second wave)** | same |
+| Antipode definition + termination | **DONE (second wave)** | same |
+| Antipode axiom | STATED (T5) | — |
+| van Suijlekom Hopf ideal | SCOPED (needs graphs) | — |
+| Birkhoff decomposition | SCOPED (needs algebra packaging) | — |
+| Wightman T1 (light cone) | PROVED | same |
+| Wightman axioms + existence | PINNED (T5) | — |
+
+**Zero `sorry`s.** **No physical claims.** Nothing pushed; commit is the
+parent's call.
