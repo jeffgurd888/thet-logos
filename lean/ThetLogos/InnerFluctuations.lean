@@ -4,23 +4,43 @@ import ThetLogos.MartinettiRep
 import ThetLogos.OrderOne
 
 /-!
-# ThetLogos.InnerFluctuations — gauge fields via inner fluctuations
+# ThetLogos.InnerFluctuations — inner fluctuations of the finite Dirac
 
 Phase 3: Field dynamics. The internal Dirac operator `D_F` defines free
-kinematics. Dynamic interactions enter through inner fluctuations generated
-by the algebra `A_F = ℂ ⊕ ℍ ⊕ M₃(ℂ)`, represented via the Martinetti
-`smGen : Fin 12 → Matrix I32 I32 ℂ` with opposite `smGenOp`.
+kinematics. Algebraic 1-forms
+  A = ∑ᵢ π(aᵢ)[D_F, π(bᵢ)],  aᵢ, bᵢ ∈ Fin 12,
+with `π = smGen` the Martinetti representation (opposite `smGenOp`), give
+the fluctuated operator `D_A = D_F + A + J_F A J_F⁻¹` under the real
+structure `J_F`.
 
-Self-adjoint algebraic 1-forms `A ∈ Ω¹_D(A_F)` take the form
-  A = ∑ᵢ π(aᵢ)[D_F, π(bᵢ)],  aᵢ, bᵢ ∈ Fin 12.
+## What the algebra IS (T1/T4)
 
-The real structure `J_F` dictates the full fluctuated internal operator
-  D_A = D_F + A + J_F A J_F⁻¹.
+The abstract finite algebra is `A_F = ℂ ⊕ ℍ ⊕ M₃(ℂ)` — 24 real dims
+(2 + 4 + 18). What the representation CARRIES is less: Option-A `π(A_F)`
+has real-dim **6**, because the entire M₃(ℂ) summand maps to 0 under
+`smGen`; only the ℍ-block (indices {0,1}) and the ℂ-block
+(`diag(u,ū)` on {8,9}) survive (T4, confirmed numerically; see
+`scripts/automorphism-hunt-results.md`).
 
-- Electroweak & strong bosons: `A` generates the SU(3)_C × SU(2)_L × U(1)_Y
-  gauge connections acting on ℂ³².
-- Higgs field: off-diagonal components in `A` coupling `H_L ↔ H_R` generate
-  the Higgs doublet `H ∈ ℂ²` as an internal gauge field.
+## What the SM reading would NEED (T5)
+
+The "electroweak & strong bosons" and "Higgs" readings below are T5
+interpretive labels, NOT proved content. A genuine
+SU(3)_C × SU(2)_L × U(1)_Y gauge connection would need the killed
+M₃(ℂ) summand to be represented — here the strong-sector generators act
+as ZERO — and a physical gauge field would need the manifold factor
+`C∞(M) ⊗ A_F`, which is not present. What IS proved here (T1, zero
+sorrys) is purely finite: inner fluctuations of `D_F` by the represented
+6-dim gauge algebra preserve order-one and self-adjointness, and leave
+the Majorana E-block entry unfluctuated.
+
+- "Electroweak & strong bosons" (T5 reading): in the Connes–Chamseddine
+  picture, `A` plays the role of gauge connections acting on ℂ³². With
+  M₃(ℂ) killed, only the electroweak-flavoured (ℂ ⊕ ℍ) part acts.
+- "Higgs field" (T5 reading): off-diagonal components in `A` coupling
+  `H_L ↔ H_R` play the role of a Higgs doublet `H ∈ ℂ²` as an internal
+  gauge field in the usual reading; nothing here proves the SM Higgs
+  sector.
 -/
 
 namespace ThetLogos
@@ -409,7 +429,8 @@ theorem fluctuatedDirac_self_adjoint
   rw [Matrix.conjTranspose_add, Matrix.conjTranspose_add,
     oppositeOneForm_conjTranspose, hD', hA']
 
-/-- J-compatibility of the SM Dirac ansatz, in transpose form:
+/-- J-compatibility of the `smDirac` ansatz (the "SM Dirac ansatz" name is a
+    T5 reading, not a proved SM matching), in transpose form:
     `UJ * D_Fᵀ * UJ = D_F`.
     From `smDirac_J_compat` (`UJ·D̄ = D·UJ`) and `smDirac_self_adjoint`
     (`D̄ = Dᵀ`), plus `UJ² = 1`. -/
@@ -433,8 +454,9 @@ theorem smDirac_IsJCompatible (yNu yE yU yD yR : ℂ) :
     _ = smDirac yNu yE yU yD yR * (UJ * UJ) := by rw [← Matrix.mul_assoc]
     _ = smDirac yNu yE yU yD yR := by rw [UJ_mul_self, Matrix.mul_one]
 
-/-- Hypothesis loop closed: for the SM Dirac ansatz, inner fluctuations
-    preserve order-one with no remaining hypotheses on `D_F`.
+/-- Hypothesis loop closed (T1, zero sorrys): for the `smDirac` ansatz — a
+    T4/T5 SM-flavoured model operator, not a proved SM Dirac — inner
+    fluctuations preserve order-one with no remaining hypotheses on `D_F`.
     `IsJCompatible` is supplied by `smDirac_IsJCompatible`;
     `OrderOneHolds` by `OrderOneHolds_smDirac`. -/
 theorem inner_fluctuation_preserves_order_one_smDirac
@@ -706,7 +728,8 @@ theorem buildDirac_E_entry (A B C E : Block8) (i j : I32)
   simp only []
   simp [hi1, hi2, hi3, hj1, hj2]
 
-/-- The E-block of the SM ansatz is exactly `majoranaBlock yR`. -/
+/-- The E-block of the `smDirac` ansatz (the "SM" name is a T5 reading) is
+    exactly `majoranaBlock yR`. -/
 theorem smDirac_E_block (yNu yE yU yD yR : ℂ) :
     eBlockOf (smDirac yNu yE yU yD yR) = majoranaBlock yR := by
   ext i j
