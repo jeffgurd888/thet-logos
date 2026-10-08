@@ -1,0 +1,958 @@
+{
+ "meta": {
+  "tier": "T4 numerical",
+  "seeds": {
+   "base": 2026,
+   "struct_A": 202607,
+   "general_A": 202608
+  },
+  "betas": [
+   0.1,
+   1.0,
+   10.0
+  ],
+  "ratios": [
+   0.0,
+   0.05,
+   0.2,
+   0.5
+  ],
+  "classes": {
+   "struct": {
+    "projected": true
+   },
+   "struct_noproj": {
+    "projected": false
+   },
+   "genAH": {
+    "projected": true
+   },
+   "genAH_noproj": {
+    "projected": false
+   },
+   "nonAH_noproj": {
+    "projected": false
+   }
+  },
+  "definition": "D_A = D + A1 + J(A1) (+ optional Hermitian projection); K_A = beta*D_A^2 + (ln Z)I analytic; phi = i[K_A, D_A]. beta GLOBAL (no beta(x))."
+ },
+ "max_flux_abs": 2.2762495480910834e-07,
+ "max_flux_rel": 1.5798929119748606e-16,
+ "max_flux_abs_hermitian_only": 0.0,
+ "max_flux_abs_nonhermitian": 2.2762495480910834e-07,
+ "n_nonhermitian_cases": 27,
+ "records": [
+  {
+   "class": "struct",
+   "ratio": 0.0,
+   "beta": 0.1,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct",
+   "ratio": 0.0,
+   "beta": 1.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct",
+   "ratio": 0.0,
+   "beta": 10.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct",
+   "ratio": 0.05,
+   "beta": 0.1,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 103.45167886278533,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct",
+   "ratio": 0.05,
+   "beta": 1.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 103.45167886278533,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct",
+   "ratio": 0.05,
+   "beta": 10.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 103.45167886278533,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct",
+   "ratio": 0.2,
+   "beta": 0.1,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 413.8067154511413,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct",
+   "ratio": 0.2,
+   "beta": 1.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 413.8067154511413,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {},
+   "kms_residual": 7.771561172376096e-16,
+   "entropy_nats": 1.3862943611199687,
+   "Z": 4.000000000000009
+  },
+  {
+   "class": "struct",
+   "ratio": 0.2,
+   "beta": 10.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 413.8067154511413,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {},
+   "kms_residual": 8.881784197001252e-16,
+   "entropy_nats": 1.3862943611198906,
+   "Z": 4.0
+  },
+  {
+   "class": "struct",
+   "ratio": 0.5,
+   "beta": 0.1,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 1034.5167886278532,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct",
+   "ratio": 0.5,
+   "beta": 1.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 1034.5167886278532,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {},
+   "kms_residual": 7.771561172376096e-16,
+   "entropy_nats": 1.3862943611199687,
+   "Z": 4.000000000000009
+  },
+  {
+   "class": "struct",
+   "ratio": 0.5,
+   "beta": 10.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 1034.5167886278532,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {},
+   "kms_residual": 8.881784197001252e-16,
+   "entropy_nats": 1.3862943611198906,
+   "Z": 4.0
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.0,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.0,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.0,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.05,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 103.45167886278533,
+   "herm_resid_DA_noproj": 103.45167886278533,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": false,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 558.9426954894944,
+    "min_real_eig_H": -546.0721902011081,
+    "H_herm_resid": 2235.7707819579778
+   }
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.05,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 103.45167886278533,
+   "herm_resid_DA_noproj": 103.45167886278533,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": false,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 558.9426954894944,
+    "min_real_eig_H": -546.0721902011081,
+    "H_herm_resid": 2235.7707819579778
+   }
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.05,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 103.45167886278533,
+   "herm_resid_DA_noproj": 103.45167886278533,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": false,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 558.9426954894944,
+    "min_real_eig_H": -546.0721902011081,
+    "H_herm_resid": 2235.7707819579778
+   }
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.2,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 413.8067154511413,
+   "herm_resid_DA_noproj": 413.8067154511413,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": false,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 8943.083127831911,
+    "min_real_eig_H": -8827.92904321773,
+    "H_herm_resid": 35772.332511327644
+   }
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.2,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 413.8067154511413,
+   "herm_resid_DA_noproj": 413.8067154511413,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": false,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 8943.083127831911,
+    "min_real_eig_H": -8827.92904321773,
+    "H_herm_resid": 35772.332511327644
+   }
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.2,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 413.8067154511413,
+   "herm_resid_DA_noproj": 413.8067154511413,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": false,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 8943.083127831911,
+    "min_real_eig_H": -8827.92904321773,
+    "H_herm_resid": 35772.332511327644
+   }
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.5,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 1034.5167886278532,
+   "herm_resid_DA_noproj": 1034.5167886278532,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": false,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 55894.269548949436,
+    "min_real_eig_H": -55206.32742011079,
+    "H_herm_resid": 223577.07819579775
+   }
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.5,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 1034.5167886278532,
+   "herm_resid_DA_noproj": 1034.5167886278532,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": false,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 55894.269548949436,
+    "min_real_eig_H": -55206.32742011079,
+    "H_herm_resid": 223577.07819579775
+   }
+  },
+  {
+   "class": "struct_noproj",
+   "ratio": 0.5,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 1034.5167886278532,
+   "herm_resid_DA_noproj": 1034.5167886278532,
+   "rho_reality_defect_A1": 1.414213562373095,
+   "D_A_hermitian": false,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 55894.269548949436,
+    "min_real_eig_H": -55206.32742011079,
+    "H_herm_resid": 223577.07819579775
+   }
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.0,
+   "beta": 0.1,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.0,
+   "beta": 1.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.0,
+   "beta": 10.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.05,
+   "beta": 0.1,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 113.99001302614863,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.05,
+   "beta": 1.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 113.99001302614863,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.05,
+   "beta": 10.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 113.99001302614863,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.2,
+   "beta": 0.1,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 455.9600521045946,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.2,
+   "beta": 1.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 455.9600521045946,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {},
+   "kms_residual": 0.0,
+   "entropy_nats": 1.4028582551622741,
+   "Z": 4.009416369774945
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.2,
+   "beta": 10.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 455.9600521045946,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {},
+   "kms_residual": 8.881784197001252e-16,
+   "entropy_nats": 1.3862943611198906,
+   "Z": 4.0
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.5,
+   "beta": 0.1,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 1139.9001302614865,
+   "rho_reality_defect_A1": 1.3902040212185567,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.5,
+   "beta": 1.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 1139.9001302614865,
+   "rho_reality_defect_A1": 1.3902040212185567,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {},
+   "kms_residual": 0.0,
+   "entropy_nats": 1.4028582551622741,
+   "Z": 4.009416369774945
+  },
+  {
+   "class": "genAH",
+   "ratio": 0.5,
+   "beta": 10.0,
+   "projected": true,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 1139.9001302614865,
+   "rho_reality_defect_A1": 1.3902040212185567,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {},
+   "kms_residual": 8.881784197001252e-16,
+   "entropy_nats": 1.3862943611198906,
+   "Z": 4.0
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.0,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.0,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.0,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.05,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 113.99001302614863,
+   "herm_resid_DA_noproj": 113.99001302614863,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": false,
+   "flux_abs": 2.2762495480910824e-09,
+   "flux_rel": 1.5798929119748598e-16,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 2411.454150852319,
+    "min_real_eig_H": -152.8656718831262,
+    "H_herm_resid": 21545.90239595098
+   }
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.05,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 113.99001302614863,
+   "herm_resid_DA_noproj": 113.99001302614863,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": false,
+   "flux_abs": 2.2762495480910832e-08,
+   "flux_rel": 1.5798929119748606e-16,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 2411.454150852319,
+    "min_real_eig_H": -152.8656718831262,
+    "H_herm_resid": 21545.90239595098
+   }
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.05,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 113.99001302614863,
+   "herm_resid_DA_noproj": 113.99001302614863,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": false,
+   "flux_abs": 2.2762495480910834e-07,
+   "flux_rel": 1.5798929119748606e-16,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 2411.454150852319,
+    "min_real_eig_H": -152.8656718831262,
+    "H_herm_resid": 21545.90239595098
+   }
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.2,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 455.9600521045946,
+   "herm_resid_DA_noproj": 455.9600521045946,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": false,
+   "flux_abs": 1.3207489979319572e-09,
+   "flux_rel": 8.845652271638366e-17,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 9439.268358304998,
+    "min_real_eig_H": -3127.6823811346744,
+    "H_herm_resid": 86183.60958380392
+   }
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.2,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 455.9600521045946,
+   "herm_resid_DA_noproj": 455.9600521045946,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": false,
+   "flux_abs": 1.3207489979319589e-08,
+   "flux_rel": 8.845652271638378e-17,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 9439.268358304998,
+    "min_real_eig_H": -3127.6823811346744,
+    "H_herm_resid": 86183.60958380392
+   }
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.2,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 455.9600521045946,
+   "herm_resid_DA_noproj": 455.9600521045946,
+   "rho_reality_defect_A1": 1.390204021218559,
+   "D_A_hermitian": false,
+   "flux_abs": 1.3207489979319588e-07,
+   "flux_rel": 8.845652271638378e-17,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 9439.268358304998,
+    "min_real_eig_H": -3127.6823811346744,
+    "H_herm_resid": 86183.60958380392
+   }
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.5,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 1139.9001302614865,
+   "herm_resid_DA_noproj": 1139.9001302614865,
+   "rho_reality_defect_A1": 1.3902040212185567,
+   "D_A_hermitian": false,
+   "flux_abs": 1.5829646840998937e-09,
+   "flux_rel": 8.317411979562394e-17,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 22688.714951417285,
+    "min_real_eig_H": -21699.40489390026,
+    "H_herm_resid": 215459.0239595099
+   }
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.5,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 1139.9001302614865,
+   "herm_resid_DA_noproj": 1139.9001302614865,
+   "rho_reality_defect_A1": 1.3902040212185567,
+   "D_A_hermitian": false,
+   "flux_abs": 1.582964684099894e-08,
+   "flux_rel": 8.317411979562396e-17,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 22688.714951417285,
+    "min_real_eig_H": -21699.40489390026,
+    "H_herm_resid": 215459.0239595099
+   }
+  },
+  {
+   "class": "genAH_noproj",
+   "ratio": 0.5,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 1139.9001302614865,
+   "herm_resid_DA_noproj": 1139.9001302614865,
+   "rho_reality_defect_A1": 1.3902040212185567,
+   "D_A_hermitian": false,
+   "flux_abs": 1.582964684099894e-07,
+   "flux_rel": 8.317411979562396e-17,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 22688.714951417285,
+    "min_real_eig_H": -21699.40489390026,
+    "H_herm_resid": 215459.0239595099
+   }
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.0,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.0,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.0,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 0.0,
+   "herm_resid_DA_noproj": 0.0,
+   "rho_reality_defect_A1": 0.0,
+   "D_A_hermitian": true,
+   "flux_abs": 0.0,
+   "flux_rel": 0.0,
+   "nonhermitian_spectrum": {}
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.05,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 77.8044179129755,
+   "herm_resid_DA_noproj": 77.8044179129755,
+   "rho_reality_defect_A1": 1.443114618435418,
+   "D_A_hermitian": false,
+   "flux_abs": 1.8661101368589136e-09,
+   "flux_rel": 1.290763630492198e-16,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 2019.3458429299142,
+    "min_real_eig_H": -21.722009252489244,
+    "H_herm_resid": 14861.824596760314
+   }
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.05,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 77.8044179129755,
+   "herm_resid_DA_noproj": 77.8044179129755,
+   "rho_reality_defect_A1": 1.443114618435418,
+   "D_A_hermitian": false,
+   "flux_abs": 1.866110136858911e-08,
+   "flux_rel": 1.2907636304921964e-16,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 2019.3458429299142,
+    "min_real_eig_H": -21.722009252489244,
+    "H_herm_resid": 14861.824596760314
+   }
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.05,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 77.8044179129755,
+   "herm_resid_DA_noproj": 77.8044179129755,
+   "rho_reality_defect_A1": 1.443114618435418,
+   "D_A_hermitian": false,
+   "flux_abs": 1.866110136858911e-07,
+   "flux_rel": 1.2907636304921964e-16,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 2019.3458429299142,
+    "min_real_eig_H": -21.722009252489244,
+    "H_herm_resid": 14861.824596760314
+   }
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.2,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 311.217671651902,
+   "herm_resid_DA_noproj": 311.217671651902,
+   "rho_reality_defect_A1": 1.443114618435418,
+   "D_A_hermitian": false,
+   "flux_abs": 1.7845758581645251e-09,
+   "flux_rel": 1.1572926458971196e-16,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 8134.492379671863,
+    "min_real_eig_H": -600.7059273520277,
+    "H_herm_resid": 60719.506010630525
+   }
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.2,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 311.217671651902,
+   "herm_resid_DA_noproj": 311.217671651902,
+   "rho_reality_defect_A1": 1.443114618435418,
+   "D_A_hermitian": false,
+   "flux_abs": 1.784575858164523e-08,
+   "flux_rel": 1.157292645897118e-16,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 8134.492379671863,
+    "min_real_eig_H": -600.7059273520277,
+    "H_herm_resid": 60719.506010630525
+   }
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.2,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 311.217671651902,
+   "herm_resid_DA_noproj": 311.217671651902,
+   "rho_reality_defect_A1": 1.443114618435418,
+   "D_A_hermitian": false,
+   "flux_abs": 1.7845758581645228e-07,
+   "flux_rel": 1.1572926458971178e-16,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 8134.492379671863,
+    "min_real_eig_H": -600.7059273520277,
+    "H_herm_resid": 60719.506010630525
+   }
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.5,
+   "beta": 0.1,
+   "projected": false,
+   "herm_resid_DA": 778.0441791297554,
+   "herm_resid_DA_noproj": 778.0441791297554,
+   "rho_reality_defect_A1": 1.4431146184354178,
+   "D_A_hermitian": false,
+   "flux_abs": 1.5492617151359057e-09,
+   "flux_rel": 7.343198469834306e-17,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 21187.109455543505,
+    "min_real_eig_H": -3888.11157145847,
+    "H_herm_resid": 166957.63021121846
+   }
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.5,
+   "beta": 1.0,
+   "projected": false,
+   "herm_resid_DA": 778.0441791297554,
+   "herm_resid_DA_noproj": 778.0441791297554,
+   "rho_reality_defect_A1": 1.4431146184354178,
+   "D_A_hermitian": false,
+   "flux_abs": 1.5492617151359066e-08,
+   "flux_rel": 7.343198469834311e-17,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 21187.109455543505,
+    "min_real_eig_H": -3888.11157145847,
+    "H_herm_resid": 166957.63021121846
+   }
+  },
+  {
+   "class": "nonAH_noproj",
+   "ratio": 0.5,
+   "beta": 10.0,
+   "projected": false,
+   "herm_resid_DA": 778.0441791297554,
+   "herm_resid_DA_noproj": 778.0441791297554,
+   "rho_reality_defect_A1": 1.4431146184354178,
+   "D_A_hermitian": false,
+   "flux_abs": 1.5492617151359065e-07,
+   "flux_rel": 7.343198469834311e-17,
+   "nonhermitian_spectrum": {
+    "max_abs_imag_eig_H": 21187.109455543505,
+    "min_real_eig_H": -3888.11157145847,
+    "H_herm_resid": 166957.63021121846
+   }
+  }
+ ]
+}

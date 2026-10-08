@@ -1,0 +1,295 @@
+\documentclass[aps,prd,twocolumn,superscriptaddress,showpacs]{revtex4-2}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+\title{The Digital Standard Model:\\
+Machine-Checked Structure of the Finite Spectral Triple}
+
+\author{Jeffrey Michael Gurd}
+\affiliation{Nexus Research (independent research)}
+\email{jeffgurd888@gmail.com}
+
+\begin{abstract}
+We present machine-checked results on the finite spectral triple underlying
+the Standard Model in noncommutative geometry. Using the Lean~4 proof
+assistant, we classify the order-one commutant $W_{22}$ as a
+22-dimensional real linear space---10 Standard Model directions plus 12
+exotic survivor directions---with zero \texttt{sorry}s and no new axioms.
+We further prove that the 12-dimensional exotic component decomposes
+canonically as $8 \oplus 2 \oplus 2$: an 8-dimensional connected sector
+and two 2-dimensional sectors, each generating a 3-dimensional compact
+Lie algebra and commuting exactly with all directions outside itself.
+We also machine-check two modular-dynamics results: the thermal modular
+flux vanishes identically for the Gibbs-type Hamiltonian, and a
+self-adjoint driver provably fails to commute with the off-diagonal
+Dirac operator. All proofs are public and independently checkable. We
+state precisely what is \emph{not} claimed: no physical particles, no
+mass predictions, no continuum limit. This is the foundation of a
+digital standard model: the Standard Model's finite geometry, made
+machine-checkable, numerically explorable, and openly auditable.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+The Standard Model of particle physics can be formulated as a
+noncommutative geometry: the finite spectral triple
+$(\mathcal{A}_F, \mathcal{H}_F, D_F)$ with
+$\mathcal{A}_F = \mathbb{C} \oplus \mathbb{H} \oplus M_3(\mathbb{C})$
+and $\mathcal{H}_F = \mathbb{C}^{32}$, due to Chamseddine and
+Connes~\cite{CC2007,CCM2007}. In this framework the gauge bosons,
+the Higgs, and the fermion masses all emerge from the Dirac operator
+and the spectral action. It is arguably the most economical known
+mathematical encoding of the Standard Model's bosonic sector.
+
+But economy is not the same as certainty. The finite triple is a
+concrete object---explicit matrices, explicit commutators---and
+concrete objects can be checked by machine. This paper reports what
+happens when they are: a classification of the order-one deformations
+of the finite Dirac operator, carried out in the Lean~4 proof
+assistant~\cite{lean4} with every step verified and every gap closed.
+We call the resulting program the \emph{digital standard model}:
+not a new physical theory, but the existing finite geometry made
+fully explicit, machine-checked, and numerically explorable.
+
+Our contributions are:
+\begin{enumerate}
+\item A machine-checked classification (\texttt{cf\_kernel\_classification\_46\_22}):
+the order-one commutant $W_{22}$ is a 22-dimensional real space,
+spanned by 10 Standard Model directions and 12 exotic survivor
+directions, each with explicit proved properties.
+\item A machine-checked decomposition: the 12-dimensional exotic
+component splits canonically as $8 \oplus 2 \oplus 2$.
+\item Two machine-checked modular-dynamics theorems: thermal flux
+vanishing and active-driver existence.
+\item A public numerical laboratory corroborating and exploring
+these structures.
+\end{enumerate}
+All Lean sources are public~\cite{thetlogos}; the classification
+paper is archived~\cite{zenodo}.
+
+A note on language that we enforce throughout: a 12-dimensional
+\emph{algebraic} kernel is not 12 physical fields. The exotic
+directions are explicit matrices with proved properties. They are
+not claimed to be particles, forces, or dark matter. Interpretation
+never alters an operator identity.
+
+\section{The finite spectral triple}
+
+We work with the established finite triple of
+Chamseddine--Connes--Marcolli~\cite{CC2007,CCM2007}, recalled here
+to fix notation. The algebra is
+\begin{equation}
+\mathcal{A}_F = \mathbb{C} \oplus \mathbb{H} \oplus M_3(\mathbb{C}),
+\end{equation}
+acting on $\mathcal{H}_F = \mathbb{C}^{32}$ via the representation
+$\pi$, with opposite representation $\pi^\circ = J_F \pi(\cdot)^*
+J_F^{-1}$. The finite Dirac operator $D_F$ is self-adjoint,
+\[
+D_F = \begin{pmatrix} 0 & M \\ M^* & 0 \end{pmatrix},
+\qquad D_F^2 = \begin{pmatrix} MM^* & 0 \\ 0 & M^*M \end{pmatrix},
+\]
+with $M$ built from the Yukawa matrices
+$Y_\nu, Y_e, Y_u, Y_d$ and the Majorana mass $Y_R$.
+Charge conjugation $J_F$ satisfies $J_F^2 = I$, and the chiral
+grading $\gamma_F$ satisfies $J_F \gamma_F = -\gamma_F J_F$.
+The order-zero condition $[\pi(a), \pi^\circ(b)] = 0$ and the
+order-one condition $[[D_F, \pi(a)], \pi^\circ(b)] = 0$ are the
+axioms selecting admissible Dirac operators; both are
+machine-checked in our formalization
+(\texttt{order\_zero\_condition}, \texttt{OrderOneHolds\_smDirac}).
+
+Nothing in this section is new; it is the common ground.
+
+\section{The 22-dimensional classification}
+
+\begin{theorem}[Machine-checked]
+Let $W_{22}$ be the space of finite Dirac operators satisfying
+the order-one condition with respect to the Standard Model
+finite triple. Then $\dim_{\mathbb{R}} W_{22} = 22$, spanned by
+the explicit list \texttt{dirs22}: 10 Standard Model directions
+and 12 exotic survivor directions.
+\end{theorem}
+
+The proof (\texttt{ThetLogos.cf\_kernel\_classification\_46\_22})
+proceeds by linear algebra over an explicit constraint system:
+with \texttt{smGen : Fin 12}, the $12^2 = 144$ generator pairs
+produce $144 \times 1024 = 147{,}456$ complex component equations,
+and the kernel is computed exactly. The 10 SM directions are
+5 complex moduli $\times$ 2 real
+($y_\nu, y_e, y_u, y_d, y_R$). Each of the 12 exotic directions
+carries four proved properties: self-adjointness,
+$J$-compatibility, grading-oddness, and commutation with the
+central element \texttt{cfMat} (48 lemmas in
+\texttt{CFKernelRetarget.lean}). The formalization contains zero
+\texttt{sorry}s; the axiom footprint is exactly
+\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound},
+as reported by \texttt{\#print axioms}.
+
+The census runs in the 272-real-dimensional admissible Dirac
+space. A separate 24-generator Python scan (576 pairs) corroborates
+the classification numerically; it is supporting evidence only
+and never a substitute for the machine proof.
+
+\section{Exotic sector decomposition}
+
+The 12 exotic directions are not an unstructured list. Define
+the commutator graph on the 12 directions, with an edge when the
+commutator is nonzero. Then:
+
+\begin{theorem}[Machine-checked]
+The 12-dimensional exotic component decomposes as
+$8 \oplus 2 \oplus 2$:
+\begin{enumerate}
+\item an 8-dimensional sector (the NuLeR, ELNuR, NuREbarR,
+EREbarR pairs) forming a connected commutator component;
+\item a 2-dimensional sector (the ULDR pair) commuting exactly
+with every direction outside itself;
+\item a 2-dimensional sector (the DLUR pair) commuting exactly
+with every direction outside itself.
+\end{enumerate}
+Each pair is internally non-abelian
+($[\mathrm{Re}, \mathrm{Im}] \neq 0$, with the $(2,2)$ resp.\
+$(3,3)$ entry equal to $-2i$); the ULDR pair spans with its
+commutator a 3-dimensional space (proved
+\texttt{LinearIndependent}); the DLUR analogue is the identical
+proof shape.
+\end{theorem}
+
+The proof (\texttt{ThetLogos.ExoticSectors}, 78 theorems, zero
+\texttt{sorry}s) works through all $2 \times 8 + 2 \times 8 +
+2 \times 2 = 36$ cross-sector commutators, each shown to vanish
+via disjoint-support lemmas, and exhibits the nonzero internal
+commutators explicitly. The sector structure was first found by
+numerical exploration of the explicit matrices and then
+formalized; the machine proof is the result, the numerics were
+the scout.
+
+We emphasize: this is a decomposition of \emph{matrices}, not
+of particles. The sector names reflect the fermion bilinears
+the matrices couple, not physical identifications.
+
+\section{Modular dynamics}
+
+Let the modular flux be $\phi = i[K, D]$ for a modular
+Hamiltonian $K$. Two results are machine-checked in
+\texttt{ModularFlux.lean}:
+
+\begin{theorem}[Machine-checked]
+For the Gibbs-type modular Hamiltonian $K_\beta = \beta D^2$,
+the modular flux vanishes identically:
+$\phi = i[K_\beta, D] = 0$.
+\end{theorem}
+
+\begin{theorem}[Machine-checked]
+For the off-diagonal Dirac operator
+$D = \left(\begin{smallmatrix} 0 & M \\ M^* & 0 \end{smallmatrix}\right)$
+with $M \neq 0$, there exists a self-adjoint operator $G$ with
+$[G, D] \neq 0$ (witnessed explicitly by the block-diagonal
+active driver).
+\end{theorem}
+
+The first promotes a thermal-stationarity observation to a
+proved identity; the second closes an existence placeholder,
+providing the non-commuting driver the dynamics requires.
+Both are algebraic mechanisms. Neither proves anything about
+physics.
+
+We distinguish $K_\beta = \beta D^2$ (used above) from the
+synthesized modular Hamiltonian $K_\rho = -\ln \rho$ of
+\texttt{ModularTime.lean}; conflating them was an error in an
+earlier draft, corrected here. The flux $\phi$ is always
+lowercase: $\Phi$ is reserved as an ontological glyph and never
+denotes an operator in this work.
+
+A conditional spectral-gap lemma is also proved
+(\texttt{spectralGap\_pos}): the gap $\Delta = \min$ positive
+eigenvalue of a Hermitian $D$ is positive \emph{when $D$ is
+invertible on its support}. The hypothesis is the content;
+there is no unconditional mass-gap theorem, and the closed-form
+gap is recorded as a blocked question (see Sec.~\ref{sec:not}).
+
+\section{Numerical laboratory}
+
+Alongside the proofs we maintain a deterministic numerical
+companion suite (Tier-4 exploration, explicitly not proof):
+a 24-generator census corroborating the classification, Connes
+distances between states ($d_D = 0.4065\ \mathrm{GeV}^{-1}$ on
+6 of 105 sampled pairs), thermal/KMS stationarity checks
+(KMS error $6.77 \times 10^{-16}$ at $\beta = 1.0$), and an
+interactive laboratory in which the 22 moduli can be varied
+and the spectrum recomputed live. Numerical minima are never
+presented as physical vacua; the laboratory is an instrument
+for forming hypotheses, and every hypothesis it suggests must
+earn its own proof.
+
+\section{What is not claimed}
+\label{sec:not}
+
+To keep the record straight, we list what this work does
+\emph{not} establish:
+\begin{itemize}
+\item No new particles, forces, or dark-matter candidates. The
+exotic directions are matrices.
+\item No mass predictions. Yukawa couplings are inputs; no
+renormalization-group running is performed.
+\item No mass gap. Only the conditional lemma above exists;
+the closed-form spectral gap is a blocked question, obstructed
+by the Galois-theoretic barrier on the degree-32 characteristic
+polynomial and the non-analyticity of the $\min$ selection.
+\item No MOND, no fifth forces, no cosmological predictions.
+\item No continuum limit and no general-relativistic recovery.
+\item No technology implementations.
+\end{itemize}
+Claims beyond this list that appeared in earlier drafts
+(including a spacetime-dimension derivation from a withdrawn
+kernel-dimension claim and a golden-ratio mass hierarchy) were
+explicitly killed and are recorded as such in the public
+proof-status ledger~\cite{thetlogos}. Killed claims return
+only as new, weaker entries supported by fresh proof.
+
+\section{Outlook}
+
+Each rung of the program is conditional on the last:
+decompose the 8-dimensional sector's internal structure;
+generalize to $N$ generations; classify admissible deformations
+$D_F \to D_F + \delta D$; connect the finite result to the
+spectral action; and, finally, derive a quantitative, testable
+prediction. The finite-to-continuum correspondence is a major
+program, not an assumption.
+
+\section{Conclusion}
+
+The finite geometry underlying the Standard Model can be made
+fully digital: explicit matrices, machine-checked theorems,
+numerical laboratories, and an auditable record of what is
+proved, what is explored, and what is dead. That is the
+digital standard model---not a new theory of nature, but a new
+standard of honesty about the mathematics we have. The proofs
+are public; the reader is invited to check them.
+
+\begin{thebibliography}{9}
+\bibitem{CC2007} A.~Chamseddine and A.~Connes,
+\textit{Why the Standard Model}, J.\ Geom.\ Phys.\ \textbf{58} (2008) 38.
+\bibitem{CCM2007} A.~Chamseddine, A.~Connes, and M.~Marcolli,
+\textit{Gravity and the Standard Model with neutrino mixing},
+Adv.\ Theor.\ Math.\ Phys.\ \textbf{11} (2007) 991.
+\bibitem{lean4} L.~de Moura \textit{et al.}, \textit{The Lean 4
+Theorem Prover and Programming Language}, 2021.
+\bibitem{thetlogos} J.~M.~Gurd, \textit{thet-logos},
+\url{https://github.com/jeffgurd888/thet-logos}.
+\bibitem{zenodo} J.~M.~Gurd, \textit{Thermal Time and Emergent
+Space from Ontological Equality. Active Cartesian Modular
+Dynamics (ACMD): the W22 Classification, Formalized in Lean},
+Zenodo (2026), \doi{10.5281/zenodo.23140813}.
+\end{thebibliography}
+
+\end{document}

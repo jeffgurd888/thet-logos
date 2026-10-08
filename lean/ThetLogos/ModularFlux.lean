@@ -214,4 +214,145 @@ theorem interSectoral_flux_nonzero {m : ℕ} [NeZero m]
     exact (star_ne_zero.mpr hij) hentry
   exact smul_ne_zero Complex.I_ne_zero hcomm_ne
 
+-- ============================================================================
+-- Beta-family of thermal states (2026-10-07, beta-A flux landscape).
+--
+-- For a fixed modular Hamiltonian K, the Gibbs beta-family
+--   rho_beta = e^{-beta K} / Tr(e^{-beta K})
+-- has modular Hamiltonian K_beta = beta*K + (ln Z)*I (spectral mapping
+-- theorem; the scalar drops out of every commutator). Hence the modular
+-- flux scales EXACTLY linearly in beta:
+--   phi(beta, A) = i[K_beta, D_A] = beta * i[K, D_A].
+-- The beta parameter is GLOBAL: the finite triple has no x-dependence,
+-- so there is no beta(x) gradient in this construction (explicit boundary).
+-- ============================================================================
+
+/-- Beta-scaling of the modular flux (Tier T1 — proved): rescaling the
+    modular Hamiltonian by beta rescales the flux by beta. This is the
+    algebraic core of the beta-A landscape's exact beta-linearity
+    (checked numerically to 1.8e-12 over beta in [0.1, 10]). -/
+theorem modularFlux_betaScale {N : ℕ} (K D : Matrix (Fin N) (Fin N) ℂ)
+    (β : ℝ) :
+    modularFlux ((β : ℂ) • K) D = (β : ℂ) • modularFlux K D := by
+  unfold modularFlux
+  rw [Algebra.smul_mul_assoc, Algebra.mul_smul_comm, ← smul_sub, smul_comm]
+
+/-- Thermal vanishing for every beta (Tier T1 — proved): the Gibbs-type
+    modular Hamiltonian K = beta*D^2 gives zero flux for ALL beta, not just
+    beta = 1. Immediate from `thermal_flux_vanishes`. Checked numerically:
+    ||phi||_F = 0.000e+00 across the full (beta, A) grid in equilibrium. -/
+theorem thermal_flux_vanishes_allBeta {N : ℕ} (D : Matrix (Fin N) (Fin N) ℂ)
+    (β : ℝ) :
+    modularFlux ((β : ℂ) • D ^ 2) D = 0 :=
+  thermal_flux_vanishes D β
+
+/-- Gibbs beta-family KMS property (Tier T5 — PINNED): for the Gibbs state
+    rho_beta = e^{-beta K}/Tr(e^{-beta K}) and the modular flow
+    sigma^K_t(B) = e^{itK} B e^{-itK}, the KMS identity at the state's own
+    beta holds: Tr(rho_beta * A * sigma^K_{i*beta}(B)) = Tr(rho_beta * B * A).
+    True by the standard Gibbs-KMS argument (cyclicity of the trace); the
+    matrix exp/log KMS machinery beyond the diagonal `kms_identity_diagonal`
+    target in `ModularTime.lean` is not formalized here — hence PINNED, with
+    rho_beta existentially quantified rather than constructed. Checked
+    numerically to 3.2e-15 (stable cyclic form: Tr(A e^{-beta K} B)/Z)
+    over beta in [0.1, 10]. -/
+def GibbsKMSAtOwnBeta : Prop :=
+  ∀ (N : ℕ) (K : Matrix (Fin N) (Fin N) ℂ) (β : ℝ),
+    0 < β → K.IsHermitian →
+      ∃ ρ : Matrix (Fin N) (Fin N) ℂ,
+        ∀ A B : Matrix (Fin N) (Fin N) ℂ,
+          Matrix.trace (ρ * A *
+            (NormedSpace.exp (((-β : ℂ)) • K) * B * NormedSpace.exp (((β : ℂ)) • K)))
+            = Matrix.trace (ρ * B * A)
+
+-- ============================================================================
+-- Thermal magnetophase entropy state (2026-10-07).
+--
+-- rho_{beta,A} = e^{-beta D_A^2}/Z: the thermal state built FROM the
+-- gauge-fluctuated Dirac D_A (the state knows the magnetic background
+-- intrinsically -- K_A depends on A). Modular Hamiltonian
+-- K_A = beta*D_A^2 + (ln Z)*I; the scalar drops from every commutator, so
+-- the flux sees K_A = beta * D_A^2. beta is GLOBAL (no beta(x); the finite
+-- triple has no x-dependence -- explicit boundary, load-bearing).
+-- ============================================================================
+
+/-- Magnetophase modular Hamiltonian (Tier T2 — definition): K_A = beta*D_A^2.
+    The (ln Z)*I scalar is omitted: it drops out of all commutators. -/
+def magnetophaseModularH {N : ℕ} (D_A : Matrix (Fin N) (Fin N) ℂ) (β : ℝ) :
+    Matrix (Fin N) (Fin N) ℂ :=
+  (β : ℂ) • D_A ^ 2
+
+/-- Magnetophase flux no-go (Tier T1 — proved): the magnetophase flux
+    vanishes IDENTICALLY, because K_A = beta*D_A^2 commutes with D_A.
+    This is `thermal_flux_vanishes` applied to the fluctuated Dirac --
+    no new machinery. Checked numerically: ||phi_{beta,A}||_F = 0.000e+00
+    over the full (beta, A) grid (beta in [0.1,10], ||A1||/||D|| in [0,0.05]).
+    Consequence: the "magnetophase" as a FLUX concept is KILLED by this
+    theorem (proved no-go, kill-condition (b)). What survives as a new entry
+    is the ENTROPY S(rho_{beta,A}): genuine magnetic imprint, T4 --
+    monotone decrease in A (1.18% at beta=1), cold limit ln 4 for ALL A
+    (4-dim kernel of D_A stable under fluctuation: finite index stability). -/
+theorem magnetophaseFlux_vanishes {N : ℕ} (D_A : Matrix (Fin N) (Fin N) ℂ)
+    (β : ℝ) :
+    modularFlux (magnetophaseModularH D_A β) D_A = 0 :=
+  thermal_flux_vanishes D_A β
+
+/-- A=0 reduction (Tier T1 — proved): at zero fluctuation the magnetophase
+    modular Hamiltonian is definitionally the equilibrium beta-family one.
+    Checked numerically: ||rho_{1,0} - rho_eq(1)||_1 = 0.000e+00. -/
+theorem magnetophase_reduces_at_zero {N : ℕ} (D : Matrix (Fin N) (Fin N) ℂ)
+    (β : ℝ) :
+    magnetophaseModularH D β = (β : ℂ) • D ^ 2 :=
+  rfl
+
+/-- Magnetophase KMS (Tier T5 — PINNED): rho_{beta,A} = e^{-beta D_A^2}/Z
+    satisfies the KMS identity at its own beta w.r.t. the D_A^2-flow:
+    Tr(rho * A * e^{-beta D_A^2} B e^{+beta D_A^2}) = Tr(rho * B * A).
+    This is `GibbsKMSAtOwnBeta` instantiated at K := D_A^2 (D_A Hermitian
+    gives D_A^2 Hermitian) -- no new KMS machinery is needed; the pin is
+    inherited, not extended. Checked numerically to 3.997e-15 (stable cyclic
+    form Tr(A e^{-beta D_A^2} B)/Z) over the (beta, A) grid. -/
+def MagnetophaseKMSAtOwnBeta : Prop :=
+  ∀ (N : ℕ) (D_A : Matrix (Fin N) (Fin N) ℂ) (β : ℝ),
+    0 < β → D_A.IsHermitian →
+      ∃ ρ : Matrix (Fin N) (Fin N) ℂ,
+        ∀ A B : Matrix (Fin N) (Fin N) ℂ,
+          Matrix.trace (ρ * A *
+            (NormedSpace.exp (((-β : ℂ)) • D_A ^ 2) * B * NormedSpace.exp (((β : ℂ)) • D_A ^ 2)))
+            = Matrix.trace (ρ * B * A)
+
+/-- Non-Gibbs magnetophase flux (Tier T5 — PINNED): the active-driven flux
+    on the gauge-fluctuated triple. The generator K_A^act = -logm(rho_A^act)
+    is the lab's active-driver construction applied with D -> D_A
+    (rho_A^act = proj_+(normalize(thermal_state(D_A^2,beta) + p*R)),
+    non-Gibbs by construction); its exact matrix-log KMS machinery is pinned,
+    following the lab's own pinning. Checked numerically (T4):
+    ||phi_A^act||_F = 1.6416e3 at (A=0, drive=0.35) reproducing the lab's
+    active mode; +2.1% monotone A-growth saturating (not reducible to the
+    fixed-K ruled surface, which is A-flat); flux-direction rotation 0.9991;
+    entropy production +0.87 nats at (0.35, A=0). -/
+noncomputable def nonGibbsMagnetophaseFlux {N : ℕ} (K_A D_A : Matrix (Fin N) (Fin N) ℂ) :
+    Matrix (Fin N) (Fin N) ℂ :=
+  modularFlux K_A D_A
+
+/-- A=0 reduction (Tier T1 — proved): at zero fluctuation the non-Gibbs
+    magnetophase flux is definitionally the ordinary active flux.
+    Checked numerically: ||phi||_F = 1.6416e3 at (A=0, drive=0.35),
+    reproducing modular_flow_lab.py's active mode to the digit
+    (same seed-2026 pump draw order). -/
+theorem nonGibbsMagnetophase_reduces_at_zero {N : ℕ}
+    (K D : Matrix (Fin N) (Fin N) ℂ) :
+    nonGibbsMagnetophaseFlux K D = modularFlux K D := rfl
+
+/-- Non-vanishing transfer (Tier T1 — proved): a non-commuting active
+    generator gives non-zero flux. This is the finite-triple reason the
+    non-Gibbs magnetophase survives where the Gibbs one died by theorem:
+    K_A^act is not a function of D_A, so [K_A^act, D_A] need not vanish. -/
+theorem activeFlux_nonzero_of_noncomm {N : ℕ}
+    (K D_A : Matrix (Fin N) (Fin N) ℂ)
+    (h : K * D_A - D_A * K ≠ 0) :
+    modularFlux K D_A ≠ 0 := by
+  unfold modularFlux
+  exact smul_ne_zero Complex.I_ne_zero h
+
 end ThetLogos
