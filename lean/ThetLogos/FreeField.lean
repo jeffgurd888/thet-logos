@@ -1,4 +1,5 @@
 import Mathlib.LinearAlgebra.SymmetricAlgebra.Basic
+import Mathlib.LinearAlgebra.ExteriorAlgebra.Basic
 import ThetLogos.WightmanAxioms
 
 namespace ThetLogos
@@ -33,8 +34,15 @@ honest location of the gap.
 
 Honesty tiers in this file:
 - **T1 (proved):** `onePoint_vanishes`, `twoPoint_algebraic_trivial`,
-  `create_commute`, `vacuum_cyclic`.
+  `create_commute`, `vacuum_cyclic` (bosonic); `fermionExp_vacuum`,
+  `fermion_onePoint_vanishes`, `fermion_twoPoint_algebraic_trivial`,
+  `createFerm_anticommute`, `pauli_exclusion`, `fermion_vacuum_cyclic`
+  (fermionic).
 - **T5 (pinned statements):** `FreeFieldWightman`, the per-axiom ledger.
+- The fermionic creation/annihilation CAR, the fermionic 2-point
+  function, and number operators on both sides stay OPEN behind the
+  `fockInnerProduct` infrastructure gap (Mathlib 2026 has no Fock inner
+  product, so no adjoints, no completion).
 -/
 
 variable (V : Type*) [AddCommGroup V] [Module ℂ V]
@@ -102,6 +110,106 @@ theorem vacuum_cyclic :
   eq_top_iff.mpr fun _ _ => mem_adjoin_range V _
 
 /-!
+## Fermionic Fock space (algebraic level)
+
+The fermionic twin of the above: `ExteriorAlgebra ℂ V`. Everything the
+bosonic side has algebraically, the fermionic side has too — plus the
+Pauli exclusion principle, which is genuinely new content (not a formal
+shadow of anything bosonic): fermionic creators square to zero and
+anticommute, both proved from `ExteriorAlgebra.ι_sq_zero`.
+
+Honesty note: the fermionic annihilation operators, the fermionic
+2-point function `⟨0| ψ(v)ψ†(w) |0⟩ = ⟪v,w⟫`, and the fermionic Wightman
+ledger sit behind the SAME `fockInnerProduct` infrastructure gap as the
+bosonic side. The algebraic vacuum functional is again trivial on
+products (`fermion_twoPoint_algebraic_trivial`).
+
+New T1 in this section: `fermionExp_vacuum`, `fermion_onePoint_vanishes`,
+`fermion_twoPoint_algebraic_trivial`, `createFerm_anticommute`,
+`pauli_exclusion`, `fermion_vacuum_cyclic`.
+-/
+
+/-- The fermionic Fock space at the algebraic level: the exterior algebra
+    over the one-particle space `V`. -/
+abbrev fermionicFock := ExteriorAlgebra ℂ V
+
+/-- The fermionic vacuum vector: the unit of the fermionic Fock algebra. -/
+def fermionVacuum : fermionicFock V := 1
+
+/-- The fermionic vacuum expectation functional: the augmentation map
+    killing every positive-degree element (`ExteriorAlgebra.algebraMapInv`). -/
+def fermionExp : fermionicFock V →ₐ[ℂ] ℂ := ExteriorAlgebra.algebraMapInv
+
+/-- Fermionic creation operator for a one-particle state `v`: left
+    multiplication by `ι v`. Squares to zero (`pauli_exclusion`). -/
+def createFerm (v : V) : fermionicFock V →ₗ[ℂ] fermionicFock V :=
+  LinearMap.mulLeft ℂ (ExteriorAlgebra.ι (R := ℂ) (M := V) v)
+
+/-- The fermionic vacuum expectation of the vacuum is 1. -/
+theorem fermionExp_vacuum : fermionExp V (fermionVacuum V) = 1 := by
+  simp [fermionExp, fermionVacuum]
+
+/-- The fermionic one-point function vanishes: `⟨0| a†(v) |0⟩ = 0`. -/
+theorem fermion_onePoint_vanishes (v : V) :
+    fermionExp V (ExteriorAlgebra.ι (R := ℂ) (M := V) v) = 0 := by
+  simp [fermionExp, ExteriorAlgebra.algebraMapInv, ExteriorAlgebra.lift_ι_apply]
+
+/-- The algebraic fermionic vacuum functional gives a TRIVIAL two-point
+    function — same `fockInnerProduct` gap as the bosonic side. -/
+theorem fermion_twoPoint_algebraic_trivial (v w : V) :
+    fermionExp V (ExteriorAlgebra.ι (R := ℂ) (M := V) v * ExteriorAlgebra.ι (R := ℂ) (M := V) w) = 0 := by
+  rw [map_mul, fermion_onePoint_vanishes, fermion_onePoint_vanishes, mul_zero]
+
+/-- Generators anticommute: `ι v * ι w = -(ι w * ι v)`.
+    From `ι (v+w)² = 0` by expanding the square. -/
+theorem ferm_ι_anticomm (v w : V) :
+    ExteriorAlgebra.ι (R := ℂ) (M := V) v * ExteriorAlgebra.ι (R := ℂ) (M := V) w
+      = -(ExteriorAlgebra.ι (R := ℂ) (M := V) w * ExteriorAlgebra.ι (R := ℂ) (M := V) v) := by
+  have h := ExteriorAlgebra.ι_sq_zero (R := ℂ) (M := V) (v + w)
+  rw [map_add, add_mul, mul_add, mul_add] at h
+  rw [ExteriorAlgebra.ι_sq_zero, ExteriorAlgebra.ι_sq_zero,
+    zero_add, add_zero] at h
+  exact eq_neg_of_add_eq_zero_left h
+
+/-- Fermionic creation operators anticommute:
+    `a†(v) a†(w) = -a†(w) a†(v)` — the `{a†(v), a†(w)} = 0` half of the
+    fermionic CAR. (The mixed `{a(v), a†(w)}` half needs annihilation
+    operators, i.e. the Fock inner product — same gap as W1/W4.) -/
+theorem createFerm_anticommute (v w : V) :
+    (createFerm V v).comp (createFerm V w)
+      = -((createFerm V w).comp (createFerm V v)) := by
+  ext x
+  simp only [createFerm, LinearMap.comp_apply, LinearMap.mulLeft_apply,
+    LinearMap.neg_apply]
+  rw [← mul_assoc, ← mul_assoc, ferm_ι_anticomm, neg_mul, mul_assoc]
+
+/-- Pauli exclusion principle: a fermionic creator squares to zero — no
+    two fermions occupy the same one-particle state. -/
+theorem pauli_exclusion (v : V) :
+    (createFerm V v).comp (createFerm V v) = 0 := by
+  ext x
+  simp only [createFerm, LinearMap.comp_apply, LinearMap.mulLeft_apply,
+    LinearMap.zero_apply]
+  rw [← mul_assoc, ExteriorAlgebra.ι_sq_zero, zero_mul]
+
+/-- Every fermionic Fock vector lies in the algebra generated by the
+    fermionic creators. -/
+theorem fermion_mem_adjoin_range (a : fermionicFock V) :
+    a ∈ Algebra.adjoin ℂ (Set.range (ExteriorAlgebra.ι (R := ℂ) (M := V))) :=
+  ExteriorAlgebra.induction (R := ℂ) (M := V)
+    (fun r => Subalgebra.algebraMap_mem _ r)
+    (fun x => Algebra.subset_adjoin ⟨x, rfl⟩)
+    (fun _ _ ha hb => Subalgebra.mul_mem _ ha hb)
+    (fun _ _ ha hb => Subalgebra.add_mem _ ha hb)
+    a
+
+/-- Fermionic vacuum cyclicity (algebraic): the algebra generated by the
+    fermionic creators is everything. -/
+theorem fermion_vacuum_cyclic :
+    Algebra.adjoin ℂ (Set.range (ExteriorAlgebra.ι (R := ℂ) (M := V))) = ⊤ :=
+  eq_top_iff.mpr fun _ _ => fermion_mem_adjoin_range V _
+
+/-!
 ## Per-axiom ledger: the free field against W0–W6
 
 Verdicts for the free scalar field. "Proved" means in this file (T1);
@@ -146,5 +254,9 @@ def FreeFieldWightman : Prop := ∃ _ : WightmanAxioms, True
 #print axioms twoPoint_algebraic_trivial
 #print axioms create_commute
 #print axioms vacuum_cyclic
+#print axioms fermion_onePoint_vanishes
+#print axioms createFerm_anticommute
+#print axioms pauli_exclusion
+#print axioms fermion_vacuum_cyclic
 
 end ThetLogos

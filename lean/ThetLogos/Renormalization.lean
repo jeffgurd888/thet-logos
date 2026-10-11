@@ -963,20 +963,489 @@ theorem ssumEval_add (x y : SSum) (F : Forest) :
   unfold ssumEval
   rw [List.map_append, List.sum_append]
 
-/-- Corrected antipode axiom (T5, statement): the antipode cancels the
-    coproduct *in the group ring* — i.e., after evaluation (which has
-    cancellation). For nonempty `t`, the net coefficient at every forest
-    is zero.
-    Proof sketch: induction on `n`. Expand `treeCoprod (.node ts)` by the
-    cocycle; the `([t],[])` term evaluates (via `ssumEval_add`/`ssumNeg`) to
-    minus the definitional sum, which cancels the remaining terms after the
-    `toList`-fold congruence (evaluation respects `List.Perm` via
-    `List.Perm.sum_eq`, so the two folds agree). The remaining analytic
-    step is eval-stability of `antipodeForest` in the bound `n` for pruned
-    forests (all strictly smaller by `coprod_pruned_bound`). -/
+/-- Corrected antipode axiom (T1, proved as `antipodeAxiomEval_proved` below):
+    the antipode cancels the coproduct *in the group ring* — i.e., after
+    evaluation (which has cancellation). For nonempty `t`, the net coefficient
+    at every forest is zero.
+    Proof: joint induction on the size bound `n` (`stab_treeStab_axiomN`),
+    proving evaluation-stability of `antipodeForest`/`antipodeTree` alongside
+    the axiom. The analytic core is the convolution formula
+    `ssumEval_ssumMul`: evaluation turns the list convolution `ssumMul` into a
+    genuine convolution of integer-valued functions, so evaluation is a
+    congruence for `ssumMul`. The cocycle split (`treeCoprod_node`) then gives
+    `S(t) + Σ = S(t) - S(t) = 0` after the stability rewrite. -/
 def antipodeAxiomEval : Prop :=
   ∀ (n : Nat) (t : RKTree), 0 < treeSize t →
     treeSize t ≤ n → ∀ F : Forest, ssumEval (antipodeAxiomSum n t) F = 0
+
+
+/-! ## Evaluated antipode axiom: proof
+The proof goes by induction on the size bound `n`, proving three statements jointly:
+`Stab` (evaluation-stability of `antipodeForest`), `TreeStab` (of `antipodeTree`),
+and `AxiomN` (the evaluated antipode axiom). The analytic core is that evaluation
+turns the list convolution `ssumMul` into a genuine convolution of integer-valued
+functions (`ssumEval_ssumMul`), making evaluation a congruence for `ssumMul`. -/
+
+theorem list_map_congr_of {α β : Type} (l : List α) (f g : α → β)
+    (h : ∀ a ∈ l, f a = g a) : l.map f = l.map g := by
+  induction l with
+  | nil => rfl
+  | cons a l ih =>
+      simp only [List.map_cons, h a (List.mem_cons.mpr (Or.inl rfl)),
+        ih (fun b hb => h b (List.mem_cons.mpr (Or.inr hb)))]
+
+theorem list_sum_map_zero_of (l : List α) (f : α → ℤ) (h : ∀ a ∈ l, f a = 0) :
+    (l.map f).sum = 0 := by
+  induction l with
+  | nil => rfl
+  | cons a l ih =>
+      rw [List.map_cons, List.sum_cons, h a (by simp),
+        ih (fun b hb => h b (by simp [hb])), add_zero]
+
+theorem sum_flatMap_aux (x : List α) (k : α → List ℤ) :
+    (x.flatMap k).sum = (x.map fun a => (k a).sum).sum := by
+  induction x with
+  | nil => rfl
+  | cons a x ih =>
+      simp only [List.flatMap_cons, List.sum_append, List.map_cons, List.sum_cons, ih]
+
+theorem sum_map_ite_mul (l : List β) (p : β → Prop) [DecidablePred p] (r : ℤ) (f : β → ℤ) :
+    (l.map fun b => if p b then r * f b else 0).sum
+      = r * (l.map fun b => if p b then f b else 0).sum := by
+  induction l with
+  | nil => simp
+  | cons b l ih =>
+      simp only [List.map_cons, List.sum_cons, ih]
+      by_cases h : p b <;> simp [h, mul_add]
+
+theorem sum_map_ite_filter (l : List α) (p : α → Prop) [DecidablePred p] (C : α → ℤ) :
+    (l.map fun k => if p k then C k else 0).sum
+      = ((l.filter fun k => decide (p k)).map C).sum := by
+  induction l with
+  | nil => rfl
+  | cons a l ih =>
+      by_cases h : p a
+      · have hd : decide (p a) = true := decide_eq_true h
+        have hf : (a :: l).filter (fun k => decide (p k)) = a :: l.filter (fun k => decide (p k)) := by
+          simp [hd]
+        simp only [List.map_cons, List.sum_cons, ih, ite_eq_left h, hf, List.map_cons, List.sum_cons]
+      · have hd : decide (p a) = false := by simp [h]
+        have hf : (a :: l).filter (fun k => decide (p k)) = l.filter (fun k => decide (p k)) := by
+          simp [hd]
+        simp only [List.map_cons, List.sum_cons, ih, ite_eq_right h, zero_add, hf]
+
+theorem ssumEval_nil (F : Forest) : ssumEval [] F = 0 := by
+  simp [ssumEval]
+
+theorem ssumEval_neg (x : SSum) (F : Forest) :
+    ssumEval (ssumNeg x) F = -ssumEval x F := by
+  have h : ∀ l : List (ℤ × Forest),
+      (l.map fun pr => if pr.2 = F then -pr.1 else (0:ℤ)).sum
+        = -((l.map fun pr => if pr.2 = F then pr.1 else (0:ℤ))).sum := by
+    intro l
+    induction l with
+    | nil => simp
+    | cons pr l ih =>
+        simp only [List.map_cons, List.sum_cons, ih]
+        by_cases hc : pr.2 = F <;> simp [hc] <;> ac_rfl
+  have e : ssumEval (ssumNeg x) F
+      = ((x.map fun pr => if pr.2 = F then -pr.1 else (0:ℤ))).sum := by
+    unfold ssumNeg ssumEval
+    rw [List.map_map]
+    apply congrArg List.sum
+    apply list_map_congr_of
+    intro pr _
+    rfl
+  rw [e, h]
+  rfl
+
+theorem shiftEval_eq (y : SSum) (A F : Forest) :
+    (y.map fun pr₂ => if A ++ pr₂.2 = F then pr₂.1 else 0).sum
+      = if A.length ≤ F.length ∧ F.take A.length = A then ssumEval y (F.drop A.length) else 0 := by
+  by_cases hc : A.length ≤ F.length ∧ F.take A.length = A
+  · have key : ∀ pr₂ : ℤ × Forest,
+        (if A ++ pr₂.2 = F then pr₂.1 else (0:ℤ))
+          = (if pr₂.2 = F.drop A.length then pr₂.1 else 0) := by
+      intro pr₂
+      by_cases h : A ++ pr₂.2 = F
+      · have hB : pr₂.2 = F.drop A.length := by
+          have hcon := congrArg (List.drop A.length) h
+          simp only [List.drop_left] at hcon
+          exact hcon
+        rw [ite_eq_left h, ite_eq_left hB]
+      · have hB : ¬ pr₂.2 = F.drop A.length := by
+          intro hcon
+          apply h
+          have e : A ++ pr₂.2 = F.take A.length ++ F.drop A.length := by rw [hc.2, hcon]
+          rw [e, List.take_append_drop]
+        rw [ite_eq_right h, ite_eq_right hB]
+    rw [ite_eq_left hc]
+    have e2 : (y.map fun pr₂ => if A ++ pr₂.2 = F then pr₂.1 else (0:ℤ))
+        = (y.map fun pr₂ => if pr₂.2 = F.drop A.length then pr₂.1 else (0:ℤ)) :=
+      list_map_congr_of _ _ _ (fun pr₂ _ => key pr₂)
+    rw [e2]
+    rfl
+  · have hvan : ∀ pr₂ : ℤ × Forest, A ++ pr₂.2 = F → False := by
+      intro pr₂ hcon
+      apply hc
+      constructor
+      · have hle := congrArg List.length hcon
+        simp only [List.length_append] at hle
+        omega
+      · have htk := congrArg (List.take A.length) hcon
+        simp only [List.take_left] at htk
+        exact htk.symm
+    rw [ite_eq_right hc, sum_map_ite_filter]
+    have hnil : y.filter (fun pr₂ => decide (A ++ pr₂.2 = F)) = [] := by
+      rw [List.filter_eq_nil_iff]
+      intro a _ hcon
+      exact hvan a (of_decide_eq_true hcon)
+    rw [hnil]
+    rfl
+
+theorem nodup_all_eq_singleton {α : Type} (l : List α) (c : α) (hn : l.Nodup)
+    (hall : ∀ x ∈ l, x = c) (hmem : c ∈ l) : l = [c] := by
+  cases l with
+  | nil => simp at hmem
+  | cons y ys =>
+      have hy : y = c := hall y (by simp)
+      have hys : ys = [] := by
+        by_contra hne
+        obtain ⟨z, hz⟩ := List.exists_mem_of_ne_nil ys hne
+        have h1 : z = c := hall z (by simp [hz])
+        have hnp : y ∉ ys := (List.nodup_cons.mp hn).1
+        have h2 : y ∈ ys := by rw [hy, ← h1]; exact hz
+        exact hnp h2
+      rw [hy, hys]
+
+theorem sum_range_ite_take (F a : Forest) (C : Nat → ℤ) :
+    ((List.range (F.length + 1)).map fun k => if a = F.take k then C k else 0).sum
+      = if a.length ≤ F.length ∧ F.take a.length = a then C a.length else 0 := by
+  have key : ∀ k, k ≤ F.length → (a = F.take k ↔ k = a.length ∧ F.take a.length = a) := by
+    intro k hk
+    constructor
+    · intro h
+      have hlen : a.length = k := by
+        have hle := congrArg List.length h
+        rw [List.length_take] at hle
+        omega
+      exact ⟨hlen.symm, by rw [hlen]; exact h.symm⟩
+    · rintro ⟨rfl, h⟩
+      exact h.symm
+  rw [sum_map_ite_filter]
+  by_cases h : a.length ≤ F.length ∧ F.take a.length = a
+  · rw [ite_eq_left h]
+    have hfil : (List.range (F.length + 1)).filter (fun k => decide (a = F.take k)) = [a.length] := by
+      have hnod : ((List.range (F.length + 1)).filter fun k => decide (a = F.take k)).Nodup :=
+        List.Nodup.filter _ List.nodup_range
+      have hall : ∀ x ∈ (List.range (F.length + 1)).filter (fun k => decide (a = F.take k)),
+          x = a.length := by
+        intro x hx
+        rw [List.mem_filter] at hx
+        have hkk : x ≤ F.length := by
+          have hmem := hx.1; rw [List.mem_range] at hmem; omega
+        have hxx : a = F.take x := of_decide_eq_true hx.2
+        exact ((key x hkk).mp hxx).1
+      have hmemf : a.length ∈ (List.range (F.length + 1)).filter (fun k => decide (a = F.take k)) := by
+        rw [List.mem_filter]
+        exact ⟨List.mem_range.mpr (by omega), decide_eq_true h.2.symm⟩
+      exact nodup_all_eq_singleton _ _ hnod hall hmemf
+    rw [hfil, List.map_singleton, List.sum_singleton]
+  · rw [ite_eq_right h]
+    have hnil : (List.range (F.length + 1)).filter (fun k => decide (a = F.take k)) = [] := by
+      rw [List.filter_eq_nil_iff]
+      intro k hk hcon
+      have hkk : k ≤ F.length := by
+        rw [List.mem_range] at hk; omega
+      have hkk' : a = F.take k := of_decide_eq_true hcon
+      have hlen : a.length ≤ F.length := by
+        have hle := congrArg List.length hkk'
+        rw [List.length_take] at hle
+        omega
+      exact h ⟨hlen, ((key k hkk).mp hkk').2⟩
+    rw [hnil]
+    rfl
+
+theorem ssumEval_ssumMul_single (pr : ℤ × Forest) (y : SSum) (F : Forest) :
+    ssumEval (ssumMul [pr] y) F
+      = ((List.range (F.length + 1)).map fun k => ssumEval [pr] (F.take k) * ssumEval y (F.drop k)).sum := by
+  have e1 : ssumMul [pr] y = y.flatMap fun pr₂ => [(pr.1 * pr₂.1, pr.2 ++ pr₂.2)] := by
+    simp only [ssumMul, List.flatMap_singleton]
+  rw [e1]
+  have e2 : ssumEval (y.flatMap fun pr₂ => [(pr.1 * pr₂.1, pr.2 ++ pr₂.2)]) F
+      = (y.map fun pr₂ => if pr.2 ++ pr₂.2 = F then pr.1 * pr₂.1 else 0).sum := by
+    unfold ssumEval
+    rw [List.map_flatMap, sum_flatMap_aux]
+    apply congrArg List.sum
+    apply list_map_congr_of
+    intro pr₂ _
+    simp only [List.map_singleton, List.sum_singleton]
+  rw [e2, sum_map_ite_mul, shiftEval_eq]
+  have e3 : ∀ k, ssumEval [pr] (F.take k) * ssumEval y (F.drop k)
+      = (if pr.2 = F.take k then pr.1 * ssumEval y (F.drop k) else 0) := by
+    intro k
+    have e4 : ssumEval [pr] (F.take k) = (if pr.2 = F.take k then pr.1 else (0:ℤ)) := by
+      unfold ssumEval
+      simp
+    rw [e4]
+    by_cases h : pr.2 = F.take k <;> simp [h]
+  rw [list_map_congr_of _ _ _ (fun k _ => e3 k), sum_range_ite_take]
+  by_cases h : pr.2.length ≤ F.length ∧ F.take pr.2.length = pr.2 <;> simp [h]
+
+theorem ssumEval_ssumMul (x y : SSum) (F : Forest) :
+    ssumEval (ssumMul x y) F
+      = ((List.range (F.length + 1)).map fun k => ssumEval x (F.take k) * ssumEval y (F.drop k)).sum := by
+  induction x with
+  | nil =>
+      have e1 : ssumMul ([] : SSum) y = [] := rfl
+      rw [e1, ssumEval_nil]
+      have hpw : ∀ k ∈ List.range (F.length + 1),
+          ssumEval ([] : SSum) (F.take k) * ssumEval y (F.drop k) = 0 := by
+        intro k _
+        rw [ssumEval_nil, zero_mul]
+      exact (list_sum_map_zero_of _ _ hpw).symm
+  | cons pr x ih =>
+      have hsplit : ssumMul (pr :: x) y = ssumMul [pr] y ++ ssumMul x y := by
+        simp only [ssumMul, List.flatMap_cons, List.flatMap_nil, List.append_nil]
+      rw [hsplit, ssumEval_add, ih, ssumEval_ssumMul_single]
+      rw [← List.sum_map_add]
+      have hpw : ∀ k ∈ List.range (F.length + 1),
+          ssumEval [pr] (F.take k) * ssumEval y (F.drop k)
+            + ssumEval x (F.take k) * ssumEval y (F.drop k)
+            = ssumEval (pr :: x) (F.take k) * ssumEval y (F.drop k) := by
+        intro k _
+        have e : ssumEval (pr :: x) (F.take k)
+            = ssumEval [pr] (F.take k) + ssumEval x (F.take k) := by
+          have hcc : (pr :: x) = [pr] ++ x := rfl
+          rw [hcc, ssumEval_add]
+        rw [e, add_mul]
+      rw [list_map_congr_of _ _ _ hpw]
+
+theorem ssumEval_ssumMul_congr {x₁ x₂ y₁ y₂ : SSum} (F : Forest)
+    (hx : ∀ A, ssumEval x₁ A = ssumEval x₂ A)
+    (hy : ∀ B, ssumEval y₁ B = ssumEval y₂ B) :
+    ssumEval (ssumMul x₁ y₁) F = ssumEval (ssumMul x₂ y₂) F := by
+  rw [ssumEval_ssumMul, ssumEval_ssumMul]
+  simp only [hx, hy]
+
+theorem ssumEval_ssumMul_singleton_congr {x₁ x₂ : SSum} (G₀ F : Forest)
+    (hx : ∀ A, ssumEval x₁ A = ssumEval x₂ A) :
+    ssumEval (ssumMul x₁ [(1, G₀)]) F = ssumEval (ssumMul x₂ [(1, G₀)]) F :=
+  ssumEval_ssumMul_congr F hx (fun _ => rfl)
+
+theorem ssumEval_mul_one_right (x : SSum) (F : Forest) :
+    ssumEval (ssumMul x [(1, [])]) F = ssumEval x F := by
+  have e : ∀ pr₁ : ℤ × Forest,
+      (if pr₁.2 ++ ([] : Forest) = F then pr₁.1 * 1 else (0:ℤ))
+        = (if pr₁.2 = F then pr₁.1 else 0) := by
+    intro pr₁
+    by_cases h : pr₁.2 ++ ([] : Forest) = F
+    · have h2 : pr₁.2 = F := by simpa using h
+      simp [h, h2]
+    · have h2 : ¬ pr₁.2 = F := by simpa using h
+      simp [h, h2]
+  have inner : ∀ pr₁ : ℤ × Forest,
+      ((([(pr₁.1 * 1, pr₁.2 ++ ([] : Forest))].map
+        fun p => if p.2 = F then p.1 else (0:ℤ))).sum)
+        = (if pr₁.2 = F then pr₁.1 else 0) := by
+    intro pr₁
+    rw [List.map_singleton, List.sum_singleton]
+    show (if pr₁.2 ++ ([] : Forest) = F then pr₁.1 * 1 else (0:ℤ)) = _
+    exact e pr₁
+  simp only [ssumMul, List.flatMap_singleton]
+  unfold ssumEval
+  rw [List.map_flatMap, sum_flatMap_aux]
+  simp only [inner]
+
+theorem foldr_eval_gen (term : Forest × Forest → SSum) (F : Forest) :
+    ∀ (L : List (Forest × Forest)) (init : SSum),
+    ssumEval (L.foldr (fun pr acc => ssumAdd (term pr) acc) init) F
+      = (L.map fun pr => ssumEval (term pr) F).sum + ssumEval init F := by
+  intro L
+  induction L with
+  | nil => intro init; simp
+  | cons a L ih =>
+      intro init
+      rw [List.foldr_cons]
+      have h2 : ssumEval (ssumAdd (term a) (L.foldr (fun pr acc => ssumAdd (term pr) acc) init)) F
+          = ssumEval (term a) F + ssumEval (L.foldr (fun pr acc => ssumAdd (term pr) acc) init) F :=
+        ssumEval_add _ _ _
+      rw [h2, ih, List.map_cons, List.sum_cons]
+      ac_rfl
+
+theorem foldr_eval_additive (M₁ M₂ : Multiset (Forest × Forest))
+    (term : Forest × Forest → SSum) (F : Forest) :
+    ssumEval ((M₁ + M₂).toList.foldr (fun pr acc => ssumAdd (term pr) acc) []) F
+      = ssumEval (M₁.toList.foldr (fun pr acc => ssumAdd (term pr) acc) []) F
+        + ssumEval (M₂.toList.foldr (fun pr acc => ssumAdd (term pr) acc) []) F := by
+  have hperm : List.Perm (M₁ + M₂).toList (M₁.toList ++ M₂.toList) := by
+    rw [← Multiset.coe_eq_coe]
+    rw [Multiset.coe_toList, ← Multiset.coe_add, Multiset.coe_toList, Multiset.coe_toList]
+  have hperm_eval : ∀ L₁ L₂ : List (Forest × Forest), List.Perm L₁ L₂ →
+      ssumEval (L₁.foldr (fun pr acc => ssumAdd (term pr) acc) []) F
+        = ssumEval (L₂.foldr (fun pr acc => ssumAdd (term pr) acc) []) F := by
+    intro L₁ L₂ h
+    have e1 := foldr_eval_gen term F L₁ []
+    have e2 := foldr_eval_gen term F L₂ []
+    rw [e1, e2, ssumEval_nil, add_zero, add_zero]
+    exact List.Perm.sum_eq (h.map _)
+  rw [hperm_eval _ _ hperm, List.foldr_append]
+  simp only [foldr_eval_gen, ssumEval_nil, add_zero]
+
+theorem foldr_eval_multiset (M : Multiset (Forest × Forest))
+    (term : Forest × Forest → SSum) (F : Forest) :
+    ssumEval (M.toList.foldr (fun pr acc => ssumAdd (term pr) acc) []) F
+      = (M.map fun pr => ssumEval (term pr) F).sum := by
+  induction M using Multiset.induction_on with
+  | empty =>
+      simp [Multiset.toList_zero, ssumEval_nil]
+  | cons a s ih =>
+      rw [← Multiset.singleton_add, foldr_eval_additive, Multiset.map_add, Multiset.sum_add, ih]
+      congr 1
+      rw [Multiset.toList_singleton]
+      simp only [List.foldr_cons, List.foldr_nil, ssumAdd, List.append_nil,
+        Multiset.map_singleton, Multiset.sum_singleton, add_zero]
+
+/-- Stability of `antipodeForest` under evaluation when the bound grows,
+    for forests of sufficiently small trees. -/
+def Stab (N : Nat) : Prop :=
+  ∀ P : Forest, (∀ u ∈ P, treeSize u ≤ N) → ∀ G : Forest,
+    ssumEval (antipodeForest (N+1) P) G = ssumEval (antipodeForest N P) G
+
+/-- Stability of `antipodeTree` under evaluation when the bound grows. -/
+def TreeStab (N : Nat) : Prop :=
+  ∀ u : RKTree, treeSize u ≤ N → ∀ G : Forest,
+    ssumEval (antipodeTree (N+1) u) G = ssumEval (antipodeTree N u) G
+
+/-- The evaluated antipode axiom at bound `N`. -/
+def AxiomN (N : Nat) : Prop :=
+  ∀ t : RKTree, 0 < treeSize t → treeSize t ≤ N → ∀ F : Forest,
+    ssumEval (antipodeAxiomSum N t) F = 0
+
+theorem stab_treeStab_axiomN : ∀ N, Stab N ∧ TreeStab N ∧ AxiomN N := by
+  intro N
+  induction N with
+  | zero =>
+      refine ⟨?_, ?_, ?_⟩
+      · show ∀ P : Forest, (∀ u ∈ P, treeSize u ≤ 0) → ∀ G : Forest,
+            ssumEval (antipodeForest (0+1) P) G = ssumEval (antipodeForest 0 P) G
+        intro P hP G
+        have hempty : P = [] := by
+          rw [List.eq_nil_iff_forall_not_mem]
+          intro u hmem
+          have h1 := hP u hmem
+          have h2 := treeSize_pos u
+          omega
+        rw [hempty]
+        simp only [antipodeForest]
+      · show ∀ u : RKTree, treeSize u ≤ 0 → ∀ G : Forest,
+            ssumEval (antipodeTree (0+1) u) G = ssumEval (antipodeTree 0 u) G
+        intro u hu G
+        have h2 := treeSize_pos u
+        omega
+      · show ∀ t : RKTree, 0 < treeSize t → treeSize t ≤ 0 → ∀ F : Forest,
+            ssumEval (antipodeAxiomSum 0 t) F = 0
+        intro t h0 hN F
+        omega
+  | succ N ih =>
+      obtain ⟨hS, hT, hA⟩ := ih
+      have hT' : TreeStab (N+1) := by
+        show ∀ u : RKTree, treeSize u ≤ N+1 → ∀ G : Forest,
+          ssumEval (antipodeTree (N+1+1) u) G = ssumEval (antipodeTree (N+1) u) G
+        intro u hu G
+        cases u with
+        | node ts =>
+            have hts : treeSize (RKTree.node ts) = 1 + (ts.map treeSize).sum := by
+              unfold treeSize; simp
+            simp only [antipodeTree, ssumEval_neg]
+            rw [foldr_eval_multiset, foldr_eval_multiset]
+            congr 1
+            congr 1
+            apply Multiset.map_congr rfl
+            intro pr hmem
+            obtain ⟨P, R⟩ := pr
+            show ssumEval (ssumMul (antipodeForest (N+1) P) [(1, [RKTree.node R])]) G
+                = ssumEval (ssumMul (antipodeForest N P) [(1, [RKTree.node R])]) G
+            have hPlt : ∀ v ∈ P, treeSize v ≤ N := by
+              intro v hv
+              have h1 : treeSize v ≤ (P.map treeSize).sum :=
+                List.le_sum_of_mem (List.mem_map.mpr ⟨v, hv, rfl⟩)
+              have h2 : (P.map treeSize).sum ≤ (ts.map treeSize).sum :=
+                coprod_pruned_bound ts P R hmem
+              omega
+            exact ssumEval_ssumMul_singleton_congr _ _ (hS P hPlt)
+      refine ⟨?_, hT', ?_⟩
+      · show ∀ P : Forest, (∀ u ∈ P, treeSize u ≤ N+1) → ∀ G : Forest,
+            ssumEval (antipodeForest (N+1+1) P) G = ssumEval (antipodeForest (N+1) P) G
+        intro P
+        induction P with
+        | nil =>
+            intro hP G
+            simp only [antipodeForest]
+        | cons u us ihP =>
+            intro hP G
+            have hu : treeSize u ≤ N + 1 := hP u (by simp)
+            have hus : ∀ v ∈ us, treeSize v ≤ N + 1 := fun v hv => hP v (by simp [hv])
+            simp only [antipodeForest]
+            exact ssumEval_ssumMul_congr G (hT' u hu) (ihP hus)
+      · show ∀ t : RKTree, 0 < treeSize t → treeSize t ≤ N+1 → ∀ F : Forest,
+            ssumEval (antipodeAxiomSum (N+1) t) F = 0
+        intro t h0 hN F
+        cases t with
+        | node ts =>
+            have hts : treeSize (RKTree.node ts) = 1 + (ts.map treeSize).sum := by
+              unfold treeSize; simp
+            have step1 : ssumEval (antipodeAxiomSum (N+1) (RKTree.node ts)) F
+                = ((treeCoprod (RKTree.node ts)).map fun pr =>
+                    ssumEval (ssumMul (antipodeForest (N+1) pr.1) [(1, pr.2)]) F).sum := by
+              simp only [antipodeAxiomSum]
+              rw [foldr_eval_multiset]
+            rw [step1, treeCoprod_node, Multiset.map_add, Multiset.sum_add]
+            have eSing : ((({((([RKTree.node ts], [])))} : Multiset (Forest × Forest))).map fun pr =>
+                ssumEval (ssumMul (antipodeForest (N+1) pr.1) [(1, pr.2)]) F).sum
+                = ssumEval (ssumMul (antipodeForest (N+1) [RKTree.node ts]) [(1, ([] : Forest))]) F := by
+              simp only [Multiset.map_singleton, Multiset.sum_singleton]
+            have term1 : ssumEval (ssumMul (antipodeForest (N+1) [RKTree.node ts]) [(1, ([] : Forest))]) F
+                = ssumEval (antipodeTree (N+1) (RKTree.node ts)) F := by
+              rw [ssumEval_mul_one_right]
+              have e1 : antipodeForest (N+1) [RKTree.node ts]
+                  = ssumMul (antipodeTree (N+1) (RKTree.node ts)) (antipodeForest (N+1) []) := by
+                simp only [antipodeForest]
+              have e2 : antipodeForest (N+1) ([] : Forest) = ssumOne := by
+                simp only [antipodeForest]
+              rw [e1, e2]
+              exact ssumEval_mul_one_right _ _
+            have term2 : ((((forestCoprod ts).bind fun pr => {((pr.1, [RKTree.node pr.2]))}).map fun pr =>
+                ssumEval (ssumMul (antipodeForest (N+1) pr.1) [(1, pr.2)]) F)).sum
+                = (((forestCoprod ts).map fun pr =>
+                    ssumEval (ssumMul (antipodeForest N pr.1) [(1, [RKTree.node pr.2])]) F)).sum := by
+              rw [Multiset.bind_singleton, Multiset.map_map]
+              congr 1
+              apply Multiset.map_congr rfl
+              intro pr hmem
+              obtain ⟨P, R⟩ := pr
+              show ssumEval (ssumMul (antipodeForest (N+1) P) [(1, [RKTree.node R])]) F
+                  = ssumEval (ssumMul (antipodeForest N P) [(1, [RKTree.node R])]) F
+              have hPlt : ∀ v ∈ P, treeSize v ≤ N := by
+                intro v hv
+                have h1 : treeSize v ≤ (P.map treeSize).sum :=
+                  List.le_sum_of_mem (List.mem_map.mpr ⟨v, hv, rfl⟩)
+                have h2 : (P.map treeSize).sum ≤ (ts.map treeSize).sum :=
+                  coprod_pruned_bound ts P R hmem
+                omega
+              exact ssumEval_ssumMul_singleton_congr _ _ (hS P hPlt)
+            have eTree : ssumEval (antipodeTree (N+1) (RKTree.node ts)) F
+                = -(((forestCoprod ts).map fun pr =>
+                    ssumEval (ssumMul (antipodeForest N pr.1) [(1, [RKTree.node pr.2])]) F)).sum := by
+              simp only [antipodeTree, ssumEval_neg]
+              rw [foldr_eval_multiset]
+            rw [eSing, term1, term2, eTree]
+            exact neg_add_cancel _
+
+/-- The corrected antipode axiom (evaluation into the group ring) holds. -/
+theorem antipodeAxiomEval_proved : antipodeAxiomEval := by
+  intro n t h0 hN F
+  exact (stab_treeStab_axiomN n).2.2 t h0 hN F
 
 
 end ThetLogos

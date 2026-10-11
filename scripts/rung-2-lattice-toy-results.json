@@ -1,0 +1,122 @@
+{
+ "meta": {
+  "toy": true,
+  "tier": "T4-at-best",
+  "seed": 20261008,
+  "discretization": "naive lattice Dirac (doublers NOT handled), a=1 toy units",
+  "DF_kernel_dim": 4,
+  "DF_opnorm_GeV": 228.78
+ },
+ "L3": {
+  "sites": 81,
+  "prod_dim": 10368,
+  "lattice_kernel_dim": 4,
+  "product_kernel_dim": 16,
+  "expected_product_kernel": 16,
+  "D2_identity_relerr": 0.0,
+  "first_excited_sqrt": 0.8660254037782413,
+  "audit_D_resid_max": 1.242635362502972e-15,
+  "finite_leak_max": 0.0,
+  "lattice_leak_max": 1.3727955381505223e-15,
+  "max_schmidt_rank": 4
+ },
+ "L4": {
+  "sites": 256,
+  "prod_dim": 32768,
+  "lattice_kernel_dim": 64,
+  "product_kernel_dim": 256,
+  "expected": 256,
+  "block_max": 6.735421669725822e-08,
+  "gap_above_block": 0.99999993264578
+ },
+ "finite_oneform_sweep": [
+  {
+   "t_ratio": 0.0,
+   "kernel_dim": 4,
+   "rel_change": 0.0
+  },
+  {
+   "t_ratio": 0.001,
+   "kernel_dim": 4,
+   "rel_change": 0.001351821727597354
+  },
+  {
+   "t_ratio": 0.01,
+   "kernel_dim": 4,
+   "rel_change": 0.013518217275973543
+  },
+  {
+   "t_ratio": 0.05,
+   "kernel_dim": 4,
+   "rel_change": 0.06759108637986772
+  }
+ ],
+ "gauge_sweep_L3": [
+  {
+   "amp": 0.0,
+   "lattice_kernel": 4,
+   "product_kernel": 16,
+   "block_min": 0.0,
+   "block_max": 2.5809568279517847e-08,
+   "gap_above_block": 0.8660253779748686
+  },
+  {
+   "amp": 0.1,
+   "lattice_kernel": 0,
+   "product_kernel": 0,
+   "block_min": 0.013390323495688573,
+   "block_max": 0.014387990199020486,
+   "gap_above_block": 0.812994347716385
+  },
+  {
+   "amp": 0.3,
+   "lattice_kernel": 0,
+   "product_kernel": 0,
+   "block_min": 0.019929071151819213,
+   "block_max": 0.03665287478175434,
+   "gap_above_block": 0.6816065232893179
+  },
+  {
+   "amp": 0.7,
+   "lattice_kernel": 0,
+   "product_kernel": 0,
+   "block_min": 0.09696156159597336,
+   "block_max": 0.13107656168435627,
+   "gap_above_block": 0.35763025125662273
+  },
+  {
+   "amp": 3.141592653589793,
+   "lattice_kernel": 0,
+   "product_kernel": 0,
+   "block_min": 0.004989114015509908,
+   "block_max": 0.008665256865269196,
+   "gap_above_block": 0.031829342912400596
+  }
+ ],
+ "combined_L3": [
+  {
+   "config": "links only, amp=0.3",
+   "finite_kernel": 4,
+   "product_kernel": 0,
+   "block_min": 0.03442997762364843,
+   "block_max": 0.04431135746476105,
+   "gap_above_block": 0.673112657440976
+  },
+  {
+   "config": "finite 1-form only, t=0.01",
+   "finite_kernel": 4,
+   "product_kernel": 16,
+   "block_min": 0.0,
+   "block_max": 2.5809568279517847e-08,
+   "gap_above_block": 0.8660253779748686
+  },
+  {
+   "config": "both: amp=0.3 x t=0.01",
+   "finite_kernel": 4,
+   "product_kernel": 0,
+   "block_min": 0.048621392487821796,
+   "block_max": 0.056015907006919816,
+   "gap_above_block": 0.6655020559124819
+  }
+ ]
+}
