@@ -1,0 +1,458 @@
+import Mathlib.Tactic
+import ThetLogos.FieldOperators
+import ThetLogos.HaagKastler
+import ThetLogos.PoincareAction
+
+namespace ThetLogos
+
+/-!
+# ThetLogos.HaagKastlerFree — the free-field Haag–Kastler net: what the machine holds
+
+Source: theories intake, Candidate 3 — Algebraic QFT (Haag–Kastler nets),
+2026-10-11. Jeff's directive: fold in every theory that genuinely fits; the
+fit test is theorems onto formalized objects, not analogies.
+
+**What this file IS.** The free-field net built from the smeared creators of
+`FieldOperators.lean`, with each Haag–Kastler axiom (as pinned in
+`HaagKastler.lean`) proved exactly where the formalized structure supports it
+and priced exactly where it doesn't.
+
+Per-axiom verdicts:
+- **Isotony — FIT (T1).** `localAlgBoson_isotone`, `localAlgFermion_isotone`,
+  `localObsFermion_isotone`: `O₁ ⊆ O₂ → A(O₁) ≤ A(O₂)`, conditional on the T2
+  localization marker `hsupp_mono`.
+- **Locality — FIT at the creation-operator level (T1).**
+  `localAlgBoson_commute`: bosonic local algebras commute elementwise for any
+  two regions (the symmetric algebra is commutative) — hence for
+  spacelike-separated regions, which is what the axiom requires
+  (`haagKastler_locality_boson`). `localObsFermion_commute`: the *even*
+  (observable) parts of fermionic local algebras commute elementwise — graded
+  locality, T1 (`haagKastler_locality_fermion`). Honest caveat: the spacelike
+  hypothesis is vacuous at the creator level (everything commutes/
+  anticommutes unconditionally); its physical content — support separation of
+  test functions — is the T2 `supp` marker, and the full-field (anti)commutator
+  with the annihilation half is behind the Fock-inner-product gap
+  (`fermionicFieldCAR_window`, `bosonicFieldCCR_window` in
+  `FieldOperators.lean`).
+- **Poincaré covariance — PARTIAL.** Geometric half T1: `poincareActPoint`
+  (the point action `(a,Λ) • x = Λx + a`, a genuine `MulAction`) and
+  `spacelikeSeparated_poincare` (it preserves spacelike separation, from the
+  Lorentz invariance of the Minkowski form). Implementer half priced T5:
+  `covariantNet_window` (needs `OneParticleRep_window` +
+  `SecondQuantization_window` + Schwartz support theory).
+- **Spectrum condition — NO-FIT as a theorem; T5 window.**
+  `spectrumCondition_window`: the exact shape (unitary translation
+  representation, joint spectrum in the closed forward light cone — T1 geometry
+  in `WightmanAxioms.lean`), priced behind second quantization + Stone's
+  theorem.
+- **Vacuum — PARTIAL.** Cyclic vector T1: the algebraic vacuum `1` is cyclic
+  for the global algebra (`localAlgBoson_univ`, `localAlgFermion_univ`,
+  conditional on surjective smearing + the T2 marker data
+  `supp univ = ⊤`). Poincaré invariance of the vacuum is priced (needs the
+  unitary implementers).
+- **Irreducibility / weak additivity — NO-FIT.** Needs the represented net
+  (GNS / vacuum sector), which is behind the W0 Fock-completion gap.
+- **Interacting net — T5, untouched.** `HaagKastlerExistence`
+  (`HaagKastler.lean`) is NOT modified: no interacting 4D Haag–Kastler net has
+  ever been constructed, and the net built here is quasi-free, hence not a
+  witness. Recorded as an explicit priced window below.
+
+**What this file is NOT.** The full smeared fields `ψ(f) = a†(f) + a(f)`,
+Schwartz support theory, the Fock inner product / completion, or any
+interacting net. `HaagKastler.lean` and `FieldOperators.lean` are unmodified.
+
+Honesty tiers in this file:
+- **T1 (proved):** `localAlgBoson_isotone`, `localAlgFermion_isotone`,
+  `localObsFermion_isotone`, `localAlgBoson_commute`,
+  `haagKastler_locality_boson`, `anticomm_pair_mul_comm`,
+  `obsFermion_gen_commute`, `localObsFermion_commute`,
+  `haagKastler_locality_fermion`, `poincareActPoint_one`, `poincareActPoint_mul`,
+  `spacelikeSeparated_poincare`, `localAlgBoson_univ`, `localAlgFermion_univ`.
+- **T2 (labeled markers):** `supp` + `hsupp_mono` (the localization
+  assignment).
+- **T5 (priced windows, exact statements, unproved by design):**
+  `covariantNet_window`, `spectrumCondition_window`, and the interacting-net
+  window `HaagKastlerExistence` (pinned in `HaagKastler.lean`, referenced
+  below — not restated, not modified).
+-/
+
+variable (V : Type*) [AddCommGroup V] [Module ℂ V]
+variable (T : TestFunctionMarker) [AddCommGroup T.carrier] [Module ℂ T.carrier]
+variable (smear : T.carrier →ₗ[ℂ] V)
+
+/- **T2 marker:** test functions localized in a spacetime region. In a real
+    construction this is `{f : supp f ⊆ O}` inside Schwartz space; support
+    theory is absent from Mathlib (2026), so the assignment is marked, with the
+    monotonicity every support-based assignment satisfies as marker data. -/
+variable (supp : Set Minkowski → Submodule ℂ T.carrier)
+
+/-!
+## The net: local algebras from smeared creators
+-/
+
+/-- The bosonic local algebra of a region: the unital subalgebra of the bosonic
+    Fock algebra generated by the smeared creators with test functions
+    localized in `O`. -/
+def localAlgBoson (O : Set Minkowski) : Subalgebra ℂ (bosonicFock V) :=
+  Algebra.adjoin ℂ
+    (Set.range fun f : ↥(supp O) =>
+      SymmetricAlgebra.ι ℂ V (smear (f : T.carrier)))
+
+/-- The fermionic local *field* algebra of a region: generated by the smeared
+    creators. (Not the observables — see `localObsFermion`.) -/
+def localAlgFermion (O : Set Minkowski) : Subalgebra ℂ (fermionicFock V) :=
+  Algebra.adjoin ℂ
+    (Set.range fun f : ↥(supp O) =>
+      ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (f : T.carrier)))
+
+/-- The fermionic local *observable* algebra of a region: generated by
+    pair-products of smeared creators (the even part at generator level).
+    These are the bosonic observables of the fermionic net — the objects the
+    Haag–Kastler locality axiom constrains. -/
+def localObsFermion (O : Set Minkowski) : Subalgebra ℂ (fermionicFock V) :=
+  Algebra.adjoin ℂ
+    (Set.range fun fg : ↥(supp O) × ↥(supp O) =>
+      ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (fg.1 : T.carrier)) *
+      ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (fg.2 : T.carrier)))
+
+/-!
+## Isotony (T1, conditional on the T2 marker)
+-/
+
+/-- **T1:** isotony of the bosonic net — `O₁ ⊆ O₂` implies
+    `A(O₁) ≤ A(O₂)`. Conditional on the T2 marker `hsupp_mono` (an explicit
+    hypothesis: Lean only auto-includes `variable`s mentioned in the
+    statement). -/
+theorem localAlgBoson_isotone (hsupp_mono : Monotone supp) :
+    Monotone (localAlgBoson V T smear supp) := by
+  intro O₁ O₂ h
+  apply Algebra.adjoin_mono
+  rintro y ⟨f, rfl⟩
+  exact ⟨⟨(f : T.carrier), hsupp_mono h f.property⟩, rfl⟩
+
+/-- **T1:** isotony of the fermionic field net. -/
+theorem localAlgFermion_isotone (hsupp_mono : Monotone supp) :
+    Monotone (localAlgFermion V T smear supp) := by
+  intro O₁ O₂ h
+  apply Algebra.adjoin_mono
+  rintro y ⟨f, rfl⟩
+  exact ⟨⟨(f : T.carrier), hsupp_mono h f.property⟩, rfl⟩
+
+/-- **T1:** isotony of the fermionic observable net. -/
+theorem localObsFermion_isotone (hsupp_mono : Monotone supp) :
+    Monotone (localObsFermion V T smear supp) := by
+  intro O₁ O₂ h
+  apply Algebra.adjoin_mono
+  rintro y ⟨⟨f₁, f₂⟩, rfl⟩
+  exact ⟨⟨⟨(f₁ : T.carrier), hsupp_mono h f₁.property⟩,
+    ⟨(f₂ : T.carrier), hsupp_mono h f₂.property⟩⟩, rfl⟩
+
+/-!
+## Locality, bosonic (T1)
+-/
+
+/-- **T1:** bosonic locality at the creation-operator level. The symmetric
+    algebra is commutative, so local algebras for *any* two regions commute
+    elementwise. (The spacelike hypothesis of the Haag–Kastler axiom is
+    vacuous here — see the file header for the honest caveat.) -/
+theorem localAlgBoson_commute (O₁ O₂ : Set Minkowski)
+    (x : bosonicFock V) (_hx : x ∈ localAlgBoson V T smear supp O₁)
+    (y : bosonicFock V) (_hy : y ∈ localAlgBoson V T smear supp O₂) :
+    x * y = y * x :=
+  mul_comm x y
+
+/-- **T1:** Haag–Kastler locality, axiom-shaped (bosonic): spacelike-separated
+    regions have commuting local algebras. The hypothesis is unused — the
+    creator-level commutativity holds unconditionally. -/
+theorem haagKastler_locality_boson (O₁ O₂ : Set Minkowski)
+    (_hsep : SpacelikeSeparated O₁ O₂)
+    (x : bosonicFock V) (hx : x ∈ localAlgBoson V T smear supp O₁)
+    (y : bosonicFock V) (hy : y ∈ localAlgBoson V T smear supp O₂) :
+    x * y = y * x :=
+  localAlgBoson_commute V T smear supp O₁ O₂ x hx y hy
+
+/-!
+## Graded locality, fermionic (T1)
+-/
+
+/-- **T1:** element-level graded locality. In any ring, pair-products commute
+    when the two pairs anticommute cross-wise: the four cross-anticommutation
+    swaps give total sign `(−1)⁴ = +1`. (The within-pair relations are not
+    needed.) -/
+theorem anticomm_pair_mul_comm {A : Type*} [Ring A] {a b c d : A}
+    (hac : a * c = -(c * a)) (had : a * d = -(d * a))
+    (hbc : b * c = -(c * b)) (hbd : b * d = -(d * b)) :
+    (a * b) * (c * d) = (c * d) * (a * b) := by
+  have hda : d * a = -(a * d) := by
+    have h := congrArg Neg.neg had
+    simp only [neg_neg] at h
+    exact h.symm
+  have hdb : d * b = -(b * d) := by
+    have h := congrArg Neg.neg hbd
+    simp only [neg_neg] at h
+    exact h.symm
+  have hca : c * a = -(a * c) := by
+    have h := congrArg Neg.neg hac
+    simp only [neg_neg] at h
+    exact h.symm
+  have hcb : c * b = -(b * c) := by
+    have h := congrArg Neg.neg hbc
+    simp only [neg_neg] at h
+    exact h.symm
+  have key : (c * d) * (a * b) = -(-(((a * b) * c) * d)) := by
+    rw [mul_assoc c d (a * b), ← mul_assoc d a b, hda, neg_mul, mul_neg,
+      ← mul_assoc c (a * d) b, ← mul_assoc c a d, hca, neg_mul, neg_mul, neg_neg,
+      mul_assoc (a * c) d b, hdb, mul_neg, mul_assoc a c (b * d),
+      ← mul_assoc c b d, hcb, neg_mul, mul_neg, ← mul_assoc a (b * c) d,
+      ← mul_assoc a b c]
+  rw [key, neg_neg, ← mul_assoc (a * b) c d]
+
+/-- The commutant of an element, as a subalgebra (the lift vehicle for graded
+    locality). -/
+def commutantSub (p : fermionicFock V) : Subalgebra ℂ (fermionicFock V) where
+  carrier := {q | p * q = q * p}
+  mul_mem' := by
+    intro x y hx hy
+    have hx' : p * x = x * p := hx
+    have hy' : p * y = y * p := hy
+    show p * (x * y) = (x * y) * p
+    calc p * (x * y) = (p * x) * y := (mul_assoc p x y).symm
+      _ = (x * p) * y := by rw [hx']
+      _ = x * (p * y) := mul_assoc x p y
+      _ = x * (y * p) := by rw [hy']
+      _ = (x * y) * p := (mul_assoc x y p).symm
+  add_mem' := by
+    intro x y hx hy
+    have hx' : p * x = x * p := hx
+    have hy' : p * y = y * p := hy
+    show p * (x + y) = (x + y) * p
+    rw [mul_add, hx', hy', add_mul]
+  one_mem' := by
+    show p * 1 = 1 * p
+    rw [mul_one, one_mul]
+  zero_mem' := by
+    show p * 0 = 0 * p
+    rw [mul_zero, zero_mul]
+  algebraMap_mem' := by
+    intro r
+    show p * (algebraMap ℂ (fermionicFock V) r)
+      = (algebraMap ℂ (fermionicFock V) r) * p
+    exact Algebra.commute_algebraMap_right r p
+
+/-- A pair-product generator from region 1 commutes with the whole region-2
+    observable algebra (generator-level anticommutation, lifted by
+    `Algebra.adjoin_le`). -/
+theorem obsFermion_gen_commute (O₁ O₂ : Set Minkowski)
+    (f₁ g₁ : ↥(supp O₁)) (y : fermionicFock V)
+    (hy : y ∈ localObsFermion V T smear supp O₂) :
+    (ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (f₁ : T.carrier)) *
+      ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (g₁ : T.carrier))) * y
+      = y * (ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (f₁ : T.carrier)) *
+        ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (g₁ : T.carrier))) := by
+  have hsub : localObsFermion V T smear supp O₂
+      ≤ commutantSub V (ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (f₁ : T.carrier)) *
+        ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (g₁ : T.carrier))) := by
+    apply Algebra.adjoin_le
+    rintro z ⟨⟨f₂, g₂⟩, rfl⟩
+    show (ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (f₁ : T.carrier)) *
+        ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (g₁ : T.carrier))) * _
+      = _ * (ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (f₁ : T.carrier)) *
+        ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (g₁ : T.carrier)))
+    exact anticomm_pair_mul_comm
+      (ferm_ι_anticomm V _ _) (ferm_ι_anticomm V _ _)
+      (ferm_ι_anticomm V _ _) (ferm_ι_anticomm V _ _)
+  exact hsub hy
+
+/-- **T1:** graded locality — the even (observable) parts of fermionic local
+    algebras commute elementwise, for any two regions. The Haag–Kastler
+    locality axiom requires this for spacelike-separated regions; here it
+    holds unconditionally at the creation-operator level (the spacelike
+    hypothesis is vacuous — its physical content is the T2 `supp` marker). -/
+theorem localObsFermion_commute (O₁ O₂ : Set Minkowski)
+    (x : fermionicFock V) (hx : x ∈ localObsFermion V T smear supp O₁)
+    (y : fermionicFock V) (hy : y ∈ localObsFermion V T smear supp O₂) :
+    x * y = y * x := by
+  have hsub : localObsFermion V T smear supp O₁ ≤ commutantSub V y := by
+    apply Algebra.adjoin_le
+    rintro p ⟨⟨f₁, g₁⟩, rfl⟩
+    show y * (ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (f₁ : T.carrier)) *
+        ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (g₁ : T.carrier)))
+      = (ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (f₁ : T.carrier)) *
+        ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (g₁ : T.carrier))) * y
+    exact (obsFermion_gen_commute V T smear supp O₁ O₂ f₁ g₁ y hy).symm
+  exact (hsub hx).symm
+
+/-- **T1:** Haag–Kastler locality, axiom-shaped (fermionic observables):
+    spacelike-separated regions have commuting even local algebras. -/
+theorem haagKastler_locality_fermion (O₁ O₂ : Set Minkowski)
+    (_hsep : SpacelikeSeparated O₁ O₂)
+    (x : fermionicFock V) (hx : x ∈ localObsFermion V T smear supp O₁)
+    (y : fermionicFock V) (hy : y ∈ localObsFermion V T smear supp O₂) :
+    x * y = y * x :=
+  localObsFermion_commute V T smear supp O₁ O₂ x hx y hy
+
+/-!
+## Poincaré covariance: the geometric half (T1)
+-/
+
+/-- The Poincaré group acting on spacetime points: `(a,Λ) • x = Λx + a`.
+    T1: defined directly from the `PoincareAction.lean` group structure. -/
+def poincareActPoint (g : PoincareGroup) (x : Minkowski) : Minkowski :=
+  g.lor.toLin x + g.trans
+
+/-- **T1:** the identity acts trivially on points. -/
+theorem poincareActPoint_one (x : Minkowski) : poincareActPoint 1 x = x := by
+  simp only [poincareActPoint, PoincareGroup.one_trans, PoincareGroup.one_lor,
+    LorentzGroup.one_toLin, LinearEquiv.refl_apply, add_zero]
+
+/-- **T1:** the composition law on points. -/
+theorem poincareActPoint_mul (g₁ g₂ : PoincareGroup) (x : Minkowski) :
+    poincareActPoint (g₁ * g₂) x
+      = poincareActPoint g₁ (poincareActPoint g₂ x) := by
+  simp only [poincareActPoint, PoincareGroup.mul_trans, PoincareGroup.mul_lor,
+    LorentzGroup.mul_toLin, LinearEquiv.trans_apply, map_add]
+  abel
+
+/-- **T1:** the point action packaged as a genuine group action. -/
+instance : MulAction PoincareGroup Minkowski where
+  smul := poincareActPoint
+  one_smul := poincareActPoint_one
+  mul_smul := poincareActPoint_mul
+
+/-- **T1:** Poincaré transformations preserve spacelike separation of regions —
+    the geometric input to Haag–Kastler locality is covariant, from the Lorentz
+    invariance of the Minkowski form (`PoincareAction.lean`, T1). -/
+theorem spacelikeSeparated_poincare (g : PoincareGroup) (O₁ O₂ : Set Minkowski)
+    (h : SpacelikeSeparated O₁ O₂) :
+    SpacelikeSeparated (poincareActPoint g '' O₁)
+      (poincareActPoint g '' O₂) := by
+  rintro x ⟨x₀, hx₀, rfl⟩ y ⟨y₀, hy₀, rfl⟩
+  have hxy := h x₀ hx₀ y₀ hy₀
+  have hdiff : poincareActPoint g x₀ - poincareActPoint g y₀
+      = g.lor.toLin (x₀ - y₀) := by
+    have e : (g.lor.toLin x₀ + g.trans) - (g.lor.toLin y₀ + g.trans)
+        = g.lor.toLin x₀ - g.lor.toLin y₀ := by abel
+    simp only [poincareActPoint]
+    rw [e, ← map_sub]
+  rw [hdiff, g.lor.preserves]
+  exact hxy
+
+/-!
+## The vacuum: cyclicity for the global algebra (T1, conditional)
+-/
+
+/-- **T1:** the global bosonic algebra is everything — the algebraic vacuum
+    `1` is cyclic for the whole net. Conditional on surjective smearing and the
+    T2 marker data `supp univ = ⊤`. This is the algebraic shadow of the
+    Haag–Kastler vacuum axiom's cyclicity half; Poincaré invariance of the
+    vacuum is priced (`covariantNet_window` + `SecondQuantization_window`). -/
+theorem localAlgBoson_univ (hsurj : Function.Surjective smear)
+    (hsupp_univ : supp Set.univ = ⊤) :
+    localAlgBoson V T smear supp Set.univ = ⊤ := by
+  have hset : (Set.range fun f : ↥(supp Set.univ) =>
+        SymmetricAlgebra.ι ℂ V (smear (f : T.carrier)))
+      = Set.range (fun f : T.carrier => SymmetricAlgebra.ι ℂ V (smear f)) := by
+    rw [hsupp_univ]
+    ext y
+    constructor
+    · rintro ⟨⟨f, _⟩, rfl⟩
+      exact ⟨f, rfl⟩
+    · rintro ⟨f, rfl⟩
+      exact ⟨⟨f, Submodule.mem_top⟩, rfl⟩
+  unfold localAlgBoson
+  rw [hset]
+  exact smearedBoson_cyclic_of_surjective V T smear hsurj
+
+/-- **T1:** the global fermionic field algebra is everything (same conditions).
+    Note: the *observable* (even) algebra is not everything — odd creators are
+    missing — which is exactly as it should be. -/
+theorem localAlgFermion_univ (hsurj : Function.Surjective smear)
+    (hsupp_univ : supp Set.univ = ⊤) :
+    localAlgFermion V T smear supp Set.univ = ⊤ := by
+  have hset : (Set.range fun f : ↥(supp Set.univ) =>
+        ExteriorAlgebra.ι (R := ℂ) (M := V) (smear (f : T.carrier)))
+      = Set.range (fun f : T.carrier =>
+        ExteriorAlgebra.ι (R := ℂ) (M := V) (smear f)) := by
+    rw [hsupp_univ]
+    ext y
+    constructor
+    · rintro ⟨⟨f, _⟩, rfl⟩
+      exact ⟨f, rfl⟩
+    · rintro ⟨f, rfl⟩
+      exact ⟨⟨f, Submodule.mem_top⟩, rfl⟩
+  unfold localAlgFermion
+  rw [hset]
+  exact smearedFermion_cyclic_of_surjective V T smear hsurj
+
+/-!
+## Priced windows (T5): what the setting does not support
+-/
+
+/-- **Priced window (T5):** Poincaré covariance of the net,
+    `α_g(A(O)) = A(g·O)`.
+
+    Exact statement. `act` marks the geometric action on test functions (the
+    `poincareActLin` interface point in `PoincareAction.lean`: the formula
+    `f_{(a,Λ)}(x) = f(Λ⁻¹(x − a))` descends to Schwartz space);
+    `_hact_supp` marks covariance of the localization assignment; `alpha g`
+    marks the algebra automorphism implementing `g`.
+    PRICE — two infrastructure gaps, both absent from Mathlib (2026):
+    (i) the implementers `alpha` — the unitary Poincaré representation on the
+    completed Fock space, i.e. `OneParticleRep_window` +
+    `SecondQuantization_window` in `PoincareAction.lean` (the W0
+    Fock-inner-product gap); (ii) `act`, `hact_supp`, and `supp` itself —
+    Schwartz space with support theory. The geometric half (the point action
+    and its preservation of spacelike separation) is T1 above. -/
+def covariantNet_window
+    (act : PoincareGroup → T.carrier →ₗ[ℂ] T.carrier)
+    (_hact_supp : ∀ (g : PoincareGroup) (O : Set Minkowski),
+      supp (poincareActPoint g '' O) = Submodule.map (act g) (supp O))
+    (alpha : PoincareGroup → (bosonicFock V ≃ₐ[ℂ] bosonicFock V)) : Prop :=
+  ∀ (g : PoincareGroup) (O : Set Minkowski),
+    Subalgebra.map (alpha g) (localAlgBoson V T smear supp O)
+      = localAlgBoson V T smear supp (poincareActPoint g '' O)
+
+/-- **Priced window (T5):** the Haag–Kastler spectrum condition — translations
+    act by unitaries with joint spectrum in the closed forward light cone.
+
+    PRICE: the unitary translation representation on the completed Fock space
+    (needs `SecondQuantization_window` — the W0 gap) and the joint spectrum
+    via Stone's theorem / unbounded functional calculus (absent from Mathlib
+    2026). The cone's geometry is T1 (`forwardLightCone`,
+    `WightmanAxioms.lean`); the analytic content here is the exact shape of
+    the axiom. -/
+def spectrumCondition_window (Fock : FockMarker)
+    [NormedAddCommGroup Fock.carrier] [InnerProductSpace ℂ Fock.carrier]
+    [CompleteSpace Fock.carrier]
+    (transRep : Minkowski → (Fock.carrier ≃ₗᵢ[ℂ] Fock.carrier))
+    (spec : Set Minkowski) : Prop :=
+  (∀ a b : Minkowski, transRep (a + b) = (transRep a).trans (transRep b)) ∧
+  spec ⊆ forwardLightCone
+
+/-!
+## Priced window: the interacting net (open problem — untouched)
+
+`HaagKastlerExistence` (`HaagKastler.lean`) is NOT modified by this file: no
+interacting 4D Haag–Kastler net has ever been constructed (rungs map, Rung 3).
+The net built above is quasi-free — generated by smeared creators with the
+canonical (anti)commutation relations — hence it is not a witness to
+`HaagKastlerExistence`. This window stays priced until constructive QFT
+delivers an interacting model.
+-/
+
+#print axioms localAlgBoson_isotone
+#print axioms localAlgFermion_isotone
+#print axioms localObsFermion_isotone
+#print axioms localAlgBoson_commute
+#print axioms haagKastler_locality_boson
+#print axioms anticomm_pair_mul_comm
+#print axioms obsFermion_gen_commute
+#print axioms localObsFermion_commute
+#print axioms haagKastler_locality_fermion
+#print axioms poincareActPoint_one
+#print axioms poincareActPoint_mul
+#print axioms spacelikeSeparated_poincare
+#print axioms localAlgBoson_univ
+#print axioms localAlgFermion_univ
+
+end ThetLogos
