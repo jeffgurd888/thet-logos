@@ -12,3 +12,4 @@ import ThetLogos.Chromatic
 import ThetLogos.BlockedQuestions
 import ThetLogos.ThreeGen
 import ThetLogos.Mod9Triad
+import ThetLogos.TritGrading

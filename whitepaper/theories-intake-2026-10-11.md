@@ -103,6 +103,54 @@ coordinator completed the bridge: §§3–5.)
 **NO-FIT (recorded):** quantum Yang-Mills mass gap — quarantined T5
 (`MassGapDossier`); no quantization, no continuum, no gap claimed or touched.
 
+## Candidate 6 — Morley-miracle edge signature: PROMISING with one precise kill (2026-10-11)
+
+Jeff's hypothesis: a 4D boundary carrying two 2D edge operators generates
+the 3+1 split — Lorentzian signature emergent from boundary/edge data, with
+the torsion twist in the D_F projection carried (never assumed away);
+inspired by Morley's miracle ("the perfect triangle inside any triangle
+from the projection"). Gentle gauntlet requested (steelman first).
+Full verdict: `whitepaper/gauntlet-morley-3plus1-2026-10-11.md`.
+
+**File:** `lean/ThetLogos/EdgeSignature.lean` (commit `8eac400`).
+Build green, 21 theorems, zero sorrys, zero new axioms; `#print axioms`
+confirms only `[propext, Classical.choice, Quot.sound]` throughout.
+
+**FIT (PROMISING) — edge-pair ⟺ fundamental symmetry (Morley core, T1):**
+the "two 2D edge operators" as a complementary orthogonal idempotent pair
+`(E₊, E₋)` — the abstract self-dual/anti-self-dual decomposition — and the
+"4D boundary signature data" as a fundamental symmetry `η` with `η² = 1`
+(the Krein structure's algebraic core, Rung 3). Perfection (idempotence,
+orthogonality, complementarity) is FORCED by `η² = 1` alone, for arbitrary
+`η` — the genuine "arbitrary input → perfect structure" pattern
+(`edgePair_of_symm`, `symm_of_edgePair`).
+
+**FIT (PROMISING) — flip-twist equivariance (T1):** the doubled edge
+decomposition is flip-invariant — the Rung-2 twist preserves the perfection.
+
+**FIT (PROMISING) — torsion as exact defect (T1):**
+`(η+T)² = 1 + (ηT + Tη + T²)` exactly (`torsion_defect`); fluctuated edges
+miss idempotence by exactly `(2⁻¹)² • (ηT + Tη + T²)`; perfection survives
+torsion iff `ηT + Tη + T² = 0` (Maurer–Cartan-type flatness). The killed
+ℂ⁷-torsion claim is NOT resurrected.
+
+**NO-GO (recorded) — strong emergence, by T1 counterexample:**
+`signature_not_determined` — `(1,1)` and `(1,−1)` on `ℂ × ℂ` both square
+to 1, but one's minus-edge vanishes (signature (2,0)) and the other's
+doesn't (signature (1,1)). The signature *numbers* do not emerge from the
+edge data; they are extra input. The mechanism (edge operators encode
+signature via the fundamental symmetry) is real; the strong claim is dead,
+and its death is itself a T1 theorem.
+
+**Morley analogy: NEEDS-WORK** — real formal content at the algebraic level;
+the "miracle" grading (maximal symmetry from no symmetry) stays philosophy.
+
+**Priced windows:** D_F-specific torsion map (η built from Dirac data, defect
+under inner fluctuations `D ↦ D_A`); the dimensional reading — "two 2D"
+suggests neutral (2,2), not (3,1): what breaks it to (3,1); twisted-FOC
+integration of the flatness condition; a boundary spectral triple as the
+honest home for the "4D boundary".
+
 ## Intake queue (next candidates to test)
 
 - BRST / anomalies (fit test against the gauge/fluctuation structure).
