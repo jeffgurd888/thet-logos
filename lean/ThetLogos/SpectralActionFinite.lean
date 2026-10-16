@@ -939,8 +939,9 @@ theorem tr_DF_fourth_yukawa (yNu yE yU yD yR : ℂ) :
           + 2 * Complex.normSq yNu * Complex.normSq yR
           + (Complex.normSq yR)^2 : ℝ) : ℂ) := by
     simp_rw [hA, hE, conjTranspose_diagonal, Matrix.diagonal_mul_diagonal,
-      diagonal_add_eq, Matrix.trace_diagonal, Fin.sum_univ_eight]
-    simp_rw [star_mul_eq_normSq, mul_star_eq_normSq]
+      diagonal_add_eq, Matrix.diagonal_mul_diagonal, Matrix.trace_diagonal,
+      Fin.sum_univ_eight]
+    simp_rw [star_mul_eq_normSq]
     simp
     push_cast
     ring
@@ -987,11 +988,11 @@ theorem tr_DF_fourth_yukawa (yNu yE yU yD yR : ℂ) :
     simp_rw [conjTranspose_diagonal, starRingEnd_apply, star_star,
       Matrix.diagonal_mul_diagonal, Matrix.trace_diagonal]
     have hsum : (∑ i : Fin 8,
-        (((starRingEnd ℂ ((![yNu, yE, yU, yD, yU, yD, yU, yD] : Fin 8 → ℂ) i))
+        (((star ((![yNu, yE, yU, yD, yU, yD, yU, yD] : Fin 8 → ℂ) i))
             * (if i.val = 0 then yR else 0))
           * ((star (if i.val = 0 then yR else 0))
             * ((![yNu, yE, yU, yD, yU, yD, yU, yD] : Fin 8 → ℂ) i))))
-        = (((starRingEnd ℂ ((![yNu, yE, yU, yD, yU, yD, yU, yD] : Fin 8 → ℂ) 0))
+        = (((star ((![yNu, yE, yU, yD, yU, yD, yU, yD] : Fin 8 → ℂ) 0))
             * (if (0 : Fin 8).val = 0 then yR else 0))
           * ((star (if (0 : Fin 8).val = 0 then yR else 0))
             * ((![yNu, yE, yU, yD, yU, yD, yU, yD] : Fin 8 → ℂ) 0))) := by
@@ -1021,7 +1022,7 @@ theorem tr_DF_fourth_yukawa (yNu yE yU yD yR : ℂ) :
     rw [hA, hmap]
     simp_rw [conjTranspose_diagonal, starRingEnd_apply, star_star,
       Matrix.diagonal_mul_diagonal, Matrix.trace_diagonal, Fin.sum_univ_eight]
-    simp_rw [starRingEnd_apply, mul_star_eq_normSq, normSq_starRingEnd]
+    simp_rw [star_mul_eq_normSq]
     push_cast
     ring
   -- Block (3,0): Tr((E·Aᴴ)·(A·Eᴴ)) = |yNu|²·|yR|²
@@ -1071,8 +1072,8 @@ theorem tr_DF_fourth_yukawa (yNu yE yU yD yR : ℂ) :
     rw [hA, hmap, hE]
     simp_rw [conjTranspose_diagonal, starRingEnd_apply, star_star,
       Matrix.diagonal_mul_diagonal, diagonal_add_eq,
-      Matrix.trace_diagonal, Fin.sum_univ_eight]
-    simp_rw [mul_star_eq_normSq, star_mul_eq_normSq, normSq_starRingEnd]
+      Matrix.diagonal_mul_diagonal, Matrix.trace_diagonal, Fin.sum_univ_eight]
+    simp_rw [mul_star_eq_normSq]
     simp
     push_cast
     ring

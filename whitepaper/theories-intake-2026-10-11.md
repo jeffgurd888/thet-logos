@@ -36,6 +36,29 @@ Build green, zero sorrys, zero new axioms; all headline footprints
 
 No physical predictions claimed; coefficients are model properties.
 
+**Repair note (2026-10-15) — FIT verdict SUSPENDED, then RESTORED.** The
+2026-10-15 paper-rebuild audit found `SpectralActionFinite.lean` BUILD-RED:
+4 proof errors in `tr_DF_fourth_yukawa` (blocks e3, e5, e6, e8), all from
+Mathlib/Lean drift since the 2026-10-11 verification — current `simp_rw`
+processes its lemmas strictly in sequence and errors on any that makes no
+progress, where the October pipeline reached a joint fixpoint. Repairs
+(proof-local only; no statement changed, no sorry/admit/axiom added):
+(i) e3/e8 — after the local `diagonal_add_eq` merges two diagonals, the
+product of the merged diagonals must be reduced before `Matrix.trace_diagonal`
+gets its turn: re-apply `Matrix.diagonal_mul_diagonal` after
+`diagonal_add_eq` in the chain; (ii) e5 — the local `hsum` was stated with
+`(starRingEnd ℂ) ·` where the pipeline now produces `star ·`; restated to
+match (`starRingEnd_apply` is `rfl`, so the asserted equation is identical);
+(iii) e3/e6/e8 — simp lemmas whose patterns no longer occur at that point
+(`starRingEnd_apply`, `normSq_starRingEnd`, and the dead one of
+`mul_star_eq_normSq`/`star_mul_eq_normSq` per block) trimmed to the single
+live lemma per site. Re-verified 2026-10-15: `SpectralActionFinite` and
+`SpectralActionBridge` build green; root `lake build` green (3325 jobs);
+`#print axioms` on the headline theorems (`finite_heat_trace_even`,
+`tr_DF_sq_yukawa`, `tr_fluctuated_sq`, `tr_DF_fourth_yukawa`, …) unchanged —
+exactly `[propext, Classical.choice, Quot.sound]`, no `sorryAx`.
+**The spectral-action FIT verdict stands restored.**
+
 ---
 
 ## Pending
@@ -115,6 +138,14 @@ Full verdict: `whitepaper/gauntlet-morley-3plus1-2026-10-11.md`.
 **File:** `lean/ThetLogos/EdgeSignature.lean` (commit `8eac400`).
 Build green, 21 theorems, zero sorrys, zero new axioms; `#print axioms`
 confirms only `[propext, Classical.choice, Quot.sound]` throughout.
+**Re-verification attempted 2026-10-15 — INCOMPLETE.** Standalone
+`lake build ThetLogos.EdgeSignature` exceeded both a 1200 s and a 1500 s
+budget on this VM, with no errors emitted in either attempt and no olean
+produced. (The module imports all of Mathlib, making it the repo's most
+expensive standalone check, and the VM was shared with other build jobs
+throughout.) The file's green status therefore remains its 2026-10-11
+record above; the paper-rebuild audit's open item stays open pending a
+longer build window. Verdict unchanged.
 
 **FIT (PROMISING) — edge-pair ⟺ fundamental symmetry (Morley core, T1):**
 the "two 2D edge operators" as a complementary orthogonal idempotent pair
