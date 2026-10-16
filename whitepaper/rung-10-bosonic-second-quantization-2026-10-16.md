@@ -2,6 +2,8 @@
 
 **Verdict: Task 1 STANDS · Task 2 STANDS · Task 3 PARTIAL.**
 
+**Completion addendum (2026-10-16, later the same day): Task 3 is CLOSED.** The Γ(U) functor campaign proved both priced obstructions — the fiber-permanent counting lemma and the permanent Cauchy–Binet identity for repeated indices — with their consequences (Γ(1) = 1, the diagonal action, multiplicativity, the unitarity package): `lean/ThetLogos/BosonicGammaFunctor.lean`, 1,161 lines, 42 T1 theorems + 8 definitions, zero sorrys, targeted build green (2,455 jobs), headline axiom checks exactly `[propext, Classical.choice, Quot.sound]`. **Rung 10 now STANDS whole.** Full record: `whitepaper/gamma-functor-campaign-2026-10-16.md`. The PARTIAL verdict below stands as the historical record of the rung's first landing.
+
 Two new modules, `BosonicFock.lean` / `BosonicAssembly.lean` unmodified,
 `satisfiesDestruction` untouched:
 
