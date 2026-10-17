@@ -1,5 +1,10 @@
 # thet-logos — Active Cartesian Modular Dynamics (ACMD)
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Paper v2 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23427964.svg)](https://doi.org/10.5281/zenodo.23427964)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C080-blue)
+![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
+
 **Machine-verified foundations for quantum field theory, in Lean 4.**
 
 An independent research program (Nexus Research) building rigorous
@@ -57,9 +62,28 @@ headline results additionally checked with `#print axioms` (only
 - **Bridge exhibit** — finite graph bridge algebra: L = dᵀσd,
   Kirchhoff's laws, the Fiedler variational bound
   ([dossier](whitepaper/bridge-laplacian-2026-10-17.md)).
-- **Pitch 4 is scoped, not built** — the continuum passage, staged and
-  priced, finite lattice gauge theory first
+- **Pitch 4, Stage 0 in progress** — finite lattice gauge theory
+  (the continuum passage is scoped and priced, Stage 0 first)
   ([scoping](whitepaper/pitch-4-continuum-scoping-DRAFT-2026-10-17.md)).
+
+**Foundational results**
+
+- **22-direction classification of the order-one commutant W₂₂** —
+  `cf_kernel_classification_46_22`, zero `sorry`s, unconditional: the
+  order-one constraint system admits exactly a 22-dimensional real
+  solution space (10 SM + 12 exotic directions; the exotic directions
+  are explicit non-claims). `lean/ThetLogos/CFKernel22.lean`.
+- **Order-zero for all 144 generator pairs** — machine-checked, zero
+  `sorry`s. `lean/ThetLogos/MartinettiRep.lean`.
+
+**Background algebra (all T1)** — Weld duality (the boundary pair
+algebra: idempotents, trace rigidity, resting-place theorems;
+[dossier](whitepaper/weld-duality-2026-10-16.md)) · FluxTwist
+(flux-twisted ring spectrum) · TritGrading (ℤ₃ grading) ·
+SexagesimalClock (mod-60 CRT grading). Theories intake, Round 1:
+KMS/Tomita–Takesaki and classical Yang–Mills FIT at the finite level;
+continuum claims NO-FIT, on record
+([dossier](whitepaper/theories-intake-2026-10-11.md)).
 
 ## Not claimed
 
