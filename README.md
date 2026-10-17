@@ -5,6 +5,11 @@
 ![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C216-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
+> "If we don't stop worrying about the Almighty dollar, we'd never
+> gonna change the world!"
+> — Caleb Gurd, as remembered by his father. The standard this
+> program answers to at home.
+
 **Machine-verified foundations for quantum field theory, in Lean 4.**
 
 An independent research program (Nexus Research) building rigorous
