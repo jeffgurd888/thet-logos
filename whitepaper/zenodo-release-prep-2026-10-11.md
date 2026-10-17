@@ -31,3 +31,7 @@
 2. Regenerate the PDF without the DRAFT banner.
 3. Upload via Zenodo web (Jeff's login) or API; publish; capture DOI.
 4. Insert DOI into the LinkedIn reveal post; post on Jeff's approval.
+
+## Deposit record (updated 2026-10-16)
+- Version 1: published 2026-10-16, DOI 10.5281/zenodo.23408680 (record 23408680); all-versions DOI 10.5281/zenodo.23408679.
+- Version 2: published 2026-10-16, DOI 10.5281/zenodo.23427964 (record https://zenodo.org/records/23427964). Adds Rungs 8B/9/10 + Appendix A; program total 1,648. Files: acmd-machine-verified-foundations-v2.pdf (136.5 kB, md5 68b8343b6a354495cba51a64a2bfdcfb) + acmd-machine-verified-foundations-v2-2026-10-16.md (62.7 kB, md5 5f29995ed7d1c1d1428f8621000c7588) — deposited bytes md5-verified identical to local finals. Paper source committed publicly (commit c32b61f).
