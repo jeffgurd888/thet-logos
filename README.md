@@ -5,8 +5,8 @@
 ![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C216-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
-> "If we don't stop worrying about the Almighty dollar, we'd never
-> gonna change the world!"
+> "If we don't stop worrying about the Almighty dollar, we're not
+> going to change the world!"
 > — Caleb Gurd, as remembered by his father. The standard this
 > program answers to at home.
 
