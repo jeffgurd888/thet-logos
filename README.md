@@ -18,7 +18,7 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**2,369 verified theorem declarations**\*
+**2,427 verified theorem declarations**\*
 across 98 Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
@@ -112,6 +112,15 @@ cite the originators first.
   positivity clause: the clauses that would need it are stated
   conditionally on it, by name
   ([dossier](whitepaper/pitch-4-stage-1b-c-2026-10-17.md)).
+- **Pitch 4, Stage 1b-D** — **the transfer matrix STANDS**: the
+  one-step transfer operator on the Stage 1b-C space at every
+  coupling — a contraction (norm ≤ 1), vacuum-fixing, self-adjoint
+  at even extent, nonnegative on nonnegative observables. At zero
+  coupling it is *exactly* the vacuum projection, so **the β = 0
+  lattice gap is exactly 1**. The general-coupling gap is fenced
+  (spectral input priced M–L); nothing in this stage routes
+  through Stage 1b-B's open clause
+  ([dossier](whitepaper/pitch-4-stage-1b-d-2026-10-17.md)).
 
 **Foundational results**
 
