@@ -18,7 +18,7 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**2,283 verified theorem declarations**\*
+**2,327 verified theorem declarations**\*
 across 98 Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
@@ -91,9 +91,18 @@ cite the originators first.
 - **Pitch 4, Stage 1b-A** — **reflection structure STANDS**: the
   torus reflection built, its fixed link stratum characterized, the
   Gibbs measure proved reflection-invariant, and the Wilson action
-  split S = S₊ + S₋ + S₀ across the reflection (positivity itself is
-  Stage 1b-B, in progress)
+  split S = S₊ + S₋ + S₀ across the reflection
   ([dossier](whitepaper/pitch-4-stage-1b-a-2026-10-17.md)).
+- **Pitch 4, Stage 1b-B** — **reflection positivity: PARTIAL**: the
+  Osterwalder–Schrader form is built in full (conjugate symmetry,
+  sesquilinearity, exact kernel factorization), positivity is
+  **proved at zero coupling**, and a Gram (sum-of-squares) criterion
+  reduces positivity at general coupling to one named lemma — the
+  character-expansion factorization of the Wilson weight, whose
+  standard proof needs Peter–Weyl orthogonality that the pinned
+  Mathlib does not yet contain (priced XL, library-blocked; the
+  theorem itself is classical and not in doubt)
+  ([dossier](whitepaper/pitch-4-stage-1b-b-2026-10-17.md)).
 
 **Foundational results**
 
