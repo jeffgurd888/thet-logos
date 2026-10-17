@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v2 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23427964.svg)](https://doi.org/10.5281/zenodo.23427964)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C216-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C283-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -18,7 +18,7 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**2,216 verified theorem declarations**\*
+**2,283 verified theorem declarations**\*
 across 98 Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
@@ -88,6 +88,12 @@ cite the originators first.
   **Elitzur's theorem**: gauge-variant insertions have expectation
   zero at every coupling, for a general gauge group
   ([dossier](whitepaper/pitch-4-stage-1a-2026-10-17.md)).
+- **Pitch 4, Stage 1b-A** — **reflection structure STANDS**: the
+  torus reflection built, its fixed link stratum characterized, the
+  Gibbs measure proved reflection-invariant, and the Wilson action
+  split S = S₊ + S₋ + S₀ across the reflection (positivity itself is
+  Stage 1b-B, in progress)
+  ([dossier](whitepaper/pitch-4-stage-1b-a-2026-10-17.md)).
 
 **Foundational results**
 
