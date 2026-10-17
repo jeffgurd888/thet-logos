@@ -22,6 +22,15 @@ the program's counted modules, each verified by targeted `lake build`;
 headline results additionally checked with `#print axioms` (only
 `propext`, `Classical.choice`, `Quot.sound`).*
 
+## Credit
+
+This program formalizes; it did not originate the ideas, the
+problems, or most of the mathematics it verifies. The staircase is
+named in [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) — Dirac, Connes,
+Tomita–Takesaki, Wightman, Osterwalder–Schrader, Wilson, and the
+Lean/Mathlib community among them. If this corpus is ever cited,
+cite the originators first.
+
 ## The paper
 
 **Active Cartesian Modular Dynamics: Machine-Verified Foundations**
