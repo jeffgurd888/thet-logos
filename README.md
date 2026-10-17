@@ -18,7 +18,7 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**2,327 verified theorem declarations**\*
+**2,369 verified theorem declarations**\*
 across 98 Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
@@ -103,6 +103,15 @@ cite the originators first.
   Mathlib does not yet contain (priced XL, library-blocked; the
   theorem itself is classical and not in doubt)
   ([dossier](whitepaper/pitch-4-stage-1b-b-2026-10-17.md)).
+- **Pitch 4, Stage 1b-C** — **the OS Hilbert space STANDS**: built
+  by the time-slice L² route — the L² space of the Gibbs marginal
+  measure on a time slice, at every coupling, with the vacuum vector
+  (norm 1), vacuum expectation identified with the Gibbs
+  expectation, and bounded slice observables acting as multiplication
+  operators with adjoints by conjugation. No appeal to the open
+  positivity clause: the clauses that would need it are stated
+  conditionally on it, by name
+  ([dossier](whitepaper/pitch-4-stage-1b-c-2026-10-17.md)).
 
 **Foundational results**
 
