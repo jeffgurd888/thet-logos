@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v2 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23427964.svg)](https://doi.org/10.5281/zenodo.23427964)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C080-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C148-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 **Machine-verified foundations for quantum field theory, in Lean 4.**
@@ -13,7 +13,7 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**2,080 verified theorem declarations**\*
+**2,148 verified theorem declarations**\*
 across 98 Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
@@ -62,9 +62,13 @@ headline results additionally checked with `#print axioms` (only
 - **Bridge exhibit** — finite graph bridge algebra: L = dᵀσd,
   Kirchhoff's laws, the Fiedler variational bound
   ([dossier](whitepaper/bridge-laplacian-2026-10-17.md)).
-- **Pitch 4, Stage 0 in progress** — finite lattice gauge theory
-  (the continuum passage is scoped and priced, Stage 0 first)
-  ([scoping](whitepaper/pitch-4-continuum-scoping-DRAFT-2026-10-17.md)).
+- **Pitch 4, Stage 0** — **finite lattice gauge theory STANDS**:
+  group-valued links, Wilson action, product-Haar measure, and
+  **exact gauge invariance proved for every gauge transformation** —
+  the corpus's first quantized gauge sector (finite lattice only;
+  reflection positivity is Stage 1b, priced)
+  ([dossier](whitepaper/pitch-4-stage-0-2026-10-17.md),
+  [scoping](whitepaper/pitch-4-continuum-scoping-DRAFT-2026-10-17.md)).
 
 **Foundational results**
 
