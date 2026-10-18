@@ -555,4 +555,99 @@ theorem gibbs_flux_vanishing {N : ℕ} (D : Matrix (Fin N) (Fin N) ℂ)
     modularFlux ((β : ℂ) • D ^ 2) D = 0 :=
   thermal_flux_vanishes D β
 
+-- ============================================================================
+-- §7. The scalar-shift lemma, matrix level (housekeeping brick, 2026-10-18)
+-- ============================================================================
+
+/-- **Scalar shifts are invisible to the commutator** (Tier T1 — proved):
+    for every generator K, observable A, and scalar c,
+    `[K + c • I, A] = [K, A]`. The scalar part of a generator commutes
+    with everything, so it drops out of every commutator — in
+    particular out of the modular flux. This is the algebraic heart of
+    the matrix-level scalar-shift lemma (the named leftover of
+    `whitepaper/thermal-clock-2026-10-17.md` §4). -/
+theorem commutator_add_smul_one {N : ℕ} (K A : Matrix (Fin N) (Fin N) ℂ)
+    (c : ℂ) :
+    (K + c • 1) * A - A * (K + c • 1) = K * A - A * K := by
+  have h1 : (c • (1 : Matrix (Fin N) (Fin N) ℂ)) * A = c • A := by
+    rw [Matrix.smul_mul, Matrix.one_mul]
+  have h2 : A * (c • (1 : Matrix (Fin N) (Fin N) ℂ)) = c • A := by
+    rw [Matrix.mul_smul, Matrix.mul_one]
+  rw [add_mul, mul_add, h1, h2, add_sub_add_comm, sub_self, add_zero]
+
+/-- **Scalar shifts are invisible to the modular flux** (Tier T1 —
+    proved): `modularFlux (K + c • I) D = modularFlux K D`, since the
+    flux is `I • [K, D]` and the commutator does not see the shift. -/
+theorem modularFlux_add_smul_one {N : ℕ} (K D : Matrix (Fin N) (Fin N) ℂ)
+    (c : ℂ) :
+    modularFlux (K + c • 1) D = modularFlux K D := by
+  unfold modularFlux
+  rw [commutator_add_smul_one]
+
+/-- **THE SCALAR-SHIFT LEMMA, matrix level** (Tier T1 — proved): adding
+    a scalar multiple of the identity to the generator does not change
+    the modular flow: `modularFlow (K + c • I) s = modularFlow K s` for
+    every time s and every observable. Route (as priced in the
+    dossier): the exponential of the shifted generator splits by
+    `Matrix.exp_add_of_commute` into the exponential of the unshifted
+    generator times a scalar exponential, and the two scalar factors
+    cancel in the conjugation. This is the standalone matrix-level
+    statement whose eigenbasis shadow is `gibbs_K_eigenvalue_diff` /
+    `diagFlow_gibbs_logZ_independent`. -/
+theorem modularFlow_add_smul_one {N : ℕ} (K : Matrix (Fin N) (Fin N) ℂ)
+    (c : ℂ) (s : ℝ) (B : Matrix (Fin N) (Fin N) ℂ) :
+    modularFlow (K + c • 1) s B = modularFlow K s B := by
+  have hPi : ∀ a : ℂ, NormedSpace.exp (fun _ : Fin N => a)
+      = fun _ => NormedSpace.exp a := by
+    intro a
+    funext i
+    have h1 : ∀ x : Fin N → ℂ, (NormedSpace.exp x) i
+        = ∑' (n : ℕ), ((Nat.factorial n : ℂ))⁻¹ • (x ^ n) i := by
+      intro x
+      rw [NormedSpace.exp_eq_tsum (𝕂 := ℂ) (𝔸 := Fin N → ℂ)]
+      exact Pi.tsum_apply (NormedSpace.expSeries_summable' x)
+    rw [h1]
+    simp only [Pi.pow_apply]
+    exact (congrFun (NormedSpace.exp_eq_tsum (𝕂 := ℂ) (𝔸 := ℂ)) a).symm
+  have hscalar : ∀ a : ℂ,
+      NormedSpace.exp (a • (1 : Matrix (Fin N) (Fin N) ℂ))
+        = (NormedSpace.exp a) • 1 := by
+    intro a
+    rw [Matrix.smul_one_eq_diagonal, Matrix.exp_diagonal, hPi,
+      ← Matrix.smul_one_eq_diagonal]
+  have hexp : ∀ z : ℂ, NormedSpace.exp (z • (K + c • 1))
+      = (NormedSpace.exp (z * c)) • NormedSpace.exp (z • K) := by
+    intro z
+    have h1 : z • (K + c • 1)
+        = z • K + (z * c) • (1 : Matrix (Fin N) (Fin N) ℂ) := by
+      rw [smul_add, smul_smul]
+    have hcomm : Commute (z • K)
+        ((z * c) • (1 : Matrix (Fin N) (Fin N) ℂ)) :=
+      ((Commute.one_right K).smul_left z).smul_right (z * c)
+    rw [h1, Matrix.exp_add_of_commute _ _ hcomm, hscalar, Matrix.mul_smul,
+      Matrix.mul_one]
+  have hprod : NormedSpace.exp ((-(Complex.I * (s : ℂ))) * c)
+      * NormedSpace.exp ((Complex.I * (s : ℂ)) * c) = 1 := by
+    rw [← NormedSpace.exp_add_of_commute (Commute.all _ _), neg_mul,
+      neg_add_cancel, NormedSpace.exp_zero]
+  unfold modularFlow
+  rw [hexp, hexp, Matrix.smul_mul, Matrix.mul_smul, Matrix.smul_mul,
+    smul_smul, hprod, one_smul]
+
+/-- **The conversion theorem with the full Gibbs generator**
+    (Tier T1 — proved): the Gibbs state's own modular Hamiltonian is
+    `−ln ρ_{β,K} = β • K + (ln Z) • I` (see the `GibbsClock`
+    docstring); by the scalar-shift lemma its scalar part is
+    invisible, so the conversion `gibbs_conversion` holds for the
+    FULL generator, not only for its non-scalar part β • K:
+    flowing with `β • K + logZ • I` for thermal time s is flowing
+    with the laboratory Hamiltonian K for physical time β·s. -/
+theorem gibbs_conversion_full_generator {N : ℕ}
+    (K : Matrix (Fin N) (Fin N) ℂ) (β : ℝ) (logZ : ℂ) (s : ℝ)
+    (B : Matrix (Fin N) (Fin N) ℂ) :
+    modularFlow ((β : ℂ) • K + logZ • 1) s B
+      = modularFlow K (β * s) B := by
+  rw [modularFlow_add_smul_one]
+  exact gibbs_conversion K β s B
+
 end ThetLogos

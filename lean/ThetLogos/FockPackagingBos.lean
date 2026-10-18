@@ -52,10 +52,12 @@ matrices to the concrete `ℕ`-indexed ONB `shellONB m hm`:
 * **Lorentz strong continuity is NOT part of this brick.** Only the
   translation subgroup's strong continuity is transported; the
   Lorentz half remains its own priced line item.
-* The fermionic half lives in `FockPackagingFerm.lean`: the two
-  statistic stacks cannot be co-imported in one module
-  (`numberOp`/`numberOp_basis` collide between `FermionicFock` and
-  `BosonicAssembly`).
+* The fermionic half lives in `FockPackagingFerm.lean`. (Historical
+  note: at packaging time the two statistic stacks could not be
+  co-imported in one module — `numberOp`/`numberOp_basis` collided
+  between `FermionicFock` and `BosonicAssembly`. That fence was
+  discharged 2026-10-18; see `FockCoImport.lean` and the
+  packaging-rename dossier.)
 * T1 throughout: free theory, no interaction, no continuum limit, no
   Yang–Mills claim.
 -/

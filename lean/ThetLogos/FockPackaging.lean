@@ -9,10 +9,15 @@ product on `SymmetricAlgebra ℂ V` satisfying the permanent formula) and
 is NOT revived anywhere in this campaign.
 
 This module is the fence-neutral shell side, imported by both statistic
-modules (`FockPackagingBos`, `FockPackagingFerm`), which cannot be
-co-imported with each other (`numberOp`/`numberOp_basis` collide between
-`FermionicFock` and `BosonicAssembly` — a standing corpus fence; the
-rename is priced S and is not in this brick's scope).
+modules (`FockPackagingBos`, `FockPackagingFerm`). At packaging time
+the two could not be co-imported with each other
+(`numberOp`/`numberOp_basis` collided between `FermionicFock` and
+`BosonicAssembly`); that fence is HISTORICAL — discharged 2026-10-18
+by the `numberOpBos` rename, and the packaging-level helper
+collisions by the six-name packaging rename (dossiers
+`whitepaper/numberop-rename-2026-10-18.md` and
+`whitepaper/packaging-rename-2026-10-18.md`). `FockCoImport.lean`
+now imports both statistic modules in one environment.
 
 CONTENTS.
 * Step (i) (gauntlet price S, mechanical): the one-particle action

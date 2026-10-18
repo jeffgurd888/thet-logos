@@ -10,10 +10,11 @@ Proved:
 - `tr_fluctuated_sq`: `Tr((fluctuatedDirac D_F A)^2)`, symbolic in `A`.
 - `fluctuatedDirac_zero`, `tr_fluctuated_sq_zero`: K4 (A=0 reduction).
 - D²-block q-lemmas (`pow2_buildDirac_blk_00` … `pow2_buildDirac_blk_33`, C=0):
-  infrastructure for the fourth power (stretch, not completed).
+  infrastructure for the fourth power.
+- `tr_DF_fourth_yukawa`: `Tr((smDirac …)^4)` as a Yukawa polynomial
+  (K4a; proved below via `trace_buildDirac_fourth`).
 
 Open (stretch):
-- `tr_DF_fourth_yukawa`: `Tr((smDirac …)^4)` as a Yukawa polynomial.
 - `tr_fluctuated_fourth`: `Tr((fluctuatedDirac D_F A)^4)`, symbolic in `A`.
 -/
 import ThetLogos.InnerFluctuations
@@ -628,10 +629,11 @@ theorem pow2_buildDirac_blk_33 (A B E : Block8) (a₁ a₂ : Fin 8) :
 
 /- The 8 nonzero D²-block q-lemmas above (`pow2_buildDirac_blk_00` through
     `pow2_buildDirac_blk_33`) provide the infrastructure for `Tr(D⁴)`.
-    The full `tr_DF_fourth_yukawa` (Yukawa polynomial for the fourth power)
-    and `tr_fluctuated_fourth` remain open: they require a
-    `trace_buildDirac_fourth` block-expansion lemma (16 terms, 8 nonzero)
-    analogous to `trace_buildDirac_sq`, which is mechanical but lengthy.
+    `tr_DF_fourth_yukawa` (Yukawa polynomial for the fourth power) is
+    proved below via the `trace_buildDirac_fourth` block-expansion lemma
+    (16 terms, 8 nonzero) analogous to `trace_buildDirac_sq`; only
+    `tr_fluctuated_fourth` remains open. (An earlier form of this
+    comment listed both as open; corrected 2026-10-18.)
     Numerical verification (2026-09-30): `Tr(D⁴) = 4(|yNu|⁴+|yE|⁴+3|yU|⁴+3|yD|⁴)
     + 8|yNu|²|yR|² + 2|yR|⁴` (5 random trials, err ≤ 1.2e-13). -/
 

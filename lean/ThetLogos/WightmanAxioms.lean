@@ -19,9 +19,16 @@ each analytic component as a labeled opaque field, plus the open existence
 problem for interacting theories.
 
 **What this file is NOT.** A construction of any QFT, or progress toward one.
-Mathlib (2026) has no Schwartz distribution theory, no operator-valued
-distributions, no Poincaré representation theory adequate for quantum fields —
-those dependencies are logged below, not wished away. Per the rungs map's
+Correction (2026-10-18): this header originally asserted that Mathlib
+(2026) has no Schwartz distribution theory. That premise is FALSE for
+the pinned Mathlib v4.35.0-rc3, which ships tempered distributions
+`𝓢′` with Fourier theory; the axioms are therefore re-pinned on
+genuine `𝓢′` in `ThetLogos.WightmanRepin` (OS side:
+`ThetLogos.OSRepin`), and this file stands as the historical
+opaque-field pin. What Mathlib still does not ship is an
+operator-valued distribution theory or a Poincaré representation
+theory adequate for quantum fields — those dependencies are logged
+below, not wished away. Per the rungs map's
 caution: a Lean file *named* after a theorem proves nothing until the
 statement is checked; this file claims only the statement.
 

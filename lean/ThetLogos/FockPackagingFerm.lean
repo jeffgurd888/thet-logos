@@ -11,13 +11,15 @@ and is not used).
 
 This module is the fermionic half of the packaging; the bosonic
 half is `ThetLogos.FockPackagingBos`. The two statistics live in
-separate modules under one dossier because the corpus's two
-second-quantization stacks cannot be co-imported in one
-environment (`numberOp`/`numberOp_basis` collide between
-`FermionicFock` and `BosonicAssembly`); neither stack is imported
-here — this module imports only `ThetLogos.FockPackaging` (the
-one-particle shell representation) and `ThetLogos.FermionicLimitOps`
-(the fermionic limit stack).
+separate modules under one dossier: at packaging time the corpus's
+two second-quantization stacks could not be co-imported in one
+environment (`numberOp`/`numberOp_basis` collided between
+`FermionicFock` and `BosonicAssembly`) — that fence is HISTORICAL,
+discharged 2026-10-18 (see the header note in
+`ThetLogos.FockPackaging` and the packaging-rename dossier);
+neither stack is imported here — this module imports only
+`ThetLogos.FockPackaging` (the one-particle shell representation)
+and `ThetLogos.FermionicLimitOps` (the fermionic limit stack).
 
 Route (concrete ONB port). The one-particle side is the corpus's
 mass-shell representation `shellU1` on `shellLp m hm`, with the
@@ -261,8 +263,9 @@ theorem gammaKernelFermLim_symm (m : ℝ) (hm : 0 < m)
 /-! ## §F3. Entry Gram limits, the determinant bound, B0F
 
 The three generic exhaustion helpers below are statistic-free;
-they are re-proved here because the bosonic module that owns
-them cannot be co-imported with this one (see the header). -/
+they were re-proved here because, at packaging time, the bosonic
+module that owns them could not be co-imported with this one (see
+the header; that fence was discharged 2026-10-18). -/
 
 /-- Finite sets are absorbed by a monotone exhaustion (T1). -/
 theorem exists_forall_mem_of_monotone {α : Type*} (s : ℕ → Finset α)

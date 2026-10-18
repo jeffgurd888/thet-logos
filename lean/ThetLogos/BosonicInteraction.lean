@@ -40,11 +40,16 @@ not imported — the two Fock parents cannot share an environment):
   by the finite-dimensional spectral theorem (`hamIntBosSector_spectral`);
   (ii) as a partial linear map — `hamPMap` is densely defined and a formal
   adjoint of itself, i.e. `hamPMap ≤ hamPMap†`. Essential self-adjointness
-  of the closure is **not** claimed: Mathlib has no closure operation for
-  partial linear maps and no essential-self-adjointness criterion (no
-  Kato–Rellich, no analytic vectors — grep-verified in the scoping), and
-  the closure's domain is an ℓ²-growth condition across infinitely many
-  sectors. That step is priced, unattempted.
+  of the closure is **not** claimed in this module — it was discharged
+  separately in `BosonicESA.lean` and `BosonicESABeta.lean`, building on
+  `LinearPMap.closure`: the closure operation for partial linear maps
+  DOES exist in the pinned Mathlib. (An earlier form of this header
+  asserted that Mathlib has no closure operation for partial linear
+  maps and no essential-self-adjointness criterion — that premise is
+  stale; corrected 2026-10-18. The discharge route is the closure
+  route, not a Mathlib Kato–Rellich or analytic-vector criterion, and
+  the closure's domain remains an ℓ²-growth condition across
+  infinitely many sectors.)
 - **B3 (§§3–4).** (i) The diagonal density exhibit `densityIntBos`:
   explicit eigenvalues on the configuration basis, an exact gap theorem
   (uniform, all sectors), and the **not-a-dΓ certificate**

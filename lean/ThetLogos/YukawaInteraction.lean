@@ -68,13 +68,17 @@ eigenvector of `H` supported in bosonic band `N` obeys the dichotomy
   collapse counterexample embeds at the fermion vacuum sector): only
   the windowed statement of (f) is claimed, with the window in the
   hypotheses from line one.
-- `BosonicInteraction` does NOT co-import with the fermionic stack
-  (the censused `numberOp` collision in `BosonicAssembly`, adag-repair
-  dossier 2026-10-17); the bosonic coefficient machinery above
-  `BosonicFock`'s parent API (monomial calculus, relative bounds,
-  windowed persistence) is therefore rebuilt inside this module on the
-  product configurations, in the same style. No statement is routed
-  through `BosonicAssembly`.
+- `BosonicInteraction` did NOT co-import with the fermionic stack
+  when this module was built (the censused `numberOp` collision in
+  `BosonicAssembly`, adag-repair dossier 2026-10-17). That fence is
+  HISTORICAL: it was discharged 2026-10-18 by the bosonic-side rename
+  `numberOp` → `numberOpBos`, and `FockCoImport.lean` now imports
+  `BosonicInteraction` alongside the full fermionic stack. This
+  module's presentation is unchanged by design: the bosonic
+  coefficient machinery above `BosonicFock`'s parent API (monomial
+  calculus, relative bounds, windowed persistence) is rebuilt inside
+  this module on the product configurations, in the same style, and
+  no statement is routed through `BosonicAssembly`.
 
 ## Honesty ledger
 
