@@ -17,7 +17,7 @@ Occupation-number construction of the bosonic Fock space, directly as
 - `BosonicFock d := lp (fun _ : Config d => ℂ) 2` with Mathlib's ℓ² inner product.
 - Basis `boseE d c := lp.single 2 c 1`; vacuum `vac := boseE d 0`.
 - Dense domain `Dom d := Submodule.span ℂ (Set.range (boseE d))`.
-- Creation `adag d i` / annihilation `ann d i` as linear maps `Dom d →ₗ[ℂ] Dom d`,
+- Creation `adagBos d i` / annihilation `annBos d i` as linear maps `Dom d →ₗ[ℂ] Dom d`,
   defined by transport from coefficient operators `adagC`/`annC` on
   `Config d →₀ ℂ` via the linear equivalence `boseEquiv`.
   (These are unbounded on the full space; the dense-domain formulation
@@ -25,7 +25,7 @@ Occupation-number construction of the bosonic Fock space, directly as
 
 ## Results proved
 - `adjoint_basis`: the adjoint relation on basis vectors,
-  `⟪ann i e_c, e_{c'}⟫ = ⟪e_c, adag i e_{c'}⟫` — the computational core of W0.
+  `⟪annBos i e_c, e_{c'}⟫ = ⟪e_c, adagBos i e_{c'}⟫` — the computational core of W0.
 - `boseE_orthonormal`, `boseE_inner`: orthonormality of the occupation basis.
 - `adag_basis_coe`, `ann_basis_coe`: explicit basis actions.
 
@@ -183,21 +183,21 @@ theorem config_add_sub_comm (d : ℕ) (c : Config d) (i j : Fin d) (hij : i ≠ 
 /-! ## Operators on the dense domain -/
 
 /-- Creation operator on the dense domain (transported from coefficients). -/
-noncomputable def adag (d : ℕ) (i : Fin d) : Dom d →ₗ[ℂ] Dom d :=
+noncomputable def adagBos (d : ℕ) (i : Fin d) : Dom d →ₗ[ℂ] Dom d :=
   (boseEquiv d).toLinearMap.comp ((adagC d i).comp (boseEquiv d).symm.toLinearMap)
 
 /-- Annihilation operator on the dense domain (transported from coefficients). -/
-noncomputable def ann (d : ℕ) (i : Fin d) : Dom d →ₗ[ℂ] Dom d :=
+noncomputable def annBos (d : ℕ) (i : Fin d) : Dom d →ₗ[ℂ] Dom d :=
   (boseEquiv d).toLinearMap.comp ((annC d i).comp (boseEquiv d).symm.toLinearMap)
 
 theorem adag_transport (d : ℕ) (i : Fin d) (x : Dom d) :
-    boseRepr d (adag d i x) = adagC d i (boseRepr d x) := by
-  simp only [adag, boseRepr, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
+    boseRepr d (adagBos d i x) = adagC d i (boseRepr d x) := by
+  simp only [adagBos, boseRepr, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
     LinearEquiv.symm_apply_apply]
 
 theorem ann_transport (d : ℕ) (i : Fin d) (x : Dom d) :
-    boseRepr d (ann d i x) = annC d i (boseRepr d x) := by
-  simp only [ann, boseRepr, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
+    boseRepr d (annBos d i x) = annC d i (boseRepr d x) := by
+  simp only [annBos, boseRepr, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap,
     LinearEquiv.symm_apply_apply]
 
 /-- Transport for composed operators. -/
@@ -219,22 +219,22 @@ theorem Dom_ext_transport (d : ℕ) {F G : Dom d →ₗ[ℂ] Dom d}
   apply (boseRepr d).injective
   rw [hF, hG, h]
 
-theorem adag_basis (d : ℕ) (i : Fin d) (c : Config d) :
-    boseRepr d (adag d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
+theorem adagBos_basis (d : ℕ) (i : Fin d) (c : Config d) :
+    boseRepr d (adagBos d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
       = sqrtNat (c i + 1) • Finsupp.single (c + Finsupp.single i 1) 1 := by
   rw [adag_transport, boseRepr_basis, adagC_single, one_mul]
 
-theorem ann_basis (d : ℕ) (i : Fin d) (c : Config d) :
-    boseRepr d (ann d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
+theorem annBos_basis (d : ℕ) (i : Fin d) (c : Config d) :
+    boseRepr d (annBos d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
       = if c i = 0 then 0
         else sqrtNat (c i) • Finsupp.single (c - Finsupp.single i 1) 1 := by
   rw [ann_transport, boseRepr_basis, annC_single, one_mul]
 
 theorem adag_basis_coe (d : ℕ) (i : Fin d) (c : Config d) :
-    (((adag d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ : Dom d) : BosonicFock d)
+    (((adagBos d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ : Dom d) : BosonicFock d)
       = sqrtNat (c i + 1) • boseE d (c + Finsupp.single i 1) := by
-  have h := adag_basis d i c
-  have h2 : (adag d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
+  have h := adagBos_basis d i c
+  have h2 : (adagBos d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = boseEquiv d (sqrtNat (c i + 1) • Finsupp.single (c + Finsupp.single i 1) 1) := by
     have := congrArg (boseEquiv d) h
     simpa [boseRepr] using this
@@ -242,12 +242,12 @@ theorem adag_basis_coe (d : ℕ) (i : Fin d) (c : Config d) :
   rfl
 
 theorem ann_basis_coe (d : ℕ) (i : Fin d) (c : Config d) :
-    (((ann d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ : Dom d) : BosonicFock d)
+    (((annBos d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ : Dom d) : BosonicFock d)
       = if c i = 0 then 0 else sqrtNat (c i) • boseE d (c - Finsupp.single i 1) := by
-  have h := ann_basis d i c
+  have h := annBos_basis d i c
   by_cases hc : c i = 0
   · simp only [hc, if_true] at h
-    have h2 : (ann d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ = 0 := by
+    have h2 : (annBos d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ = 0 := by
       apply (boseRepr d).injective
       simpa [boseRepr] using h
     rw [h2]
@@ -257,7 +257,7 @@ theorem ann_basis_coe (d : ℕ) (i : Fin d) (c : Config d) :
         = sqrtNat (c i) • Finsupp.single (c - Finsupp.single i 1) 1 := by
       rw [if_neg hc]
     rw [h'] at h
-    have h2 : (ann d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
+    have h2 : (annBos d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
         = boseEquiv d (sqrtNat (c i) • Finsupp.single (c - Finsupp.single i 1) 1) := by
       have := congrArg (boseEquiv d) h
       simpa [boseRepr] using this
@@ -310,10 +310,10 @@ theorem Dom_induction₂ (d : ℕ) {P : Dom d → Dom d → Prop}
 
 /-- Basis computation for the adjoint relation. -/
 theorem adjoint_basis (d : ℕ) (i : Fin d) (c c' : Config d) :
-    ⟪(((ann d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ : Dom d) : BosonicFock d),
+    ⟪(((annBos d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ : Dom d) : BosonicFock d),
       boseE d c'⟫_ℂ
     = ⟪boseE d c,
-      (((adag d i) ⟨boseE d c', Submodule.subset_span (Set.mem_range_self c')⟩ : Dom d) : BosonicFock d)⟫_ℂ := by
+      (((adagBos d i) ⟨boseE d c', Submodule.subset_span (Set.mem_range_self c')⟩ : Dom d) : BosonicFock d)⟫_ℂ := by
   rw [ann_basis_coe, adag_basis_coe]
   by_cases h0 : c i = 0
   · rw [if_pos h0, inner_zero_left, inner_smul_right]

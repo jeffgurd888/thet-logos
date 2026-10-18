@@ -512,7 +512,7 @@ theorem monoCoef_norm_le {i j k l : Fin d} {γ : Config d} {n : ℕ}
 
 /-- One quartic monomial as an operator on the finite-particle domain. -/
 noncomputable def wickMonoBos (i j k l : Fin d) : Module.End ℂ (Dom d) :=
-  (adag d i) ∘ₗ ((adag d j) ∘ₗ ((ann d k) ∘ₗ (ann d l)))
+  (adagBos d i) ∘ₗ ((adagBos d j) ∘ₗ ((annBos d k) ∘ₗ (annBos d l)))
 
 /-- The domain monomial is the coefficient monomial, transported. -/
 theorem repr_wickMonoBos (i j k l : Fin d) (x : Dom d) :
@@ -1117,7 +1117,7 @@ theorem hamPMap_le_adjoint (lam : Fin d → ℝ)
 
 /-- The number operator of one mode, as a domain endomorphism. -/
 noncomputable def numModeBos (i : Fin d) : Module.End ℂ (Dom d) :=
-  (adag d i) ∘ₗ (ann d i)
+  (adagBos d i) ∘ₗ (annBos d i)
 
 theorem numModeBos_basis (i : Fin d) (c : Config d) :
     numModeBos d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
@@ -1178,7 +1178,7 @@ in the order `a†ᵢ aᵢ a†ⱼ aⱼ`. -/
 theorem densityIntBos_eq_quartic (U : Fin d → Fin d → ℝ) :
     densityIntBos d U
       = ∑ i, ∑ j, (if i < j then (U i j : ℂ) else 0) •
-          ((adag d i) ∘ₗ ((ann d i) ∘ₗ ((adag d j) ∘ₗ (ann d j)))) := by
+          ((adagBos d i) ∘ₗ ((annBos d i) ∘ₗ ((adagBos d j) ∘ₗ (annBos d j)))) := by
   unfold densityIntBos numModeBos
   refine Finset.sum_congr rfl (fun i _ => Finset.sum_congr rfl (fun j _ => ?_))
   rw [LinearMap.comp_assoc]

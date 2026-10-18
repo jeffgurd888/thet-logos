@@ -5,17 +5,17 @@ import ThetLogos.BosonicFock
 
 Closes the bosonic PARTIAL of Rung 8. Starting point:
 `ThetLogos.BosonicFock` (25 T1s): occupation basis `boseE`, dense domain
-`Dom d`, creation/annihilation `adag`/`ann` as linear maps on `Dom d`,
+`Dom d`, creation/annihilation `adagBos`/`annBos` as linear maps on `Dom d`,
 basis actions, basis-level adjoint relation `adjoint_basis`, and the
 double induction principle `Dom_induction₂`.
 
 ## What this module proves
 - `adjoint_relation` — the full inner-product adjoint identity between
-  `ann i` and `adag i` on all of `Dom d`, assembled from `adjoint_basis`
+  `annBos i` and `adagBos i` on all of `Dom d`, assembled from `adjoint_basis`
   by `Dom_induction₂` (the Rung 8 priced gap).
-- CCR on `Dom d` (mixed commutator, ann/ann and adag/adag commutativity),
+- CCR on `Dom d` (mixed commutator, annBos/annBos and adagBos/adagBos commutativity),
   transported from coefficient-space identities on `Config d →₀ ℂ`.
-- `numberOp` — the number operator `∑ i, adag i ∘ₗ ann i` on `Dom d`,
+- `numberOp` — the number operator `∑ i, adagBos i ∘ₗ annBos i` on `Dom d`,
   with basis eigenvalue the total occupation count, vacuum eigenvalue 0.
 - Vacuum annihilation and sector orthogonality for distinct total
   occupation counts.
@@ -36,14 +36,14 @@ open scoped InnerProductSpace
 
 /-- **Rung 8B, target 1 (T1):** the full adjoint relation on the dense
 domain. For all `x y : Dom d`,
-`⟪ann i x, y⟫ = ⟪x, adag i y⟫` (inner products taken in `BosonicFock d`
+`⟪annBos i x, y⟫ = ⟪x, adagBos i y⟫` (inner products taken in `BosonicFock d`
 via the coercion). Assembled from `adjoint_basis` by `Dom_induction₂`. -/
 theorem adjoint_relation (d : ℕ) (i : Fin d) (x y : Dom d) :
-    ⟪(((ann d i x) : Dom d) : BosonicFock d), (y : BosonicFock d)⟫_ℂ
-      = ⟪(x : BosonicFock d), (((adag d i y) : Dom d) : BosonicFock d)⟫_ℂ := by
+    ⟪(((annBos d i x) : Dom d) : BosonicFock d), (y : BosonicFock d)⟫_ℂ
+      = ⟪(x : BosonicFock d), (((adagBos d i y) : Dom d) : BosonicFock d)⟫_ℂ := by
   refine Dom_induction₂ (P := fun x y =>
-    ⟪(((ann d i x) : Dom d) : BosonicFock d), (y : BosonicFock d)⟫_ℂ
-      = ⟪(x : BosonicFock d), (((adag d i y) : Dom d) : BosonicFock d)⟫_ℂ) d
+    ⟪(((annBos d i x) : Dom d) : BosonicFock d), (y : BosonicFock d)⟫_ℂ
+      = ⟪(x : BosonicFock d), (((adagBos d i y) : Dom d) : BosonicFock d)⟫_ℂ) d
     ?_ ?_ ?_ ?_ ?_ ?_ ?_ x y
   · -- base: basis vectors — this is `adjoint_basis`
     intro c c'
@@ -68,11 +68,11 @@ theorem adjoint_relation (d : ℕ) (i : Fin d) (x y : Dom d) :
     simp only [map_smul, Submodule.coe_smul, inner_smul_right, hx]
 
 /-- **T1:** the companion adjoint relation, with creation on the left:
-`⟪adag i x, y⟫ = ⟪x, ann i y⟫` on `Dom d`. Follows from
+`⟪adagBos i x, y⟫ = ⟪x, annBos i y⟫` on `Dom d`. Follows from
 `adjoint_relation` by conjugate symmetry of the inner product. -/
 theorem adjoint_relation_adag (d : ℕ) (i : Fin d) (x y : Dom d) :
-    ⟪(((adag d i x) : Dom d) : BosonicFock d), (y : BosonicFock d)⟫_ℂ
-      = ⟪(x : BosonicFock d), (((ann d i y) : Dom d) : BosonicFock d)⟫_ℂ := by
+    ⟪(((adagBos d i x) : Dom d) : BosonicFock d), (y : BosonicFock d)⟫_ℂ
+      = ⟪(x : BosonicFock d), (((annBos d i y) : Dom d) : BosonicFock d)⟫_ℂ := by
   rw [← inner_conj_symm, ← adjoint_relation d i y x, inner_conj_symm]
 
 /-! ## 2. CCR — coefficient-space identities -/
@@ -172,7 +172,7 @@ theorem ccr_coeff_mixed (d : ℕ) (i j : Fin d) :
         show a * sqrtNat (c j + 1) * sqrtNat (c i)
           = a * sqrtNat (c i) * sqrtNat (c j + 1) from by ring, sub_self]
 
-/-- **Coefficient CCR, ann/ann (T1):** annihilation operators commute on
+/-- **Coefficient CCR, annBos/annBos (T1):** annihilation operators commute on
 `Config d →₀ ℂ`. -/
 theorem ccr_coeff_ann_ann (d : ℕ) (i j : Fin d) :
     (annC d i) ∘ₗ (annC d j) = (annC d j) ∘ₗ (annC d i) := by
@@ -199,7 +199,7 @@ theorem ccr_coeff_ann_ann (d : ℕ) (i j : Fin d) :
         show (a * sqrtNat (c j)) * sqrtNat (c i)
           = (a * sqrtNat (c i)) * sqrtNat (c j) from by ring]
 
-/-- **Coefficient CCR, adag/adag (T1):** creation operators commute on
+/-- **Coefficient CCR, adagBos/adagBos (T1):** creation operators commute on
 `Config d →₀ ℂ`. -/
 theorem ccr_coeff_adag_adag (d : ℕ) (i j : Fin d) :
     (adagC d i) ∘ₗ (adagC d j) = (adagC d j) ∘ₗ (adagC d i) := by
@@ -217,35 +217,35 @@ theorem ccr_coeff_adag_adag (d : ℕ) (i j : Fin d) :
 
 /-! ## 3. CCR on `Dom d` (transported from coefficient space) -/
 
-/-- Transport of a composite `ann ∘ adag` through `boseRepr`. -/
+/-- Transport of a composite `annBos ∘ adagBos` through `boseRepr`. -/
 theorem repr_ann_adag (d : ℕ) (i j : Fin d) (x : Dom d) :
-    boseRepr d (((ann d i) ∘ₗ (adag d j)) x)
+    boseRepr d (((annBos d i) ∘ₗ (adagBos d j)) x)
       = ((annC d i) ∘ₗ (adagC d j)) (boseRepr d x) := by
   simp only [LinearMap.comp_apply, ann_transport, adag_transport]
 
-/-- Transport of a composite `adag ∘ ann` through `boseRepr`. -/
+/-- Transport of a composite `adagBos ∘ annBos` through `boseRepr`. -/
 theorem repr_adag_ann (d : ℕ) (i j : Fin d) (x : Dom d) :
-    boseRepr d (((adag d i) ∘ₗ (ann d j)) x)
+    boseRepr d (((adagBos d i) ∘ₗ (annBos d j)) x)
       = ((adagC d i) ∘ₗ (annC d j)) (boseRepr d x) := by
   simp only [LinearMap.comp_apply, adag_transport, ann_transport]
 
-/-- Transport of a composite `ann ∘ ann` through `boseRepr`. -/
+/-- Transport of a composite `annBos ∘ annBos` through `boseRepr`. -/
 theorem repr_ann_ann (d : ℕ) (i j : Fin d) (x : Dom d) :
-    boseRepr d (((ann d i) ∘ₗ (ann d j)) x)
+    boseRepr d (((annBos d i) ∘ₗ (annBos d j)) x)
       = ((annC d i) ∘ₗ (annC d j)) (boseRepr d x) := by
   simp only [LinearMap.comp_apply, ann_transport]
 
-/-- Transport of a composite `adag ∘ adag` through `boseRepr`. -/
+/-- Transport of a composite `adagBos ∘ adagBos` through `boseRepr`. -/
 theorem repr_adag_adag (d : ℕ) (i j : Fin d) (x : Dom d) :
-    boseRepr d (((adag d i) ∘ₗ (adag d j)) x)
+    boseRepr d (((adagBos d i) ∘ₗ (adagBos d j)) x)
       = ((adagC d i) ∘ₗ (adagC d j)) (boseRepr d x) := by
   simp only [LinearMap.comp_apply, adag_transport]
 
 /-- **CCR on `Dom d`, mixed (T1):**
-`ann i ∘ₗ adag j - adag j ∘ₗ ann i = δ i j • id` as linear maps on the
+`annBos i ∘ₗ adagBos j - adagBos j ∘ₗ annBos i = δ i j • id` as linear maps on the
 dense domain. -/
 theorem ccr_mixed (d : ℕ) (i j : Fin d) :
-    (ann d i) ∘ₗ (adag d j) - (adag d j) ∘ₗ (ann d i)
+    (annBos d i) ∘ₗ (adagBos d j) - (adagBos d j) ∘ₗ (annBos d i)
       = if i = j then (1 : Module.End ℂ (Dom d)) else 0 := by
   refine Dom_ext_transport d ?_ ?_ (ccr_coeff_mixed d i j)
   · intro z
@@ -256,18 +256,18 @@ theorem ccr_mixed (d : ℕ) (i j : Fin d) :
       simp only [if_true, Module.End.one_apply]
     · simp only [if_neg hij, LinearMap.zero_apply, map_zero]
 
-/-- **CCR on `Dom d`, ann/ann (T1):** annihilation operators commute. -/
+/-- **CCR on `Dom d`, annBos/annBos (T1):** annihilation operators commute. -/
 theorem ccr_ann_ann (d : ℕ) (i j : Fin d) :
-    (ann d i) ∘ₗ (ann d j) = (ann d j) ∘ₗ (ann d i) := by
+    (annBos d i) ∘ₗ (annBos d j) = (annBos d j) ∘ₗ (annBos d i) := by
   refine Dom_ext_transport d ?_ ?_ (ccr_coeff_ann_ann d i j)
   · intro z
     simp only [LinearMap.comp_apply, ann_transport]
   · intro z
     simp only [LinearMap.comp_apply, ann_transport]
 
-/-- **CCR on `Dom d`, adag/adag (T1):** creation operators commute. -/
+/-- **CCR on `Dom d`, adagBos/adagBos (T1):** creation operators commute. -/
 theorem ccr_adag_adag (d : ℕ) (i j : Fin d) :
-    (adag d i) ∘ₗ (adag d j) = (adag d j) ∘ₗ (adag d i) := by
+    (adagBos d i) ∘ₗ (adagBos d j) = (adagBos d j) ∘ₗ (adagBos d i) := by
   refine Dom_ext_transport d ?_ ?_ (ccr_coeff_adag_adag d i j)
   · intro z
     simp only [LinearMap.comp_apply, adag_transport]
@@ -275,10 +275,10 @@ theorem ccr_adag_adag (d : ℕ) (i j : Fin d) :
     simp only [LinearMap.comp_apply, adag_transport]
 
 /-- **CCR, pointwise mixed form (T1):** for every `x : Dom d`,
-`ann i (adag j x) = adag j (ann i x) + (if i = j then x else 0)`. -/
+`annBos i (adagBos j x) = adagBos j (annBos i x) + (if i = j then x else 0)`. -/
 theorem ccr_mixed_apply (d : ℕ) (i j : Fin d) (x : Dom d) :
-    ann d i (adag d j x)
-      = adag d j (ann d i x) + (if i = j then x else 0) := by
+    annBos d i (adagBos d j x)
+      = adagBos d j (annBos d i x) + (if i = j then x else 0) := by
   have h := LinearMap.congr_fun (ccr_mixed d i j) x
   by_cases hij : i = j
   · subst hij
@@ -293,17 +293,17 @@ theorem ccr_mixed_apply (d : ℕ) (i j : Fin d) (x : Dom d) :
 
 /-! ## 4. Number operator -/
 
-/-- The number operator on the dense domain: `N = ∑ i, adag i ∘ₗ ann i`. -/
+/-- The number operator on the dense domain: `N = ∑ i, adagBos i ∘ₗ annBos i`. -/
 noncomputable def numberOp (d : ℕ) : Dom d →ₗ[ℂ] Dom d :=
-  ∑ i, (adag d i) ∘ₗ (ann d i)
+  ∑ i, (adagBos d i) ∘ₗ (annBos d i)
 
 /-- One mode's contribution to `numberOp` on a basis vector, in
 coefficient form: mode `i` contributes the scalar `c i`. -/
 theorem repr_numberOp_mode (d : ℕ) (i : Fin d) (c : Config d) :
-    boseRepr d (((adag d i) ∘ₗ (ann d i))
+    boseRepr d (((adagBos d i) ∘ₗ (annBos d i))
       ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
       = (c i : ℂ) • Finsupp.single c 1 := by
-  rw [LinearMap.comp_apply, adag_transport, ann_basis]
+  rw [LinearMap.comp_apply, adag_transport, annBos_basis]
   by_cases hci : c i = 0
   · rw [if_pos hci, map_zero]
     simp [hci]
@@ -327,13 +327,13 @@ theorem numberOp_basis (d : ℕ) (c : Config d) :
 noncomputable def vacDom (d : ℕ) : Dom d :=
   ⟨boseE d 0, Submodule.subset_span (Set.mem_range_self (0 : Config d))⟩
 
-/-- **Vacuum annihilation (T1):** `ann i` kills the vacuum. -/
-theorem ann_vacuum (d : ℕ) (i : Fin d) : ann d i (vacDom d) = 0 := by
+/-- **Vacuum annihilation (T1):** `annBos i` kills the vacuum. -/
+theorem ann_vacuum (d : ℕ) (i : Fin d) : annBos d i (vacDom d) = 0 := by
   apply (boseRepr d).injective
   rw [map_zero]
-  show boseRepr d (ann d i ⟨boseE d 0, Submodule.subset_span
+  show boseRepr d (annBos d i ⟨boseE d 0, Submodule.subset_span
     (Set.mem_range_self (0 : Config d))⟩) = 0
-  rw [ann_basis]
+  rw [annBos_basis]
   simp
 
 /-- **Vacuum eigenvalue (T1):** the number operator kills the vacuum
@@ -389,10 +389,10 @@ theorem sqrtNat_ne_zero {n : ℕ} (hn : n ≠ 0) : sqrtNat n ≠ 0 := by
   exact hn
 
 /-- The number operator's one-mode eigenvalue computation, at the level
-of `Dom d` (not just coefficients): `adag i` raises the configuration
+of `Dom d` (not just coefficients): `adagBos i` raises the configuration
 `c` to `c + δi` with scalar `sqrtNat (c i + 1)`. -/
 theorem adag_basis_dom (d : ℕ) (i : Fin d) (c : Config d) :
-    adag d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
+    adagBos d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = sqrtNat (c i + 1) • ⟨boseE d (c + Finsupp.single i 1),
           Submodule.subset_span (Set.mem_range_self _)⟩ := by
   apply (boseRepr d).injective
@@ -401,7 +401,7 @@ theorem adag_basis_dom (d : ℕ) (i : Fin d) (c : Config d) :
 /-- Applying a list of creation operators to the vacuum, in list order. -/
 noncomputable def applyList (d : ℕ) : List (Fin d) → Dom d
   | [] => vacDom d
-  | i :: l => adag d i (applyList d l)
+  | i :: l => adagBos d i (applyList d l)
 
 /-- The cyclic submodule: the span of everything reachable from the
 vacuum by finitely many creation operators. -/
@@ -410,11 +410,11 @@ noncomputable def cycSub (d : ℕ) : Submodule ℂ (Dom d) :=
 
 /-- The cyclic submodule is closed under every creation operator. -/
 theorem adag_mem_cycSub (d : ℕ) (i : Fin d) {y : Dom d} (hy : y ∈ cycSub d) :
-    adag d i y ∈ cycSub d := by
+    adagBos d i y ∈ cycSub d := by
   induction hy using Submodule.span_induction with
   | mem z hz =>
       obtain ⟨l, rfl⟩ := hz
-      show adag d i (applyList d l) ∈ Submodule.span ℂ (Set.range (applyList d))
+      show adagBos d i (applyList d l) ∈ Submodule.span ℂ (Set.range (applyList d))
       exact Submodule.subset_span ⟨i :: l, rfl⟩
   | zero =>
       rw [map_zero]
@@ -439,8 +439,8 @@ theorem tot_add_single (c : Config d) (i : Fin d) :
   simp only [tot, Finsupp.add_apply, Finset.sum_add_distrib, hsum]
 
 /-- Every basis vector lies in the cyclic submodule, by strong induction
-on the total occupation count: peel one particle off with `ann`-inverse
-reasoning — `e_c` is a nonzero scalar multiple of `adag i e_{c - δi}`. -/
+on the total occupation count: peel one particle off with `annBos`-inverse
+reasoning — `e_c` is a nonzero scalar multiple of `adagBos i e_{c - δi}`. -/
 theorem basis_mem_cycSub (d : ℕ) :
     ∀ (n : ℕ) (c : Config d), tot c = n →
       ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ ∈ cycSub d := by
@@ -472,11 +472,11 @@ theorem basis_mem_cycSub (d : ℕ) :
           conv_lhs => rw [← config_sub_single_add_single d c i hi]
           exact tot_add_single _ _
         have htot' : tot (c - Finsupp.single i 1) = n := by omega
-        have had : adag d i ⟨boseE d (c - Finsupp.single i 1),
+        have had : adagBos d i ⟨boseE d (c - Finsupp.single i 1),
             Submodule.subset_span (Set.mem_range_self (c - Finsupp.single i 1))⟩
             ∈ cycSub d :=
           adag_mem_cycSub d i (ih _ htot')
-        have hmul : adag d i ⟨boseE d (c - Finsupp.single i 1),
+        have hmul : adagBos d i ⟨boseE d (c - Finsupp.single i 1),
               Submodule.subset_span (Set.mem_range_self (c - Finsupp.single i 1))⟩
             = sqrtNat (c i) • ⟨boseE d c,
                 Submodule.subset_span (Set.mem_range_self c)⟩ := by

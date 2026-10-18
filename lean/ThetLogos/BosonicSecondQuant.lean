@@ -5,14 +5,14 @@ import ThetLogos.BosonicAssembly
 
 Starting point: Rung 8 (`ThetLogos.BosonicFock`) and Rung 8B
 (`ThetLogos.BosonicAssembly`): occupation basis `boseE`, dense domain
-`Dom d`, creation/annihilation `adag`/`ann` on `Dom d`, the full adjoint
-relation, CCR, and `numberOp = ∑ i, adag i ∘ₗ ann i` with basis
+`Dom d`, creation/annihilation `adagBos`/`annBos` on `Dom d`, the full adjoint
+relation, CCR, and `numberOp = ∑ i, adagBos i ∘ₗ annBos i` with basis
 eigenvalue the total occupation count.
 
 This module mirrors Rung 9's fermionic `SecondQuantDGamma`:
 
 ## Task 1 — the bosonic dΓ lift
-`dgammaBos M = ∑ i j, M i j • (adag i ∘ₗ ann j)` on `Dom d`, with
+`dgammaBos M = ∑ i j, M i j • (adagBos i ∘ₗ annBos j)` on `Dom d`, with
 - `dgammaBos_adjoint` — `⟪dΓ(M) x, y⟫ = ⟪x, dΓ(Mᴴ) y⟫` on `Dom d`;
 - `dgammaBos_one` — `dΓ(1) = numberOp`;
 - `dgammaBos_vacuum` — `dΓ(M)` annihilates the vacuum;
@@ -51,7 +51,7 @@ open scoped Matrix
 /-- The annihilation operator's action on a basis vector, at the level
 of `Dom d` (companion to `adag_basis_dom` from Rung 8B). -/
 theorem ann_basis_dom (d : ℕ) (i : Fin d) (c : Config d) :
-    ann d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
+    annBos d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = if c i = 0 then 0
         else sqrtNat (c i) • ⟨boseE d (c - Finsupp.single i 1),
           Submodule.subset_span (Set.mem_range_self _)⟩ := by
@@ -65,9 +65,9 @@ theorem ann_basis_dom (d : ℕ) (i : Fin d) (c : Config d) :
       if_neg hc, one_mul]
 
 /-- One mode's number contribution at the level of `Dom d`:
-`(adag i ∘ₗ ann i) e_c = (c i) • e_c`. -/
+`(adagBos i ∘ₗ annBos i) e_c = (c i) • e_c`. -/
 theorem numberOp_mode_dom (d : ℕ) (i : Fin d) (c : Config d) :
-    ((adag d i) ∘ₗ (ann d i)) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
+    ((adagBos d i) ∘ₗ (annBos d i)) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (c i : ℂ) • ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ := by
   apply (boseRepr d).injective
   rw [map_smul, boseRepr_basis]
@@ -76,11 +76,11 @@ theorem numberOp_mode_dom (d : ℕ) (i : Fin d) (c : Config d) :
 /-! ## 2. Task 1 — the bosonic dΓ lift -/
 
 /-- **Rung 10, Task 1.** The bosonic dΓ lift of a one-particle matrix
-`M`: `dΓ(M) = ∑ i j, M i j • (adag i ∘ₗ ann j)` on the dense domain
+`M`: `dΓ(M) = ∑ i j, M i j • (adagBos i ∘ₗ annBos j)` on the dense domain
 `Dom d`. -/
 noncomputable def dgammaBos (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ) :
     Module.End ℂ (Dom d) :=
-  ∑ i : Fin d, ∑ j : Fin d, (M i j) • ((adag d i) ∘ₗ (ann d j))
+  ∑ i : Fin d, ∑ j : Fin d, (M i j) • ((adagBos d i) ∘ₗ (annBos d j))
 
 /-- `dΓ(M)` annihilates the vacuum (T1). -/
 theorem dgammaBos_vacuum (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ) :
@@ -101,10 +101,10 @@ theorem dgammaBos_adjoint (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ) (x y : Dom 
     ⟪(((dgammaBos d M x) : Dom d) : BosonicFock d), (y : BosonicFock d)⟫_ℂ
       = ⟪(x : BosonicFock d), (((dgammaBos d Mᴴ y) : Dom d) : BosonicFock d)⟫_ℂ := by
   have term : ∀ i j : Fin d,
-      ⟪((((M i j) • ((adag d i) ∘ₗ (ann d j))) x : Dom d) : BosonicFock d),
+      ⟪((((M i j) • ((adagBos d i) ∘ₗ (annBos d j))) x : Dom d) : BosonicFock d),
           (y : BosonicFock d)⟫_ℂ
         = ⟪(x : BosonicFock d),
-            ((((Mᴴ j i) • ((adag d j) ∘ₗ (ann d i))) y : Dom d) : BosonicFock d)⟫_ℂ := by
+            ((((Mᴴ j i) • ((adagBos d j) ∘ₗ (annBos d i))) y : Dom d) : BosonicFock d)⟫_ℂ := by
     intro i j
     rw [LinearMap.smul_apply, LinearMap.smul_apply, Submodule.coe_smul,
       Submodule.coe_smul, inner_smul_left, inner_smul_right,
@@ -134,9 +134,9 @@ theorem dgammaBos_basis_diag (d : ℕ) (lam : Fin d → ℂ) (c : Config d) :
       = (∑ i, lam i * (c i : ℂ)) •
           ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ := by
   have step : ∀ i : Fin d,
-      ((∑ j : Fin d, ((Matrix.diagonal lam) i j) • ((adag d i) ∘ₗ (ann d j)))
+      ((∑ j : Fin d, ((Matrix.diagonal lam) i j) • ((adagBos d i) ∘ₗ (annBos d j)))
           ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
-        = lam i • (((adag d i) ∘ₗ (ann d i))
+        = lam i • (((adagBos d i) ∘ₗ (annBos d i))
             ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩) := by
     intro i
     rw [LinearMap.sum_apply]
@@ -146,7 +146,7 @@ theorem dgammaBos_basis_diag (d : ℕ) (lam : Fin d → ℂ) (c : Config d) :
     · rw [LinearMap.smul_apply, Matrix.diagonal_apply_eq]
   calc dgammaBos d (Matrix.diagonal lam)
           ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
-      = ∑ i : Fin d, lam i • (((adag d i) ∘ₗ (ann d i))
+      = ∑ i : Fin d, lam i • (((adagBos d i) ∘ₗ (annBos d i))
           ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩) := by
         unfold dgammaBos
         rw [LinearMap.sum_apply]
@@ -169,10 +169,10 @@ noncomputable def domSector (d : ℕ) (n : ℕ) : Submodule ℂ (Dom d) :=
   Submodule.span ℂ {x : Dom d | ∃ c : Config d, tot c = n ∧
     x = ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩}
 
-/-- A dΓ monomial, at the level of `Dom d`: `adag i ∘ₗ ann j` sends
+/-- A dΓ monomial, at the level of `Dom d`: `adagBos i ∘ₗ annBos j` sends
 `e_c` to a scalar multiple of `e_{c - δj + δi}` (or to `0`). -/
 theorem dgammaBos_term_dom (d : ℕ) (i j : Fin d) (c : Config d) :
-    ((adag d i) ∘ₗ (ann d j)) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
+    ((adagBos d i) ∘ₗ (annBos d j)) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = if c j = 0 then 0
         else (sqrtNat (c j) * sqrtNat ((c - Finsupp.single j 1 : Config d) i + 1)) •
           ⟨boseE d (c - Finsupp.single j 1 + Finsupp.single i 1),
@@ -186,7 +186,7 @@ theorem dgammaBos_term_dom (d : ℕ) (i j : Fin d) (c : Config d) :
 vector into its own sector. -/
 theorem dgammaBos_term_mem_domSector (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ)
     (i j : Fin d) (c : Config d) :
-    (M i j) • (((adag d i) ∘ₗ (ann d j))
+    (M i j) • (((adagBos d i) ∘ₗ (annBos d j))
         ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
       ∈ domSector d (tot c) := by
   rw [dgammaBos_term_dom]
