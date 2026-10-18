@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C417-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C536-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -18,8 +18,8 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**2,417 verified theorem declarations**\*
-across 89 counted Lean modules, with whitepaper dossiers for every campaign.
+**2,536 verified theorem declarations**\*
+across 90 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -29,7 +29,7 @@ program's counted modules, each verified by targeted `lake build`;
 headline results additionally checked with `#print axioms` (only
 `propext`, `Classical.choice`, `Quot.sound`). Fifteen declarations
 carrying a same-line `@[simp]` attribute are not counted under this
-rule (an attribute-inclusive count reads 2,432); earlier running
+rule (an attribute-inclusive count reads 2,551); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0.*
 
@@ -128,6 +128,17 @@ cite the originators first.
   (spectral input priced M–L); nothing in this stage routes
   through Stage 1b-B's open clause
   ([dossier](whitepaper/pitch-4-stage-1b-d-2026-10-17.md)).
+- **Yukawa interaction** — **the first mixed fermion–boson
+  interaction STANDS**: on the product of the fermionic and bosonic
+  finite-mode stacks (made co-importable by the adag repair), a
+  Yukawa-shaped coupling (fermion bilinear × boson field) with
+  Wick-type calculus, explicit relative bounds, symmetry and
+  sectorwise self-adjointness in Pitch 3's scoped senses, and gap
+  persistence in windowed form (a band-N threshold with an explicit
+  √(N+1) factor; no uniform claim — uniformity is false in
+  general). Essential self-adjointness remains fenced as Pitch 3's
+  priced remainder
+  ([dossier](whitepaper/yukawa-interaction-2026-10-17.md)).
 
 **Foundational results**
 
