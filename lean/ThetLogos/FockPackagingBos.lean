@@ -859,7 +859,7 @@ theorem sum_sq_Umat_le (m : ℝ) (hm : 0 < m)
 
 /-- The squared norm of a complex number as a conjugate product
 (T1). -/
-theorem ofReal_norm_sq (z : ℂ) : ((‖z‖ ^ 2 : ℝ) : ℂ) = star z * z := by
+theorem ofReal_norm_sqBos (z : ℂ) : ((‖z‖ ^ 2 : ℝ) : ℂ) = star z * z := by
   simpa using (RCLike.conj_mul z).symm
 
 /-- The squared normalization factor, as a real identity (T1). -/
@@ -1041,7 +1041,7 @@ theorem gammaKernelLim_col_sum_le (m : ℝ) (hm : 0 < m)
     rw [Finset.sum_congr rfl (g := fun c'₁ =>
       gammaKernelRect ((UmatRect m hm W E d)ᴴ) c₀ c'₁
         * gammaKernelRect (UmatRect m hm W E d) c'₁ c₀)
-      (fun c'₁ _ => by rw [ofReal_norm_sq, gammaKernelRect_conjTranspose])]
+      (fun c'₁ _ => by rw [ofReal_norm_sqBos, gammaKernelRect_conjTranspose])]
     exact (gammaKernelRect_mul ((UmatRect m hm W E d)ᴴ)
       (UmatRect m hm W E d) c₀ c₀).symm
   -- Step 5: bound the Gram entry by the permanent bound.
@@ -1123,7 +1123,7 @@ entries converge by Parseval (§5); the tail is controlled by B0 (§5).
 The exhaustion lemma below is the bridge. -/
 
 /-- Finite sets are absorbed by a monotone exhaustion (T1). -/
-theorem exists_forall_mem_of_monotone {α : Type*} (s : ℕ → Finset α)
+theorem exists_forall_mem_of_monotoneBos {α : Type*} (s : ℕ → Finset α)
     (hmono : Monotone s) (t : Finset α)
     (hcov : ∀ a ∈ t, ∃ e, a ∈ s e) : ∃ e, ∀ a ∈ t, a ∈ s e := by
   classical
@@ -1141,7 +1141,7 @@ theorem exists_forall_mem_of_monotone {α : Type*} (s : ℕ → Finset α)
 /-- **Exhaustion (T1):** if a summable function's partial sums over
 a monotone exhaustion — covering every index where the function is
 nonzero — converge to `L`, then `L` is the `tsum`. -/
-theorem tsum_eq_of_tendsto_sum_exhaustion {α : Type*} {f : α → ℂ}
+theorem tsum_eq_of_tendsto_sum_exhaustionBos {α : Type*} {f : α → ℂ}
     (hf : Summable f) (s : ℕ → Finset α) (hmono : Monotone s)
     (hcov : ∀ a, f a ≠ 0 → ∃ e, a ∈ s e)
     {L : ℂ} (hL : Tendsto (fun e => ∑ a ∈ s e, f a) atTop (𝓝 L)) :
@@ -1155,7 +1155,7 @@ theorem tsum_eq_of_tendsto_sum_exhaustion {α : Type*} {f : α → ℂ}
       rw [SummationFilter.unconditional_filter] at hε
       exact mem_atTop_sets.1 hε
     -- The support part of `t₀` is absorbed by the exhaustion.
-    obtain ⟨E, hE⟩ := exists_forall_mem_of_monotone s hmono
+    obtain ⟨E, hE⟩ := exists_forall_mem_of_monotoneBos s hmono
       (t₀.filter (fun a => f a ≠ 0))
       (fun a ha => hcov a (Finset.mem_filter.1 ha).2)
     refine ⟨E, fun e he => ?_⟩
@@ -1224,7 +1224,7 @@ theorem gammaKernelRect_eq (d : ℕ) (X : Matrix (Fin d) (Fin d) ℂ)
 
 /-- **Product of two `ℓ²` families is summable (T1):** the
 `AM–GM` bound against the two square-summable families. -/
-theorem summable_mul_of_summable_sq {α : Type*} {f g : α → ℂ}
+theorem summable_mul_of_summable_sqBos {α : Type*} {f g : α → ℂ}
     (hf : Summable (fun a => ‖f a‖ ^ 2))
     (hg : Summable (fun a => ‖g a‖ ^ 2)) :
     Summable (fun a => f a * g a) := by
@@ -1408,7 +1408,7 @@ theorem gammaKernelLim_column_orthonormal (m : ℝ) (hm : 0 < m)
   set f : ConfigLim → ℂ := fun c' => star (gammaKernelLim m hm W c' c₁)
     * gammaKernelLim m hm W c' c₂ with hf_def
   have hf : Summable f := by
-    refine summable_mul_of_summable_sq (f := fun c' =>
+    refine summable_mul_of_summable_sqBos (f := fun c' =>
       star (gammaKernelLim m hm W c' c₁)) (g := fun c' =>
       gammaKernelLim m hm W c' c₂) ?_ (gammaKernelLim_summable_col m hm W c₂)
     refine Summable.congr (gammaKernelLim_summable_col m hm W c₁) ?_
@@ -1533,7 +1533,7 @@ theorem gammaKernelLim_column_orthonormal (m : ℝ) (hm : 0 < m)
         (1 : Matrix (Fin D) (Fin D) ℂ) hentry c₁₁ c₂₁
       rw [hval] at hT
       exact Filter.Tendsto.congr (fun e => (hpartial e).symm) hT
-    exact tsum_eq_of_tendsto_sum_exhaustion hf s hmono hcov hL
+    exact tsum_eq_of_tendsto_sum_exhaustionBos hf s hmono hcov hL
   · -- Different totals: every term vanishes.
     have hzero : ∀ c', f c' = 0 := by
       intro c'
@@ -1597,7 +1597,7 @@ theorem gammaKernelLim_comp (m : ℝ) (hm : 0 < m)
   classical
   set f : ConfigLim → ℂ := fun c'' => gammaKernelLim m hm W₂ c' c''
     * gammaKernelLim m hm W₁ c'' c with hf_def
-  have hf : Summable f := summable_mul_of_summable_sq
+  have hf : Summable f := summable_mul_of_summable_sqBos
     (gammaKernelLim_summable_row m hm W₂ c')
     (gammaKernelLim_summable_col m hm W₁ c)
   by_cases htot : totLim c' = totLim c
@@ -1698,7 +1698,7 @@ theorem gammaKernelLim_comp (m : ℝ) (hm : 0 < m)
           (Umat m hm (W₁.trans W₂)) d' d c'₀ c₀).symm
       rw [hback] at hT
       exact Filter.Tendsto.congr (fun e => (hpartial e).symm) hT
-    exact (tsum_eq_of_tendsto_sum_exhaustion hf s hmono hcov hL).symm
+    exact (tsum_eq_of_tendsto_sum_exhaustionBos hf s hmono hcov hL).symm
   · -- Different totals: both sides vanish.
     have hLHS : gammaKernelLim m hm (W₁.trans W₂) c' c = 0 :=
       gammaKernelLim_of_tot_ne m hm (W₁.trans W₂) c' c htot
@@ -1791,7 +1791,7 @@ theorem inner_boseELim_colVec (m : ℝ) (hm : 0 < m)
   simp
 
 /-- A linear combination is its support sum (T1). -/
-theorem linearCombination_eq_sum (v : ConfigLim → BosonicFockLim)
+theorem linearCombination_eq_sumBos (v : ConfigLim → BosonicFockLim)
     (φ : ConfigLim →₀ ℂ) :
     Finsupp.linearCombination ℂ v φ = ∑ a ∈ φ.support, φ a • v a := by
   rw [Finsupp.linearCombination_apply]
@@ -1800,13 +1800,13 @@ theorem linearCombination_eq_sum (v : ConfigLim → BosonicFockLim)
 /-- **Finite-expansion inner formula (T1):** the inner product of
 two finite combinations is the finite double sum of the pairwise
 inner products. -/
-theorem inner_linearCombination_mixed (v w : ConfigLim → BosonicFockLim)
+theorem inner_linearCombination_mixedBos (v w : ConfigLim → BosonicFockLim)
     (φ ψ : ConfigLim →₀ ℂ) :
     ⟪Finsupp.linearCombination ℂ v φ,
         Finsupp.linearCombination ℂ w ψ⟫_ℂ
       = ∑ a ∈ φ.support, ∑ b ∈ ψ.support,
           starRingEnd ℂ (φ a) * (ψ b * ⟪v a, w b⟫_ℂ) := by
-  rw [linearCombination_eq_sum, linearCombination_eq_sum, sum_inner]
+  rw [linearCombination_eq_sumBos, linearCombination_eq_sumBos, sum_inner]
   refine Finset.sum_congr rfl (fun a _ => ?_)
   rw [inner_sum]
   refine Finset.sum_congr rfl (fun b _ => ?_)
@@ -1818,7 +1818,7 @@ theorem inner_linearCombination_colVec (m : ℝ) (hm : 0 < m)
     ⟪Finsupp.linearCombination ℂ (colVec m hm W) φ,
         Finsupp.linearCombination ℂ (colVec m hm W) ψ⟫_ℂ
       = ∑ c ∈ φ.support, starRingEnd ℂ (φ c) * ψ c := by
-  rw [inner_linearCombination_mixed]
+  rw [inner_linearCombination_mixedBos]
   refine Finset.sum_congr rfl (fun a _ => ?_)
   have hterm : ∀ b ∈ ψ.support, starRingEnd ℂ (φ a)
         * (ψ b * ⟪colVec m hm W a, colVec m hm W b⟫_ℂ)
@@ -1871,8 +1871,8 @@ theorem inner_gammaDomLim_adjoint (m : ℝ) (hm : 0 < m)
   obtain ⟨ψ, rfl⟩ : ∃ ψ, bosEquivLim ψ = v :=
     ⟨bosReprLim v, LinearEquiv.apply_symm_apply bosEquivLim v⟩
   rw [gammaDomLim_bosEquivLim, gammaDomLim_bosEquivLim, bosEquivLim_coe,
-    bosEquivLim_coe, inner_linearCombination_mixed,
-    inner_linearCombination_mixed]
+    bosEquivLim_coe, inner_linearCombination_mixedBos,
+    inner_linearCombination_mixedBos]
   refine Finset.sum_congr rfl (fun a _ => ?_)
   refine Finset.sum_congr rfl (fun b _ => ?_)
   rw [inner_colVec_boseELim, inner_boseELim_colVec,
@@ -2081,8 +2081,8 @@ theorem gammaIsometry_comp_apply (m : ℝ) (hm : 0 < m)
     (W₁ W₂ : shellLp m hm ≃ₗᵢ[ℂ] shellLp m hm) (u : DomLim) :
     gammaIsometry m hm W₂ (gammaDomLim m hm W₁ u)
       = gammaDomLim m hm (W₁.trans W₂) u := by
-  rw [gammaDomLim_apply, gammaDomLim_apply, linearCombination_eq_sum,
-    map_sum, linearCombination_eq_sum]
+  rw [gammaDomLim_apply, gammaDomLim_apply, linearCombination_eq_sumBos,
+    map_sum, linearCombination_eq_sumBos]
   refine Finset.sum_congr rfl (fun c _ => ?_)
   rw [map_smul, gammaIsometry_colVec]
 
@@ -2520,7 +2520,7 @@ theorem gammaFockU1_dom_tendsto (m : ℝ) (hm : 0 < m) (u : DomLim) :
         gammaDomLim_bosEquivLim]
     have hu : ((bosEquivLim φ : DomLim) : BosonicFockLim)
         = Finsupp.linearCombination ℂ boseELim φ := bosEquivLim_coe φ
-    rw [hΓ, hu, linearCombination_eq_sum, linearCombination_eq_sum,
+    rw [hΓ, hu, linearCombination_eq_sumBos, linearCombination_eq_sumBos,
       ← Finset.sum_sub_distrib]
     refine (norm_sum_le _ _).trans (Finset.sum_le_sum (fun c _ => ?_))
     rw [← smul_sub, norm_smul, gammaFockU1_boseELim]

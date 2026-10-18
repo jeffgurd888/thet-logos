@@ -201,7 +201,7 @@ theorem gammaFockU1_dom_lorentz_tendsto (m : ℝ) (hm : 0 < m)
         gammaDomLim_bosEquivLim]
     have hu : ((bosEquivLim φ : DomLim) : BosonicFockLim)
         = Finsupp.linearCombination ℂ boseELim φ := bosEquivLim_coe φ
-    rw [hΓ, hu, linearCombination_eq_sum, linearCombination_eq_sum,
+    rw [hΓ, hu, linearCombination_eq_sumBos, linearCombination_eq_sumBos,
       ← Finset.sum_sub_distrib]
     refine (norm_sum_le _ _).trans (Finset.sum_le_sum (fun c _ => ?_))
     rw [← smul_sub, norm_smul, gammaFockU1_boseELim_lorentz]
