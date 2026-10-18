@@ -1,7 +1,7 @@
 # Schrödinger smalls — the two priced remainders of `SchrodingerDynamics`, discharged
 
 **Date:** 2026-10-18
-**Module:** `lean/ThetLogos/SchrodingerSmalls.lean` (488 lines)
+**Module:** `lean/ThetLogos/SchrodingerSmalls.lean` (487 lines)
 **Builds on:** `lean/ThetLogos/SchrodingerDynamics.lean` (not modified),
 `lean/ThetLogos/FermionicInteraction.lean` (via `SchrodingerDynamics`)
 **Spec:** `whitepaper/gauntlet-parked-fleet-2026-10-17.md` §5 (which re-prices
