@@ -1,8 +1,8 @@
 # thet-logos — Active Cartesian Modular Dynamics (ACMD)
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Paper v2 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23427964.svg)](https://doi.org/10.5281/zenodo.23427964)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C283-blue)
+[![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C417-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -46,7 +46,8 @@ cite the originators first.
 
 **Active Cartesian Modular Dynamics: Machine-Verified Foundations**
 
-- Current version (v2): [doi.org/10.5281/zenodo.23427964](https://doi.org/10.5281/zenodo.23427964)
+- Current version (v3): [doi.org/10.5281/zenodo.23444600](https://doi.org/10.5281/zenodo.23444600)
+- v2: [doi.org/10.5281/zenodo.23427964](https://doi.org/10.5281/zenodo.23427964)
 - v1: [doi.org/10.5281/zenodo.23408680](https://doi.org/10.5281/zenodo.23408680)
 - Author: Jeffrey Michael Gurd, Nexus Research —
   [ORCID 0009-0008-0188-5150](https://orcid.org/0009-0008-0188-5150)
