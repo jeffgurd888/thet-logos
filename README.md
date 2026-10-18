@@ -159,6 +159,13 @@ KMS/Tomita–Takesaki and classical Yang–Mills FIT at the finite level;
 continuum claims NO-FIT, on record
 ([dossier](whitepaper/theories-intake-2026-10-11.md)).
 
+**Exhibit (numerical, not a theorem)** — the
+[vacuum portrait](exhibits/vacuum-portrait/EXHIBIT.md): six
+portraits sampled from this corpus's own Stage 0/1a U(1) Gibbs
+measure on a 6⁴ torus; reproducibility verified by an independent
+byte-identical rerun
+([shipment note](exhibits/vacuum-portrait/SHIPMENT-2026-10-18.md)).
+
 ## Not claimed
 
 - **Not claimed: the continuum limit, interacting 4D QFT, the
