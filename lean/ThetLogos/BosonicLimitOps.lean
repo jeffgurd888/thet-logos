@@ -785,14 +785,14 @@ theorem numberOpLimBos_basis (c : ConfigLim) :
 /-- The limit number operator restricts to the finite number operator at
 every level (via `dgammaBos_one`). -/
 theorem numberOpLimBos_compat (d : ℕ) :
-    numberOpLimBos ∘ₗ (bosDomMap d) = (bosDomMap d) ∘ₗ (numberOp d) := by
+    numberOpLimBos ∘ₗ (bosDomMap d) = (bosDomMap d) ∘ₗ (numberOpBos d) := by
   have h1 : diagABos d (fun _ => (1 : ℂ)) = 1 := by
     rw [diagABos, Matrix.diagonal_one]
   calc numberOpLimBos ∘ₗ (bosDomMap d)
       = (dGammaLimBos (fun _ => 1)) ∘ₗ (bosDomMap d) := rfl
     _ = (bosDomMap d) ∘ₗ (dgammaBos d (diagABos d (fun _ => (1 : ℂ)))) :=
         dGammaLimBos_compat (fun _ => 1) d
-    _ = (bosDomMap d) ∘ₗ (numberOp d) := by rw [h1, dgammaBos_one]
+    _ = (bosDomMap d) ∘ₗ (numberOpBos d) := by rw [h1, dgammaBos_one]
 
 /-- The vacuum is annihilated by every limit diagonal dΓ. -/
 theorem dGammaLimBos_vacuum (a : ℕ → ℂ) :

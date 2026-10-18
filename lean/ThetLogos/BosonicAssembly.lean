@@ -15,7 +15,7 @@ double induction principle `Dom_induction₂`.
   by `Dom_induction₂` (the Rung 8 priced gap).
 - CCR on `Dom d` (mixed commutator, annBos/annBos and adagBos/adagBos commutativity),
   transported from coefficient-space identities on `Config d →₀ ℂ`.
-- `numberOp` — the number operator `∑ i, adagBos i ∘ₗ annBos i` on `Dom d`,
+- `numberOpBos` — the number operator `∑ i, adagBos i ∘ₗ annBos i` on `Dom d`,
   with basis eigenvalue the total occupation count, vacuum eigenvalue 0.
 - Vacuum annihilation and sector orthogonality for distinct total
   occupation counts.
@@ -294,10 +294,10 @@ theorem ccr_mixed_apply (d : ℕ) (i j : Fin d) (x : Dom d) :
 /-! ## 4. Number operator -/
 
 /-- The number operator on the dense domain: `N = ∑ i, adagBos i ∘ₗ annBos i`. -/
-noncomputable def numberOp (d : ℕ) : Dom d →ₗ[ℂ] Dom d :=
+noncomputable def numberOpBos (d : ℕ) : Dom d →ₗ[ℂ] Dom d :=
   ∑ i, (adagBos d i) ∘ₗ (annBos d i)
 
-/-- One mode's contribution to `numberOp` on a basis vector, in
+/-- One mode's contribution to `numberOpBos` on a basis vector, in
 coefficient form: mode `i` contributes the scalar `c i`. -/
 theorem repr_numberOp_mode (d : ℕ) (i : Fin d) (c : Config d) :
     boseRepr d (((adagBos d i) ∘ₗ (annBos d i))
@@ -310,15 +310,15 @@ theorem repr_numberOp_mode (d : ℕ) (i : Fin d) (c : Config d) :
   · rw [if_neg hci, map_smul, adagC_single, config_sub_single_apply_self _ _ hci,
       one_mul, smul_smul, sqrtNat_mul_self, config_sub_single_add_single _ _ _ hci]
 
-/-- **Number operator eigenvalue (T1):** `numberOp` acts on the basis
+/-- **Number operator eigenvalue (T1):** `numberOpBos` acts on the basis
 vector `e_c` as multiplication by the total occupation count
 `∑ i, c i`. -/
-theorem numberOp_basis (d : ℕ) (c : Config d) :
-    numberOp d ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
+theorem numberOpBos_basis (d : ℕ) (c : Config d) :
+    numberOpBos d ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (∑ i, (c i : ℂ)) • ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ := by
   apply (boseRepr d).injective
   rw [map_smul, boseRepr_basis]
-  simp only [numberOp, LinearMap.sum_apply, map_sum, repr_numberOp_mode,
+  simp only [numberOpBos, LinearMap.sum_apply, map_sum, repr_numberOp_mode,
     Finset.sum_smul]
 
 /-! ## 5. Vacuum and sectors -/
@@ -338,10 +338,10 @@ theorem ann_vacuum (d : ℕ) (i : Fin d) : annBos d i (vacDom d) = 0 := by
 
 /-- **Vacuum eigenvalue (T1):** the number operator kills the vacuum
 (eigenvalue `0 = ∑ i, (0 : Config d) i`). -/
-theorem numberOp_vacuum (d : ℕ) : numberOp d (vacDom d) = 0 := by
-  show numberOp d ⟨boseE d 0, Submodule.subset_span
+theorem numberOp_vacuum (d : ℕ) : numberOpBos d (vacDom d) = 0 := by
+  show numberOpBos d ⟨boseE d 0, Submodule.subset_span
     (Set.mem_range_self (0 : Config d))⟩ = 0
-  rw [numberOp_basis]
+  rw [numberOpBos_basis]
   simp
 
 /-- Total occupation count of a configuration. -/

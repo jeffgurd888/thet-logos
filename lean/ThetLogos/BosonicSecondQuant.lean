@@ -6,7 +6,7 @@ import ThetLogos.BosonicAssembly
 Starting point: Rung 8 (`ThetLogos.BosonicFock`) and Rung 8B
 (`ThetLogos.BosonicAssembly`): occupation basis `boseE`, dense domain
 `Dom d`, creation/annihilation `adagBos`/`annBos` on `Dom d`, the full adjoint
-relation, CCR, and `numberOp = ∑ i, adagBos i ∘ₗ annBos i` with basis
+relation, CCR, and `numberOpBos = ∑ i, adagBos i ∘ₗ annBos i` with basis
 eigenvalue the total occupation count.
 
 This module mirrors Rung 9's fermionic `SecondQuantDGamma`:
@@ -14,7 +14,7 @@ This module mirrors Rung 9's fermionic `SecondQuantDGamma`:
 ## Task 1 — the bosonic dΓ lift
 `dgammaBos M = ∑ i j, M i j • (adagBos i ∘ₗ annBos j)` on `Dom d`, with
 - `dgammaBos_adjoint` — `⟪dΓ(M) x, y⟫ = ⟪x, dΓ(Mᴴ) y⟫` on `Dom d`;
-- `dgammaBos_one` — `dΓ(1) = numberOp`;
+- `dgammaBos_one` — `dΓ(1) = numberOpBos`;
 - `dgammaBos_vacuum` — `dΓ(M)` annihilates the vacuum;
 - `dgammaBos_basis_diag` — `dΓ(diag λ) e_c = (∑ i, λ i · c i) • e_c`;
 - sector preservation: `dgammaBos` preserves every `domSector d n`,
@@ -116,8 +116,8 @@ theorem dgammaBos_adjoint (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ) (x y : Dom 
 
 /-- **The number operator is `dΓ(1)` (T1).** -/
 theorem dgammaBos_one (d : ℕ) :
-    dgammaBos d (1 : Matrix (Fin d) (Fin d) ℂ) = numberOp d := by
-  unfold dgammaBos numberOp
+    dgammaBos d (1 : Matrix (Fin d) (Fin d) ℂ) = numberOpBos d := by
+  unfold dgammaBos numberOpBos
   refine Finset.sum_congr rfl (fun i _ => ?_)
   refine (Finset.sum_eq_single i (fun j _ hji => ?_)
     (fun hi => absurd (Finset.mem_univ i) hi)).trans ?_
