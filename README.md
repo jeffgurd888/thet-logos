@@ -18,14 +18,20 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**2,427 verified theorem declarations**\*
-across 98 Lean modules, with whitepaper dossiers for every campaign.
+**2,417 verified theorem declarations**\*
+across 89 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
-and proof-dependency audit. Count method: theorem/lemma declarations in
-the program's counted modules, each verified by targeted `lake build`;
+and proof-dependency audit. Count method (adopted 2026-10-17):
+theorem/lemma declarations whose keyword begins a source line at
+column 0 (`^(theorem|lemma) ` on comment-stripped source) in the
+program's counted modules, each verified by targeted `lake build`;
 headline results additionally checked with `#print axioms` (only
-`propext`, `Classical.choice`, `Quot.sound`).*
+`propext`, `Classical.choice`, `Quot.sound`). Fifteen declarations
+carrying a same-line `@[simp]` attribute are not counted under this
+rule (an attribute-inclusive count reads 2,432); earlier running
+totals summed dossier figures made under mixed patterns — the full
+reconciliation is printed in Paper v3, §0.*
 
 ## Credit
 
