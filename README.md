@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C569-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-2%2C598-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -18,8 +18,8 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**2,569 verified theorem declarations**\*
-across 92 counted Lean modules, with whitepaper dossiers for every campaign.
+**2,598 verified theorem declarations**\*
+across 93 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -29,7 +29,7 @@ program's counted modules, each verified by targeted `lake build`;
 headline results additionally checked with `#print axioms` (only
 `propext`, `Classical.choice`, `Quot.sound`). Fifteen declarations
 carrying a same-line `@[simp]` attribute are not counted under this
-rule (an attribute-inclusive count reads 2,584); earlier running
+rule (an attribute-inclusive count reads 2,613); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0.*
 
