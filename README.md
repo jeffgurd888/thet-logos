@@ -18,8 +18,8 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**3,302 verified theorem declarations**\*
-across 95 counted Lean modules, with whitepaper dossiers for every campaign.
+**3,315 verified theorem declarations**\*
+across 96 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -29,7 +29,7 @@ program's counted modules, each verified by targeted `lake build`;
 headline results additionally checked with `#print axioms` (only
 `propext`, `Classical.choice`, `Quot.sound`). Fifteen declarations
 carrying a same-line `@[simp]` attribute are not counted under this
-rule (an attribute-inclusive count reads 3,317); earlier running
+rule (an attribute-inclusive count reads 3,330); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0.*
 
@@ -163,7 +163,13 @@ the walk's normalization;
 (the modular clock's master tick: a state with nondegenerate
 `K = −ln ρ` spectrum of width `W` negates its widest coherence first
 at exactly `t = π/W`, and at no earlier positive time;
-[dossier](whitepaper/spectral-clock-2026-10-18.md)). Theories intake, Round 1:
+[dossier](whitepaper/spectral-clock-2026-10-18.md)) · ThermalKernel
+(the thermal spectral kernel of the modular generator, amortized mode
+by mode: the diagonal heat kernel e^{−tK} has the semigroup law, its
+trace is the sum of the modes' exponential schedules, each mode's
+total payment over all time is exactly 1/λ, and at unit time the
+kernel IS the state, e^{−K} = ρ; finite, diagonal case;
+[dossier](whitepaper/thermal-kernel-2026-10-18.md)). Theories intake, Round 1:
 KMS/Tomita–Takesaki and classical Yang–Mills FIT at the finite level;
 continuum claims NO-FIT, on record
 ([dossier](whitepaper/theories-intake-2026-10-11.md)).
