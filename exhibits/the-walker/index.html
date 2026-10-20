@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>The Walker — DiffusionDefect Exhibit</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0a0c0e;
+        --panel: #121518;
+        --panel-2: #171b1f;
+        --line: #262c31;
+        --ink: #e8e6e0;
+        --ink-dim: #9aa0a3;
+        --ink-faint: #6b7176;
+        --x-red: #ff5a52;
+        --y-blue: #5b9dff;
+        --z-green: #43d97e;
+        --paper: #f2efe6;
+        --accent: #d8c58f;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.45;
+      }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 28px 20px 40px;
+      }
+
+      /* ---------- Header ---------- */
+      header { margin-bottom: 22px; }
+      .plate {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 16px;
+      }
+      h1 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 400;
+        font-size: clamp(34px, 6vw, 54px);
+        letter-spacing: 0.01em;
+        margin: 0;
+        color: var(--paper);
+      }
+      .plate .no {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        white-space: nowrap;
+      }
+      .subtitle {
+        font-family: Georgia, "Times New Roman", serif;
+        font-style: italic;
+        font-size: clamp(17px, 3vw, 22px);
+        color: var(--ink-dim);
+        margin: 12px 0 0;
+      }
+      .subtitle .fx { color: var(--x-red); font-style: normal; }
+      .subtitle .fy { color: var(--y-blue); font-style: normal; }
+      .subtitle .fz { color: var(--z-green); font-style: normal; }
+      .subtitle .ft { color: var(--ink); font-style: normal; }
+
+      /* ---------- Layout ---------- */
+      .stage {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+      }
+      @media (max-width: 820px) {
+        .stage { grid-template-columns: minmax(0, 1fr); }
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 16px;
+      }
+      .panel h2 {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin: 0 0 12px;
+      }
+      canvas.sim {
+        display: block;
+        width: 100%;
+        height: auto;
+        background: #0d1013;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+      }
+
+      /* ---------- Readouts ---------- */
+      .readouts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .readout {
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 10px 12px;
+        min-width: 0;
+      }
+      .readout .lab {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 4px;
+        white-space: normal;
+        line-height: 1.3;
+      }
+      .readout .val {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: clamp(19px, 3.4vw, 26px);
+        font-weight: 600;
+        line-height: 1.1;
+        white-space: nowrap;
+      }
+      .val .xv { color: var(--x-red); }
+      .val .yv { color: var(--y-blue); }
+      .val .zv { color: var(--z-green); }
+      .val .sep { color: var(--ink-faint); font-weight: 400; }
+
+      /* ---------- Controls ---------- */
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+        align-items: center;
+      }
+      button {
+        appearance: none;
+        border: 1px solid var(--line);
+        background: var(--panel-2);
+        color: var(--ink);
+        font: inherit;
+        font-size: 14px;
+        padding: 9px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        min-height: 42px;
+      }
+      button:hover { border-color: #3a4249; background: #1c2126; }
+      button:active { transform: translateY(1px); }
+      button.primary {
+        background: var(--paper);
+        color: #101315;
+        border-color: var(--paper);
+        font-weight: 600;
+        min-width: 108px;
+      }
+      button.primary:hover { background: #ffffff; }
+      .speedbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+      input[type="range"] {
+        accent-color: var(--accent);
+        width: 110px;
+      }
+
+      /* ---------- Start offset ---------- */
+      .startbox {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+        font-size: 13px;
+        color: var(--ink-dim);
+      }
+      .startbox .grp { display: flex; align-items: center; gap: 6px; }
+      .startbox label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .startbox label.lx { color: var(--x-red); }
+      .startbox label.ly { color: var(--y-blue); }
+      .startbox input[type="number"] {
+        width: 58px;
+        background: #0d1013;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        color: var(--ink);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 14px;
+        padding: 6px 8px;
+      }
+      .startbox .hint { font-size: 12px; color: var(--ink-faint); }
+
+      /* ---------- Ensemble ---------- */
+      .bigstats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .bigstat {
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 10px 12px;
+      }
+      .bigstat .lab {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 10px;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 4px;
+      }
+      .bigstat .val {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: clamp(20px, 3.6vw, 27px);
+        font-weight: 600;
+        line-height: 1.1;
+      }
+      .bigstat .val.measured { color: var(--paper); }
+      .bigstat .val.theory { color: var(--z-green); }
+      .legend {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        font-size: 12px;
+        color: var(--ink-dim);
+        margin-top: 10px;
+      }
+      .legend .sw {
+        display: inline-block;
+        width: 22px;
+        height: 0;
+        border-top: 3px solid;
+        vertical-align: middle;
+        margin-right: 6px;
+      }
+      .legend .sw.theory { border-color: var(--z-green); }
+      .legend .sw.measured { border-color: var(--paper); border-top-style: dashed; }
+      .ensnote { font-size: 12.5px; color: var(--ink-dim); margin: 10px 0 0; }
+      .ensnote b { color: var(--ink); font-weight: 600; }
+
+      /* ---------- Honest labeling ---------- */
+      .label-card {
+        margin-top: 18px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 18px 20px;
+      }
+      .label-card .stamp {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin: 0 0 8px;
+      }
+      .label-card p { margin: 0 0 10px; font-size: 15px; color: var(--ink); max-width: 72ch; }
+      .label-card p:last-child { margin-bottom: 0; }
+      .label-card .fences { font-size: 12.5px; color: var(--ink-faint); max-width: 78ch; }
+      .label-card code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.92em;
+        color: var(--ink);
+        background: #0d1013;
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: 0 4px;
+      }
+      footer {
+        margin-top: 22px;
+        font-size: 12px;
+        color: var(--ink-faint);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="plate">
+          <h1>The Walker</h1>
+          <span class="no">Exhibit · DiffusionDefect</span>
+        </div>
+        <p class="subtitle">
+          <span class="fz">z²</span> = <span class="fx">X²</span> + <span class="fy">y²</span> + <span class="ft">t</span>
+          — a theorem you can watch
+        </p>
+      </header>
+
+      <div class="stage">
+        <!-- ============ MAIN PANEL ============ -->
+        <section class="panel" aria-label="The walker">
+          <h2>One walker · 2D simple random walk</h2>
+          <canvas class="sim" id="grid" width="640" height="640"></canvas>
+
+          <div class="readouts">
+            <div class="readout">
+              <div class="lab">Step t</div>
+              <div class="val" id="roT">0</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Position (x, y)</div>
+              <div class="val"><span class="xv" id="roX">3</span><span class="sep">, </span><span class="yv" id="roY">2</span></div>
+            </div>
+            <div class="readout">
+              <div class="lab">r² = x² + y²</div>
+              <div class="val"><span class="zv" id="roR2">13</span></div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="primary" id="btnPlay" type="button">Pause</button>
+            <button id="btnStep" type="button">Step</button>
+            <button id="btnReset" type="button">Reset</button>
+            <div class="speedbox">
+              <label for="speed">Speed</label>
+              <input type="range" id="speed" min="1" max="40" value="6" />
+              <span id="speedVal">6 /s</span>
+            </div>
+          </div>
+
+          <div class="startbox">
+            <span>Start offset:</span>
+            <span class="grp">
+              <label class="lx" for="startX">x₀</label>
+              <input type="number" id="startX" value="3" min="-12" max="12" step="1" />
+            </span>
+            <span class="grp">
+              <label class="ly" for="startY">y₀</label>
+              <input type="number" id="startY" value="2" min="-12" max="12" step="1" />
+            </span>
+            <span class="hint">Applies on Reset. The walker starts here — not at the origin — so the theorem's x² + y² term is visible from step zero.</span>
+          </div>
+        </section>
+
+        <!-- ============ ENSEMBLE PANEL ============ -->
+        <section class="panel" aria-label="Ensemble average">
+          <h2>The ensemble · 200 walkers, averaged</h2>
+          <div class="bigstats">
+            <div class="bigstat">
+              <div class="lab">Measured average r²</div>
+              <div class="val measured" id="roMeas">13.00</div>
+            </div>
+            <div class="bigstat">
+              <div class="lab">Theory x₀² + y₀² + t</div>
+              <div class="val theory" id="roTheory">13</div>
+            </div>
+          </div>
+          <canvas class="sim" id="chart" width="520" height="380"></canvas>
+          <div class="legend">
+            <span><span class="sw theory"></span>Theory — exact line</span>
+            <span><span class="sw measured"></span>Measured — ensemble mean</span>
+          </div>
+          <p class="ensnote">
+            A single walker wanders anywhere — its r² proves nothing. But average
+            <b>200 independent walkers</b> and the noise cancels: the measured mean tracks the
+            exact line. That agreement is the theorem, seen from the outside.
+          </p>
+        </section>
+      </div>
+
+      <!-- ============ HONEST LABELING ============ -->
+      <section class="label-card" aria-label="About this exhibit">
+        <p class="stamp">Exhibit — numerical demonstration, not a theorem</p>
+        <p>
+          Exhibit (numerical demonstration, not a theorem). The theorem — expected squared
+          displacement equals x² + y² + t exactly — is machine-checked in Lean&nbsp;4
+          (<code>DiffusionDefect.lean</code>). What you see here is the simulation agreeing
+          with the proof.
+        </p>
+        <p class="fences">
+          The fences, stated plainly: <b>t</b> is the step count — the independent clock, not
+          physical time. The coefficient <b>1</b> in front of t is the walk's chosen
+          diffusivity (one lattice step per tick, uniform over the four directions). The
+          <b>+</b> signs are the chosen Euclidean signature. Change any of those choices and
+          the identity changes with them; within them, it is exact — proved, not fitted.
+        </p>
+      </section>
+
+      <footer>
+        <span>thet-logos / ACMD — Jeffrey Michael Gurd, Nexus Research (independent).</span>
+        <span>Module: DiffusionDefect.lean · 12 theorems · 0 sorry · standard axioms.</span>
+        <span>Color law: X red · Y blue · Z (radius) green.</span>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        var N_ENSEMBLE = 200;
+        var DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+        var COL = {
+          x: "#ff5a52",
+          y: "#5b9dff",
+          z: "#43d97e",
+          paper: "#f2efe6",
+          grid: "#1d2329",
+          gridAxis: "#39424a",
+          faint: "rgba(232,230,224,0.16)"
+        };
+
+        // ---------- State ----------
+        var startX = 3, startY = 2;
+        var t = 0;
+        var wx = startX, wy = startY;
+        var trail = [];               // main walker path [{x,y}, ...]
+        var ens = [];                 // ensemble positions [{x,y}, ...]
+        var history = [];             // measured mean r^2 per t
+        var playing = true;
+        var speed = 6;                // steps per second
+        var acc = 0, lastTs = null;
+
+        var el = function (id) { return document.getElementById(id); };
+        var gridC = el("grid"), chartC = el("chart");
+        var gtx = gridC.getContext("2d"), ctx = chartC.getContext("2d");
+
+        function theory() { return startX * startX + startY * startY + t; }
+
+        function reset() {
+          var sx = parseInt(el("startX").value, 10);
+          var sy = parseInt(el("startY").value, 10);
+          if (!isFinite(sx)) sx = 0;
+          if (!isFinite(sy)) sy = 0;
+          sx = Math.max(-12, Math.min(12, sx));
+          sy = Math.max(-12, Math.min(12, sy));
+          el("startX").value = sx; el("startY").value = sy;
+          startX = sx; startY = sy;
+          t = 0;
+          wx = startX; wy = startY;
+          trail = [{ x: wx, y: wy }];
+          ens = [];
+          for (var i = 0; i < N_ENSEMBLE; i++) ens.push({ x: startX, y: startY });
+          history = [startX * startX + startY * startY];
+          acc = 0;
+          updateReadouts();
+          drawAll();
+        }
+
+        function stepOnce() {
+          var d = DIRS[(Math.random() * 4) | 0];
+          wx += d[0]; wy += d[1];
+          trail.push({ x: wx, y: wy });
+          if (trail.length > 4000) trail.splice(0, trail.length - 4000);
+          var sum = 0;
+          for (var i = 0; i < N_ENSEMBLE; i++) {
+            var e = ens[i];
+            var dd = DIRS[(Math.random() * 4) | 0];
+            e.x += dd[0]; e.y += dd[1];
+            sum += e.x * e.x + e.y * e.y;
+          }
+          t += 1;
+          history.push(sum / N_ENSEMBLE);
+        }
+
+        // ---------- Readouts ----------
+        function fmt(n) {
+          return n.toLocaleString("en-US");
+        }
+        function updateReadouts() {
+          el("roT").textContent = fmt(t);
+          el("roX").textContent = wx;
+          el("roY").textContent = wy;
+          el("roR2").textContent = fmt(wx * wx + wy * wy);
+          el("roMeas").textContent = history[history.length - 1].toFixed(2);
+          el("roTheory").textContent = fmt(theory());
+        }
+
+        // ---------- Canvas sizing (HiDPI) ----------
+        function fitCanvas(c) {
+          var dpr = window.devicePixelRatio || 1;
+          var w = c.clientWidth, h = c.clientHeight;
+          if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) {
+            c.width = Math.round(w * dpr);
+            c.height = Math.round(h * dpr);
+          }
+          var g = c.getContext("2d");
+          g.setTransform(dpr, 0, 0, dpr, 0, 0);
+          return { w: w, h: h };
+        }
+
+        // ---------- Grid drawing ----------
+        function drawGrid() {
+          var s = fitCanvas(gridC);
+          var W = s.w, H = s.h;
+          gtx.clearRect(0, 0, W, H);
+
+          // World extent: cover start, trail, and a minimum radius.
+          var ext = 8;
+          var i, p;
+          for (i = 0; i < trail.length; i++) {
+            p = trail[i];
+            ext = Math.max(ext, Math.abs(p.x), Math.abs(p.y));
+          }
+          ext = Math.max(ext, Math.abs(startX), Math.abs(startY));
+          ext += 2;
+          var half = Math.min(W, H) / 2;
+          var scale = half / ext;
+          var cx = W / 2, cy = H / 2;
+          function px(x) { return cx + x * scale; }
+          function py(y) { return cy - y * scale; }
+
+          // Lattice lines
+          gtx.lineWidth = 1;
+          for (var gx = -ext; gx <= ext; gx++) {
+            gtx.strokeStyle = gx === 0 ? COL.gridAxis : COL.grid;
+            gtx.beginPath(); gtx.moveTo(px(gx), 0); gtx.lineTo(px(gx), H); gtx.stroke();
+          }
+          for (var gy = -ext; gy <= ext; gy++) {
+            gtx.strokeStyle = gy === 0 ? COL.gridAxis : COL.grid;
+            gtx.beginPath(); gtx.moveTo(0, py(gy)); gtx.lineTo(W, py(gy)); gtx.stroke();
+          }
+          // Lattice dots at intersections near the middle
+          gtx.fillStyle = "rgba(232,230,224,0.10)";
+          for (gx = -ext; gx <= ext; gx++) {
+            for (gy = -ext; gy <= ext; gy++) {
+              gtx.fillRect(px(gx) - 0.5, py(gy) - 0.5, 1, 1);
+            }
+          }
+
+          // Axis labels (house color law)
+          gtx.font = "600 12px ui-monospace, Menlo, Consolas, monospace";
+          gtx.fillStyle = COL.x;
+          gtx.fillText("X", W - 18, cy - 8);
+          gtx.fillStyle = COL.y;
+          gtx.fillText("Y", cx + 8, 16);
+
+          // Ensemble walkers — faint ghosts behind the hero walker
+          gtx.fillStyle = "rgba(232,230,224,0.13)";
+          for (i = 0; i < ens.length; i++) {
+            gtx.beginPath();
+            gtx.arc(px(ens[i].x), py(ens[i].y), 1.6, 0, Math.PI * 2);
+            gtx.fill();
+          }
+
+          // Radius line from true origin (0,0) to walker, in Z-green
+          gtx.strokeStyle = COL.z;
+          gtx.globalAlpha = 0.55;
+          gtx.lineWidth = 1.5;
+          gtx.setLineDash([4, 4]);
+          gtx.beginPath(); gtx.moveTo(px(0), py(0)); gtx.lineTo(px(wx), py(wy)); gtx.stroke();
+          gtx.setLineDash([]);
+          gtx.globalAlpha = 1;
+
+          // True origin marker
+          gtx.strokeStyle = "rgba(232,230,224,0.45)";
+          gtx.lineWidth = 1;
+          gtx.beginPath();
+          gtx.moveTo(px(0) - 5, py(0)); gtx.lineTo(px(0) + 5, py(0));
+          gtx.moveTo(px(0), py(0) - 5); gtx.lineTo(px(0), py(0) + 5);
+          gtx.stroke();
+          gtx.fillStyle = "rgba(232,230,224,0.45)";
+          gtx.font = "10px ui-monospace, Menlo, Consolas, monospace";
+          gtx.fillText("(0,0)", px(0) + 7, py(0) + 13);
+
+          // Fading trail
+          var n = trail.length;
+          if (n > 1) {
+            gtx.lineWidth = 2;
+            gtx.lineJoin = "round";
+            gtx.lineCap = "round";
+            for (i = 1; i < n; i++) {
+              var a = 0.06 + 0.72 * (i / n);
+              gtx.strokeStyle = "rgba(216,197,143," + a.toFixed(3) + ")";
+              gtx.beginPath();
+              gtx.moveTo(px(trail[i - 1].x), py(trail[i - 1].y));
+              gtx.lineTo(px(trail[i].x), py(trail[i].y));
+              gtx.stroke();
+            }
+          }
+
+          // Start marker — the marked origin offset (x0, y0)
+          gtx.strokeStyle = COL.paper;
+          gtx.lineWidth = 1.5;
+          gtx.beginPath();
+          gtx.arc(px(startX), py(startY), 6, 0, Math.PI * 2);
+          gtx.stroke();
+          gtx.fillStyle = COL.paper;
+          gtx.font = "600 10px ui-monospace, Menlo, Consolas, monospace";
+          gtx.fillText("start (" + startX + ", " + startY + ")", px(startX) + 9, py(startY) - 8);
+
+          // The walker
+          gtx.fillStyle = COL.paper;
+          gtx.beginPath();
+          gtx.arc(px(wx), py(wy), 5, 0, Math.PI * 2);
+          gtx.fill();
+          gtx.strokeStyle = "rgba(10,12,14,0.85)";
+          gtx.lineWidth = 1.5;
+          gtx.stroke();
+        }
+
+        // ---------- Chart drawing ----------
+        function drawChart() {
+          var s = fitCanvas(chartC);
+          var W = s.w, H = s.h;
+          ctx.clearRect(0, 0, W, H);
+
+          var padL = 46, padR = 12, padT = 12, padB = 30;
+          var iw = W - padL - padR, ih = H - padT - padB;
+          var tMax = Math.max(20, t);
+          var yMax = theory() * 1.18 + 4;
+          var i, v;
+          for (i = 0; i < history.length; i++) yMax = Math.max(yMax, history[i] * 1.12 + 2);
+
+          function X(tt) { return padL + (tt / tMax) * iw; }
+          function Y(vv) { return padT + ih - (vv / yMax) * ih; }
+
+          // Frame + gridlines
+          ctx.strokeStyle = COL.grid;
+          ctx.lineWidth = 1;
+          ctx.font = "10px ui-monospace, Menlo, Consolas, monospace";
+          var ticks = 4;
+          for (i = 0; i <= ticks; i++) {
+            v = (yMax / ticks) * i;
+            ctx.beginPath(); ctx.moveTo(padL, Y(v)); ctx.lineTo(W - padR, Y(v)); ctx.stroke();
+            ctx.fillStyle = "#6b7176";
+            ctx.fillText(String(Math.round(v)), 8, Y(v) + 3);
+          }
+          ctx.strokeStyle = COL.gridAxis;
+          ctx.strokeRect(padL, padT, iw, ih);
+
+          // Axis captions
+          ctx.fillStyle = COL.z;
+          ctx.fillText("r²", 8, padT + 2);
+          ctx.fillStyle = "#6b7176";
+          ctx.fillText("t →", W - padR - 22, H - 10);
+          ctx.fillText("0", padL - 3, H - 10);
+
+          // Theory line — exact, Z-green
+          ctx.strokeStyle = COL.z;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(X(0), Y(startX * startX + startY * startY));
+          ctx.lineTo(X(tMax), Y(startX * startX + startY * startY + tMax));
+          ctx.stroke();
+
+          // Measured ensemble mean — dashed paper line
+          if (history.length > 1) {
+            ctx.strokeStyle = COL.paper;
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 3]);
+            ctx.beginPath();
+            for (i = 0; i < history.length; i++) {
+              if (i === 0) ctx.moveTo(X(i), Y(history[i]));
+              else ctx.lineTo(X(i), Y(history[i]));
+            }
+            ctx.stroke();
+            ctx.setLineDash([]);
+            // Live endpoint dot
+            ctx.fillStyle = COL.paper;
+            ctx.beginPath();
+            ctx.arc(X(t), Y(history[history.length - 1]), 3.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        function drawAll() { drawGrid(); drawChart(); }
+
+        // ---------- Main loop ----------
+        function frame(ts) {
+          if (lastTs === null) lastTs = ts;
+          var dt = (ts - lastTs) / 1000;
+          lastTs = ts;
+          if (playing) {
+            acc += dt * speed;
+            var steps = Math.floor(acc);
+            if (steps > 0) {
+              acc -= steps;
+              steps = Math.min(steps, 200);
+              for (var i = 0; i < steps; i++) stepOnce();
+              updateReadouts();
+              drawAll();
+            }
+          }
+          requestAnimationFrame(frame);
+        }
+
+        // ---------- Controls ----------
+        var btnPlay = el("btnPlay");
+        function setPlaying(p) {
+          playing = p;
+          btnPlay.textContent = playing ? "Pause" : "Play";
+        }
+        btnPlay.addEventListener("click", function () { setPlaying(!playing); });
+        el("btnStep").addEventListener("click", function () {
+          stepOnce();
+          updateReadouts();
+          drawAll();
+        });
+        el("btnReset").addEventListener("click", function () { reset(); });
+        el("speed").addEventListener("input", function () {
+          speed = parseInt(this.value, 10) || 1;
+          el("speedVal").textContent = speed + " /s";
+        });
+        el("startX").addEventListener("change", reset);
+        el("startY").addEventListener("change", reset);
+        window.addEventListener("resize", drawAll);
+
+        reset();
+        setPlaying(true);
+        requestAnimationFrame(frame);
+      })();
+    </script>
+  </body>
+</html>
