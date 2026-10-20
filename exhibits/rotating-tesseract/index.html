@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Rotating Tesseract and Its Shadow</title>
+    <style>
+      :root {
+        --bg: #f4f2ec;
+        --ink: #1c1a16;
+        --ink-soft: #57534a;
+        --panel-line: #d8d3c6;
+        --card: #fbfaf6;
+        --chip: #eceade;
+        --chip-on: #1c1a16;
+        --chip-on-ink: #f7f4ec;
+        --accent: #b34724;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #141311;
+          --ink: #ece7db;
+          --ink-soft: #a49c8c;
+          --panel-line: #35322b;
+          --card: #1d1b18;
+          --chip: #2a2721;
+          --chip-on: #ece7db;
+          --chip-on-ink: #1c1a16;
+          --accent: #ff8a5c;
+        }
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+        line-height: 1.45;
+        -webkit-text-size-adjust: 100%;
+      }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 40px; }
+      h1 {
+        font-size: 1.55rem; line-height: 1.2; margin: 4px 0 6px; font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .lede { margin: 0 0 10px; color: var(--ink-soft); font-size: 1rem; }
+      .counts {
+        font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.86rem; letter-spacing: 0.01em;
+        border-top: 1px solid var(--panel-line);
+        border-bottom: 1px solid var(--panel-line);
+        padding: 8px 2px; margin: 0 0 18px;
+      }
+      .counts b { font-weight: 700; }
+      section.view { margin: 0 0 18px; }
+      .view-head {
+        display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
+        margin: 0 0 6px;
+      }
+      .view-head h2 { font-size: 1.08rem; margin: 0; font-weight: 600; }
+      .view-head .how {
+        font-size: 0.83rem; color: var(--ink-soft);
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      }
+      canvas.stage {
+        display: block; width: 100%; aspect-ratio: 4 / 3;
+        border-radius: 10px;
+      }
+      #modelCanvas { background: #0a0d13; box-shadow: inset 0 0 0 1px #232a38; }
+      #shadowCanvas { box-shadow: inset 0 0 0 1px #a9a49a; }
+      .legend {
+        display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 8px 2px 0;
+        font-size: 0.85rem; color: var(--ink-soft);
+      }
+      .legend span { display: inline-flex; align-items: center; gap: 6px; }
+      .swatch { width: 18px; height: 4px; border-radius: 2px; display: inline-block; }
+      .caption {
+        font-size: 1.02rem; font-style: italic; text-align: center;
+        margin: 4px 8px 22px;
+      }
+      .controls {
+        background: var(--card);
+        border: 1px solid var(--panel-line);
+        border-radius: 12px;
+        padding: 14px 14px 8px;
+      }
+      .transport { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+      button {
+        font: inherit; font-size: 0.92rem; cursor: pointer;
+        border: 1px solid var(--panel-line); background: var(--chip); color: var(--ink);
+        border-radius: 999px; padding: 10px 16px; min-height: 44px;
+        touch-action: manipulation;
+      }
+      button:active { transform: translateY(1px); }
+      button.on { background: var(--chip-on); color: var(--chip-on-ink); border-color: var(--chip-on); }
+      #playBtn { font-weight: 700; min-width: 118px; }
+      .group-label {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+        color: var(--ink-soft); margin: 14px 0 2px;
+      }
+      .slider-row {
+        display: grid; grid-template-columns: 52px 1fr 64px; align-items: center;
+        gap: 10px; min-height: 48px;
+      }
+      .slider-row .plane {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 1rem; font-weight: 700;
+      }
+      .slider-row .val {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.82rem; text-align: right; color: var(--ink-soft);
+        font-variant-numeric: tabular-nums;
+      }
+      input[type="range"] {
+        width: 100%; height: 44px; margin: 0; accent-color: var(--accent);
+        touch-action: pan-y; cursor: pointer; background: transparent;
+      }
+      .hint { font-size: 0.85rem; color: var(--ink-soft); margin: 10px 2px 6px; }
+      .foot { font-size: 0.85rem; color: var(--ink-soft); margin: 16px 2px 0; }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <h1>A 4D cube, turning in all six of its planes</h1>
+      <p class="lede">The wire model from the video, made movable. This is the real
+        tesseract — computed in four dimensions, then projected down twice: once to the
+        model you can almost hold, once to its flat shadow on the ground.</p>
+      <p class="counts"><b>16</b> vertices · <b>32</b> edges · <b>24</b> square faces · <b>8</b> cubic cells</p>
+
+      <section class="view" aria-label="The model">
+        <div class="view-head">
+          <h2>The model</h2>
+          <span class="how">4D → 3D → screen, with perspective</span>
+        </div>
+        <canvas id="modelCanvas" class="stage" role="img"
+          aria-label="Perspective projection of a rotating tesseract. Two cubic cells in different colors joined by eight bridging edges."></canvas>
+        <div class="legend" aria-hidden="true">
+          <span><i class="swatch" style="background:#ff5d47"></i> the w = +1 cell</span>
+          <span><i class="swatch" style="background:#2fb7ff"></i> the w = −1 cell</span>
+          <span><i class="swatch" style="background:#ffcf4d"></i> the 8 bridges between them</span>
+          <span>dot size &amp; brightness = w, the fourth coordinate</span>
+        </div>
+      </section>
+
+      <section class="view" aria-label="The shadow">
+        <div class="view-head">
+          <h2>The shadow</h2>
+          <span class="how">4D → flat (x, y), straight down, like sunlight</span>
+        </div>
+        <canvas id="shadowCanvas" class="stage" role="img"
+          aria-label="Flat orthographic shadow of the same tesseract: dark lines and dots on gray pavement, no perspective, no color."></canvas>
+      </section>
+
+      <p class="caption">Two projections of one 4D cube — the counts survive, the lengths don't.</p>
+
+      <div class="controls">
+        <div class="transport">
+          <button id="playBtn" type="button" aria-pressed="true">❚❚&nbsp; Pause</button>
+          <button type="button" class="preset on" data-preset="double">Double rotation (inside-out)</button>
+          <button type="button" class="preset" data-preset="simple">Simple spin</button>
+          <button type="button" class="preset" data-preset="all">All planes</button>
+          <button type="button" class="preset" data-preset="freeze">Freeze</button>
+        </div>
+
+        <p class="group-label">Planes inside ordinary 3D space</p>
+        <div id="sliders3d"></div>
+
+        <p class="group-label">Planes through the fourth direction, w</p>
+        <div id="slidersW"></div>
+
+        <p class="hint">Each slider is one rotation plane's speed. Center is stopped;
+          drag left of center and that plane runs backwards. A rigid model in your hand
+          can only turn in the first three — the w-planes are the ones that exist only here.</p>
+      </div>
+
+      <p class="foot">A 4D rotation doesn't turn around an axis; it turns <em>in a plane</em>,
+        and four dimensions have six planes. Turn two disjoint planes at once — a double
+        rotation — and the inner cell swells, passes through the outer cell, and takes its
+        place. That inside-out pass is the signature no 3D object can perform.</p>
+    </main>
+
+    <script>
+      "use strict";
+
+      /* ---------- The tesseract itself ----------
+         16 vertices: every (±1, ±1, ±1, ±1). Coordinates ordered (x, y, z, w).
+         32 edges: pairs of vertices differing in exactly one coordinate. */
+      var VERTS = [];
+      for (var i = 0; i < 16; i++) {
+        VERTS.push([
+          (i & 1) ? 1 : -1,
+          (i & 2) ? 1 : -1,
+          (i & 4) ? 1 : -1,
+          (i & 8) ? 1 : -1
+        ]);
+      }
+      var EDGES = [];
+      for (var a = 0; a < 16; a++) {
+        for (var b = a + 1; b < 16; b++) {
+          var d = a ^ b;
+          if (d && (d & (d - 1)) === 0) {           // exactly one bit differs
+            var bit = Math.round(Math.log2(d));      // 0=x, 1=y, 2=z, 3=w
+            var kind;
+            if (bit === 3) kind = "bridge";          // one of the 8 w-bridges
+            else kind = VERTS[a][3] > 0 ? "plus" : "minus"; // edge of a cubic cell
+            EDGES.push({ a: a, b: b, kind: kind });
+          }
+        }
+      }
+
+      /* ---------- Rotation state: the six planes of 4D ---------- */
+      var PLANES = [
+        { name: "xy", i: 0, j: 1, group: "3d" },
+        { name: "xz", i: 0, j: 2, group: "3d" },
+        { name: "yz", i: 1, j: 2, group: "3d" },
+        { name: "xw", i: 0, j: 3, group: "w" },
+        { name: "yw", i: 1, j: 3, group: "w" },
+        { name: "zw", i: 2, j: 3, group: "w" }
+      ];
+      var angles = {}, speeds = {};
+      PLANES.forEach(function (p) { angles[p.name] = 0; speeds[p.name] = 0; });
+
+      var PRESETS = {
+        double: { xw: 0.55, yw: 0.55 },
+        simple: { xy: 0.8 },
+        all:    { xy: 0.30, xz: 0.42, yz: 0.26, xw: 0.50, yw: 0.38, zw: 0.44 },
+        freeze: {}
+      };
+
+      var running = true;
+      var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced) running = false;
+
+      /* ---------- Sliders ---------- */
+      var sliderEls = {};
+      function buildSliders(containerId, group) {
+        var box = document.getElementById(containerId);
+        PLANES.forEach(function (p) {
+          if (p.group !== group) return;
+          var row = document.createElement("div");
+          row.className = "slider-row";
+          var lab = document.createElement("span");
+          lab.className = "plane"; lab.textContent = p.name;
+          var input = document.createElement("input");
+          input.type = "range"; input.min = "-1.6"; input.max = "1.6"; input.step = "0.02";
+          input.value = "0";
+          input.setAttribute("aria-label", "Rotation speed in the " + p.name + " plane");
+          var val = document.createElement("span");
+          val.className = "val"; val.textContent = "0.00";
+          row.appendChild(lab); row.appendChild(input); row.appendChild(val);
+          box.appendChild(row);
+          sliderEls[p.name] = { input: input, val: val };
+          input.addEventListener("input", function () {
+            speeds[p.name] = parseFloat(input.value);
+            val.textContent = fmt(speeds[p.name]);
+            clearPresetHighlight();
+          });
+        });
+      }
+      function fmt(v) { return (v > 0 ? "+" : "") + v.toFixed(2); }
+      buildSliders("sliders3d", "3d");
+      buildSliders("slidersW", "w");
+
+      function setSpeeds(map) {
+        PLANES.forEach(function (p) {
+          var v = map[p.name] || 0;
+          speeds[p.name] = v;
+          sliderEls[p.name].input.value = String(v);
+          sliderEls[p.name].val.textContent = fmt(v);
+        });
+      }
+
+      /* ---------- Transport & presets ---------- */
+      var playBtn = document.getElementById("playBtn");
+      function renderPlayBtn() {
+        playBtn.innerHTML = running ? "❚❚&nbsp; Pause" : "▶&nbsp; Play";
+        playBtn.setAttribute("aria-pressed", running ? "true" : "false");
+      }
+      playBtn.addEventListener("click", function () { running = !running; renderPlayBtn(); });
+
+      var presetBtns = Array.prototype.slice.call(document.querySelectorAll(".preset"));
+      function clearPresetHighlight() {
+        presetBtns.forEach(function (b) { b.classList.remove("on"); });
+      }
+      presetBtns.forEach(function (b) {
+        b.addEventListener("click", function () {
+          setSpeeds(PRESETS[b.getAttribute("data-preset")]);
+          clearPresetHighlight();
+          b.classList.add("on");
+          if (b.getAttribute("data-preset") !== "freeze" && !running) {
+            running = true; renderPlayBtn();
+          }
+        });
+      });
+
+      // Default on load: the double-rotation preset, running.
+      setSpeeds(PRESETS.double);
+      renderPlayBtn();
+
+      /* ---------- Canvases ---------- */
+      var modelCanvas = document.getElementById("modelCanvas");
+      var shadowCanvas = document.getElementById("shadowCanvas");
+      var mctx = modelCanvas.getContext("2d");
+      var sctx = shadowCanvas.getContext("2d");
+      var speckle = null;
+
+      function fit(canvas) {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var w = canvas.clientWidth, h = canvas.clientHeight;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        var ctx = canvas.getContext("2d");
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        return { w: w, h: h };
+      }
+      function makeSpeckle(w, h) {
+        var c = document.createElement("canvas");
+        c.width = Math.max(2, Math.round(w)); c.height = Math.max(2, Math.round(h));
+        var g = c.getContext("2d");
+        g.fillStyle = "#b9b6ae"; g.fillRect(0, 0, c.width, c.height);
+        var n = Math.round(c.width * c.height / 55);
+        for (var k = 0; k < n; k++) {
+          var shade = 150 + Math.floor(Math.random() * 70);
+          g.fillStyle = "rgba(" + shade + "," + shade + "," + (shade - 6) + ",0.5)";
+          g.fillRect(Math.random() * c.width, Math.random() * c.height,
+                     1 + Math.random() * 1.6, 1 + Math.random() * 1.6);
+        }
+        for (var j = 0; j < 26; j++) {  // a few darker stones
+          g.fillStyle = "rgba(105,102,96,0.35)";
+          g.beginPath();
+          g.arc(Math.random() * c.width, Math.random() * c.height, 1 + Math.random() * 2.2, 0, 6.2832);
+          g.fill();
+        }
+        return c;
+      }
+      var mSize = fit(modelCanvas), sSize = fit(shadowCanvas);
+      speckle = makeSpeckle(sSize.w, sSize.h);
+      var resizeTimer = null;
+      window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          mSize = fit(modelCanvas); sSize = fit(shadowCanvas);
+          speckle = makeSpeckle(sSize.w, sSize.h);
+        }, 120);
+      });
+
+      /* ---------- Math ---------- */
+      function rotate4(v) {
+        var p = [v[0], v[1], v[2], v[3]];
+        for (var k = 0; k < PLANES.length; k++) {
+          var pl = PLANES[k], ang = angles[pl.name];
+          if (!ang) continue;
+          var c = Math.cos(ang), s = Math.sin(ang);
+          var u = p[pl.i], w = p[pl.j];
+          p[pl.i] = u * c - w * s;
+          p[pl.j] = u * s + w * c;
+        }
+        return p;
+      }
+      // Fixed camera tilt so the 3D projection reads as a solid viewpoint.
+      function tilt3(p) {
+        var c1 = Math.cos(0.5), s1 = Math.sin(0.5);   // xz tilt
+        var x = p[0] * c1 - p[2] * s1, z = p[0] * s1 + p[2] * c1;
+        var c2 = Math.cos(0.38), s2 = Math.sin(0.38); // yz tilt
+        var y = p[1] * c2 - z * s2; z = p[1] * s2 + z * c2;
+        return [x, y, z];
+      }
+      function lerp(a, b, t) { return a + (b - a) * t; }
+      function mixColor(c1, c2, t) {
+        return "rgb(" + Math.round(lerp(c1[0], c2[0], t)) + "," +
+                        Math.round(lerp(c1[1], c2[1], t)) + "," +
+                        Math.round(lerp(c1[2], c2[2], t)) + ")";
+      }
+
+      var EDGE_COLORS = { plus: "#ff5d47", minus: "#2fb7ff", bridge: "#ffcf4d" };
+      var DW = 3.2, DZ = 4.6;   // perspective distances: 4D eye, then 3D eye
+
+      function draw(rot) {
+        /* ----- The model: 4D -> 3D (perspective on w) -> 2D (perspective on z) ----- */
+        var W = mSize.w, H = mSize.h;
+        mctx.clearRect(0, 0, W, H);
+        var scaleM = Math.min(W, H) * 0.148;
+        var cx = W / 2, cy = H / 2;
+        var pts = [], i, p4, s4, p3, s3;
+        for (i = 0; i < 16; i++) {
+          p4 = rot[i];
+          s4 = DW / (DW - p4[3]);                       // w-perspective: nearer in w = bigger
+          p3 = tilt3([p4[0] * s4, p4[1] * s4, p4[2] * s4]);
+          s3 = DZ / (DZ - p3[2]);
+          pts.push({
+            x: cx + p3[0] * s3 * scaleM,
+            y: cy - p3[1] * s3 * scaleM,
+            z: p3[2], w: p4[3], persp: s4 * s3
+          });
+        }
+        // Edges far-to-near so the near cell draws over the far one.
+        var order = EDGES.slice().sort(function (e1, e2) {
+          return (pts[e1.a].z + pts[e1.b].z) - (pts[e2.a].z + pts[e2.b].z);
+        });
+        mctx.lineCap = "round";
+        for (i = 0; i < order.length; i++) {
+          var e = order[i], A = pts[e.a], B = pts[e.b];
+          var depth = Math.min(1, Math.max(0, (A.z + B.z + 5.2) / 10.4));
+          mctx.strokeStyle = EDGE_COLORS[e.kind];
+          mctx.globalAlpha = 0.38 + 0.62 * depth;
+          mctx.lineWidth = e.kind === "bridge" ? 1.6 : 2.1;
+          mctx.beginPath(); mctx.moveTo(A.x, A.y); mctx.lineTo(B.x, B.y); mctx.stroke();
+        }
+        mctx.globalAlpha = 1;
+        // Vertices: size and brightness from the w coordinate.
+        var vOrder = pts.map(function (_, idx) { return idx; }).sort(function (u, v) {
+          return pts[u].z - pts[v].z;
+        });
+        for (i = 0; i < 16; i++) {
+          var P = pts[vOrder[i]];
+          var t = Math.min(1, Math.max(0, (P.w + 2) / 4));
+          var r = (2.1 + 2.6 * t) * Math.min(1.25, Math.max(0.8, P.persp));
+          mctx.fillStyle = mixColor([110, 126, 160], [255, 255, 255], t);
+          mctx.beginPath(); mctx.arc(P.x, P.y, r, 0, 6.2832); mctx.fill();
+        }
+
+        /* ----- The shadow: straight orthographic drop to (x, y). No perspective, no color. ----- */
+        var SW = sSize.w, SH = sSize.h;
+        sctx.clearRect(0, 0, SW, SH);
+        if (speckle) sctx.drawImage(speckle, 0, 0, SW, SH);
+        var scaleS = Math.min(SW, SH) * 0.235;   // vertices reach |coord| 2
+        var scx = SW / 2, scy = SH / 2;
+        sctx.strokeStyle = "rgba(38,36,33,0.78)";
+        sctx.lineWidth = 2.4; sctx.lineCap = "round";
+        sctx.beginPath();
+        for (i = 0; i < EDGES.length; i++) {
+          var e2 = EDGES[i];
+          var pA = rot[e2.a], pB = rot[e2.b];
+          sctx.moveTo(scx + pA[0] * scaleS, scy - pA[1] * scaleS);
+          sctx.lineTo(scx + pB[0] * scaleS, scy - pB[1] * scaleS);
+        }
+        sctx.stroke();
+        sctx.fillStyle = "rgba(30,28,26,0.92)";
+        for (i = 0; i < 16; i++) {
+          sctx.beginPath();
+          sctx.arc(scx + rot[i][0] * scaleS, scy - rot[i][1] * scaleS, 3.6, 0, 6.2832);
+          sctx.fill();
+        }
+      }
+
+      /* ---------- Main loop: one rotation state, both views, every frame ---------- */
+      var last = null;
+      function frame(ts) {
+        if (last === null) last = ts;
+        var dt = Math.min(0.05, (ts - last) / 1000);
+        last = ts;
+        if (running) {
+          for (var k = 0; k < PLANES.length; k++) {
+            var p = PLANES[k];
+            angles[p.name] += speeds[p.name] * dt;
+          }
+        }
+        var rot = VERTS.map(rotate4);
+        draw(rot);
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    </script>
+  </body>
+</html>
