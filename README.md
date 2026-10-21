@@ -18,8 +18,8 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**3,323 verified theorem declarations**\*
-across 117 counted Lean modules, with whitepaper dossiers for every campaign.
+**3,337 verified theorem declarations**\*
+across 118 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -33,7 +33,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 3,363); earlier running
+rule (an attribute-inclusive count reads 3,377); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0.*
 
@@ -173,7 +173,15 @@ by mode: the diagonal heat kernel e^{−tK} has the semigroup law, its
 trace is the sum of the modes' exponential schedules, each mode's
 total payment over all time is exactly 1/λ, and at unit time the
 kernel IS the state, e^{−K} = ρ; finite, diagonal case;
-[dossier](whitepaper/thermal-kernel-2026-10-18.md)). Theories intake, Round 1:
+[dossier](whitepaper/thermal-kernel-2026-10-18.md)) · WindingRing
+(winding numbers on a finite phase ring, as integer bookkeeping:
+compound winding is addition in ℤ; a slip — one edge gaining a full
+turn of ticks — raises the winding by exactly 1 while leaving every
+visible phase unchanged modulo the turn; re-gauging a lift by
+anything periodic cannot move it, so winding changes only at slips;
+and winding 0 does not imply trivial, by an in-module counterexample;
+cabinet tier — not an Abrikosov vortex, no knots, no continuum claim;
+[dossier](whitepaper/winding-ring-2026-10-21.md)). Theories intake, Round 1:
 KMS/Tomita–Takesaki and classical Yang–Mills FIT at the finite level;
 continuum claims NO-FIT, on record
 ([dossier](whitepaper/theories-intake-2026-10-11.md)).
