@@ -3075,6 +3075,84 @@ the same speed as positive ones.
   byte-identically.
 
 
+## 29. The 4D Dynamics in four colors — a visual representation (exhibit)
+
+This section is an exhibit, like §28: it proves nothing and
+adds no theorem. It sets four equations of the corpus — each
+machine-checked in the module named beneath it — in four
+colors, as a visual representation of the program's dynamic
+ontology: heat in a bounded box; a thermal state resting on
+its energies; charge separated across sectors; the flux that
+answers when sectors couple; and the state itself, whose
+snapshot is the algebra and whose flow is the film behind it.
+The equations are T1 exactly as stated in their modules. The
+colors are a reading aid under a palette declared below; the
+ontology the palette encodes is the author's interpretive
+layer (T5 in the program's tiers) and asserts nothing about
+the mathematics, which stands in black and white in the
+repository. Each strand is named in its caption, so nothing
+in this section depends on color alone surviving print.
+
+**The palette (declared convention of this exhibit).**
+Gold — heat and diffusion. Blue — charge and its separation.
+Red — the modular flux. Green — the state and its flow. The
+assignment extends the author's standing color convention
+for the tripotent components (X red, Y blue, Z green) with a
+fourth color for heat; it is a convention of representation,
+not a claim.
+
+- <span style="color:#B8860B">**E[r²] = x² + y² + t**</span>
+  — *gold: heat, spreading.* The expected squared displacement
+  of the two-dimensional walk after t steps from (x, y) is
+  exactly x² + y² + t: time enters the distance law in
+  quadrature with the two spatial directions, and diffusion —
+  the heat channel — spreads at this, the slowest of rates.
+  `ThetLogos.DiffusionDefect` (12 theorems, zero sorry).
+
+- <span style="color:#2050A0">**S(β) = q · (exp(−βE₀) − exp(−βE₁)) / (exp(−βE₀) + exp(−βE₁)) = −q · tanh(β(E₀ − E₁)/2)**</span>
+  — *blue: charge, separated by a thermal state.* For a Gibbs
+  state over two sectors with energies E₀, E₁ and an input
+  charge q carried as +q on sector 0 and −q on sector 1, the
+  separation is exactly this function of the inverse
+  temperature β and the gap: zero if and only if the energies
+  are equal, strictly growing in β for a nonzero gap, bounded
+  by |q| at every finite β, and tending to ±q in the cold
+  limit. The charge and the energies are inputs; no charge
+  value is derived. `ThetLogos.TeslaVortexSeparation`
+  (18 theorems, zero sorry; landed 2026-10-22, after this
+  manuscript's §0 inventory — its dossier is
+  `whitepaper/tesla-vortex-modular-dynamics-rung1-2026-10-22.md`).
+
+- <span style="color:#C0272D">**φ = i[K, D] = 0 ⟺ D is block-diagonal across ρ's distinct-weight sectors**</span>
+  — *red: the flux.* The modular flux of a state vanishes
+  exactly when the Dirac operator does not couple the state's
+  weight sectors — for arbitrary D and any real weights, with
+  the general Hermitian form beside it. Couple the sectors of
+  a separated state, and the flux is nonzero: the vortex turns
+  on. `ThetLogos.FluxClassification` (15 theorems, zero sorry;
+  landed 2026-10-22; dossier
+  `whitepaper/flux-classification-2026-10-22.md`).
+
+- <span style="color:#1E7B34">**K = β•diag(E) + logZ•1, and the modular flow of a Gibbs state is Heisenberg evolution at rescaled time β·s**</span>
+  — *green: the state and its flow.* For a Gibbs state the
+  modular Hamiltonian is the energy diagonal, rescaled: the
+  snapshot's generator is written on its face, and its flow
+  is ordinary evolution read at thermal time — in both
+  pictures, for a general Hermitian Hamiltonian.
+  `ThetLogos.GibbsSpan` (21 theorems, zero sorry; landed
+  2026-10-22; dossier `whitepaper/gibbs-span-2026-10-22.md`).
+
+**Fences.** The four equations are the whole content of this
+exhibit. Nothing here models light as a field, matter
+formation, or the derivation of any physical constant or
+charge; the map from these equations to the author's 4D
+Dynamic Ontology is printed as a separate memo
+(`4d-dynamic-ontology-combined-map-2026-10-22`, outside this
+paper) with every correspondence marked anchored, rhyme, or
+empty, and the standing kills restated. A reader who grants
+the ontology nothing loses nothing here: four proved
+equations, in colors.
+
 ## Acknowledgments
 
 This program formalizes. It did not originate the ideas, the

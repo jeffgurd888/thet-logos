@@ -282,3 +282,42 @@ decision only:
 
 - Manuscript (md5): `9e9aef7d80d0c3da6682ae9e44345ee0`
 - PDF (md5): `97fc975dc936a77a5a25ef4b4bbf2382`
+
+---
+
+## Amendment (2026-10-22): §29 added — the four-colors exhibit
+
+At Jeff's instruction (2026-10-22 16:20 EDT, widget ruling "Put it in
+Paper v4 instead"), a new §29 — "The 4D Dynamics in four colors — a
+visual representation (exhibit)" — was inserted after §28, before the
+Acknowledgments. Content: four corpus equations set in color (gold —
+the DiffusionDefect law E[r²] = x² + y² + t; blue — the
+TeslaVortexSeparation formula; red — the FluxClassification iff; green
+— the GibbsSpan flow identity), each with its strand caption, module,
+and count; a declared palette paragraph; and a fences paragraph. The
+section is an exhibit in §28's sense: it proves nothing, the equations
+are T1 as stated in their modules, and the ontology the colors encode
+is labeled T5 on its face. Two of the four modules (TeslaVortex
+Separation, FluxClassification) and GibbsSpan landed 2026-10-22, after
+this manuscript's §0 inventory; §29 says so on its face, and the
+ship-day §0 refresh (fresh counts) remains as planned. Full prose
+sections for the 2026-10-22 bricks are NOT added by this amendment —
+that remains Jeff's separate call.
+
+**Palette (declared in §29, Jeff correctable in one word before the
+ship):** gold #B8860B = heat/diffusion; blue #2050A0 = charge/
+separation; red #C0272D = modular flux; green #1E7B34 = state/flow.
+
+**Render:** the PDF was regenerated in-environment with the recorded
+pipeline (python-markdown 3.11.1 → WeasyPrint 62.3, DejaVu, A4) via the
+new saved script `whitepaper/render_v4.py` — the original render
+command was not saved with the manuscript, and render_v4.py's CSS is a
+reconstruction, so this render runs 60 pages against the original
+51-page styling. Page count is a styling artifact, not content: the
+ship-day render re-derives all such figures. **Verified for this
+render:** §29 present by text extraction (all four equations, palette
+paragraph, fences); all four colors pixel-verified in the rendered
+PDF (gold (184,134,11) p.55; blue (32,80,160) p.55; red (192,39,45)
+p.56; green (30,123,52) p.56). Manuscript now 3,380 lines / 27,089 words.
+**Status remains: PREPARED, NOT PUBLISHED.** The Nov 6 ship gate is
+unchanged.
