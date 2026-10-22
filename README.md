@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-3%2C507-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-3%2C522-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -18,8 +18,8 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**3,507 theorem declarations**\*
-across 125 counted Lean modules, with whitepaper dossiers for every campaign.
+**3,522 theorem declarations**\*
+across 126 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -33,7 +33,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 3,547); earlier running
+rule (an attribute-inclusive count reads 3,562); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
