@@ -18,8 +18,8 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
-**3,384 verified theorem declarations**\*
-across 121 counted Lean modules, with whitepaper dossiers for every campaign.
+**3,408 verified theorem declarations**\*
+across 122 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -33,7 +33,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 3,424); earlier running
+rule (an attribute-inclusive count reads 3,448); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0.*
 
@@ -202,7 +202,17 @@ payoff, stationarity, and master tick with firstness transport
 along the spectral decomposition, the clock's statements in the
 eigenbasis; the non-diagonal e^{−K} = ρ jewel and original-basis
 entries are named remainders, not claimed;
-[dossier](whitepaper/hermitian-reduction-2026-10-21.md)). Theories intake, Round 1:
+[dossier](whitepaper/hermitian-reduction-2026-10-21.md)) ·
+ThermalPreCompensation (the thermal instance of the
+pre-compensation question: coherences damped by a factor of the
+spectral gap; a target is exactly pre-compensable iff its
+de-amplified candidate is a density matrix — positivity is the
+whole question — and the maximally coherent pair across the
+widest gap never is, its negative direction exactly
+1 − exp(β · spectralWidth): the width prices the tooth; the
+density theorem carries its gap-kernel positivity hypothesis on
+its face, and the flow's own cosine factor is unconditional;
+[dossier](whitepaper/thermal-pre-compensation-2026-10-21.md)). Theories intake, Round 1:
 KMS/Tomita–Takesaki and classical Yang–Mills FIT at the finite level;
 continuum claims NO-FIT, on record
 ([dossier](whitepaper/theories-intake-2026-10-11.md)).
