@@ -321,3 +321,29 @@ PDF (gold (184,134,11) p.55; blue (32,80,160) p.55; red (192,39,45)
 p.56; green (30,123,52) p.56). Manuscript now 3,380 lines / 27,089 words.
 **Status remains: PREPARED, NOT PUBLISHED.** The Nov 6 ship gate is
 unchanged.
+
+---
+
+## Amendment 2 (2026-10-22): §§30–35 built — the 2026-10-22 bricks get full sections
+
+At Jeff's instruction (2026-10-22 16:59 EDT, "build them"), full prose
+sections were written for all six bricks landed 2026-10-22, following
+§29: §30 CharpolyFactor (STANDS WHOLE), §31 DiracTorsionMap (grading
+seat STANDS / sign seat KILLED, reported at win speed), §32
+DiscreteLangevin — Stokes–Einstein Rung 1 (STANDS WHOLE, Target 3 in
+the charter's pinned form), §33 FluxClassification (STANDS WHOLE),
+§34 GibbsSpan (STANDS; the pad's general-Schrödinger NO SEAT verdict
+carried, not upgraded), §35 TeslaVortexSeparation (STANDS WHOLE). Each
+section is sourced from its landing dossier (named in the section),
+carries its fences on its face, and closes with its census step; the
+six steps chain 3,408 → 3,442 → 3,460 → 3,507 → 3,522 → 3,543 →
+3,561 strict / 123 → 128 modules, matching the README and the landing
+records exactly. A §0 subsection was also added: "The
+proof-dependency audit (2026-10-21/22)" — verdict NO SURPRISES, the
+sorryAx footprint exactly the 7 known declarations, proved-only
+3,390–3,392 of 3,408, full report cited. Manuscript now 3,586 lines /
+28,715 words. PDF regenerated with render_v4.py (this styling: 64
+pages); extraction verified for the §0 audit subsection and all six
+section headings. Status remains PREPARED, NOT PUBLISHED; the Nov 6
+ship-day §0 count refresh is unchanged and still required (the §0
+inventory in the text is the 2026-10-18 one, as its face states).

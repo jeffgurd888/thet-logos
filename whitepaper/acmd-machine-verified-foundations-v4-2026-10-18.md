@@ -559,6 +559,33 @@ existence-vacuity correction likewise axiom-free); nine
 pre-compensation headlines; and all 15 resonance-spectrum
 headlines.
 
+### The proof-dependency audit (2026-10-21/22)
+
+At the author's instruction, the complete transitive axiom
+footprint of every declaration in the counted corpus was
+inspected directly (4,117 declarations across all 137 source
+files, counted and remainder; the pipeline calibrated on two
+independent routes against a known-clean and a known-sorry
+anchor, agreeing exactly). **Verdict: NO SURPRISES.** The
+`sorryAx` footprint of the counted corpus is exactly the seven
+known sorry declarations named in this section — no transitive
+contamination anywhere: every downstream importer of the three
+sorry-carrying files is clean, including the 474 declarations
+of `CFKernelRetarget`. A further 9–11 counted declarations rest
+on the corpus's own named T2 file axioms (the CFKernel and CCM
+classification headlines, the five N0Uniqueness theorems, and —
+on a counted-membership hinge — CausalProduct's two product
+theorems). The honest proved-only figure at the audit's
+inventory (3,408 strict) is therefore **3,390–3,392**
+standard-axioms-only declarations; the range is the
+CausalProduct/OrderOne membership hinge, with documentary
+evidence favoring 3,390. The audit predates the six bricks of
+§§30–35; each of those was individually axiom-checked at
+landing (`#print axioms` on every headline — standard three
+only), so the footprint statement extends over them
+declaration by declaration. Full report:
+`whitepaper/corpus-dependency-audit-2026-10-21.md`.
+
 ### Corrections to Version 2 (in the open)
 
 Version 2 is a dated snapshot and is not retro-edited. Four of
@@ -3152,6 +3179,185 @@ paper) with every correspondence marked anchored, rhyme, or
 empty, and the standing kills restated. A reader who grants
 the ontology nothing loses nothing here: four proved
 equations, in colors.
+
+## 30. CharpolyFactor — Q4 Path B's load-bearing lemma, discharged stronger than worded (T1) — STANDS WHOLE
+
+`ThetLogos.CharpolyFactor` (34 theorems, 7 definitions; zero
+sorry; headline axiom checks exactly the standard three). The
+Q4 amendment of 2026-10-05 named the load-bearing unproved
+lemma of the mass-gap run's Path B: that `charpoly(D_F)` splits
+into sector polynomials of degree ≤ 4 in λ². The lemma is
+**discharged, stronger than worded.** For the corpus's
+one-generation `smDirac` on ℂ³² at arbitrary parameters,
+`charpoly_smDirac` factors the characteristic polynomial over
+the eight mode classes of the corpus's own support lemma; each
+mode factor (`modeFactor_sq_form`, `modeBlock_charpoly`) is a
+**biquadratic** — X⁴ − C(2•|aₖ|² + |eₖ|²)•X² + C(|aₖ|⁴) — a
+polynomial in X² of λ²-degree **≤ 2**, half the amendment's
+claimed bound, hence radical-solvable per sector; the eight
+modes group into the four Yukawa sectors with multiplicity 2
+(`charpoly_smDirac_grouped`). General machinery proved en
+route: the charpoly of a block-diagonal matrix is the product
+of the block charpolys, and the charpoly of the chiral
+off-diagonal block form `[[0, P], [Q, 0]]` is the charpoly of
+`−(Q*P)` composed with X². **Fences:** the result is about
+the one-generation ansatz; `blockedQ4_closedFormGap` **stays
+sorry** — the per-sector closed forms do not survive Path B's
+remaining step, the `min` selection (Obstruction 2,
+generically non-smooth at level crossings), which stands
+untouched and is now the path's one named obstruction instead
+of two. No part of any official Clay statement is touched.
+Census: 3,408 → 3,442 strict; 123 counted modules. Dossier:
+`whitepaper/charpoly-factorization-2026-10-22.md`.
+
+## 31. DiracTorsionMap — the D_F torsion map: the grading seat stands, the sign seat is killed (T1)
+
+`ThetLogos.DiracTorsionMap` (18 theorems, 4 definitions; zero
+sorry; standard three on every headline). §13's abstract
+`EdgeSignature` law — the defect calculus of η + T against
+(η + T)² = 1, needing only η² = 1 — is instantiated on the
+corpus's actual finite Dirac family under inner fluctuations
+D ↦ D_A, with two seats for η put to the question. **Seat 1,
+the grading seat (η := γ_F): SURVIVAL STANDS** — its torsion
+map is the zero map; the substance is the invariance theorem
+`fluctuatedDirac_gamma_odd` (every inner fluctuation of a
+γ-odd Dirac operator by a γ-odd 1-form stays γ-odd), so the
+induced correction is exactly T = 0. **Seat 2, the sign seat
+(η₀ := y⁻¹·D₀ on the flat sector): SURVIVAL KILLED, for every
+s ≠ 0** — `majorana_survival_iff` proves (η₀ + T)² = 1 ⟺
+s = 0 along the Majorana deformation line, and `defect_entry`
+names the witness: the defect at the single (ν_L, ν̄_R) corner
+entry is exactly y⁻¹•s̄. In the sign seat the Majorana block
+*is* the torsion, and it does not survive. The kill is a T1
+theorem, reported at win speed per the house rule. **Fences:**
+the sign seat's iff is a statement about the flat sector and
+that deformation line; the grading seat's survival covers
+γ-odd fluctuations only. Finite toy only — no continuum or
+spacetime torsion. Census: 3,442 → 3,460 strict; 124 modules.
+Dossier: `whitepaper/dirac-torsion-map-2026-10-22.md`.
+
+## 32. DiscreteLangevin — Stokes–Einstein Rung 1: the damped kicked walker, exact (T1) — STANDS WHOLE, Target 3 in pinned form
+
+`ThetLogos.DiscreteLangevin` (47 theorems; zero sorry;
+standard three on all twelve headlines). The charter
+(`whitepaper/stokes-einstein-scoping-DRAFT-2026-10-18.md`)
+scoped a finite Stokes–Einstein direction under pre-registered
+kills; its §7 gate was opened by the author on 2026-10-22.
+The model is the damped kicked walker v ← a•v + F + ξ in the
+smallest finite combinatorial form that carries it: kicks are
+the two-point law ±σ on finite sign-path spaces under the
+uniform counting measure, and every probabilistic hypothesis
+the moment theorems need — mean exactly 0, second moment
+exactly σ², cross-time orthogonality — is **computed** from
+the path space (the master lemma `sum_sgn_mul_sgn`), not
+assumed. **Verdicts:** the stationary velocity variance
+σ²/(1−a²) stands, in relaxation and stationary-regime forms,
+with covariance kernel a^(t−s)•V (Target 1); the mobility
+μ = 1/(1−a) stands, the stationary mean being μF at all times
+(Target 2); the position-variance growth stands **in the
+charter's own pinned form** — the exact per-step increment is
+σ²/(1−a)² − 2a^(n+1)•V/(1−a), the advertised rate being the
+leading term and the bare rate only the large-n limit, stated
+on the theorem's face (Target 3); and the Einstein form
+D = μΘ stands exactly, with Θ := σ²/(2(1−a)) **defined** by
+the fluctuation–dissipation balance (Target 4). **Fences
+(charter §6, on the module's face):** Θ is a model ratio,
+never thermodynamic k_BT (K1); no ultrametric route (K2);
+`DiffusionDefect` is neither imported nor cited — the shared
+finite-path pattern is technique, not evidence (K3); no
+continuum, Brownian, or Stokes-drag claim by vocabulary (K4).
+Rung 2 (a finite Green–Kubo form) is **not commissioned**.
+Census: 3,460 → 3,507 strict; 125 modules. Dossier:
+`whitepaper/discrete-langevin-stokes-einstein-rung1-2026-10-22.md`.
+
+## 33. FluxClassification — the modular-flux classification (T1) — STANDS WHOLE
+
+`ThetLogos.FluxClassification` (15 theorems, 1 definition;
+zero sorry; standard three on all 15). Commissioned as the
+roadmap's first stress test; the pre-registered kill (close
+PARTIAL if the classification outruns the construction) **did
+not fire** — the classification is proved on the corpus's
+built objects with **fewer hypotheses than the target
+allowed**: no Hermiticity is assumed of D anywhere. The engine
+is entry-level: for diagonal K, the flux entry is exactly
+(k i − k j) • (D i j). On the built modular Hamiltonian
+`diagModularK` (K = −ln ρ), for any real weights and arbitrary
+D: φ = i[K, D] = 0 ⟺ D has no entries between distinct-weight
+sectors — the sectors being **log-level sets**, stated in the
+log form on the theorem's face (at positive weights they are
+the weight level sets themselves). Beside it: the general
+Hermitian-K eigenbasis form, via `HermitianReduction`; the
+preservation forms (flux zero ⟹ D preserves every sector, and
+— for arbitrary K, basis-free — every eigenspace); and the
+witness direction (one nonzero cross-sector entry ⟹ flux
+≠ 0, the criterion form of the corpus's active-driver
+existence). **Fences:** finite level only; the Hermitian form
+is an eigenbasis statement, carrying `HermitianReduction`'s
+standing remainder R1. Census: 3,507 → 3,522 strict; 126
+modules. Dossier: `whitepaper/flux-classification-2026-10-22.md`.
+
+## 34. GibbsSpan — Bridge Span (a): the Gibbs case of Schrödinger dynamics, as a checked exhibit (T1) — STANDS
+
+`ThetLogos.GibbsSpan` (21 theorems, 5 definitions; zero sorry;
+standard three on all 21; **no route through the quarantined
+`kms_identity_diagonal`**). The Bridge Landing Pad carried
+Schrödinger dynamics as a PARTIAL whose provable core was the
+Gibbs special case; this brick promotes that case to a named
+exhibit **without upgrading the pad's verdict** — the general
+Schrödinger equation for an independent Hamiltonian remains
+**NO SEAT**. For a Gibbs state, the built modular Hamiltonian
+is the energy diagonal on its face:
+`diagModularK (gibbsWeightsE β E logZ) = β•diag(E) + logZ•1` —
+the free-energy scalar written, never dropped. The modular
+flow is then Heisenberg evolution at rescaled time β•s, proved
+in the eigenbasis picture and at matrix level, and for a
+general Hermitian Hamiltonian via `HermitianReduction`; the
+Gibbs state is stationary under its own Schrödinger-picture
+evolution. A convention finding is pinned as a theorem:
+`modularFlow_eq_genFlow_neg` — the corpus's two flow
+conventions differ by exactly s ↦ −s, the K = −ln ρ sign.
+**Named remainder R-GS1:** the matrix-level generator is
+identified through the diagonal route, the corpus having no
+matrix logarithm (`HermitianReduction` remainder R2,
+inherited unchanged). Census: 3,522 → 3,543 strict; 127
+modules. Dossier: `whitepaper/gibbs-span-2026-10-22.md`.
+
+## 35. TeslaVortexSeparation — Tesla Vortex Modular Dynamics, Rung 1: thermal separation (T1) — STANDS WHOLE
+
+`ThetLogos.TeslaVortexSeparation` (18 theorems, 1 definition;
+zero sorry; standard three on all 18). Commissioned by the
+author on 2026-10-22 as Rung 1 of a new line, Tesla Vortex
+Modular Dynamics, after a pre-build audit of its motivating
+chain (charter:
+`whitepaper/tesla-vortex-modular-dynamics-scoping-2026-10-22.md`).
+The finite claim that survives the audit: a thermal state
+separates charge across energy-split sectors, exactly. For a
+two-sector Gibbs state with energies E₀, E₁, inverse
+temperature β, and an input charge q carried as +q / −q on the
+sectors, the separation S(β) is the state's normalized charge
+expectation, and all five targets stand: the **exact formula**
+S(β) = q•(exp(−βE₀) − exp(−βE₁)) / (exp(−βE₀) + exp(−βE₁)) —
+the partition normalization cancelling, the value independent
+of the logZ convention — and its tanh form −q•tanh(β•gap/2);
+**zero if and only if** the sector energies are equal
+(β > 0); **strictly increasing** in β for a nonzero gap; the
+**bound and saturation in full** — |S(β)| < |q| at every
+finite β, with |S| → |q| and both signed limits as β → ∞; and
+the **flux hook**, proved through §33's classification: a
+cross-sector Dirac entry on the separated state forces the
+modular flux nonzero. **Fences (on the module's face):** q
+and the energies are inputs — thermodynamics converts an
+energy gap into a population separation; it does not create
+the gap, and no charge value, nucleus, or atom is modeled
+(K-TV1); the motivating chain's further links (separation
+creating the nuclear charges; electrons trapped in magnetic
+suspension) are **not modeled** and stand as the author's
+interpretive picture under their standing verdicts (K-TV2);
+"Tesla Vortex" is the author's coinage for his electric heat
+gauge vortex — not Tesla's devices, not 3-6-9 numerology
+(K-TV3). Rung 2 is **not commissioned**. Census: 3,543 →
+3,561 strict; 128 modules. Dossier:
+`whitepaper/tesla-vortex-modular-dynamics-rung1-2026-10-22.md`.
 
 ## Acknowledgments
 
