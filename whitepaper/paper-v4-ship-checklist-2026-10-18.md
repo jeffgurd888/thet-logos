@@ -347,3 +347,24 @@ pages); extraction verified for the §0 audit subsection and all six
 section headings. Status remains PREPARED, NOT PUBLISHED; the Nov 6
 ship-day §0 count refresh is unchanged and still required (the §0
 inventory in the text is the 2026-10-18 one, as its face states).
+
+---
+
+## Amendment 3 (2026-10-22): §§36–38 inserted — no §35 cutoff
+
+At Jeff's ruling (2026-10-22 20:10 EDT, "Insert §§36–38 before the
+ship"; followed by "remove the cutoff date" — the alternative of
+shipping v4 with a stated §35 cutoff is REMOVED as an option; the
+manuscript carries all nine 2026-10-22 bricks), the three sections
+drafted from the landing dossiers were inserted between §35 and the
+Acknowledgments: §36 GreenKubo — Stokes–Einstein Rung 2 (STANDS
+WHOLE), §37 TeslaVortexMultiSector — TVMD Rung 2 (STANDS WHOLE),
+§38 PhaseWinding (STANDS WHOLE, cabinet tier, NO CLAIM; route-A
+definitional-weight note on its face). Each closes with its census
+step, extending the Amendment 2 chain: 3,561 → 3,577 → 3,592 →
+3,619 strict / 128 → 131 modules, matching the README and the
+landing records. Manuscript now 3,677 lines / 29,461 words. PDF
+regenerated with render_v4.py (this styling: 65 pages); extraction
+verified for all three new section headings. Status remains
+PREPARED, NOT PUBLISHED; the ship-day §0 count refresh is unchanged
+and still required.

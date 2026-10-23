@@ -3359,6 +3359,96 @@ gauge vortex — not Tesla's devices, not 3-6-9 numerology
 3,561 strict; 128 modules. Dossier:
 `whitepaper/tesla-vortex-modular-dynamics-rung1-2026-10-22.md`.
 
+## 36. GreenKubo — Stokes–Einstein Rung 2: the Green–Kubo sum (T1) — STANDS WHOLE
+
+`ThetLogos.GreenKubo` (16 theorems, 4 definitions; zero sorry;
+standard three on the headlines). Commissioned by the author on
+2026-10-22 ("both tvmd and Stokes"); charter:
+`whitepaper/stokes-einstein-scoping-DRAFT-2026-10-18.md` §5.
+Rung 2 asks whether the diffusivity computed directly in Rung 1
+(§32, `ThetLogos.DiscreteLangevin`, imported unmodified) is also
+the summed velocity autocorrelation of the same process — the
+Kubo shape checked against the direct computation. It is,
+exactly: **the Green–Kubo sum** `gkSum_eq_diffusivity` —
+V/2 + Σ′ a^(k+1)·V = σ²/(2(1−a)²) at a² < 1, the zero-lag term
+carried at trapezoidal weight ½. Also standing: the **lag
+covariance** `lagCov a σ k = a^k · statVar a σ`, proved equal to
+the Rung-1 process covariance at lag k itself; the
+**finite-horizon identity** — position variance over n steps as
+the two-sided lag sum n·C(0) + 2Σ_{k=1}^{n−1}(n−k)·C(k) — proved
+at the level of Rung 1's closed forms, stated on the module's
+face (the path-space double sum is Rung 1's, cited not
+duplicated); and the **partial sums in closed form**, converging
+to the diffusivity as N → ∞. **Fences (charter §6, on the
+module's face):** Θ is a model ratio defined by the finite
+model's fluctuation–dissipation balance, never thermodynamic
+k_BT (K1); `DiffusionDefect` is neither imported nor cited (K3);
+no continuum statement — the only limits are of finite partial
+sums and of a convergent series of finite lag covariances (K4).
+Rung 3 (the continuum passage) is **not commissioned**; the
+charter leaves it unscheduled. Census: 3,561 → 3,577 strict;
+129 modules. Dossier: `whitepaper/green-kubo-rung2-2026-10-22.md`.
+
+## 37. TeslaVortexMultiSector — Tesla Vortex Modular Dynamics, Rung 2: multi-sector separation and ground-sector selection (T1) — STANDS WHOLE
+
+`ThetLogos.TeslaVortexMultiSector` (15 theorems, 4 definitions;
+zero sorry; standard three). Commissioned by the author on
+2026-10-22; charter:
+`whitepaper/tesla-vortex-modular-dynamics-rung2-scoping-2026-10-22.md`.
+Rung 2 generalizes §35 from two sectors to any finite nonempty
+family, with input energies E and input charges q, and
+S(β) = (Σᵢ qᵢ·exp(−βEᵢ)) / (Σᵢ exp(−βEᵢ)). All five targets
+stand: **well-definedness and the bound, stronger than
+chartered** — |S(β)| ≤ maxᵢ |qᵢ| at *every* real β, not only
+β ≥ 0, since the Gibbs weights are positive everywhere;
+**S(0)** is the flat average of the input charges; **ground-sector
+selection, in full, no pin** — as β → ∞, S(β) tends exactly to
+the average of the charges over the ground sectors alone, so
+§35's saturation is this selection's two-sector shadow;
+**two-sector recovery** — at Fin 2 with charges (+q, −q), the
+general machine returns Rung 1's `thermalSeparation` exactly;
+and the **flux hook at N sectors** — over Fin n, the modular
+flux at the N-sector Gibbs state vanishes if and only if the
+Dirac operator has no entries across distinct *energy* sectors.
+**Fences (on the module's face):** the charges and energies are
+inputs — no charge values are derived, and no nucleus or atom
+is modeled (K-TV1); links 2–3 of the motivating chain are not
+modeled (K-TV2); "Tesla Vortex" is the author's coinage (K-TV3);
+monotonicity in β is a two-sector theorem of Rung 1 only — it is
+not claimed for N sectors, and no N-sector counterexample is
+claimed either (K-TV4). Census: 3,577 → 3,592 strict; 130
+modules. Dossier:
+`whitepaper/tesla-vortex-modular-dynamics-rung2-2026-10-22.md`.
+
+## 38. PhaseWinding — the winding atom on a finite phase ring (T1) — STANDS WHOLE (cabinet tier, NO CLAIM)
+
+`ThetLogos.PhaseWinding` (27 theorems, 10 definitions including
+the `Lift` structure; zero sorry; standard three). Cabinet
+tier, NO CLAIM — not a Yang–Mills rung. Commissioned by the
+author on 2026-10-22 (lift-first, route A); charter:
+`whitepaper/phase-winding-charter-2026-10-21.md`. A
+configuration is a lift: site phases on a finite ring, a closing
+increment, and a winding number w : ℤ pinned by the closing
+equation. All four targets stand: **compound windings add in
+ℤ** under pointwise addition of lifts; **gauge invariance** — a
+single-valued shift cannot move w, proved at the bonds, where
+the shift increments telescope to zero around the ring; **a
+phase slip is the only door** — a seam mismatch of 2πs moves w
+by exactly s, and the master form says w moves under
+shift-deformations only through that mismatch; and the
+**FluxTwist bridge** — the Fourier mode index m *is* the
+winding number of its phase configuration, exactly m at θ = 0,
+with the general-θ total (θ + 2πm) carried on the face.
+**Honest note (on the dossier's face):** under lift-first, the
+three headline equalities close by construction of the
+operations — route A's design, priced in the charter before the
+build; the proof weight sits in `winding_unique` (the phases
+and wrap pin w — the data is not free), the bond anatomy, and
+the eigenvector weld. **Fences:** this is not an Abrikosov
+vortex; no knots, no strings; route B (principal-argument) is
+unbuilt. Census: 3,592 → 3,619 strict; 131 modules. Dossier:
+`whitepaper/phase-winding-brick-2026-10-22.md`.
+
 ## Acknowledgments
 
 This program formalizes. It did not originate the ideas, the
