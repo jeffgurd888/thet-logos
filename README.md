@@ -27,8 +27,17 @@ spectral-triple compatibilities together, machine-checked
 Millennium statement — parts of any official Clay statement
 closed by this program: 0.
 
-**4,080 theorem declarations**\*
-across 136 counted Lean modules, with whitepaper dossiers for every campaign.
+**2026-10-23 — the Gram clause, Route C.** The finite Gram
+criterion of Stage 1b-B is proved to have a hypothesis the Wilson
+weight cannot satisfy (T0); its replacement — the integrated,
+series-form criterion — is proved at general (G, ρ), and
+reflection positivity of the U(1) Wilson theory at every β ≥ 0 is
+now T1 (`ThetLogos.LatticeGramSeries`; dossier
+`whitepaper/gram-route-c-2026-10-23.md`). The clause at general
+(G, ρ) remains open: Route B (averaging) is the named next brick.
+
+**4,189 theorem declarations**\*
+across 137 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -42,7 +51,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 4,129); earlier running
+rule (an attribute-inclusive count reads 4,238); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
@@ -122,16 +131,20 @@ cite the originators first.
   Gibbs measure proved reflection-invariant, and the Wilson action
   split S = S₊ + S₋ + S₀ across the reflection
   ([dossier](whitepaper/pitch-4-stage-1b-a-2026-10-17.md)).
-- **Pitch 4, Stage 1b-B** — **reflection positivity: PARTIAL**: the
-  Osterwalder–Schrader form is built in full (conjugate symmetry,
-  sesquilinearity, exact kernel factorization), positivity is
-  **proved at zero coupling**, and a Gram (sum-of-squares) criterion
-  reduces positivity at general coupling to one named lemma — the
-  character-expansion factorization of the Wilson weight, whose
-  standard proof needs Peter–Weyl orthogonality that the pinned
-  Mathlib does not yet contain (priced XL, library-blocked; the
-  theorem itself is classical and not in doubt)
-  ([dossier](whitepaper/pitch-4-stage-1b-b-2026-10-17.md)).
+- **Pitch 4, Stage 1b-B** — **reflection positivity: STANDS for
+  U(1); PARTIAL at general (G, ρ)**: the Osterwalder–Schrader form
+  is built in full (conjugate symmetry, sesquilinearity, exact
+  kernel factorization) and positivity is **proved at zero
+  coupling**. The original finite Gram criterion stands as proved,
+  but its hypothesis is now **proved unsatisfiable for the Wilson
+  weight** (T0, 2026-10-23); the replacement integrated
+  (series-form) Gram criterion is proved at general (G, ρ), and
+  the U(1) Wilson theory is **discharged at every β ≥ 0**
+  (Route C). The general-group discharge is Route B — averaging
+  over the stratum, no Peter–Weyl required — priced L and next
+  in the queue
+  ([dossier](whitepaper/pitch-4-stage-1b-b-2026-10-17.md),
+  [Route C dossier](whitepaper/gram-route-c-2026-10-23.md)).
 - **Pitch 4, Stage 1b-C** — **the OS Hilbert space STANDS**: built
   by the time-slice L² route — the L² space of the Gibbs marginal
   measure on a time slice, at every coupling, with the vacuum vector

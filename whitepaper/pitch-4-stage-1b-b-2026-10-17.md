@@ -168,3 +168,31 @@ landing: 1b-C (OS space) can consume §5's kernel identity and §4's form;
 1b-D remains downstream of both. Stage 3c's uniform estimates remain
 priced research-scale/open elsewhere in the pitch. **Parts of any
 official Clay statement closed by this stage: 0.**
+
+## ADDENDUM — 2026-10-23 (Route C landing; by addition, per the relabeling rule)
+
+T0 of the Gram-clause campaign (`whitepaper/gram-clause-scoping-2026-10-23.md`,
+dossier `whitepaper/gram-route-c-2026-10-23.md`, module
+`lean/ThetLogos/LatticeGramSeries.lean`, parent-verified 2026-10-23)
+settles this stage's open clause in two parts:
+
+1. **The finite pointwise criterion's hypothesis is NOT satisfiable
+   by the Wilson weight.** `osForm_nonneg_of_gram` above stands as
+   proved — and its `hgram` cannot hold for the Wilson weight at
+   β ≠ 0: `restrictPos`/`mirrorP` forget the reflection-plane links
+   the crossing action depends on (paper proof, finite check at
+   N = 2), and even integrated, the crossing kernel's Gram
+   expansion is infinite-rank (formalized span lemma
+   `finite_gram_sections_span` + the proved Fourier series below).
+2. **The door that replaces it stands, and U(1) is discharged.**
+   The integrated/series criterion `osForm_nonneg_of_gram_integrated`
+   is proved at general (G, ρ), any real β; and for G = U(1) with
+   the defining representation, the Gram identity, marginals, and
+   discharge are proved: **OS positivity of the U(1) Wilson theory
+   at every β ≥ 0 is T1** (`osForm_circle_nonneg`).
+
+**Revised verdict for Stage 1b-B:** the form, the factorization,
+the kernel identity, β = 0, and now U(1) at all β ≥ 0 STAND at T1.
+The clause at general (G, ρ) remains open — Route B (averaging over
+the stratum, chartered at L) is the named route. Parts of any
+official Clay statement closed: still 0.
