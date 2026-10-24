@@ -35,11 +35,16 @@ closed-half arc is a stratum · strict · stratum sandwich, whose
 monomials are occurrence (tensor) coefficients, not word entries,
 so the pointwise Gram identity is false for the word-entry family
 (dossier `whitepaper/gram-route-b-t4c-obstruction-2026-10-23.md`).
-The repair is underway on occurrence features: steps T4a′ (A side)
-and T4b′ (mirror side, sharing one strict-half feature with T4a′)
-have landed (`ThetLogos.GramAssemblyOcc`,
-`ThetLogos.GramMirrorOcc`). The clause at general (G, ρ) remains
-open; the closer on the occurrence family is the remaining step.
+The repair on occurrence features landed its two halves — T4a′
+(A side) and T4b′ (mirror side, sharing one strict-half feature)
+(`ThetLogos.GramAssemblyOcc`, `ThetLogos.GramMirrorOcc`) — and the
+closer T4c′ then stopped on a **second, deeper proved
+obstruction**: the strict factor's two readings differ by the
+index-pair swap (k, a) ↔ (j, i), invisible iff d = 1, so no
+factored family instantiates the integrated criterion at d ≥ 2
+(dossier `whitepaper/gram-route-b-t4cp-obstruction-2026-10-24.md`).
+The clause at general (G, ρ) remains open; a regrouped,
+non-factored charter is the unpriced next question.
 
 **2026-10-23 — the Gram clause, Route C.** The finite Gram
 criterion of Stage 1b-B is proved to have a hypothesis the Wilson
