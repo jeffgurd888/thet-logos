@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C204-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C247-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -36,8 +36,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**4,204 theorem declarations**\*
-across 138 counted Lean modules, with whitepaper dossiers for every campaign.
+**4,247 theorem declarations**\*
+across 139 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -141,14 +141,18 @@ cite the originators first.
   (series-form) Gram criterion is proved at general (G, ρ), and
   the U(1) Wilson theory is **discharged at every β ≥ 0**
   (Route C). The general-group discharge is Route B — averaging
-  over the stratum, no Peter–Weyl required: its step T2, the
+  over the stratum, no Peter–Weyl required: step T2, the
   averaging-projection lemma (the Haar average is the orthogonal
   projection onto the invariant subspace, with its finite Gram
-  sum), **landed 2026-10-23** (`ThetLogos.AveragingProjection`);
-  steps T3 (word/tensor bookkeeping) and T4 (assembly) remain
+  sum), and step T3, the word/tensor bookkeeping (crossing words
+  are coefficients of the joint tensor representation, and the
+  joint stratum integral is the averaging operator applied to
+  it), **both landed 2026-10-23** (`ThetLogos.AveragingProjection`,
+  `ThetLogos.GramWordTensor`); step T4 (assembly) remains
   ([dossier](whitepaper/pitch-4-stage-1b-b-2026-10-17.md),
   [Route C dossier](whitepaper/gram-route-c-2026-10-23.md),
-  [Route B step T2 dossier](whitepaper/gram-route-b-t2-averaging-projection-2026-10-23.md)).
+  [Route B step T2 dossier](whitepaper/gram-route-b-t2-averaging-projection-2026-10-23.md),
+  [Route B step T3 dossier](whitepaper/gram-route-b-t3-word-tensor-2026-10-23.md)).
 - **Pitch 4, Stage 1b-C** — **the OS Hilbert space STANDS**: built
   by the time-slice L² route — the L² space of the Gibbs marginal
   measure on a time slice, at every coupling, with the vacuum vector
