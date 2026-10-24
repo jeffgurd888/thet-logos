@@ -43,8 +43,14 @@ obstruction**: the strict factor's two readings differ by the
 index-pair swap (k, a) ↔ (j, i), invisible iff d = 1, so no
 factored family instantiates the integrated criterion at d ≥ 2
 (dossier `whitepaper/gram-route-b-t4cp-obstruction-2026-10-24.md`).
-The clause at general (G, ρ) remains open; a regrouped,
-non-factored charter is the unpriced next question.
+The clause at general (G, ρ) remains open. The regrouped route
+was scoped, priced, and tested at its pre-registered R0 gate —
+and it died there: symmetrized proportionality is false at the
+T4c′ SU(2) instance (wedges 5/8 and −3/8; dossier
+`whitepaper/gram-route-b-r0-obstruction-2026-10-24.md`). The
+obstruction now covers the factored family and its
+reflection-regrouping class; the criterion itself, Route C, and
+T4a′/T4b′ stand untouched.
 
 **2026-10-23 — the Gram clause, Route C.** The finite Gram
 criterion of Stage 1b-B is proved to have a hypothesis the Wilson
