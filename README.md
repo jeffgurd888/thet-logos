@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C401-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C423-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -46,6 +46,23 @@ named question at depths above one (dossier
 `whitepaper/gram-transfer-s1-depth-one-identification-2026-10-24.md`;
 charter `whitepaper/gram-clause-transfer-matrix-scoping-2026-10-24.md`).
 Stage 1b-B at general (G, ρ) remains open.
+
+**2026-10-24 — the STEM bridge, brick B2: gauge
+covariance.** B1's magnetic graph Laplacian is
+gauge-covariant (`ThetLogos.BridgeMagneticGauge`): for a
+vertex gauge transformation `g : V → Circle`, the conjugated
+connection is forced to be `θ^g i j = g i · θ i j · (g j)⁻¹`
+— the intertwining closes termwise iff `θ^g i j · g j =
+g i · θ i j` — and the operator identity
+`L_{w,θ^g} = U_g ∘ₗ L_{w,θ} ∘ₗ U_g*` stands
+**hypothesis-free**, with `U_g*` proved the adjoint in both
+senses the corpus carries. Corollaries: the phased Dirichlet
+energy is gauge-invariant, and `μ` is an eigenvalue of
+`L_{w,θ^g}` iff it is one of `L_{w,θ}`. The heat-trace half
+of the charter's S3 belongs to brick B3 and is not asserted
+(dossier
+`whitepaper/stem-bridge-b2-gauge-covariance-2026-10-24.md`).
+Bricks B3–B5 remain open.
 
 **2026-10-24 — the STEM bridge, brick B1.** The
 Spectral–Thermal ElectroMagnetic bridge (charter
@@ -144,8 +161,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**4,401 theorem declarations**\*
-across 148 counted Lean modules, with whitepaper dossiers for every campaign.
+**4,423 theorem declarations**\*
+across 149 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -159,7 +176,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 4,450); earlier running
+rule (an attribute-inclusive count reads 4,472); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
