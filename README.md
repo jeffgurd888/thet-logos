@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C445-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C471-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -46,6 +46,40 @@ named question at depths above one (dossier
 `whitepaper/gram-transfer-s1-depth-one-identification-2026-10-24.md`;
 charter `whitepaper/gram-clause-transfer-matrix-scoping-2026-10-24.md`).
 Stage 1b-B at general (G, ρ) remains open.
+
+**2026-10-24 — the STEM bridge, brick B5: the zero-field
+weld — the bridge's near bank is complete.** At the trivial
+connection `θ ≡ 1`, the magnetic theory of B1–B3 contains
+the Bridge exhibit's own theory as its zero-field special
+case, end to end (`ThetLogos.BridgeMagneticWeld`). The
+operator level cites B1's `magLap_one` and records its
+linear and Euclidean forms; the matrix level gives
+`magMat w 1` entrywise (row-sum diagonal, bare cast
+conductances) and in spectral form
+(`magMat_one_eq_conj`: conjugation by the rectangular weld
+matrix `weldMat`, whose columns are the exhibit's cast
+eigenbasis, onto `diagonal (lapEig)`). The heat level is
+the eigenbasis identification, proved three agreeing
+ways — on each cast eigenvector (`heatOp`'s own factor
+`exp (−t • lapEig k)`), as a solution formula over ℂ, and
+as a matrix identity (`magHeat_one_eq_conj`) — and the
+trace welds to the exhibit datum at the exhibit's
+eigenvalues (`magHeatTrace_one`). The Fiedler value is
+the `θ = 1` spectral gap in the corpus's own terms: it
+floors every nonzero welded eigenvalue and is attained
+as one (`magMat_one_fiedler_floor`,
+`magMat_one_fiedler_eigen`). One named seam, kept on the
+module's face: the rectangular `weldMat` carries no
+`star` in Mathlib — its adjoint is `conjTranspose`
+throughout. With B1, B2, B3 and B5 landed, the bridge's
+near bank is complete; remaining are B4′
+(face-restricted flux-dependence; its landing leaves the
+bridge at PARTIAL) and B4 (general flux-dependence —
+needs cycle-space machinery the corpus does not yet
+hold, a named remainder) (dossier
+`whitepaper/stem-bridge-b5-zero-field-weld-2026-10-24.md`).
+Finite graph bookkeeping — not Maxwell, not a
+unification claim.
 
 **2026-10-24 — the STEM bridge, brick B3: the heat
 object.** B1's magnetic Laplacian now has its heat object
@@ -190,8 +224,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**4,445 theorem declarations**\*
-across 150 counted Lean modules, with whitepaper dossiers for every campaign.
+**4,471 theorem declarations**\*
+across 151 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -205,7 +239,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 4,494); earlier running
+rule (an attribute-inclusive count reads 4,520); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
