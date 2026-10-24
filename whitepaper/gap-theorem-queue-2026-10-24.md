@@ -558,3 +558,33 @@ vagueness; the quarantined seven stay receipts, not results.
 
 — BONES, for the record. Tiers per the Concrete; kills and
 parks at full rank; **NO CLAIM.**
+
+---
+
+## Status note — 2026-10-24 (TM ladder, after this queue shipped)
+
+- **Q4 (TM R2) — KILLED by its pre-registered criterion.**
+  Design-phase obstruction, no Lean built: positivity of the
+  transfer operator on arbitrary vectors reduces (via landed
+  S1 + R1) to positive-definiteness of the seam kernel, whose
+  only Gram factorization is the tensor-power/word series
+  over representation indices of a crossing plaquette —
+  charter kill clause 1 + constraint D5. The kernel is also
+  not positive-definite for β < 0 (numerical certificate), so
+  any revival is narrowed to β ≥ 0. Dossier:
+  `whitepaper/gram-transfer-r2-obstruction-2026-10-24.md`.
+  The transfer route as chartered terminates at R2.
+- **Q8 (TM R3) — SPLIT.** The *identification* half
+  (`osForm β F F = ⟪ψ_F, T^m ψ_F⟫`, positivity-free) remains
+  **QUEUE**, buildable as scoped. The positivity-dependent
+  half (positivity of odd transfer powers) is **BLOCKED** —
+  it is R2 on the range of T^k; even powers remain free
+  (`T^{2k} = (T^k)†T^k`).
+- **Q11 (TM R4) — BLOCKED.** The discharge is equivalent to
+  R2 at depth one via S1, so it cannot be assembled from
+  R1 + S1 + even powers. Stage 1b-B stays T1 for U(1),
+  general (G, ρ) OPEN.
+- **Named remainder (not an item; Jeff's call):** the word
+  expansion of the crossing weight as a factored family for
+  the landed `osForm_nonneg_of_gram_integrated` — a third
+  family, Gram-route territory; see the R2 dossier §9.
