@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C471-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C510-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -26,6 +26,30 @@ spectral-triple compatibilities together, machine-checked
 `whitepaper/track1-routeb-2026-10-23.md`). NO CLAIM on any
 Millennium statement — parts of any official Clay statement
 closed by this program: 0.
+
+**2026-10-24 — the Gram clause, the third family, brick
+F1: the single-plaquette word factorization.** The route
+scoped clean this morning (the landed integrated criterion
+fits the family verbatim) lands its first brick: the
+exponential factor of one crossing plaquette, factored as
+a `∑'` over word indices in the criterion's exact
+`conj (B) * A` shape (`ThetLogos.LatticeGramWord`). The
+factorization is basis-free by construction — an HS inner
+product pairs the same entry path on both sides, so no
+entry-selection step exists at which the (k, a)/(j, i)
+mismatch of the dead factored family could enter — and
+its d = 1 control resums to Route C's `fourier_exp_circle`
+through the common value, so the family that closed U(1)
+is this family's one-dimensional shadow. Entry bounds
+enter only through the summability side conditions; the
+domination package ships in criterion shape
+(`summable_wordCA_mul` discharged) as the named interface
+F2 consumes. Neither pre-registered kill fired. F1 asserts
+nothing about marginals, Haar integrals, or positivity:
+the Damping Lemma is F2's named seat, and Stage 1b-B at
+general (G, ρ) remains open until F3 (dossier
+`whitepaper/gram-third-family-f1-word-factorization-2026-10-24.md`;
+charter `whitepaper/gram-third-family-scoping-2026-10-24.md`).
 
 **2026-10-24 — the Gram clause, the transfer-matrix route.**
 With factored and regrouped closures obstructed, the classical
@@ -224,8 +248,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**4,471 theorem declarations**\*
-across 151 counted Lean modules, with whitepaper dossiers for every campaign.
+**4,510 theorem declarations**\*
+across 152 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -239,7 +263,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 4,520); earlier running
+rule (an attribute-inclusive count reads 4,559); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
