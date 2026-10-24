@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C348-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C372-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -47,6 +47,23 @@ named question at depths above one (dossier
 charter `whitepaper/gram-clause-transfer-matrix-scoping-2026-10-24.md`).
 Stage 1b-B at general (G, ρ) remains open.
 
+**2026-10-24 — the STEM bridge, brick B1.** The
+Spectral–Thermal ElectroMagnetic bridge (charter
+`whitepaper/stem-bridge-scoping-2026-10-24.md`) joins the
+spectral–thermal bank to the electromagnetic bank through the
+heat kernel of a covariant operator; its first brick lands the
+operator itself: the **magnetic graph Laplacian** `L_{w,θ}` on
+the Bridge exhibit's own graph — the exhibit's conductances
+unchanged, a Circle-valued U(1) connection seated in the Ohm
+factor, complex potentials (`ThetLogos.BridgeMagnetic`).
+Self-adjointness (S1a) and the phased energy identity (S1b)
+stand, positivity stands, and at `θ ≡ 1` the operator is the
+exhibit's landed `laplacianOp` verbatim (the definitional
+weld; the full zero-field weld is brick B5). Finite graph
+bookkeeping — not Maxwell, not a unification claim (dossier
+`whitepaper/stem-bridge-b1-magnetic-laplacian-2026-10-24.md`).
+Bricks B2–B5 remain open.
+
 **2026-10-24 — the Gram clause, Route B (averaging).** Steps T2
 (the averaging projection), T3 (word/tensor bookkeeping), T4a and
 T4b (feature assembly and its mirror) stand. The word-entry closer
@@ -81,8 +98,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**4,348 theorem declarations**\*
-across 144 counted Lean modules, with whitepaper dossiers for every campaign.
+**4,372 theorem declarations**\*
+across 145 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -96,7 +113,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 4,397); earlier running
+rule (an attribute-inclusive count reads 4,421); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
