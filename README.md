@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C382-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C401-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -90,6 +90,26 @@ every real `β` (dossier
 Operator positivity on arbitrary vectors (the half-step
 square) remains open.
 
+**2026-10-24 — the Gram clause, transfer-matrix route R1:
+the layer factorization.** The one lemma the transfer
+route's two remaining gaps shared is landed
+(`ThetLogos.LatticeLayerFactor`): in Stage 0's split
+coordinatization, the Gibbs measure is `Z⁻¹` times the
+product of the two half Gibbs-type measures — both built
+from the *same* half-action function `halfActionP`, the
+negative half read through the mirror — reweighted by the
+layer Boltzmann factor `exp(−S₀)`, the crossing stratum's
+weight. Pure finite density algebra on the landed action
+split: no disintegration, and no basis expansion of the
+Boltzmann weight (charter constraint D5 held; the priced
+side door stays shut). The expectation-pairing and
+Fubini-iteration forms the next rungs consume ship with it;
+gap queue Q1's `posToSlice` was not consumed after all. The
+half-step square (R2) and the depth-`N/2` identification
+(R3) remain open, and Stage 1b-B at general (G, ρ) remains
+open (dossier
+`whitepaper/gram-transfer-r1-layer-factorization-2026-10-24.md`).
+
 **2026-10-24 — the Gram clause, Route B (averaging).** Steps T2
 (the averaging projection), T3 (word/tensor bookkeeping), T4a and
 T4b (feature assembly and its mirror) stand. The word-entry closer
@@ -124,8 +144,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**4,382 theorem declarations**\*
-across 147 counted Lean modules, with whitepaper dossiers for every campaign.
+**4,401 theorem declarations**\*
+across 148 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -139,7 +159,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 4,431); earlier running
+rule (an attribute-inclusive count reads 4,450); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
