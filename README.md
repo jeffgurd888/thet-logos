@@ -35,9 +35,11 @@ closed-half arc is a stratum · strict · stratum sandwich, whose
 monomials are occurrence (tensor) coefficients, not word entries,
 so the pointwise Gram identity is false for the word-entry family
 (dossier `whitepaper/gram-route-b-t4c-obstruction-2026-10-23.md`).
-The repair is underway on occurrence features: step T4a′ (A side)
-has landed (`ThetLogos.GramAssemblyOcc`). The clause at general
-(G, ρ) remains open.
+The repair is underway on occurrence features: steps T4a′ (A side)
+and T4b′ (mirror side, sharing one strict-half feature with T4a′)
+have landed (`ThetLogos.GramAssemblyOcc`,
+`ThetLogos.GramMirrorOcc`). The clause at general (G, ρ) remains
+open; the closer on the occurrence family is the remaining step.
 
 **2026-10-23 — the Gram clause, Route C.** The finite Gram
 criterion of Stage 1b-B is proved to have a hypothesis the Wilson
@@ -48,8 +50,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**4,320 theorem declarations**\*
-across 142 counted Lean modules, with whitepaper dossiers for every campaign.
+**4,339 theorem declarations**\*
+across 143 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -63,7 +65,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 4,369); earlier running
+rule (an attribute-inclusive count reads 4,388); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
