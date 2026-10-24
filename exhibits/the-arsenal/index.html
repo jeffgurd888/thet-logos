@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Picture &amp; The Full Arsenal — Nexus Research</title>
-<meta name="description" content="The 2026 Spectral Model panel, and everything underneath it: 4,559 machine-checked theorems, the papers, the exhibits, the failures — all linked, all free, for anyone to dissect and test.">
+<meta name="description" content="The 2026 Spectral Model panel, and everything underneath it: 4,576 machine-checked theorems, the papers, the exhibits, the failures — all linked, all free, for anyone to dissect and test.">
 <style>
   :root { --bg:#0b0e14; --panel:#12172a; --ink:#e8e6df; --dim:#9a97a3; --gold:#f5b942; --red:#e5534b; --blue:#58a6ff; --green:#3fb950; }
   * { box-sizing:border-box; }
@@ -60,7 +60,7 @@ grep -rn "sorry" ThetLogos/   # exactly 7, all named open obligations</pre>
       <li><b>The seven sorrys are named, not hidden:</b> five T5 blocked questions in <code>BlockedQuestions.lean</code>, one T3 diagonal KMS identity, one T5 tripotent-existence obligation. A full proof-dependency audit found <i>zero</i> transitive contamination beyond them: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/corpus-dependency-audit-2026-10-21.md">corpus-dependency-audit-2026-10-21.md</a>.</li>
       <li><b>Axiom check:</b> headline theorems are verified with <code>#print axioms</code> — only Lean's standard three (<code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>), no <code>sorryAx</code>.</li>
     </ul>
-    <p class="census">Census, 2026-10-24: <b>4,559</b> strict · <b>4,608</b> attribute-inclusive · <b>153</b> counted modules</p>
+    <p class="census">Census, 2026-10-24: <b>4,576</b> strict · <b>4,625</b> attribute-inclusive · <b>154</b> counted modules</p>
   </section>
 
   <section>
@@ -102,6 +102,11 @@ grep -rn "sorry" ThetLogos/   # exactly 7, all named open obligations</pre>
       <li><b>Kill 4 (TM R2)</b> — transfer-matrix positivity reduces to positive-definiteness of the seam kernel, whose only Gram factorization is the fenced-off word series: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-transfer-r2-obstruction-2026-10-24.md">gram-transfer-r2-obstruction-2026-10-24.md</a></li>
       <li><b>Kill 5 (F2, the Damping Lemma)</b> — the third family's assembly <i>stands</i> (the seam kernel's Gram identity is proved), but its marginals cannot factor through a common Ξ: the arc split puts three links on one side and one on the other. The route terminates here — no fifth family; the next direction is a new route decision: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-third-family-f2-partial-damping-kill-2026-10-24.md">gram-third-family-f2-partial-damping-kill-2026-10-24.md</a></li>
     </ul>
+  </section>
+
+  <section>
+    <h2>🧱 The boundary operator — dynamic boundary <span class="tag t1">DB1 STANDS</span></h2>
+    <p>The reflection plane is a boundary, and its dynamics is the seam kernel. DB1 names it — <b>Bdry</b> — and proves its basic theory at general (G, ρ): strictly positive and real; at β = 0 identically 1, with the two halves decoupled (Haar × Haar — the halves interact <i>only</i> through the boundary); invariant under reflection at every β. Positive-definiteness is nowhere asserted — that was the dead route's territory, and the fence is on the module's face: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/dynamic-boundary-db1-2026-10-24.md">dynamic-boundary-db1-2026-10-24.md</a></p>
   </section>
 
   <section>
