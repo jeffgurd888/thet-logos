@@ -27,6 +27,18 @@ spectral-triple compatibilities together, machine-checked
 Millennium statement — parts of any official Clay statement
 closed by this program: 0.
 
+**2026-10-24 — the Gram clause, Route B (averaging).** Steps T2
+(the averaging projection), T3 (word/tensor bookkeeping), T4a and
+T4b (feature assembly and its mirror) stand. The word-entry closer
+T4c stopped on a **proved obstruction**: a crossing plaquette's
+closed-half arc is a stratum · strict · stratum sandwich, whose
+monomials are occurrence (tensor) coefficients, not word entries,
+so the pointwise Gram identity is false for the word-entry family
+(dossier `whitepaper/gram-route-b-t4c-obstruction-2026-10-23.md`).
+The repair is underway on occurrence features: step T4a′ (A side)
+has landed (`ThetLogos.GramAssemblyOcc`). The clause at general
+(G, ρ) remains open.
+
 **2026-10-23 — the Gram clause, Route C.** The finite Gram
 criterion of Stage 1b-B is proved to have a hypothesis the Wilson
 weight cannot satisfy (T0); its replacement — the integrated,
@@ -36,8 +48,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**4,299 theorem declarations**\*
-across 141 counted Lean modules, with whitepaper dossiers for every campaign.
+**4,320 theorem declarations**\*
+across 142 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -51,7 +63,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 4,238); earlier running
+rule (an attribute-inclusive count reads 4,369); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
