@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v3 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444600.svg)](https://doi.org/10.5281/zenodo.23444600)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C299-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-4%2C348-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -26,6 +26,26 @@ spectral-triple compatibilities together, machine-checked
 `whitepaper/track1-routeb-2026-10-23.md`). NO CLAIM on any
 Millennium statement — parts of any official Clay statement
 closed by this program: 0.
+
+**2026-10-24 — the Gram clause, the transfer-matrix route.**
+With factored and regrouped closures obstructed, the classical
+route was scoped against the corpus: most of it was already T1
+(the Stage 1b-D transfer package), and its two gaps were fenced
+by one missing lemma — the layer factorization of the Gibbs
+measure. Step S1 lands the route's first stone: the
+**depth-one identification** (`ThetLogos.LatticeTransferID`).
+At depth one the identification is a *symmetry* fact, not a
+factorization fact: reflection pairs slice 0 with slice N−1,
+and one composite symmetry — the axis reflection, reflection
+after a one-step time shift — carries that pairing exactly onto
+the transfer step's (0, 1) pairing, so the OS form of a slice
+observable *equals* the transfer operator's quadratic form, at
+general (G, ρ) and every real β, machine-checked. The layer
+factorization is not consumed at this depth; it remains the
+named question at depths above one (dossier
+`whitepaper/gram-transfer-s1-depth-one-identification-2026-10-24.md`;
+charter `whitepaper/gram-clause-transfer-matrix-scoping-2026-10-24.md`).
+Stage 1b-B at general (G, ρ) remains open.
 
 **2026-10-24 — the Gram clause, Route B (averaging).** Steps T2
 (the averaging projection), T3 (word/tensor bookkeeping), T4a and
@@ -61,8 +81,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**4,339 theorem declarations**\*
-across 143 counted Lean modules, with whitepaper dossiers for every campaign.
+**4,348 theorem declarations**\*
+across 144 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -76,7 +96,7 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 4,388); earlier running
+rule (an attribute-inclusive count reads 4,397); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
