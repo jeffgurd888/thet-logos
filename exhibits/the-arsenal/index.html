@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Picture &amp; The Full Arsenal — Nexus Research</title>
+<meta name="description" content="The 2026 Spectral Model panel, and everything underneath it: 4,339 machine-checked theorems, the papers, the exhibits, the failures — all linked, all free, for anyone to dissect and test.">
+<style>
+  :root { --bg:#0b0e14; --panel:#12172a; --ink:#e8e6df; --dim:#9a97a3; --gold:#f5b942; --red:#e5534b; --blue:#58a6ff; --green:#3fb950; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family: Georgia, 'Times New Roman', serif; line-height:1.55; }
+  main { max-width: 860px; margin: 0 auto; padding: 28px 18px 60px; }
+  .lead { color:var(--dim); font-style: italic; text-align:center; margin: 6px 0 2px; }
+  h1 { text-align:center; font-size: 2rem; margin: 10px 0 4px; }
+  h1 .gold { color: var(--gold); }
+  .sub { text-align:center; color:var(--dim); margin: 0 0 22px; }
+  img.poster { display:block; width:100%; height:auto; border:1px solid #2a3350; border-radius:10px; }
+  .cap { text-align:center; color:var(--dim); font-size:.9rem; margin:8px 0 26px; }
+  .noclaim { border:2px solid var(--gold); background:#1a1607; border-radius:10px; padding:14px 18px; margin: 22px 0; }
+  .noclaim b { color: var(--gold); }
+  section { background:var(--panel); border:1px solid #232b45; border-radius:10px; padding:18px 22px; margin:18px 0; }
+  h2 { margin: 4px 0 10px; font-size:1.3rem; }
+  h2 .tag { font-size:.75rem; vertical-align: middle; color:#0b0e14; background:var(--dim); border-radius:4px; padding:2px 7px; margin-left:8px; font-family: ui-monospace, monospace; }
+  h2 .tag.t1 { background: var(--green); }
+  h2 .tag.kill { background: var(--red); color:#fff; }
+  h2 .tag.toy { background: var(--gold); }
+  ul { margin: 6px 0 6px 18px; padding:0; }
+  li { margin: 6px 0; }
+  a { color: var(--blue); }
+  code { font-family: ui-monospace, SFMono-Regular, monospace; background:#0d1120; padding:1px 5px; border-radius:4px; font-size:.92em; }
+  pre { background:#0d1120; border-radius:8px; padding:12px 14px; overflow-x:auto; font-size:.88rem; }
+  .big { font-size:1.15rem; }
+  .census { text-align:center; font-family: ui-monospace, monospace; font-size:1.05rem; margin:14px 0 0; }
+  footer { color:var(--dim); text-align:center; margin-top:30px; font-size:.92rem; }
+  .heart { color:var(--gold); }
+</style>
+</head>
+<body>
+<main>
+  <p class="lead">No university lab. No college degrees. 'Cause I don't have anyone telling me what to do, I make it free for everyone.</p>
+  <h1>The Picture &amp; <span class="gold">The Full Arsenal</span></h1>
+  <p class="sub">The Evolution of the Atomic Model, reconstructed 2026 — with the last panel filled in, and every piece of work underneath it linked on one page, for anyone to dissect and test for themselves.</p>
+
+  <img class="poster" src="poster.jpg" alt="Evolution of the Atomic Model poster: Democritus, Dalton, Thomson, Rutherford, Bohr, Schrödinger &amp; de Broglie, Chadwick, and Jeffrey Gurd 2026 — the Spectral Model, Nexus Research.">
+  <p class="cap">Tap for the full-resolution poster: <a href="poster-full.jpg">poster-full.jpg</a> · All portraits are painted illustrations · Text set from the historical record</p>
+
+  <div class="noclaim">
+    <b>NO CLAIM — read this first.</b> Nothing on this page claims a solution to any Millennium Prize problem. Parts of any official Clay statement closed by this program: <b>0</b>. What is claimed is narrower and checkable: a body of machine-verified mathematics (every theorem below can be re-built and re-audited by you), a finite-level assembly of the Standard Model whose measured numbers are still <i>inputs, not derivations</i>, and a public record in which the failures are published at the same rank as the wins. Tiers are marked on every section: <b>T1</b> = machine-checked proof · <b>TOY</b> = numerical model, labeled · <b>KILL</b> = a proved obstruction or a failed test, kept on the record.
+  </div>
+
+  <section>
+    <h2>🔬 Dissect it yourself <span class="tag t1">T1</span></h2>
+    <p>Do not take the counts on faith. The whole corpus rebuilds from source:</p>
+    <pre>git clone https://github.com/jeffgurd888/thet-logos
+cd thet-logos/lean
+lake build            # every module, from scratch
+grep -rn "sorry" ThetLogos/   # exactly 7, all named open obligations</pre>
+    <ul>
+      <li><b>The count rule</b> (adopted 2026-10-17): a declaration counts if <code>theorem</code> or <code>lemma</code> begins a source line at column 0 in a counted module, on comment-stripped source. Same-line <code>@[simp]</code> declarations (49) are excluded from the strict count and included in the attribute-inclusive one.</li>
+      <li><b>The seven sorrys are named, not hidden:</b> five T5 blocked questions in <code>BlockedQuestions.lean</code>, one T3 diagonal KMS identity, one T5 tripotent-existence obligation. A full proof-dependency audit found <i>zero</i> transitive contamination beyond them: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/corpus-dependency-audit-2026-10-21.md">corpus-dependency-audit-2026-10-21.md</a>.</li>
+      <li><b>Axiom check:</b> headline theorems are verified with <code>#print axioms</code> — only Lean's standard three (<code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>), no <code>sorryAx</code>.</li>
+    </ul>
+    <p class="census">Census, 2026-10-24: <b>4,339</b> strict · <b>4,388</b> attribute-inclusive · <b>143</b> counted modules</p>
+  </section>
+
+  <section>
+    <h2>📄 The papers</h2>
+    <ul>
+      <li><b>ACMD — Machine-Verified Foundations, v3</b> (current): <a href="https://doi.org/10.5281/zenodo.23444600">doi.org/10.5281/zenodo.23444600</a></li>
+      <li>v2: <a href="https://doi.org/10.5281/zenodo.23427964">doi.org/10.5281/zenodo.23427964</a> · v1: <a href="https://doi.org/10.5281/zenodo.23408680">doi.org/10.5281/zenodo.23408680</a> · Concept DOI (all versions): <a href="https://doi.org/10.5281/zenodo.23408679">doi.org/10.5281/zenodo.23408679</a></li>
+      <li><b>The code</b> — the full Lean corpus, MIT-licensed: <a href="https://github.com/jeffgurd888/thet-logos">github.com/jeffgurd888/thet-logos</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🧩 The finite Standard Model — assembled <span class="tag t1">T1</span></h2>
+    <p>All four SM-Match tracks stand at the finite level. The gauge-algebra track — the last open one — closed on 2026-10-23 by a representation in which additivity, order-zero, and the first-order condition hold simultaneously. Hypercharges, masses, and couplings remain <i>inputs</i>; three-generation triplication is imposed, not derived. That is stated here at the same size as the result, because it is part of the result.</p>
+    <ul>
+      <li>SM-Match dossier: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/sm-match-2026-10-11.md">sm-match-2026-10-11.md</a></li>
+      <li>Track 1 closure (Route B): <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/track1-routeb-2026-10-23.md">track1-routeb-2026-10-23.md</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🖐️ The work you can touch <span class="tag toy">EXHIBITS</span></h2>
+    <ul>
+      <li>🚶 <a href="https://jeffgurd888.github.io/thet-logos/exhibits/the-walker/"><b>The Walker</b></a> — a theorem you can watch walk: diffusion with a defect, E[r²] = x² + y² + t, live in your browser.</li>
+      <li>🧊 <a href="https://jeffgurd888.github.io/thet-logos/exhibits/rotating-tesseract/"><b>The Tesseract</b></a> — the rotating 4-cube: 16 vertices, 32 edges, the geometry before the heat.</li>
+      <li>🌀 <a href="https://jeffgurd888.github.io/thet-logos/exhibits/vortex-stepper/"><b>The Vortex Stepper</b></a> — phase winding you can step through, anchored to a machine-checked theorem.</li>
+      <li>🌌 <a href="https://github.com/jeffgurd888/thet-logos/tree/master/exhibits/vacuum-portrait"><b>The Vacuum Portrait</b></a> — numerical portrait of the finite vacuum (data + method in the repo; labeled numerical, not a theorem).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>⚖️ The Gram campaign — Stage 1b-B <span class="tag t1">T1 for U(1)</span> <span class="tag kill">3 KILLS</span></h2>
+    <p>Reflection positivity of lattice gauge theory. <b>Closed:</b> positivity of the U(1) Wilson theory at every β ≥ 0 is machine-checked (Route C), and the integrated/series Gram criterion stands at general (G, ρ). <b>Open:</b> the clause at general (G, ρ). The campaign's three proved obstructions — published at full rank, because a surveyed wall is a result:</p>
+    <ul>
+      <li>Route C + the criterion: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-route-c-2026-10-23.md">gram-route-c-2026-10-23.md</a> · Stage record: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/pitch-4-stage-1b-b-2026-10-17.md">pitch-4-stage-1b-b-2026-10-17.md</a></li>
+      <li><b>Kill 1 (T4c)</b> — word-entry features die on the sandwich monomial: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-route-b-t4c-obstruction-2026-10-23.md">gram-route-b-t4c-obstruction-2026-10-23.md</a></li>
+      <li><b>Kill 2 (T4c′)</b> — factored occurrence features die on the strict pair vs the mirror pair, (k, a) vs (j, i): <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-route-b-t4cp-obstruction-2026-10-24.md">gram-route-b-t4cp-obstruction-2026-10-24.md</a></li>
+      <li><b>Kill 3 (R0)</b> — the polarization regrouping dies at its pre-registered gate test: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-route-b-r0-obstruction-2026-10-24.md">gram-route-b-r0-obstruction-2026-10-24.md</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🧪 The toy models — verdicts kept <span class="tag toy">TOY</span></h2>
+    <ul>
+      <li><b>Toy atom</b> (finite-difference hydrogen, built from the real Hamiltonian): <b>RHYME</b> — levels and spectral lines land within ~1% at the finest grid. Agreement is the numerical method working, <i>not</i> a derivation from first principles: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/toy-atom-verdict-2026-10-23.md">toy-atom-verdict-2026-10-23.md</a></li>
+      <li><b>Toy periodic table</b> (every element, Z = 1–118, two registered runs): <b>NO CORRELATION</b> — Pearson 0.252, Spearman 0.403. The sawtooth skeleton is present (noble-gas maxima, alkali minima); nearly half the rows fail to converge. Published at the same rank as the rhyme: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/toy-periodic-verdict-v2-2026-10-23.md">toy-periodic-verdict-v2-2026-10-23.md</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🏆🎯 The Millennium board <span class="tag">DECLARED GOAL</span></h2>
+    <p>The <a href="https://www.claymath.org/millennium-problems/">Clay Millennium Prize Problems</a> are this lab's declared horizon — Yang–Mills existence and the mass gap first among them. Standing answer, rechecked 2026-10-24: <b>NO CLAIM on any of them.</b> Four dials would have to move before the odds on this program's own framework change — one measured number <i>derived</i> rather than input; one gravity object surviving audit; one continuum-limit theorem; one externally confirmed novel prediction. Moved so far: <b>zero of four</b>. The scaffolding climbs in public anyway.</p>
+  </section>
+
+  <section>
+    <h2>🏛️ The Foundation</h2>
+    <p class="big"><i>"Learn all that we can from anywhere and store it always for everyone for free FOREVER."</i></p>
+    <p>That is the charter of this lab — a digital university lab for ALL. Everything may be learned and stored; only the verified may be taught as fact; nothing is paywalled, ever. The mission it serves, Priority #1: solve world hunger and homelessness.</p>
+    <ul>
+      <li><b>Nexus Research</b> — the lab's name; being formalized as a registered trade name (DBA) of Eco-Kleen Co. LLC, Schoolcraft, Michigan.</li>
+      <li><b>Support the work:</b> Cash App — <a href="https://cash.app/$Gurd888">$Gurd888</a>. Every dollar goes to the work, and the work stays public — proof of work is the receipt.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Free forever, for everyone — one common bond. <span class="heart">·</span> Code MIT · Text CC BY · Posters free to share with credit<br>
+    "If we don't stop worrying about the Almighty dollar, we're not going to change the world!" — Caleb Gurd<br>
+    Nexus Research · Schoolcraft, Michigan · <a href="https://github.com/jeffgurd888/thet-logos">github.com/jeffgurd888/thet-logos</a></p>
+  </footer>
+</main>
+</body>
+</html>
