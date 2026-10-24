@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Picture &amp; The Full Arsenal — Nexus Research</title>
-<meta name="description" content="The 2026 Spectral Model panel, and everything underneath it: 4,510 machine-checked theorems, the papers, the exhibits, the failures — all linked, all free, for anyone to dissect and test.">
+<meta name="description" content="The 2026 Spectral Model panel, and everything underneath it: 4,559 machine-checked theorems, the papers, the exhibits, the failures — all linked, all free, for anyone to dissect and test.">
 <style>
   :root { --bg:#0b0e14; --panel:#12172a; --ink:#e8e6df; --dim:#9a97a3; --gold:#f5b942; --red:#e5534b; --blue:#58a6ff; --green:#3fb950; }
   * { box-sizing:border-box; }
@@ -60,7 +60,7 @@ grep -rn "sorry" ThetLogos/   # exactly 7, all named open obligations</pre>
       <li><b>The seven sorrys are named, not hidden:</b> five T5 blocked questions in <code>BlockedQuestions.lean</code>, one T3 diagonal KMS identity, one T5 tripotent-existence obligation. A full proof-dependency audit found <i>zero</i> transitive contamination beyond them: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/corpus-dependency-audit-2026-10-21.md">corpus-dependency-audit-2026-10-21.md</a>.</li>
       <li><b>Axiom check:</b> headline theorems are verified with <code>#print axioms</code> — only Lean's standard three (<code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>), no <code>sorryAx</code>.</li>
     </ul>
-    <p class="census">Census, 2026-10-24: <b>4,510</b> strict · <b>4,559</b> attribute-inclusive · <b>152</b> counted modules</p>
+    <p class="census">Census, 2026-10-24: <b>4,559</b> strict · <b>4,608</b> attribute-inclusive · <b>153</b> counted modules</p>
   </section>
 
   <section>
@@ -92,13 +92,15 @@ grep -rn "sorry" ThetLogos/   # exactly 7, all named open obligations</pre>
   </section>
 
   <section>
-    <h2>⚖️ The Gram campaign — Stage 1b-B <span class="tag t1">T1 for U(1)</span> <span class="tag kill">3 KILLS</span></h2>
-    <p>Reflection positivity of lattice gauge theory. <b>Closed:</b> positivity of the U(1) Wilson theory at every β ≥ 0 is machine-checked (Route C), and the integrated/series Gram criterion stands at general (G, ρ). <b>Open:</b> the clause at general (G, ρ). The campaign's three proved obstructions — published at full rank, because a surveyed wall is a result:</p>
+    <h2>⚖️ The Gram campaign — Stage 1b-B <span class="tag t1">T1 for U(1)</span> <span class="tag kill">4 CLOSURES</span></h2>
+    <p>Reflection positivity of lattice gauge theory. <b>Closed:</b> positivity of the U(1) Wilson theory at every β ≥ 0 is machine-checked (Route C), and the integrated/series Gram criterion stands at general (G, ρ). <b>Open:</b> the clause at general (G, ρ). The campaign's proved obstructions — four families now closed around the clause, published at full rank, because a surveyed wall is a result:</p>
     <ul>
       <li>Route C + the criterion: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-route-c-2026-10-23.md">gram-route-c-2026-10-23.md</a> · Stage record: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/pitch-4-stage-1b-b-2026-10-17.md">pitch-4-stage-1b-b-2026-10-17.md</a></li>
       <li><b>Kill 1 (T4c)</b> — word-entry features die on the sandwich monomial: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-route-b-t4c-obstruction-2026-10-23.md">gram-route-b-t4c-obstruction-2026-10-23.md</a></li>
       <li><b>Kill 2 (T4c′)</b> — factored occurrence features die on the strict pair vs the mirror pair, (k, a) vs (j, i): <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-route-b-t4cp-obstruction-2026-10-24.md">gram-route-b-t4cp-obstruction-2026-10-24.md</a></li>
       <li><b>Kill 3 (R0)</b> — the polarization regrouping dies at its pre-registered gate test: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-route-b-r0-obstruction-2026-10-24.md">gram-route-b-r0-obstruction-2026-10-24.md</a></li>
+      <li><b>Kill 4 (TM R2)</b> — transfer-matrix positivity reduces to positive-definiteness of the seam kernel, whose only Gram factorization is the fenced-off word series: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-transfer-r2-obstruction-2026-10-24.md">gram-transfer-r2-obstruction-2026-10-24.md</a></li>
+      <li><b>Kill 5 (F2, the Damping Lemma)</b> — the third family's assembly <i>stands</i> (the seam kernel's Gram identity is proved), but its marginals cannot factor through a common Ξ: the arc split puts three links on one side and one on the other. The route terminates here — no fifth family; the next direction is a new route decision: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/gram-third-family-f2-partial-damping-kill-2026-10-24.md">gram-third-family-f2-partial-damping-kill-2026-10-24.md</a></li>
     </ul>
   </section>
 
