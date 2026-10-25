@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joule → Kernel — an exhibit</title>
+<meta name="description" content="A pocket converter between physical energy (joules, eV) and the dimensionless energies of a transfer-operator kernel — with the scale declared as an INPUT, on its face. An exhibit. NO CLAIM.">
+<style>
+  body { font-family: system-ui, sans-serif; background:#0b0e13; color:#e8e4d8; margin:0; padding:24px 16px 48px; }
+  main { max-width: 640px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  .sub { color:#9db4c8; margin: 0 0 16px; }
+  .fence { border:1px solid #b8860b; background:#1a1607; color:#f0d089; border-radius:8px; padding:10px 14px; font-size:.92rem; margin: 14px 0; }
+  .card { background:#12161f; border:1px solid #26303f; border-radius:10px; padding:16px; margin:14px 0; }
+  label { display:block; font-size:.85rem; color:#9db4c8; margin:10px 0 4px; }
+  input[type=number], select { width:100%; box-sizing:border-box; background:#0b0e13; color:#e8e4d8; border:1px solid #33415541; border:1px solid #334155; border-radius:6px; padding:9px; font-size:1.05rem; }
+  input[type=range] { width:100%; }
+  .row { display:flex; gap:10px; } .row > div { flex:1; }
+  button { background:#1f2937; color:#e8e4d8; border:1px solid #3b4a5f; border-radius:999px; padding:6px 12px; margin:4px 4px 0 0; cursor:pointer; font-size:.85rem; }
+  button:hover { background:#2b3a4f; }
+  .big { font-size:1.9rem; font-weight:700; color:#7ee0a3; word-break:break-all; }
+  .mid { font-size:1.15rem; font-weight:600; word-break:break-all; }
+  .bar { height:12px; background:#1f2937; border-radius:6px; margin-top:6px; overflow:hidden; }
+  .bar > div { height:100%; background:#7ee0a3; width:0%; }
+  .note { font-size:.85rem; color:#9db4c8; }
+  footer { color:#62707f; font-size:.8rem; margin-top:28px; }
+  a { color:#7fb3e0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Joule → Kernel ⚖️</h1>
+  <p class="sub">Physical energy on the left. The kernel's dimensionless energy on the right. The exchange rate between them is a <b>scale</b> — and the scale is yours to declare.</p>
+
+  <div class="fence"><b>EXHIBIT — NO CLAIM.</b> The scale τ below is an <b>INPUT</b>, chosen by hand. The corpus this toy sits beside owns no physical scale (no lattice spacing, no clock rate — that is the named continuum wall), so nothing here is derived and no measured number is predicted. Dial #1: unmoved.</div>
+
+  <div class="card">
+    <label for="energy">Energy</label>
+    <div class="row">
+      <div><input type="number" id="energy" value="12.75" step="any"></div>
+      <div><select id="unit">
+        <option value="1.602176634e-19" selected>eV</option>
+        <option value="1">joule (J)</option>
+        <option value="1.602176634e-10">GeV</option>
+        <option value="1.602176634e-22">meV</option>
+      </select></div>
+    </div>
+    <label>Presets (hydrogen, counted up from its ground state)</label>
+    <div>
+      <button data-ev="10.20">n=2→1 · 10.20 eV</button>
+      <button data-ev="12.09">n=3→1 · 12.09 eV</button>
+      <button data-ev="12.75">n=4→1 · 12.75 eV</button>
+      <button data-ev="13.60">ionize · 13.60 eV</button>
+      <button data-ev="1.6e9">glueball whisper · 1.6 GeV</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label for="tau">Scale τ — one transfer step lasts this long <b>(INPUT)</b>: <span id="tauVal"></span></label>
+    <input type="range" id="tau" min="-44" max="0" step="0.01" value="-15">
+    <div>
+      <button data-tau="5.391247e-44">Planck time</button>
+      <button data-tau="4.114e-25">set by the 1.6 GeV whisper</button>
+      <button data-tau="1e-15">atomic · 1 fs</button>
+      <button data-tau="1e-9">1 ns</button>
+      <button data-tau="1">1 s</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label>Kernel energy ε = E·τ / ħ (dimensionless — the kernel's native currency)</label>
+    <div class="big" id="eps">–</div>
+    <label>One-step survival weight μ = e<sup>−ε</sup> (the eigenvalue the kernel sees)</label>
+    <div class="mid" id="mu">–</div>
+    <div class="bar"><div id="mubar"></div></div>
+    <label style="margin-top:14px">The photon that carries this energy (the whiteboard's side of the street)</label>
+    <div class="mid" id="photon">–</div>
+    <p class="note">f = E/h, λ = hc/E. Constants: ħ = 1.054571817×10⁻³⁴ J·s, h = 6.62607015×10⁻³⁴ J·s, c = 299792458 m/s, 1 eV = 1.602176634×10⁻¹⁹ J (exact SI).</p>
+  </div>
+
+  <p class="note">How to read it: the kernel counts energies up from its ground state and stores them as −log(eigenvalue). A joule prices the same gap in the world's currency. This page is the exchange booth — the rate is declared, not discovered. When a continuum limit ever <i>earns</i> a scale, this booth becomes a theorem. Until then: exhibit.</p>
+
+  <footer>Part of the public toybox of <a href="https://github.com/jeffgurd888/thet-logos">thet-logos</a> · Nexus Research · free forever. Companion reading: today's stone — FG-2b, the Hamiltonian exists (ĤΩ = 0).</footer>
+</main>
+<script>
+  const HBAR = 1.054571817e-34, H = 6.62607015e-34, C = 299792458;
+  const $ = id => document.getElementById(id);
+  function fmt(x) {
+    if (!isFinite(x)) return "∞";
+    if (x === 0) return "0";
+    const a = Math.abs(x);
+    if (a >= 1e-3 && a < 1e6) return x.toPrecision(5).replace(/\.?0+$/, "");
+    return x.toExponential(3);
+  }
+  function upd() {
+    const E = parseFloat($("energy").value) * parseFloat($("unit").value);
+    const tau = Math.pow(10, parseFloat($("tau").value));
+    $("tauVal").textContent = "= " + fmt(tau) + " s";
+    if (!(E > 0)) { $("eps").textContent = "–"; return; }
+    const eps = E * tau / HBAR;
+    const mu = Math.exp(-eps);
+    $("eps").textContent = fmt(eps);
+    $("mu").textContent = mu === 0 ? "0 (underflow — the step forgets it entirely)" : fmt(mu);
+    $("mubar").style.width = (mu * 100).toFixed(2) + "%";
+    const f = E / H, lam = H * C / E;
+    $("photon").textContent = "f = " + fmt(f) + " Hz · λ = " + fmt(lam) + " m";
+  }
+  ["energy","unit","tau"].forEach(id => $(id).addEventListener("input", upd));
+  document.querySelectorAll("button[data-ev]").forEach(b => b.addEventListener("click", () => {
+    $("energy").value = b.dataset.ev; $("unit").value = "1.602176634e-19"; upd();
+  }));
+  document.querySelectorAll("button[data-tau]").forEach(b => b.addEventListener("click", () => {
+    $("tau").value = Math.log10(parseFloat(b.dataset.tau)); upd();
+  }));
+  upd();
+</script>
+</body>
+</html>
