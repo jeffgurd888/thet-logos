@@ -54,6 +54,36 @@
         padding: 8px 2px; margin: 0 0 18px;
       }
       .counts b { font-weight: 700; }
+      .countgame {
+        border: 1px solid var(--panel-line); border-radius: 12px;
+        background: var(--card); padding: 12px 14px 14px; margin: 0 0 18px;
+      }
+      .countgame .cg-title { margin: 0 0 10px; font-weight: 700; font-size: 1.02rem; }
+      .cg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      @media (max-width: 520px) { .cg-grid { grid-template-columns: repeat(2, 1fr); } }
+      .cg-chip {
+        background: var(--chip); border-radius: 10px; padding: 8px 6px; text-align: center;
+      }
+      .cg-chip .n {
+        display: block; font-size: 1.5rem; font-weight: 700; line-height: 1.15;
+        font-variant-numeric: tabular-nums;
+      }
+      .cg-chip .w { display: block; font-size: 0.8rem; color: var(--ink-soft); }
+      .cg-note { font-size: 0.9rem; color: var(--ink-soft); margin: 10px 0 0; }
+      .cg-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
+      #cellLabel { font-size: 0.9rem; color: var(--ink-soft); }
+      .drag-hint { font-size: 0.92rem; margin: 8px 2px 0; }
+      .label-card {
+        background: var(--card); border: 1px solid var(--panel-line);
+        border-radius: 12px; padding: 14px 16px; margin: 18px 0 0;
+      }
+      .label-card .stamp {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em;
+        text-transform: uppercase; color: var(--accent); margin: 0 0 8px;
+      }
+      .label-card p { margin: 0 0 8px; font-size: 0.98rem; }
+      .label-card p:last-child { margin-bottom: 0; }
       section.view { margin: 0 0 18px; }
       .view-head {
         display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
@@ -67,7 +97,9 @@
       canvas.stage {
         display: block; width: 100%; aspect-ratio: 4 / 3;
         border-radius: 10px;
+        touch-action: none; cursor: grab;
       }
+      canvas.stage:active { cursor: grabbing; }
       #modelCanvas { background: #0a0d13; box-shadow: inset 0 0 0 1px #232a38; }
       #shadowCanvas { box-shadow: inset 0 0 0 1px #a9a49a; }
       .legend {
@@ -101,18 +133,19 @@
         font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
         color: var(--ink-soft); margin: 14px 0 2px;
       }
-      .slider-row {
-        display: grid; grid-template-columns: 52px 1fr 64px; align-items: center;
-        gap: 10px; min-height: 48px;
-      }
+      .slider-row { padding: 2px 0 4px; }
+      .slider-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
       .slider-row .plane {
         font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
         font-size: 1rem; font-weight: 700;
       }
+      .slider-row .plain { font-size: 0.88rem; color: var(--ink-soft); }
+      .slider-bot { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+      .slider-bot input[type="range"] { flex: 1; }
       .slider-row .val {
         font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
         font-size: 0.82rem; text-align: right; color: var(--ink-soft);
-        font-variant-numeric: tabular-nums;
+        font-variant-numeric: tabular-nums; min-width: 52px;
       }
       input[type="range"] {
         width: 100%; height: 44px; margin: 0; accent-color: var(--accent);
@@ -125,15 +158,32 @@
   <body>
     <main class="wrap">
       <h1>A 4D cube, turning in all six of its planes</h1>
-      <p class="lede">The wire model from the video, made movable. This is the real
-        tesseract — computed in four dimensions, then projected down twice: once to the
-        model you can almost hold, once to its flat shadow on the ground.</p>
-      <p class="counts"><b>16</b> vertices · <b>32</b> edges · <b>24</b> square faces · <b>8</b> cubic cells</p>
+      <p class="lede">A play toy. Grab the model below and drag it — it turns in four
+        dimensions for real, then gets projected down twice: once to the model you can
+        almost hold, once to its flat shadow on the pavement.</p>
+
+      <div class="countgame" aria-label="The counting game">
+        <p class="cg-title">🔢 The counting game</p>
+        <div class="cg-grid">
+          <div class="cg-chip"><span class="n" id="cntV">16</span><span class="w">corners</span></div>
+          <div class="cg-chip"><span class="n" id="cntE">32</span><span class="w">edges</span></div>
+          <div class="cg-chip"><span class="n" id="cntF">24</span><span class="w">square faces</span></div>
+          <div class="cg-chip"><span class="n" id="cntC">8</span><span class="w">cube cells</span></div>
+        </div>
+        <p class="cg-note">Count them yourself — then turn the cube any way you like and
+          count again. The numbers never change. That is the exact part of this toy,
+          and the readout below is counted live from the same vertices and edges
+          being drawn.</p>
+        <div class="cg-row">
+          <button id="cellBtn" type="button">🎯 Highlight one cube cell</button>
+          <span id="cellLabel">All 8 cells are lit. Highlight one to see it on its own.</span>
+        </div>
+      </div>
 
       <section class="view" aria-label="The model">
         <div class="view-head">
           <h2>The model</h2>
-          <span class="how">4D → 3D → screen, with perspective</span>
+          <span class="how">4D → 3D → screen, with perspective · drag it!</span>
         </div>
         <canvas id="modelCanvas" class="stage" role="img"
           aria-label="Perspective projection of a rotating tesseract. Two cubic cells in different colors joined by eight bridging edges."></canvas>
@@ -143,9 +193,12 @@
           <span><i class="swatch" style="background:#ffcf4d"></i> the 8 bridges between them</span>
           <span>dot size &amp; brightness = w, the fourth coordinate</span>
         </div>
+        <p class="drag-hint">👆 <b>Drag the model:</b> sideways turns it in the
+          <b>hidden direction</b> (the xw plane), up and down turns the yw plane —
+          the inside-out turn, under your finger. The shadow below is draggable too.</p>
       </section>
 
-      <section class="view" aria-label="The shadow">
+      <section class="view" id="shadowSection" aria-label="The shadow">
         <div class="view-head">
           <h2>The shadow</h2>
           <span class="how">4D → flat (x, y), straight down, like sunlight</span>
@@ -159,10 +212,25 @@
       <div class="controls">
         <div class="transport">
           <button id="playBtn" type="button" aria-pressed="true">❚❚&nbsp; Pause</button>
+          <button id="resetBtn" type="button">↺&nbsp; Reset</button>
+          <button id="shadowBtn" type="button" aria-pressed="true">Hide the shadow</button>
           <button type="button" class="preset on" data-preset="double">Double rotation (inside-out)</button>
           <button type="button" class="preset" data-preset="simple">Simple spin</button>
           <button type="button" class="preset" data-preset="all">All planes</button>
-          <button type="button" class="preset" data-preset="freeze">Freeze</button>
+          <button type="button" class="preset" data-preset="freeze">Freeze-frame</button>
+        </div>
+
+        <p class="group-label">Overall speed — how fast everything turns</p>
+        <div class="slider-row">
+          <div class="slider-top">
+            <span class="plane">speed</span>
+            <span class="plain">— one knob for the whole toy</span>
+          </div>
+          <div class="slider-bot">
+            <input type="range" id="speedRange" min="0" max="2.5" step="0.05" value="1"
+              aria-label="Overall turning speed" />
+            <span class="val" id="speedVal">×1.0</span>
+          </div>
         </div>
 
         <p class="group-label">Planes inside ordinary 3D space</p>
@@ -175,6 +243,15 @@
           drag left of center and that plane runs backwards. A rigid model in your hand
           can only turn in the first three — the w-planes are the ones that exist only here.</p>
       </div>
+
+      <section class="label-card" aria-label="About this exhibit">
+        <p class="stamp">Exhibit — a picture, not a proof</p>
+        <p>Labeled plainly: this is an exhibit — a picture of the mathematics, not a
+          proof. The exact part is the arithmetic: a 4-dimensional cube has 16 corners,
+          32 edges, 24 faces, and 8 cube-shaped cells, and no rotation changes the count.</p>
+        <p>It runs right here in your browser. No account, no install, no tracking.</p>
+        <p><b>Free forever, for everyone — one common bond.</b></p>
+      </section>
 
       <p class="foot">A 4D rotation doesn't turn around an axis; it turns <em>in a plane</em>,
         and four dimensions have six planes. Turn two disjoint planes at once — a double
@@ -206,19 +283,19 @@
             var kind;
             if (bit === 3) kind = "bridge";          // one of the 8 w-bridges
             else kind = VERTS[a][3] > 0 ? "plus" : "minus"; // edge of a cubic cell
-            EDGES.push({ a: a, b: b, kind: kind });
+            EDGES.push({ a: a, b: b, kind: kind, axis: bit });
           }
         }
       }
 
       /* ---------- Rotation state: the six planes of 4D ---------- */
       var PLANES = [
-        { name: "xy", i: 0, j: 1, group: "3d" },
-        { name: "xz", i: 0, j: 2, group: "3d" },
-        { name: "yz", i: 1, j: 2, group: "3d" },
-        { name: "xw", i: 0, j: 3, group: "w" },
-        { name: "yw", i: 1, j: 3, group: "w" },
-        { name: "zw", i: 2, j: 3, group: "w" }
+        { name: "xy", i: 0, j: 1, group: "3d", plain: "spin flat, like a top in the screen" },
+        { name: "xz", i: 0, j: 2, group: "3d", plain: "tip forward and back" },
+        { name: "yz", i: 1, j: 2, group: "3d", plain: "roll side to side" },
+        { name: "xw", i: 0, j: 3, group: "w", plain: "turn in the hidden direction — left–right trades places with w (the inside-out turn)" },
+        { name: "yw", i: 1, j: 3, group: "w", plain: "turn in the hidden direction — up–down trades places with w" },
+        { name: "zw", i: 2, j: 3, group: "w", plain: "turn in the hidden direction — near–far trades places with w" }
       ];
       var angles = {}, speeds = {};
       PLANES.forEach(function (p) { angles[p.name] = 0; speeds[p.name] = 0; });
@@ -242,15 +319,23 @@
           if (p.group !== group) return;
           var row = document.createElement("div");
           row.className = "slider-row";
+          var top = document.createElement("div");
+          top.className = "slider-top";
           var lab = document.createElement("span");
           lab.className = "plane"; lab.textContent = p.name;
+          var plain = document.createElement("span");
+          plain.className = "plain"; plain.textContent = "— " + p.plain;
+          top.appendChild(lab); top.appendChild(plain);
+          var bot = document.createElement("div");
+          bot.className = "slider-bot";
           var input = document.createElement("input");
           input.type = "range"; input.min = "-1.6"; input.max = "1.6"; input.step = "0.02";
           input.value = "0";
-          input.setAttribute("aria-label", "Rotation speed in the " + p.name + " plane");
+          input.setAttribute("aria-label", "Rotation speed in the " + p.name + " plane: " + p.plain);
           var val = document.createElement("span");
           val.className = "val"; val.textContent = "0.00";
-          row.appendChild(lab); row.appendChild(input); row.appendChild(val);
+          bot.appendChild(input); bot.appendChild(val);
+          row.appendChild(top); row.appendChild(bot);
           box.appendChild(row);
           sliderEls[p.name] = { input: input, val: val };
           input.addEventListener("input", function () {
@@ -300,6 +385,87 @@
       setSpeeds(PRESETS.double);
       renderPlayBtn();
 
+      /* ---------- Master speed: one multiplier over every plane ---------- */
+      var speedMul = 1;
+      var speedRange = document.getElementById("speedRange");
+      var speedVal = document.getElementById("speedVal");
+      speedRange.addEventListener("input", function () {
+        speedMul = parseFloat(speedRange.value) || 0;
+        speedVal.textContent = "×" + speedMul.toFixed(1);
+      });
+
+      /* ---------- Highlight one cube cell ----------
+         The 8 cells: freeze one coordinate at −1 or +1.
+         Order: x−1, x+1, y−1, y+1, z−1, z+1, w−1, w+1. */
+      var CELL_AXES = ["x", "y", "z", "w"];
+      var hlCell = -1;   // -1 = all cells lit
+      var cellBtn = document.getElementById("cellBtn");
+      var cellLabel = document.getElementById("cellLabel");
+      function cellOf(idx) {
+        return { axis: Math.floor(idx / 2), sign: (idx % 2 === 0) ? -1 : 1 };
+      }
+      function edgeInCell(e, cell) {
+        return e.axis !== cell.axis && VERTS[e.a][cell.axis] === cell.sign;
+      }
+      function vertInCell(i, cell) { return VERTS[i][cell.axis] === cell.sign; }
+      function setCell(idx) {
+        hlCell = idx;
+        if (idx < 0) {
+          cellLabel.textContent = "All 8 cells are lit. Highlight one to see it on its own.";
+          cellBtn.textContent = "🎯 Highlight one cube cell";
+        } else {
+          var c = cellOf(idx);
+          cellLabel.textContent = "Cell " + (idx + 1) + " of 8 — the cube where " +
+            CELL_AXES[c.axis] + " = " + (c.sign > 0 ? "+1" : "−1") +
+            ". Its own count: 8 corners, 12 edges, 6 square faces. The rest of the tesseract fades back.";
+          cellBtn.textContent = idx === 7 ? "🎯 Show all cells again" : "🎯 Next cell (" + (idx + 2) + " of 8)";
+        }
+      }
+      cellBtn.addEventListener("click", function () {
+        setCell(hlCell >= 7 ? -1 : hlCell + 1);
+      });
+
+      /* ---------- The counting game: count from the data itself ---------- */
+      (function () {
+        var faces = 0, cells = 0, i, j, k, s1, s2;
+        for (i = 0; i < 4; i++) {           // choose the 2 axes a face varies in
+          for (j = i + 1; j < 4; j++) {    // the other 2 axes are frozen, each ±1
+            for (s1 = -1; s1 <= 1; s1 += 2)
+              for (s2 = -1; s2 <= 1; s2 += 2) faces++;
+          }
+        }
+        for (k = 0; k < 4; k++)            // a cell freezes 1 axis, at −1 or +1
+          for (s1 = -1; s1 <= 1; s1 += 2) cells++;
+        document.getElementById("cntV").textContent = String(VERTS.length);
+        document.getElementById("cntE").textContent = String(EDGES.length);
+        document.getElementById("cntF").textContent = String(faces);
+        document.getElementById("cntC").textContent = String(cells);
+      })();
+
+      /* ---------- Reset: angles home, house preset back, highlight off ---------- */
+      document.getElementById("resetBtn").addEventListener("click", function () {
+        PLANES.forEach(function (p) { angles[p.name] = 0; });
+        setSpeeds(PRESETS.double);
+        clearPresetHighlight();
+        presetBtns.forEach(function (b) {
+          if (b.getAttribute("data-preset") === "double") b.classList.add("on");
+        });
+        setCell(-1);
+        if (!reduced && !running) { running = true; renderPlayBtn(); }
+      });
+
+      /* ---------- Shadow toggle: the shadow view can be put away ---------- */
+      var shadowOn = true;
+      var shadowBtn = document.getElementById("shadowBtn");
+      var shadowSection = document.getElementById("shadowSection");
+      shadowBtn.addEventListener("click", function () {
+        shadowOn = !shadowOn;
+        shadowSection.style.display = shadowOn ? "" : "none";
+        shadowBtn.textContent = shadowOn ? "Hide the shadow" : "Show the shadow";
+        shadowBtn.setAttribute("aria-pressed", shadowOn ? "true" : "false");
+        if (shadowOn) { sSize = fit(shadowCanvas); speckle = makeSpeckle(sSize.w, sSize.h); }
+      });
+
       /* ---------- Canvases ---------- */
       var modelCanvas = document.getElementById("modelCanvas");
       var shadowCanvas = document.getElementById("shadowCanvas");
@@ -346,6 +512,32 @@
           speckle = makeSpeckle(sSize.w, sSize.h);
         }, 120);
       });
+
+      /* ---------- Drag: turn the tesseract itself, in 4D ----------
+         Not a camera move — the drag feeds the rotation angles directly.
+         Horizontal drag turns the xw plane, vertical drag the yw plane:
+         the two hidden-direction planes of the inside-out double rotation. */
+      function addDrag(canvas) {
+        var dragging = false, lx = 0, ly = 0;
+        canvas.addEventListener("pointerdown", function (ev) {
+          dragging = true; lx = ev.clientX; ly = ev.clientY;
+          if (canvas.setPointerCapture) {
+            try { canvas.setPointerCapture(ev.pointerId); } catch (err) { /* noop */ }
+          }
+          ev.preventDefault();
+        });
+        canvas.addEventListener("pointermove", function (ev) {
+          if (!dragging) return;
+          angles.xw += (ev.clientX - lx) * 0.008;
+          angles.yw += (ev.clientY - ly) * 0.008;
+          lx = ev.clientX; ly = ev.clientY;
+        });
+        function end() { dragging = false; }
+        canvas.addEventListener("pointerup", end);
+        canvas.addEventListener("pointercancel", end);
+      }
+      addDrag(modelCanvas);
+      addDrag(shadowCanvas);
 
       /* ---------- Math ---------- */
       function rotate4(v) {
@@ -400,13 +592,15 @@
         var order = EDGES.slice().sort(function (e1, e2) {
           return (pts[e1.a].z + pts[e1.b].z) - (pts[e2.a].z + pts[e2.b].z);
         });
+        var cellM = hlCell >= 0 ? cellOf(hlCell) : null;
         mctx.lineCap = "round";
         for (i = 0; i < order.length; i++) {
           var e = order[i], A = pts[e.a], B = pts[e.b];
           var depth = Math.min(1, Math.max(0, (A.z + B.z + 5.2) / 10.4));
+          var member = !cellM || edgeInCell(e, cellM);
           mctx.strokeStyle = EDGE_COLORS[e.kind];
-          mctx.globalAlpha = 0.38 + 0.62 * depth;
-          mctx.lineWidth = e.kind === "bridge" ? 1.6 : 2.1;
+          mctx.globalAlpha = (0.38 + 0.62 * depth) * (member ? 1 : 0.12);
+          mctx.lineWidth = (e.kind === "bridge" ? 1.6 : 2.1) * (member && cellM ? 1.8 : 1);
           mctx.beginPath(); mctx.moveTo(A.x, A.y); mctx.lineTo(B.x, B.y); mctx.stroke();
         }
         mctx.globalAlpha = 1;
@@ -418,28 +612,53 @@
           var P = pts[vOrder[i]];
           var t = Math.min(1, Math.max(0, (P.w + 2) / 4));
           var r = (2.1 + 2.6 * t) * Math.min(1.25, Math.max(0.8, P.persp));
+          mctx.globalAlpha = (cellM && !vertInCell(vOrder[i], cellM)) ? 0.22 : 1;
           mctx.fillStyle = mixColor([110, 126, 160], [255, 255, 255], t);
           mctx.beginPath(); mctx.arc(P.x, P.y, r, 0, 6.2832); mctx.fill();
         }
+        mctx.globalAlpha = 1;
 
-        /* ----- The shadow: straight orthographic drop to (x, y). No perspective, no color. ----- */
+        /* ----- The shadow: straight orthographic drop to (x, y). No perspective.
+           No color either, except the one highlighted cell, tinted so you can
+           follow it from the model into its shadow. ----- */
+        if (!shadowOn) return;
         var SW = sSize.w, SH = sSize.h;
         sctx.clearRect(0, 0, SW, SH);
         if (speckle) sctx.drawImage(speckle, 0, 0, SW, SH);
         var scaleS = Math.min(SW, SH) * 0.235;   // vertices reach |coord| 2
         var scx = SW / 2, scy = SH / 2;
-        sctx.strokeStyle = "rgba(38,36,33,0.78)";
-        sctx.lineWidth = 2.4; sctx.lineCap = "round";
+        sctx.lineCap = "round";
+        // Pass 1: the whole shadow — faint when one cell is highlighted.
+        sctx.strokeStyle = cellM ? "rgba(38,36,33,0.16)" : "rgba(38,36,33,0.78)";
+        sctx.lineWidth = 2.4;
         sctx.beginPath();
         for (i = 0; i < EDGES.length; i++) {
           var e2 = EDGES[i];
+          if (cellM && edgeInCell(e2, cellM)) continue;
           var pA = rot[e2.a], pB = rot[e2.b];
           sctx.moveTo(scx + pA[0] * scaleS, scy - pA[1] * scaleS);
           sctx.lineTo(scx + pB[0] * scaleS, scy - pB[1] * scaleS);
         }
         sctx.stroke();
-        sctx.fillStyle = "rgba(30,28,26,0.92)";
+        // Pass 2: the highlighted cell's own shadow, in the accent.
+        if (cellM) {
+          sctx.strokeStyle = "rgba(179,71,36,0.95)";
+          sctx.lineWidth = 3.4;
+          sctx.beginPath();
+          for (i = 0; i < EDGES.length; i++) {
+            var e3 = EDGES[i];
+            if (!edgeInCell(e3, cellM)) continue;
+            var pC = rot[e3.a], pD = rot[e3.b];
+            sctx.moveTo(scx + pC[0] * scaleS, scy - pC[1] * scaleS);
+            sctx.lineTo(scx + pD[0] * scaleS, scy - pD[1] * scaleS);
+          }
+          sctx.stroke();
+        }
         for (i = 0; i < 16; i++) {
+          var inCellS = !cellM || vertInCell(i, cellM);
+          sctx.fillStyle = cellM
+            ? (inCellS ? "rgba(179,71,36,0.95)" : "rgba(30,28,26,0.22)")
+            : "rgba(30,28,26,0.92)";
           sctx.beginPath();
           sctx.arc(scx + rot[i][0] * scaleS, scy - rot[i][1] * scaleS, 3.6, 0, 6.2832);
           sctx.fill();
@@ -455,7 +674,7 @@
         if (running) {
           for (var k = 0; k < PLANES.length; k++) {
             var p = PLANES[k];
-            angles[p.name] += speeds[p.name] * dt;
+            angles[p.name] += speeds[p.name] * dt * speedMul;
           }
         }
         var rot = VERTS.map(rotate4);
