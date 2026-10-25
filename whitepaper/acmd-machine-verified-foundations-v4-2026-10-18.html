@@ -11,7 +11,7 @@ code { font-family: "DejaVu Sans Mono", monospace; font-size: 9pt; }
 li { margin-bottom: 0.35em; }
 </style></head><body><h1>Active Cartesian Modular Dynamics: Machine-Verified Foundations</h1>
 <p><strong>Jeffrey Michael Gurd — Nexus Research (independent)</strong>
-<strong>2026-10-18 — Version 4.</strong></p>
+<strong>2026-10-18 — Version 4; published 2026-10-25.</strong></p>
 <p>Repository: https://github.com/jeffgurd888/thet-logos</p>
 <blockquote>
 <p>"If we don't stop worrying about the Almighty dollar, we're not
@@ -54,8 +54,14 @@ re-pin; the trit experiment's pre-registered kill; and the
 vacuum-portrait exhibit. The program total at preparation is
 <strong>3,276 theorem/lemma declarations</strong> by the strict counting
 method of §0 (an attribute-inclusive count of the same modules
-reads 3,291). Version 4 is published as a new version of the
-same record; its DOI is minted on publication.</p>
+reads 3,291). At publication (2026-10-25) the program total
+stands at <strong>5,409 theorem/lemma declarations</strong> by the same
+strict method (5,458 attribute-inclusive), re-derived from the
+committed tree on ship day; the dated ship-day inventory is in
+§0. Version 4 is the version of record, published as a new
+version of the same record, superseding Version 3 (DOI:
+10.5281/zenodo.23444600); its own DOI is minted on Zenodo at
+publication.</p>
 <hr />
 <h2>Abstract</h2>
 <p>This paper states exactly what the machine has verified in the Active
@@ -835,6 +841,76 @@ landing (<code>#print axioms</code> on every headline — standard three
 only), so the footprint statement extends over them
 declaration by declaration. Full report:
 <code>whitepaper/corpus-dependency-audit-2026-10-21.md</code>.</p>
+<h3>Ship-day inventory (2026-10-25)</h3>
+<p>Version 4 was prepared on 2026-10-18 and is published on
+2026-10-25. The corpus did not stop at preparation: §§29–38
+were added to this version's text by dated amendment
+(2026-10-22), and the campaigns of 2026-10-23/25 landed after
+them. No section's own census step is altered by this note —
+those steps are the historical chain, and they stand as
+written. This note is the ship-day inventory only, taken from
+the committed Lean tree at commit
+<code>65f9926a260bb065f8dcf5dd554a582d9cc92492</code> (this version's
+ship-day edits touch only the manuscript and its rendering,
+not the Lean tree).</p>
+<p><strong>Program total at publication: 5,409 theorem/lemma
+declarations</strong> by the strict counting method of this section —
+line-initial <code>^(theorem|lemma)</code> on comment-stripped source,
+summed over the program's counted modules — across <strong>178
+counted modules</strong>. The attribute-inclusive parallel figure for
+the same modules is <strong>5,458</strong> (the difference is exactly the
+49 same-line <code>@[simp]</code>-prefixed declarations, all of them in
+counted modules). For reference only, the whole Lean tree at
+the same commit — 193 files under <code>lean/ThetLogos/</code>, including
+the earlier exploratory campaigns and every module whether or
+not it belongs to the program chain — counts <strong>6,078</strong>
+declarations by the strict rule (6,127 attribute-inclusive);
+the complement of the chain is the same fifteen pre-ladder /
+non-chain remainder files (669 strict) documented in the
+2026-10-19 double-check sweep
+(<code>whitepaper/double-check-sweep-2026-10-18.md</code>), and, as that
+sweep recorded, no total depends on the remainder's six-file
+membership tail.</p>
+<p><strong>Sorry hygiene (re-derived 2026-10-25).</strong> A comment-stripped
+sweep of the whole tree finds the word <code>sorry</code> in code
+<strong>exactly seven times</strong> — the same seven labeled occurrences
+as at every prior inventory: five T5 in
+<code>BlockedQuestions.lean</code> (the quarantined open questions
+Q1–Q5), one T3 in <code>ModularTime.lean</code>
+(<code>kms_identity_diagonal</code>), and one T5 in
+<code>XYZTripotents.lean</code> — and the word <code>admit</code> in code <strong>zero
+times</strong>. The program total above is therefore a declaration
+census that includes those seven quarantined sorry
+obligations; it is not a completed-proof count, and this
+paper does not call the corpus sorry-free.</p>
+<p><strong>Growth since the Version 4 addendum (3,276 → 5,409).</strong> The
+increment is carried by §§29–38 of this version (the
+four-colors exhibit and the nine full sections of 2026-10-22)
+and by the landings of 2026-10-23/25, which this version's
+sections do not decompose and which are inventoried here at
+arc level only: the SM-Match Track 1 closure at the finite
+level; the Gram-clause campaigns (Route C's U(1) discharge,
+the transfer-matrix and third-family bricks), Q12, and the
+Q13 closure; the Dynamic Boundary bricks and the containment
+synthesis; the STEM bridge at its finite seat; and the Stage 2
+reconstruction completion — the slice engine, the Hamiltonian
+form, the weld, and the completion/operator bricks — followed
+by the D-1 vacuum-simplicity weld and the HDen discharge,
+which together assemble, at the U(1) seat, for every β &gt; 0
+and every even N, a per-instance spectral gap δ(β, N) &gt; 0 of
+the fixed-volume transfer operator with no positivity
+hypothesis left standing, and by the FG-2 line: the closedness
+of the completed −log form (PARTIAL at the top of its band)
+and the Friedrichs construction of the Hamiltonian Ĥ ≥ 0 on
+the completed space, with ĤΩ = 0. Every one of those results
+is a finite-mode or fixed-volume lattice result, verified at
+its landing by a targeted build and an axiom check at the
+standard three, exactly as reported in its dossier. None of
+them is a continuum result, and uniformity of the gap across
+N remains open. <strong>Parts of the official Clay Yang–Mills
+statement closed by this corpus: 0.</strong> NO CLAIM is made here
+or anywhere in this version on the Yang–Mills existence and
+mass gap problem.</p>
 <h3>Corrections to Version 2 (in the open)</h3>
 <p>Version 2 is a dated snapshot and is not retro-edited. Four of
 its statements are overtaken by the work Version 3 reports, and
@@ -3550,6 +3626,90 @@ gauge vortex — not Tesla's devices, not 3-6-9 numerology
 (K-TV3). Rung 2 is <strong>not commissioned</strong>. Census: 3,543 →
 3,561 strict; 128 modules. Dossier:
 <code>whitepaper/tesla-vortex-modular-dynamics-rung1-2026-10-22.md</code>.</p>
+<h2>36. GreenKubo — Stokes–Einstein Rung 2: the Green–Kubo sum (T1) — STANDS WHOLE</h2>
+<p><code>ThetLogos.GreenKubo</code> (16 theorems, 4 definitions; zero sorry;
+standard three on the headlines). Commissioned by the author on
+2026-10-22 ("both tvmd and Stokes"); charter:
+<code>whitepaper/stokes-einstein-scoping-DRAFT-2026-10-18.md</code> §5.
+Rung 2 asks whether the diffusivity computed directly in Rung 1
+(§32, <code>ThetLogos.DiscreteLangevin</code>, imported unmodified) is also
+the summed velocity autocorrelation of the same process — the
+Kubo shape checked against the direct computation. It is,
+exactly: <strong>the Green–Kubo sum</strong> <code>gkSum_eq_diffusivity</code> —
+V/2 + Σ′ a^(k+1)·V = σ²/(2(1−a)²) at a² &lt; 1, the zero-lag term
+carried at trapezoidal weight ½. Also standing: the <strong>lag
+covariance</strong> <code>lagCov a σ k = a^k · statVar a σ</code>, proved equal to
+the Rung-1 process covariance at lag k itself; the
+<strong>finite-horizon identity</strong> — position variance over n steps as
+the two-sided lag sum n·C(0) + 2Σ_{k=1}^{n−1}(n−k)·C(k) — proved
+at the level of Rung 1's closed forms, stated on the module's
+face (the path-space double sum is Rung 1's, cited not
+duplicated); and the <strong>partial sums in closed form</strong>, converging
+to the diffusivity as N → ∞. <strong>Fences (charter §6, on the
+module's face):</strong> Θ is a model ratio defined by the finite
+model's fluctuation–dissipation balance, never thermodynamic
+k_BT (K1); <code>DiffusionDefect</code> is neither imported nor cited (K3);
+no continuum statement — the only limits are of finite partial
+sums and of a convergent series of finite lag covariances (K4).
+Rung 3 (the continuum passage) is <strong>not commissioned</strong>; the
+charter leaves it unscheduled. Census: 3,561 → 3,577 strict;
+129 modules. Dossier: <code>whitepaper/green-kubo-rung2-2026-10-22.md</code>.</p>
+<h2>37. TeslaVortexMultiSector — Tesla Vortex Modular Dynamics, Rung 2: multi-sector separation and ground-sector selection (T1) — STANDS WHOLE</h2>
+<p><code>ThetLogos.TeslaVortexMultiSector</code> (15 theorems, 4 definitions;
+zero sorry; standard three). Commissioned by the author on
+2026-10-22; charter:
+<code>whitepaper/tesla-vortex-modular-dynamics-rung2-scoping-2026-10-22.md</code>.
+Rung 2 generalizes §35 from two sectors to any finite nonempty
+family, with input energies E and input charges q, and
+S(β) = (Σᵢ qᵢ·exp(−βEᵢ)) / (Σᵢ exp(−βEᵢ)). All five targets
+stand: <strong>well-definedness and the bound, stronger than
+chartered</strong> — |S(β)| ≤ maxᵢ |qᵢ| at <em>every</em> real β, not only
+β ≥ 0, since the Gibbs weights are positive everywhere;
+<strong>S(0)</strong> is the flat average of the input charges; <strong>ground-sector
+selection, in full, no pin</strong> — as β → ∞, S(β) tends exactly to
+the average of the charges over the ground sectors alone, so
+§35's saturation is this selection's two-sector shadow;
+<strong>two-sector recovery</strong> — at Fin 2 with charges (+q, −q), the
+general machine returns Rung 1's <code>thermalSeparation</code> exactly;
+and the <strong>flux hook at N sectors</strong> — over Fin n, the modular
+flux at the N-sector Gibbs state vanishes if and only if the
+Dirac operator has no entries across distinct <em>energy</em> sectors.
+<strong>Fences (on the module's face):</strong> the charges and energies are
+inputs — no charge values are derived, and no nucleus or atom
+is modeled (K-TV1); links 2–3 of the motivating chain are not
+modeled (K-TV2); "Tesla Vortex" is the author's coinage (K-TV3);
+monotonicity in β is a two-sector theorem of Rung 1 only — it is
+not claimed for N sectors, and no N-sector counterexample is
+claimed either (K-TV4). Census: 3,577 → 3,592 strict; 130
+modules. Dossier:
+<code>whitepaper/tesla-vortex-modular-dynamics-rung2-2026-10-22.md</code>.</p>
+<h2>38. PhaseWinding — the winding atom on a finite phase ring (T1) — STANDS WHOLE (cabinet tier, NO CLAIM)</h2>
+<p><code>ThetLogos.PhaseWinding</code> (27 theorems, 10 definitions including
+the <code>Lift</code> structure; zero sorry; standard three). Cabinet
+tier, NO CLAIM — not a Yang–Mills rung. Commissioned by the
+author on 2026-10-22 (lift-first, route A); charter:
+<code>whitepaper/phase-winding-charter-2026-10-21.md</code>. A
+configuration is a lift: site phases on a finite ring, a closing
+increment, and a winding number w : ℤ pinned by the closing
+equation. All four targets stand: <strong>compound windings add in
+ℤ</strong> under pointwise addition of lifts; <strong>gauge invariance</strong> — a
+single-valued shift cannot move w, proved at the bonds, where
+the shift increments telescope to zero around the ring; <strong>a
+phase slip is the only door</strong> — a seam mismatch of 2πs moves w
+by exactly s, and the master form says w moves under
+shift-deformations only through that mismatch; and the
+<strong>FluxTwist bridge</strong> — the Fourier mode index m <em>is</em> the
+winding number of its phase configuration, exactly m at θ = 0,
+with the general-θ total (θ + 2πm) carried on the face.
+<strong>Honest note (on the dossier's face):</strong> under lift-first, the
+three headline equalities close by construction of the
+operations — route A's design, priced in the charter before the
+build; the proof weight sits in <code>winding_unique</code> (the phases
+and wrap pin w — the data is not free), the bond anatomy, and
+the eigenvector weld. <strong>Fences:</strong> this is not an Abrikosov
+vortex; no knots, no strings; route B (principal-argument) is
+unbuilt. Census: 3,592 → 3,619 strict; 131 modules. Dossier:
+<code>whitepaper/phase-winding-brick-2026-10-22.md</code>.</p>
 <h2>Acknowledgments</h2>
 <p>This program formalizes. It did not originate the ideas, the
 problems, or most of the mathematics it verifies. The staircase

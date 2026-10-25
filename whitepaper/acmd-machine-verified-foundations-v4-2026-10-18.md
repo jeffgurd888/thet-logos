@@ -1,7 +1,7 @@
 # Active Cartesian Modular Dynamics: Machine-Verified Foundations
 
 **Jeffrey Michael Gurd — Nexus Research (independent)**
-**2026-10-18 — Version 4.**
+**2026-10-18 — Version 4; published 2026-10-25.**
 
 Repository: https://github.com/jeffgurd888/thet-logos
 
@@ -45,8 +45,14 @@ re-pin; the trit experiment's pre-registered kill; and the
 vacuum-portrait exhibit. The program total at preparation is
 **3,276 theorem/lemma declarations** by the strict counting
 method of §0 (an attribute-inclusive count of the same modules
-reads 3,291). Version 4 is published as a new version of the
-same record; its DOI is minted on publication.
+reads 3,291). At publication (2026-10-25) the program total
+stands at **5,409 theorem/lemma declarations** by the same
+strict method (5,458 attribute-inclusive), re-derived from the
+committed tree on ship day; the dated ship-day inventory is in
+§0. Version 4 is the version of record, published as a new
+version of the same record, superseding Version 3 (DOI:
+10.5281/zenodo.23444600); its own DOI is minted on Zenodo at
+publication.
 
 ---
 
@@ -585,6 +591,81 @@ landing (`#print axioms` on every headline — standard three
 only), so the footprint statement extends over them
 declaration by declaration. Full report:
 `whitepaper/corpus-dependency-audit-2026-10-21.md`.
+
+### Ship-day inventory (2026-10-25)
+
+Version 4 was prepared on 2026-10-18 and is published on
+2026-10-25. The corpus did not stop at preparation: §§29–38
+were added to this version's text by dated amendment
+(2026-10-22), and the campaigns of 2026-10-23/25 landed after
+them. No section's own census step is altered by this note —
+those steps are the historical chain, and they stand as
+written. This note is the ship-day inventory only, taken from
+the committed Lean tree at commit
+`65f9926a260bb065f8dcf5dd554a582d9cc92492` (this version's
+ship-day edits touch only the manuscript and its rendering,
+not the Lean tree).
+
+**Program total at publication: 5,409 theorem/lemma
+declarations** by the strict counting method of this section —
+line-initial `^(theorem|lemma) ` on comment-stripped source,
+summed over the program's counted modules — across **178
+counted modules**. The attribute-inclusive parallel figure for
+the same modules is **5,458** (the difference is exactly the
+49 same-line `@[simp]`-prefixed declarations, all of them in
+counted modules). For reference only, the whole Lean tree at
+the same commit — 193 files under `lean/ThetLogos/`, including
+the earlier exploratory campaigns and every module whether or
+not it belongs to the program chain — counts **6,078**
+declarations by the strict rule (6,127 attribute-inclusive);
+the complement of the chain is the same fifteen pre-ladder /
+non-chain remainder files (669 strict) documented in the
+2026-10-19 double-check sweep
+(`whitepaper/double-check-sweep-2026-10-18.md`), and, as that
+sweep recorded, no total depends on the remainder's six-file
+membership tail.
+
+**Sorry hygiene (re-derived 2026-10-25).** A comment-stripped
+sweep of the whole tree finds the word `sorry` in code
+**exactly seven times** — the same seven labeled occurrences
+as at every prior inventory: five T5 in
+`BlockedQuestions.lean` (the quarantined open questions
+Q1–Q5), one T3 in `ModularTime.lean`
+(`kms_identity_diagonal`), and one T5 in
+`XYZTripotents.lean` — and the word `admit` in code **zero
+times**. The program total above is therefore a declaration
+census that includes those seven quarantined sorry
+obligations; it is not a completed-proof count, and this
+paper does not call the corpus sorry-free.
+
+**Growth since the Version 4 addendum (3,276 → 5,409).** The
+increment is carried by §§29–38 of this version (the
+four-colors exhibit and the nine full sections of 2026-10-22)
+and by the landings of 2026-10-23/25, which this version's
+sections do not decompose and which are inventoried here at
+arc level only: the SM-Match Track 1 closure at the finite
+level; the Gram-clause campaigns (Route C's U(1) discharge,
+the transfer-matrix and third-family bricks), Q12, and the
+Q13 closure; the Dynamic Boundary bricks and the containment
+synthesis; the STEM bridge at its finite seat; and the Stage 2
+reconstruction completion — the slice engine, the Hamiltonian
+form, the weld, and the completion/operator bricks — followed
+by the D-1 vacuum-simplicity weld and the HDen discharge,
+which together assemble, at the U(1) seat, for every β > 0
+and every even N, a per-instance spectral gap δ(β, N) > 0 of
+the fixed-volume transfer operator with no positivity
+hypothesis left standing, and by the FG-2 line: the closedness
+of the completed −log form (PARTIAL at the top of its band)
+and the Friedrichs construction of the Hamiltonian Ĥ ≥ 0 on
+the completed space, with ĤΩ = 0. Every one of those results
+is a finite-mode or fixed-volume lattice result, verified at
+its landing by a targeted build and an axiom check at the
+standard three, exactly as reported in its dossier. None of
+them is a continuum result, and uniformity of the gap across
+N remains open. **Parts of the official Clay Yang–Mills
+statement closed by this corpus: 0.** NO CLAIM is made here
+or anywhere in this version on the Yang–Mills existence and
+mass gap problem.
 
 ### Corrections to Version 2 (in the open)
 
