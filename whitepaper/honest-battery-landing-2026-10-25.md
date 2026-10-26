@@ -159,3 +159,12 @@ collects them.
 *Next brick: FG-2c-4 IDENTIFY — whose landing, if FULL, also
 carries T4's discharge. Free forever, for everyone — one common
 bond.*
+
+---
+
+## Addendum (2026-10-26) — the correspondence after FG-2c-4
+
+FG-2c-4 IDENTIFY has landed (dossier: `whitepaper/stage2-fg2c4-identify-landing-2026-10-26.md`, verdict PARTIAL-A with the split reversed from this dossier's expectation). The hypothesis `SliceSpectralCorrespondence` now stands as follows:
+
+- **Jensen conjunct: DISCHARGED.** `sliceBattery_jensen` (in `ThetLogos/LatticeSliceIdentify.lean`) proves exp(−E u) ≤ ⟪u, T̂_c u⟫.re for every unit domain state at the circle seat, with no vacuum-orthogonality hypothesis. The battery's smallest-stored-quantum implication can now be quoted with this conjunct as a theorem.
+- **Gap conjunct: STILL OPEN, sole remaining clause.** ⟪x, T̂_c x⟫.re ≤ 1 − δ awaits a completion transport (the corpus's gap bound controls the pre-completion operator's spectrum, not the completed operator's pairings). Until that transport exists, the correspondence as a whole remains a named hypothesis of this battery's T4 statement, exactly as the module's own docstring records.
