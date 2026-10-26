@@ -54,10 +54,10 @@
     <pre>git clone https://github.com/jeffgurd888/thet-logos
 cd thet-logos/lean
 lake build            # every module, from scratch
-grep -rn "sorry" ThetLogos/   # exactly 7, all named open obligations</pre>
+grep -rn "sorry" ThetLogos/   # exactly 6, all named open obligations</pre>
     <ul>
       <li><b>The count rule</b> (adopted 2026-10-17): a declaration counts if <code>theorem</code> or <code>lemma</code> begins a source line at column 0 in a counted module, on comment-stripped source. Same-line <code>@[simp]</code> declarations (49) are excluded from the strict count and included in the attribute-inclusive one.</li>
-      <li><b>The seven sorrys are named, not hidden:</b> five T5 blocked questions in <code>BlockedQuestions.lean</code>, one T3 diagonal KMS identity, one T5 tripotent-existence obligation. A full proof-dependency audit found <i>zero</i> transitive contamination beyond them: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/corpus-dependency-audit-2026-10-21.md">corpus-dependency-audit-2026-10-21.md</a>.</li>
+      <li><b>The six sorrys are named, not hidden:</b> five T5 blocked questions in <code>BlockedQuestions.lean</code> and one T5 tripotent-existence obligation. A seventh — the T3 diagonal KMS identity in <code>ModularTime.lean</code> — was discharged by proof on 2026-10-25. A full proof-dependency audit found <i>zero</i> transitive contamination beyond them: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/corpus-dependency-audit-2026-10-21.md">corpus-dependency-audit-2026-10-21.md</a>.</li>
       <li><b>Axiom check:</b> headline theorems are verified with <code>#print axioms</code> — only Lean's standard three (<code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>), no <code>sorryAx</code>.</li>
     </ul>
     <p class="census">Census, 2026-10-25: <b>5,684</b> strict · <b>5,745</b> attribute-inclusive · <b>183</b> counted modules</p>

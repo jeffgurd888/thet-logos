@@ -28,8 +28,9 @@ Tier T1 (proved): `modularEigenvalue_diff` (ln Z cancellation, spectral
 form); `diagFlow_trivial_of_commute` ([ρ,a] = 0 ⟹ σ_s(a) = a, eigenbasis
 form); `scalar_conj_trivial` (scalar modular unitaries act trivially);
 `diagFlow_trivial_of_const` and `maximallyMixed_flow_trivial` (at maximal
-ignorance the modular flow is trivial). Tier T3 target (labeled `sorry`):
-the KMS identity in the eigenbasis. Numerical checks live in
+ignorance the modular flow is trivial); the KMS identity in the
+eigenbasis (`kms_identity_diagonal`, discharged 2026-10-25 — formerly
+the Tier T3 target carried as a labeled placeholder). Numerical checks live in
 `python/thet_logos/` (T3/T4).
 -/
 
@@ -194,6 +195,34 @@ noncomputable def diagModularK {N : ℕ} (w : Fin N → ℝ) :
     Matrix (Fin N) (Fin N) ℂ :=
   diagonal (fun j => ((-Real.log (w j) : ℝ) : ℂ))
 
+/-- Helper (KMS brick): `exp` of the modular Hamiltonian is diagonal with
+    entries `(w j)⁻¹`, since `exp (−ln wⱼ) = wⱼ⁻¹` for `wⱼ > 0`. -/
+private lemma kms_exp_diagModularK {N : ℕ} (w : Fin N → ℝ) (hw : ∀ j, 0 < w j) :
+    exp (diagModularK w) = diagonal (fun j => (w j : ℂ)⁻¹) := by
+  have hd : diagModularK w = diagonal (fun j => ((-Real.log (w j) : ℝ) : ℂ)) := rfl
+  rw [hd, Matrix.exp_diagonal]
+  congr 1
+  funext j
+  simp only [Pi.coe_exp]
+  rw [← congr_fun Complex.exp_eq_exp_ℂ _, ← Complex.ofReal_exp, Real.exp_neg,
+    Real.exp_log (hw j), Complex.ofReal_inv]
+
+/-- Helper (KMS brick): `exp` of the negated modular Hamiltonian is diagonal
+    with entries `w j`, since `exp (ln wⱼ) = wⱼ` for `wⱼ > 0`. -/
+private lemma kms_exp_neg_diagModularK {N : ℕ} (w : Fin N → ℝ) (hw : ∀ j, 0 < w j) :
+    exp (-diagModularK w) = diagonal (fun j => (w j : ℂ)) := by
+  have hneg : -diagModularK w = diagonal (fun j => ((Real.log (w j) : ℝ) : ℂ)) := by
+    have hd : diagModularK w = diagonal (fun j => ((-Real.log (w j) : ℝ) : ℂ)) := rfl
+    rw [hd, Matrix.diagonal_neg]
+    congr 1
+    funext j
+    simp only [Complex.ofReal_neg, neg_neg]
+  rw [hneg, Matrix.exp_diagonal]
+  congr 1
+  funext j
+  simp only [Pi.coe_exp]
+  rw [← congr_fun Complex.exp_eq_exp_ℂ _, ← Complex.ofReal_exp, Real.exp_log (hw j)]
+
 /-- Correction 6 (Tier T3 target): the KMS identity in the eigenbasis.
     For weights w_j > 0 summing to 1, with σ_{−i}(B) = e^{−K}Be^{K}:
     Tr(ρAσ_{−i}(B)) = Tr(ρBA). This — not [ρ,K] = 0 — is the stationarity
@@ -203,7 +232,61 @@ theorem kms_identity_diagonal {N : ℕ} (w : Fin N → ℝ) (hw : ∀ j, 0 < w j
     Matrix.trace (diagState w * A *
       (exp (-diagModularK w) * B * exp (diagModularK w)))
       = Matrix.trace (diagState w * B * A) := by
-  sorry
+  have hwi : ∀ j, (w j : ℂ) ≠ 0 := fun j => by exact_mod_cast (hw j).ne'
+  have hdS : diagState w = diagonal (fun j => (w j : ℂ)) := rfl
+  -- Entries of the conjugated matrix `exp (-K) * B * exp K`.
+  have hE : ∀ k j, (exp (-diagModularK w) * B * exp (diagModularK w)) k j
+      = (w k : ℂ) * B k j * (w j : ℂ)⁻¹ := by
+    intro k j
+    rw [kms_exp_neg_diagModularK w hw, kms_exp_diagModularK w hw,
+      Matrix.mul_diagonal, Matrix.diagonal_mul]
+  -- Diagonal entries of the left-hand product.
+  have hL : ∀ i, (diagState w * A *
+      (exp (-diagModularK w) * B * exp (diagModularK w))) i i
+      = (w i : ℂ) * ∑ k, A i k * ((w k : ℂ) * B k i) * (w i : ℂ)⁻¹ := by
+    intro i
+    rw [Matrix.mul_apply, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro k _
+    rw [show (diagState w * A) i k = (w i : ℂ) * A i k from by
+      rw [hdS, Matrix.diagonal_mul], hE]
+    ring
+  -- Diagonal entries of the right-hand product.
+  have hR : ∀ i, (diagState w * B * A) i i
+      = (w i : ℂ) * ∑ k, B i k * A k i := by
+    intro i
+    rw [Matrix.mul_apply, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro k _
+    rw [show (diagState w * B) i k = (w i : ℂ) * B i k from by
+      rw [hdS, Matrix.diagonal_mul]]
+    ring
+  -- Cancel `w i * (w i)⁻¹` entrywise on the left.
+  have hC : ∀ i, (diagState w * A *
+      (exp (-diagModularK w) * B * exp (diagModularK w))) i i
+      = ∑ k, (w k : ℂ) * (B k i * A i k) := by
+    intro i
+    rw [hL, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro k _
+    have hc : (w i : ℂ) * (w i : ℂ)⁻¹ = 1 := mul_inv_cancel₀ (hwi i)
+    calc (w i : ℂ) * (A i k * ((w k : ℂ) * B k i) * (w i : ℂ)⁻¹)
+        = (A i k * ((w k : ℂ) * B k i)) * ((w i : ℂ) * (w i : ℂ)⁻¹) := by ring
+      _ = (w k : ℂ) * (B k i * A i k) := by rw [hc, mul_one]; ring
+  show (∑ i, (diagState w * A *
+      (exp (-diagModularK w) * B * exp (diagModularK w))) i i)
+    = ∑ i, (diagState w * B * A) i i
+  calc (∑ i, (diagState w * A *
+        (exp (-diagModularK w) * B * exp (diagModularK w))) i i)
+      = ∑ i, ∑ k, (w k : ℂ) * (B k i * A i k) :=
+        Finset.sum_congr rfl fun i _ => hC i
+    _ = ∑ k, ∑ i, (w k : ℂ) * (B k i * A i k) := Finset.sum_comm
+    _ = ∑ k, (w k : ℂ) * ∑ i, B k i * A i k := by
+        refine Finset.sum_congr rfl fun k _ => ?_
+        exact (Finset.mul_sum (s := Finset.univ) (f := fun i => B k i * A i k)
+          (a := (w k : ℂ))).symm
+    _ = ∑ i, (diagState w * B * A) i i :=
+        Finset.sum_congr rfl fun i _ => (hR i).symm
 
 /-- Modular flux φ := i[K, D]: the infinitesimal generator of the modular
     orbit of D — the tangent vector to s ↦ σ_s(D) = e^{isK}De^{−isK} at s = 0
