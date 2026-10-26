@@ -248,8 +248,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**5,684 theorem declarations**\*
-across 178 counted Lean modules, with whitepaper dossiers for every campaign.
+**5,707 theorem declarations**\*
+across 185 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -257,7 +257,7 @@ theorem/lemma declarations whose keyword begins a source line at
 column 0 (`^(theorem|lemma) ` on comment-stripped source) in the
 program's counted modules, each verified by targeted `lake build`;
 headline results additionally checked with `#print axioms` (only
-`propext`, `Classical.choice`, `Quot.sound`). Forty-nine declarations
+`propext`, `Classical.choice`, `Quot.sound`). Sixty-seven declarations
 carrying a same-line `@[simp]` attribute are not counted under this
 rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
