@@ -334,6 +334,56 @@
             </div>
           </div>
 
+          <div class="card">
+            <h2>Dissipation — the flip-back burn</h2>
+            <p class="dim small">A perfect rigid body in empty space would flip forever. A real tumbling
+              body leaks energy as it goes — at fixed angular momentum — and sinks toward the lowest
+              energy its momentum allows: rotation about its largest-moment axis, its seat. Here the
+              leak is charged at each flip-back (and on each swing of the trapped wobble once the
+              flips stop): each flip-back, internal dissipation steers the spin
+              toward the largest-moment axis — the seat — by up to the dial in degrees; energy falls
+              out at fixed angular momentum, and the ledger reads the seat cone it buys. The dial:</p>
+            <div class="slider-block">
+              <div class="slider-head">
+                <span class="name">Flip-back steering — the dial</span>
+                <span class="val" id="dissVal">15° — steering step per return</span>
+              </div>
+              <input type="range" id="dissRange" min="0" max="30" step="1" value="15" aria-label="Flip-back steering dial, degrees" />
+            </div>
+            <div class="controls">
+              <button id="btnDiss" aria-pressed="false">Dissipation in free play: OFF</button>
+            </div>
+            <p class="small dim">The choice, stated plainly: dissipation switches itself <b>ON automatically
+              while the guided sequence runs</b> — the flip regime is where this dial belongs. In free
+              play it starts <b>OFF</b>, so the original exhibit is the untouched default; the switch
+              above turns it on there. The steering bites only on the unstable seat, and is charged
+              at a flip-back — every second counted flip, the return — walking the spin toward the
+              seat at fixed L, until the seat cone is spent and the body settles.</p>
+            <p class="small dim">The ledger's degrees are measured, never assumed: the seat cone is the
+              angle between the seat axis and L, the seat swing lost is the sum of the seat-cone drops
+              the charges actually measured, charge to charge, and the burn line reads the excess
+              energy that fell out along the way. (For Earth the seat is C, the figure axis itself —
+              so there the seat cone is the very cone the main display shows.)</p>
+            <p class="small dim">The 15° is Jeff's parameter, from his reading of the geological record:
+              paleomagnetic true-polar-wander studies propose out-and-back excursions whose returns do
+              not fully close, with residuals of this size — proposed and contested, not settled. Here
+              it is the largest steering step a single return may take toward the seat. The steering
+              MECHANISM is settled physics: a real tumbling body dissipates energy at fixed angular
+              momentum and ratchets toward its stable seat. A perfect rigid body in empty space would
+              flip forever; nothing real does.</p>
+            <h2 style="margin-top:16px;">Flip-back ledger</h2>
+            <div class="nums">
+              <div class="row"><span class="k">Flips counted</span><span class="v" id="ledFlips">0</span></div>
+              <div class="row"><span class="k">Flip-backs counted</span><span class="v" id="ledBacks">0</span></div>
+              <div class="row"><span class="k">The dial — steering step per return</span><span class="v" id="ledPer">15°</span></div>
+              <div class="row"><span class="k">Cone now — figure axis to L</span><span class="v" id="ledCone">—</span></div>
+              <div class="row"><span class="k">Seat cone — seat axis to L</span><span class="v" id="ledSeat">—</span></div>
+              <div class="row"><span class="k">Swing — cycle peak cone (figure axis)</span><span class="v" id="ledSwing">—</span></div>
+              <div class="row"><span class="k">Energy burned — excess over the seat</span><span class="v" id="ledBurn">—</span></div>
+              <div class="row"><span class="k">Seat swing lost — measured charge to charge</span><span class="v" id="ledTotal">0.0°</span></div>
+            </div>
+          </div>
+
           <div class="card label-card">
             <p class="stamp">Exhibit — live mathematics, honestly fenced</p>
             <p><b>Labeled plainly: this is an exhibit — Euler's equations integrated live, which is
@@ -399,7 +449,8 @@
       Lspace: [0, 0, 0],         // angular momentum in space (conserved)
       history: [],               // snapshots for scrubbing
       stepsSinceSnap: 0,
-      trail: []                  // figure-axis tip trail (space frame)
+      trail: [],                 // figure-axis tip trail (space frame)
+      settled: false             // dissipation steered the spin onto its seat
     };
 
     /* ---------- the guided sequence (MAKE IT FLIP) ----------
@@ -426,6 +477,80 @@
       done: false
     };
     var FREEZE_GAP = 0.0025;       // (C-B) gap, 1e37 units = 2.5e34 kg m^2
+
+    /* ---------- dissipation: the flip-back burn (Brick E) ----------
+       A real tumbling body leaks energy at fixed angular momentum
+       and sinks toward the lowest energy its momentum allows —
+       rotation about its LARGEST-moment axis: the seat. The charge
+       is taken at a flip-back — every second counted flip, the
+       return — and it STEERS TO THE SEAT: in the body frame, the
+       direction of L is rotated toward the seat axis by up to the
+       dial in degrees (a slerp in the plane the two directions
+       span), and omega is re-derived from the rotated L. |L| is
+       preserved exactly (a rotation), L in SPACE is preserved
+       exactly (the body is counter-rotated by the inverse
+       rotation, as any internal rearrangement demands), and the
+       energy falls at every step — its floor E_min =
+       |L|² / (2·I_max) is reached exactly at alignment with the
+       seat axis. Earlier bricks hit the same wall three ways: the
+       figure-axis cone angle peaks at 90° on every L₃ = 0 crossing
+       regardless of energy (A, C), and the cone-shrink ray's own
+       energy floor is the figure axis's SEPARATRIX energy, so an
+       energy charge along it saturated at ~2% and parked the body
+       on the saddle (D). The quantity that actually shrinks under
+       dissipation is the SEAT cone — the angle between the seat
+       axis and L — so the ledger, the swing, and the settled test
+       are all re-based on it. (For Earth the seat IS the figure
+       axis C, and the two cones coincide.) The 15-degree size of
+       the dial is Jeff's, from his reading of the geological
+       record — labeled as such on the page. Dissipation is ON
+       automatically while the guided sequence runs; in free play
+       it starts OFF (the original exhibit untouched) unless the
+       visitor switches it on. */
+    var DISS = {
+      lossDeg: 15,               // slider value: the dial, degrees; the steering step per return
+      userOn: false,             // free-play switch (sequence forces ON)
+      mode: "auto",              // "auto" | "on" | "off" (verification hook)
+      flipBacks: 0,
+      charges: 0,                // steering charges actually landed
+      totalLost: 0,              // degrees: MEASURED seat-cone drops, summed charge to charge
+      firstLossLanded: false,
+      firstLossDeg: 0,           // measured seat-cone drop of the first landed charge, degrees
+      lastEvent: null,
+      cyclePeak: 0,              // peak FIGURE-axis cone of the cycle in progress (display)
+      lastPeak: 0,               // figure-axis swing of the last completed cycle (display)
+      seatCyclePeak: 0,          // peak SEAT cone of the cycle in progress
+      lastSeatPeak: 0,           // seat swing of the last completed cycle
+      eBaseExcess: null,         // E − E_min at the first charge (the burn ledger's baseline)
+      // Brick E2 — trapped-regime trigger bookkeeping
+      trapCharges: 0,            // charges landed by the trapped trigger (subset of charges)
+      flipsAtLastCharge: 0,      // toy.flips when the last charge (either trigger) landed
+      trapPeaksSeen: 0,          // consecutive flip-free seat-cone peaks since the last charge
+      trapPrev: null,            // seat cone at the previous step (local-max detection)
+      trapTrough: null,          // lowest seat cone of the current arming window
+      trapPeak: 0,               // highest seat cone of the current upswing
+      trapRising: false,         // the seat cone is currently rising
+      trapArmed: false           // the upswing has risen >= 2° above its trough: the peak may charge
+    };
+    function dissEnabled() {
+      if (DISS.mode === "on") return true;
+      if (DISS.mode === "off") return false;
+      return SEQ.active || DISS.userOn;
+    }
+    function dissDialText(deg) {
+      return deg + "° — steering step per return";
+    }
+    function dissReset() {
+      DISS.flipBacks = 0; DISS.totalLost = 0;
+      DISS.charges = 0; DISS.firstLossLanded = false; DISS.firstLossDeg = 0;
+      DISS.lastEvent = null;
+      DISS.cyclePeak = 0; DISS.lastPeak = 0;
+      DISS.seatCyclePeak = 0; DISS.lastSeatPeak = 0;
+      DISS.eBaseExcess = null;
+      DISS.trapCharges = 0; DISS.flipsAtLastCharge = 0; DISS.trapPeaksSeen = 0;
+      DISS.trapPrev = null; DISS.trapTrough = null; DISS.trapPeak = 0;
+      DISS.trapRising = false; DISS.trapArmed = false;
+    }
     function seqMoments(m) {
       return [8.01 + 0.375 * PER_OCEAN * m, 8.02 + 0.375 * PER_OCEAN * m, 8.04 - 0.75 * PER_OCEAN * m];
     }
@@ -498,6 +623,10 @@
       toy.q = qNorm([y[3], y[4], y[5], y[6]]);
       toy.t += DT;
       // classifier bookkeeping
+      var coneNow = coneDegNow();
+      DISS.cyclePeak = Math.max(DISS.cyclePeak, coneNow);
+      var seatNow = seatConeDegNow();
+      DISS.seatCyclePeak = Math.max(DISS.seatCyclePeak, seatNow);
       var s = spinS();
       toy.sHist.push(s);
       if (toy.sHist.length > 20000) toy.sHist.shift();
@@ -508,6 +637,7 @@
         if (toy.armedSign > 0) registerFlip();
         toy.armedSign = -1;
       }
+      dissTrapTrack(seatNow); // Brick E2: watch for a trapped-libration peak
       // scrub history
       toy.stepsSinceSnap++;
       if (toy.stepsSinceSnap >= 25) {
@@ -520,6 +650,236 @@
       toy.flips++;
       if (toy.lastFlipT !== null) toy.flipInterval = toy.t - toy.lastFlipT;
       toy.lastFlipT = toy.t;
+      if (toy.flips % 2 === 0) onFlipBack(); // every second counted flip is the return
+    }
+    /* The wobble cone of the main display: the angle between the
+       figure axis (C) and the angular momentum L. (The dissipation
+       ledger is charged on the SEAT cone instead — seatConeDegNow,
+       below — which is the angle that actually shrinks as the body
+       settles. The two coincide when the seat is C, as for Earth.) */
+    function coneDegNow() {
+      var e = effI();
+      var l3 = e[2] * toy.w[2];
+      var ln = Math.hypot(e[0] * toy.w[0], e[1] * toy.w[1], l3);
+      if (ln === 0) return 0;
+      return Math.acos(Math.min(1, Math.abs(l3) / ln)) * 180 / Math.PI;
+    }
+    /* The seat: the axis carrying the largest moment — the axis
+       whose rotation is the energy floor for this |L|. Recomputed
+       from the effective moments at every call (the guided sequence
+       moves the moments, and with them the seat). */
+    function seatAxisIdx() {
+      var e = effI();
+      var s = 0;
+      if (e[1] > e[s]) s = 1;
+      if (e[2] > e[s]) s = 2;
+      return s;
+    }
+    function bodyL() {
+      var e = effI();
+      return [e[0] * toy.w[0], e[1] * toy.w[1], e[2] * toy.w[2]];
+    }
+    /* The seat cone: the angle between the seat axis and L. While
+       the body flips around a non-seat spin this is a 90°-class
+       angle; it is the angle that walks to zero as dissipation
+       steers the spin home. */
+    function seatConeDegNow() {
+      var Lb = bodyL();
+      var Ln = Math.hypot(Lb[0], Lb[1], Lb[2]);
+      if (Ln === 0) return 0;
+      var c = Math.abs(Lb[seatAxisIdx()]) / Ln;
+      return Math.acos(Math.min(1, c)) * 180 / Math.PI;
+    }
+    function onFlipBack() {
+      DISS.flipBacks++;
+      // the cycle closes here: record both swings — the figure-axis
+      // cone for the display ledger, the seat cone for dissipation
+      DISS.lastPeak = Math.max(DISS.cyclePeak, coneDegNow());
+      DISS.cyclePeak = 0;
+      DISS.lastSeatPeak = Math.max(DISS.seatCyclePeak, seatConeDegNow());
+      var seatPeak = DISS.lastSeatPeak;
+      DISS.seatCyclePeak = 0;
+      if (seatPeak <= 0.5) toy.settled = true; // the seat swing is spent: settled
+      if (!dissEnabled()) return;
+      if (ranks()[toy.spinAxis] !== 1) return; // the steering bites only on the unstable seat
+      applySteerCharge("flipback");
+    }
+    /* Trapped-regime trigger (Brick E2). Brick E's flip-back trigger
+       starves once dissipation succeeds: the polhode traps around
+       the seat axis, the somersaults cease, the flip detector never
+       fires again, and the last degrees of seat cone — by then a
+       trapped libration, a wobble about the seat — are never
+       charged. But dissipation does not stop when the flipping
+       stops; it acts on the trapped libration too. So: track the
+       seat cone step by step and charge its peaks — with one
+       witness first. A seat-cone peak completes BEFORE the next
+       flip registers (the peak is mid-somersault), so one flip-free
+       peak proves nothing; the trapped state is declared only when
+       a SECOND consecutive peak completes with no flip counted
+       since the last charge — in the flipping regime a somersault
+       always intervenes between two peaks. From then on each peak
+       charges (every charge resets the witness count, so charged
+       peaks alternate with witness peaks), at most one charge per
+       peak-to-peak swing, with 2° of rise above the intervening
+       trough required to arm a peak (hysteresis). At least one
+       flip must have occurred since reset, so a merely wobbling
+       stable body is never charged. The charge map, the ledger,
+       and the settled test are Brick E's, untouched. One gate
+       more: the trigger never fires while the guided sequence
+       runs — the sequence is a scripted demonstration whose
+       dissipation story is the flip-back charges alone (and the
+       sequence's own end state traps inside its horizon, so no
+       witness count could keep its ledger unchanged); the
+       trapped trigger is the free-play completion. */
+    function dissTrapTrack(sc) {
+      if (DISS.trapPrev === null) {
+        DISS.trapPrev = sc; DISS.trapTrough = sc; DISS.trapPeak = sc;
+        DISS.trapRising = false; DISS.trapArmed = false;
+        return;
+      }
+      if (sc < DISS.trapTrough) DISS.trapTrough = sc;
+      if (sc > DISS.trapPrev) {
+        if (!DISS.trapRising) { DISS.trapRising = true; DISS.trapPeak = sc; DISS.trapArmed = false; }
+        if (sc > DISS.trapPeak) DISS.trapPeak = sc;
+        if (DISS.trapPeak - DISS.trapTrough >= 2) DISS.trapArmed = true;
+      } else if (sc < DISS.trapPrev && DISS.trapRising) {
+        // the cone just turned down: a local maximum is complete
+        var peak = DISS.trapPeak, armed = DISS.trapArmed;
+        DISS.trapRising = false; DISS.trapArmed = false;
+        DISS.trapPeak = sc; DISS.trapTrough = sc; // the next arming window opens here
+        DISS.trapPrev = sc;
+        if (!armed) return;
+        if (!dissEnabled()) return;
+        if (SEQ.active) return; // the guided sequence's charges are the flip-backs alone
+        if (toy.flips < 1) return; // no flipping episode yet: never charge a stable wobble
+        if (toy.flips !== DISS.flipsAtLastCharge) { DISS.trapPeaksSeen = 0; return; } // still flipping
+        DISS.trapPeaksSeen++;
+        if (DISS.trapPeaksSeen < 2) return; // the first flip-free peak is the witness, not a charge
+        if (ranks()[toy.spinAxis] !== 1) return; // the steering bites only on the unstable seat
+        DISS.lastSeatPeak = peak; // the trapped swing this charge closes
+        applySteerCharge("trapped");
+        return; // applySteerCharge reset the tracker; trapPrev re-inits next step
+      }
+      DISS.trapPrev = sc;
+    }
+    /* Rotational energy at the current state, and the seat energy:
+       the least energy this |L| can have — reached with L along
+       the largest-moment axis, E_min = |L|² / (2·I_max). */
+    function rotEnergy() {
+      var e = effI();
+      return 0.5 * (e[0] * toy.w[0] * toy.w[0] + e[1] * toy.w[1] * toy.w[1] + e[2] * toy.w[2] * toy.w[2]);
+    }
+    function seatEnergy(Ln) {
+      var e = effI();
+      return Ln * Ln / (2 * Math.max(e[0], e[1], e[2]));
+    }
+    /* The burn ledger's reading: cumulative percent of the initial
+       excess (E − E_min at the first charge) that is gone. Energy
+       changes only at charges — the integration conserves it — so
+       the live value is the cumulative value. */
+    function dissBurnPct() {
+      if (DISS.eBaseExcess === null || DISS.eBaseExcess <= 0) return 0;
+      var e = effI();
+      var Ln = Math.hypot(e[0] * toy.w[0], e[1] * toy.w[1], e[2] * toy.w[2]);
+      var excess = rotEnergy() - seatEnergy(Ln);
+      return 100 * (1 - excess / DISS.eBaseExcess);
+    }
+    /* One flip-back charge (Brick E): steer to the seat. Work in
+       the BODY frame: L_b = I·omega, |L| fixed. Rotate the
+       DIRECTION of L_b toward the seat axis by the step angle
+       phi = min(dial, seat cone) — a slerp in the plane the two
+       directions span (Rodrigues) — then set omega' = I^-1 L_b'.
+       The rotation preserves |L| exactly. L in SPACE is preserved
+       exactly by counter-rotating the body by the inverse
+       rotation before re-deriving omega's frame mate: L_space =
+       R(q) L_b, so q' = q (x) q_rot^-1 gives R(q') L_b' = R(q) L_b
+       identically. (Holding q fixed instead would drag L_space by
+       the full steering angle — the conservation law is the
+       physics, so the body orientation is what steps.) The energy
+       after the charge, E' = (1/2) L_b' . omega', is below E and
+       falls monotonically as L_b approaches the seat axis, with
+       its floor E_min reached exactly at alignment. The drop the
+       ledger books is MEASURED: the seat cone just before the
+       charge minus the seat cone just after it. */
+    function applySteerCharge(trigger) {
+      var e = effI();
+      var Lb = bodyL();
+      var Ln = Math.hypot(Lb[0], Lb[1], Lb[2]);
+      if (Ln === 0) return;
+      var seat = seatAxisIdx();
+      var E = rotEnergy();
+      var excess = E - seatEnergy(Ln);
+      if (DISS.eBaseExcess === null && excess > 0) DISS.eBaseExcess = excess;
+      var u = [Lb[0] / Ln, Lb[1] / Ln, Lb[2] / Ln];
+      // the seat direction L actually leans toward (signed axis)
+      var sv = [0, 0, 0];
+      sv[seat] = u[seat] < 0 ? -1 : 1;
+      var theta = Math.acos(Math.min(1, Math.abs(u[seat])));
+      var coneBefore = theta * 180 / Math.PI;
+      var phi = Math.min(DISS.lossDeg * Math.PI / 180, theta);
+      if (phi <= 0) return; // already aligned, or a zero dial: nothing to steer
+      // rotation axis: u x sv, normalized
+      var ax = [
+        u[1] * sv[2] - u[2] * sv[1],
+        u[2] * sv[0] - u[0] * sv[2],
+        u[0] * sv[1] - u[1] * sv[0]
+      ];
+      var axn = Math.hypot(ax[0], ax[1], ax[2]);
+      if (axn < 1e-12) {
+        // u is (anti)parallel to the seat axis: any perpendicular axis serves
+        var k = 0;
+        if (Math.abs(u[1]) < Math.abs(u[k])) k = 1;
+        if (Math.abs(u[2]) < Math.abs(u[k])) k = 2;
+        var ek = [0, 0, 0]; ek[k] = 1;
+        ax = [
+          u[1] * ek[2] - u[2] * ek[1],
+          u[2] * ek[0] - u[0] * ek[2],
+          u[0] * ek[1] - u[1] * ek[0]
+        ];
+        axn = Math.hypot(ax[0], ax[1], ax[2]);
+        if (axn < 1e-12) return;
+      }
+      ax = [ax[0] / axn, ax[1] / axn, ax[2] / axn];
+      // Rodrigues: rotate u by phi about ax. ax x u = sv - u*cos(theta)
+      // (ax is perpendicular to u), so at phi = theta this lands on sv.
+      var cp = Math.cos(phi), sp = Math.sin(phi);
+      var axu = [
+        ax[1] * u[2] - ax[2] * u[1],
+        ax[2] * u[0] - ax[0] * u[2],
+        ax[0] * u[1] - ax[1] * u[0]
+      ];
+      var u2 = [
+        u[0] * cp + axu[0] * sp,
+        u[1] * cp + axu[1] * sp,
+        u[2] * cp + axu[2] * sp
+      ];
+      var Lb2 = [u2[0] * Ln, u2[1] * Ln, u2[2] * Ln];
+      toy.w = [Lb2[0] / e[0], Lb2[1] / e[1], Lb2[2] / e[2]];
+      // counter-rotate the body by the inverse steering rotation, so
+      // L in SPACE is conserved exactly (magnitude and direction)
+      var half = phi / 2, sh = Math.sin(half);
+      var Mq = [Math.cos(half), -ax[0] * sh, -ax[1] * sh, -ax[2] * sh];
+      toy.q = qNorm(qMul(toy.q, Mq));
+      toy.trail = []; recordTrail(true); // the body stepped; the trail restarts
+      var coneAfter = seatConeDegNow();
+      var drop = coneBefore - coneAfter;
+      DISS.charges++;
+      if (trigger === "trapped") DISS.trapCharges++;
+      DISS.flipsAtLastCharge = toy.flips;
+      // a landed charge closes the trapped tracker's arming window too
+      DISS.trapPeaksSeen = 0;
+      DISS.trapPrev = null; DISS.trapTrough = null; DISS.trapPeak = 0;
+      DISS.trapRising = false; DISS.trapArmed = false;
+      DISS.totalLost += Math.max(0, drop);
+      if (!DISS.firstLossLanded) { DISS.firstLossLanded = true; DISS.firstLossDeg = drop; }
+      if (coneAfter <= 0.5) toy.settled = true; // this charge brought the seat cone home
+      DISS.lastEvent = {
+        t: toy.t, flips: toy.flips, charges: DISS.charges, trigger: trigger || "flipback",
+        seatAxis: seat, phiDeg: phi * 180 / Math.PI,
+        seatConeBefore: coneBefore, seatConeAfter: coneAfter, dropDeg: drop,
+        seatPeakClosed: DISS.lastSeatPeak,
+        eBefore: E, eAfter: rotEnergy(), lMag: Ln
+      };
     }
     function stepN(n) { for (var i = 0; i < n; i++) stepOnce(); }
 
@@ -535,6 +895,8 @@
       toy.sHist = []; toy.flips = 0; toy.armedSign = 0;
       toy.lastFlipT = null; toy.flipInterval = null;
       toy.history = []; toy.stepsSinceSnap = 0; toy.trail = [];
+      toy.settled = false;
+      dissReset();
       var e = effI();
       var Lb = [e[0]*toy.w[0], e[1]*toy.w[1], e[2]*toy.w[2]];
       toy.Lspace = qRot(toy.q, Lb);
@@ -543,6 +905,7 @@
 
     /* ---------- classification & analytic period ---------- */
     function classify() {
+      if (toy.settled) return "settled";
       var r = ranks();
       var spinRank = r[toy.spinAxis];
       if (spinRank === 1) {
@@ -602,6 +965,8 @@
       // the push starts a new observed epoch for the classifier
       toy.sHist = []; toy.flips = 0; toy.armedSign = 0;
       toy.lastFlipT = null; toy.flipInterval = null;
+      toy.settled = false;
+      dissReset();
     }
 
     /* ---------- guided sequence engine ---------- */
@@ -628,7 +993,10 @@
         case 1: return "Mass is moving pole-ward — " + SEQ.m.toFixed(2) + " ocean masses so far. The gap (C−A) is shrinking from 2.64×10³⁵ kg·m² toward zero, and the wobble cone is widening as the seat shallows.";
         case 2: return "The moments are nearly equal, so the wobble can barely decide: its period has stretched to about " + (isFinite(stretch) ? stretch.toFixed(1) : "∞") + "× its Earth-today value. The closer the moments, the slower the undecided wobble.";
         case 3: return "C has crossed B: the polar moment is now the INTERMEDIATE moment. The seat itself has become unstable — the spin never moved; the ranking underneath it did. (Time is sped up from here: near Earth's moments the instability grows slowly.)";
-        case 4: return "The Earth is somersaulting end-over-end around the red line — " + toy.flips + " full flip" + (toy.flips === 1 ? "" : "s") + " counted. The red line never moved: angular momentum stays fixed in space while the body turns around it.";
+        case 4: return "The Earth is somersaulting end-over-end around the red line — " + toy.flips + " full flip" + (toy.flips === 1 ? "" : "s") + " counted. The red line never moved: angular momentum stays fixed in space while the body turns around it." +
+          (DISS.firstLossLanded
+            ? " First flip-back: the steering took " + fmtDeg(DISS.firstLossDeg) + "° off the seat cone — the return never fully closes, and the spin is walking home to its seat. " + DISS.charges + " steering charge(s) landed so far; the ledger below reads the seat cone they buy, measured charge to charge."
+            : (dissEnabled() ? " Dissipation is on: at each flip-back the spin is steered toward the largest-moment axis — its seat — by up to the dial in degrees." : ""));
       }
       return "";
     }
@@ -902,6 +1270,10 @@
       if (T >= 10) return T.toFixed(1) + " toy-time";
       return T.toFixed(2) + " toy-time";
     }
+    function fmtDeg(x) {
+      var v = Math.round(x * 10) / 10;
+      return (v % 1 === 0) ? String(v.toFixed(0)) : String(v);
+    }
     var RANK_TXT = ["smallest", "intermediate", "largest"];
     function refreshReadouts() {
       var e = effI(), r = ranks();
@@ -946,9 +1318,11 @@
       var cls = classify();
       var chip = $("stateChip");
       chip.className = "chip " + (cls === "flip" ? "state-flip" : cls === "building" ? "state-building" : "state-stable");
-      $("stateVal").textContent = cls === "flip" ? "FLIPPING" : cls === "building" ? "UNSTABLE SEAT — FLIP BUILDING" : "STABLE WOBBLE";
+      $("stateVal").textContent = cls === "settled" ? "SETTLED — dissipation walked it to the stable seat" : cls === "flip" ? "FLIPPING" : cls === "building" ? "UNSTABLE SEAT — FLIP BUILDING" : "STABLE WOBBLE";
       $("flipsVal").textContent = toy.flips;
-      if (cls === "flip" && toy.flipInterval) {
+      if (cls === "settled") {
+        $("periodVal").textContent = "settled — the ratchet is done";
+      } else if (cls === "flip" && toy.flipInterval) {
         $("periodVal").textContent = "flip every " + fmtPeriod(toy.flipInterval);
       } else if (cls === "building") {
         $("periodVal").textContent = "building… (growth is exponential, then the flip)";
@@ -958,6 +1332,15 @@
       var s = spinS();
       $("coneVal").textContent = (Math.acos(Math.min(1, Math.abs(s))) * 180 / Math.PI).toFixed(1) + "°";
       $("timeVal").textContent = toy.t.toFixed(0);
+      // flip-back ledger
+      $("ledFlips").textContent = toy.flips;
+      $("ledBacks").textContent = DISS.flipBacks;
+      $("ledPer").textContent = dissDialText(DISS.lossDeg) + (dissEnabled() ? "" : " (off)");
+      $("ledCone").textContent = coneDegNow().toFixed(1) + "°";
+      $("ledSeat").textContent = seatConeDegNow().toFixed(1) + "°";
+      $("ledSwing").textContent = Math.max(DISS.cyclePeak, coneDegNow()).toFixed(1) + "°";
+      $("ledBurn").textContent = DISS.charges > 0 ? dissBurnPct().toFixed(1) + "% of the initial excess" : "—";
+      $("ledTotal").textContent = DISS.totalLost.toFixed(1) + "°";
     }
 
     function syncControls() {
@@ -990,6 +1373,17 @@
       this.setAttribute("aria-pressed", toy.playing ? "true" : "false");
     });
     $("btnReset").addEventListener("click", function () { resetSpin(); refreshReadouts(); });
+    $("dissRange").addEventListener("input", function () {
+      DISS.lossDeg = parseFloat(this.value);
+      $("dissVal").textContent = dissDialText(DISS.lossDeg);
+      refreshReadouts();
+    });
+    $("btnDiss").addEventListener("click", function () {
+      DISS.userOn = !DISS.userOn;
+      this.textContent = DISS.userOn ? "Dissipation in free play: ON" : "Dissipation in free play: OFF";
+      this.setAttribute("aria-pressed", DISS.userOn ? "true" : "false");
+      refreshReadouts();
+    });
     $("speedRange").addEventListener("input", function () {
       toy.speed = parseFloat(this.value);
       $("speedVal").textContent = toy.speed + "×";
@@ -1025,6 +1419,8 @@
           toy.t = snap.t; toy.w = snap.w.slice(); toy.q = snap.q.slice();
           toy.sHist = []; toy.flips = 0; toy.armedSign = 0;
           toy.lastFlipT = null; toy.flipInterval = null; toy.trail = [];
+          toy.settled = false;
+          dissReset();
           recordTrail(true);
         }
       }
@@ -1073,6 +1469,29 @@
       analyticPeriod: analyticPeriod, gapInfo: gapInfo, spinS: spinS,
       stepN: stepN, resetSpin: resetSpin, setPreset: setPreset,
       applyPush: applyPush,
+      coneDeg: coneDegNow,
+      dissState: function () {
+        return {
+          enabled: dissEnabled(), lossDeg: DISS.lossDeg, userOn: DISS.userOn, mode: DISS.mode,
+          flipBacks: DISS.flipBacks, charges: DISS.charges, trapCharges: DISS.trapCharges, totalLost: DISS.totalLost,
+          firstLossLanded: DISS.firstLossLanded, firstLossDeg: DISS.firstLossDeg,
+          lastEvent: DISS.lastEvent, settled: toy.settled, flips: toy.flips,
+          burnPct: dissBurnPct(), energy: rotEnergy(),
+          eMin: (function () { var e = effI(); return seatEnergy(Math.hypot(e[0] * toy.w[0], e[1] * toy.w[1], e[2] * toy.w[2])); })(),
+          coneNow: coneDegNow(),
+          seatAxis: seatAxisIdx(), seatConeNow: seatConeDegNow(),
+          swingPeak: DISS.cyclePeak, lastSwing: DISS.lastPeak,
+          seatSwingPeak: DISS.seatCyclePeak, lastSeatSwing: DISS.lastSeatPeak
+        };
+      },
+      setDissipation: function (mode, deg) {
+        if (mode === "auto" || mode === "on" || mode === "off") DISS.mode = mode;
+        if (typeof deg === "number") {
+          DISS.lossDeg = deg;
+          $("dissRange").value = deg;
+          $("dissVal").textContent = dissDialText(deg);
+        }
+      },
       setMoments: function (arr) { toy.I = arr.slice(); toy.meltBoost = 0; resetSpin(); },
       setSpinAxis: function (a) { toy.spinAxis = a; resetSpin(); },
       startSequence: seqStart,
