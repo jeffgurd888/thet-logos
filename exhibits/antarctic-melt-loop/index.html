@@ -177,6 +177,8 @@
       }
       button:hover { border-color: #3a4249; background: #1c2126; }
       button:active { transform: translateY(1px); }
+      button:disabled { opacity: 0.45; cursor: default; }
+      button:disabled:hover { background: var(--panel-2); border-color: var(--line); }
       button.primary {
         background: var(--paper);
         color: #101315;
@@ -312,7 +314,8 @@
           <b>25,772 years</b>; that precession paces the ice ages — and the melting ice,
           in return, nudges the precession's tempo and drags the pole. This is the loop,
           and you can steer it: <b>drag the Earth, scrub the cycle, flip the melt between
-          DUAL and MONO and watch what changes.</b>
+          DUAL and MONO and watch what changes — then flip the new switch and ask what
+          happens if the melt does not come back, or leaves too fast to follow.</b>
         </p>
       </header>
 
@@ -336,14 +339,31 @@
               <div class="sub" id="roModeSub">both poles melt — watch the tempo</div>
             </div>
             <div class="readout">
+              <div class="lab">Caps remaining</div>
+              <div class="val ice" id="roCaps">100%</div>
+              <div class="sub" id="roCapsSub">the loop refills them every cycle</div>
+            </div>
+            <div class="readout">
               <div class="lab">Pole drift</div>
               <div class="val" id="roPole">near home</div>
               <div class="sub" id="roPoleSub">symmetric melt tilts nothing</div>
+              <div class="sub" id="roPoleNote" style="display:none;color:var(--accent)">no return — the drift is one-way while the caps are gone</div>
             </div>
             <div class="readout">
               <div class="lab">Pole migration (toy scale)</div>
               <div class="val gold" id="roMig">0.0°</div>
               <div class="sub">real drift is ~1 cm/yr — magnified here so you can see it</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Axis separation (load vs figure)</div>
+              <div class="val" id="roSep">0.00°</div>
+              <div class="sub" id="roSepSub">in the loop the bulge rides with the load — nothing separates</div>
+            </div>
+            <div class="readout">
+              <div class="lab">The motion term — Coriolis-driven ocean</div>
+              <div class="val" id="roMotion">0</div>
+              <div class="sub" id="roMotionSub">the sea-ice lid stays on in the loop — this channel opens in one-way mode</div>
+              <div class="sub">the currents' angular momentum as a fraction of Earth's spin momentum — drawn visible; real size: a ten-millionth of the spin. It is in the equation. It does not move the seat.</div>
             </div>
             <div class="readout">
               <div class="lab">Precession tempo shift</div>
@@ -364,6 +384,15 @@
               <button id="btnDual" type="button" class="on" aria-pressed="true">Dual melt</button>
               <button id="btnMono" type="button" aria-pressed="false">Mono — Antarctic only</button>
             </div>
+            <div class="modebox" role="group" aria-label="Does the melt return">
+              <button id="btnRetLoop" type="button" class="on" aria-pressed="true">Melt returns (the loop)</button>
+              <button id="btnRetOne" type="button" aria-pressed="false">Melt does not return (one-way)</button>
+            </div>
+            <div class="modebox" role="group" aria-label="One-way depletion pace">
+              <button id="btnPaceSlow" type="button" aria-pressed="false" disabled>Slow · ~6 cycles</button>
+              <button id="btnPaceStd" type="button" class="on" aria-pressed="true" disabled>Standard · ~3 cycles</button>
+              <button id="btnPaceFast" type="button" aria-pressed="false" disabled>Fast · ~½ cycle</button>
+            </div>
             <div class="speedbox">
               <label for="speed">Speed</label>
               <input type="range" id="speed" min="0.25" max="4" step="0.25" value="1"
@@ -371,6 +400,12 @@
               <span id="speedVal">1×</span>
             </div>
           </div>
+
+          <p class="hint" id="onewayHint" style="display:none">One-way mode: the small ring is the
+            <b>LOAD axis</b> — where the lost mass says the pole should be. The red dot is the
+            <b>FIGURE axis</b> — the bulge itself — chasing the load with a lag whose time constant
+            is ≈0.4 cycle, the toy stand-in for the real 10³–10⁴-year viscoelastic relaxation of
+            the mantle. Melt faster than the bulge can follow and the two axes separate.</p>
 
           <div class="scrubbox">
             <label for="scrub"><span>Scrub the cycle</span><span id="scrubVal">year 0</span></label>
@@ -479,12 +514,23 @@
           times</b> — the real drift is about a centimeter a year, invisible at this scale, so
           the dot's walk is a diagram, not a measurement. The tempo shift is capped at the
           paper's honest ceiling: <b>+0.3%</b>, and that only for melting <i>all</i> modern ice;
-          in MONO mode the toy's pulses are sized as single-basin events, so its tempo barely
-          moves while the pole does the talking — that contrast is the lesson, and it is a toy
-          parameter, printed here. The countdowns are scenario arithmetic from published
-          rates, not predictions with dates attached; the idea itself predicts <b>no</b> crustal
-          displacement, <b>no</b> global flood layer, and <b>no</b> axis flip — melt deepens the
-          stable seat the spin already sits in.
+          in MONO loop mode the toy's pulses are sized as single-basin events, so its tempo
+          barely moves while the pole does the talking — that contrast is the lesson, and it
+          is a toy parameter, printed here; in one-way mode the drain is the whole inventory,
+          so the tempo climbs to the same ceiling and stays there. The countdowns are scenario
+          arithmetic from published rates, not predictions with dates attached; the idea
+          itself predicts <b>no</b> crustal displacement, <b>no</b> global flood layer, and
+          <b>no</b> axis flip — melt deepens the stable seat the spin already sits in.
+          One-way mode is the no-return scenario: it breaks the loop on purpose. The real
+          glacial cycle returns the water to the caps over ~100,000 years; a melt that does
+          not come back is the question this mode asks. Depletion pace magnified for
+          visibility — at satellite-era rates, losing all of Antarctica takes millennia;
+          Greenland centuries-to-millennia. Fast loss separates the axes only in the model —
+          in the real Earth the same lag exists (the bulge relaxes over thousands of years),
+          which is why today's pole is still chasing yesterday's ice.
+          The Coriolis term is real physics at a small address: it steers the ocean and
+          stirs the length of day at the sub-millisecond level; the mass term still owns
+          the pole.
         </p>
         <p>It runs right here in your browser. No account, no install, no tracking.</p>
         <p><b>Free forever, for everyone — one common bond.</b></p>
@@ -523,6 +569,11 @@
         var playing = true;
         var speed = 1;
         var mode = "dual";            // "dual" | "mono"
+        var retMode = "loop";         // "loop" | "oneway" — does the melt come back?
+        var totalYears = 0;           // cumulative elapsed cycle-years (never wraps)
+        var paceCycles = 3;           // one-way depletion pace: full loss over ~N cycles
+        var paceName = "STANDARD";
+        var figMig = 0, figVel = 0;   // figure-axis migration (deg) and its rate (deg/yr)
         var acc = 0, lastTs = null;
 
         var el = function (id) { return document.getElementById(id); };
@@ -547,6 +598,90 @@
         }
         function lodTerm(p) { return LOD_AT_PEAK * meltLevel(p); }
         function activeLink(p) { return Math.floor(((p % 1) + 1) % 1 * 4) % 4; }
+
+        // ---------- One-way (no-return) mode ----------
+        // The melt state is a pure function of cumulative elapsed years, so
+        // scrubbing backward restores the caps deterministically — the state
+        // never resets at a cycle wrap.
+        // THERMAL-FENCE FEEDBACK: while the ice stands, the Antarctic
+        // Circumpolar Current thermally fences the continent. Past ~50%
+        // loss the sea-ice lid is gone, warmer water reaches the shelf, and
+        // the melt quickens: the depletion rate is multiplied by
+        // 1 + 0.5 * iceFreeFrac (up to +50% at full depletion). The closed
+        // form below is that ODE integrated exactly, so the state stays a
+        // pure function of totalYears: linear to 50%, then exponential
+        // (rate ∝ frac + 0.5), reaching 1 at (0.5 + ln 1.5) ≈ 0.905 of the
+        // nominal pace span instead of 1.0.
+        function depletionFrac() {
+          var T = paceCycles * CYCLE;
+          if (totalYears <= 0.5 * T) return totalYears / T;
+          return Math.min(1, Math.exp((totalYears - 0.5 * T) / T) - 0.5);
+        }
+        // How open the Southern Ocean is: 0 while the lid holds (frac ≤ 50%),
+        // 1 at full depletion.
+        function iceFreeFrac() {
+          if (retMode !== "oneway") return 0;
+          return Math.min(1, Math.max(0, (depletionFrac() - 0.5) / 0.5));
+        }
+        // The live melt-rate multiplier from the ocean feedback (1.0 → 1.5).
+        function meltRateBoost() {
+          var f = depletionFrac();
+          return f <= 0.5 ? 1 : f + 0.5;   // = 1 + 0.5 * iceFreeFrac
+        }
+        // The LOAD axis: where the lost mass says the pole should be. It
+        // follows the cumulative melt instantly.
+        function loadMigrationDeg() {
+          if (retMode === "oneway") return mode === "mono" ? MIG_MAX * depletionFrac() : 0;
+          return migrationDeg(phase, mode);
+        }
+        function tempoNow() {
+          if (retMode === "oneway") {
+            // The one-way drain is the whole inventory, not a single-basin
+            // pulse — so no MONO share factor here; tempo climbs with the
+            // cumulative melt fraction to the ceiling and holds.
+            return Math.min(TEMPO_CEILING, TEMPO_CEILING * depletionFrac());
+          }
+          return tempoShiftPct(phase, mode);
+        }
+        // The MOTION term: the rotation equation is excited by currents as
+        // well as by mass. Ocean-current relative angular momentum is
+        // ~10^25–10^26 kg·m²/s against Earth's 5.86×10^33 — a fraction of
+        // ~10^-8, reached here as the Southern Ocean opens. Its honest
+        // effect at that scale: a sub-millisecond stir of the length of
+        // day (amplitude ~0.1 ms, scaled by ice-free fraction).
+        var MOTION_LOD_AMP = 0.1;         // ms — labeled real amplitude, never exceeded
+        var SHIMMER_DEG = 0.15;           // toy-scale shimmer of the figure-axis chase
+        var SHIMMER_PERIOD_YEARS = 0.05 * CYCLE;
+        function motionFrac() { return 1e-8 * iceFreeFrac(); }
+        function lodNow() {
+          if (retMode !== "oneway") return lodTerm(phase);
+          var osc = MOTION_LOD_AMP * iceFreeFrac() * Math.sin(phase * Math.PI * 2 * 3);
+          return LOD_AT_PEAK * depletionFrac() + osc;
+        }
+        function capsRemainingPct() {
+          return 100 * (1 - (retMode === "oneway" ? depletionFrac() : meltLevel(phase)));
+        }
+        // The FIGURE axis (the bulge itself) chases the LOAD axis: a damped
+        // second-order chase whose natural period is ~0.4 cycle — the toy
+        // stand-in for the real 10^3–10^4 yr viscoelastic relaxation of the
+        // mantle. Driven slowly it tracks quasi-statically (separation ~0);
+        // driven fast it lags, overshoots when the load stops, and rings
+        // down onto the load axis.
+        var FIG_PERIOD_YEARS = 0.4 * CYCLE;
+        var FIG_ZETA = 0.25;
+        function stepFigure(dtYears) {
+          if (retMode !== "oneway") { figMig = loadMigrationDeg(); figVel = 0; return; }
+          var w0 = 2 * Math.PI / FIG_PERIOD_YEARS;
+          var load = loadMigrationDeg();
+          var n = Math.max(1, Math.ceil(dtYears / 150));
+          var h = dtYears / n;
+          for (var i = 0; i < n; i++) {
+            var accF = w0 * w0 * (load - figMig) - 2 * FIG_ZETA * w0 * figVel;
+            figVel += accF * h;
+            figMig += figVel * h;
+          }
+        }
+        function snapFigure() { figMig = loadMigrationDeg(); figVel = 0; }
 
         // ---------- Canvas ----------
         var canvas = el("loopCanvas");
@@ -650,8 +785,15 @@
           g.restore();
 
           // Ice caps (clipped to the globe)
-          var meltN = mode === "dual" ? m : 0;   // mono leaves the Arctic cap alone
-          var meltS = m;                          // Antarctica melts in both modes
+          var meltN, meltS;
+          if (retMode === "oneway") {
+            var frac = depletionFrac();           // drains monotonically, never refills
+            meltS = frac;                         // Antarctica drains in both modes
+            meltN = mode === "dual" ? frac : 0;   // mono leaves the Arctic cap alone
+          } else {
+            meltN = mode === "dual" ? m : 0;
+            meltS = m;                            // Antarctica melts in both modes
+          }
           function cap(poleSign, meltFrac) {
             var px = cx + ux * R * poleSign, py = cy + uy * R * poleSign;
             var capR = R * 0.46 * (1 - 0.78 * meltFrac);
@@ -667,6 +809,28 @@
           var nPole = cap(1, meltN);
           cap(-1, meltS);
 
+          // Ice-free Southern Ocean (one-way, past ~50% Antarctic loss): the
+          // sea-ice lid is gone and the Antarctic Circumpolar Current runs —
+          // a rotating dashed ring around the continent, eastward, growing
+          // stronger as the ocean opens.
+          var iceFree = iceFreeFrac();
+          if (iceFree > 0) {
+            var sPoleX = cx - ux * R, sPoleY = cy - uy * R;
+            g.save();
+            g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.clip();
+            g.strokeStyle = "rgba(91,157,255," + (0.25 + 0.55 * iceFree).toFixed(3) + ")";
+            g.lineWidth = 1 + 2 * iceFree;
+            g.setLineDash([7, 5]);
+            g.lineDashOffset = -((totalYears * 0.004) % 12);
+            g.beginPath(); g.arc(sPoleX, sPoleY, R * 0.52, 0, Math.PI * 2); g.stroke();
+            g.setLineDash([]);
+            g.lineDashOffset = 0;
+            g.restore();
+            g.font = "600 11px ui-monospace, Menlo, Consolas, monospace";
+            g.fillStyle = "rgba(91,157,255,0.9)";
+            g.fillText("Antarctic Circumpolar Current", cx - R * 0.98, cy + R * 0.64);
+          }
+
           // The spin axis line (through the globe, past both poles)
           g.strokeStyle = "#d8c58f";
           g.lineWidth = 2;
@@ -678,10 +842,35 @@
           g.fillStyle = "#d8c58f";
           g.beginPath(); g.arc(tipX, tipY, 3.5, 0, Math.PI * 2); g.fill();
 
-          // The rotation pole dot — migrates in MONO mode toward the melt sector
-          var mig = migrationDeg(phase, mode);
-          var migPx = (mig / MIG_MAX) * R * 0.42;
+          // The rotation pole dot — this is the FIGURE axis. In one-way mode
+          // the LOAD axis (where the lost mass says the pole should be) is
+          // drawn as a small ring, and the figure axis chases it with the
+          // bulge's lag; in the loop the two ride together.
+          var loadMig = loadMigrationDeg();
+          var mig = retMode === "oneway" ? figMig : loadMig;
+          // The motion term's visible trace: a toy-scale shimmer on the
+          // figure-axis chase once the ocean opens (real effect ~0.1 ms on
+          // the day — magnified here, fenced on the motion-term card).
+          var migDraw = mig + (retMode === "oneway"
+            ? SHIMMER_DEG * iceFreeFrac() * Math.sin(totalYears * 2 * Math.PI / SHIMMER_PERIOD_YEARS)
+            : 0);
+          var migPx = (migDraw / MIG_MAX) * R * 0.42;
           var dotX = nPole.x + migPx, dotY = nPole.y + migPx * 0.22;
+          var loadX = null, loadY = null;
+          if (retMode === "oneway" && mode === "mono") {
+            var loadPx = (loadMig / MIG_MAX) * R * 0.42;
+            loadX = nPole.x + loadPx; loadY = nPole.y + loadPx * 0.22;
+            if (Math.abs(loadMig - mig) > 0.02) {
+              g.strokeStyle = "rgba(238,244,248,0.55)";
+              g.lineWidth = 1.5;
+              g.setLineDash([3, 3]);
+              g.beginPath(); g.moveTo(loadX, loadY); g.lineTo(dotX, dotY); g.stroke();
+              g.setLineDash([]);
+            }
+            g.strokeStyle = "#eef4f8";
+            g.lineWidth = 2;
+            g.beginPath(); g.arc(loadX, loadY, 4.5, 0, Math.PI * 2); g.stroke();
+          }
           if (mig > 0.01) {
             g.strokeStyle = "rgba(255,90,82,0.65)";
             g.lineWidth = 1.5;
@@ -705,6 +894,10 @@
           g.fillText("Antarctic cap", cx - R * 0.98, cy + R * 0.86);
           g.fillStyle = "#ff5a52";
           g.fillText("the pole", dotX + 9, dotY + 3);
+          if (loadX !== null) {
+            g.fillStyle = "#eef4f8";
+            g.fillText("load axis", loadX + 9, loadY - 7);
+          }
           g.fillStyle = "#6b7176";
           g.fillText("drag to turn →", 12, H - 12);
 
@@ -734,22 +927,50 @@
         function fmt(n) { return n.toLocaleString("en-US"); }
         function updateReadouts() {
           var year = Math.floor(phase * CYCLE);
-          var tempo = tempoShiftPct(phase, mode);
-          var mig = migrationDeg(phase, mode);
-          var lod = lodTerm(phase);
+          var oneway = retMode === "oneway";
+          var loadMig = loadMigrationDeg();
+          var mig = oneway ? figMig : loadMig;
+          var sep = oneway ? Math.abs(loadMig - figMig) : 0;
+          var tempo = tempoNow();
+          var lod = lodNow();
           el("roYear").textContent = fmt(year);
           el("roPhase").textContent = (phase * 100).toFixed(1) + "%";
           el("roMode").textContent = mode === "dual" ? "DUAL" : "MONO";
           el("roModeSub").textContent = mode === "dual"
             ? "both poles melt — watch the tempo"
             : "Antarctic only — watch the pole, not the tempo";
+          el("roCaps").textContent = Math.round(capsRemainingPct()) + "%";
+          el("roCapsSub").textContent = oneway
+            ? "draining one-way at the " + paceName + " pace — no refill, ever"
+            : "the loop refills them every cycle";
           el("roPole").textContent = mode === "dual"
             ? "near home"
             : (mig > 0.05 ? "migrating" : "near home");
           el("roPoleSub").textContent = mode === "dual"
-            ? "symmetric melt tilts nothing"
-            : "dragged toward the Amundsen sector — Jeff's mono signature";
+            ? (oneway
+              ? "symmetric melt tilts nothing — but the caps still do not come back"
+              : "symmetric melt tilts nothing")
+            : (oneway
+              ? "dragged toward the Amundsen sector — and it stays dragged"
+              : "dragged toward the Amundsen sector — Jeff's mono signature");
+          el("roPoleNote").style.display = oneway ? "" : "none";
           el("roMig").textContent = mig.toFixed(1) + "°";
+          el("roSep").textContent = sep.toFixed(2) + "°";
+          el("roSepSub").textContent = !oneway
+            ? "in the loop the bulge rides with the load — nothing separates"
+            : (sep > 0.2
+              ? "the bulge hasn't caught up — the spin axis is chasing the load"
+              : "axes locked — the bulge is keeping up");
+          var iceF = iceFreeFrac();
+          el("roMotion").textContent = !oneway
+            ? "0"
+            : (iceF <= 0 ? "0 — lid on" : (iceF * 10).toFixed(1) + "×10⁻⁹");
+          el("roMotionSub").textContent = !oneway
+            ? "the sea-ice lid stays on in the loop — this channel opens in one-way mode"
+            : (iceF <= 0
+              ? "sea-ice lid still on — this channel opens past ~50% Antarctic loss"
+              : "ice-free Southern Ocean: the ACC runs (wind + Coriolis, no ice lid) — ocean feedback: +"
+                + Math.round((meltRateBoost() - 1) * 100) + "% melt rate");
           el("roTempo").textContent = "+" + tempo.toFixed(3) + "%";
           el("roLod").textContent = "+" + lod.toFixed(2) + " ms/cy";
           el("roLodSub").textContent = lod >= LOD_TIDAL
@@ -768,7 +989,10 @@
           var dt = (ts - lastTs) / 1000;
           lastTs = ts;
           if (playing) {
-            phase = (phase + dt * speed / BASE_SECONDS) % 1;
+            var dYears = dt * speed * (CYCLE / BASE_SECONDS);
+            totalYears = Math.max(0, totalYears + dYears);
+            phase = (totalYears / CYCLE) % 1;
+            stepFigure(dYears);
             drawAll();
           }
           requestAnimationFrame(frame);
@@ -784,6 +1008,9 @@
         btnPlay.addEventListener("click", function () { setPlaying(!playing); });
         el("btnReset").addEventListener("click", function () {
           phase = 0;
+          totalYears = 0;
+          figMig = 0;
+          figVel = 0;
           drawAll();
         });
 
@@ -798,13 +1025,51 @@
         el("btnDual").addEventListener("click", function () { setMode("dual"); });
         el("btnMono").addEventListener("click", function () { setMode("mono"); });
 
+        function setReturn(rm) {
+          retMode = rm;
+          el("btnRetLoop").classList.toggle("on", rm === "loop");
+          el("btnRetOne").classList.toggle("on", rm === "oneway");
+          el("btnRetLoop").setAttribute("aria-pressed", rm === "loop" ? "true" : "false");
+          el("btnRetOne").setAttribute("aria-pressed", rm === "oneway" ? "true" : "false");
+          var paceBtns = [el("btnPaceSlow"), el("btnPaceStd"), el("btnPaceFast")];
+          for (var i = 0; i < paceBtns.length; i++) paceBtns[i].disabled = rm !== "oneway";
+          el("onewayHint").style.display = rm === "oneway" ? "" : "none";
+          if (rm === "loop") snapFigure();
+          drawAll();
+        }
+        el("btnRetLoop").addEventListener("click", function () { setReturn("loop"); });
+        el("btnRetOne").addEventListener("click", function () { setReturn("oneway"); });
+
+        function setPace(cycles, name, btn) {
+          paceCycles = cycles;
+          paceName = name;
+          var bs = [el("btnPaceSlow"), el("btnPaceStd"), el("btnPaceFast")];
+          for (var i = 0; i < bs.length; i++) {
+            bs[i].classList.toggle("on", bs[i] === btn);
+            bs[i].setAttribute("aria-pressed", bs[i] === btn ? "true" : "false");
+          }
+          drawAll();
+        }
+        el("btnPaceSlow").addEventListener("click", function () { setPace(6, "SLOW", this); });
+        el("btnPaceStd").addEventListener("click", function () { setPace(3, "STANDARD", this); });
+        el("btnPaceFast").addEventListener("click", function () { setPace(0.5, "FAST", this); });
+
         el("speed").addEventListener("input", function () {
           speed = parseFloat(this.value) || 1;
           el("speedVal").textContent = speed + "×";
         });
         el("scrub").addEventListener("input", function () {
           var yr = parseInt(this.value, 10);
-          if (isFinite(yr)) phase = Math.min(CYCLE - 1, Math.max(0, yr)) / CYCLE;
+          if (isFinite(yr)) {
+            yr = Math.min(CYCLE - 1, Math.max(0, yr));
+            // Scrub within the current cycle of the cumulative timeline:
+            // the one-way melt state follows from totalYears, so scrubbing
+            // backward restores the caps deterministically. The figure axis
+            // snaps to equilibrium (its transient re-develops in play).
+            totalYears = Math.floor(totalYears / CYCLE) * CYCLE + yr;
+            phase = yr / CYCLE;
+            snapFigure();
+          }
           drawAll();
         });
 
@@ -821,7 +1086,9 @@
         canvas.addEventListener("pointermove", function (ev) {
           if (!dragging) return;
           var w = canvas.clientWidth || 1;
-          phase = (((phase + (ev.clientX - lastX) / w * 0.2) % 1) + 1) % 1;
+          totalYears = Math.max(0, totalYears + (ev.clientX - lastX) / w * 0.2 * CYCLE);
+          phase = (totalYears / CYCLE) % 1;
+          snapFigure();
           lastX = ev.clientX;
           drawAll();
         });
