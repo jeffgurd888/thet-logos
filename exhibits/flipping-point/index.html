@@ -142,6 +142,18 @@
       .nums .row:last-child { border-bottom: none; }
       .nums .k { color: var(--ink-dim); } .nums .v { color: var(--ink); text-align: right; }
 
+      .seqbar {
+        border: 1px solid var(--accent); border-radius: 8px; background: var(--panel-2);
+        padding: 12px 14px; margin: 14px 0 6px;
+      }
+      .seqbar .stage-name {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+        display: block; margin-bottom: 6px;
+      }
+      .seqbar p { margin: 0; font-size: 14.5px; }
+      .seqfence { font-size: 12.5px; color: var(--gold); margin-top: 8px; }
+
       .label-card .stamp {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         display: inline-block; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase;
@@ -160,19 +172,21 @@
           <span class="no">Exhibit · Rigid-body dynamics</span>
         </div>
         <p class="subtitle">
-          Where the Dzhanibekov effect switches on. A spinning wingnut is integrated live from
-          <b>Euler's equations</b> — no animation is faked. Spin it on its smallest or largest
+          Where the Dzhanibekov effect switches on. A spinning <b>Earth</b> is integrated live from
+          <b>Euler's equations</b> — no animation is faked: the same motion as the space-station
+          wingnut, drawn on the Earth. Spin it on its smallest or largest
           axis and it wobbles, stable, forever. Spin it on the <b>middle</b> axis and it
           somersaults. Drag the moments toward each other and you can watch the wobble
           <b>freeze</b> as you approach the flipping point — then cross it, and watch the flip switch on.
+          Or press <b>MAKE IT FLIP</b> and watch the model forced through the boundary, stage by stage.
         </p>
       </header>
 
       <div class="stage">
         <div>
           <div class="card">
-            <h2>The wingnut — integrated live</h2>
-            <canvas id="cv" aria-label="A tumbling rigid body, integrated from Euler's equations"></canvas>
+            <h2>The Earth — integrated live</h2>
+            <canvas id="cv" aria-label="The Earth as a tumbling rigid body, integrated from Euler's equations"></canvas>
             <div class="state-line">
               <span class="chip" id="stateChip">STATE <b id="stateVal">—</b></span>
               <span class="chip">Flips seen <b id="flipsVal">0</b></span>
@@ -180,14 +194,40 @@
               <span class="chip">Cone angle <b id="coneVal">—</b></span>
               <span class="chip">Toy time <b id="timeVal">0</b></span>
             </div>
-            <p class="hint">👆 Drag the picture left or right to scrub through the motion. Mirroring the ISS
-              wingnut footage (Veritasium, “The Bizarre Behaviour Of Rotating Bodies”): the <b>red line</b> is the
-              angular-momentum axis — fixed in space; the wingnut flips around it and the line never moves.
-              The faint <b>blue trace</b> is the tip of the body's spin axis: a tight little circle when stable,
-              great wandering loops when flipping.</p>
+            <p class="hint">👆 Drag the picture left or right to scrub through the motion. The concept is the
+              ISS wingnut footage (Veritasium, “The Bizarre Behaviour Of Rotating Bodies”) — the same motion,
+              drawn on the Earth: the <b>red line</b> is the angular-momentum axis — fixed in space; the Earth
+              flips around it and the line never moves.
+              The faint <b>blue trace</b> is the tip of the Earth's figure axis (its polar axis): a tight little
+              circle when stable, great wandering loops when flipping. The globe's flattening follows the
+              moments — oblate while C is the largest moment, rounding at equality, prolate past the
+              crossing — exaggerated, and schematic.</p>
             <div class="controls">
               <button id="btnPlay" class="primary" aria-pressed="true">⏸ Pause</button>
               <button id="btnReset">Reset — back to the chosen spin</button>
+            </div>
+            <div class="seqbar" id="seqBar">
+              <span class="stage-name" id="seqStage">Guided sequence — ready</span>
+              <p id="seqCaption">Earth today: the spin sits on C, the largest moment, with the gap
+                (C−A) = 2.64×10³⁵ kg·m² standing guard. Press the button and the model is forced,
+                stage by stage, through the flipping point — so you can watch <i>how</i> a flip would happen.</p>
+              <p class="seqfence">Fence, printed before it runs: this sequence is a model FORCED through the
+                boundary with ~4 ocean masses of redistribution the planet does not have — a demonstration of
+                HOW a flip would happen, not a scenario and not a forecast. Earth's real melt moves the
+                needle the other way (see the TOTAL MELT preset).</p>
+            </div>
+            <div class="controls">
+              <button id="btnSeq" class="primary">🌍 MAKE IT FLIP — show me how</button>
+              <button id="btnSeqStop">Stop — back to Earth today</button>
+              <span class="chip">Mass moved pole-ward <b id="seqMassVal">0.00 ocean masses</b></span>
+              <span class="chip">Sequence <b id="seqPhaseVal">0%</b></span>
+            </div>
+            <div class="slider-block">
+              <div class="slider-head">
+                <span class="name">Scrub the sequence</span>
+                <span class="val" id="seqScrubVal">at Earth today</span>
+              </div>
+              <input type="range" id="seqRange" min="0" max="1000" step="1" value="0" aria-label="Scrub the guided flip sequence" />
             </div>
             <div class="slider-block">
               <div class="slider-head">
@@ -300,12 +340,19 @@
               mathematics you can check, wrapped around a planet it does not threaten.</b>
               Earth's spin sits on its largest-moment axis; melting deepens that seat (see the
               TOTAL MELT preset). The flip is real physics — for bodies spinning on their middle
-              axis: wingnuts, and tumbling asteroids like Toutatis.</p>
+              axis: the space-station wingnut, and tumbling asteroids like Toutatis.</p>
+            <p><b>The guided sequence, fenced at full strength:</b> MAKE IT FLIP is a model FORCED
+              through the boundary with ~4 ocean masses of pole-ward redistribution — about 200× every
+              glacier and ice sheet on Earth, moved the opposite way from melt. It is a demonstration
+              of <i>how</i> a flip would happen if a planet were ever driven across the rank boundary.
+              It is not a scenario, not a forecast, and not something Earth's melt is doing: the real
+              needle moves the other way (TOTAL MELT preset, above).</p>
             <p>Rigid-body fences, stated plainly: the body in this toy is perfectly rigid and
               torque-free. Earth is neither — it flows, its bulge follows its spin, and the Moon and Sun
               hold torques on it. Every one of those differences makes the real planet <i>more</i> settled
-              in its seat, not less. The drawing is a schematic wingnut; the moments are the
-              numbers you set, and the integration is exact for the body those numbers describe.</p>
+              in its seat, not less. The drawing is a schematic Earth (its flattening exaggerated);
+              the moments are the numbers you set, and the integration is exact for the body those
+              numbers describe.</p>
             <p>It runs right here in your browser. No account, no install, no tracking.</p>
             <p><b>Free forever, for everyone — one common bond.</b></p>
           </div>
@@ -352,8 +399,41 @@
       Lspace: [0, 0, 0],         // angular momentum in space (conserved)
       history: [],               // snapshots for scrubbing
       stepsSinceSnap: 0,
-      trail: []                  // spin-axis tip trail (space frame)
+      trail: []                  // figure-axis tip trail (space frame)
     };
+
+    /* ---------- the guided sequence (MAKE IT FLIP) ----------
+       A parameter m — "mass moved pole-ward", in ocean masses, 0 -> 4 —
+       drives the moments from EARTH TODAY along the ring-model path of
+       the WHAT IT WOULD TAKE preset: per ocean mass moved,
+       dA = dB = +3/8 m R^2, dC = -3/4 m R^2 (R = 6.371e6 m,
+       one ocean mass = 1.4e21 kg). The sequence is a demonstration of
+       HOW a flip would happen, forced with mass the planet does not
+       have — fenced as such on the page. */
+    var OCEAN_KG = 1.4e21, EARTH_R = 6.371e6;
+    var PER_OCEAN = OCEAN_KG * EARTH_R * EARTH_R / 1e37; // mR^2 in 1e37 units
+    var SEQ = {
+      active: false,
+      phase: 0,                  // 0..1 (time through the sequence, speed-1 seconds / LEN)
+      LEN: 40,                   // ~40 s at speed 1
+      M_END: 4,                  // ocean masses at the end of the drive
+      m: 0,
+      stage: 0,
+      basePeriod: null,          // analytic period at Earth today (stretch reference)
+      freezeGap: null,           // (C-B) gap when the freeze stage was entered (1e37)
+      freezeStretch: null,       // period stretch factor at freeze entry
+      maxStretch: null,
+      done: false
+    };
+    var FREEZE_GAP = 0.0025;       // (C-B) gap, 1e37 units = 2.5e34 kg m^2
+    function seqMoments(m) {
+      return [8.01 + 0.375 * PER_OCEAN * m, 8.02 + 0.375 * PER_OCEAN * m, 8.04 - 0.75 * PER_OCEAN * m];
+    }
+    function seqMassAt(phase) {
+      // m reaches M_END at phase 0.72, then holds while the flip develops
+      var p = Math.min(phase, 0.72) / 0.72;
+      return SEQ.M_END * p;
+    }
 
     function effI() {
       return [toy.I[0], toy.I[1], toy.I[2] + toy.meltBoost];
@@ -524,6 +604,101 @@
       toy.lastFlipT = null; toy.flipInterval = null;
     }
 
+    /* ---------- guided sequence engine ---------- */
+    var SEQ_STAGES = [
+      "Stage 0 — Earth today: the stable seat",
+      "Stage 1 — The gap closes",
+      "Stage 2 — The freeze",
+      "Stage 3 — The rank crosses",
+      "Stage 4 — The flip"
+    ];
+    function gapCB() { var e = effI(); return e[2] - e[1]; }
+    function seqStageFromState() {
+      if (toy.flips > 0) return 4;
+      if (ranks()[2] === 1) return 3;
+      if (SEQ.m > 0.02 && gapCB() <= FREEZE_GAP) return 2;
+      if (SEQ.m > 0.02) return 1;
+      return 0;
+    }
+    function seqCaptionText(stage) {
+      var per = analyticPeriod();
+      var stretch = SEQ.basePeriod ? (per / SEQ.basePeriod) : 1;
+      switch (stage) {
+        case 0: return "Earth today: the spin sits on C, the largest moment, with the gap (C−A) = 2.64×10³⁵ kg·m² standing guard. The model is about to be forced, stage by stage, through the flipping point.";
+        case 1: return "Mass is moving pole-ward — " + SEQ.m.toFixed(2) + " ocean masses so far. The gap (C−A) is shrinking from 2.64×10³⁵ kg·m² toward zero, and the wobble cone is widening as the seat shallows.";
+        case 2: return "The moments are nearly equal, so the wobble can barely decide: its period has stretched to about " + (isFinite(stretch) ? stretch.toFixed(1) : "∞") + "× its Earth-today value. The closer the moments, the slower the undecided wobble.";
+        case 3: return "C has crossed B: the polar moment is now the INTERMEDIATE moment. The seat itself has become unstable — the spin never moved; the ranking underneath it did. (Time is sped up from here: near Earth's moments the instability grows slowly.)";
+        case 4: return "The Earth is somersaulting end-over-end around the red line — " + toy.flips + " full flip" + (toy.flips === 1 ? "" : "s") + " counted. The red line never moved: angular momentum stays fixed in space while the body turns around it.";
+      }
+      return "";
+    }
+    function seqRefresh() {
+      SEQ.stage = seqStageFromState();
+      $("seqStage").textContent = (SEQ.active ? "Guided sequence — running · " : "Guided sequence · ") + SEQ_STAGES[SEQ.stage];
+      $("seqCaption").textContent = seqCaptionText(SEQ.stage);
+      $("seqMassVal").textContent = SEQ.m.toFixed(2) + " ocean masses";
+      $("seqPhaseVal").textContent = Math.round(SEQ.phase * 100) + "%";
+      $("seqRange").value = Math.round(SEQ.phase * 1000);
+      $("seqScrubVal").textContent = SEQ.m <= 0.001 ? "at Earth today" :
+        "at " + SEQ.m.toFixed(2) + " ocean masses moved — " + SEQ_STAGES[SEQ.stage].split(" — ")[1];
+    }
+    function seqApplyMoments() {
+      toy.I = seqMoments(SEQ.m);
+      toy.meltBoost = 0;
+      toy.spinAxis = 2;
+      syncControls();
+    }
+    function seqStart() {
+      toy.I = [8.01, 8.02, 8.04]; toy.meltBoost = 0; toy.spinAxis = 2;
+      SEQ.active = true; SEQ.phase = 0; SEQ.m = 0; SEQ.stage = 0;
+      SEQ.freezeGap = null; SEQ.freezeStretch = null; SEQ.maxStretch = null; SEQ.done = false;
+      syncControls(); resetSpin();
+      SEQ.basePeriod = analyticPeriod();
+      seqRefresh(); refreshReadouts();
+    }
+    function seqStop() {
+      SEQ.active = false; SEQ.phase = 0; SEQ.m = 0; SEQ.stage = 0; SEQ.done = false;
+      setPreset("earth");
+      seqRefresh();
+    }
+    function seqManualStop() {
+      if (!SEQ.active) return;
+      SEQ.active = false;
+      $("seqStage").textContent = "Guided sequence — stopped (manual control)";
+    }
+    function seqScrub(phase) {
+      SEQ.phase = Math.min(1, Math.max(0, phase));
+      SEQ.m = seqMassAt(SEQ.phase);
+      SEQ.active = true; SEQ.done = false;
+      seqApplyMoments();
+      resetSpin(); // scrubbing restarts the spin at this redistribution state
+      if (SEQ.basePeriod === null) {
+        var keep = toy.I.slice(); toy.I = [8.01, 8.02, 8.04];
+        SEQ.basePeriod = analyticPeriod(); toy.I = keep;
+      }
+      seqRefresh(); refreshReadouts();
+    }
+    function seqAdvance(dtSec) {
+      if (!SEQ.active) return;
+      SEQ.phase = Math.min(1, SEQ.phase + (dtSec / SEQ.LEN) * toy.speed);
+      SEQ.m = seqMassAt(SEQ.phase);
+      seqApplyMoments();
+      var st = seqStageFromState();
+      var accel = st >= 3 ? 30 : st === 2 ? 6 : 1; // near Earth's moments the instability grows slowly — time is sped up, and the page says so in the stage-3 caption's patience note below
+      var steps = Math.max(1, Math.round(3360 * toy.speed * accel * dtSec));
+      stepN(steps);
+      recordTrail(false);
+      st = seqStageFromState();
+      if (st === 2) {
+        var stretch = SEQ.basePeriod ? analyticPeriod() / SEQ.basePeriod : 1;
+        if (SEQ.freezeGap === null) { SEQ.freezeGap = gapCB(); SEQ.freezeStretch = stretch; }
+        if (SEQ.maxStretch === null || stretch > SEQ.maxStretch) SEQ.maxStretch = stretch;
+      }
+      SEQ.stage = st;
+      if (SEQ.phase >= 1 && toy.flips >= 2) SEQ.done = true;
+      seqRefresh();
+    }
+
     /* ---------- presets ---------- */
     var AXIS_NAMES = ["A", "B", "C"];
     var NOTE_EARTH = "<b>Earth today.</b> Moments (A, B, C) = (8.01, 8.02, 8.04) ×10³⁷ kg·m² — the sliders carry " +
@@ -548,6 +723,7 @@
 
     function setPreset(name) {
       var note = $("presetNote");
+      SEQ.active = false;
       toy.meltBoost = 0;
       if (name === "earth") {
         toy.I = [8.01, 8.02, 8.04]; toy.spinAxis = 2;
@@ -587,33 +763,72 @@
       var scale = Math.min(CW, CH) * 0.30;
       return [CW / 2 + p[0] * scale, CH / 2 - p[1] * scale, p[2]];
     }
-    // schematic WINGNUT (the ISS footage in Veritasium's "The Bizarre Behaviour
-    // Of Rotating Bodies"): a central hub, a bolt shaft along B, two wing ears
-    // along +/-A at the top of the shaft, and the nut block at the bottom.
-    var BOXES = [
-      { c: [0, 0, 0], h: [0.34, 0.34, 0.34] },          // hub / barrel
-      { c: [0, 0.62, 0], h: [0.13, 0.62, 0.13] },       // bolt shaft (along B)
-      { c: [0.58, 1.18, 0], h: [0.44, 0.16, 0.21] },    // right wing ear (along +A)
-      { c: [-0.58, 1.18, 0], h: [0.44, 0.16, 0.21] },   // left wing ear (along -A)
-      { c: [0, -0.62, 0], h: [0.13, 0.45, 0.13] },      // shaft below the hub
-      { c: [0, -1.12, 0], h: [0.31, 0.19, 0.31] }       // nut block
-    ];
-    var EDGES = [];
-    BOXES.forEach(function (b) {
-      var vs = [];
-      for (var i = 0; i < 8; i++) {
-        vs.push([
-          b.c[0] + ((i & 1) ? b.h[0] : -b.h[0]),
-          b.c[1] + ((i & 2) ? b.h[1] : -b.h[1]),
-          b.c[2] + ((i & 4) ? b.h[2] : -b.h[2])
-        ]);
+    // schematic EARTH: a stylized globe — graticule, a marked equator, and the
+    // two ice caps — with its polar (figure) axis along C. Body coordinates:
+    // x = A, y = B, z = C (the pole). The drawn flattening follows the moment
+    // state qualitatively: oblate while C is the largest moment, rounding at
+    // equality, prolate once C is demoted — exaggerated, and labeled schematic.
+    function spherePoint(latDeg, lonDeg) {
+      var la = latDeg * Math.PI / 180, lo = lonDeg * Math.PI / 180;
+      return [Math.cos(la) * Math.cos(lo), Math.cos(la) * Math.sin(lo), Math.sin(la)];
+    }
+    var MERIDIANS = [], PARALLELS = [], EQUATOR = [], CAP_N = [], CAP_S = [];
+    (function buildGlobe() {
+      var lo, la, pts;
+      for (lo = 0; lo < 180; lo += 30) {
+        pts = [];
+        for (la = -84; la <= 84; la += 6) pts.push(spherePoint(la, lo));
+        MERIDIANS.push(pts);
       }
-      var pairs = [[0,1],[0,2],[0,4],[1,3],[1,5],[2,3],[2,6],[3,7],[4,5],[4,6],[5,7],[6,7]];
-      pairs.forEach(function (pr) { EDGES.push([vs[pr[0]], vs[pr[1]]]); });
-    });
+      for (la = -60; la <= 75; la += 15) {
+        pts = [];
+        for (lo = 0; lo <= 360; lo += 6) pts.push(spherePoint(la, lo));
+        PARALLELS.push(pts);
+      }
+      for (lo = 0; lo <= 360; lo += 4) EQUATOR.push(spherePoint(0, lo));
+      for (lo = 0; lo <= 360; lo += 6) { CAP_N.push(spherePoint(66, lo)); CAP_S.push(spherePoint(-66, lo)); }
+    })();
+    function oblateness() {
+      // scale applied to the polar axis when drawing: <1 oblate, >1 prolate
+      var e = effI();
+      var s = e[2] - (e[0] + e[1]) / 2; // C vs the equatorial mean, 1e37 units
+      return 1 - 0.35 * Math.tanh(s / 0.06);
+    }
+    function bodyToSpace(p) {
+      var f = oblateness();
+      return qRot(toy.q, [p[0], p[1], p[2] * f]);
+    }
+    function drawPolyline(pts, style, width) {
+      var prev = null, started = false;
+      ctx.strokeStyle = style; ctx.lineWidth = width;
+      ctx.beginPath();
+      for (var i = 0; i < pts.length; i++) {
+        var sp = bodyToSpace(pts[i]);
+        var pr = proj(sp);
+        var facing = pr[2];
+        if (prev !== null && facing < -0.25 && prev < -0.25) { started = false; prev = facing; continue; }
+        if (!started) { ctx.moveTo(pr[0], pr[1]); started = true; }
+        else ctx.lineTo(pr[0], pr[1]);
+        prev = facing;
+      }
+      ctx.stroke();
+    }
+    function drawCap(ring, poleLat) {
+      var pole = bodyToSpace(spherePoint(poleLat, 0));
+      var pp = proj(pole);
+      if (pp[2] < -0.45) return; // cap on the far side
+      ctx.beginPath();
+      for (var i = 0; i < ring.length; i++) {
+        var pr = proj(bodyToSpace(ring[i]));
+        if (i === 0) ctx.moveTo(pr[0], pr[1]); else ctx.lineTo(pr[0], pr[1]);
+      }
+      ctx.closePath();
+      ctx.fillStyle = "rgba(238,246,255,0.88)";
+      ctx.fill();
+    }
     var AXIS_COLORS = ["#ff5a52", "#5b9dff", "#43d97e"];
     function recordTrail(force) {
-      var ax = [0, 0, 0]; ax[toy.spinAxis] = 1.55;
+      var ax = [0, 0, 0]; ax[2] = 1.55; // the figure axis (polar axis, C)
       var tip = qRot(toy.q, ax);
       var last = toy.trail[toy.trail.length - 1];
       if (force || !last || Math.hypot(tip[0]-last[0], tip[1]-last[1], tip[2]-last[2]) > 0.03) {
@@ -624,7 +839,7 @@
     function draw() {
       ctx.clearRect(0, 0, CW, CH);
       // The RED LINE (as in the Veritasium footage): the angular-momentum axis,
-      // a full line through the body, fixed in space. The wingnut flips around
+      // a full line through the body, fixed in space. The Earth flips around
       // it; the line never moves.
       var Ln = Math.hypot(toy.Lspace[0], toy.Lspace[1], toy.Lspace[2]) || 1;
       var Lu = [toy.Lspace[0]/Ln, toy.Lspace[1]/Ln, toy.Lspace[2]/Ln];
@@ -635,7 +850,7 @@
       ctx.fillStyle = "#ff2a2a";
       ctx.font = "12px ui-monospace, Menlo, monospace";
       ctx.fillText("L — fixed in space", Lp[0] + 8, Lp[1] + 4);
-      // faint BLUE trace: the tip of the body's spin axis wandering / flipping
+      // faint BLUE trace: the tip of the Earth's figure axis wandering / flipping
       if (toy.trail.length > 1) {
         ctx.strokeStyle = "rgba(91,157,255,0.55)"; ctx.lineWidth = 1.4;
         ctx.beginPath();
@@ -648,23 +863,27 @@
         ctx.fillStyle = "rgba(140,190,255,0.95)";
         ctx.beginPath(); ctx.arc(lastTp[0], lastTp[1], 2.6, 0, Math.PI * 2); ctx.fill();
       }
-      // body edges, painter-sorted by depth
-      var drawn = EDGES.map(function (e) {
-        var a = proj(qRot(toy.q, e[0])), b = proj(qRot(toy.q, e[1]));
-        return { a: a, b: b, z: (a[2] + b[2]) / 2 };
-      });
-      drawn.sort(function (p, q2) { return p.z - q2.z; });
-      drawn.forEach(function (e) {
-        var alpha = 0.35 + 0.55 * Math.min(1, Math.max(0, (e.z + 1.6) / 3.2));
-        ctx.strokeStyle = "rgba(232,230,224," + alpha.toFixed(2) + ")";
-        ctx.lineWidth = 1.6;
-        ctx.beginPath(); ctx.moveTo(e.a[0], e.a[1]); ctx.lineTo(e.b[0], e.b[1]); ctx.stroke();
-      });
-      // body axes
+      // the globe: filled disc, graticule, equator, ice caps (far-side dimmed)
+      var cen = proj([0, 0, 0]);
+      var discR = Math.min(CW, CH) * 0.30 * 1.04;
+      var grad = ctx.createRadialGradient(cen[0] - discR * 0.35, cen[1] - discR * 0.35, discR * 0.15, cen[0], cen[1], discR);
+      grad.addColorStop(0, "#274b63"); grad.addColorStop(0.65, "#17334a"); grad.addColorStop(1, "#0d1f30");
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(cen[0], cen[1], discR, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "rgba(160,200,235,0.5)"; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.arc(cen[0], cen[1], discR, 0, Math.PI * 2); ctx.stroke();
+      MERIDIANS.forEach(function (pts) { drawPolyline(pts, "rgba(150,195,235,0.40)", 1.1); });
+      PARALLELS.forEach(function (pts) { drawPolyline(pts, "rgba(150,195,235,0.32)", 1.1); });
+      drawCap(CAP_S, -90);
+      drawCap(CAP_N, 90);
+      drawPolyline(EQUATOR, "rgba(232,230,224,0.85)", 2.0);
+      // body axes (the polar axis length follows the drawn flattening)
+      var fAx = oblateness();
       for (var ax = 0; ax < 3; ax++) {
         var dir = [0, 0, 0]; dir[ax] = 1;
-        var tipB = [dir[0] * 1.5, dir[1] * 1.5, dir[2] * 1.5];
-        var tailB = [dir[0] * -1.5, dir[1] * -1.5, dir[2] * -1.5];
+        var axLen = ax === 2 ? 1.5 * fAx : 1.5;
+        var tipB = [dir[0] * axLen, dir[1] * axLen, dir[2] * axLen];
+        var tailB = [dir[0] * -axLen, dir[1] * -axLen, dir[2] * -axLen];
         var pt = proj(qRot(toy.q, tipB)), pb = proj(qRot(toy.q, tailB));
         ctx.strokeStyle = AXIS_COLORS[ax]; ctx.lineWidth = ax === toy.spinAxis ? 3 : 1.6;
         ctx.beginPath(); ctx.moveTo(pb[0], pb[1]); ctx.lineTo(pt[0], pt[1]); ctx.stroke();
@@ -748,6 +967,7 @@
     /* ---------- events ---------- */
     ["sI1", "sI2", "sI3"].forEach(function (id, idx) {
       $(id).addEventListener("input", function () {
+        seqManualStop();
         toy.I[idx] = parseFloat(this.value);
         toy.meltBoost = 0; // manual drags leave the presets
         resetSpin(); refreshReadouts();
@@ -755,8 +975,14 @@
     });
     [["spinA", 0], ["spinB", 1], ["spinC", 2]].forEach(function (pair) {
       $(pair[0]).addEventListener("click", function () {
+        seqManualStop();
         toy.spinAxis = pair[1]; resetSpin(); refreshReadouts();
       });
+    });
+    $("btnSeq").addEventListener("click", function () { seqStart(); });
+    $("btnSeqStop").addEventListener("click", function () { seqStop(); });
+    $("seqRange").addEventListener("input", function () {
+      seqScrub(parseFloat(this.value) / 1000);
     });
     $("btnPlay").addEventListener("click", function () {
       toy.playing = !toy.playing;
@@ -811,10 +1037,16 @@
     window.addEventListener("resize", resize);
 
     /* ---------- main loop ---------- */
-    var frame = 0;
-    function loop() {
+    var frame = 0, lastTs = null;
+    function loop(ts) {
+      var dtSec = 1 / 60;
+      if (typeof ts === "number") {
+        if (lastTs !== null) dtSec = Math.min(0.1, Math.max(0.001, (ts - lastTs) / 1000));
+        lastTs = ts;
+      }
       if (toy.playing) {
-        stepN(Math.max(1, Math.round(56 * toy.speed)));
+        if (SEQ.active) seqAdvance(dtSec);
+        else stepN(Math.max(1, Math.round(56 * toy.speed)));
         recordTrail(false);
       }
       draw();
@@ -832,6 +1064,7 @@
     resize();
     resetSpin();
     refreshReadouts();
+    seqRefresh();
     if (typeof requestAnimationFrame === "function") requestAnimationFrame(loop);
 
     /* hooks for headless verification */
@@ -842,6 +1075,32 @@
       applyPush: applyPush,
       setMoments: function (arr) { toy.I = arr.slice(); toy.meltBoost = 0; resetSpin(); },
       setSpinAxis: function (a) { toy.spinAxis = a; resetSpin(); },
+      startSequence: seqStart,
+      stopSequence: seqStop,
+      seqAdvance: seqAdvance,
+      seqScrubTo: seqScrub,
+      seqMoments: seqMoments,
+      seqState: function () {
+        return {
+          active: SEQ.active, phase: SEQ.phase, m: SEQ.m, stage: seqStageFromState(),
+          flips: toy.flips, done: SEQ.done,
+          basePeriod: SEQ.basePeriod,
+          freezeGap: SEQ.freezeGap, freezeStretch: SEQ.freezeStretch,
+          maxStretch: SEQ.maxStretch,
+          gapCB: gapCB(), periodNow: analyticPeriod(),
+          moments: effI()
+        };
+      },
+      runSequenceToEnd: function () {
+        if (!SEQ.active) seqStart();
+        var i = 0;
+        while (i < 8000) {
+          seqAdvance(0.05);
+          i++;
+          if (SEQ.phase >= 1 && toy.flips >= 3) break;
+        }
+        return window.__toy.seqState();
+      },
       sMinWindow: function (n) {
         var h = toy.sHist.slice(-n); if (!h.length) return 1;
         return Math.min.apply(null, h);
