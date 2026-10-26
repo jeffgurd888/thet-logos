@@ -112,7 +112,51 @@
         background: #0d1013;
         border: 1px solid var(--line);
         border-radius: 4px;
+        touch-action: none;
+        cursor: grab;
       }
+      canvas.sim:active { cursor: grabbing; }
+      .drag-hint { font-size: 13.5px; color: var(--ink-dim); margin: 10px 2px 0; }
+      .drag-hint b { color: var(--ink); font-weight: 600; }
+
+      /* ---------- The winding ledger (the checkable core) ---------- */
+      .ledger {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 14px 16px 16px;
+        margin-bottom: 18px;
+      }
+      .ledger-title { margin: 0 0 10px; font-weight: 700; font-size: 16px; color: var(--paper); }
+      .ledger-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      @media (max-width: 520px) {
+        .ledger-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      .lchip {
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 8px 6px;
+        text-align: center;
+      }
+      .lchip .n {
+        display: block;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.15;
+        font-variant-numeric: tabular-nums;
+      }
+      .lchip .n.wv { color: var(--z-bright); }
+      .lchip .w { display: block; font-size: 12px; color: var(--ink-dim); margin-top: 2px; }
+      .checkline { font-size: 13.5px; color: var(--ink-dim); margin: 10px 0 0; }
+      .checkline b { color: var(--ink); font-weight: 600; }
+      .checkline .tick { color: var(--z-bright); font-weight: 700; white-space: nowrap; }
+      .controls-note { font-size: 13px; color: var(--ink-dim); margin: 10px 0 0; }
 
       /* ---------- Readouts ---------- */
       .readouts {
@@ -212,7 +256,9 @@
       input[type="range"] {
         accent-color: var(--gold);
         width: 110px;
-        min-height: 32px;
+        min-height: 44px;
+        touch-action: pan-y;
+        cursor: pointer;
       }
 
       /* ---------- Status / legend ---------- */
@@ -303,11 +349,33 @@
         </p>
       </header>
 
+      <!-- ============ THE WINDING LEDGER ============ -->
+      <section class="ledger" aria-label="The winding ledger">
+        <p class="ledger-title">🔢 The winding ledger — check it yourself</p>
+        <div class="ledger-grid">
+          <div class="lchip"><span class="n" id="lgSteps">0</span><span class="w">steps taken</span></div>
+          <div class="lchip"><span class="n" id="lgSite">0</span><span class="w">position in this turn (of 12)</span></div>
+          <div class="lchip"><span class="n" id="lgSlips">0</span><span class="w">phase slips so far (signed)</span></div>
+          <div class="lchip"><span class="n wv" id="lgW">0</span><span class="w">winding number w</span></div>
+        </div>
+        <p class="checkline">
+          The ledger: <b>steps + 12 × slips = 12 × w + position</b> — right now
+          <b id="lgEqL">0</b> = <b id="lgEqR">0</b> <span class="tick">✓ balances exactly</span>.
+          Step it, slip it, drag the ring with your finger, scramble it any way you like:
+          every step is accounted for — each one is either inside the turn you are in,
+          or inside a completed winding of 12. These numbers are read live from the
+          same state being drawn, so you can catch the toy out if it ever cheats.
+        </p>
+      </section>
+
       <div class="stage">
         <!-- ============ RING PANEL ============ -->
         <section class="panel" aria-label="The ring">
           <h2>The ring · 12 sites, one seam</h2>
           <canvas class="sim" id="ring" width="640" height="640"></canvas>
+          <p class="drag-hint">👆 <b>Drag the ring:</b> grab it and pull it around with
+            your finger or mouse — the walker steps as you turn it, forward or back,
+            one bond at a time. Push it over the red seam to finish a turn.</p>
 
           <div class="readouts">
             <div class="readout">
@@ -328,17 +396,24 @@
           </div>
 
           <div class="controls">
-            <button class="primary" id="btnPlay" type="button">Pause</button>
-            <button id="btnStep" type="button">Step once</button>
-            <button class="slip-plus" id="btnSlipPlus" type="button">Phase slip +1</button>
-            <button class="slip-minus" id="btnSlipMinus" type="button">Phase slip −1</button>
-            <button id="btnReset" type="button">Reset</button>
+            <button class="primary" id="btnPlay" type="button">❚❚&nbsp; Pause</button>
+            <button id="btnStep" type="button">Step once — forward one bond</button>
+            <button id="btnBack" type="button">Step back — undo one step</button>
+            <button class="slip-plus" id="btnSlipPlus" type="button">Phase slip +1 — w jumps up exactly 1</button>
+            <button class="slip-minus" id="btnSlipMinus" type="button">Phase slip −1 — w drops exactly 1</button>
+            <button id="btnReset" type="button">Reset — back to zero</button>
             <div class="speedbox">
-              <label for="speed">Speed</label>
+              <label for="speed">Speed — steps per second</label>
               <input type="range" id="speed" min="1" max="16" value="4" />
               <span id="speedVal">4 /s</span>
             </div>
           </div>
+          <p class="controls-note">
+            Ordinary stepping just walks the walker around the ring — it can only move
+            <b>w</b> by finishing a turn, and then by exactly 1. The two slip buttons are
+            the only sudden move in the toy: the whole staircase jumps one full turn at
+            the seam, and <b>w</b> jumps with it, by exactly the slip.
+          </p>
 
           <div class="status" id="status" role="status">
             Each step advances the phase by one bond (2π/12). The lift climbs;
@@ -350,6 +425,9 @@
         <section class="panel" aria-label="The lift staircase">
           <h2>The lift · a staircase step function</h2>
           <canvas class="sim" id="chart" width="560" height="520"></canvas>
+          <p class="drag-hint">👆 <b>Drag the staircase sideways:</b> right to climb
+            forward through the steps, left to climb back down — the same steps,
+            scrubbed under your finger.</p>
           <div class="legend">
             <span><span class="sw gold"></span>Lift Θ — the staircase</span>
             <span><span class="sw wline"></span>Integer turns — w levels</span>
@@ -367,20 +445,21 @@
 
       <!-- ============ HONEST LABELING ============ -->
       <section class="label-card" aria-label="About this exhibit">
-        <p class="stamp">Exhibit — illustration of a theorem, not a proof</p>
+        <p class="stamp">Exhibit — a picture, not a proof</p>
         <p>
-          Exhibit — an illustration of a machine-checked finite theorem
-          (<code>PhaseWinding</code>, T1), not itself a proof. The theorem is
-          machine-checked in Lean&nbsp;4 (<code>PhaseWinding.lean</code>): winding
-          numbers add in ℤ, a single-valued (gauge) shift cannot move the winding
-          number, and a phase slip moves it by exactly the slip. What you see here
-          is a picture of that algebra, drawn live.
+          Labeled plainly: this is an exhibit — a picture of the mathematics, not a proof.
+          The theorem it pictures is machine-checked in Lean&nbsp;4
+          (<code>PhaseWinding.lean</code>): winding numbers add in ℤ, a single-valued
+          (gauge) shift cannot move the winding number, and a phase slip moves it by
+          exactly the slip. What you see here is that algebra, drawn live.
         </p>
         <p>
-          The winding number changes only at a phase slip — proved in the corpus.
-          Stepping around the ring winds the lift; no smooth stepping and no
-          relabeling of the sites can change <b>w</b> — only a slip at the seam can,
-          and then by exactly the slip, never more, never less.
+          The exact part is the ledger at the top: <b>steps + 12 × slips =
+          12 × w + position in the turn</b>, true at every moment, however you play.
+          Ordinary stepping never moves <b>w</b> except by completing a turn — then
+          by exactly 1 — and no relabeling of the sites can change it. Only a phase
+          slip moves <b>w</b> suddenly, and then by exactly the slip, never more,
+          never less.
         </p>
         <p class="fences">
           The fences, stated plainly: this is a finite ring of 12 sites and an
@@ -390,6 +469,8 @@
           carry, in the exact form the corpus proves it. Cabinet tier — NO CLAIM
           toward any larger result.
         </p>
+        <p>It runs right here in your browser. No account, no install, no tracking.</p>
+        <p><b>Free forever, for everyone — one common bond.</b></p>
       </section>
 
       <footer>
@@ -471,6 +552,38 @@
           drawAll();
         }
 
+        function stepBack() {
+          // Undo the most recent move, whatever it was. The event list is the
+          // history: a slip sits on top as a pair of vertices at the same step
+          // count; anything else on top is a single step.
+          if (events.length <= 1) return;
+          var last = events[events.length - 1];
+          var prev = events[events.length - 2];
+          if (last.n === prev.n) {
+            var d = Math.round(last.lift - prev.lift);   // the slip being undone
+            slips -= d;
+            events.splice(events.length - 2, 2);
+            flash = -d;
+            flashUntil = performance.now() + 800;
+            setStatus("Stepped back over the <b>phase slip</b> — the slip is undone, " +
+                      "the lift dropped back by exactly one turn, and <b class=\"wb\">w moved by " +
+                      (d > 0 ? "−1" : "+1") + "</b>, exactly the slip reversed.");
+          } else {
+            var uncrossed = (site() === 0 && n > 0);
+            events.pop();
+            n -= 1;
+            if (uncrossed) {
+              flash = 2;
+              flashUntil = performance.now() + 650;
+              setStatus("Stepped back across the <b>seam</b> — the turn un-completed, " +
+                        "so <b class=\"wb\">w fell by exactly 1</b>. Stepping moves w only " +
+                        "at the seam, in either direction, and only by 1.");
+            }
+          }
+          updateReadouts();
+          drawAll();
+        }
+
         function doSlip(s) {
           var before = liftTurns();
           slips += s;
@@ -496,6 +609,13 @@
           el("roSite").textContent = "site " + site() + " of " + M;
           el("roLift").textContent = fmtSigned(liftTurns(), 2);
           el("roW").textContent = (winding() > 0 ? "+" : "") + winding();
+          // The winding ledger — read from the same state, every time.
+          el("lgSteps").textContent = n.toLocaleString("en-US");
+          el("lgSite").textContent = site();
+          el("lgSlips").textContent = (slips > 0 ? "+" : "") + slips;
+          el("lgW").textContent = (winding() > 0 ? "+" : "") + winding();
+          el("lgEqL").textContent = (n + M * slips).toLocaleString("en-US");
+          el("lgEqR").textContent = (M * winding() + site()).toLocaleString("en-US");
         }
 
         // ---------- Canvas sizing (HiDPI) ----------
@@ -707,14 +827,83 @@
           requestAnimationFrame(frame);
         }
 
+        // ---------- Drag: turn the vortex with your finger ----------
+        // The ring drag feeds the stepper itself, not a camera: pulling the
+        // ring around by one bond angle (2π/12) takes exactly one step, in
+        // whichever direction you pull. The chart drag scrubs the same steps
+        // sideways. Both work with mouse and touch (pointer events).
+        function wrapPi(a) {
+          while (a > Math.PI) a -= TAU;
+          while (a < -Math.PI) a += TAU;
+          return a;
+        }
+        function addRingDrag(canvas) {
+          // accAng is deliberately NOT reset between drags: a pull shorter
+          // than one bond is banked, so several short pulls still add up to
+          // a step — no motion is ever silently dropped.
+          var dragging = false, lastAng = 0, accAng = 0;
+          function angOf(ev) {
+            var r = canvas.getBoundingClientRect();
+            return Math.atan2(ev.clientY - (r.top + r.height / 2),
+                              ev.clientX - (r.left + r.width / 2));
+          }
+          canvas.addEventListener("pointerdown", function (ev) {
+            dragging = true;
+            lastAng = angOf(ev);
+            if (canvas.setPointerCapture) {
+              try { canvas.setPointerCapture(ev.pointerId); } catch (err) { /* noop */ }
+            }
+            ev.preventDefault();
+          });
+          canvas.addEventListener("pointermove", function (ev) {
+            if (!dragging) return;
+            var a = angOf(ev);
+            accAng += wrapPi(a - lastAng);
+            lastAng = a;
+            var bond = TAU / M;
+            while (accAng >= bond) { stepOnce(); accAng -= bond; }
+            while (accAng <= -bond) { stepBack(); accAng += bond; }
+          });
+          function end() { dragging = false; }
+          canvas.addEventListener("pointerup", end);
+          canvas.addEventListener("pointercancel", end);
+        }
+        function addChartDrag(canvas) {
+          // accPx persists between drags too — short scrubs bank up.
+          var dragging = false, lastX = 0, accPx = 0;
+          var PX_PER_STEP = 16;
+          canvas.addEventListener("pointerdown", function (ev) {
+            dragging = true;
+            lastX = ev.clientX;
+            if (canvas.setPointerCapture) {
+              try { canvas.setPointerCapture(ev.pointerId); } catch (err) { /* noop */ }
+            }
+            ev.preventDefault();
+          });
+          canvas.addEventListener("pointermove", function (ev) {
+            if (!dragging) return;
+            accPx += ev.clientX - lastX;
+            lastX = ev.clientX;
+            while (accPx >= PX_PER_STEP) { stepOnce(); accPx -= PX_PER_STEP; }
+            while (accPx <= -PX_PER_STEP) { stepBack(); accPx += PX_PER_STEP; }
+          });
+          function end() { dragging = false; }
+          canvas.addEventListener("pointerup", end);
+          canvas.addEventListener("pointercancel", end);
+        }
+        addRingDrag(ringC);
+        addChartDrag(chartC);
+
         // ---------- Controls ----------
         var btnPlay = el("btnPlay");
         function setPlaying(p) {
           playing = p;
-          btnPlay.textContent = playing ? "Pause" : "Play";
+          btnPlay.innerHTML = playing ? "❚❚&nbsp; Pause" : "▶&nbsp; Play";
+          btnPlay.setAttribute("aria-pressed", playing ? "true" : "false");
         }
         btnPlay.addEventListener("click", function () { setPlaying(!playing); });
         el("btnStep").addEventListener("click", function () { stepOnce(); });
+        el("btnBack").addEventListener("click", function () { stepBack(); });
         el("btnSlipPlus").addEventListener("click", function () { doSlip(1); });
         el("btnSlipMinus").addEventListener("click", function () { doSlip(-1); });
         el("btnReset").addEventListener("click", function () { reset(); });
@@ -724,8 +913,11 @@
         });
         window.addEventListener("resize", drawAll);
 
+        var reduced = window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
         reset();
-        setPlaying(true);
+        setPlaying(!reduced);
         requestAnimationFrame(frame);
       })();
     </script>
