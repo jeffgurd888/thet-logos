@@ -46,8 +46,11 @@ remains OPEN, untouched by this landing.
 
 ## Census effect
 
-Strict 5,942 → **5,945**; attribute-inclusive 6,020 → **6,023**;
-modules 200 → **201**; `sorry` placeholders unchanged at **6**.
+Strict 5,953 → **5,956**; attribute-inclusive 6,031 → **6,034**;
+modules 201 → **202**; `sorry` placeholders unchanged at **6**.
+*(Census lines corrected by the parent on landing review,
+2026-10-26: this dossier's first printing counted from the
+pre-Brick-α base; the theorem content was unaffected.)*
 
 ## Backers since last landing
 
