@@ -1,0 +1,1138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>Spectral Chamber Former — Form a Room by Its Hum</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0a0c0e;
+        --panel: #121518;
+        --panel-2: #171b1f;
+        --line: #262c31;
+        --ink: #e8e6e0;
+        --ink-dim: #9aa0a3;
+        --ink-faint: #6b7176;
+        --y-blue: #5b9dff;
+        --paper: #f2efe6;
+        --accent: #d8c58f;
+        --gold: #e8b34b;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.45;
+      }
+      .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 20px 40px; }
+      header { margin-bottom: 22px; }
+      .plate {
+        display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+        border-bottom: 1px solid var(--line); padding-bottom: 16px;
+      }
+      h1 {
+        font-family: Georgia, "Times New Roman", serif; font-weight: 400;
+        font-size: clamp(29px, 5.2vw, 46px); letter-spacing: 0.01em; margin: 0; color: var(--paper);
+      }
+      .plate .no {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--ink-faint); white-space: nowrap;
+      }
+      .subtitle {
+        font-family: Georgia, "Times New Roman", serif; font-style: italic;
+        font-size: clamp(16px, 2.8vw, 21px); color: var(--ink-dim); margin: 12px 0 0; max-width: 76ch;
+      }
+      .subtitle b { color: var(--ink); font-style: normal; font-weight: 600; }
+      .stage { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+      @media (max-width: 860px) { .stage { grid-template-columns: 1fr; } }
+      .card {
+        background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+        padding: 16px 18px; margin-bottom: 18px;
+      }
+      .card h2 {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--ink-dim); margin: 0 0 12px; font-weight: 600;
+      }
+      .card p { margin: 0 0 10px; font-size: 14.5px; }
+      .card p:last-child { margin-bottom: 0; }
+      .dim { color: var(--ink-dim); } .faint { color: var(--ink-faint); } .small { font-size: 12.5px; }
+      #cv {
+        width: 100%; height: 440px; display: block; border-radius: 8px;
+        background: radial-gradient(120% 90% at 50% 38%, #141a20 0%, #0a0c0e 70%);
+      }
+      #cvTwin {
+        width: 100%; height: 300px; display: block; border-radius: 8px;
+        background: radial-gradient(120% 90% at 50% 38%, #141a20 0%, #0a0c0e 70%);
+      }
+      @media (max-width: 640px) { #cv { height: 320px; } #cvTwin { height: 240px; } }
+      .hint { font-size: 12.5px; color: var(--ink-faint); margin-top: 8px; }
+      .state-line { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 4px; }
+      .chip {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12.5px; border: 1px solid var(--line); border-radius: 999px;
+        padding: 6px 12px; background: var(--panel-2); color: var(--ink-dim); white-space: nowrap;
+      }
+      .chip b { color: var(--ink); font-weight: 600; }
+      .controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+      button {
+        font: inherit; font-size: 14px; min-height: 44px; padding: 9px 16px;
+        border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2);
+        color: var(--ink); cursor: pointer;
+      }
+      button:hover { border-color: var(--ink-faint); }
+      button.primary { border-color: var(--accent); color: var(--accent); }
+      select {
+        font: inherit; font-size: 14.5px; min-height: 44px; padding: 8px 10px; width: 100%;
+        border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2); color: var(--ink);
+      }
+      .slider-block { margin: 12px 0; }
+      .slider-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+      .slider-head .name { font-size: 14.5px; }
+      .slider-head .val {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px; color: var(--ink);
+      }
+      input[type="range"] { width: 100%; height: 44px; accent-color: var(--accent); }
+      .nums { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px; }
+      .nums .row { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px dashed var(--line); }
+      .nums .row:last-child { border-bottom: none; }
+      .nums .k { color: var(--ink-dim); } .nums .v { color: var(--ink); text-align: right; }
+      .gap-row { margin: 10px 0; }
+      .gap-lab {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12.5px; color: var(--ink-dim); display: block; margin-bottom: 4px;
+      }
+      .gap-line { display: flex; align-items: center; gap: 8px; margin: 3px 0; }
+      .gap-tag {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 11px; color: var(--ink-faint); width: 58px; flex: none; text-transform: uppercase; letter-spacing: 0.06em;
+      }
+      .gap-track { flex: 1; height: 12px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+      .gap-fill { height: 100%; }
+      .gap-fill.chamber { background: var(--y-blue); }
+      .gap-fill.target { background: var(--gold); }
+      .gap-num {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12.5px; color: var(--ink); width: 52px; flex: none; text-align: right;
+      }
+      .form-note { font-size: 13.5px; color: var(--ink-dim); border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; margin-top: 12px; }
+      .form-note b { color: var(--ink); }
+      .twin-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+      @media (max-width: 860px) { .twin-grid { grid-template-columns: 1fr; } }
+      .label-card .stamp {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        display: inline-block; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase;
+        border: 1px solid var(--accent); color: var(--accent); border-radius: 4px; padding: 4px 9px; margin: 0 0 12px;
+      }
+      .label-card p { font-size: 13.5px; color: var(--ink-dim); }
+      .label-card p b { color: var(--ink); }
+      footer { color: var(--ink-faint); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 14px; margin-top: 6px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="plate">
+          <h1>Spectral Chamber Former</h1>
+          <span class="no">Exhibit · Spectral geometry instrument</span>
+        </div>
+        <p class="subtitle">
+          A room is known by its <b>hum</b> — the ratios of its resonance modes. This instrument
+          works the way the old ICAD design systems did: <b>rules first</b>, written down as data,
+          and candidate chambers are <b>generated</b> from the rules, then graded by their spectrum.
+          Drag the walls yourself, or press <b>Form chamber</b> and let the search pour forms
+          until one hums close to the target.
+        </p>
+      </header>
+
+      <div class="stage">
+        <div>
+          <div class="card">
+            <h2>The chamber — first mode shaded</h2>
+            <canvas id="cv" width="680" height="440"></canvas>
+            <p class="hint">The blue shading is the chamber's first (lowest) resonance mode, computed
+              live from the solver — the cymatic picture of the room's deepest note.
+              Computed on a 23×23 grid — a picture of the mathematics.</p>
+            <div class="state-line">
+              <span class="chip">λ₁ <b id="lam1Val">—</b></span>
+              <span class="chip">Match <b id="matchVal">—</b></span>
+              <span class="chip">Grid <b>23×23</b></span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Mode gaps</h2>
+            <p class="dim small">Each mode's frequency ratio against the first mode (λ<sub>i</sub> / λ<sub>1</sub>) —
+              the chamber's hum, bar against the target's bar.</p>
+            <div id="gapBars"></div>
+            <p class="dim">Match: <b id="matchVal2" style="color:var(--ink)">—</b>
+              <span class="small">(RMS log mismatch against the target — lower = closer)</span></p>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <h2>Target hum</h2>
+            <select id="targetSel">
+              <option value="harmonic" selected>Harmonic ladder</option>
+              <option value="clockChord">Clock chord</option>
+            </select>
+            <p class="dim small" style="margin-top:10px">The ladder is a 1D string's ratios (2, 3, 4, 5, 6).
+              The clock chord is measured optical-clock ratios, used as a target shape only.</p>
+          </div>
+
+          <div class="card">
+            <h2>Wall shape</h2>
+            <div class="slider-block">
+              <div class="slider-head"><span class="name">Width a</span><span class="val" id="valA">—</span></div>
+              <input type="range" id="sA" min="0.8" max="1.3" step="0.01" value="1.05" />
+            </div>
+            <div class="slider-block">
+              <div class="slider-head"><span class="name">Height b</span><span class="val" id="valB">—</span></div>
+              <input type="range" id="sB" min="0.8" max="1.3" step="0.01" value="0.95" />
+            </div>
+            <div class="slider-block">
+              <div class="slider-head"><span class="name">Corner power p</span><span class="val" id="valP">—</span></div>
+              <input type="range" id="sP" min="2" max="6" step="0.1" value="3" />
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Mirror ripple</h2>
+            <div class="slider-block">
+              <div class="slider-head"><span class="name">Ripple amount r</span><span class="val" id="valR">—</span></div>
+              <input type="range" id="sR" min="0" max="0.15" step="0.005" value="0.05" />
+            </div>
+            <div class="slider-block">
+              <div class="slider-head"><span class="name">Lobes k</span><span class="val" id="valK">—</span></div>
+              <input type="range" id="sK" min="0" max="8" step="1" value="4" />
+            </div>
+            <div class="controls">
+              <button id="btnForm" class="primary">Form chamber</button>
+            </div>
+            <p class="dim" id="formStatus">The search pours rule-satisfying chambers and keeps the best hum it finds.</p>
+            <p class="form-note" id="formResult" style="display:none"></p>
+          </div>
+
+          <div class="card">
+            <h2>Twin check</h2>
+            <p>Run a second search from a different seed and ask whether a <b>different</b> room
+              hums the same hum.</p>
+            <div class="controls">
+              <button id="btnTwin">Twin check</button>
+            </div>
+            <div id="twinPanel" style="display:none">
+              <div class="twin-grid">
+                <div>
+                  <canvas id="cvTwin" width="340" height="300"></canvas>
+                  <p class="hint">The twin chamber, with its own first mode shaded.</p>
+                </div>
+                <div class="nums">
+                  <div class="row"><span class="k">Twin form</span><span class="v" id="twinParams">—</span></div>
+                  <div class="row"><span class="k">Champion Match</span><span class="v" id="twinChampMatch">—</span></div>
+                  <div class="row"><span class="k">Twin Match</span><span class="v" id="twinMatch">—</span></div>
+                  <div class="row"><span class="k">Distance in form space</span><span class="v" id="twinDist">—</span></div>
+                </div>
+              </div>
+              <p style="margin-top:12px"><b>Same hum, different room — a spectrum does not pick a shape.</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card label-card">
+        <p class="stamp">Exhibit — a picture of the mathematics, not a proof</p>
+        <p><b>Labeled plainly: this is an exhibit.</b> Everything on this page is computed on a
+          <b>23×23 grid</b> — a finite-difference picture of the mathematics, not the continuum chamber.
+          The underlying solver was verified on the bench: against a rectangle, whose discrete spectrum
+          is known in closed form, it is exact to <b>1.2×10⁻¹⁵</b>; its continuum error shrinks as the
+          grid refines, the way the mathematics says it should.</p>
+        <p><b>The ladder cannot be hit exactly by any chamber in this family.</b> The bench gauntlet —
+          a finer 29×29 grid, a 400-evaluation budget, the floor measured four ways — bottomed out at
+          Match ≈ <b>0.066</b>, with ratios ≈ 2.157, 2.872, 3.725, 4.597, 5.751 against the ladder's
+          2, 3, 4, 5, 6. <b>A 2D room cannot hum a 1D string's ladder. The floor is the family's,
+          measured four ways.</b> The search on this page works a coarser grid with a smaller budget,
+          so expect it to land near that floor, not under it.</p>
+        <p><b>The clock chord is measured data, nothing more.</b> Its ratios are the standard
+          optical-clock frequency ratios (CCL-CCTF recommended values, 2021), entered as T4 input and
+          used here only as a target shape — no claim attaches to them. On the bench grid the former
+          reached Match <b>0.533</b> against it: <b>the clocks' chord sits lower than this family's
+          reach</b> — this family's lowest mode ratios do not go down where the clocks live.</p>
+        <p><b>The rules are the design.</b> The search may only propose chambers the rulebook allows —
+          width and height in [0.8, 1.3], aspect between 0.5 and 2, corner power in [2, 6], ripple at
+          most 0.15 with at most 8 lobes, walls clear of the solver box. The rules are carried as data
+          and checked for every candidate, the way the knowledge-based design systems carried them.</p>
+        <p>It runs right here in your browser. No account, no install, no tracking.</p>
+        <p><b>Free forever, for everyone — one common bond.</b></p>
+      </div>
+
+      <footer>
+        Spectral Chamber Former · an exhibit of Nexus Research · a rule-driven former over a
+        finite-difference spectral solver, computed live. Companion exhibits: the Walker, the
+        Rotating Tesseract, the Vortex Stepper, Joule→Kernel, the Flipping Point.
+      </footer>
+    </div>
+
+    <script>
+/*
+ * rapid-former core (Brick A) — ICAD-style knowledge-based generation of a 2D
+ * reflective resonance chamber. Design RULES (data) generate candidate cavity
+ * geometries; each candidate's Dirichlet-Laplacian mode spectrum is computed
+ * by finite differences; a seeded search "rapid-forms" the geometry whose
+ * normalized gap ratios best match a target.
+ *
+ * Fence: this is an instrument/exhibit computation. No physics claims.
+ * Pure node, no dependencies. A later exhibit page can require() this file's
+ * logic (or inline it).
+ */
+
+// ---------------------------------------------------------------- RNG
+function mulberry32(seed) {
+  let t = seed >>> 0;
+  return function () {
+    t += 0x6D2B79F5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// ---------------------------------------------------------------- RULES (as data — the ICAD homage)
+const RULES = {
+  a:        { min: 0.8,  max: 1.3,  label: 'semi-axis a' },
+  b:        { min: 0.8,  max: 1.3,  label: 'semi-axis b' },
+  aspect:   { min: 0.5,  max: 2.0,  label: 'a/b ratio' },
+  p:        { min: 2,    max: 6,    label: 'superellipse exponent p' },
+  rippleAmp:{ min: 0,    max: 0.15, label: 'wall ripple amplitude r' },
+  rippleLobes: { min: 0, max: 8, integer: true, label: 'ripple lobe count k' },
+  // the cavity must sit at least this many grid units inside the solver box
+  minWallClearanceGridUnits: 2,
+  boxHalf: 1.8,          // solver box is [-boxHalf, boxHalf]^2
+  gridN: 29,             // nodes per side (interior points <= 28x28 by construction)
+};
+
+function checkRules(prm, rules = RULES) {
+  const v = [];
+  const R = rules;
+  if (!(prm.a >= R.a.min && prm.a <= R.a.max)) v.push(`a-range: a=${prm.a} outside [${R.a.min}, ${R.a.max}]`);
+  if (!(prm.b >= R.b.min && prm.b <= R.b.max)) v.push(`b-range: b=${prm.b} outside [${R.b.min}, ${R.b.max}]`);
+  const asp = prm.a / prm.b;
+  if (!(asp >= R.aspect.min && asp <= R.aspect.max)) v.push(`aspect-ratio: a/b=${asp.toFixed(3)} outside [${R.aspect.min}, ${R.aspect.max}]`);
+  if (!(prm.p >= R.p.min && prm.p <= R.p.max)) v.push(`p-range: p=${prm.p} outside [${R.p.min}, ${R.p.max}]`);
+  if (!(prm.rippleAmp >= R.rippleAmp.min && prm.rippleAmp <= R.rippleAmp.max)) v.push(`ripple-amp: r=${prm.rippleAmp} outside [${R.rippleAmp.min}, ${R.rippleAmp.max}]`);
+  if (!(Number.isInteger(prm.rippleLobes) && prm.rippleLobes >= R.rippleLobes.min && prm.rippleLobes <= R.rippleLobes.max))
+    v.push(`ripple-lobes: k=${prm.rippleLobes} not an integer in [${R.rippleLobes.min}, ${R.rippleLobes.max}]`);
+  if (prm.rippleLobes === 0 && prm.rippleAmp !== 0)
+    v.push('ripple-k0: k=0 makes ripple a pure rescale; r must be 0');
+  // wall clearance, in grid units: max radial extent vs the solver box
+  const h = (2 * R.boxHalf) / (R.gridN - 1);
+  const extent = Math.max(prm.a, prm.b) * (1 + prm.rippleAmp);
+  const clearance = (R.boxHalf - extent) / h;
+  if (clearance < R.minWallClearanceGridUnits)
+    v.push(`wall-clearance: ${clearance.toFixed(2)} grid units < ${R.minWallClearanceGridUnits}`);
+  return v;
+}
+
+// ---------------------------------------------------------------- geometry
+// Superellipse polar radius in direction theta, with radial ripple.
+function boundaryRadius(theta, prm) {
+  const c = Math.cos(theta), s = Math.sin(theta);
+  const base = Math.pow(Math.pow(Math.abs(c) / prm.a, prm.p) + Math.pow(Math.abs(s) / prm.b, prm.p), -1 / prm.p);
+  return base * (1 + prm.rippleAmp * Math.cos(prm.rippleLobes * theta));
+}
+function insideShape(x, y, prm) {
+  if (prm.shape === 'rect') return Math.abs(x) < prm.a && Math.abs(y) < prm.b;
+  const r = Math.hypot(x, y);
+  if (r === 0) return true;
+  return r < boundaryRadius(Math.atan2(y, x), prm);
+}
+
+// Build the 5-point-stencil Dirichlet Laplacian as a stencil-apply operator
+// over interior grid points only. Returns { n, h, apply, points }.
+function buildOperator(prm, rules = RULES) {
+  const N = rules.gridN, half = rules.boxHalf;
+  const h = (2 * half) / (N - 1);
+  const idx = new Int32Array(N * N).fill(-1);
+  const pts = [];
+  for (let j = 0; j < N; j++) {
+    for (let i = 0; i < N; i++) {
+      const x = -half + i * h, y = -half + j * h;
+      if (insideShape(x, y, prm)) { idx[j * N + i] = pts.length; pts.push([i, j]); }
+    }
+  }
+  const n = pts.length;
+  const inv = 1 / (h * h);
+  function apply(v, out) {
+    out.fill(0);
+    for (let q = 0; q < n; q++) {
+      const [i, j] = pts[q];
+      let s = 4 * v[q];
+      let nb;
+      nb = i > 0     ? idx[j * N + i - 1] : -1; if (nb >= 0) s -= v[nb];
+      nb = i < N - 1 ? idx[j * N + i + 1] : -1; if (nb >= 0) s -= v[nb];
+      nb = j > 0     ? idx[(j - 1) * N + i] : -1; if (nb >= 0) s -= v[nb];
+      nb = j < N - 1 ? idx[(j + 1) * N + i] : -1; if (nb >= 0) s -= v[nb];
+      out[q] = s * inv;
+    }
+    return out;
+  }
+  return { n, h, apply, points: pts };
+}
+
+// Rectangle operator on an exact nx-by-ny interior grid with spacing h
+// (for solver verification against the closed-form discrete spectrum).
+function buildRectOperator(nx, ny, h) {
+  const n = nx * ny, inv = 1 / (h * h);
+  function apply(v, out) {
+    for (let y = 0; y < ny; y++) {
+      for (let x = 0; x < nx; x++) {
+        const q = y * nx + x;
+        let s = 4 * v[q];
+        if (x > 0) s -= v[q - 1];
+        if (x < nx - 1) s -= v[q + 1];
+        if (y > 0) s -= v[q - nx];
+        if (y < ny - 1) s -= v[q + nx];
+        out[q] = s * inv;
+      }
+    }
+    return out;
+  }
+  return { n, h, apply };
+}
+function rectExactEigenvalues(nx, ny, h, count) {
+  const vals = [];
+  for (let m = 1; m <= nx; m++)
+    for (let nn = 1; nn <= ny; nn++)
+      vals.push((4 / (h * h)) * (Math.pow(Math.sin((m * Math.PI) / (2 * (nx + 1))), 2) +
+                                 Math.pow(Math.sin((nn * Math.PI) / (2 * (ny + 1))), 2)));
+  vals.sort((x, y) => x - y);
+  return vals.slice(0, count);
+}
+
+// ---------------------------------------------------------------- small symmetric eigensolver (cyclic Jacobi)
+function jacobiEigen(Ain) {
+  const n = Ain.length;
+  const A = Ain.map((row) => Float64Array.from(row));
+  const V = Array.from({ length: n }, (_, i) => { const r = new Float64Array(n); r[i] = 1; return r; });
+  for (let sweep = 0; sweep < 100; sweep++) {
+    let off = 0;
+    for (let p = 0; p < n; p++) for (let q = p + 1; q < n; q++) off += A[p][q] * A[p][q];
+    if (off < 1e-30) break;
+    for (let p = 0; p < n - 1; p++) {
+      for (let q = p + 1; q < n; q++) {
+        const apq = A[p][q];
+        if (Math.abs(apq) < 1e-300) continue;
+        const app = A[p][p], aqq = A[q][q];
+        const phi = 0.5 * Math.atan2(2 * apq, aqq - app);
+        const c = Math.cos(phi), s = Math.sin(phi);
+        for (let k = 0; k < n; k++) {
+          const akp = A[k][p], akq = A[k][q];
+          A[k][p] = c * akp - s * akq; A[k][q] = s * akp + c * akq;
+        }
+        for (let k = 0; k < n; k++) {
+          const apk = A[p][k], aqk = A[q][k];
+          A[p][k] = c * apk - s * aqk; A[q][k] = s * apk + c * aqk;
+        }
+        for (let k = 0; k < n; k++) {
+          const vkp = V[k][p], vkq = V[k][q];
+          V[k][p] = c * vkp - s * vkq; V[k][q] = s * vkp + c * vkq;
+        }
+      }
+    }
+  }
+  const vals = Array.from({ length: n }, (_, i) => A[i][i]);
+  const order = vals.map((v, i) => i).sort((x, y) => vals[x] - vals[y]);
+  return {
+    values: order.map((i) => vals[i]),
+    vectors: order.map((i) => V.map((row) => row[i])), // vectors[k][component]
+  };
+}
+
+// ---------------------------------------------------------------- Lanczos for the smallest `need` eigenvalues
+// Runs Lanczos on B = shift*I - A (shift = 8/h^2, the Gershgorin bound of the
+// 5-point Laplacian), whose LARGEST eigenvalues are A's smallest. Full
+// reorthogonalization; exact Ritz residuals checked periodically.
+function smallestEigen(op, need = 8, opts = {}) {
+  const tol = opts.tol || 1e-10;             // relative residual target
+  const mMax = opts.mMax || 320;
+  const rng = mulberry32(opts.seed === undefined ? 1234567 : opts.seed);
+  const n = op.n, shift = 8 / (op.h * op.h);
+  const applyB = (v, out) => { op.apply(v, out); for (let i = 0; i < n; i++) out[i] = shift * v[i] - out[i]; return out; };
+
+  const Q = [];       // Lanczos basis vectors
+  const alph = [], bet = [];
+  let q = new Float64Array(n);
+  for (let i = 0; i < n; i++) q[i] = rng() - 0.5;
+  let nrm = Math.hypot(...q); q = q.map((x) => x / nrm);
+  Q.push(q);
+  let w = new Float64Array(n), ritz = null, residuals = null;
+
+  // Diagonalize the current T (size m) and return {values, vectors} (ascending).
+  const diagT = (m) => {
+    const T = Array.from({ length: m }, () => new Float64Array(m));
+    for (let i = 0; i < m; i++) { T[i][i] = alph[i]; if (i > 0) { T[i][i - 1] = bet[i - 1]; T[i - 1][i] = bet[i - 1]; } }
+    return jacobiEigen(T);
+  };
+  // Exact residuals for the `need` smallest-A Ritz pairs from a T diagonalization.
+  const exactCheck = (m, eig) => {
+    const sel = [];
+    for (let k = m - 1; k >= Math.max(0, m - need); k--) sel.push(k);
+    // k descending = thetaB descending = lambdaA ascending. Do NOT reverse.
+    const lam = [], res = [];
+    const tmp = new Float64Array(n), Av = new Float64Array(n);
+    for (const k of sel) {
+      const lamA = shift - eig.values[k];
+      const vec = eig.vectors[k];
+      tmp.fill(0);
+      for (let j = 0; j < m; j++) { const c = vec[j]; if (c !== 0) for (let i = 0; i < n; i++) tmp[i] += c * Q[j][i]; }
+      op.apply(tmp, Av);
+      let rs = 0; for (let i = 0; i < n; i++) { const d = Av[i] - lamA * tmp[i]; rs += d * d; }
+      lam.push(lamA); res.push(Math.sqrt(rs));
+    }
+    return { lam, res };
+  };
+
+  for (let m = 1; m <= mMax; m++) {
+    applyB(Q[m - 1], w);
+    const a = dot(w, Q[m - 1]);
+    alph.push(a);
+    for (let i = 0; i < n; i++) w[i] -= a * Q[m - 1][i];
+    if (m > 1) { const bprev = bet[m - 2]; for (let i = 0; i < n; i++) w[i] -= bprev * Q[m - 2][i]; }
+    // full reorthogonalization (two passes)
+    for (let pass = 0; pass < 2; pass++)
+      for (let k = 0; k < m; k++) { const d = dot(w, Q[k]); for (let i = 0; i < n; i++) w[i] -= d * Q[k][i]; }
+    const b = Math.hypot(...w);
+    if (m >= need + 6 && m % 10 === 0) {
+      // cheap convergence estimate: ||r|| ~= |beta_m * (last component of Ritz vector)|
+      const eig = diagT(m);
+      let estOk = true;
+      for (let k = m - 1; k >= Math.max(0, m - need); k--) {
+        const lamA = shift - eig.values[k];
+        const est = Math.abs(b * eig.vectors[k][m - 1]);
+        if (est > 0.3 * tol * Math.max(1, lamA)) { estOk = false; break; }
+      }
+      if (estOk) {
+        const { lam, res } = exactCheck(m, eig);
+        ritz = lam; residuals = res;
+        if (res.every((r, i) => r <= tol * Math.max(1, lam[i]))) break;
+      }
+    }
+    if (b < 1e-13 || m === mMax) {
+      const eig = diagT(m);
+      const { lam, res } = exactCheck(m, eig);
+      ritz = lam; residuals = res;
+      break;
+    }
+    bet.push(b);
+    Q.push(Float64Array.from(w.map((x) => x / b)));
+  }
+  if (!ritz) throw new Error('Lanczos did not produce Ritz pairs');
+  return { eigenvalues: ritz, residuals, steps: Q.length };
+}
+function dot(u, v) { let s = 0; for (let i = 0; i < u.length; i++) s += u[i] * v[i]; return s; }
+
+// ---------------------------------------------------------------- dense shift-invert subspace solver
+// For n <= 700: build A densely (via stencil applies to unit vectors), Cholesky
+// factor it once, and run subspace iteration on A^{-1} with Rayleigh-Ritz.
+// Converges far faster than Lanczos on the shifted operator for clustered
+// low modes. Returns the same shape as smallestEigen.
+function smallestEigenDense(op, need = 8, opts = {}) {
+  const tol = opts.tol || 1e-10;
+  const n = op.n;
+  const rng = mulberry32(opts.seed === undefined ? 246813579 : opts.seed);
+  // dense A, column-major not needed; store rows as Float64Array
+  const A = new Float64Array(n * n);
+  const e = new Float64Array(n), col = new Float64Array(n);
+  for (let j = 0; j < n; j++) {
+    e.fill(0); e[j] = 1;
+    op.apply(e, col);
+    for (let i = 0; i < n; i++) A[i * n + j] = col[i];
+  }
+  // Cholesky A = L L^T (in place, lower)
+  const L = Float64Array.from(A);
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j <= i; j++) {
+      let s = L[i * n + j];
+      for (let k = 0; k < j; k++) s -= L[i * n + k] * L[j * n + k];
+      if (i === j) { if (s <= 0) throw new Error('operator not SPD'); L[i * n + i] = Math.sqrt(s); }
+      else L[i * n + j] = s / L[j * n + j];
+    }
+    for (let j = i + 1; j < n; j++) L[i * n + j] = 0;
+  }
+  const solve = (b) => { // returns x with A x = b, using L
+    const x = Float64Array.from(b);
+    for (let i = 0; i < n; i++) { let s = x[i]; for (let k = 0; k < i; k++) s -= L[i * n + k] * x[k]; x[i] = s / L[i * n + i]; }
+    for (let i = n - 1; i >= 0; i--) { let s = x[i]; for (let k = i + 1; k < n; k++) s -= L[k * n + i] * x[k]; x[i] = s / L[i * n + i]; }
+    return x;
+  };
+  const B = Math.min(n, need + 6);
+  let Q = [];
+  for (let c = 0; c < B; c++) { const v = new Float64Array(n); for (let i = 0; i < n; i++) v[i] = rng() - 0.5; Q.push(v); }
+  const orthonormalize = (vecs) => {
+    const out = [];
+    for (const v0 of vecs) {
+      const v = Float64Array.from(v0);
+      for (let pass = 0; pass < 2; pass++)
+        for (const q of out) { const d = dot(v, q); for (let i = 0; i < n; i++) v[i] -= d * q[i]; }
+      const nn = Math.sqrt(dot(v, v));
+      if (nn < 1e-12) continue;
+      for (let i = 0; i < n; i++) v[i] /= nn;
+      out.push(v);
+    }
+    return out;
+  };
+  Q = orthonormalize(Q);
+  let lam = null, res = null;
+  const AQ = (q) => { const out = new Float64Array(n); op.apply(q, out); return out; };
+  for (let iter = 0; iter < 300; iter++) {
+    const Y = Q.map((q) => solve(q));
+    Q = orthonormalize(Y);
+    // Rayleigh-Ritz
+    const AQv = Q.map(AQ);
+    const T = Q.map((_, i) => Q.map((_, j) => dot(Q[i], AQv[j])));
+    const eig = jacobiEigen(T.map((r) => Array.from(r)));
+    lam = eig.values.slice(0, need);
+    res = [];
+    let ok = true;
+    for (let k = 0; k < need; k++) {
+      const vec = eig.vectors[k];
+      const y = new Float64Array(n), Ay = new Float64Array(n);
+      for (let j = 0; j < Q.length; j++) { const c = vec[j]; if (c !== 0) for (let i = 0; i < n; i++) { y[i] += c * Q[j][i]; Ay[i] += c * AQv[j][i]; } }
+      let rs = 0; for (let i = 0; i < n; i++) { const d = Ay[i] - lam[k] * y[i]; rs += d * d; }
+      rs = Math.sqrt(rs); res.push(rs);
+      if (rs > tol * Math.max(1, lam[k])) ok = false;
+    }
+    if (ok) return { eigenvalues: lam, residuals: res, steps: iter + 1 };
+  }
+  return { eigenvalues: lam, residuals: res, steps: 300 };
+}
+
+// ---------------------------------------------------------------- spectrum of a chamber candidate
+function spectrum(prm, opts = {}) {
+  const op = buildOperator(prm);
+  const r = op.n <= 700
+    ? smallestEigenDense(op, 8, { tol: opts.tol || 1e-9, seed: 987654321 })
+    : smallestEigen(op, 8, { tol: opts.tol || 1e-9, seed: 987654321 });
+  return { eigenvalues: r.eigenvalues, residuals: r.residuals, interiorPoints: op.n, h: op.h };
+}
+
+// ---------------------------------------------------------------- targets
+const TARGETS = {
+  harmonic: [2, 3, 4, 5, 6],
+  // measured optical-clock ratios (entered 2026-10-25) used as a target SHAPE
+  // only — a toy target for the former, fenced as such. Values are lambda_i/lambda_1, i=2..6.
+  clockChord: [1.207507039343337845, 1.495991618544900552, 1.60371404597510300, 2.162887127516663705, 2.611701431781463019],
+};
+function resolveTarget(t) {
+  if (Array.isArray(t)) return t.slice();
+  if (TARGETS[t]) return TARGETS[t].slice();
+  throw new Error('unknown target: ' + t);
+}
+function gapRatios(evals) { return evals.slice(1, 6).map((x) => x / evals[0]); }
+function mismatch(evals, target) {
+  const r = gapRatios(evals);
+  let s = 0;
+  for (let i = 0; i < target.length; i++) { const d = Math.log(r[i] / target[i]); s += d * d; }
+  return Math.sqrt(s / target.length);
+}
+
+// ---------------------------------------------------------------- rapid former
+function randomCandidate(rng) {
+  for (let tries = 0; tries < 200; tries++) {
+    const prm = {
+      shape: 'super',
+      a: 0.8 + 0.5 * rng(),
+      b: 0.8 + 0.5 * rng(),
+      p: 2 + 4 * rng(),
+      rippleLobes: Math.floor(rng() * 9),
+      rippleAmp: 0,
+    };
+    prm.rippleAmp = prm.rippleLobes === 0 ? 0 : 0.15 * rng();
+    if (checkRules(prm).length === 0) return prm;
+  }
+  return { shape: 'super', a: 1, b: 1, p: 2, rippleAmp: 0, rippleLobes: 0 };
+}
+
+function form(target, opts = {}) {
+  const tgt = resolveTarget(target);
+  const budget = opts.budget || 400;
+  const rng = mulberry32(opts.seed === undefined ? 1 : opts.seed);
+  const tol = opts.tol || 3e-6; // search-grade tolerance; best is re-verified tight at the end
+  let evals = 0, best = null;
+  const evaluate = (prm) => {
+    evals++;
+    const sp = spectrum(prm, { tol });
+    const mm = mismatch(sp.eigenvalues, tgt);
+    if (!best || mm < best.mismatch) best = { params: { ...prm }, mismatch: mm, eigenvalues: sp.eigenvalues, ratios: gapRatios(sp.eigenvalues) };
+    return mm;
+  };
+  // Phase 1 — rapid sampling: structured seeds (ellipses & near-rectangles at
+  // several aspects) plus random rule-satisfying forms. Pool keeps the best 10.
+  const pool = [];
+  const poolPush = (prm, mm) => {
+    pool.push({ prm, mm });
+    pool.sort((x, y) => x.mm - y.mm);
+    if (pool.length > 10) pool.length = 10;
+  };
+  const structured = [];
+  for (const asp of [0.55, 0.75, 1, 1.35, 1.8]) for (const p of [2, 4, 5.8]) {
+    const b = 1.0, a = Math.min(RULES.a.max, Math.max(RULES.a.min, asp * b));
+    structured.push({ shape: 'super', a, b, p, rippleAmp: 0, rippleLobes: 0 });
+  }
+  for (const prm of structured) { if (evals >= budget) break; if (checkRules(prm).length === 0) poolPush(prm, evaluate(prm)); }
+  const nSample = Math.min(50, Math.floor(budget / 5));
+  for (let i = 0; i < nSample && evals < budget; i++) { const prm = randomCandidate(rng); poolPush(prm, evaluate(prm)); }
+  // Phase 2 — population mutation: mutate a pool parent (gaussian steps in all
+  // coordinates, plus dedicated aspect-stretch moves and lobe mutations);
+  // offspring enters the pool if it earns a place. Step scale anneals.
+  let scale = 1;
+  while (evals < budget && pool.length) {
+    const parent = pool[Math.floor(Math.pow(rng(), 1.6) * pool.length)].prm;
+    const prm = { ...parent };
+    const move = rng();
+    if (move < 0.18) { // aspect stretch: a and b in opposite directions
+      const d = (rng() * 2 - 1) * 0.09 * scale;
+      prm.a += d; prm.b -= d * (prm.b / prm.a);
+    } else if (move < 0.30) { // lobe mutation
+      prm.rippleLobes = Math.floor(rng() * 9);
+      if (prm.rippleLobes === 0) prm.rippleAmp = 0; else if (prm.rippleAmp === 0) prm.rippleAmp = 0.03 + 0.05 * rng();
+    } else {
+      prm.a += (rng() * 2 - 1) * 0.07 * scale;
+      prm.b += (rng() * 2 - 1) * 0.07 * scale;
+      prm.p += (rng() * 2 - 1) * 0.55 * scale;
+      if (prm.rippleLobes > 0) prm.rippleAmp += (rng() * 2 - 1) * 0.03 * scale;
+    }
+    // clamp into the rule box (hard bounds only; full rule check below)
+    prm.a = Math.min(RULES.a.max, Math.max(RULES.a.min, prm.a));
+    prm.b = Math.min(RULES.b.max, Math.max(RULES.b.min, prm.b));
+    prm.p = Math.min(RULES.p.max, Math.max(RULES.p.min, prm.p));
+    prm.rippleAmp = Math.min(RULES.rippleAmp.max, Math.max(0, prm.rippleAmp));
+    if (prm.rippleLobes === 0) prm.rippleAmp = 0;
+    if (checkRules(prm).length !== 0) continue;
+    poolPush(prm, evaluate(prm));
+    scale = Math.max(0.12, scale * 0.997);
+  }
+  // Final: re-verify the champion at tight tolerance (counted as one evaluation).
+  if (best) {
+    evals++;
+    const sp = spectrum(best.params, { tol: 1e-9 });
+    best = { params: best.params, mismatch: mismatch(sp.eigenvalues, tgt), eigenvalues: sp.eigenvalues, ratios: gapRatios(sp.eigenvalues) };
+  }
+  return { best, evaluations: evals, target: tgt };
+}
+
+// normalized parameter-space distance (each coordinate scaled by its rule range)
+function paramDistance(p1, p2) {
+  const d = [
+    (p1.a - p2.a) / (RULES.a.max - RULES.a.min),
+    (p1.b - p2.b) / (RULES.b.max - RULES.b.min),
+    (p1.p - p2.p) / (RULES.p.max - RULES.p.min),
+    (p1.rippleAmp - p2.rippleAmp) / (RULES.rippleAmp.max - RULES.rippleAmp.min),
+    (p1.rippleLobes - p2.rippleLobes) / (RULES.rippleLobes.max - RULES.rippleLobes.min),
+  ];
+  return Math.hypot(...d);
+}
+
+// Isospectral twin check: second search from a different seed/region; is there
+// a DISTINCT form whose spectrum matches (nearly) as well? (Non-uniqueness demo.)
+function twinCheck(target, first, opts = {}) {
+  const seed2 = (opts.seed === undefined ? 1 : opts.seed) + 7919;
+  const second = form(target, { seed: seed2, budget: opts.budget || 300, tol: opts.tol });
+  const dist = paramDistance(first.best.params, second.best.params);
+  return {
+    twin: second.best,
+    distance: dist,
+    distinct: dist > 0.15,
+    near: second.best.mismatch <= 1.5 * first.best.mismatch,
+    isospectralTwinFound: dist > 0.15 && second.best.mismatch <= 1.5 * first.best.mismatch,
+  };
+}
+
+
+/* The bench core runs a 29×29 solver box; this page runs the coarser 23×23
+   grid printed on its face. Same solver, same rules, smaller picture. */
+RULES.gridN = 23;
+
+'use strict';
+/* ---------- Spectral Chamber Former — page logic ----------
+   Display, stepwise search (mirrors the bench former's phases, using the
+   core primitives above), and the twin check. */
+
+function $(id) { return document.getElementById(id); }
+function fmt(x, d) { return x.toFixed(d === undefined ? 3 : d); }
+var SUBS = ['\u2080','\u2081','\u2082','\u2083','\u2084','\u2085','\u2086','\u2087','\u2088'];
+
+var PAGE = {
+  target: 'harmonic',
+  last: null,          // last display computation {prm, disp, ratios, mismatch}
+  champion: null,      // {params, mismatch, target} from Form chamber
+  twin: null,          // {params, mismatch, distance, champMismatch}
+  forming: false,
+};
+
+var FORM_BUDGET = 80, FORM_SEED = 42, TWIN_SEED = 9943;
+
+/* ---------- ground-state mode (for the shading) ----------
+   Inverse iteration on the same discrete operator, factored once by
+   Cholesky — the first eigenvector, to draw the first mode's shape. */
+function groundMode(op) {
+  var n = op.n;
+  if (!n) return [];
+  var A = new Float64Array(n * n);
+  var e = new Float64Array(n), col = new Float64Array(n);
+  for (var j = 0; j < n; j++) {
+    e.fill(0); e[j] = 1;
+    op.apply(e, col);
+    for (var i = 0; i < n; i++) A[i * n + j] = col[i];
+  }
+  var L = Float64Array.from(A);
+  for (var i = 0; i < n; i++) {
+    for (var j = 0; j <= i; j++) {
+      var s = L[i * n + j];
+      for (var k = 0; k < j; k++) s -= L[i * n + k] * L[j * n + k];
+      if (i === j) L[i * n + i] = Math.sqrt(Math.max(s, 1e-300));
+      else L[i * n + j] = s / L[j * n + j];
+    }
+    for (var j2 = i + 1; j2 < n; j2++) L[i * n + j2] = 0;
+  }
+  function solve(b) {
+    var x = Float64Array.from(b);
+    for (var i = 0; i < n; i++) { var s = x[i]; for (var k = 0; k < i; k++) s -= L[i * n + k] * x[k]; x[i] = s / L[i * n + i]; }
+    for (var i = n - 1; i >= 0; i--) { var s = x[i]; for (var k = i + 1; k < n; k++) s -= L[k * n + i] * x[k]; x[i] = s / L[i * n + i]; }
+    return x;
+  }
+  var rng = mulberry32(13579);
+  var x = new Float64Array(n);
+  for (var i = 0; i < n; i++) x[i] = rng() - 0.5;
+  for (var it = 0; it < 80; it++) {
+    var y = solve(x);
+    var nn = 0; for (var i = 0; i < n; i++) nn += y[i] * y[i];
+    nn = Math.sqrt(nn) || 1;
+    var diff = 0;
+    for (var i = 0; i < n; i++) { y[i] /= nn; diff = Math.max(diff, Math.abs(y[i] - x[i])); }
+    x = y;
+    if (diff < 1e-10) break;
+  }
+  var mi = 0;
+  for (var i = 0; i < n; i++) if (Math.abs(x[i]) > Math.abs(x[mi])) mi = i;
+  if (x[mi] < 0) for (var i = 0; i < n; i++) x[i] = -x[i];
+  return Array.from(x);
+}
+
+function computeDisplay(prm, tol) {
+  var op = buildOperator(prm);
+  var eig = op.n <= 700
+    ? smallestEigenDense(op, 8, { tol: tol || 1e-7, seed: 987654321 })
+    : smallestEigen(op, 8, { tol: tol || 1e-7, seed: 987654321 });
+  return {
+    eigenvalues: eig.eigenvalues,
+    points: op.points,
+    h: op.h,
+    mode: groundMode(op),
+  };
+}
+
+/* ---------- drawing ---------- */
+function drawChamber(cv, prm, disp) {
+  if (!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  if (!ctx) return;
+  var W = cv.width || 680, H = cv.height || 440;
+  ctx.clearRect(0, 0, W, H);
+  var half = RULES.boxHalf;
+  var scale = (Math.min(W, H) / (2 * half)) * 0.94;
+  var cx = W / 2, cy = H / 2;
+  function px(x) { return cx + x * scale; }
+  function py(y) { return cy - y * scale; }
+  if (disp && disp.mode && disp.points) {
+    var mx = 0;
+    for (var i = 0; i < disp.mode.length; i++) mx = Math.max(mx, disp.mode[i]);
+    var cell = Math.max(2, disp.h * scale * 1.06);
+    for (var q = 0; q < disp.points.length; q++) {
+      var ij = disp.points[q];
+      var gx = -half + ij[0] * disp.h, gy = -half + ij[1] * disp.h;
+      var v = mx > 0 ? disp.mode[q] / mx : 0;
+      ctx.fillStyle = 'rgba(91,157,255,' + (0.07 + 0.88 * v).toFixed(3) + ')';
+      ctx.fillRect(px(gx) - cell / 2, py(gy) - cell / 2, cell, cell);
+    }
+  }
+  ctx.strokeStyle = '#e8e6e0';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (var s = 0; s <= 180; s++) {
+    var th = (s / 180) * 2 * Math.PI;
+    var r = boundaryRadius(th, prm);
+    var X = Math.cos(th) * r, Y = Math.sin(th) * r;
+    if (s === 0) ctx.moveTo(px(X), py(Y)); else ctx.lineTo(px(X), py(Y));
+  }
+  ctx.closePath();
+  ctx.stroke();
+}
+
+/* ---------- sliders / readouts ---------- */
+function readSliders() {
+  return {
+    shape: 'super',
+    a: parseFloat($('sA').value),
+    b: parseFloat($('sB').value),
+    p: parseFloat($('sP').value),
+    rippleAmp: parseFloat($('sR').value),
+    rippleLobes: parseInt($('sK').value, 10),
+  };
+}
+function refreshLabels() {
+  var p = readSliders();
+  $('valA').textContent = fmt(p.a, 2);
+  $('valB').textContent = fmt(p.b, 2);
+  $('valP').textContent = fmt(p.p, 1);
+  $('valR').textContent = fmt(p.rippleAmp, 3);
+  $('valK').textContent = String(p.rippleLobes);
+}
+function setSliders(prm) {
+  $('sA').value = prm.a;
+  $('sB').value = prm.b;
+  $('sP').value = prm.p;
+  $('sR').value = prm.rippleAmp;
+  $('sK').value = prm.rippleLobes;
+  refreshLabels();
+}
+
+function updateReadouts() {
+  refreshLabels();
+  var prm = readSliders();
+  var disp = computeDisplay(prm);
+  var tgt = resolveTarget(PAGE.target);
+  var ratios = gapRatios(disp.eigenvalues);
+  var mm = mismatch(disp.eigenvalues, tgt);
+  PAGE.last = { prm: prm, disp: disp, ratios: ratios, mismatch: mm };
+  $('lam1Val').textContent = fmt(disp.eigenvalues[0]);
+  $('matchVal').textContent = fmt(mm);
+  $('matchVal2').textContent = fmt(mm);
+  var html = '';
+  for (var i = 0; i < 5; i++) {
+    var r = ratios[i], t = tgt[i];
+    var mxr = Math.max(r, t) * 1.12;
+    html += '<div class="gap-row"><span class="gap-lab">\u03bb' + SUBS[i + 2] + ' / \u03bb\u2081</span>'
+      + '<div class="gap-line"><span class="gap-tag">chamber</span><div class="gap-track"><div class="gap-fill chamber" style="width:' + (100 * r / mxr).toFixed(1) + '%"></div></div><span class="gap-num">' + fmt(r) + '</span></div>'
+      + '<div class="gap-line"><span class="gap-tag">target</span><div class="gap-track"><div class="gap-fill target" style="width:' + (100 * t / mxr).toFixed(1) + '%"></div></div><span class="gap-num">' + fmt(t) + '</span></div>'
+      + '</div>';
+  }
+  $('gapBars').innerHTML = html;
+  drawChamber($('cv'), prm, disp);
+  return PAGE.last;
+}
+
+/* ---------- stepwise search — the bench former's phases, one candidate
+   per step, built on the core primitives (spectrum / mismatch /
+   checkRules / randomCandidate), so the page can animate the pour. */
+function makeSearch(targetKey, budget, seed) {
+  var tgt = resolveTarget(targetKey);
+  var rng = mulberry32(seed);
+  var tol = 3e-6;
+  var evals = 0, best = null, doneFlag = false;
+  var pool = [];
+  function evaluate(prm) {
+    evals++;
+    var sp = spectrum(prm, { tol: tol });
+    var mm = mismatch(sp.eigenvalues, tgt);
+    if (!best || mm < best.mismatch) {
+      best = { params: Object.assign({}, prm), mismatch: mm, eigenvalues: sp.eigenvalues, ratios: gapRatios(sp.eigenvalues) };
+    }
+    return mm;
+  }
+  function poolPush(prm, mm) {
+    pool.push({ prm: prm, mm: mm });
+    pool.sort(function (x, y) { return x.mm - y.mm; });
+    if (pool.length > 10) pool.length = 10;
+  }
+  var structured = [];
+  [0.55, 0.75, 1, 1.35, 1.8].forEach(function (asp) {
+    [2, 4, 5.8].forEach(function (p) {
+      var b = 1.0, a = Math.min(RULES.a.max, Math.max(RULES.a.min, asp * b));
+      structured.push({ shape: 'super', a: a, b: b, p: p, rippleAmp: 0, rippleLobes: 0 });
+    });
+  });
+  var nSample = Math.min(50, Math.floor(budget / 5));
+  var phase = 0, sIdx = 0, sampled = 0, scale = 1;
+  function step() {
+    if (doneFlag) return;
+    if (phase === 0) {
+      if (sIdx < structured.length && evals < budget) {
+        var prm0 = structured[sIdx++];
+        if (checkRules(prm0).length === 0) poolPush(prm0, evaluate(prm0));
+      } else phase = 1;
+      return;
+    }
+    if (phase === 1) {
+      if (sampled < nSample && evals < budget) {
+        sampled++;
+        var c = randomCandidate(rng);
+        poolPush(c, evaluate(c));
+      } else phase = 2;
+      return;
+    }
+    if (evals < budget && pool.length) {
+      var parent = pool[Math.floor(Math.pow(rng(), 1.6) * pool.length)].prm;
+      var prm = Object.assign({}, parent);
+      var move = rng();
+      if (move < 0.18) {
+        var d = (rng() * 2 - 1) * 0.09 * scale;
+        prm.a += d; prm.b -= d * (prm.b / prm.a);
+      } else if (move < 0.30) {
+        prm.rippleLobes = Math.floor(rng() * 9);
+        if (prm.rippleLobes === 0) prm.rippleAmp = 0;
+        else if (prm.rippleAmp === 0) prm.rippleAmp = 0.03 + 0.05 * rng();
+      } else {
+        prm.a += (rng() * 2 - 1) * 0.07 * scale;
+        prm.b += (rng() * 2 - 1) * 0.07 * scale;
+        prm.p += (rng() * 2 - 1) * 0.55 * scale;
+        if (prm.rippleLobes > 0) prm.rippleAmp += (rng() * 2 - 1) * 0.03 * scale;
+      }
+      prm.a = Math.min(RULES.a.max, Math.max(RULES.a.min, prm.a));
+      prm.b = Math.min(RULES.b.max, Math.max(RULES.b.min, prm.b));
+      prm.p = Math.min(RULES.p.max, Math.max(RULES.p.min, prm.p));
+      prm.rippleAmp = Math.min(RULES.rippleAmp.max, Math.max(0, prm.rippleAmp));
+      if (prm.rippleLobes === 0) prm.rippleAmp = 0;
+      if (checkRules(prm).length !== 0) return;
+      poolPush(prm, evaluate(prm));
+      scale = Math.max(0.12, scale * 0.997);
+      return;
+    }
+    if (best) {
+      // final re-verification of the champion at tight tolerance — a re-check
+      // of an already-counted candidate, not a new evaluation.
+      var sp = spectrum(best.params, { tol: 1e-9 });
+      best = { params: best.params, mismatch: mismatch(sp.eigenvalues, tgt), eigenvalues: sp.eigenvalues, ratios: gapRatios(sp.eigenvalues) };
+    }
+    doneFlag = true;
+  }
+  return {
+    step: step,
+    best: function () { return best; },
+    evals: function () { return evals; },
+    done: function () { return doneFlag; },
+  };
+}
+
+function finishForm(b, ev, targetKey) {
+  PAGE.champion = { params: b.params, mismatch: b.mismatch, target: targetKey };
+  setSliders(b.params);
+  updateReadouts();
+  $('formStatus').textContent = 'Done — the best hum the pour found is in the sliders.';
+  var el = $('formResult');
+  el.style.display = 'block';
+  el.innerHTML = 'Formed in <b>' + ev + ' evaluations</b> (budget ' + FORM_BUDGET + ') on a <b>23\u00d723 grid</b>. '
+    + 'Match <b>' + fmt(b.mismatch) + '</b>. Bench gauntlet on a finer grid measured the family floor '
+    + 'for the ladder: \u2248 0.066.';
+}
+
+function runFormAnimated() {
+  if (PAGE.forming) return;
+  PAGE.forming = true;
+  var targetKey = PAGE.target;
+  var search = makeSearch(targetKey, FORM_BUDGET, FORM_SEED);
+  var shown = null;
+  $('formStatus').textContent = 'Forming\u2026 pouring chambers.';
+  function tick() {
+    for (var i = 0; i < 2 && !search.done(); i++) search.step();
+    var b = search.best();
+    if (b && b !== shown) {
+      shown = b;
+      $('formStatus').textContent = 'Forming\u2026 best Match so far ' + fmt(b.mismatch) + ' (' + search.evals() + ' of ' + FORM_BUDGET + ' evaluations)';
+      drawChamber($('cv'), b.params, computeDisplay(b.params, 1e-6));
+    }
+    if (search.done()) {
+      PAGE.forming = false;
+      finishForm(search.best(), search.evals(), targetKey);
+      return;
+    }
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(tick);
+    else setTimeout(tick, 0);
+  }
+  tick();
+}
+
+function runTwin() {
+  var champParams = (PAGE.champion && PAGE.champion.target === PAGE.target)
+    ? PAGE.champion.params : readSliders();
+  var champDisp = computeDisplay(champParams, 1e-9);
+  var champMM = mismatch(champDisp.eigenvalues, resolveTarget(PAGE.target));
+  var search = makeSearch(PAGE.target, FORM_BUDGET, TWIN_SEED);
+  while (!search.done()) search.step();
+  var tw = search.best();
+  var dist = paramDistance(champParams, tw.params);
+  PAGE.twin = { params: tw.params, mismatch: tw.mismatch, distance: dist, champMismatch: champMM, evals: search.evals() };
+  $('twinPanel').style.display = 'block';
+  $('twinParams').textContent = 'a ' + fmt(tw.params.a, 2) + ' \u00b7 b ' + fmt(tw.params.b, 2) + ' \u00b7 p ' + fmt(tw.params.p, 1)
+    + ' \u00b7 ripple ' + fmt(tw.params.rippleAmp) + ' \u00b7 lobes ' + tw.params.rippleLobes;
+  $('twinChampMatch').textContent = fmt(champMM);
+  $('twinMatch').textContent = fmt(tw.mismatch);
+  $('twinDist').textContent = fmt(dist, 2);
+  drawChamber($('cvTwin'), tw.params, computeDisplay(tw.params));
+  return PAGE.twin;
+}
+
+/* ---------- events ---------- */
+['sA', 'sB', 'sP', 'sR', 'sK'].forEach(function (id) {
+  $(id).addEventListener('input', function () { updateReadouts(); });
+});
+$('targetSel').addEventListener('change', function () {
+  PAGE.target = this.value;
+  PAGE.champion = null;
+  updateReadouts();
+});
+$('btnForm').addEventListener('click', function () { runFormAnimated(); });
+$('btnTwin').addEventListener('click', function () { runTwin(); });
+
+/* ---------- init ---------- */
+function sizeCanvases() {
+  var cv = $('cv');
+  if (cv && cv.clientWidth) { cv.width = Math.round(cv.clientWidth); cv.height = Math.round(cv.clientWidth * 0.647); }
+  var ct = $('cvTwin');
+  if (ct && ct.clientWidth) { ct.width = Math.round(ct.clientWidth); ct.height = Math.round(ct.clientWidth * 0.88); }
+}
+if (typeof window !== 'undefined' && window.addEventListener) {
+  window.addEventListener('resize', function () { sizeCanvases(); if (PAGE.last) drawChamber($('cv'), PAGE.last.prm, PAGE.last.disp); });
+}
+sizeCanvases();
+updateReadouts();
+
+/* ---------- hooks for headless verification ---------- */
+window.__chamber = {
+  getState: function () {
+    var L = PAGE.last;
+    return {
+      target: PAGE.target,
+      gridN: RULES.gridN,
+      params: L ? L.prm : null,
+      eigenvalues: L ? L.disp.eigenvalues : null,
+      ratios: L ? L.ratios : null,
+      mismatch: L ? L.mismatch : null,
+      champion: PAGE.champion,
+      twin: PAGE.twin,
+    };
+  },
+  setParams: function (p) { setSliders(p); updateReadouts(); },
+  setTarget: function (t) { PAGE.target = t; $('targetSel').value = t; PAGE.champion = null; updateReadouts(); },
+  runFormSync: function () {
+    var s = makeSearch(PAGE.target, FORM_BUDGET, FORM_SEED);
+    while (!s.done()) s.step();
+    var b = s.best();
+    finishForm(b, s.evals(), PAGE.target);
+    return { params: b.params, mismatch: b.mismatch, evaluations: s.evals(), ratios: b.ratios };
+  },
+  runTwinSync: function () { return runTwin(); },
+  spectrumOf: function (p) { return spectrum(p, { tol: 1e-9 }); },
+};
+
+    </script>
+  </body>
+</html>
