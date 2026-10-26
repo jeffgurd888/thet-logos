@@ -148,3 +148,16 @@ Schoolcraft, Michigan
 *Free forever, for everyone (CC BY).*
 
 **NO CLAIM footer:** Parts of any official statement closed by this document: **0**. This is a dated idea with registered predictions — the data will grade it.
+
+---
+
+## TEST ADDENDUM — 2026-10-25 (appended the day of publication; the body above is untouched)
+
+**Prediction P4 was tested against the published literature the same day it was registered. Verdict: UNTESTABLE.** Full report: `~/workspace/your_files/p4-retrodiction-test-2026-10-25.md` (local record; verdict summarized here at full rank, per the house rule that kills and non-results publish at the same volume as wins).
+
+- No published record — reconstruction or model product — resolves deglacial rotation-pole wander *rate* as a time series over 16–9 ka at the ±2 kyr resolution P4 requires. The only genuine data-derived true-polar-wander reconstruction located (Domeier et al. 2026, *Science*, DOI 10.1126/science.aec8423) samples at 10-million-year intervals — roughly 5,000× coarser than P4's window, with nothing in the Quaternary. The remaining literature is forward GIA modeling with prescribed ice history (whose deglaciation forcing is typically a smooth ramp that does not contain the meltwater pulses at all), integrated deglacial totals, present-day rates, or deep-time reconstructions.
+- Category boundary held: Holocene paleomagnetic secular-variation stacks reach 250–400-yr-class resolution but reconstruct the *geomagnetic* pole, not the rotation pole; they are not P4 evidence at any resolution.
+- **Anchor caveat, independent of resolution:** P4's 11.4 ka window is keyed to Meltwater Pulse 1B, and a standard global inversion (Lambeck et al. 2014, *PNAS*) reports no evidence for a global MWP-1B event at ~11.3 ka. The MWP-1A anchor (~14.6 ka) is solid (Deschamps et al. 2012). P4 is therefore weakened on its own terms, beyond the resolution gap.
+- What would make P4 testable: a purpose-built relative-sea-level inversion for the degree-2/order-1 pole-tide component in ≤1–2 kyr bins across 16–9 ka, or a pulse-resolved forward GIA ensemble that publishes wander rate(t) with uncertainties and the viscoelastic convolution modeled.
+
+P4 earns nothing. UNTESTABLE is neither a kill of the melt–precession coupling (predictions P1–P3 are untouched and grade on their own data) nor a pass. The prediction stays on the register, marked with its verdict.
