@@ -172,3 +172,7 @@ FG-2c-4 IDENTIFY has landed (dossier: `whitepaper/stage2-fg2c4-identify-landing-
 ## Addendum 2026-10-26 (completion transport — PARTIAL by the pre-registered slip)
 
 `SliceTransport.lean` (strict 12) landed A1 (completed weld, by density) and A3 (moment step, b₁² ≤ b₂) IN FULL, and A2's spectrum dichotomy (every real spectral point of transferOp is 1 or ≤ 1 − δ, from GapBoundU1 alone). A2's form-gap step stopped at a machinery obstruction in the pin: `ContinuousFunctionalCalculus ℝ (osSpace →L[ℂ] osSpace) ?p` does not synthesize, and the hand-supplied instance's star is not defeq to `ContinuousLinearMap.instStarId`. NOT a math kill. The correspondence remains a carried hypothesis; its remainder is now exactly A2's form-gap, with Route A′ (compact spectral decomposition, priced L) the named continuation. Dossier: stage2-transport-partial-landing-2026-10-26.md.
+
+## Addendum 2026-10-26 (completion transport — FULL: the correspondence discharged)
+
+Route A′ (`SliceTransportA.lean`, strict 11) proved the form-gap `transferOp_form_gap_circle` by compact spectral decomposition — no cfc at transferOp — and assembled the gap pairing for T̂_c. Headline: `sliceSpectralCorrespondence_of_transport` discharges the battery's named hypothesis `SliceSpectralCorrespondence` at the U(1) seat (carried data: β > 0, δ ∈ (0, 1), GapBoundU1, Hilbert basis). The battery correspondence is now a theorem at the seat; Stage 2's fixed-volume story has no open conjuncts. Items 3 (uniformity) and 4 (continuum) untouched. Dossier: stage2-transportA-full-landing-2026-10-26.md.
