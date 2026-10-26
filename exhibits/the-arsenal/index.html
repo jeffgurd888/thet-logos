@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Picture &amp; The Full Arsenal — Nexus Research</title>
-<meta name="description" content="The 2026 Spectral Model panel, and everything underneath it: 6,004 machine-checked theorems, the papers, the exhibits, the failures — all linked, all free, for anyone to dissect and test.">
+<meta name="description" content="The 2026 Spectral Model panel, and everything underneath it: 6,034 machine-checked theorems, the papers, the exhibits, the failures — all linked, all free, for anyone to dissect and test.">
 <style>
   :root { --bg:#0b0e14; --panel:#12172a; --ink:#e8e6df; --dim:#9a97a3; --gold:#f5b942; --red:#e5534b; --blue:#58a6ff; --green:#3fb950; }
   * { box-sizing:border-box; }
@@ -60,7 +60,7 @@ grep -rn "sorry" ThetLogos/   # exactly 6, all named open obligations</pre>
       <li><b>The six sorrys are named, not hidden:</b> five T5 blocked questions in <code>BlockedQuestions.lean</code> and one T5 tripotent-existence obligation. A seventh — the T3 diagonal KMS identity in <code>ModularTime.lean</code> — was discharged by proof on 2026-10-25. A full proof-dependency audit found <i>zero</i> transitive contamination beyond them: <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/corpus-dependency-audit-2026-10-21.md">corpus-dependency-audit-2026-10-21.md</a>.</li>
       <li><b>Axiom check:</b> headline theorems are verified with <code>#print axioms</code> — only Lean's standard three (<code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>), no <code>sorryAx</code>.</li>
     </ul>
-    <p class="census">Census, 2026-10-26: <b>6,004</b> strict · <b>6,082</b> attribute-inclusive · <b>203</b> counted modules</p>
+    <p class="census">Census, 2026-10-26: <b>6,034</b> strict · <b>6,112</b> attribute-inclusive · <b>204</b> counted modules</p>
   </section>
 
   <section>
