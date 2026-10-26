@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>The Flipping Point — Where the Dzhanibekov Effect Switches On</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0a0c0e;
+        --panel: #121518;
+        --panel-2: #171b1f;
+        --line: #262c31;
+        --ink: #e8e6e0;
+        --ink-dim: #9aa0a3;
+        --ink-faint: #6b7176;
+        --x-red: #ff5a52;
+        --y-blue: #5b9dff;
+        --z-green: #43d97e;
+        --paper: #f2efe6;
+        --accent: #d8c58f;
+        --gold: #e8b34b;
+        --bad: #ff7a6b;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.45;
+      }
+      .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 20px 40px; }
+
+      header { margin-bottom: 22px; }
+      .plate {
+        display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+        border-bottom: 1px solid var(--line); padding-bottom: 16px;
+      }
+      h1 {
+        font-family: Georgia, "Times New Roman", serif; font-weight: 400;
+        font-size: clamp(29px, 5.2vw, 46px); letter-spacing: 0.01em; margin: 0; color: var(--paper);
+      }
+      .plate .no {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--ink-faint); white-space: nowrap;
+      }
+      .subtitle {
+        font-family: Georgia, "Times New Roman", serif; font-style: italic;
+        font-size: clamp(16px, 2.8vw, 21px); color: var(--ink-dim); margin: 12px 0 0; max-width: 76ch;
+      }
+      .subtitle b { color: var(--ink); font-style: normal; font-weight: 600; }
+
+      .stage { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+      @media (max-width: 860px) { .stage { grid-template-columns: 1fr; } }
+      .card {
+        background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+        padding: 16px 18px; margin-bottom: 18px;
+      }
+      .card h2 {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--ink-dim); margin: 0 0 12px; font-weight: 600;
+      }
+      .card p { margin: 0 0 10px; font-size: 14.5px; }
+      .card p:last-child { margin-bottom: 0; }
+      .dim { color: var(--ink-dim); } .faint { color: var(--ink-faint); } .small { font-size: 12.5px; }
+
+      #cv {
+        width: 100%; height: 460px; display: block; border-radius: 8px;
+        background: radial-gradient(120% 90% at 50% 38%, #141a20 0%, #0a0c0e 70%);
+        touch-action: none; cursor: grab;
+      }
+      #cv:active { cursor: grabbing; }
+      @media (max-width: 640px) { #cv { height: 340px; } }
+      .hint { font-size: 12.5px; color: var(--ink-faint); margin-top: 8px; }
+
+      .state-line { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 4px; }
+      .chip {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12.5px; border: 1px solid var(--line); border-radius: 999px;
+        padding: 6px 12px; background: var(--panel-2); color: var(--ink-dim); white-space: nowrap;
+      }
+      .chip b { color: var(--ink); font-weight: 600; }
+      .chip.state-stable b { color: var(--z-green); }
+      .chip.state-flip b { color: var(--bad); }
+      .chip.state-building b { color: var(--gold); }
+
+      .controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+      button {
+        font: inherit; font-size: 14px; min-height: 44px; padding: 9px 16px;
+        border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2);
+        color: var(--ink); cursor: pointer;
+      }
+      button:hover { border-color: var(--ink-faint); }
+      button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+      button.primary { border-color: var(--accent); color: var(--accent); }
+      .btnrow-label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+        color: var(--ink-faint); width: 100%; margin-top: 4px;
+      }
+
+      .slider-block { margin: 14px 0; }
+      .slider-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+      .slider-head .name { font-size: 14.5px; }
+      .slider-head .val {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px; color: var(--ink);
+      }
+      .rank { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; letter-spacing: 0.06em; }
+      .rank.smallest { color: var(--x-red); } .rank.intermediate { color: var(--gold); } .rank.largest { color: var(--z-green); }
+      input[type="range"] { width: 100%; height: 44px; accent-color: var(--accent); }
+      .axisdot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; vertical-align: baseline; }
+      .dot-a { background: var(--x-red); } .dot-b { background: var(--y-blue); } .dot-c { background: var(--z-green); }
+
+      .gauge-wrap { margin: 8px 0 4px; }
+      .gauge {
+        position: relative; height: 26px; border: 1px solid var(--line); border-radius: 6px;
+        background: linear-gradient(90deg, #3a1512 0%, #2c2313 45%, #14231a 100%);
+        overflow: visible;
+      }
+      .gauge .needle {
+        position: absolute; top: -5px; width: 3px; height: 34px; background: var(--paper);
+        border-radius: 2px; transform: translateX(-50%); box-shadow: 0 0 6px rgba(0,0,0,0.7);
+      }
+      .gauge-scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-faint); margin-top: 6px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .gauge-verdict { font-size: 14.5px; margin-top: 10px; }
+      .gauge-verdict b.flip { color: var(--bad); } .gauge-verdict b.safe { color: var(--z-green); }
+
+      .preset-note { font-size: 13.5px; color: var(--ink-dim); border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; margin-top: 12px; }
+      .preset-note b { color: var(--ink); }
+      .preset-note.danger { border-left-color: var(--bad); }
+
+      .nums { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px; }
+      .nums .row { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px dashed var(--line); }
+      .nums .row:last-child { border-bottom: none; }
+      .nums .k { color: var(--ink-dim); } .nums .v { color: var(--ink); text-align: right; }
+
+      .label-card .stamp {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        display: inline-block; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase;
+        border: 1px solid var(--accent); color: var(--accent); border-radius: 4px; padding: 4px 9px; margin: 0 0 12px;
+      }
+      .label-card p { font-size: 13.5px; color: var(--ink-dim); }
+      .label-card p b { color: var(--ink); }
+      footer { color: var(--ink-faint); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 14px; margin-top: 6px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="plate">
+          <h1>The Flipping Point</h1>
+          <span class="no">Exhibit · Rigid-body dynamics</span>
+        </div>
+        <p class="subtitle">
+          Where the Dzhanibekov effect switches on. A spinning wingnut is integrated live from
+          <b>Euler's equations</b> — no animation is faked. Spin it on its smallest or largest
+          axis and it wobbles, stable, forever. Spin it on the <b>middle</b> axis and it
+          somersaults. Drag the moments toward each other and you can watch the wobble
+          <b>freeze</b> as you approach the flipping point — then cross it, and watch the flip switch on.
+        </p>
+      </header>
+
+      <div class="stage">
+        <div>
+          <div class="card">
+            <h2>The wingnut — integrated live</h2>
+            <canvas id="cv" aria-label="A tumbling rigid body, integrated from Euler's equations"></canvas>
+            <div class="state-line">
+              <span class="chip" id="stateChip">STATE <b id="stateVal">—</b></span>
+              <span class="chip">Flips seen <b id="flipsVal">0</b></span>
+              <span class="chip">Period <b id="periodVal">—</b></span>
+              <span class="chip">Cone angle <b id="coneVal">—</b></span>
+              <span class="chip">Toy time <b id="timeVal">0</b></span>
+            </div>
+            <p class="hint">👆 Drag the picture left or right to scrub through the motion. Mirroring the ISS
+              wingnut footage (Veritasium, “The Bizarre Behaviour Of Rotating Bodies”): the <b>red line</b> is the
+              angular-momentum axis — fixed in space; the wingnut flips around it and the line never moves.
+              The faint <b>blue trace</b> is the tip of the body's spin axis: a tight little circle when stable,
+              great wandering loops when flipping.</p>
+            <div class="controls">
+              <button id="btnPlay" class="primary" aria-pressed="true">⏸ Pause</button>
+              <button id="btnReset">Reset — back to the chosen spin</button>
+            </div>
+            <div class="slider-block">
+              <div class="slider-head">
+                <span class="name">Speed</span>
+                <span class="val" id="speedVal">1×</span>
+              </div>
+              <input type="range" id="speedRange" min="0.25" max="8" step="0.25" value="1" aria-label="Simulation speed" />
+            </div>
+            <div class="controls">
+              <span class="btnrow-label">Spin it near which axis? (a ~4° tilt is built in, so you can see the motion)</span>
+              <button id="spinA" aria-pressed="false">Axis A — the red one</button>
+              <button id="spinB" aria-pressed="true">Axis B — the blue one</button>
+              <button id="spinC" aria-pressed="false">Axis C — the green one</button>
+            </div>
+            <p class="small dim" id="spinNote">Axis B currently carries the <b>intermediate</b> moment — the unstable seat. That is why it flips.</p>
+          </div>
+
+          <div class="card">
+            <h2>The water's own momentum — Jeff's question</h2>
+            <p>The oceans are not passengers in this story; they are part of the spinning body.
+              Here is their weight in the ledger, computed, not asserted:</p>
+            <div class="nums">
+              <div class="row"><span class="k">Mass of the oceans</span><span class="v">1.4×10²¹ kg</span></div>
+              <div class="row"><span class="k">The ocean shell's own moment of inertia</span><span class="v">≈ 3.8×10³⁴ kg·m²</span></div>
+              <div class="row"><span class="k">…as a share of Earth's (C−A) gap</span><span class="v">≈ 14% — already inside today's A and C</span></div>
+              <div class="row"><span class="k">Angular momentum of all ocean currents, relative</span><span class="v">≈ 10²⁵–10²⁶ kg·m²/s</span></div>
+              <div class="row"><span class="k">Earth's total spin angular momentum</span><span class="v">5.86×10³³ kg·m²/s</span></div>
+              <div class="row"><span class="k">The currents' share of the spin</span><span class="v">≈ 10⁻⁸</span></div>
+            </div>
+            <div class="slider-block">
+              <div class="slider-head">
+                <span class="name">Ocean push — shove the spin with the currents' momentum</span>
+                <span class="val" id="pushVal">50%</span>
+              </div>
+              <input type="range" id="pushRange" min="0" max="100" step="1" value="50" aria-label="Ocean push strength" />
+            </div>
+            <div class="controls">
+              <button id="btnPush">Give it the ocean's push</button>
+            </div>
+            <p class="small dim">The push is applied <b>magnified about five million times</b> so your eye can see the cone
+              widen — at true scale it changes the tilt by ~10⁻⁸ of a turn and is invisible. Watch what it does
+              <i>and what it cannot do</i>: the wobble gets rocked, the STATE does not change, and the boundary
+              gauge below does not move. <b>The water's momentum rocks the boat. It cannot move the flipping point —
+              the boundary lives in the moments, and the ocean is 10⁻⁸ of the spin.</b></p>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <h2>The moments — drag them and find the boundary</h2>
+            <p class="dim small">Principal moments of inertia, in units of 10³⁷ kg·m². The sliders are
+              deliberately <b>not</b> kept in order — crossing the order is the whole lesson. Each axis's
+              live rank is recomputed from the numbers themselves.</p>
+            <div class="slider-block">
+              <div class="slider-head">
+                <span class="name"><span class="axisdot dot-a"></span>Moment about axis A</span>
+                <span><span class="rank smallest" id="rankA">—</span> · <span class="val" id="valA">—</span></span>
+              </div>
+              <input type="range" id="sI1" min="1" max="12" step="0.001" value="3" aria-label="Moment about axis A" />
+            </div>
+            <div class="slider-block">
+              <div class="slider-head">
+                <span class="name"><span class="axisdot dot-b"></span>Moment about axis B</span>
+                <span><span class="rank intermediate" id="rankB">—</span> · <span class="val" id="valB">—</span></span>
+              </div>
+              <input type="range" id="sI2" min="1" max="12" step="0.001" value="5" aria-label="Moment about axis B" />
+            </div>
+            <div class="slider-block">
+              <div class="slider-head">
+                <span class="name"><span class="axisdot dot-c"></span>Moment about axis C</span>
+                <span><span class="rank largest" id="rankC">—</span> · <span class="val" id="valC">—</span></span>
+              </div>
+              <input type="range" id="sI3" min="1" max="12" step="0.001" value="8" aria-label="Moment about axis C" />
+            </div>
+            <p class="small faint" id="effLine">Moments in the integration: A 3.000 · B 5.000 · C 8.000 (×10³⁷ kg·m²)</p>
+
+            <h2 style="margin-top:20px;">The boundary gauge — distance to the flipping point</h2>
+            <div class="gauge-wrap">
+              <div class="gauge"><div class="needle" id="gaugeNeedle" style="left:50%"></div></div>
+              <div class="gauge-scale"><span>AT EQUALITY — THE FLIPPING POINT</span><span>FAR FROM EQUALITY</span></div>
+            </div>
+            <p class="gauge-verdict" id="gaugeVerdict">—</p>
+            <p class="small dim">The needle measures the gap between the <b>spin axis's moment</b> and its
+              <b>nearest neighbour</b> (<span id="gaugeNeighbor">—</span>). Drag that gap toward zero and the
+              analytic wobble period stretches toward infinity — the freeze. At zero the two moments are equal,
+              the axis's rank changes, and stability is gone.
+              <b>The flipping point is not a place or a date — it is the moment two moments become equal and
+              the spin's axis changes rank.</b></p>
+          </div>
+
+          <div class="card">
+            <h2>Earth, in three buttons</h2>
+            <div class="controls">
+              <button id="pEarth">🌍 Earth today</button>
+              <button id="pMelt">🧊 Total melt</button>
+              <button id="pTake">⚠️ What it would take</button>
+            </div>
+            <div class="preset-note" id="presetNote">
+              <b>Earth today.</b> Moments (A, B, C) = (8.01, 8.02, 8.04) ×10³⁷ kg·m² — the sliders carry
+              these rounded values; the measured gap is (C−A) = 2.64×10³⁵ kg·m², so H = (C−A)/C ≈ 1/305.
+              The spin sits on C, the <b>largest</b> moment: the stable seat. Run the same formula with
+              Earth's real spin and you get the ~305-day Euler wobble (the observed pole wander is the
+              433-day Chandler wobble — Earth is not rigid, which softens and stretches it).
+            </div>
+          </div>
+
+          <div class="card label-card">
+            <p class="stamp">Exhibit — live mathematics, honestly fenced</p>
+            <p><b>Labeled plainly: this is an exhibit — Euler's equations integrated live, which is
+              mathematics you can check, wrapped around a planet it does not threaten.</b>
+              Earth's spin sits on its largest-moment axis; melting deepens that seat (see the
+              TOTAL MELT preset). The flip is real physics — for bodies spinning on their middle
+              axis: wingnuts, and tumbling asteroids like Toutatis.</p>
+            <p>Rigid-body fences, stated plainly: the body in this toy is perfectly rigid and
+              torque-free. Earth is neither — it flows, its bulge follows its spin, and the Moon and Sun
+              hold torques on it. Every one of those differences makes the real planet <i>more</i> settled
+              in its seat, not less. The drawing is a schematic wingnut; the moments are the
+              numbers you set, and the integration is exact for the body those numbers describe.</p>
+            <p>It runs right here in your browser. No account, no install, no tracking.</p>
+            <p><b>Free forever, for everyone — one common bond.</b></p>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        The Flipping Point · an exhibit of Nexus Research · Euler's equations for torque-free rigid
+        rotation, integrated live (RK4). Companion exhibits: the Walker, the Rotating Tesseract,
+        the Vortex Stepper, and “Why Does Antarctic Polar Ice Melt Matter?”
+      </footer>
+    </div>
+
+    <script>
+    "use strict";
+    /* ============================================================
+       THE FLIPPING POINT — live RK4 integration of Euler's
+       equations for torque-free rigid rotation.
+       State: omega (body frame) + quaternion q (body -> space).
+       I1 dω1 = (I2−I3) ω2ω3 · I2 dω2 = (I3−I1) ω3ω1 · I3 dω3 = (I1−I2) ω1ω2
+       q̇ = ½ q ⊗ (0, ω)
+       ============================================================ */
+    var DT = 0.004;              // fixed integration step (toy time)
+    var OMEGA0 = 1.5;            // spin magnitude at reset
+    var TILT = 4 * Math.PI / 180; // built-in off-axis tilt, ~4 degrees
+    var MELT_BOOST_C = 0.0000792; // +0.3% of 2.64e35 kg m^2, in 1e37 units
+
+    function $(id) { return document.getElementById(id); }
+
+    var toy = {
+      I: [3.0, 5.0, 8.0],        // slider moments (1e37 kg m^2), axes A,B,C
+      meltBoost: 0,              // added to C's effective moment (TOTAL MELT)
+      spinAxis: 1,               // 0=A, 1=B, 2=C
+      w: [0, 0, 0],              // omega, body frame
+      q: [1, 0, 0, 0],           // quaternion body -> space
+      t: 0,
+      playing: true,
+      speed: 1,
+      sHist: [],                 // spin-axis component history (unit)
+      flips: 0,
+      armedSign: 0,              // hysteresis arming for flip detection
+      lastFlipT: null,
+      flipInterval: null,
+      Lspace: [0, 0, 0],         // angular momentum in space (conserved)
+      history: [],               // snapshots for scrubbing
+      stepsSinceSnap: 0,
+      trail: []                  // spin-axis tip trail (space frame)
+    };
+
+    function effI() {
+      return [toy.I[0], toy.I[1], toy.I[2] + toy.meltBoost];
+    }
+    function ranks() {
+      // returns rank label per axis: 0 smallest, 1 intermediate, 2 largest
+      var e = effI();
+      var order = [0, 1, 2].sort(function (a, b) { return e[a] - e[b]; });
+      var r = [0, 0, 0];
+      r[order[0]] = 0; r[order[1]] = 1; r[order[2]] = 2;
+      return r;
+    }
+    function spinS() {
+      var n = Math.hypot(toy.w[0], toy.w[1], toy.w[2]);
+      return n > 0 ? toy.w[toy.spinAxis] / n : 1;
+    }
+
+    /* ---------- quaternion helpers ---------- */
+    function qMul(a, b) {
+      return [
+        a[0]*b[0] - a[1]*b[1] - a[2]*b[2] - a[3]*b[3],
+        a[0]*b[1] + a[1]*b[0] + a[2]*b[3] - a[3]*b[2],
+        a[0]*b[2] - a[1]*b[3] + a[2]*b[0] + a[3]*b[1],
+        a[0]*b[3] + a[1]*b[2] - a[2]*b[1] + a[3]*b[0]
+      ];
+    }
+    function qRot(q, v) {
+      var p = qMul(q, [0, v[0], v[1], v[2]]);
+      var qc = [q[0], -q[1], -q[2], -q[3]];
+      var r = qMul(p, qc);
+      return [r[1], r[2], r[3]];
+    }
+    function qNorm(q) {
+      var n = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
+      return [q[0]/n, q[1]/n, q[2]/n, q[3]/n];
+    }
+
+    /* ---------- dynamics ---------- */
+    function deriv(state) {
+      var e = effI();
+      var w1 = state[0], w2 = state[1], w3 = state[2];
+      var q = [state[3], state[4], state[5], state[6]];
+      var dw = [
+        (e[1] - e[2]) * w2 * w3 / e[0],
+        (e[2] - e[0]) * w3 * w1 / e[1],
+        (e[0] - e[1]) * w1 * w2 / e[2]
+      ];
+      var qd = qMul(q, [0, w1, w2, w3]);
+      return [dw[0], dw[1], dw[2], 0.5*qd[0], 0.5*qd[1], 0.5*qd[2], 0.5*qd[3]];
+    }
+    function stepOnce() {
+      var y = [toy.w[0], toy.w[1], toy.w[2], toy.q[0], toy.q[1], toy.q[2], toy.q[3]];
+      var k1 = deriv(y);
+      var y2 = y.map(function (v, i) { return v + 0.5 * DT * k1[i]; });
+      var k2 = deriv(y2);
+      var y3 = y.map(function (v, i) { return v + 0.5 * DT * k2[i]; });
+      var k3 = deriv(y3);
+      var y4 = y.map(function (v, i) { return v + DT * k3[i]; });
+      var k4 = deriv(y4);
+      for (var i = 0; i < 7; i++) y[i] += (DT / 6) * (k1[i] + 2*k2[i] + 2*k3[i] + k4[i]);
+      toy.w = [y[0], y[1], y[2]];
+      toy.q = qNorm([y[3], y[4], y[5], y[6]]);
+      toy.t += DT;
+      // classifier bookkeeping
+      var s = spinS();
+      toy.sHist.push(s);
+      if (toy.sHist.length > 20000) toy.sHist.shift();
+      if (s > 0.5) {
+        if (toy.armedSign < 0) registerFlip();
+        toy.armedSign = 1;
+      } else if (s < -0.5) {
+        if (toy.armedSign > 0) registerFlip();
+        toy.armedSign = -1;
+      }
+      // scrub history
+      toy.stepsSinceSnap++;
+      if (toy.stepsSinceSnap >= 25) {
+        toy.stepsSinceSnap = 0;
+        toy.history.push({ t: toy.t, w: toy.w.slice(), q: toy.q.slice() });
+        if (toy.history.length > 800) toy.history.shift();
+      }
+    }
+    function registerFlip() {
+      toy.flips++;
+      if (toy.lastFlipT !== null) toy.flipInterval = toy.t - toy.lastFlipT;
+      toy.lastFlipT = toy.t;
+    }
+    function stepN(n) { for (var i = 0; i < n; i++) stepOnce(); }
+
+    function resetSpin() {
+      var dir = [0, 0, 0];
+      var others = [0, 1, 2].filter(function (a) { return a !== toy.spinAxis; });
+      dir[toy.spinAxis] = Math.cos(TILT);
+      dir[others[0]] = Math.sin(TILT) * 0.8;
+      dir[others[1]] = Math.sin(TILT) * 0.6;
+      toy.w = [dir[0] * OMEGA0, dir[1] * OMEGA0, dir[2] * OMEGA0];
+      toy.q = [1, 0, 0, 0];
+      toy.t = 0;
+      toy.sHist = []; toy.flips = 0; toy.armedSign = 0;
+      toy.lastFlipT = null; toy.flipInterval = null;
+      toy.history = []; toy.stepsSinceSnap = 0; toy.trail = [];
+      var e = effI();
+      var Lb = [e[0]*toy.w[0], e[1]*toy.w[1], e[2]*toy.w[2]];
+      toy.Lspace = qRot(toy.q, Lb);
+      recordTrail(true);
+    }
+
+    /* ---------- classification & analytic period ---------- */
+    function classify() {
+      var r = ranks();
+      var spinRank = r[toy.spinAxis];
+      if (spinRank === 1) {
+        return toy.flips > 0 ? "flip" : "building";
+      }
+      return "stable";
+    }
+    function analyticPeriod() {
+      // frozen-coefficient polhode period for spin near the chosen axis
+      var e = effI();
+      var k = toy.spinAxis;
+      var oth = [0, 1, 2].filter(function (a) { return a !== k; });
+      var i = oth[0], j = oth[1];
+      var f = Math.abs((e[k] - e[i]) * (e[k] - e[j]));
+      var om = Math.abs(toy.w[k]);
+      if (om === 0 || f === 0) return Infinity;
+      var freq = om * Math.sqrt(f / (e[i] * e[j]));
+      return freq > 0 ? (2 * Math.PI) / freq : Infinity;
+    }
+    function gapInfo() {
+      var e = effI();
+      var k = toy.spinAxis;
+      var best = null, bestAxis = -1;
+      for (var a = 0; a < 3; a++) {
+        if (a === k) continue;
+        var g = Math.abs(e[k] - e[a]);
+        if (best === null || g < best) { best = g; bestAxis = a; }
+      }
+      return { gap: best, neighbor: bestAxis }; // gap in 1e37 units
+    }
+
+    /* ---------- ocean push ---------- */
+    function applyPush(pct) {
+      // Rotate omega's direction by delta (radians), magnified for visibility.
+      // True scale: the currents carry ~1e-8 of the spin; the applied delta is
+      // labelled on the page as a ~5,000,000x magnification.
+      var delta = (pct / 100) * 0.06; // max 0.06 rad at 100%
+      if (delta === 0) return;
+      var n = Math.hypot(toy.w[0], toy.w[1], toy.w[2]);
+      if (n === 0) return;
+      var axis = [0, 0, 0];
+      var others = [0, 1, 2].filter(function (a) { return a !== toy.spinAxis; });
+      axis[others[0]] = 1; // rotate in the plane of spin axis and one other axis
+      // Rodrigues rotation of w around `axis` by delta
+      var u = toy.w.map(function (v) { return v / n; });
+      var cross = [
+        axis[1]*u[2] - axis[2]*u[1],
+        axis[2]*u[0] - axis[0]*u[2],
+        axis[0]*u[1] - axis[1]*u[0]
+      ];
+      var dot = axis[0]*u[0] + axis[1]*u[1] + axis[2]*u[2];
+      var cd = Math.cos(delta), sd = Math.sin(delta);
+      var out = u.map(function (v, idx) {
+        return v * cd + cross[idx] * sd + axis[idx] * dot * (1 - cd);
+      });
+      toy.w = out.map(function (v) { return v * n; });
+      // the push starts a new observed epoch for the classifier
+      toy.sHist = []; toy.flips = 0; toy.armedSign = 0;
+      toy.lastFlipT = null; toy.flipInterval = null;
+    }
+
+    /* ---------- presets ---------- */
+    var AXIS_NAMES = ["A", "B", "C"];
+    var NOTE_EARTH = "<b>Earth today.</b> Moments (A, B, C) = (8.01, 8.02, 8.04) ×10³⁷ kg·m² — the sliders carry " +
+      "these rounded values; the measured gap is (C−A) = 2.64×10³⁵ kg·m², so H = (C−A)/C ≈ 1/305. " +
+      "The spin sits on C, the <b>largest</b> moment: the stable seat. Run the same formula with " +
+      "Earth's real spin and you get the ~305-day Euler wobble (the observed pole wander is the " +
+      "433-day Chandler wobble — Earth is not rigid, which softens and stretches it).";
+    var NOTE_MELT = "<b>Total melt.</b> Melt every glacier and both ice sheets and the water spreads " +
+      "through the oceans: C <i>grows</i> by the melt ceiling, +0.3% of the gap = +7.9×10³² kg·m². " +
+      "The gauge's (C−A) gap goes 2.640 → 2.648 ×10³⁵ kg·m² — the needle moves <b>away</b> from the " +
+      "flipping point. Melting deepens the stable seat; it does not dig it out.";
+    var NOTE_TAKE = "<b>What it would take.</b> Move ≈5×10²¹ kg — about 4 ocean masses, about 200× every " +
+      "glacier and ice sheet on Earth — from the equator to high latitudes. Ring-model arithmetic " +
+      "(R = 6.371×10⁶ m): ΔC = −¾mR² ≈ −1.67×10³⁵, ΔA = ΔB = +⅜mR² ≈ +0.83×10³⁵ kg·m², giving " +
+      "(A, B, C) ≈ (8.018, 8.028, 8.023) ×10³⁷. C becomes the <b>intermediate</b> moment — Earth's seat " +
+      "changes rank while the spin itself never moves — and the flip switches on. <b>Fenced on its face: " +
+      "this is beyond any physical melt.</b> Total melt moves C by +7.9×10³² kg·m² the <i>other way</i>; " +
+      "this preset needs ~200× more mass than all the ice on Earth, moved the opposite direction. " +
+      "It is a demonstration of where the boundary lives — not a scenario. One patience note: near " +
+      "Earth's near-degenerate moments the instability grows slowly (e-folding ≈ 1,100 toy-time, the " +
+      "first somersault after a few thousand) — run it at 8×, or drag the moments further apart to watch a faster flip.";
+
+    function setPreset(name) {
+      var note = $("presetNote");
+      toy.meltBoost = 0;
+      if (name === "earth") {
+        toy.I = [8.01, 8.02, 8.04]; toy.spinAxis = 2;
+        note.innerHTML = NOTE_EARTH; note.classList.remove("danger");
+      } else if (name === "melt") {
+        toy.I = [8.01, 8.02, 8.04]; toy.spinAxis = 2; toy.meltBoost = MELT_BOOST_C;
+        note.innerHTML = NOTE_MELT; note.classList.remove("danger");
+      } else if (name === "take") {
+        toy.I = [8.018, 8.028, 8.023]; toy.spinAxis = 2;
+        note.innerHTML = NOTE_TAKE; note.classList.add("danger");
+      }
+      syncControls(); resetSpin(); refreshReadouts();
+    }
+
+    /* ---------- rendering (schematic) ---------- */
+    var cv = $("cv"), ctx = cv.getContext("2d");
+    var CW = 0, CH = 0;
+    function resize() {
+      var r = cv.getBoundingClientRect();
+      var dpr = window.devicePixelRatio || 1;
+      CW = Math.max(280, r.width); CH = Math.max(240, r.height);
+      cv.width = Math.round(CW * dpr); cv.height = Math.round(CH * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function view(v) {
+      // fixed camera: rotY then rotX, orthographic
+      var cy = Math.cos(0.55), sy = Math.sin(0.55);
+      var cx = Math.cos(-0.45), sx = Math.sin(-0.45);
+      var x1 = cy * v[0] + sy * v[2];
+      var z1 = -sy * v[0] + cy * v[2];
+      var y2 = cx * v[1] - sx * z1;
+      var z2 = sx * v[1] + cx * z1;
+      return [x1, y2, z2];
+    }
+    function proj(v) {
+      var p = view(v);
+      var scale = Math.min(CW, CH) * 0.30;
+      return [CW / 2 + p[0] * scale, CH / 2 - p[1] * scale, p[2]];
+    }
+    // schematic WINGNUT (the ISS footage in Veritasium's "The Bizarre Behaviour
+    // Of Rotating Bodies"): a central hub, a bolt shaft along B, two wing ears
+    // along +/-A at the top of the shaft, and the nut block at the bottom.
+    var BOXES = [
+      { c: [0, 0, 0], h: [0.34, 0.34, 0.34] },          // hub / barrel
+      { c: [0, 0.62, 0], h: [0.13, 0.62, 0.13] },       // bolt shaft (along B)
+      { c: [0.58, 1.18, 0], h: [0.44, 0.16, 0.21] },    // right wing ear (along +A)
+      { c: [-0.58, 1.18, 0], h: [0.44, 0.16, 0.21] },   // left wing ear (along -A)
+      { c: [0, -0.62, 0], h: [0.13, 0.45, 0.13] },      // shaft below the hub
+      { c: [0, -1.12, 0], h: [0.31, 0.19, 0.31] }       // nut block
+    ];
+    var EDGES = [];
+    BOXES.forEach(function (b) {
+      var vs = [];
+      for (var i = 0; i < 8; i++) {
+        vs.push([
+          b.c[0] + ((i & 1) ? b.h[0] : -b.h[0]),
+          b.c[1] + ((i & 2) ? b.h[1] : -b.h[1]),
+          b.c[2] + ((i & 4) ? b.h[2] : -b.h[2])
+        ]);
+      }
+      var pairs = [[0,1],[0,2],[0,4],[1,3],[1,5],[2,3],[2,6],[3,7],[4,5],[4,6],[5,7],[6,7]];
+      pairs.forEach(function (pr) { EDGES.push([vs[pr[0]], vs[pr[1]]]); });
+    });
+    var AXIS_COLORS = ["#ff5a52", "#5b9dff", "#43d97e"];
+    function recordTrail(force) {
+      var ax = [0, 0, 0]; ax[toy.spinAxis] = 1.55;
+      var tip = qRot(toy.q, ax);
+      var last = toy.trail[toy.trail.length - 1];
+      if (force || !last || Math.hypot(tip[0]-last[0], tip[1]-last[1], tip[2]-last[2]) > 0.03) {
+        toy.trail.push(tip);
+        if (toy.trail.length > 260) toy.trail.shift();
+      }
+    }
+    function draw() {
+      ctx.clearRect(0, 0, CW, CH);
+      // The RED LINE (as in the Veritasium footage): the angular-momentum axis,
+      // a full line through the body, fixed in space. The wingnut flips around
+      // it; the line never moves.
+      var Ln = Math.hypot(toy.Lspace[0], toy.Lspace[1], toy.Lspace[2]) || 1;
+      var Lu = [toy.Lspace[0]/Ln, toy.Lspace[1]/Ln, toy.Lspace[2]/Ln];
+      var Lp = proj([Lu[0]*2.35, Lu[1]*2.35, Lu[2]*2.35]);
+      var Lm = proj([Lu[0]*-2.35, Lu[1]*-2.35, Lu[2]*-2.35]);
+      ctx.strokeStyle = "rgba(255,42,42,0.9)"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(Lm[0], Lm[1]); ctx.lineTo(Lp[0], Lp[1]); ctx.stroke();
+      ctx.fillStyle = "#ff2a2a";
+      ctx.font = "12px ui-monospace, Menlo, monospace";
+      ctx.fillText("L — fixed in space", Lp[0] + 8, Lp[1] + 4);
+      // faint BLUE trace: the tip of the body's spin axis wandering / flipping
+      if (toy.trail.length > 1) {
+        ctx.strokeStyle = "rgba(91,157,255,0.55)"; ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        for (var i = 0; i < toy.trail.length; i++) {
+          var tp = proj(toy.trail[i]);
+          if (i === 0) ctx.moveTo(tp[0], tp[1]); else ctx.lineTo(tp[0], tp[1]);
+        }
+        ctx.stroke();
+        var lastTp = proj(toy.trail[toy.trail.length - 1]);
+        ctx.fillStyle = "rgba(140,190,255,0.95)";
+        ctx.beginPath(); ctx.arc(lastTp[0], lastTp[1], 2.6, 0, Math.PI * 2); ctx.fill();
+      }
+      // body edges, painter-sorted by depth
+      var drawn = EDGES.map(function (e) {
+        var a = proj(qRot(toy.q, e[0])), b = proj(qRot(toy.q, e[1]));
+        return { a: a, b: b, z: (a[2] + b[2]) / 2 };
+      });
+      drawn.sort(function (p, q2) { return p.z - q2.z; });
+      drawn.forEach(function (e) {
+        var alpha = 0.35 + 0.55 * Math.min(1, Math.max(0, (e.z + 1.6) / 3.2));
+        ctx.strokeStyle = "rgba(232,230,224," + alpha.toFixed(2) + ")";
+        ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(e.a[0], e.a[1]); ctx.lineTo(e.b[0], e.b[1]); ctx.stroke();
+      });
+      // body axes
+      for (var ax = 0; ax < 3; ax++) {
+        var dir = [0, 0, 0]; dir[ax] = 1;
+        var tipB = [dir[0] * 1.5, dir[1] * 1.5, dir[2] * 1.5];
+        var tailB = [dir[0] * -1.5, dir[1] * -1.5, dir[2] * -1.5];
+        var pt = proj(qRot(toy.q, tipB)), pb = proj(qRot(toy.q, tailB));
+        ctx.strokeStyle = AXIS_COLORS[ax]; ctx.lineWidth = ax === toy.spinAxis ? 3 : 1.6;
+        ctx.beginPath(); ctx.moveTo(pb[0], pb[1]); ctx.lineTo(pt[0], pt[1]); ctx.stroke();
+        ctx.fillStyle = AXIS_COLORS[ax];
+        ctx.beginPath(); ctx.arc(pt[0], pt[1], 4, 0, Math.PI * 2); ctx.fill();
+        ctx.font = "bold 13px ui-monospace, Menlo, monospace";
+        ctx.fillText(AXIS_NAMES[ax], pt[0] + 8, pt[1] - 6);
+      }
+    }
+
+    /* ---------- readouts ---------- */
+    function fmtPeriod(T) {
+      if (!isFinite(T)) return "∞ — frozen at equality";
+      if (T >= 1000) return T.toFixed(0) + " toy-time";
+      if (T >= 100) return T.toFixed(0) + " toy-time";
+      if (T >= 10) return T.toFixed(1) + " toy-time";
+      return T.toFixed(2) + " toy-time";
+    }
+    var RANK_TXT = ["smallest", "intermediate", "largest"];
+    function refreshReadouts() {
+      var e = effI(), r = ranks();
+      var ids = ["A", "B", "C"];
+      for (var a = 0; a < 3; a++) {
+        $("val" + ids[a]).textContent = e[a].toFixed(3);
+        var rk = $("rank" + ids[a]);
+        rk.textContent = RANK_TXT[r[a]].toUpperCase();
+        rk.className = "rank " + RANK_TXT[r[a]];
+        $("sI" + (a + 1)).value = toy.I[a];
+      }
+      $("effLine").textContent = "Moments in the integration: A " + e[0].toFixed(3) +
+        " · B " + e[1].toFixed(3) + " · C " + e[2].toFixed(3) + " (×10³⁷ kg·m²)" +
+        (toy.meltBoost > 0 ? " — C includes the total-melt ceiling +7.9×10³² kg·m²" : "");
+      // spin note
+      var spinRank = r[toy.spinAxis];
+      $("spinNote").innerHTML = spinRank === 1
+        ? "Axis " + AXIS_NAMES[toy.spinAxis] + " currently carries the <b>intermediate</b> moment — the unstable seat. That is why it flips."
+        : "Axis " + AXIS_NAMES[toy.spinAxis] + " currently carries the <b>" + RANK_TXT[spinRank] + "</b> moment — a stable seat. It will wobble, and only wobble.";
+      ["spinA", "spinB", "spinC"].forEach(function (id, i) {
+        $(id).setAttribute("aria-pressed", i === toy.spinAxis ? "true" : "false");
+      });
+      // gauge
+      var g = gapInfo();
+      var gapKg = g.gap * 1e37;
+      var pos = 100 * (Math.log10(Math.max(gapKg, 1e33)) - 33) / (37.3 - 33);
+      pos = Math.min(100, Math.max(0, pos));
+      $("gaugeNeedle").style.left = pos.toFixed(1) + "%";
+      $("gaugeNeighbor").textContent = "axis " + AXIS_NAMES[g.neighbor];
+      var verdict = $("gaugeVerdict");
+      if (spinRank === 1) {
+        verdict.innerHTML = "Spin-axis gap to nearest neighbour: <b>" +
+          (g.gap * 100).toFixed(2) + "×10³⁵ kg·m²</b> — but the spin axis <b class=\"flip\">IS the intermediate axis</b>: this seat is past the flipping point.";
+      } else if (g.gap < 0.005) {
+        verdict.innerHTML = "Spin-axis gap: <b>" + (g.gap * 100).toFixed(2) +
+          "×10³⁵ kg·m²</b> — a hair from equality. The wobble period is stretching toward the freeze.";
+      } else {
+        verdict.innerHTML = "Spin-axis gap: <b>" + (g.gap * 100).toFixed(2) +
+          "×10³⁵ kg·m²</b> — the spin axis sits <b class=\"safe\">clear of the flipping point</b>.";
+      }
+      // state chips
+      var cls = classify();
+      var chip = $("stateChip");
+      chip.className = "chip " + (cls === "flip" ? "state-flip" : cls === "building" ? "state-building" : "state-stable");
+      $("stateVal").textContent = cls === "flip" ? "FLIPPING" : cls === "building" ? "UNSTABLE SEAT — FLIP BUILDING" : "STABLE WOBBLE";
+      $("flipsVal").textContent = toy.flips;
+      if (cls === "flip" && toy.flipInterval) {
+        $("periodVal").textContent = "flip every " + fmtPeriod(toy.flipInterval);
+      } else if (cls === "building") {
+        $("periodVal").textContent = "building… (growth is exponential, then the flip)";
+      } else {
+        $("periodVal").textContent = fmtPeriod(analyticPeriod());
+      }
+      var s = spinS();
+      $("coneVal").textContent = (Math.acos(Math.min(1, Math.abs(s))) * 180 / Math.PI).toFixed(1) + "°";
+      $("timeVal").textContent = toy.t.toFixed(0);
+    }
+
+    function syncControls() {
+      $("sI1").value = toy.I[0]; $("sI2").value = toy.I[1]; $("sI3").value = toy.I[2];
+    }
+
+    /* ---------- events ---------- */
+    ["sI1", "sI2", "sI3"].forEach(function (id, idx) {
+      $(id).addEventListener("input", function () {
+        toy.I[idx] = parseFloat(this.value);
+        toy.meltBoost = 0; // manual drags leave the presets
+        resetSpin(); refreshReadouts();
+      });
+    });
+    [["spinA", 0], ["spinB", 1], ["spinC", 2]].forEach(function (pair) {
+      $(pair[0]).addEventListener("click", function () {
+        toy.spinAxis = pair[1]; resetSpin(); refreshReadouts();
+      });
+    });
+    $("btnPlay").addEventListener("click", function () {
+      toy.playing = !toy.playing;
+      this.textContent = toy.playing ? "⏸ Pause" : "▶ Play";
+      this.setAttribute("aria-pressed", toy.playing ? "true" : "false");
+    });
+    $("btnReset").addEventListener("click", function () { resetSpin(); refreshReadouts(); });
+    $("speedRange").addEventListener("input", function () {
+      toy.speed = parseFloat(this.value);
+      $("speedVal").textContent = toy.speed + "×";
+    });
+    $("pushRange").addEventListener("input", function () {
+      $("pushVal").textContent = this.value + "%";
+    });
+    $("btnPush").addEventListener("click", function () {
+      applyPush(parseFloat($("pushRange").value));
+      refreshReadouts();
+    });
+    $("pEarth").addEventListener("click", function () { setPreset("earth"); });
+    $("pMelt").addEventListener("click", function () { setPreset("melt"); });
+    $("pTake").addEventListener("click", function () { setPreset("take"); });
+
+    // drag to scrub through the motion
+    var dragging = false, lastX = 0, dragAcc = 0;
+    cv.addEventListener("pointerdown", function (ev) {
+      dragging = true; lastX = ev.clientX; dragAcc = 0;
+      if (cv.setPointerCapture) cv.setPointerCapture(ev.pointerId);
+    });
+    cv.addEventListener("pointermove", function (ev) {
+      if (!dragging) return;
+      dragAcc += ev.clientX - lastX; lastX = ev.clientX;
+      var snapSteps = 25;
+      while (dragAcc >= 24) {
+        dragAcc -= 24; stepN(snapSteps); recordTrail(false);
+      }
+      while (dragAcc <= -24) {
+        dragAcc += 24;
+        var snap = toy.history.pop();
+        if (snap) {
+          toy.t = snap.t; toy.w = snap.w.slice(); toy.q = snap.q.slice();
+          toy.sHist = []; toy.flips = 0; toy.armedSign = 0;
+          toy.lastFlipT = null; toy.flipInterval = null; toy.trail = [];
+          recordTrail(true);
+        }
+      }
+      draw(); refreshReadouts();
+    });
+    function endDrag() { dragging = false; }
+    cv.addEventListener("pointerup", endDrag);
+    cv.addEventListener("pointercancel", endDrag);
+
+    window.addEventListener("resize", resize);
+
+    /* ---------- main loop ---------- */
+    var frame = 0;
+    function loop() {
+      if (toy.playing) {
+        stepN(Math.max(1, Math.round(56 * toy.speed)));
+        recordTrail(false);
+      }
+      draw();
+      frame++;
+      if (frame % 6 === 0) refreshReadouts();
+      if (typeof requestAnimationFrame === "function") requestAnimationFrame(loop);
+    }
+
+    /* ---------- init ---------- */
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      toy.playing = false;
+      $("btnPlay").textContent = "▶ Play";
+      $("btnPlay").setAttribute("aria-pressed", "false");
+    }
+    resize();
+    resetSpin();
+    refreshReadouts();
+    if (typeof requestAnimationFrame === "function") requestAnimationFrame(loop);
+
+    /* hooks for headless verification */
+    window.__toy = {
+      toy: toy, effI: effI, ranks: ranks, classify: classify,
+      analyticPeriod: analyticPeriod, gapInfo: gapInfo, spinS: spinS,
+      stepN: stepN, resetSpin: resetSpin, setPreset: setPreset,
+      applyPush: applyPush,
+      setMoments: function (arr) { toy.I = arr.slice(); toy.meltBoost = 0; resetSpin(); },
+      setSpinAxis: function (a) { toy.spinAxis = a; resetSpin(); },
+      sMinWindow: function (n) {
+        var h = toy.sHist.slice(-n); if (!h.length) return 1;
+        return Math.min.apply(null, h);
+      },
+      LNow: function () {
+        var e = effI();
+        return qRot(toy.q, [e[0]*toy.w[0], e[1]*toy.w[1], e[2]*toy.w[2]]);
+      }
+    };
+    </script>
+  </body>
+</html>
