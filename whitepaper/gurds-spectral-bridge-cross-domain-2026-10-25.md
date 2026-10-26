@@ -567,3 +567,25 @@ paper in the local record and are part of its frame:
 
 Both are T5 doctrine in Jeff's words. Neither changes any tier,
 count, or dial in this paper.
+
+---
+
+## ADDENDUM 2026-10-25 (evening)
+
+Two landings recorded after this paper's main text was written.
+The body text is not edited; this addendum carries the update.
+
+- **FG-2c-3 LANDED FULL** (`LatticeSliceYosida`, 75 strict): the
+  semigroup constructed from the landed resolvent family exists
+  on all of `H′`, with the semigroup law on all of `H′`.
+  Stage 2's operator residue is now down to **FG-2c-4 alone**.
+  Dossier: `stage2-fg2c3-yosida-full-2026-10-25.md`.
+- **The Honest Battery LANDED** (`SliceBattery`, 20 strict):
+  D0–T3 stand, and T4 stands conditional under its single named
+  hypothesis, exactly as pre-registered. This addendum replaces
+  §5's "battery verdict" open-seat phrasing: the verdict is in,
+  and it is the conditional verdict the charter promised. Dossier:
+  `honest-battery-landing-2026-10-25.md`.
+
+**Census now: 5,684 strict theorems / 183 counted modules.**
+**Dials still 0/4.** NO CLAIM.
