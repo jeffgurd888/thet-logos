@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="dark"/>
+<link rel="icon" href="data:,"/>
+<title>Nested Saddles — Down Is Free, Up Costs</title>
+<style>
+:root{color-scheme:dark;--bg:#0a0c0e;--panel:#121518;--panel-2:#171b1f;--line:#262c31;--ink:#e8e6e0;--ink-dim:#9aa0a3;--ink-faint:#6b7176;--paper:#f2efe6;--accent:#d8c58f;--blue:#5b9dff}
+*{box-sizing:border-box} html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.45}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 20px 44px}
+.plate{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:16px}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(29px,5.2vw,46px);margin:0;color:var(--paper)}
+.plate .no{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
+.subtitle{font-family:Georgia,serif;font-style:italic;font-size:clamp(16px,2.8vw,21px);color:var(--ink-dim);margin:12px 0 0;max-width:78ch}
+.subtitle b{color:var(--ink);font-style:normal}
+.fence{border:1px solid var(--accent);border-radius:10px;padding:14px 18px;margin:20px 0;background:#141310}
+.fence p{margin:0 0 8px;font-size:14.5px}.fence p:last-child{margin-bottom:0}
+.fence .big{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:18px}
+.card h2{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin:0 0 12px;font-weight:600}
+.card p{margin:0 0 10px;font-size:14.5px}.card p:last-child{margin-bottom:0}
+.dim{color:var(--ink-dim)} .small{font-size:12.5px} .faint{color:var(--ink-faint)}
+canvas{width:100%;display:block;border-radius:8px;background:radial-gradient(120% 90% at 50% 38%,#141a20 0%,#0a0c0e 70%)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.duo{grid-template-columns:1fr}}
+.cap{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:8px 0 6px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+button{font:inherit;font-size:14px;min-height:44px;padding:9px 16px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--ink-faint)} button.on{border-color:var(--accent);color:var(--accent)}
+.hint{font-size:12.5px;color:var(--ink-faint);margin-top:8px}
+.slider-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.slider-head .val{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+input[type=range]{width:100%;height:44px;accent-color:var(--accent)}
+footer{color:var(--ink-faint);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="plate"><h1>Nested Saddles</h1><span class="no">Exhibit · Projection, up &amp; down</span></div>
+  <p class="subtitle">A hydrogen orbital is a landscape of bright lobes, and between the lobes the brightness <b>pinches through passes — saddles, nested shell inside shell</b>. Casting its shadow is free. Reading the object back off the shadow is not.</p>
+</header>
+
+<div class="fence">
+  <p class="big">Exhibit — an intuition instrument. No theorems. NO CLAIM.</p>
+  <p>Companion to a proved ill-posedness in the corpus: the measured-clock question Q1′ was posed in a way that discarded the information its answer needed — the same species as reading an object off its shadow.</p>
+  <p class="dim">The shapes below are textbook hydrogen wavefunctions (|ψ|², T4 mathematics). They are shown as density landscapes — nothing here claims they are gravity, or saddles in any sense beyond that landscape.</p>
+</div>
+
+<section class="card">
+  <h2>1 · The object — and its shadow, cast for free</h2>
+  <div class="controls" id="presets">
+    <button data-p="s">s — ringed (4s)</button>
+    <button data-p="p" class="on">p — two lobes (2p)</button>
+    <button data-p="d">d — four petals (3d)</button>
+    <button data-p="f">f — six petals (4f)</button>
+  </div>
+  <canvas id="cvObj" width="880" height="520"></canvas>
+  <p class="hint">Drag to rotate. Left idle, it turns on its own. The point cloud is sampled from |ψ|²; watch the brightness pinch through passes between the lobes — saddles, nested shell inside shell.</p>
+  <div class="duo">
+    <div><p class="cap">The shadow — line-of-sight ∫|ψ|²</p><canvas id="cvShadow" width="440" height="300"></canvas></div>
+    <div><p class="cap">The slice — mid-plane |ψ|², facing you</p><canvas id="cvSlice" width="440" height="300"></canvas></div>
+  </div>
+  <p style="margin-top:12px"><b>One object. One shadow. No choices.</b> <span class="dim">Projection down costs nothing: every object casts exactly one shadow and one facing slice, instantly, from any angle. Nothing was decided, nothing was lost that you asked to keep — yet.</span></p>
+</section>
+
+<section class="card">
+  <h2>2 · The climb back, first toll — phase</h2>
+  <p>Two wavefunctions, one shadow. On the right, every lobe's sign has been flipped across its node — the twin is ψ with its phase pattern changed, so <b>|ψ|² is identical, point for point</b>. Their shadows cannot tell them apart. Nothing in the shadow can.</p>
+  <canvas id="cvTwins" width="880" height="400"></canvas>
+  <div class="controls"><button id="btnRef">Add a reference wave</button></div>
+  <p><b>The shadow dropped the phase. Interference is how you buy it back.</b> <span class="dim">Add one known reference wave and let it interfere: the fringe pattern shifts exactly where the signs differ, and the twins stop looking alike. The information was never in the shadow — it has to be supplied.</span></p>
+</section>
+
+<section class="card">
+  <h2>3 · The climb back, second toll — angles</h2>
+  <p>A fixed target — one orbital slice. All you are given is its shadows: line-integrals taken at a handful of angles. Stack them back naively (this is plain back-projection, honestly labelled — no filtering, no cleverness) and watch what the angles buy.</p>
+  <div class="duo">
+    <div><p class="cap">Target slice — d orbital</p><canvas id="cvTarget" width="360" height="360"></canvas></div>
+    <div><p class="cap">Naive back-projection</p><canvas id="cvRecon" width="360" height="360"></canvas></div>
+  </div>
+  <div class="slider-head"><span>Projection angles</span><span class="val" id="angVal">4 angles</span></div>
+  <input type="range" id="angSlider" min="1" max="32" step="1" value="4"/>
+  <p><b>One slice knows almost nothing. Angles are the currency.</b> <span class="dim">At one or two angles the reconstruction is all streaks. By sixteen to thirty-two, the four petals stand up. The shape was paid for, angle by angle. (Display windowed to its own min–max, as on every panel here; the reconstruction itself is unfiltered.)</span></p>
+</section>
+
+<footer>EXHIBIT — an intuition instrument. No theorems. NO CLAIM. · Orbitals: hydrogenic wavefunctions, atomic units. Down is a projection; up is a purchase.</footer>
+</div>
+<script>
+"use strict";
+/* ---------- shared helpers ---------- */
+function mulberry(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const clamp=(v,a,b)=>v<a?a:(v>b?b:v);
+/* density colour map: black -> violet -> blue -> cyan -> near-white */
+function cmap(t,out,o){
+  t=clamp(t,0,1); let r,g,b;
+  if(t<0.28){const u=t/0.28; r=10+40*u; g=8+10*u; b=24+86*u;}
+  else if(t<0.58){const u=(t-0.28)/0.30; r=50-20*u; g=18+110*u; b=110+110*u;}
+  else if(t<0.85){const u=(t-0.58)/0.27; r=30+60*u; g=128+97*u; b=220+25*u;}
+  else{const u=(t-0.85)/0.15; r=90+150*u; g=225+28*u; b=245+8*u;}
+  out[o]=r; out[o+1]=g; out[o+2]=b; out[o+3]=255;
+}
+/* ---------- hydrogen orbitals (atomic units, proportional forms) ---------- */
+/* returns psi (real) at (x,y,z). Angular parts are the real (tesseral) harmonics. */
+const ORB={
+  s:{R:26,label:"4s", psi(x,y,z){const r=Math.sqrt(x*x+y*y+z*z); if(r<1e-9)return 0;
+      const q=r/2, poly=24-36*q+12*q*q-q*q*q; return poly*Math.exp(-q/2);}},
+  p:{R:13,label:"2p", psi(x,y,z){const r=Math.sqrt(x*x+y*y+z*z); return z*Math.exp(-r/2);}},
+  d:{R:17,label:"3d", psi(x,y,z){const r=Math.sqrt(x*x+y*y+z*z); return (x*x-y*y)*Math.exp(-r/3);}},
+  f:{R:19,label:"4f", psi(x,y,z){const r=Math.sqrt(x*x+y*y+z*z);
+      return x*(x*x-3*y*y)*Math.exp(-r/4);}}
+};
+/* exact proportional forms: 4s poly in r/2; 2p: z e^{-r/2}; 3d: (x^2-y^2) e^{-r/3}; 4f: x(x^2-3y^2) e^{-r/4} */
+function dens(key,x,y,z){const v=ORB[key].psi(x,y,z); return v*v;}
+
+/* ---------- Panel 1: object, shadow, slice ---------- */
+const cvO=document.getElementById('cvObj'), cxO=cvO.getContext('2d');
+const cvS=document.getElementById('cvShadow'), cxS=cvS.getContext('2d');
+const cvL=document.getElementById('cvSlice'), cxL=cvL.getContext('2d');
+let key='p', pts=[], pmax=1, yaw=0.6, pitch=0.45, lastTouch=0, dragging=false, px=0, py=0;
+function sample(){
+  const R=ORB[key].R, rnd=mulberry(1234567);
+  /* estimate peak density by probing */
+  let mx=1e-12;
+  for(let i=0;i<4000;i++){const x=(rnd()*2-1)*R,y=(rnd()*2-1)*R,z=(rnd()*2-1)*R;
+    const d=dens(key,x,y,z); if(d>mx)mx=d;}
+  pmax=mx; pts=[];
+  let guard=0;
+  while(pts.length<4200&&guard++<320000){
+    const x=(rnd()*2-1)*R,y=(rnd()*2-1)*R,z=(rnd()*2-1)*R;
+    if(x*x+y*y+z*z>R*R)continue;
+    if(rnd()<dens(key,x,y,z)/mx)pts.push([x,y,z]);
+  }
+}
+function basis(){
+  const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+  /* screen axes in object coords: ex (right), ey (up), ez (toward viewer) */
+  return {ex:[cy,0,-sy], ey:[sy*sp,cp,cy*sp], ez:[sy*cp,-sp,cy*cp]};
+}
+function drawObject(){
+  const W=cvO.width,H=cvO.height,B=basis(),R=ORB[key].R,Rd=R*0.72,sc=(H*0.46)/Rd;
+  cxO.clearRect(0,0,W,H);
+  const proj=pts.map(p=>{
+    const u=p[0]*B.ex[0]+p[1]*B.ex[1]+p[2]*B.ex[2];
+    const v=p[0]*B.ey[0]+p[1]*B.ey[1]+p[2]*B.ey[2];
+    const w=p[0]*B.ez[0]+p[1]*B.ez[1]+p[2]*B.ez[2];
+    return [W/2+u*sc,H/2-v*sc,w];
+  });
+  proj.sort((a,b)=>a[2]-b[2]);
+  const img=cxO.getImageData(0,0,W,H),dt=img.data;
+  for(const q of proj){
+    const depth=clamp((q[2]/Rd+1)/2,0,1), rad=depth>0.45?2:1;
+    for(let dy=0;dy<=rad;dy++)for(let dx=0;dx<=rad;dx++){
+      const X=q[0]+dx|0,Y=q[1]+dy|0; if(X<0||Y<0||X>=W||Y>=H)continue;
+      const o=(Y*W+X)*4, tmp=new Uint8Array(4);
+      cmap(0.3+0.7*depth,tmp,0);
+      const a=0.55+0.55*depth;
+      dt[o]=Math.min(255,dt[o]+tmp[0]*a); dt[o+1]=Math.min(255,dt[o+1]+tmp[1]*a);
+      dt[o+2]=Math.min(255,dt[o+2]+tmp[2]*a); dt[o+3]=255;
+    }
+  }
+  cxO.putImageData(img,0,0);
+  cxO.fillStyle='rgba(232,230,224,0.75)'; cxO.font='13px ui-monospace,Menlo,monospace';
+  cxO.fillText(ORB[key].label+'  ·  |ψ|² point cloud',14,H-14);
+}
+function blit(ctx,W,H,gw,gh,vals,pow,mx){
+  const off=blit._c||(blit._c=document.createElement('canvas'));
+  off.width=gw; off.height=gh;
+  const octx=off.getContext('2d'), img=octx.createImageData(gw,gh), dt=img.data;
+  for(let i=0;i<gw*gh;i++)cmap(Math.pow(vals[i]/mx,pow),dt,i*4);
+  octx.putImageData(img,0,0);
+  ctx.imageSmoothingEnabled=true; ctx.clearRect(0,0,W,H);
+  ctx.drawImage(off,0,0,W,H);
+}
+function drawShadow(){
+  const W=cvS.width,H=cvS.height,B=basis(),R=ORB[key].R,sc=(H*0.46)/R;
+  const gw=110,gh=82,acc=new Float32Array(gw*gh);
+  for(const p of pts){
+    const u=p[0]*B.ex[0]+p[1]*B.ex[1]+p[2]*B.ex[2];
+    const v=p[0]*B.ey[0]+p[1]*B.ey[1]+p[2]*B.ey[2];
+    const gx=Math.round((u/R*0.5+0.5)*(gw-1)), gy=Math.round((-v/R*0.5+0.5)*(gh-1));
+    if(gx>=0&&gy>=0&&gx<gw&&gy<gh)acc[gy*gw+gx]+=1;
+  }
+  /* one smoothing pass: line-of-sight integral, Monte-Carlo estimated */
+  const sm=new Float32Array(gw*gh); let mx=1e-9;
+  for(let y=0;y<gh;y++)for(let x=0;x<gw;x++){
+    let s=0,n=0;
+    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+      const X=x+dx,Y=y+dy; if(X>=0&&Y>=0&&X<gw&&Y<gh){s+=acc[Y*gw+X];n++;}
+    }
+    sm[y*gw+x]=s/n; if(sm[y*gw+x]>mx)mx=sm[y*gw+x];
+  }
+  blit(cxS,W,H,gw,gh,sm,0.55,mx);
+}
+function drawSlice(){
+  const W=cvL.width,H=cvL.height,B=basis(),R=ORB[key].R;
+  const gw=150,gh=102;
+  /* facing plane through the centre: p = u*ex + v*ey (object coords), per-pixel from grid */
+  let mx=1e-12; const vals=new Float32Array(gw*gh);
+  for(let gy=0;gy<gh;gy++)for(let gx=0;gx<gw;gx++){
+    const u=(gx/(gw-1)*2-1)*R, v=(1-gy/(gh-1)*2)*R;
+    const x=u*B.ex[0]+v*B.ey[0], y=u*B.ex[1]+v*B.ey[1], z=u*B.ex[2]+v*B.ey[2];
+    const d=dens(key,x,y,z); vals[gy*gw+gx]=d; if(d>mx)mx=d;
+  }
+  blit(cxL,W,H,gw,gh,vals,0.5,mx);
+}
+function frame(now){
+  if(!dragging&&now-lastTouch>2600)yaw+=0.0035;
+  drawObject(); drawShadow(); drawSlice();
+  requestAnimationFrame(frame);
+}
+function ptr(e){const r=cvO.getBoundingClientRect();
+  return [(e.clientX-r.left)/r.width*cvO.width,(e.clientY-r.top)/r.height*cvO.height];}
+cvO.addEventListener('pointerdown',e=>{dragging=true;[px,py]=ptr(e);cvO.setPointerCapture(e.pointerId);});
+cvO.addEventListener('pointermove',e=>{if(!dragging)return;const [x,y]=ptr(e);
+  yaw+=(x-px)*0.008; pitch=clamp(pitch+(y-py)*0.008,-1.4,1.4); px=x; py=y;});
+const endDrag=()=>{dragging=false;lastTouch=performance.now();};
+cvO.addEventListener('pointerup',endDrag); cvO.addEventListener('pointercancel',endDrag);
+document.getElementById('presets').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  document.querySelectorAll('#presets button').forEach(x=>x.classList.toggle('on',x===b));
+  key=b.dataset.p; sample();
+});
+sample();
+requestAnimationFrame(frame);
+
+/* ---------- Panel 2: the twins — identical shadow, different phase ---------- */
+const cvT=document.getElementById('cvTwins'), cxT=cvT.getContext('2d');
+let refOn=false;
+const btnRef=document.getElementById('btnRef');
+btnRef.addEventListener('click',()=>{refOn=!refOn;
+  btnRef.classList.toggle('on',refOn);
+  btnRef.textContent=refOn?'Remove the reference wave':'Add a reference wave';
+  drawTwins();});
+function twinPsi(x,y,flip){
+  /* z=0 slice of a d-type wave: psi ~ (x^2 - y^2) e^{-r/3}; twin flips sign across each node */
+  const r=Math.sqrt(x*x+y*y);
+  let v=(x*x-y*y)*Math.exp(-r/3);
+  if(flip)v=Math.abs(v);
+  return v;
+}
+function drawTwins(){
+  const W=cvT.width,H=cvT.height,half=W/2,G=168,ext=11;
+  /* psi normalisation probe */
+  let pm=1e-12;
+  for(let gy=0;gy<G;gy++)for(let gx=0;gx<G;gx++){
+    const x=(gx/(G-1)*2-1)*ext, y=(1-gy/(G-1)*2)*ext;
+    const v=Math.abs(twinPsi(x,y,false)); if(v>pm)pm=v;
+  }
+  const refA=0.45*pm, k=0.55;
+  for(let side=0;side<2;side++){
+    const flip=side===1;
+    const img=cxT.createImageData(half,H),dt=img.data;
+    for(let py=0;py<H;py++)for(let pxx=0;pxx<half;pxx++){
+      const gx=clamp(Math.round(pxx/half*(G-1)),0,G-1), gy=clamp(Math.round(py/H*(G-1)),0,G-1);
+      const x=(gx/(G-1)*2-1)*ext, y=(1-gy/(G-1)*2)*ext;
+      const v=twinPsi(x,y,flip); let inten;
+      if(!refOn){inten=v*v/(pm*pm);}
+      else{const re=v+refA*Math.cos(k*x), im=refA*Math.sin(k*x);
+        inten=(re*re+im*im)/(pm*pm*1.9);}
+      cmap(Math.pow(clamp(inten,0,1),0.5),dt,(py*half+pxx)*4);
+    }
+    cxT.putImageData(img,side*half,0);
+  }
+  cxT.fillStyle='rgba(10,12,14,0.55)'; cxT.fillRect(0,H-58,W,58);
+  cxT.fillStyle='#e8e6e0'; cxT.font='13px ui-monospace,Menlo,monospace';
+  cxT.fillText(refOn?'ψ — interfered with the reference':'ψ — its shadow |ψ|²',14,H-36);
+  cxT.fillText(refOn?'twin — interfered, fringes shifted':'twin — the same shadow, exactly',half+14,H-36);
+  cxT.fillStyle='#9aa0a3'; cxT.font='12px ui-monospace,Menlo,monospace';
+  cxT.fillText(refOn?'same |ψ|², different ψ — the fringes confess it':'phase pattern differs; the shadow cannot see it',14,H-16);
+  cxT.strokeStyle='#262c31'; cxT.beginPath(); cxT.moveTo(half,0); cxT.lineTo(half,H); cxT.stroke();
+}
+drawTwins();
+
+/* ---------- Panel 3: tomography — naive back-projection ---------- */
+const cvG=document.getElementById('cvTarget'), cxG=cvG.getContext('2d');
+const cvR=document.getElementById('cvRecon'), cxR=cvR.getContext('2d');
+const GN=96, EXT=11;
+const target=new Float32Array(GN*GN);
+(function(){
+  let mx=1e-12;
+  for(let gy=0;gy<GN;gy++)for(let gx=0;gx<GN;gx++){
+    const x=(gx/(GN-1)*2-1)*EXT, y=(1-gy/(GN-1)*2)*EXT;
+    const v=twinPsi(x,y,false); target[gy*GN+gx]=v*v;
+    if(target[gy*GN+gx]>mx)mx=target[gy*GN+gx];
+  }
+  for(let i=0;i<target.length;i++)target[i]/=mx;
+})();
+function paintGrid(ctx,cv,grid,pow,subMin){
+  const W=cv.width,H=cv.height,img=ctx.createImageData(W,H),dt=img.data;
+  let mx=1e-12,mn=Infinity;
+  for(let i=0;i<grid.length;i++){if(grid[i]>mx)mx=grid[i]; if(grid[i]<mn)mn=grid[i];}
+  if(!subMin)mn=0;
+  const rng=Math.max(mx-mn,1e-12);
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    const gx=clamp(Math.round(x/W*(GN-1)),0,GN-1), gy=clamp(Math.round(y/H*(GN-1)),0,GN-1);
+    cmap(Math.pow(clamp((grid[gy*GN+gx]-mn)/rng,0,1),pow),dt,(y*W+x)*4);
+  }
+  ctx.putImageData(img,0,0);
+}
+paintGrid(cxG,cvG,target,0.5);
+const NB=128;
+function reconstruct(nAng){
+  /* sinogram by splatting: each pixel votes into the detector bin of its projection */
+  const sino=new Float32Array(nAng*NB);
+  for(let a=0;a<nAng;a++){
+    const th=Math.PI*a/nAng, c=Math.cos(th), s=Math.sin(th);
+    for(let gy=0;gy<GN;gy++)for(let gx=0;gx<GN;gx++){
+      const val=target[gy*GN+gx]; if(val<0.004)continue;
+      const x=gx/(GN-1)*2-1, y=1-gy/(GN-1)*2;
+      const t=(x*c+y*s)/(2*Math.SQRT2)+0.5;
+      const b=clamp(Math.round(t*(NB-1)),0,NB-1);
+      sino[a*NB+b]+=val;
+    }
+  }
+  const rec=new Float32Array(GN*GN);
+  for(let gy=0;gy<GN;gy++)for(let gx=0;gx<GN;gx++){
+    const x=gx/(GN-1)*2-1, y=1-gy/(GN-1)*2;
+    let sum=0;
+    for(let a=0;a<nAng;a++){
+      const th=Math.PI*a/nAng, c=Math.cos(th), s=Math.sin(th);
+      const t=(x*c+y*s)/(2*Math.SQRT2)+0.5;
+      const bf=t*(NB-1), b0=clamp(Math.floor(bf),0,NB-2), fr=bf-b0;
+      sum+=sino[a*NB+b0]*(1-fr)+sino[a*NB+b0+1]*fr;
+    }
+    rec[gy*GN+gx]=sum/nAng;
+  }
+  paintGrid(cxR,cvR,rec,0.8,true);
+}
+const angSlider=document.getElementById('angSlider'), angVal=document.getElementById('angVal');
+function updAng(){const n=+angSlider.value;
+  angVal.textContent=n+(n===1?' angle':' angles'); reconstruct(n);}
+angSlider.addEventListener('input',updAng);
+updAng();
+</script>
+</body>
+</html>
