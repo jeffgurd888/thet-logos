@@ -1262,4 +1262,1479 @@ theorem c4_split_list (hN : Even N) (hN3 : 3 ≤ N)
 
 end SplitListCorollary
 
+/-! ## §5b. The contraction engine
+
+PW-5b: the machinery that turns a `quadCharMoment` at a `C4`
+quad into evaluated pair contractions. Three parts:
+
+* **R1 (support factorization).** Each column character is
+  expanded into matrix entries (`trace` of the column word as
+  a four-fold entry sum). A column contributes exactly two
+  site-local factors — one at its base, one at its head — and
+  two frozen link factors. The stratum integral then factors
+  over the sites of the layer: at every site outside the
+  quad's support the local factor is `1`, and at each support
+  site exactly the two incident columns contribute. The end
+  form is a finite sum over entry-index assignments of a
+  product of frozen factors times a product, over the four
+  ordered support sites, of single-site Haar integrals of
+  pairs of entry factors.
+* **The per-site type table.** Each site factor is a plain or
+  a conjugated `repMatrix` entry, determined by the column's
+  pattern membership and by whether the site is the column's
+  base or its head; the four pair evaluations (mixed by PW-1,
+  same-orientation by PW-3) are packaged against the
+  site-factor definitions, and the based/headed incidence at
+  a site is read off its `siteSplit` value.
+* **R2 (twisted contraction).** The entry-level sewing of
+  frozen path sandwiches: contracting a path word against a
+  conjugate path (mixed) or against a plain path
+  (same-orientation) at one site, with the `J`-insertion of
+  PW-3 appearing in the contracted object; and the final
+  closure identity, which contracts the `star (J) · J` tensor
+  around the closed cycle into a Frobenius pairing — a sum of
+  entry products of the two `J`-twisted path matrices, hence
+  a sum of squared norms when the second path is the
+  conjugate of the first.
+
+**Fences.** NO CLAIM; dials 0/4. This section is a
+contraction engine only: it evaluates integrals and
+rearranges finite sums, and asserts **no sign** for `Φ` or
+for any moment. The assembly of the sign from these parts
+is §5c. Finite-volume algebra only; `N = 2` is not touched.
+-/
+
+section ContractionEngine
+
+variable {G : Type*} [Group G] [MeasurableSpace G] [MeasurableInv G]
+  [TopologicalSpace G] [IsTopologicalGroup G] [BorelSpace G]
+  [SecondCountableTopology G] {d : ℕ}
+  (ρ : G →* ↥(Matrix.unitaryGroup (Fin d) ℂ)) {N : ℕ} [NeZero N]
+  (μG : Measure G) [IsProbabilityMeasure μG]
+  [μG.IsMulLeftInvariant] [μG.IsMulRightInvariant] [μG.IsInvInvariant]
+
+/-! ### §5b.0. The site-factor definitions
+
+For a column `Q` and a pattern bit `σ` (`σ = true`: the
+column is taken plain in the moment; `σ = false`: taken
+conjugated), the character of the column word is the sum,
+over entry indices `a b e f`, of a product of two site-local
+factors and one frozen factor:
+
+* plain: `ρ(α c) a b · star (ρ(α σ_Q c)) f e · (ρ(u' ℓ) b e · star (ρ(u ℓ)) a f)`;
+* conjugated: `star (ρ(α c)) a f · ρ(α σ_Q c) b e · (ρ(u ℓ) a b · star (ρ(u' ℓ)) f e)`,
+
+where `c = Q.1` is the base, `σ_Q c` the head, and
+`ℓ = layerLinkOf c Q.2.1 Q.2.2` the column's link. The two
+site-local factors are packaged as `colBaseFac` (at the
+base) and `colHeadFac` (at the head); `colSiteFac` selects
+the factor a column contributes at a given site (`1` at
+sites the column does not read). -/
+
+/-- The link a column reads. -/
+def colLink (Q : LayerColumn N) : LayerLink N :=
+  layerLinkOf Q.1 Q.2.1 Q.2.2
+
+/-- The head site of a column: the second site it reads. -/
+def colHead (Q : LayerColumn N) : LayerSite N :=
+  layerShift Q.2.1 Q.2.2 Q.1
+
+/-- The two sites a column reads are its base and its head. -/
+theorem colSites_eq (Q : LayerColumn N) :
+    colSites Q = {Q.1, colHead Q} := rfl
+
+/-- The site-local factor a column contributes at its
+**base**: a plain entry of `ρ(g)` at indices `(a, b)` if the
+column is taken plain; if taken conjugated, the base letter
+of the inverse word is `(α c)⁻¹`, whose `(f, a)` entry is
+the conjugate of the `(a, f)` entry of `ρ(g)`. -/
+def colBaseFac (Q : LayerColumn N) (σ : Bool) (a b e f : Fin d) (g : G) : ℂ :=
+  if σ then repMatrix ρ g a b else star (repMatrix ρ g a f)
+
+/-- The site-local factor a column contributes at its
+**head**: if the column is taken plain, the head letter of
+its word is `(α σ_Q c)⁻¹`, whose `(e, f)` entry is the
+conjugate of the `(f, e)` entry of `ρ(g)`; if taken
+conjugated, a plain entry at `(b, e)`. -/
+def colHeadFac (Q : LayerColumn N) (σ : Bool) (a b e f : Fin d) (g : G) : ℂ :=
+  if σ then star (repMatrix ρ g f e) else repMatrix ρ g b e
+
+/-- The frozen factor of a column: the two link entries of
+its word, at the frozen configurations `u, u'`. -/
+def colFrozenFac (u u' : LayerLink N → G) (Q : LayerColumn N) (σ : Bool)
+    (a b e f : Fin d) : ℂ :=
+  if σ then repMatrix ρ (u' (colLink Q)) b e
+      * star (repMatrix ρ (u (colLink Q)) a f)
+    else repMatrix ρ (u (colLink Q)) a b
+      * star (repMatrix ρ (u' (colLink Q)) f e)
+
+/-- The factor a column contributes at a site `r`: its base
+factor at the base, its head factor at the head, and `1`
+at any site it does not read. -/
+noncomputable def colSiteFac (Q : LayerColumn N) (σ : Bool) (a b e f : Fin d)
+    (r : LayerSite N) (g : G) : ℂ :=
+  if r = Q.1 then colBaseFac ρ Q σ a b e f g
+  else if r = colHead Q then colHeadFac ρ Q σ a b e f g
+  else 1
+
+/-- The base factor at `σ = true`, unfolded. -/
+private theorem colBaseFac_true (Q : LayerColumn N) (a b e f : Fin d)
+    (g : G) :
+    colBaseFac ρ Q true a b e f g = repMatrix ρ g a b := rfl
+
+/-- The base factor at `σ = false`, unfolded. -/
+private theorem colBaseFac_false (Q : LayerColumn N) (a b e f : Fin d)
+    (g : G) :
+    colBaseFac ρ Q false a b e f g = star (repMatrix ρ g a f) := rfl
+
+/-- The head factor at `σ = true`, unfolded. -/
+private theorem colHeadFac_true (Q : LayerColumn N) (a b e f : Fin d)
+    (g : G) :
+    colHeadFac ρ Q true a b e f g = star (repMatrix ρ g f e) := rfl
+
+/-- The head factor at `σ = false`, unfolded. -/
+private theorem colHeadFac_false (Q : LayerColumn N) (a b e f : Fin d)
+    (g : G) :
+    colHeadFac ρ Q false a b e f g = repMatrix ρ g b e := rfl
+
+/-- The frozen factor at `σ = true`, unfolded. -/
+private theorem colFrozenFac_true (u u' : LayerLink N → G)
+    (Q : LayerColumn N) (a b e f : Fin d) :
+    colFrozenFac ρ u u' Q true a b e f
+      = repMatrix ρ (u' (colLink Q)) b e
+        * star (repMatrix ρ (u (colLink Q)) a f) := rfl
+
+/-- The frozen factor at `σ = false`, unfolded. -/
+private theorem colFrozenFac_false (u u' : LayerLink N → G)
+    (Q : LayerColumn N) (a b e f : Fin d) :
+    colFrozenFac ρ u u' Q false a b e f
+      = repMatrix ρ (u (colLink Q)) a b
+        * star (repMatrix ρ (u' (colLink Q)) f e) := rfl
+
+/-- At the base site, the site factor is the base factor. -/
+theorem colSiteFac_base (Q : LayerColumn N) (σ : Bool) (a b e f : Fin d)
+    (g : G) :
+    colSiteFac ρ Q σ a b e f Q.1 g = colBaseFac ρ Q σ a b e f g := by
+  simp [colSiteFac]
+
+/-- At the head site, the site factor is the head factor
+(the head differs from the base at even `N`). -/
+theorem colSiteFac_head (hN : Even N) (Q : LayerColumn N) (σ : Bool)
+    (a b e f : Fin d) (g : G) :
+    colSiteFac ρ Q σ a b e f (colHead Q) g
+      = colHeadFac ρ Q σ a b e f g := by
+  have hne : colHead Q ≠ Q.1 := layerShift_ne_self hN Q.2.1 Q.2.2 Q.1
+  simp [colSiteFac, hne]
+
+/-- At a site the column does not read, the site factor
+is `1`. -/
+theorem colSiteFac_of_not_mem (Q : LayerColumn N) (σ : Bool) (a b e f : Fin d)
+    {r : LayerSite N} (hr : r ∉ colSites Q) (g : G) :
+    colSiteFac ρ Q σ a b e f r g = 1 := by
+  rw [colSites_eq] at hr
+  simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at hr
+  simp [colSiteFac, hr.1, hr.2]
+
+/-- Table cell: plain column at its base — a plain entry. -/
+theorem colSiteFac_base_plain (Q : LayerColumn N) (a b e f : Fin d) (g : G) :
+    colSiteFac ρ Q true a b e f Q.1 g = repMatrix ρ g a b := by
+  rw [colSiteFac_base]; rfl
+
+/-- Table cell: conjugated column at its base — a
+conjugated entry. -/
+theorem colSiteFac_base_conj (Q : LayerColumn N) (a b e f : Fin d) (g : G) :
+    colSiteFac ρ Q false a b e f Q.1 g = star (repMatrix ρ g a f) := by
+  rw [colSiteFac_base]; rfl
+
+/-- Table cell: plain column at its head — a conjugated
+entry. -/
+theorem colSiteFac_head_plain (hN : Even N) (Q : LayerColumn N)
+    (a b e f : Fin d) (g : G) :
+    colSiteFac ρ Q true a b e f (colHead Q) g
+      = star (repMatrix ρ g f e) := by
+  rw [colSiteFac_head ρ hN]; rfl
+
+/-- Table cell: conjugated column at its head — a plain
+entry. -/
+theorem colSiteFac_head_conj (hN : Even N) (Q : LayerColumn N)
+    (a b e f : Fin d) (g : G) :
+    colSiteFac ρ Q false a b e f (colHead Q) g = repMatrix ρ g b e := by
+  rw [colSiteFac_head ρ hN]; rfl
+
+/-! ### §5b.1. The entry expansions
+
+The trace of a four-fold matrix product as a four-fold
+entry sum, and the two expansions of a column character —
+plain and conjugated — into site factors times the frozen
+factor. -/
+
+/-- The trace of a four-fold product is the four-fold entry
+sum, indices chained `a → b → e → f → a`. -/
+private theorem trace_mul4 (A B C D : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix.trace (A * B * C * D)
+      = ∑ a, ∑ b, ∑ e, ∑ f, A a b * B b e * C e f * D f a := by
+  have h2 : ∀ X Y : Matrix (Fin d) (Fin d) ℂ,
+      Matrix.trace (X * Y) = ∑ a, ∑ e, X a e * Y e a := by
+    intro X Y
+    simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply]
+  rw [Matrix.mul_assoc (A * B) C D, h2]
+  refine Finset.sum_congr rfl fun a _ => ?_
+  simp only [Matrix.mul_apply, Finset.sum_mul, Finset.mul_sum]
+  refine (Finset.sum_congr rfl fun e₀ _ => Finset.sum_comm).trans ?_
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun b _ => Finset.sum_congr rfl fun e _ =>
+    Finset.sum_congr rfl fun f _ => by ring
+
+/-- **Entry expansion, plain column.** The character of a
+column word is the sum over entry indices of its base
+factor, head factor, and frozen factor, all at `σ = true`. -/
+theorem charFn_colWord_expand (u u' : LayerLink N → G) (Q : LayerColumn N)
+    (α : LayerSite N → G) :
+    charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)
+      = ∑ a, ∑ b, ∑ e, ∑ f, colBaseFac ρ Q true a b e f (α Q.1)
+          * colHeadFac ρ Q true a b e f (α (colHead Q))
+          * colFrozenFac ρ u u' Q true a b e f := by
+  have hword : repMatrix ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)
+      = repMatrix ρ (α Q.1) * repMatrix ρ (u' (colLink Q))
+        * star (repMatrix ρ (α (colHead Q)))
+        * star (repMatrix ρ (u (colLink Q))) := by
+    show repMatrix ρ (α Q.1 * u' (colLink Q) * (α (colHead Q))⁻¹
+      * (u (colLink Q))⁻¹) = _
+    rw [repMatrix_mul, repMatrix_mul, repMatrix_mul, repMatrix_inv,
+      repMatrix_inv]
+  show Matrix.trace _ = _
+  rw [hword, trace_mul4]
+  refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ =>
+    Finset.sum_congr rfl fun e _ => Finset.sum_congr rfl fun f _ => ?_
+  simp only [Matrix.star_apply, colBaseFac_true, colHeadFac_true,
+    colFrozenFac_true]
+  ring
+
+/-- **Entry expansion, conjugated column.** The conjugate
+of a column character is the character of the inverse word;
+its expansion has the same shape at `σ = false`. -/
+theorem star_charFn_colWord_expand (u u' : LayerLink N → G)
+    (Q : LayerColumn N) (α : LayerSite N → G) :
+    star (charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α))
+      = ∑ a, ∑ b, ∑ e, ∑ f, colBaseFac ρ Q false a b e f (α Q.1)
+          * colHeadFac ρ Q false a b e f (α (colHead Q))
+          * colFrozenFac ρ u u' Q false a b e f := by
+  have hstar : charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)⁻¹
+      = star (charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)) := by
+    rw [charFn_inv, starRingEnd_apply]
+  have hinv : (colWord u u' Q.1 Q.2.1 Q.2.2 α)⁻¹
+      = u (colLink Q) * α (colHead Q) * (u' (colLink Q))⁻¹ * (α Q.1)⁻¹ := by
+    show (α Q.1 * u' (colLink Q) * (α (colHead Q))⁻¹ * (u (colLink Q))⁻¹)⁻¹
+      = _
+    group
+  rw [← hstar, hinv]
+  show Matrix.trace (repMatrix ρ (u (colLink Q) * α (colHead Q)
+    * (u' (colLink Q))⁻¹ * (α Q.1)⁻¹)) = _
+  rw [repMatrix_mul, repMatrix_mul, repMatrix_mul, repMatrix_inv,
+    repMatrix_inv, trace_mul4]
+  refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ =>
+    Finset.sum_congr rfl fun e _ => Finset.sum_congr rfl fun f _ => ?_
+  simp only [Matrix.star_apply, colBaseFac_false, colHeadFac_false,
+    colFrozenFac_false]
+  ring
+
+/-! ### §5b.2. R1: support factorization
+
+The stratum integrand of `quadCharMoment`, on the ordered
+columns of a primitive quad, is a product over the four
+columns of plain/conjugated characters; each character
+expands into entry sums; the integral of the expanded
+product is a finite sum of products of single-site pair
+integrals. -/
+
+/-- The pointwise product identity: on the cycle ordering,
+the `t`-split product of plain and conjugated characters
+is the product over the four ordered columns of the
+pattern-selected character. -/
+private theorem quadCharIntegrand_eq_prod_ordered
+    {C : Finset (LayerColumn N)} {s : Fin 4 → LayerSite N}
+    {P : Fin 4 → LayerColumn N} (hP : Function.Injective P)
+    (hPmem : ∀ i, P i ∈ C) (hPcover : ∀ Q ∈ C, ∃ i, P i = Q)
+    {t : Finset (LayerColumn N)} (ht : t ⊆ C) (u u' : LayerLink N → G)
+    (α : LayerSite N → G) :
+    (∏ Q ∈ t, charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α))
+      * (∏ Q ∈ C \ t, star (charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)))
+    = ∏ i : Fin 4, (if P i ∈ t
+        then charFn ρ (colWord u u' (P i).1 (P i).2.1 (P i).2.2 α)
+        else star (charFn ρ (colWord u u' (P i).1 (P i).2.1 (P i).2.2 α))) := by
+  classical
+  set F : LayerColumn N → ℂ := fun Q => if Q ∈ t
+    then charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)
+    else star (charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)) with hF
+  have himage : Finset.univ.image P = C := by
+    apply Finset.Subset.antisymm
+    · intro Q hQ
+      rw [Finset.mem_image] at hQ
+      obtain ⟨i, _, hi⟩ := hQ
+      rw [← hi]; exact hPmem i
+    · intro Q hQ
+      obtain ⟨i, hi⟩ := hPcover Q hQ
+      rw [Finset.mem_image]
+      exact ⟨i, Finset.mem_univ i, hi⟩
+  have hprodC : ∏ i : Fin 4, F (P i) = ∏ Q ∈ C, F Q := by
+    rw [← himage, Finset.prod_image (fun i _ j _ h => hP h)]
+  have hsplit : ∏ Q ∈ C, F Q
+      = (∏ Q ∈ t, charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α))
+        * (∏ Q ∈ C \ t, star (charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α))) := by
+    have ht' : ∏ Q ∈ t, F Q
+        = ∏ Q ∈ t, charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α) :=
+      Finset.prod_congr rfl fun Q hQ => if_pos hQ
+    have hc' : ∏ Q ∈ C \ t, F Q
+        = ∏ Q ∈ C \ t, star (charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)) :=
+      Finset.prod_congr rfl fun Q hQ => if_neg (Finset.mem_sdiff.mp hQ).2
+    rw [← Finset.prod_sdiff ht, ht', hc']
+    exact mul_comm _ _
+  rw [hsplit] at hprodC
+  exact hprodC.symm.trans (Finset.prod_congr rfl fun i _ => rfl)
+
+/-- The pattern-selected character of one column, expanded:
+the bridge between the `t`-membership form and the
+Bool-indexed site factors. -/
+private theorem colCharFac_expand (u u' : LayerLink N → G)
+    (Q : LayerColumn N) (t : Finset (LayerColumn N))
+    (α : LayerSite N → G) :
+    (if Q ∈ t then charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)
+      else star (charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)))
+    = ∑ a, ∑ b, ∑ e, ∑ f, colBaseFac ρ Q (decide (Q ∈ t)) a b e f (α Q.1)
+        * colHeadFac ρ Q (decide (Q ∈ t)) a b e f (α (colHead Q))
+        * colFrozenFac ρ u u' Q (decide (Q ∈ t)) a b e f := by
+  classical
+  by_cases h : Q ∈ t
+  · rw [if_pos h, show decide (Q ∈ t) = true by simp [h]]
+    exact charFn_colWord_expand ρ u u' Q α
+  · rw [if_neg h, show decide (Q ∈ t) = false by simp [h]]
+    exact star_charFn_colWord_expand ρ u u' Q α
+
+/-- Base factors are entries of a unitary matrix, or their
+conjugates: norm at most `1`. -/
+private theorem norm_colBaseFac_le (Q : LayerColumn N) (σ : Bool)
+    (a b e f : Fin d) (g : G) : ‖colBaseFac ρ Q σ a b e f g‖ ≤ 1 := by
+  cases σ with
+  | true =>
+    rw [colBaseFac_true]
+    exact abs_entry_of_mem_unitaryGroup (repMatrix_mem ρ g) a b
+  | false =>
+    rw [colBaseFac_false, norm_star]
+    exact abs_entry_of_mem_unitaryGroup (repMatrix_mem ρ g) a f
+
+/-- Head factors have norm at most `1`. -/
+private theorem norm_colHeadFac_le (Q : LayerColumn N) (σ : Bool)
+    (a b e f : Fin d) (g : G) : ‖colHeadFac ρ Q σ a b e f g‖ ≤ 1 := by
+  cases σ with
+  | true =>
+    rw [colHeadFac_true, norm_star]
+    exact abs_entry_of_mem_unitaryGroup (repMatrix_mem ρ g) f e
+  | false =>
+    rw [colHeadFac_false]
+    exact abs_entry_of_mem_unitaryGroup (repMatrix_mem ρ g) b e
+
+/-- Frozen factors have norm at most `1`: a product of two
+unitary entries (or conjugates). -/
+private theorem norm_colFrozenFac_le (u u' : LayerLink N → G)
+    (Q : LayerColumn N) (σ : Bool) (a b e f : Fin d) :
+    ‖colFrozenFac ρ u u' Q σ a b e f‖ ≤ 1 := by
+  cases σ with
+  | true =>
+    rw [colFrozenFac_true]
+    refine le_trans (norm_mul_le _ _) ?_
+    refine mul_le_one₀ ?_ (norm_nonneg _) ?_
+    · exact abs_entry_of_mem_unitaryGroup (repMatrix_mem ρ _) b e
+    · rw [norm_star]
+      exact abs_entry_of_mem_unitaryGroup (repMatrix_mem ρ _) a f
+  | false =>
+    rw [colFrozenFac_false]
+    refine le_trans (norm_mul_le _ _) ?_
+    refine mul_le_one₀ ?_ (norm_nonneg _) ?_
+    · exact abs_entry_of_mem_unitaryGroup (repMatrix_mem ρ _) a b
+    · rw [norm_star]
+      exact abs_entry_of_mem_unitaryGroup (repMatrix_mem ρ _) f e
+
+/-- Measurability of a base factor as a function of the
+configuration, read at a site `r`. -/
+private theorem measurable_colBaseFac_apply
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (Q : LayerColumn N) (σ : Bool) (a b e f : Fin d) (r : LayerSite N) :
+    Measurable (fun α : LayerSite N → G =>
+      colBaseFac ρ Q σ a b e f (α r)) := by
+  have hentry : ∀ i j : Fin d, Measurable (fun α : LayerSite N → G =>
+      repMatrix ρ (α r) i j) :=
+    fun i j => (measurable_pi_apply j).comp
+      ((measurable_pi_apply i).comp (hρcont.measurable.comp
+        (measurable_pi_apply r)))
+  cases σ with
+  | true =>
+    have hfun : (fun α : LayerSite N → G =>
+        colBaseFac ρ Q true a b e f (α r))
+        = fun α : LayerSite N → G => repMatrix ρ (α r) a b :=
+      funext fun α => colBaseFac_true ρ Q a b e f (α r)
+    rw [hfun]
+    exact hentry a b
+  | false =>
+    have hfun : (fun α : LayerSite N → G =>
+        colBaseFac ρ Q false a b e f (α r))
+        = fun α : LayerSite N → G => star (repMatrix ρ (α r) a f) :=
+      funext fun α => colBaseFac_false ρ Q a b e f (α r)
+    rw [hfun]
+    exact continuous_star.measurable.comp (hentry a f)
+
+/-- Finite `Fin 4` arithmetic facts used by the site
+bookkeeping, all decidable. -/
+private theorem fin4_facts : ∀ j : Fin 4, j ≠ j + 1 ∧ j ≠ j + 1 + 1
+    ∧ j ≠ j + 2 ∧ j ≠ j + 2 + 1 ∧ j ≠ j + 3 ∧ j + 3 ≠ j
+    ∧ (j + 3) + 1 = j := by decide
+
+/-- **Regrouping**: the product over the columns of
+(base factor · head factor) is the product over all sites
+of the product of the site factors — each column
+contributes at exactly its two sites. -/
+private theorem prod_baseHeadFac_eq_prod_siteFac (hN : Even N)
+    (P : Fin 4 → LayerColumn N) (σ : Fin 4 → Bool) (a b e f : Fin 4 → Fin d)
+    (α : LayerSite N → G) :
+    ∏ i, (colBaseFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) (α (P i).1)
+        * colHeadFac ρ (P i) (σ i) (a i) (b i) (e i) (f i)
+            (α (colHead (P i))))
+    = ∏ r : LayerSite N, ∏ i, colSiteFac ρ (P i) (σ i) (a i) (b i) (e i)
+        (f i) r (α r) := by
+  rw [Finset.prod_comm]
+  refine Finset.prod_congr rfl fun i _ => ?_
+  have hsupp : ∀ r : LayerSite N, r ∉ {(P i).1, colHead (P i)} →
+      colSiteFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) r (α r) = 1 :=
+    fun r hr => colSiteFac_of_not_mem ρ (P i) (σ i) (a i) (b i) (e i) (f i)
+      (by rwa [colSites_eq]) (α r)
+  have hne : (P i).1 ≠ colHead (P i) :=
+    Ne.symm (layerShift_ne_self hN (P i).2.1 (P i).2.2 (P i).1)
+  rw [← Finset.prod_subset (Finset.subset_univ {(P i).1, colHead (P i)})
+    (fun r _ hr => hsupp r hr), Finset.prod_pair hne, colSiteFac_base,
+    colSiteFac_head ρ hN]
+
+/-- **Site collapse**: at the ordered site `s j`, only the
+two incident columns `P (j + 3)` and `P j` contribute a
+nontrivial site factor. -/
+private theorem prod_colSiteFac_eq_pair
+    (s : Fin 4 → LayerSite N) (P : Fin 4 → LayerColumn N)
+    (hs : Function.Injective s)
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)})
+    (σ : Fin 4 → Bool) (a b e f : Fin 4 → Fin d) (j : Fin 4) (g : G) :
+    ∏ i, colSiteFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) (s j) g
+    = colSiteFac ρ (P (j + 3)) (σ (j + 3)) (a (j + 3)) (b (j + 3))
+        (e (j + 3)) (f (j + 3)) (s j) g
+      * colSiteFac ρ (P j) (σ j) (a j) (b j) (e j) (f j) (s j) g := by
+  have h1 : ∀ i : Fin 4, i ∉ ({j + 3, j} : Finset (Fin 4)) →
+      colSiteFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) (s j) g = 1 := by
+    intro i hi
+    have hcases : i = j + 1 ∨ i = j + 2 := by
+      have hex : ∀ x y : Fin 4, x ∉ ({y + 3, y} : Finset (Fin 4)) →
+          x = y + 1 ∨ x = y + 2 := by decide
+      exact hex i j hi
+    apply colSiteFac_of_not_mem
+    rcases hcases with rfl | rfl
+    · rw [hinc (j + 1)]
+      simp only [Finset.mem_insert, Finset.mem_singleton, not_or]
+      exact ⟨hs.ne (fin4_facts j).1, hs.ne (fin4_facts j).2.1⟩
+    · rw [hinc (j + 2)]
+      simp only [Finset.mem_insert, Finset.mem_singleton, not_or]
+      exact ⟨hs.ne (fin4_facts j).2.2.1, hs.ne (fin4_facts j).2.2.2.1⟩
+  rw [← Finset.prod_subset (Finset.subset_univ ({j + 3, j} : Finset (Fin 4)))
+    (fun i _ hi => h1 i hi), Finset.prod_pair (fin4_facts j).2.2.2.2.2.1]
+
+/-- **Support collapse**: in the product over all sites of
+the site integrals, every site outside the quad's support
+contributes `1`, and the support is the image of the
+ordered sites. -/
+private theorem prod_siteIntFull_eq_ordered
+    {C : Finset (LayerColumn N)} (s : Fin 4 → LayerSite N)
+    (P : Fin 4 → LayerColumn N) (hs : Function.Injective s)
+    (hPmem : ∀ i, P i ∈ C) (hPcover : ∀ Q ∈ C, ∃ i, P i = Q)
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)})
+    (σ : Fin 4 → Bool) (a b e f : Fin 4 → Fin d) :
+    (∏ r : LayerSite N, ∫ g, ∏ i, colSiteFac ρ (P i) (σ i) (a i) (b i)
+        (e i) (f i) r g ∂μG)
+    = ∏ j : Fin 4, ∫ g, ∏ i, colSiteFac ρ (P i) (σ i) (a i) (b i) (e i)
+        (f i) (s j) g ∂μG := by
+  have hsupp : quadSupport C = Finset.univ.image s := by
+    ext r
+    simp only [quadSupport, Finset.mem_biUnion, Finset.mem_image,
+      Finset.mem_univ, true_and]
+    constructor
+    · rintro ⟨Q, hQC, hrQ⟩
+      obtain ⟨i, hi⟩ := hPcover Q hQC
+      rw [← hi, hinc i] at hrQ
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hrQ
+      rcases hrQ with rfl | rfl
+      · exact ⟨i, rfl⟩
+      · exact ⟨i + 1, rfl⟩
+    · rintro ⟨j, rfl⟩
+      exact ⟨P j, hPmem j, by
+        rw [hinc j]; exact Finset.mem_insert_self _ _⟩
+  have hone : ∀ r : LayerSite N, r ∉ quadSupport C →
+      (∫ g, ∏ i, colSiteFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) r g
+        ∂μG) = 1 := by
+    intro r hr
+    have hfac : ∀ i, ∀ g : G,
+        colSiteFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) r g = 1 :=
+      fun i g => colSiteFac_of_not_mem ρ (P i) (σ i) (a i) (b i) (e i)
+        (f i) (fun hmem => hr (Finset.mem_biUnion.mpr ⟨P i, hPmem i, hmem⟩)) g
+    rw [integral_congr_ae (Filter.Eventually.of_forall fun g =>
+      Finset.prod_eq_one (fun i _ => hfac i g))]
+    simp
+  rw [← Finset.prod_subset (Finset.subset_univ (quadSupport C))
+    (fun r _ hr => hone r hr), hsupp,
+    Finset.prod_image (fun i _ j _ h => hs h)]
+
+/-- Measurability of a head factor as a function of the
+configuration, read at a site `r`. -/
+private theorem measurable_colHeadFac_apply
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (Q : LayerColumn N) (σ : Bool) (a b e f : Fin d) (r : LayerSite N) :
+    Measurable (fun α : LayerSite N → G =>
+      colHeadFac ρ Q σ a b e f (α r)) := by
+  have hentry : ∀ i j : Fin d, Measurable (fun α : LayerSite N → G =>
+      repMatrix ρ (α r) i j) :=
+    fun i j => (measurable_pi_apply j).comp
+      ((measurable_pi_apply i).comp (hρcont.measurable.comp
+        (measurable_pi_apply r)))
+  cases σ with
+  | true =>
+    have hfun : (fun α : LayerSite N → G =>
+        colHeadFac ρ Q true a b e f (α r))
+        = fun α : LayerSite N → G => star (repMatrix ρ (α r) f e) :=
+      funext fun α => colHeadFac_true ρ Q a b e f (α r)
+    rw [hfun]
+    exact continuous_star.measurable.comp (hentry f e)
+  | false =>
+    have hfun : (fun α : LayerSite N → G =>
+        colHeadFac ρ Q false a b e f (α r))
+        = fun α : LayerSite N → G => repMatrix ρ (α r) b e :=
+      funext fun α => colHeadFac_false ρ Q a b e f (α r)
+    rw [hfun]
+    exact hentry b e
+
+/-- The integrability of one fully-indexed summand of the
+expanded integrand: a product of site factors and frozen
+factors, all of norm at most `1`. -/
+private theorem integrable_ordered_summand
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (P : Fin 4 → LayerColumn N) (σ : Fin 4 → Bool)
+    (a b e f : Fin 4 → Fin d) :
+    Integrable (fun α : LayerSite N → G => ∏ i,
+        (colBaseFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) (α (P i).1)
+          * colHeadFac ρ (P i) (σ i) (a i) (b i) (e i) (f i)
+              (α (colHead (P i)))
+          * colFrozenFac ρ u u' (P i) (σ i) (a i) (b i) (e i) (f i)))
+      (Measure.pi fun _ : LayerSite N => μG) := by
+  refine Integrable.of_bound ?_ 1 (Filter.Eventually.of_forall fun α => ?_)
+  · exact (Finset.measurable_prod _ fun i _ =>
+      ((measurable_colBaseFac_apply ρ hρcont (P i) (σ i) (a i) (b i)
+          (e i) (f i) (P i).1).mul
+        (measurable_colHeadFac_apply ρ hρcont (P i) (σ i) (a i) (b i)
+          (e i) (f i) (colHead (P i)))).mul
+        measurable_const).aestronglyMeasurable
+  · refine le_trans (Finset.norm_prod_le _ _) ?_
+    have hfac : ∀ i : Fin 4,
+        ‖colBaseFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) (α (P i).1)
+          * colHeadFac ρ (P i) (σ i) (a i) (b i) (e i) (f i)
+              (α (colHead (P i)))
+          * colFrozenFac ρ u u' (P i) (σ i) (a i) (b i) (e i) (f i)‖
+          ≤ 1 := by
+      intro i
+      have hb := norm_colBaseFac_le ρ (P i) (σ i) (a i) (b i) (e i) (f i)
+        (α (P i).1)
+      have hh := norm_colHeadFac_le ρ (P i) (σ i) (a i) (b i) (e i) (f i)
+        (α (colHead (P i)))
+      have hf := norm_colFrozenFac_le ρ u u' (P i) (σ i) (a i) (b i) (e i)
+        (f i)
+      calc ‖colBaseFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) (α (P i).1)
+            * colHeadFac ρ (P i) (σ i) (a i) (b i) (e i) (f i)
+                (α (colHead (P i)))
+            * colFrozenFac ρ u u' (P i) (σ i) (a i) (b i) (e i) (f i)‖
+          ≤ ‖colBaseFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) (α (P i).1)‖
+            * ‖colHeadFac ρ (P i) (σ i) (a i) (b i) (e i) (f i)
+                (α (colHead (P i)))‖
+            * ‖colFrozenFac ρ u u' (P i) (σ i) (a i) (b i) (e i) (f i)‖ := by
+            refine le_trans (norm_mul_le _ _) ?_
+            exact mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _)
+        _ ≤ 1 * 1 * 1 :=
+            mul_le_mul (mul_le_mul hb hh (norm_nonneg _) (by norm_num)) hf
+              (norm_nonneg _) (by norm_num)
+        _ = 1 := by norm_num
+    rw [Fin.prod_univ_four]
+    refine le_trans (mul_le_mul (mul_le_mul (mul_le_mul (hfac 0) (hfac 1)
+      (norm_nonneg _) (by norm_num)) (hfac 2) (norm_nonneg _) (by norm_num))
+      (hfac 3) (norm_nonneg _) (by norm_num)) (by norm_num)
+
+/-- **R1 — support factorization.** The character moment
+of a primitive quad, read along the cyclic ordering
+`P` of its columns over the ordered sites `s`, is the
+entry expansion of the frozen factors times the product
+over the four ordered sites of the two-factor site
+integrals. Every non-support site has integrated to `1`
+against the product measure; the remaining sewing is
+exactly the per-site pair of column factors. This is the
+form the assembly consumes. -/
+theorem quadCharMoment_eq_sum_siteInt (hN : Even N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    {C : Finset (LayerColumn N)} {s : Fin 4 → LayerSite N}
+    {P : Fin 4 → LayerColumn N}
+    (hs : Function.Injective s) (hP : Function.Injective P)
+    (hPmem : ∀ i, P i ∈ C) (hPcover : ∀ Q ∈ C, ∃ i, P i = Q)
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)})
+    {t : Finset (LayerColumn N)} (ht : t ⊆ C) (u u' : LayerLink N → G) :
+    quadCharMoment ρ μG C t u u'
+    = ∑ a : Fin 4 → Fin d, ∑ b : Fin 4 → Fin d, ∑ e : Fin 4 → Fin d,
+      ∑ f : Fin 4 → Fin d,
+        (∏ i, colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) (a i) (b i)
+            (e i) (f i))
+        * ∏ j : Fin 4, ∫ g,
+            (colSiteFac ρ (P (j + 3)) (decide (P (j + 3) ∈ t))
+                (a (j + 3)) (b (j + 3)) (e (j + 3)) (f (j + 3)) (s j) g
+              * colSiteFac ρ (P j) (decide (P j ∈ t)) (a j) (b j) (e j)
+                (f j) (s j) g) ∂μG := by
+  classical
+  have hswap : ∀ α : LayerSite N → G,
+      (∏ i, ∑ a : Fin d, ∑ b : Fin d, ∑ e : Fin d, ∑ f : Fin d,
+        colBaseFac ρ (P i) (decide (P i ∈ t)) a b e f (α (P i).1)
+        * colHeadFac ρ (P i) (decide (P i ∈ t)) a b e f (α (colHead (P i)))
+        * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) a b e f)
+      = ∑ a : Fin 4 → Fin d, ∑ b : Fin 4 → Fin d, ∑ e : Fin 4 → Fin d,
+        ∑ f : Fin 4 → Fin d, ∏ i,
+          colBaseFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+            (α (P i).1)
+          * colHeadFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+            (α (colHead (P i)))
+          * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) (a i) (b i) (e i)
+            (f i) := by
+    intro α
+    rw [Fintype.prod_sum]
+    refine Finset.sum_congr rfl fun a _ => ?_
+    rw [Fintype.prod_sum]
+    refine Finset.sum_congr rfl fun b _ => ?_
+    rw [Fintype.prod_sum]
+    refine Finset.sum_congr rfl fun e _ => ?_
+    rw [Fintype.prod_sum]
+  have hInt : ∀ (a b e f : Fin 4 → Fin d), Integrable
+      (fun α : LayerSite N → G => ∏ i,
+        colBaseFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (P i).1)
+        * colHeadFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (colHead (P i)))
+        * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) (a i) (b i) (e i)
+          (f i))
+      (Measure.pi fun _ : LayerSite N => μG) :=
+    fun a b e f => integrable_ordered_summand ρ μG hρcont u u' P
+      (fun i => decide (P i ∈ t)) a b e f
+  have hpt : ∀ α : LayerSite N → G,
+      (∏ Q ∈ t, charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α))
+        * (∏ Q ∈ C \ t, star (charFn ρ (colWord u u' Q.1 Q.2.1 Q.2.2 α)))
+      = ∏ i, (∑ a : Fin d, ∑ b : Fin d, ∑ e : Fin d, ∑ f : Fin d,
+        colBaseFac ρ (P i) (decide (P i ∈ t)) a b e f (α (P i).1)
+        * colHeadFac ρ (P i) (decide (P i ∈ t)) a b e f (α (colHead (P i)))
+        * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) a b e f) := by
+    intro α
+    rw [quadCharIntegrand_eq_prod_ordered (s := s) ρ hP hPmem hPcover ht u u' α]
+    exact Finset.prod_congr rfl fun i _ => colCharFac_expand ρ u u' (P i) t α
+  unfold quadCharMoment
+  trans ∫ α, ∏ i, (∑ a : Fin d, ∑ b : Fin d, ∑ e : Fin d, ∑ f : Fin d,
+      colBaseFac ρ (P i) (decide (P i ∈ t)) a b e f (α (P i).1)
+      * colHeadFac ρ (P i) (decide (P i ∈ t)) a b e f (α (colHead (P i)))
+      * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) a b e f)
+    ∂(Measure.pi fun _ : LayerSite N => μG)
+  · exact integral_congr_ae (Filter.Eventually.of_forall hpt)
+  trans ∫ α, ∑ a : Fin 4 → Fin d, ∑ b : Fin 4 → Fin d,
+      ∑ e : Fin 4 → Fin d, ∑ f : Fin 4 → Fin d, ∏ i,
+        colBaseFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (P i).1)
+        * colHeadFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (colHead (P i)))
+        * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) (a i) (b i) (e i)
+          (f i)
+    ∂(Measure.pi fun _ : LayerSite N => μG)
+  · exact integral_congr_ae (Filter.Eventually.of_forall fun α => hswap α)
+  trans ∑ a : Fin 4 → Fin d, ∫ α, ∑ b : Fin 4 → Fin d,
+      ∑ e : Fin 4 → Fin d, ∑ f : Fin 4 → Fin d, ∏ i,
+        colBaseFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (P i).1)
+        * colHeadFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (colHead (P i)))
+        * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) (a i) (b i) (e i)
+          (f i)
+    ∂(Measure.pi fun _ : LayerSite N => μG)
+  · exact integral_finset_sum _ (fun a _ => integrable_finset_sum _
+      (fun b _ => integrable_finset_sum _ (fun e _ =>
+        integrable_finset_sum _ (fun f _ => hInt a b e f))))
+  trans ∑ a : Fin 4 → Fin d, ∑ b : Fin 4 → Fin d, ∫ α,
+      ∑ e : Fin 4 → Fin d, ∑ f : Fin 4 → Fin d, ∏ i,
+        colBaseFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (P i).1)
+        * colHeadFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (colHead (P i)))
+        * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) (a i) (b i) (e i)
+          (f i)
+    ∂(Measure.pi fun _ : LayerSite N => μG)
+  · refine Finset.sum_congr rfl fun a _ => integral_finset_sum _
+      (fun b _ => integrable_finset_sum _ (fun e _ =>
+        integrable_finset_sum _ (fun f _ => hInt a b e f)))
+  trans ∑ a : Fin 4 → Fin d, ∑ b : Fin 4 → Fin d, ∑ e : Fin 4 → Fin d,
+      ∫ α, ∑ f : Fin 4 → Fin d, ∏ i,
+        colBaseFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (P i).1)
+        * colHeadFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (colHead (P i)))
+        * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) (a i) (b i) (e i)
+          (f i)
+    ∂(Measure.pi fun _ : LayerSite N => μG)
+  · refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ =>
+      integral_finset_sum _ (fun e _ => integrable_finset_sum _
+        (fun f _ => hInt a b e f))
+  trans ∑ a : Fin 4 → Fin d, ∑ b : Fin 4 → Fin d, ∑ e : Fin 4 → Fin d,
+      ∑ f : Fin 4 → Fin d, ∫ α, ∏ i,
+        colBaseFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (P i).1)
+        * colHeadFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (colHead (P i)))
+        * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) (a i) (b i) (e i)
+          (f i)
+    ∂(Measure.pi fun _ : LayerSite N => μG)
+  · refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ =>
+      Finset.sum_congr rfl fun e _ => integral_finset_sum _
+        (fun f _ => hInt a b e f)
+  refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ =>
+    Finset.sum_congr rfl fun e _ => Finset.sum_congr rfl fun f _ => ?_
+  have hstep : ∫ α, ∏ i,
+        colBaseFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (P i).1)
+        * colHeadFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+          (α (colHead (P i)))
+        * colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) (a i) (b i) (e i)
+          (f i)
+      ∂(Measure.pi fun _ : LayerSite N => μG)
+      = (∏ i, colFrozenFac ρ u u' (P i) (decide (P i ∈ t)) (a i) (b i)
+          (e i) (f i))
+        * ∫ α, ∏ i,
+            colBaseFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i)
+              (α (P i).1)
+            * colHeadFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i)
+              (f i) (α (colHead (P i)))
+          ∂(Measure.pi fun _ : LayerSite N => μG) := by
+    refine (integral_congr_ae (Filter.Eventually.of_forall fun α => ?_)).trans
+      (integral_const_mul _ _)
+    rw [← Finset.prod_mul_distrib]
+    exact Finset.prod_congr rfl fun i _ => by ring
+  rw [hstep]
+  refine congrArg (fun z => (∏ i, colFrozenFac ρ u u' (P i)
+    (decide (P i ∈ t)) (a i) (b i) (e i) (f i)) * z) ?_
+  trans ∫ α, ∏ r : LayerSite N, ∏ i, colSiteFac ρ (P i)
+      (decide (P i ∈ t)) (a i) (b i) (e i) (f i) r (α r)
+    ∂(Measure.pi fun _ : LayerSite N => μG)
+  · exact integral_congr_ae (Filter.Eventually.of_forall fun α =>
+      prod_baseHeadFac_eq_prod_siteFac ρ hN P (fun i => decide (P i ∈ t))
+        a b e f α)
+  trans ∏ r : LayerSite N, ∫ g, ∏ i, colSiteFac ρ (P i)
+      (decide (P i ∈ t)) (a i) (b i) (e i) (f i) r g ∂μG
+  · exact integral_fintype_prod_eq_prod (fun r g => ∏ i,
+      colSiteFac ρ (P i) (decide (P i ∈ t)) (a i) (b i) (e i) (f i) r g)
+  trans ∏ j : Fin 4, ∫ g, ∏ i, colSiteFac ρ (P i) (decide (P i ∈ t))
+      (a i) (b i) (e i) (f i) (s j) g ∂μG
+  · exact prod_siteIntFull_eq_ordered ρ μG s P hs hPmem hPcover hinc
+      (fun i => decide (P i ∈ t)) a b e f
+  · exact Finset.prod_congr rfl fun j _ => integral_congr_ae
+      (Filter.Eventually.of_forall fun g =>
+        prod_colSiteFac_eq_pair ρ s P hs hinc (fun i => decide (P i ∈ t))
+          a b e f j g)
+
+end ContractionEngine
+
+/-! ## 5b.3 — The per-site type table
+
+At each ordered site `s j` exactly two columns are incident,
+`P (j + 3)` and `P j`. The `siteSplit` at the site counts
+the incident columns based there; this section turns the
+split value and the two pattern signs into the concrete
+entry (a plain `repMatrix` entry or its conjugate) that
+each site factor reduces to. All four entry evaluations are
+already owned: the mixed pair in both orientations by
+`RepOrthogonality`, the same-orientation pairs by
+`RepTensorTwirl`. The pair at a site is then: mixed exactly
+when the two reduced entries have opposite star-status,
+a `(2, 0)` pair when both are plain, a `(0, 2)` pair when
+both are conjugated — the grammar of the scoping's table,
+with the evaluations owned by `RepOrthogonality` (mixed)
+and `RepTensorTwirl` (same-orientation). -/
+
+section SiteTypeTable
+
+variable {G : Type*} [Group G] [MeasurableSpace G] [MeasurableInv G]
+  [TopologicalSpace G] [IsTopologicalGroup G] [BorelSpace G]
+  [SecondCountableTopology G] {d : ℕ}
+  (ρ : G →* ↥(Matrix.unitaryGroup (Fin d) ℂ)) {N : ℕ} [NeZero N]
+  (μG : Measure G) [IsProbabilityMeasure μG]
+  [μG.IsMulLeftInvariant] [μG.IsMulRightInvariant] [μG.IsInvInvariant]
+
+/-- The degree at an ordered site of an enumerated quad
+is exactly `2`: the incident columns are `P (j + 3)` and
+`P j` and no others. -/
+private theorem siteDegree_ordered_site {C : Finset (LayerColumn N)}
+    {s : Fin 4 → LayerSite N} {P : Fin 4 → LayerColumn N}
+    (hs : Function.Injective s) (hP : Function.Injective P)
+    (hPmem : ∀ i, P i ∈ C) (hPcover : ∀ Q ∈ C, ∃ i, P i = Q)
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)}) (j : Fin 4) :
+    siteDegree C (s j) = 2 := by
+  have hmem1 : s j ∈ colSites (P (j + 3)) := by
+    rw [hinc (j + 3), show j + 3 + 1 = j from (fin4_facts j).2.2.2.2.2.2]
+    exact Finset.mem_insert_of_mem (Finset.mem_singleton_self _)
+  have hmem2 : s j ∈ colSites (P j) := by
+    rw [hinc j]
+    exact Finset.mem_insert_self _ _
+  have hfilter : C.filter (fun Q => s j ∈ colSites Q) = {P (j + 3), P j} := by
+    ext R
+    simp only [Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]
+    constructor
+    · rintro ⟨hRC, hR⟩
+      obtain ⟨i, rfl⟩ := hPcover R hRC
+      rw [hinc i] at hR
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hR
+      rcases hR with h | h
+      · exact Or.inr (congrArg P (hs h).symm)
+      · have hpre : ∀ x y : Fin 4, x = y + 1 → y = x + 3 := by decide
+        exact Or.inl (congrArg P (hpre j i (hs h)))
+    · rintro (rfl | rfl)
+      · exact ⟨hPmem _, hmem1⟩
+      · exact ⟨hPmem _, hmem2⟩
+  unfold siteDegree
+  rw [hfilter, Finset.card_pair]
+  exact hP.ne (fin4_facts j).2.2.2.2.2.1
+
+/-- The first component of the split at an ordered site,
+as the sum of the two based-indicators of the incident
+columns. -/
+theorem siteSplit_fst_ordered {C : Finset (LayerColumn N)}
+    {s : Fin 4 → LayerSite N} {P : Fin 4 → LayerColumn N}
+    (hs : Function.Injective s) (hP : Function.Injective P)
+    (hPmem : ∀ i, P i ∈ C) (hPcover : ∀ Q ∈ C, ∃ i, P i = Q)
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)}) (j : Fin 4) :
+    (siteSplit C (s j)).1
+      = (if (P (j + 3)).1 = s j then 1 else 0)
+        + (if (P j).1 = s j then 1 else 0) := by
+  have hdeg := siteDegree_ordered_site hs hP hPmem hPcover hinc j
+  have hmem1 : s j ∈ colSites (P (j + 3)) := by
+    rw [hinc (j + 3), show j + 3 + 1 = j from (fin4_facts j).2.2.2.2.2.2]
+    exact Finset.mem_insert_of_mem (Finset.mem_singleton_self _)
+  have hmem2 : s j ∈ colSites (P j) := by
+    rw [hinc j]
+    exact Finset.mem_insert_self _ _
+  have hAB : P (j + 3) ≠ P j := hP.ne (fin4_facts j).2.2.2.2.2.1
+  have hpair := incident_pair_of_degree_two hdeg (hPmem (j + 3)) hmem1
+    (hPmem j) hmem2 hAB
+  exact siteSplit_fst_of_incident_pair hdeg hAB hpair (hPmem (j + 3))
+    (hPmem j)
+
+/-- **Table row, source**: split first component `2` at an
+ordered site — both incident columns are based there. -/
+theorem based_pair_of_split_two {C : Finset (LayerColumn N)}
+    {s : Fin 4 → LayerSite N} {P : Fin 4 → LayerColumn N}
+    (hs : Function.Injective s) (hP : Function.Injective P)
+    (hPmem : ∀ i, P i ∈ C) (hPcover : ∀ Q ∈ C, ∃ i, P i = Q)
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)}) (j : Fin 4)
+    (h2 : (siteSplit C (s j)).1 = 2) :
+    (P (j + 3)).1 = s j ∧ (P j).1 = s j := by
+  rw [siteSplit_fst_ordered hs hP hPmem hPcover hinc j] at h2
+  by_cases ha : (P (j + 3)).1 = s j <;> by_cases hb : (P j).1 = s j
+  · exact ⟨ha, hb⟩
+  · rw [if_pos ha, if_neg hb] at h2; omega
+  · rw [if_neg ha, if_pos hb] at h2; omega
+  · rw [if_neg ha, if_neg hb] at h2; omega
+
+/-- **Table row, sink**: split first component `0` at an
+ordered site — neither incident column is based there;
+both are headed there. -/
+theorem based_none_of_split_zero {C : Finset (LayerColumn N)}
+    {s : Fin 4 → LayerSite N} {P : Fin 4 → LayerColumn N}
+    (hs : Function.Injective s) (hP : Function.Injective P)
+    (hPmem : ∀ i, P i ∈ C) (hPcover : ∀ Q ∈ C, ∃ i, P i = Q)
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)}) (j : Fin 4)
+    (h0 : (siteSplit C (s j)).1 = 0) :
+    (P (j + 3)).1 ≠ s j ∧ (P j).1 ≠ s j := by
+  rw [siteSplit_fst_ordered hs hP hPmem hPcover hinc j] at h0
+  by_cases ha : (P (j + 3)).1 = s j <;> by_cases hb : (P j).1 = s j
+  · rw [if_pos ha, if_pos hb] at h0; omega
+  · rw [if_pos ha, if_neg hb] at h0; omega
+  · rw [if_neg ha, if_pos hb] at h0; omega
+  · exact ⟨ha, hb⟩
+
+/-- **Table row, flank**: split first component `1` at an
+ordered site — exactly one incident column is based
+there, the other headed. -/
+theorem based_xor_of_split_one {C : Finset (LayerColumn N)}
+    {s : Fin 4 → LayerSite N} {P : Fin 4 → LayerColumn N}
+    (hs : Function.Injective s) (hP : Function.Injective P)
+    (hPmem : ∀ i, P i ∈ C) (hPcover : ∀ Q ∈ C, ∃ i, P i = Q)
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)}) (j : Fin 4)
+    (h1 : (siteSplit C (s j)).1 = 1) :
+    ((P (j + 3)).1 = s j ∧ (P j).1 ≠ s j)
+      ∨ ((P (j + 3)).1 ≠ s j ∧ (P j).1 = s j) := by
+  rw [siteSplit_fst_ordered hs hP hPmem hPcover hinc j] at h1
+  by_cases ha : (P (j + 3)).1 = s j <;> by_cases hb : (P j).1 = s j
+  · rw [if_pos ha, if_pos hb] at h1; omega
+  · exact Or.inl ⟨ha, hb⟩
+  · exact Or.inr ⟨ha, hb⟩
+  · rw [if_neg ha, if_neg hb] at h1; omega
+
+/-- The entry a site factor reduces to at its column's
+base: a plain entry at sign `true`, a conjugated entry at
+sign `false`. -/
+theorem colSiteFac_base_entry (Q : LayerColumn N) (σ : Bool)
+    (a b e f : Fin d) (g : G) :
+    colSiteFac ρ Q σ a b e f Q.1 g
+      = if σ then repMatrix ρ g a b else star (repMatrix ρ g a f) := by
+  cases σ with
+  | true => rw [if_pos rfl]; exact colSiteFac_base_plain ρ Q a b e f g
+  | false => rw [if_neg (by decide)]; exact colSiteFac_base_conj ρ Q a b e f g
+
+/-- The entry a site factor reduces to at its column's
+head: a conjugated entry at sign `true`, a plain entry
+at sign `false`. -/
+theorem colSiteFac_head_entry (hN : Even N) (Q : LayerColumn N) (σ : Bool)
+    (a b e f : Fin d) (g : G) :
+    colSiteFac ρ Q σ a b e f (colHead Q) g
+      = if σ then star (repMatrix ρ g f e) else repMatrix ρ g b e := by
+  cases σ with
+  | true => rw [if_pos rfl]; exact colSiteFac_head_plain ρ hN Q a b e f g
+  | false => rw [if_neg (by decide)]; exact colSiteFac_head_conj ρ hN Q a b e f g
+
+/-- The base entry reduction at an ordered site, for an
+incident column based there. -/
+theorem colSiteFac_ordered_of_base {P : Fin 4 → LayerColumn N}
+    {s : Fin 4 → LayerSite N} (i j : Fin 4) (σ : Bool)
+    (a b e f : Fin 4 → Fin d) (g : G) (h : (P i).1 = s j) :
+    colSiteFac ρ (P i) σ (a i) (b i) (e i) (f i) (s j) g
+      = if σ then repMatrix ρ g (a i) (b i)
+        else star (repMatrix ρ g (a i) (f i)) := by
+  rw [← h]
+  exact colSiteFac_base_entry ρ (P i) σ (a i) (b i) (e i) (f i) g
+
+/-- The head entry reduction at an ordered site, for an
+incident column headed there. -/
+theorem colSiteFac_ordered_of_head (hN : Even N)
+    {P : Fin 4 → LayerColumn N} {s : Fin 4 → LayerSite N} (i j : Fin 4)
+    (σ : Bool) (a b e f : Fin 4 → Fin d) (g : G)
+    (hmem : s j ∈ colSites (P i)) (h : (P i).1 ≠ s j) :
+    colSiteFac ρ (P i) σ (a i) (b i) (e i) (f i) (s j) g
+      = if σ then star (repMatrix ρ g (f i) (e i))
+        else repMatrix ρ g (b i) (e i) := by
+  have hhead : colHead (P i) = s j := by
+    have hmem' : s j ∈ ({(P i).1, colHead (P i)} : Finset (LayerSite N)) := by
+      rwa [colSites_eq] at hmem
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hmem'
+    rcases hmem' with h1 | h1
+    · exact absurd h1.symm h
+    · exact h1.symm
+  rw [← hhead]
+  exact colSiteFac_head_entry ρ hN (P i) σ (a i) (b i) (e i) (f i) g
+
+end SiteTypeTable
+
+/-! ## 5b.4 — R2: the twisted contraction
+
+The entry-level sewing lemmas. Where `QuadReMomentTelescope`
+sews two traces, the assembly sews two entries carrying
+frozen sandwiches `A B C D`; the contraction at a mixed
+site is the Peter–Weyl evaluation with the sandwiches
+contracted crosswise, and at a same-orientation site it
+is the `RepTensorTwirl` evaluation, whose `J`-insertion
+lands inside the running sandwiches. The closure
+identities at the end regroup the `charFn_sewing`
+contraction as a Frobenius pairing against `J` and record
+the squared-norm form of a self-paired entry sum. No sign
+is asserted anywhere in this section: these are exact
+evaluations of pair contractions. -/
+
+section TwistedContraction
+
+variable {G : Type*} [Group G] [MeasurableSpace G] [MeasurableInv G]
+  [TopologicalSpace G] [IsTopologicalGroup G] [BorelSpace G]
+  [SecondCountableTopology G] {d : ℕ}
+  (ρ : G →* ↥(Matrix.unitaryGroup (Fin d) ℂ)) {N : ℕ} [NeZero N]
+  (μG : Measure G) [IsProbabilityMeasure μG]
+  [μG.IsMulLeftInvariant] [μG.IsMulRightInvariant] [μG.IsInvInvariant]
+
+/-- Entries of a triple matrix product, expanded. -/
+private theorem mul3_apply (A B C : Matrix (Fin d) (Fin d) ℂ) (i j : Fin d) :
+    (A * B * C) i j = ∑ p, ∑ q, A i p * B p q * C q j := by
+  have h1 : (A * B * C) i j = ∑ q, ∑ p, A i p * B p q * C q j := by
+    simp only [Matrix.mul_apply, Finset.sum_mul, Finset.mul_sum]
+  rw [h1, Finset.sum_comm]
+
+/-- Integrability of a plain-times-plain entry product. -/
+private theorem integrable_repMatrix_entry_mul
+    (hρcont : Continuous fun g : G => repMatrix ρ g) (i j k l : Fin d) :
+    Integrable (fun g => repMatrix ρ g i j * repMatrix ρ g k l) μG := by
+  obtain ⟨hMmul, hMone, hMinv, hMcont⟩ := repMatrix_isOrientationMat ρ hρcont
+  exact matFn_integrable_entry_mul μG _ _ hMmul hMone hMinv hMcont
+    hMmul hMone hMinv hMcont i j k l
+
+/-- Integrability of a conjugate-times-conjugate entry
+product. -/
+private theorem integrable_repMatrix_entry_star_mul_star
+    (hρcont : Continuous fun g : G => repMatrix ρ g) (i j k l : Fin d) :
+    Integrable (fun g => star (repMatrix ρ g i j)
+      * star (repMatrix ρ g k l)) μG := by
+  obtain ⟨hNmul, hNone, hNinv, hNcont⟩ := repMatConj_isOrientationMat ρ hρcont
+  have hInt : Integrable (fun g => repMatConj ρ g i j * repMatConj ρ g k l)
+      μG := matFn_integrable_entry_mul μG _ _ hNmul hNone hNinv hNcont
+    hNmul hNone hNinv hNcont i j k l
+  refine hInt.congr (Filter.Eventually.of_forall fun g => ?_)
+  show repMatConj ρ g i j * repMatConj ρ g k l
+    = star (repMatrix ρ g i j) * star (repMatrix ρ g k l)
+  rw [show repMatConj ρ g i j = star (repMatrix ρ g i j) from
+    orientConj_apply _ _ _ _, show repMatConj ρ g k l
+    = star (repMatrix ρ g k l) from orientConj_apply _ _ _ _]
+
+/-- **R2, mixed site.** The entry-level sewing with frozen
+sandwiches: contracting a plain entry against a conjugated
+entry sews the sandwiches crosswise — the first factors
+contract through the conjugate transpose, the second
+through the transpose against the entrywise conjugate. -/
+theorem integral_entry_sandwich_mul_star
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (hρirr : RepIrreducible ρ)
+    (A B C D : Matrix (Fin d) (Fin d) ℂ) (i j k l : Fin d) :
+    ∫ g, (A * repMatrix ρ g * B) i j
+        * star ((C * repMatrix ρ g * D) k l) ∂μG
+      = (d : ℂ)⁻¹ * ((A * Cᴴ) i k
+          * (Bᵀ * D.map (starRingEnd ℂ)) j l) := by
+  classical
+  have hexp : ∀ g : G, (A * repMatrix ρ g * B) i j
+        * star ((C * repMatrix ρ g * D) k l)
+      = ∑ p, ∑ q, ∑ r, ∑ s, (A i p * star (C k r)) * (B q j * star (D s l))
+          * (repMatrix ρ g p q * star (repMatrix ρ g r s)) := by
+    intro g
+    have e2 : star ((C * repMatrix ρ g * D) k l)
+        = ∑ r, ∑ s, star (D s l) * star (repMatrix ρ g r s)
+            * star (C k r) := by
+      rw [mul3_apply, star_sum]
+      refine Finset.sum_congr rfl fun r _ => ?_
+      rw [star_sum]
+      refine Finset.sum_congr rfl fun s _ => ?_
+      rw [star_mul, star_mul, mul_assoc]
+    rw [mul3_apply, e2, Finset.sum_mul]
+    refine Finset.sum_congr rfl fun p _ => ?_
+    rw [Finset.sum_mul]
+    refine Finset.sum_congr rfl fun q _ => ?_
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl fun r _ => ?_
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl fun s _ => ?_
+    ring
+  have hterm : ∀ p q r s : Fin d,
+      (∫ g, (A i p * star (C k r)) * (B q j * star (D s l))
+          * (repMatrix ρ g p q * star (repMatrix ρ g r s)) ∂μG)
+        = (A i p * star (C k r)) * (B q j * star (D s l))
+          * (if p = r ∧ q = s then (d : ℂ)⁻¹ else 0) := by
+    intro p q r s
+    rw [integral_const_mul,
+      integral_repMatrix_mul_star_repMatrix μG ρ hρcont hρirr p q r s]
+  have hswap : (∫ g, ∑ p, ∑ q, ∑ r, ∑ s, (A i p * star (C k r))
+          * (B q j * star (D s l))
+          * (repMatrix ρ g p q * star (repMatrix ρ g r s)) ∂μG)
+      = ∑ p, ∑ q, ∑ r, ∑ s, ∫ g, (A i p * star (C k r))
+          * (B q j * star (D s l))
+          * (repMatrix ρ g p q * star (repMatrix ρ g r s)) ∂μG :=
+    (MeasureTheory.integral_finsetSum Finset.univ
+      (fun p _ => MeasureTheory.integrable_finsetSum Finset.univ
+        (fun q _ => MeasureTheory.integrable_finsetSum Finset.univ
+          (fun r _ => MeasureTheory.integrable_finsetSum Finset.univ
+            (fun s _ => (integrable_repMatrix_entry_mul_star ρ μG hρcont
+              p q r s).const_mul _))))).trans
+      (Finset.sum_congr rfl fun p _ =>
+        (MeasureTheory.integral_finsetSum Finset.univ
+          (fun q _ => MeasureTheory.integrable_finsetSum Finset.univ
+            (fun r _ => MeasureTheory.integrable_finsetSum Finset.univ
+              (fun s _ => (integrable_repMatrix_entry_mul_star ρ μG hρcont
+                p q r s).const_mul _)))).trans
+          (Finset.sum_congr rfl fun q _ =>
+            (MeasureTheory.integral_finsetSum Finset.univ
+              (fun r _ => MeasureTheory.integrable_finsetSum Finset.univ
+                (fun s _ => (integrable_repMatrix_entry_mul_star ρ μG
+                  hρcont p q r s).const_mul _))).trans
+              (Finset.sum_congr rfl fun r _ =>
+                MeasureTheory.integral_finsetSum Finset.univ
+                  (fun s _ => (integrable_repMatrix_entry_mul_star ρ μG
+                    hρcont p q r s).const_mul _))))
+  have hcol : ∀ p q : Fin d, (∑ r, ∑ s, (A i p * star (C k r))
+          * (B q j * star (D s l))
+          * (if p = r ∧ q = s then (d : ℂ)⁻¹ else 0))
+      = (A i p * star (C k p)) * (B q j * star (D q l)) * (d : ℂ)⁻¹ := by
+    intro p q
+    have hs1 : (∑ s, (A i p * star (C k p)) * (B q j * star (D s l))
+          * (if p = p ∧ q = s then (d : ℂ)⁻¹ else 0))
+        = (A i p * star (C k p)) * (B q j * star (D q l)) * (d : ℂ)⁻¹ := by
+      rw [Finset.sum_eq_single q (fun s _ hs => ?_)
+        (fun hq => absurd (Finset.mem_univ q) hq)]
+      · rw [if_pos ⟨rfl, rfl⟩]
+      · rw [if_neg (fun h => hs h.2.symm), mul_zero]
+    rw [Finset.sum_eq_single p (fun r _ hr => ?_)
+      (fun hp => absurd (Finset.mem_univ p) hp)]
+    · exact hs1
+    · refine Finset.sum_eq_zero fun s _ => ?_
+      rw [if_neg (fun h => hr h.1.symm), mul_zero]
+  have hid1 : (∑ p, A i p * star (C k p)) = (A * Cᴴ) i k := by
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply]
+  have hid2 : (∑ q, B q j * star (D q l))
+      = (Bᵀ * D.map (starRingEnd ℂ)) j l := by
+    simp only [Matrix.mul_apply, Matrix.transpose_apply, Matrix.map_apply,
+      starRingEnd_apply]
+  have hfin : (∑ p, ∑ q, (A i p * star (C k p)) * (B q j * star (D q l))
+        * (d : ℂ)⁻¹)
+      = (d : ℂ)⁻¹ * ((A * Cᴴ) i k * (Bᵀ * D.map (starRingEnd ℂ)) j l) := by
+    trans (d : ℂ)⁻¹ * ((∑ p, A i p * star (C k p))
+        * (∑ q, B q j * star (D q l)))
+    · rw [Finset.sum_mul_sum, Finset.mul_sum]
+      refine Finset.sum_congr rfl fun p _ => ?_
+      rw [Finset.mul_sum]
+      exact Finset.sum_congr rfl fun q _ => by ring
+    · rw [hid1, hid2]
+  calc ∫ g, (A * repMatrix ρ g * B) i j
+        * star ((C * repMatrix ρ g * D) k l) ∂μG
+      = ∫ g, ∑ p, ∑ q, ∑ r, ∑ s, (A i p * star (C k r))
+          * (B q j * star (D s l))
+          * (repMatrix ρ g p q * star (repMatrix ρ g r s)) ∂μG :=
+        integral_congr_ae (Filter.Eventually.of_forall hexp)
+    _ = ∑ p, ∑ q, ∑ r, ∑ s, ∫ g, (A i p * star (C k r))
+          * (B q j * star (D s l))
+          * (repMatrix ρ g p q * star (repMatrix ρ g r s)) ∂μG := hswap
+    _ = ∑ p, ∑ q, (A i p * star (C k p)) * (B q j * star (D q l))
+          * (d : ℂ)⁻¹ :=
+        Finset.sum_congr rfl fun p _ => Finset.sum_congr rfl fun q _ =>
+          (Finset.sum_congr rfl fun r _ => Finset.sum_congr rfl fun s _ =>
+            hterm p q r s).trans (hcol p q)
+    _ = (d : ℂ)⁻¹ * ((A * Cᴴ) i k * (Bᵀ * D.map (starRingEnd ℂ)) j l) :=
+        hfin
+
+/-- **R2, `(2, 0)` site.** The same-orientation sewing:
+contracting two plain entries inserts the canonical form
+`J` into the running sandwiches — its conjugate on the
+first index pair, `J` itself on the second — and the whole
+contraction vanishes when the Frobenius–Schur indicator
+is `0`. -/
+theorem integral_entry_sandwich_mul (hd : 0 < d)
+    (hρirr : RepIrreducible ρ)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (A B C D : Matrix (Fin d) (Fin d) ℂ) (i j k l : Fin d) :
+    ∫ g, (A * repMatrix ρ g * B) i j * (C * repMatrix ρ g * D) k l ∂μG
+      = if fsIndicator ρ μG = 0 then 0
+        else (d : ℂ)⁻¹ * ((A * (canonicalForm ρ).map (starRingEnd ℂ) * Cᵀ) i k
+          * (Bᵀ * canonicalForm ρ * D) j l) := by
+  classical
+  have hexp : ∀ g : G, (A * repMatrix ρ g * B) i j
+        * (C * repMatrix ρ g * D) k l
+      = ∑ p, ∑ q, ∑ r, ∑ s, (A i p * C k r) * (B q j * D s l)
+          * (repMatrix ρ g p q * repMatrix ρ g r s) := by
+    intro g
+    rw [mul3_apply, mul3_apply, Finset.sum_mul]
+    refine Finset.sum_congr rfl fun p _ => ?_
+    rw [Finset.sum_mul]
+    refine Finset.sum_congr rfl fun q _ => ?_
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl fun r _ => ?_
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl fun s _ => ?_
+    ring
+  have hterm : ∀ p q r s : Fin d,
+      (∫ g, (A i p * C k r) * (B q j * D s l)
+          * (repMatrix ρ g p q * repMatrix ρ g r s) ∂μG)
+        = (A i p * C k r) * (B q j * D s l)
+          * (if fsIndicator ρ μG = 0 then 0
+            else (d : ℂ)⁻¹ * (star ((canonicalForm ρ) p r)
+              * (canonicalForm ρ) q s)) := by
+    intro p q r s
+    rw [integral_const_mul,
+      integral_repMatrix_mul_repMatrix μG ρ hd hρirr hρcont p q r s]
+  have hswap : (∫ g, ∑ p, ∑ q, ∑ r, ∑ s, (A i p * C k r) * (B q j * D s l)
+          * (repMatrix ρ g p q * repMatrix ρ g r s) ∂μG)
+      = ∑ p, ∑ q, ∑ r, ∑ s, ∫ g, (A i p * C k r) * (B q j * D s l)
+          * (repMatrix ρ g p q * repMatrix ρ g r s) ∂μG :=
+    (MeasureTheory.integral_finsetSum Finset.univ
+      (fun p _ => MeasureTheory.integrable_finsetSum Finset.univ
+        (fun q _ => MeasureTheory.integrable_finsetSum Finset.univ
+          (fun r _ => MeasureTheory.integrable_finsetSum Finset.univ
+            (fun s _ => (integrable_repMatrix_entry_mul ρ μG hρcont
+              p q r s).const_mul _))))).trans
+      (Finset.sum_congr rfl fun p _ =>
+        (MeasureTheory.integral_finsetSum Finset.univ
+          (fun q _ => MeasureTheory.integrable_finsetSum Finset.univ
+            (fun r _ => MeasureTheory.integrable_finsetSum Finset.univ
+              (fun s _ => (integrable_repMatrix_entry_mul ρ μG hρcont
+                p q r s).const_mul _)))).trans
+          (Finset.sum_congr rfl fun q _ =>
+            (MeasureTheory.integral_finsetSum Finset.univ
+              (fun r _ => MeasureTheory.integrable_finsetSum Finset.univ
+                (fun s _ => (integrable_repMatrix_entry_mul ρ μG
+                  hρcont p q r s).const_mul _))).trans
+              (Finset.sum_congr rfl fun r _ =>
+                MeasureTheory.integral_finsetSum Finset.univ
+                  (fun s _ => (integrable_repMatrix_entry_mul ρ μG
+                    hρcont p q r s).const_mul _))))
+  have hid1 : (∑ p, ∑ r, A i p * star ((canonicalForm ρ) p r) * C k r)
+      = (A * (canonicalForm ρ).map (starRingEnd ℂ) * Cᵀ) i k := by
+    symm
+    simp only [Matrix.mul_apply, Matrix.transpose_apply, Matrix.map_apply,
+      starRingEnd_apply, Finset.sum_mul]
+    rw [Finset.sum_comm]
+  have hid2 : (∑ q, ∑ s, B q j * (canonicalForm ρ) q s * D s l)
+      = (Bᵀ * canonicalForm ρ * D) j l := by
+    symm
+    simp only [Matrix.mul_apply, Matrix.transpose_apply, Finset.sum_mul]
+    rw [Finset.sum_comm]
+  have hsplit : (∑ p, ∑ q, ∑ r, ∑ s, (A i p * star ((canonicalForm ρ) p r)
+          * C k r) * (B q j * (canonicalForm ρ) q s * D s l))
+      = ((∑ p, ∑ r, A i p * star ((canonicalForm ρ) p r) * C k r))
+        * (∑ q, ∑ s, B q j * (canonicalForm ρ) q s * D s l) := by
+    rw [Finset.sum_mul_sum]
+    refine Finset.sum_congr rfl fun p _ => Finset.sum_congr rfl fun q _ => ?_
+    rw [Finset.sum_mul_sum]
+  by_cases hν : fsIndicator ρ μG = 0
+  · rw [if_pos hν]
+    calc ∫ g, (A * repMatrix ρ g * B) i j * (C * repMatrix ρ g * D) k l ∂μG
+        = ∑ p, ∑ q, ∑ r, ∑ s, ∫ g, (A i p * C k r) * (B q j * D s l)
+            * (repMatrix ρ g p q * repMatrix ρ g r s) ∂μG :=
+          (integral_congr_ae (Filter.Eventually.of_forall hexp)).trans hswap
+      _ = ∑ p, ∑ q, ∑ r, ∑ s, (0 : ℂ) :=
+          Finset.sum_congr rfl fun p _ => Finset.sum_congr rfl fun q _ =>
+            Finset.sum_congr rfl fun r _ => Finset.sum_congr rfl fun s _ => by
+              rw [hterm p q r s, if_pos hν, mul_zero]
+      _ = 0 := by simp only [Finset.sum_const_zero]
+  · rw [if_neg hν]
+    calc ∫ g, (A * repMatrix ρ g * B) i j * (C * repMatrix ρ g * D) k l ∂μG
+        = ∑ p, ∑ q, ∑ r, ∑ s, (A i p * C k r) * (B q j * D s l)
+            * ((d : ℂ)⁻¹ * (star ((canonicalForm ρ) p r)
+              * (canonicalForm ρ) q s)) :=
+          (integral_congr_ae (Filter.Eventually.of_forall hexp)).trans
+            (hswap.trans (Finset.sum_congr rfl fun p _ =>
+              Finset.sum_congr rfl fun q _ => Finset.sum_congr rfl
+                fun r _ => Finset.sum_congr rfl fun s _ =>
+                  (hterm p q r s).trans (by rw [if_neg hν])))
+      _ = (d : ℂ)⁻¹ * ((∑ p, ∑ r, A i p * star ((canonicalForm ρ) p r)
+              * C k r)
+            * (∑ q, ∑ s, B q j * (canonicalForm ρ) q s * D s l)) := by
+          trans (d : ℂ)⁻¹ * (∑ p, ∑ q, ∑ r, ∑ s,
+              (A i p * star ((canonicalForm ρ) p r) * C k r)
+              * (B q j * (canonicalForm ρ) q s * D s l))
+          · rw [Finset.mul_sum]
+            refine Finset.sum_congr rfl fun p _ => ?_
+            rw [Finset.mul_sum]
+            refine Finset.sum_congr rfl fun q _ => ?_
+            rw [Finset.mul_sum]
+            refine Finset.sum_congr rfl fun r _ => ?_
+            rw [Finset.mul_sum]
+            refine Finset.sum_congr rfl fun s _ => ?_
+            ring
+          · rw [hsplit]
+      _ = (d : ℂ)⁻¹ * ((A * (canonicalForm ρ).map (starRingEnd ℂ) * Cᵀ) i k
+            * (Bᵀ * canonicalForm ρ * D) j l) := by rw [hid1, hid2]
+
+/-- **R2, `(0, 2)` site.** The conjugate same-orientation
+sewing: two conjugated entries contract through `J` on
+the first index pair and its conjugate on the second;
+again the contraction vanishes at indicator `0`. -/
+theorem integral_entry_sandwich_star_mul_star (hd : 0 < d)
+    (hρirr : RepIrreducible ρ)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (A B C D : Matrix (Fin d) (Fin d) ℂ) (i j k l : Fin d) :
+    ∫ g, star ((A * repMatrix ρ g * B) i j)
+        * star ((C * repMatrix ρ g * D) k l) ∂μG
+      = if fsIndicator ρ μG = 0 then 0
+        else (d : ℂ)⁻¹ * (((A.map (starRingEnd ℂ)) * canonicalForm ρ * Cᴴ) i k
+          * (Bᴴ * (canonicalForm ρ).map (starRingEnd ℂ)
+            * D.map (starRingEnd ℂ)) j l) := by
+  classical
+  have hexp : ∀ g : G, star ((A * repMatrix ρ g * B) i j)
+        * star ((C * repMatrix ρ g * D) k l)
+      = ∑ p, ∑ q, ∑ r, ∑ s, (star (A i p) * star (C k r))
+          * (star (B q j) * star (D s l))
+          * (star (repMatrix ρ g p q) * star (repMatrix ρ g r s)) := by
+    intro g
+    have e1 : star ((A * repMatrix ρ g * B) i j)
+        = ∑ p, ∑ q, star (B q j) * star (repMatrix ρ g p q) * star (A i p) := by
+      rw [mul3_apply, star_sum]
+      refine Finset.sum_congr rfl fun p _ => ?_
+      rw [star_sum]
+      refine Finset.sum_congr rfl fun q _ => ?_
+      rw [star_mul, star_mul, mul_assoc]
+    have e2 : star ((C * repMatrix ρ g * D) k l)
+        = ∑ r, ∑ s, star (D s l) * star (repMatrix ρ g r s)
+            * star (C k r) := by
+      rw [mul3_apply, star_sum]
+      refine Finset.sum_congr rfl fun r _ => ?_
+      rw [star_sum]
+      refine Finset.sum_congr rfl fun s _ => ?_
+      rw [star_mul, star_mul, mul_assoc]
+    rw [e1, e2, Finset.sum_mul]
+    refine Finset.sum_congr rfl fun p _ => ?_
+    rw [Finset.sum_mul]
+    refine Finset.sum_congr rfl fun q _ => ?_
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl fun r _ => ?_
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl fun s _ => ?_
+    ring
+  have hterm : ∀ p q r s : Fin d,
+      (∫ g, (star (A i p) * star (C k r)) * (star (B q j) * star (D s l))
+          * (star (repMatrix ρ g p q) * star (repMatrix ρ g r s)) ∂μG)
+        = (star (A i p) * star (C k r)) * (star (B q j) * star (D s l))
+          * (if fsIndicator ρ μG = 0 then 0
+            else (d : ℂ)⁻¹ * ((canonicalForm ρ) p r
+              * star ((canonicalForm ρ) q s))) := by
+    intro p q r s
+    rw [integral_const_mul,
+      integral_star_repMatrix_mul_star_repMatrix μG ρ hd hρirr hρcont
+        p q r s]
+  have hswap : (∫ g, ∑ p, ∑ q, ∑ r, ∑ s, (star (A i p) * star (C k r))
+          * (star (B q j) * star (D s l))
+          * (star (repMatrix ρ g p q) * star (repMatrix ρ g r s)) ∂μG)
+      = ∑ p, ∑ q, ∑ r, ∑ s, ∫ g, (star (A i p) * star (C k r))
+          * (star (B q j) * star (D s l))
+          * (star (repMatrix ρ g p q) * star (repMatrix ρ g r s)) ∂μG :=
+    (MeasureTheory.integral_finsetSum Finset.univ
+      (fun p _ => MeasureTheory.integrable_finsetSum Finset.univ
+        (fun q _ => MeasureTheory.integrable_finsetSum Finset.univ
+          (fun r _ => MeasureTheory.integrable_finsetSum Finset.univ
+            (fun s _ => (integrable_repMatrix_entry_star_mul_star ρ μG
+              hρcont p q r s).const_mul _))))).trans
+      (Finset.sum_congr rfl fun p _ =>
+        (MeasureTheory.integral_finsetSum Finset.univ
+          (fun q _ => MeasureTheory.integrable_finsetSum Finset.univ
+            (fun r _ => MeasureTheory.integrable_finsetSum Finset.univ
+              (fun s _ => (integrable_repMatrix_entry_star_mul_star ρ μG
+                hρcont p q r s).const_mul _)))).trans
+          (Finset.sum_congr rfl fun q _ =>
+            (MeasureTheory.integral_finsetSum Finset.univ
+              (fun r _ => MeasureTheory.integrable_finsetSum Finset.univ
+                (fun s _ => (integrable_repMatrix_entry_star_mul_star ρ μG
+                  hρcont p q r s).const_mul _))).trans
+              (Finset.sum_congr rfl fun r _ =>
+                MeasureTheory.integral_finsetSum Finset.univ
+                  (fun s _ => (integrable_repMatrix_entry_star_mul_star
+                    ρ μG hρcont p q r s).const_mul _))))
+  have hid1 : (∑ p, ∑ r, star (A i p) * (canonicalForm ρ) p r
+        * star (C k r))
+      = ((A.map (starRingEnd ℂ)) * canonicalForm ρ * Cᴴ) i k := by
+    symm
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.map_apply,
+      starRingEnd_apply, Finset.sum_mul]
+    rw [Finset.sum_comm]
+  have hid2 : (∑ q, ∑ s, star (B q j) * star ((canonicalForm ρ) q s)
+        * star (D s l))
+      = (Bᴴ * (canonicalForm ρ).map (starRingEnd ℂ)
+          * D.map (starRingEnd ℂ)) j l := by
+    symm
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.map_apply,
+      starRingEnd_apply, Finset.sum_mul]
+    rw [Finset.sum_comm]
+  have hsplit : (∑ p, ∑ q, ∑ r, ∑ s, (star (A i p) * (canonicalForm ρ) p r
+          * star (C k r)) * (star (B q j) * star ((canonicalForm ρ) q s)
+            * star (D s l)))
+      = ((∑ p, ∑ r, star (A i p) * (canonicalForm ρ) p r * star (C k r)))
+        * (∑ q, ∑ s, star (B q j) * star ((canonicalForm ρ) q s)
+            * star (D s l)) := by
+    rw [Finset.sum_mul_sum]
+    refine Finset.sum_congr rfl fun p _ => Finset.sum_congr rfl fun q _ => ?_
+    rw [Finset.sum_mul_sum]
+  by_cases hν : fsIndicator ρ μG = 0
+  · rw [if_pos hν]
+    calc ∫ g, star ((A * repMatrix ρ g * B) i j)
+          * star ((C * repMatrix ρ g * D) k l) ∂μG
+        = ∑ p, ∑ q, ∑ r, ∑ s, ∫ g, (star (A i p) * star (C k r))
+            * (star (B q j) * star (D s l))
+            * (star (repMatrix ρ g p q) * star (repMatrix ρ g r s)) ∂μG :=
+          (integral_congr_ae (Filter.Eventually.of_forall hexp)).trans hswap
+      _ = ∑ p, ∑ q, ∑ r, ∑ s, (0 : ℂ) :=
+          Finset.sum_congr rfl fun p _ => Finset.sum_congr rfl fun q _ =>
+            Finset.sum_congr rfl fun r _ => Finset.sum_congr rfl fun s _ => by
+              rw [hterm p q r s, if_pos hν, mul_zero]
+      _ = 0 := by simp only [Finset.sum_const_zero]
+  · rw [if_neg hν]
+    calc ∫ g, star ((A * repMatrix ρ g * B) i j)
+          * star ((C * repMatrix ρ g * D) k l) ∂μG
+        = ∑ p, ∑ q, ∑ r, ∑ s, (star (A i p) * star (C k r))
+            * (star (B q j) * star (D s l))
+            * ((d : ℂ)⁻¹ * ((canonicalForm ρ) p r
+              * star ((canonicalForm ρ) q s))) :=
+          (integral_congr_ae (Filter.Eventually.of_forall hexp)).trans
+            (hswap.trans (Finset.sum_congr rfl fun p _ =>
+              Finset.sum_congr rfl fun q _ => Finset.sum_congr rfl
+                fun r _ => Finset.sum_congr rfl fun s _ =>
+                  (hterm p q r s).trans (by rw [if_neg hν])))
+      _ = (d : ℂ)⁻¹ * ((∑ p, ∑ r, star (A i p) * (canonicalForm ρ) p r
+              * star (C k r))
+            * (∑ q, ∑ s, star (B q j) * star ((canonicalForm ρ) q s)
+              * star (D s l))) := by
+          trans (d : ℂ)⁻¹ * (∑ p, ∑ q, ∑ r, ∑ s,
+              (star (A i p) * (canonicalForm ρ) p r * star (C k r))
+              * (star (B q j) * star ((canonicalForm ρ) q s)
+                * star (D s l)))
+          · rw [Finset.mul_sum]
+            refine Finset.sum_congr rfl fun p _ => ?_
+            rw [Finset.mul_sum]
+            refine Finset.sum_congr rfl fun q _ => ?_
+            rw [Finset.mul_sum]
+            refine Finset.sum_congr rfl fun r _ => ?_
+            rw [Finset.mul_sum]
+            refine Finset.sum_congr rfl fun s _ => ?_
+            ring
+          · rw [hsplit]
+      _ = (d : ℂ)⁻¹ * (((A.map (starRingEnd ℂ)) * canonicalForm ρ * Cᴴ) i k
+            * (Bᴴ * (canonicalForm ρ).map (starRingEnd ℂ)
+              * D.map (starRingEnd ℂ)) j l) := by rw [hid1, hid2]
+
+/-- **R2 closure, Frobenius form.** The contraction that
+`charFn_sewing` produces — two path matrices contracted
+through `star J` on one index pair and `J` on the other —
+regroups as the Frobenius pairing of the `J`-twisted
+product `Xᵀ * J * Y` against `J` itself: a finite index
+identity, no integration. -/
+theorem jContract_frobenius (X Y : Matrix (Fin d) (Fin d) ℂ) :
+    (∑ p : Fin d × Fin d, ∑ q : Fin d × Fin d, X p.2 p.1 * Y q.2 q.1
+        * (star ((canonicalForm ρ) p.1 q.1) * (canonicalForm ρ) p.2 q.2))
+    = ∑ n, ∑ u, (Xᵀ * canonicalForm ρ * Y) n u
+        * star ((canonicalForm ρ) n u) := by
+  classical
+  have hR : (∑ n, ∑ u, (Xᵀ * canonicalForm ρ * Y) n u
+        * star ((canonicalForm ρ) n u))
+      = ∑ n, ∑ u, ∑ t, ∑ m, ((X m n * (canonicalForm ρ) m t) * Y t u)
+          * star ((canonicalForm ρ) n u) := by
+    simp only [Matrix.mul_apply, Matrix.transpose_apply, Finset.sum_mul,
+      Finset.mul_sum, mul_assoc]
+  rw [hR, Fintype.sum_prod_type]
+  refine Finset.sum_congr rfl fun n _ => ?_
+  rw [Finset.sum_comm, Fintype.sum_prod_type]
+  refine Finset.sum_congr rfl fun u _ => ?_
+  refine Finset.sum_congr rfl fun t _ => ?_
+  refine Finset.sum_congr rfl fun m _ => ?_
+  ring
+
+/-- **R2 closure, Gram form.** A self-paired entry sum is
+a sum of squared norms: the end form of a closed
+contraction whose two sides are conjugate partners. -/
+theorem entry_gram_normSq (W : Matrix (Fin d) (Fin d) ℂ) :
+    (∑ i, ∑ j, W i j * star (W i j))
+    = ((∑ i, ∑ j, ‖W i j‖ ^ 2 : ℝ) : ℂ) := by
+  have hterm : ∀ i j : Fin d, W i j * star (W i j)
+      = ((‖W i j‖ : ℂ)) ^ 2 := by
+    intro i j
+    rw [mul_comm]
+    have h := Complex.conj_mul' (W i j)
+    rwa [starRingEnd_eq_star] at h
+  calc (∑ i, ∑ j, W i j * star (W i j))
+      = ∑ i, ∑ j, ((‖W i j‖ : ℂ)) ^ 2 :=
+        Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ =>
+          hterm i j
+    _ = ((∑ i, ∑ j, ‖W i j‖ ^ 2 : ℝ) : ℂ) := by
+        simp only [← Complex.ofReal_pow, ← Complex.ofReal_sum]
+
+end TwistedContraction
+
 end ThetLogos
