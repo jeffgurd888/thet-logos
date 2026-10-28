@@ -2737,4 +2737,856 @@ theorem entry_gram_normSq (W : Matrix (Fin d) (Fin d) ℂ) :
 
 end TwistedContraction
 
+/-! ## §5c-i. Conjugation pairing and the per-pattern evaluation
+
+PW-5c is built in two bricks. This first brick (i) proves
+the conjugation pairing: at the diagonal, the character
+moment of the complementary pattern `C \ t` is the
+conjugate of the moment of `t`, so the sixteen patterns
+of a `C4` quad form eight conjugate pairs with equal real
+parts; and (ii) evaluates each pattern's moment on the
+diagonal as a Frobenius square: the entry expansion of
+`quadCharMoment_eq_sum_siteInt` separates into a row
+network and a column network, the column network is the
+conjugate of the row network, and the moment is
+`(d)⁻⁴` times the squared norm of the row network — in
+particular its real part is nonnegative, and so is the
+real part of each conjugate pair sum.
+
+**Fences.** This section asserts signs only for
+per-pattern pair sums of `quadCharMoment` on the
+diagonal. It does not assert a sign for `Φ` itself: the
+summation over primitive quads and the `e1` baseline are
+the second brick's business. NO CLAIM; dials 0/4.
+Finite-volume algebra only; `N = 2` is not touched. -/
+
+section PatternEvaluation
+
+variable {G : Type*} [Group G] [MeasurableSpace G] [MeasurableInv G]
+  [TopologicalSpace G] [IsTopologicalGroup G] [BorelSpace G]
+  [SecondCountableTopology G] {d : ℕ}
+  (ρ : G →* ↥(Matrix.unitaryGroup (Fin d) ℂ)) {N : ℕ} [NeZero N]
+  (μG : Measure G) [IsProbabilityMeasure μG]
+  [μG.IsMulLeftInvariant] [μG.IsMulRightInvariant] [μG.IsInvInvariant]
+
+/-- **Conjugation pairing.** At the diagonal, the moment
+of the complementary pattern is the conjugate of the
+moment of the pattern: the integrand at `C \ t` is
+pointwise the conjugate of the integrand at `t`, since
+`C \ (C \ t) = t` and conjugation exchanges the plain
+and conjugated products. -/
+theorem quadCharMoment_compl {C t : Finset (LayerColumn N)} (ht : t ⊆ C)
+    (u : LayerLink N → G) :
+    quadCharMoment ρ μG C (C \ t) u u
+      = star (quadCharMoment ρ μG C t u u) := by
+  classical
+  have hsd : C \ (C \ t) = t := by
+    ext x
+    simp only [Finset.mem_sdiff]
+    constructor
+    · rintro ⟨hxC, hx⟩
+      by_contra hxt
+      exact hx ⟨hxC, hxt⟩
+    · intro hxt
+      exact ⟨ht hxt, fun h => h.2 hxt⟩
+  have hpt : ∀ α : LayerSite N → G,
+      (∏ P ∈ C \ t, charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))
+        * (∏ P ∈ C \ (C \ t), star (charFn ρ (colWord u u P.1 P.2.1 P.2.2 α)))
+      = star ((∏ P ∈ t, charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))
+        * (∏ P ∈ C \ t, star (charFn ρ (colWord u u P.1 P.2.1 P.2.2 α)))) := by
+    intro α
+    rw [hsd]
+    simp only [star_mul, star_prod, star_star, mul_comm]
+  have hstar : star (∫ α, (∏ P ∈ t, charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))
+        * (∏ P ∈ C \ t, star (charFn ρ (colWord u u P.1 P.2.1 P.2.2 α)))
+        ∂(Measure.pi fun _ : LayerSite N => μG))
+      = ∫ α, star ((∏ P ∈ t, charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))
+        * (∏ P ∈ C \ t, star (charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))))
+        ∂(Measure.pi fun _ : LayerSite N => μG) := by
+    simpa only [starRingEnd_apply] using
+      (integral_conj (μ := (Measure.pi fun _ : LayerSite N => μG))
+        (f := fun α => (∏ P ∈ t, charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))
+          * (∏ P ∈ C \ t, star (charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))))).symm
+  calc quadCharMoment ρ μG C (C \ t) u u
+      = ∫ α, (∏ P ∈ C \ t, charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))
+          * (∏ P ∈ C \ (C \ t), star (charFn ρ (colWord u u P.1 P.2.1 P.2.2 α)))
+          ∂(Measure.pi fun _ : LayerSite N => μG) := rfl
+    _ = ∫ α, star ((∏ P ∈ t, charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))
+          * (∏ P ∈ C \ t, star (charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))))
+          ∂(Measure.pi fun _ : LayerSite N => μG) :=
+        integral_congr_ae (Filter.Eventually.of_forall hpt)
+    _ = star (∫ α, (∏ P ∈ t, charFn ρ (colWord u u P.1 P.2.1 P.2.2 α))
+          * (∏ P ∈ C \ t, star (charFn ρ (colWord u u P.1 P.2.1 P.2.2 α)))
+          ∂(Measure.pi fun _ : LayerSite N => μG)) := hstar.symm
+    _ = star (quadCharMoment ρ μG C t u u) := rfl
+
+/-- The real part of a conjugate is the real part. -/
+private theorem star_re (z : ℂ) : (star z).re = z.re :=
+  Complex.conj_re z
+
+/-- **Pairing, real form.** Complementary patterns have
+equal real parts on the diagonal — the form the assembly
+consumes. -/
+theorem quadCharMoment_compl_re {C t : Finset (LayerColumn N)} (ht : t ⊆ C)
+    (u : LayerLink N → G) :
+    (quadCharMoment ρ μG C (C \ t) u u).re
+      = (quadCharMoment ρ μG C t u u).re := by
+  rw [quadCharMoment_compl ρ μG ht u, star_re]
+
+/-- The entry a single column factor contributes at a
+site: the `(p, q)` entry of `ρ(g)` when `κ = false`
+(the factor is plain), its conjugate when `κ = true`.
+Every site factor of §5b is of this form (the table
+cells `colSiteFac_base_plain` and its siblings). -/
+def entryFac (κ : Bool) (p q : Fin d) (g : G) : ℂ :=
+  if κ then star (repMatrix ρ g p q) else repMatrix ρ g p q
+
+private theorem entryFac_false (p q : Fin d) (g : G) :
+    entryFac ρ false p q g = repMatrix ρ g p q := rfl
+
+private theorem entryFac_true (p q : Fin d) (g : G) :
+    entryFac ρ true p q g = star (repMatrix ρ g p q) := rfl
+
+/-- The **row value** of a pair of entries: what the
+pair integral contributes to the row network. Mixed
+pairs contribute a Kronecker delta; same-kind pairs
+contribute the `J`-tensor entry of PW-3 (row slot),
+and vanish when the Frobenius–Schur indicator does. -/
+noncomputable def pairRowVal (κ₁ : Bool) (p₁ : Fin d) (κ₂ : Bool)
+    (p₂ : Fin d) : ℂ :=
+  if κ₁ = κ₂ then
+    if fsIndicator ρ μG = 0 then 0
+    else if κ₁ then (canonicalForm ρ) p₁ p₂
+      else star ((canonicalForm ρ) p₁ p₂)
+  else if p₁ = p₂ then 1 else 0
+
+/-- The **column value** of a pair of entries: the
+conjugate of the row value read at the column indices.
+This is the algebraic content of the column network
+being the conjugate of the row network. -/
+noncomputable def pairColVal (κ₁ : Bool) (q₁ : Fin d) (κ₂ : Bool)
+    (q₂ : Fin d) : ℂ :=
+  star (pairRowVal ρ μG κ₁ q₁ κ₂ q₂)
+
+/-- **The pair integral splits.** Integrating a product
+of two entry factors over the site variable gives
+`(d)⁻¹` times the row value times the column value:
+the four owned evaluations (PW-1 mixed, PW-3
+same-kind) read in row/column form. -/
+theorem integral_entryFac_mul (hd : 0 < d) (hρirr : RepIrreducible ρ)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (κ₁ κ₂ : Bool) (p₁ q₁ p₂ q₂ : Fin d) :
+    ∫ g, entryFac ρ κ₁ p₁ q₁ g * entryFac ρ κ₂ p₂ q₂ g ∂μG
+      = (d : ℂ)⁻¹ * pairRowVal ρ μG κ₁ p₁ κ₂ p₂
+        * pairColVal ρ μG κ₁ q₁ κ₂ q₂ := by
+  classical
+  cases κ₁ <;> cases κ₂
+  · simp only [entryFac_false]
+    rw [integral_repMatrix_mul_repMatrix μG ρ hd hρirr hρcont p₁ q₁ p₂ q₂]
+    by_cases hν : fsIndicator ρ μG = 0 <;>
+      simp [pairRowVal, pairColVal, hν, mul_assoc]
+  · simp only [entryFac_false, entryFac_true]
+    rw [integral_repMatrix_mul_star_repMatrix μG ρ hρcont hρirr p₁ q₁ p₂ q₂]
+    by_cases hp : p₁ = p₂ <;> by_cases hq : q₁ = q₂ <;>
+      simp [pairRowVal, pairColVal, hp, hq]
+  · simp only [entryFac_false, entryFac_true]
+    rw [integral_star_repMatrix_mul_repMatrix μG ρ hρcont hρirr p₁ q₁ p₂ q₂]
+    by_cases hp : p₁ = p₂ <;> by_cases hq : q₁ = q₂ <;>
+      simp [pairRowVal, pairColVal, hp, hq]
+  · simp only [entryFac_true]
+    rw [integral_star_repMatrix_mul_star_repMatrix μG ρ hd hρirr hρcont
+      p₁ q₁ p₂ q₂]
+    by_cases hν : fsIndicator ρ μG = 0 <;>
+      simp [pairRowVal, pairColVal, hν, mul_assoc]
+
+/-- The kind of the factor column `i` contributes at
+site `j` of the ordered cycle: at its base the factor
+is conjugated exactly when the column is taken
+conjugated (`σ i = false`); at its head, exactly when
+the column is taken plain. -/
+noncomputable def siteKind (s : Fin 4 → LayerSite N)
+    (P : Fin 4 → LayerColumn N) (σ : Fin 4 → Bool) (i j : Fin 4) : Bool :=
+  if (P i).1 = s j then !(σ i) else σ i
+
+/-- The row index of column `i` at site `j`, read in
+the original entry functions: the `a`-index at the
+base; at the head, the `f`-index when the column is
+plain and the `b`-index when it is conjugated. -/
+noncomputable def siteRowIdx (s : Fin 4 → LayerSite N)
+    (P : Fin 4 → LayerColumn N) (σ : Fin 4 → Bool)
+    (a b e f : Fin 4 → Fin d) (i j : Fin 4) : Fin d :=
+  if (P i).1 = s j then a i else if σ i then f i else b i
+
+/-- The column index of column `i` at site `j`: at
+the base, the `b`-index when the column is plain and
+the `f`-index when it is conjugated; the `e`-index
+at the head. -/
+noncomputable def siteColIdx (s : Fin 4 → LayerSite N)
+    (P : Fin 4 → LayerColumn N) (σ : Fin 4 → Bool)
+    (a b e f : Fin 4 → Fin d) (i j : Fin 4) : Fin d :=
+  if (P i).1 = s j then (if σ i then b i else f i) else e i
+
+/-- **The site factor is an entry factor.** At an
+ordered site, the factor a column contributes is the
+entry factor of its kind at its row and column
+indices — the table of §5b read through `entryFac`. -/
+theorem colSiteFac_eq_entryFac (hN : Even N)
+    {s : Fin 4 → LayerSite N} {P : Fin 4 → LayerColumn N}
+    (σ : Fin 4 → Bool) (a b e f : Fin 4 → Fin d) {i j : Fin 4}
+    (hmem : s j ∈ colSites (P i)) (g : G) :
+    colSiteFac ρ (P i) (σ i) (a i) (b i) (e i) (f i) (s j) g
+      = entryFac ρ (siteKind s P σ i j) (siteRowIdx s P σ a b e f i j)
+          (siteColIdx s P σ a b e f i j) g := by
+  by_cases hb : (P i).1 = s j
+  · rw [colSiteFac_ordered_of_base ρ i j (σ i) a b e f g hb]
+    cases hσ : σ i <;>
+      simp [siteKind, siteRowIdx, siteColIdx, hb, hσ,
+        entryFac_false, entryFac_true]
+  · rw [colSiteFac_ordered_of_head ρ hN i j (σ i) a b e f g hmem hb]
+    cases hσ : σ i <;>
+      simp [siteKind, siteRowIdx, siteColIdx, hb, hσ,
+        entryFac_false, entryFac_true]
+
+/-- **The site integral splits.** At an ordered site,
+the site integral of R1 is `(d)⁻¹` times the row value
+times the column value of the two incident entry
+factors. -/
+theorem siteInt_eq (hN : Even N) (hd : 0 < d) (hρirr : RepIrreducible ρ)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    {s : Fin 4 → LayerSite N} {P : Fin 4 → LayerColumn N}
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)})
+    (σ : Fin 4 → Bool) (a b e f : Fin 4 → Fin d) (j : Fin 4) :
+    (∫ g, colSiteFac ρ (P (j + 3)) (σ (j + 3)) (a (j + 3)) (b (j + 3))
+        (e (j + 3)) (f (j + 3)) (s j) g
+      * colSiteFac ρ (P j) (σ j) (a j) (b j) (e j) (f j) (s j) g ∂μG)
+    = (d : ℂ)⁻¹
+      * pairRowVal ρ μG (siteKind s P σ (j + 3) j)
+          (siteRowIdx s P σ a b e f (j + 3) j) (siteKind s P σ j j)
+          (siteRowIdx s P σ a b e f j j)
+      * pairColVal ρ μG (siteKind s P σ (j + 3) j)
+          (siteColIdx s P σ a b e f (j + 3) j) (siteKind s P σ j j)
+          (siteColIdx s P σ a b e f j j) := by
+  have h43 : ∀ k : Fin 4, k + 3 + 1 = k := by decide
+  have hmem1 : s j ∈ colSites (P (j + 3)) := by
+    rw [hinc (j + 3), h43 j]
+    exact Finset.mem_insert_of_mem (Finset.mem_singleton_self _)
+  have hmem2 : s j ∈ colSites (P j) := by
+    rw [hinc j]
+    exact Finset.mem_insert_self _ _
+  have hpt : ∀ g : G,
+      colSiteFac ρ (P (j + 3)) (σ (j + 3)) (a (j + 3)) (b (j + 3))
+          (e (j + 3)) (f (j + 3)) (s j) g
+        * colSiteFac ρ (P j) (σ j) (a j) (b j) (e j) (f j) (s j) g
+      = entryFac ρ (siteKind s P σ (j + 3) j)
+          (siteRowIdx s P σ a b e f (j + 3) j)
+          (siteColIdx s P σ a b e f (j + 3) j) g
+        * entryFac ρ (siteKind s P σ j j) (siteRowIdx s P σ a b e f j j)
+          (siteColIdx s P σ a b e f j j) g := by
+    intro g
+    rw [colSiteFac_eq_entryFac ρ hN σ a b e f hmem1 g,
+      colSiteFac_eq_entryFac ρ hN σ a b e f hmem2 g]
+  rw [integral_congr_ae (Filter.Eventually.of_forall hpt)]
+  exact integral_entryFac_mul ρ μG hd hρirr hρcont _ _ _ _ _ _
+
+/-- The row index of column `i` at site `j` in network
+coordinates: the base index `A i` at the base, the
+head index `R i` at the head. -/
+noncomputable def netRowIdx (s : Fin 4 → LayerSite N)
+    (P : Fin 4 → LayerColumn N) (A R : Fin 4 → Fin d) (i j : Fin 4) : Fin d :=
+  if (P i).1 = s j then A i else R i
+
+/-- The column index of column `i` at site `j` in
+network coordinates: the base index `Cc i` at the
+base, the head index `E i` at the head. -/
+noncomputable def netColIdx (s : Fin 4 → LayerSite N)
+    (P : Fin 4 → LayerColumn N) (Cc E : Fin 4 → Fin d) (i j : Fin 4) :
+    Fin d :=
+  if (P i).1 = s j then Cc i else E i
+
+/-- The **row network** of a pattern on the ordered
+cycle: the sum, over base and head row indices, of
+the frozen row factors times the row values at the
+four sites. -/
+noncomputable def rowNetwork (s : Fin 4 → LayerSite N)
+    (P : Fin 4 → LayerColumn N) (σ : Fin 4 → Bool)
+    (u : LayerLink N → G) : ℂ :=
+  ∑ A : Fin 4 → Fin d, ∑ R : Fin 4 → Fin d,
+    (∏ i, entryFac ρ (σ i) (A i) (R i) (u (colLink (P i))))
+      * ∏ j, pairRowVal ρ μG (siteKind s P σ (j + 3) j)
+          (netRowIdx s P A R (j + 3) j) (siteKind s P σ j j)
+          (netRowIdx s P A R j j)
+
+/-- The **column network**: the same contraction read
+in the column indices, with the conjugated frozen
+factors and the column values. -/
+noncomputable def colNetwork (s : Fin 4 → LayerSite N)
+    (P : Fin 4 → LayerColumn N) (σ : Fin 4 → Bool)
+    (u : LayerLink N → G) : ℂ :=
+  ∑ Cc : Fin 4 → Fin d, ∑ E : Fin 4 → Fin d,
+    (∏ i, entryFac ρ (!(σ i)) (Cc i) (E i) (u (colLink (P i))))
+      * ∏ j, pairColVal ρ μG (siteKind s P σ (j + 3) j)
+          (netColIdx s P Cc E (j + 3) j) (siteKind s P σ j j)
+          (netColIdx s P Cc E j j)
+
+private theorem star_entryFac (κ : Bool) (p q : Fin d) (g : G) :
+    star (entryFac ρ κ p q g) = entryFac ρ (!κ) p q g := by
+  cases κ <;> simp [entryFac]
+
+/-- **The column network is the conjugate of the row
+network.** Conjugation exchanges the two networks
+factor by factor: the frozen factors by
+`star_entryFac`, the site values by the definition of
+`pairColVal`, and the index expressions agree since
+`netColIdx` and `netRowIdx` have the same body. -/
+theorem colNetwork_eq_star_rowNetwork (s : Fin 4 → LayerSite N)
+    (P : Fin 4 → LayerColumn N) (σ : Fin 4 → Bool) (u : LayerLink N → G) :
+    colNetwork ρ μG s P σ u = star (rowNetwork ρ μG s P σ u) := by
+  have h : ∀ A R : Fin 4 → Fin d,
+      (∏ i, entryFac ρ (!(σ i)) (A i) (R i) (u (colLink (P i))))
+        * ∏ j, pairColVal ρ μG (siteKind s P σ (j + 3) j)
+            (netColIdx s P A R (j + 3) j) (siteKind s P σ j j)
+            (netColIdx s P A R j j)
+      = star ((∏ i, entryFac ρ (σ i) (A i) (R i) (u (colLink (P i))))
+        * ∏ j, pairRowVal ρ μG (siteKind s P σ (j + 3) j)
+            (netRowIdx s P A R (j + 3) j) (siteKind s P σ j j)
+            (netRowIdx s P A R j j)) := by
+    intro A R
+    have hCV : (∏ j, pairColVal ρ μG (siteKind s P σ (j + 3) j)
+          (netColIdx s P A R (j + 3) j) (siteKind s P σ j j)
+          (netColIdx s P A R j j))
+        = ∏ j, star (pairRowVal ρ μG (siteKind s P σ (j + 3) j)
+            (netRowIdx s P A R (j + 3) j) (siteKind s P σ j j)
+            (netRowIdx s P A R j j)) :=
+      Finset.prod_congr rfl fun j _ => rfl
+    have hF : (∏ i, entryFac ρ (!(σ i)) (A i) (R i) (u (colLink (P i))))
+        = ∏ i, star (entryFac ρ (σ i) (A i) (R i)
+            (u (colLink (P i)))) :=
+      Finset.prod_congr rfl fun i _ => (star_entryFac ρ _ _ _ _).symm
+    rw [star_mul, star_prod, star_prod,
+      mul_comm (∏ i, entryFac ρ (!(σ i)) (A i) (R i) (u (colLink (P i))))
+        (∏ j, pairColVal ρ μG (siteKind s P σ (j + 3) j)
+          (netColIdx s P A R (j + 3) j) (siteKind s P σ j j)
+          (netColIdx s P A R j j)), hCV, hF]
+  simp only [rowNetwork, star_sum]
+  rw [colNetwork]
+  exact Finset.sum_congr rfl fun A _ =>
+    Finset.sum_congr rfl fun R _ => h A R
+
+/-- The frozen factor on the diagonal splits as the
+row frozen factor times the column frozen factor:
+with row indices `(a, if σ then f else b)` and column
+indices `(if σ then b else f, e)`. -/
+theorem colFrozenFac_diag (u : LayerLink N → G) (Q : LayerColumn N)
+    (σ : Bool) (a b e f : Fin d) :
+    colFrozenFac ρ u u Q σ a b e f
+      = entryFac ρ σ a (if σ then f else b) (u (colLink Q))
+        * entryFac ρ (!σ) (if σ then b else f) e (u (colLink Q)) := by
+  cases σ <;> simp [colFrozenFac, entryFac, mul_comm]
+
+/-- **The summand splits.** One summand of R1's entry
+expansion, on the diagonal, is `((d)⁻¹)⁴` times the
+row part (frozen row factors times site row values)
+times the column part: the frozen factors split by
+`colFrozenFac_diag`, the site integrals by
+`siteInt_eq`, and the products regroup. -/
+theorem summand_split (hN : Even N) (hd : 0 < d)
+    (hρirr : RepIrreducible ρ)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    {s : Fin 4 → LayerSite N} {P : Fin 4 → LayerColumn N}
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)})
+    (σ : Fin 4 → Bool) (u : LayerLink N → G) (a b e f : Fin 4 → Fin d) :
+    (∏ i, colFrozenFac ρ u u (P i) (σ i) (a i) (b i) (e i) (f i))
+      * ∏ j, (∫ g, colSiteFac ρ (P (j + 3)) (σ (j + 3)) (a (j + 3))
+          (b (j + 3)) (e (j + 3)) (f (j + 3)) (s j) g
+        * colSiteFac ρ (P j) (σ j) (a j) (b j) (e j) (f j) (s j) g ∂μG)
+    = ((d : ℂ)⁻¹) ^ 4
+      * ((∏ i, entryFac ρ (σ i) (a i) (if σ i then f i else b i)
+            (u (colLink (P i))))
+        * ∏ j, pairRowVal ρ μG (siteKind s P σ (j + 3) j)
+            (siteRowIdx s P σ a b e f (j + 3) j) (siteKind s P σ j j)
+            (siteRowIdx s P σ a b e f j j))
+      * ((∏ i, entryFac ρ (!(σ i)) (if σ i then b i else f i) (e i)
+            (u (colLink (P i))))
+        * ∏ j, pairColVal ρ μG (siteKind s P σ (j + 3) j)
+            (siteColIdx s P σ a b e f (j + 3) j) (siteKind s P σ j j)
+            (siteColIdx s P σ a b e f j j)) := by
+  have hF : (∏ i, colFrozenFac ρ u u (P i) (σ i) (a i) (b i) (e i) (f i))
+      = ∏ i, (entryFac ρ (σ i) (a i) (if σ i then f i else b i)
+            (u (colLink (P i)))
+        * entryFac ρ (!(σ i)) (if σ i then b i else f i) (e i)
+            (u (colLink (P i)))) :=
+    Finset.prod_congr rfl fun i _ =>
+      colFrozenFac_diag ρ u (P i) (σ i) (a i) (b i) (e i) (f i)
+  have hS : (∏ j, (∫ g, colSiteFac ρ (P (j + 3)) (σ (j + 3)) (a (j + 3))
+          (b (j + 3)) (e (j + 3)) (f (j + 3)) (s j) g
+        * colSiteFac ρ (P j) (σ j) (a j) (b j) (e j) (f j) (s j) g ∂μG))
+      = ∏ j, ((d : ℂ)⁻¹
+        * pairRowVal ρ μG (siteKind s P σ (j + 3) j)
+            (siteRowIdx s P σ a b e f (j + 3) j) (siteKind s P σ j j)
+            (siteRowIdx s P σ a b e f j j)
+        * pairColVal ρ μG (siteKind s P σ (j + 3) j)
+            (siteColIdx s P σ a b e f (j + 3) j) (siteKind s P σ j j)
+            (siteColIdx s P σ a b e f j j)) :=
+    Finset.prod_congr rfl fun j _ =>
+      siteInt_eq ρ μG hN hd hρirr hρcont hinc σ a b e f j
+  rw [hF, hS]
+  simp only [Finset.prod_mul_distrib, Finset.prod_const, Finset.card_univ,
+    Fintype.card_fin]
+  ring
+
+/-- The coordinate swap on a pair of entry functions:
+per column, the row partner reads `f` where the pattern
+bit is set and `b` where it is not; the column partner
+reads the complementary choice. -/
+def swapFun (σ : Fin 4 → Bool)
+    (bf : (Fin 4 → Fin d) × (Fin 4 → Fin d)) :
+    (Fin 4 → Fin d) × (Fin 4 → Fin d) :=
+  (fun i => if σ i then bf.2 i else bf.1 i,
+    fun i => if σ i then bf.1 i else bf.2 i)
+
+private theorem swapFun_involutive (σ : Fin 4 → Bool) :
+    Function.Involutive
+      (swapFun σ : (Fin 4 → Fin d) × (Fin 4 → Fin d)
+        → (Fin 4 → Fin d) × (Fin 4 → Fin d)) := by
+  intro bf
+  refine Prod.ext ?_ ?_ <;> funext i <;> simp only [swapFun]
+    <;> cases h : σ i <;> simp [h]
+
+/-- The swap as an equivalence on pairs of entry
+functions. -/
+def swapPair (σ : Fin 4 → Bool) :
+    (Fin 4 → Fin d) × (Fin 4 → Fin d)
+      ≃ (Fin 4 → Fin d) × (Fin 4 → Fin d) :=
+  (swapFun_involutive σ).toPerm (swapFun σ)
+
+/-- Reindexing a double sum by the swap: summing `H`
+over `(b, f)` is summing `H` over the swapped
+coordinates `(row partner, column partner)`. -/
+theorem sum_reindex_swap (σ : Fin 4 → Bool)
+    (H : (Fin 4 → Fin d) → (Fin 4 → Fin d) → ℂ) :
+    (∑ b, ∑ f, H b f)
+      = ∑ R, ∑ Cc, H (swapFun σ (R, Cc)).1 (swapFun σ (R, Cc)).2 := by
+  calc (∑ b, ∑ f, H b f) = ∑ x : (Fin 4 → Fin d) × (Fin 4 → Fin d),
+        H x.1 x.2 := (Fintype.sum_prod_type (fun x => H x.1 x.2)).symm
+    _ = ∑ x : (Fin 4 → Fin d) × (Fin 4 → Fin d),
+        H ((swapPair σ) x).1 ((swapPair σ) x).2 :=
+      (Equiv.sum_comp (swapPair σ) (fun x => H x.1 x.2)).symm
+    _ = ∑ R, ∑ Cc, H (swapFun σ (R, Cc)).1 (swapFun σ (R, Cc)).2 := by
+      simp only [swapPair, Function.Involutive.coe_toPerm]
+      exact Fintype.sum_prod_type _
+
+/-- Swapping two nested entry-function sums, via the
+product form and the coordinate commutation
+equivalence. -/
+theorem sum_comm_swap
+    (F : (Fin 4 → Fin d) → (Fin 4 → Fin d) → ℂ) :
+    (∑ a, ∑ b, F a b) = ∑ b, ∑ a, F a b := by
+  calc (∑ a, ∑ b, F a b)
+      = ∑ x : (Fin 4 → Fin d) × (Fin 4 → Fin d), F x.1 x.2 :=
+        (Fintype.sum_prod_type (fun x => F x.1 x.2)).symm
+    _ = ∑ x : (Fin 4 → Fin d) × (Fin 4 → Fin d), F x.2 x.1 :=
+        Equiv.sum_comp (Equiv.prodComm _ _) (fun x => F x.2 x.1)
+    _ = ∑ b, ∑ a, F a b :=
+        Fintype.sum_prod_type (fun x => F x.2 x.1)
+
+/-- **Frobenius factorization (L5).** On the diagonal,
+a pattern moment over a C4 column splits as
+`((d)⁻¹)⁴` times the row network times the column
+network: R1's entry expansion, each summand split by
+`summand_split`, and the `(b, f)` sums reindexed by
+the coordinate swap. -/
+theorem quadCharMoment_eq_rowNetwork_mul (hN : Even N) (hd : 0 < d)
+    (hρirr : RepIrreducible ρ)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    {C : Finset (LayerColumn N)} {s : Fin 4 → LayerSite N}
+    {P : Fin 4 → LayerColumn N}
+    (hs : Function.Injective s) (hP : Function.Injective P)
+    (hPmem : ∀ i, P i ∈ C) (hPcover : ∀ Q ∈ C, ∃ i, P i = Q)
+    (hinc : ∀ i, colSites (P i) = {s i, s (i + 1)})
+    {t : Finset (LayerColumn N)} (ht : t ⊆ C) (u : LayerLink N → G) :
+    quadCharMoment ρ μG C t u u
+      = ((d : ℂ)⁻¹) ^ 4
+        * (rowNetwork ρ μG s P (fun i => decide (P i ∈ t)) u
+          * colNetwork ρ μG s P (fun i => decide (P i ∈ t)) u) := by
+  classical
+  calc quadCharMoment ρ μG C t u u
+      = ∑ a : Fin 4 → Fin d, ∑ b : Fin 4 → Fin d,
+        ∑ e : Fin 4 → Fin d, ∑ f : Fin 4 → Fin d,
+          (∏ i, colFrozenFac ρ u u (P i) (decide (P i ∈ t)) (a i)
+              (b i) (e i) (f i))
+          * ∏ j, (∫ g, colSiteFac ρ (P (j + 3))
+              (decide (P (j + 3) ∈ t)) (a (j + 3)) (b (j + 3))
+              (e (j + 3)) (f (j + 3)) (s j) g
+            * colSiteFac ρ (P j) (decide (P j ∈ t)) (a j) (b j)
+              (e j) (f j) (s j) g ∂μG) :=
+      quadCharMoment_eq_sum_siteInt ρ μG hN hρcont hs hP hPmem
+        hPcover hinc ht u u
+    _ = ∑ a : Fin 4 → Fin d, ∑ b : Fin 4 → Fin d,
+        ∑ e : Fin 4 → Fin d, ∑ f : Fin 4 → Fin d,
+          ((d : ℂ)⁻¹) ^ 4
+          * ((∏ i, entryFac ρ (decide (P i ∈ t)) (a i)
+                (if decide (P i ∈ t) then f i else b i)
+                (u (colLink (P i))))
+            * ∏ j, pairRowVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (siteRowIdx s P (fun i => decide (P i ∈ t)) a b e f
+                  (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (siteRowIdx s P (fun i => decide (P i ∈ t)) a b e f
+                  j j))
+          * ((∏ i, entryFac ρ (!(decide (P i ∈ t)))
+                (if decide (P i ∈ t) then b i else f i) (e i)
+                (u (colLink (P i))))
+            * ∏ j, pairColVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (siteColIdx s P (fun i => decide (P i ∈ t)) a b e f
+                  (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (siteColIdx s P (fun i => decide (P i ∈ t)) a b e f
+                  j j)) :=
+      Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ =>
+        Finset.sum_congr rfl fun e _ => Finset.sum_congr rfl fun f _ =>
+          summand_split ρ μG hN hd hρirr hρcont hinc
+            (fun i => decide (P i ∈ t)) u a b e f
+    _ = ∑ a : Fin 4 → Fin d, ∑ e : Fin 4 → Fin d,
+        ∑ b : Fin 4 → Fin d, ∑ f : Fin 4 → Fin d,
+          ((d : ℂ)⁻¹) ^ 4
+          * ((∏ i, entryFac ρ (decide (P i ∈ t)) (a i)
+                (if decide (P i ∈ t) then f i else b i)
+                (u (colLink (P i))))
+            * ∏ j, pairRowVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (siteRowIdx s P (fun i => decide (P i ∈ t)) a b e f
+                  (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (siteRowIdx s P (fun i => decide (P i ∈ t)) a b e f
+                  j j))
+          * ((∏ i, entryFac ρ (!(decide (P i ∈ t)))
+                (if decide (P i ∈ t) then b i else f i) (e i)
+                (u (colLink (P i))))
+            * ∏ j, pairColVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (siteColIdx s P (fun i => decide (P i ∈ t)) a b e f
+                  (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (siteColIdx s P (fun i => decide (P i ∈ t)) a b e f
+                  j j)) :=
+      Finset.sum_congr rfl fun a _ => sum_comm_swap _
+    _ = ∑ a : Fin 4 → Fin d, ∑ e : Fin 4 → Fin d,
+        ∑ R : Fin 4 → Fin d, ∑ Cc : Fin 4 → Fin d,
+          ((d : ℂ)⁻¹) ^ 4
+          * ((∏ i, entryFac ρ (decide (P i ∈ t)) (a i)
+                (if decide (P i ∈ t)
+                  then (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2 i
+                  else (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 i)
+                (u (colLink (P i))))
+            * ∏ j, pairRowVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (siteRowIdx s P (fun i => decide (P i ∈ t)) a
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 e
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2
+                  (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (siteRowIdx s P (fun i => decide (P i ∈ t)) a
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 e
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2
+                  j j))
+          * ((∏ i, entryFac ρ (!(decide (P i ∈ t)))
+                (if decide (P i ∈ t)
+                  then (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 i
+                  else (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2 i)
+                (e i) (u (colLink (P i))))
+            * ∏ j, pairColVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (siteColIdx s P (fun i => decide (P i ∈ t)) a
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 e
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2
+                  (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (siteColIdx s P (fun i => decide (P i ∈ t)) a
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 e
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2
+                  j j)) :=
+      Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun e _ =>
+        sum_reindex_swap (fun i => decide (P i ∈ t)) _
+    _ = ∑ a : Fin 4 → Fin d, ∑ e : Fin 4 → Fin d,
+        ∑ R : Fin 4 → Fin d, ∑ Cc : Fin 4 → Fin d,
+          ((d : ℂ)⁻¹) ^ 4
+          * ((∏ i, entryFac ρ (decide (P i ∈ t)) (a i) (R i)
+                (u (colLink (P i))))
+            * ∏ j, pairRowVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (netRowIdx s P a R (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (netRowIdx s P a R j j))
+          * ((∏ i, entryFac ρ (!(decide (P i ∈ t))) (Cc i) (e i)
+                (u (colLink (P i))))
+            * ∏ j, pairColVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (netColIdx s P Cc e (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (netColIdx s P Cc e j j)) :=
+      Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun e _ =>
+        Finset.sum_congr rfl fun R _ => Finset.sum_congr rfl
+          fun Cc _ => by
+            have hcol1 : ∀ i, (if decide (P i ∈ t)
+                  then (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2 i
+                  else (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 i)
+                = R i := by
+              intro i
+              exact congrFun (congrArg Prod.fst
+                (swapFun_involutive (fun i => decide (P i ∈ t)) (R, Cc))) i
+            have hcol2 : ∀ i, (if decide (P i ∈ t)
+                  then (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 i
+                  else (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2 i)
+                = Cc i := by
+              intro i
+              exact congrFun (congrArg Prod.snd
+                (swapFun_involutive (fun i => decide (P i ∈ t)) (R, Cc))) i
+            have hsiteR : ∀ i j, siteRowIdx s P
+                  (fun i => decide (P i ∈ t)) a
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 e
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2 i j
+                = netRowIdx s P a R i j := by
+              intro i j
+              by_cases hb : (P i).1 = s j
+              · simp only [siteRowIdx, netRowIdx, hb, if_true]
+              · simp only [siteRowIdx, netRowIdx, hb, if_false]
+                exact hcol1 i
+            have hsiteC : ∀ i j, siteColIdx s P
+                  (fun i => decide (P i ∈ t)) a
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 e
+                  (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2 i j
+                = netColIdx s P Cc e i j := by
+              intro i j
+              by_cases hb : (P i).1 = s j
+              · simp only [siteColIdx, netColIdx, hb, if_true]
+                exact hcol2 i
+              · simp only [siteColIdx, netColIdx, hb, if_false]
+            rw [Finset.prod_congr rfl (s₁ := Finset.univ)
+              (fun i _ => by rw [hcol1 i] :
+                ∀ i ∈ (Finset.univ : Finset (Fin 4)),
+                  entryFac ρ (decide (P i ∈ t)) (a i)
+                    (if decide (P i ∈ t)
+                      then (swapFun (fun i => decide (P i ∈ t))
+                        (R, Cc)).2 i
+                      else (swapFun (fun i => decide (P i ∈ t))
+                        (R, Cc)).1 i) (u (colLink (P i)))
+                    = entryFac ρ (decide (P i ∈ t)) (a i) (R i)
+                      (u (colLink (P i))))]
+            rw [Finset.prod_congr rfl (s₁ := Finset.univ)
+              (fun j _ => by rw [hsiteR (j + 3) j, hsiteR j j] :
+                ∀ j ∈ (Finset.univ : Finset (Fin 4)),
+                  pairRowVal ρ μG
+                    (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                    (siteRowIdx s P (fun i => decide (P i ∈ t)) a
+                      (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 e
+                      (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2
+                      (j + 3) j)
+                    (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                    (siteRowIdx s P (fun i => decide (P i ∈ t)) a
+                      (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 e
+                      (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2
+                      j j)
+                  = pairRowVal ρ μG
+                    (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                    (netRowIdx s P a R (j + 3) j)
+                    (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                    (netRowIdx s P a R j j))]
+            rw [Finset.prod_congr rfl (s₁ := Finset.univ)
+              (fun i _ => by rw [hcol2 i] :
+                ∀ i ∈ (Finset.univ : Finset (Fin 4)),
+                  entryFac ρ (!(decide (P i ∈ t)))
+                    (if decide (P i ∈ t)
+                      then (swapFun (fun i => decide (P i ∈ t))
+                        (R, Cc)).1 i
+                      else (swapFun (fun i => decide (P i ∈ t))
+                        (R, Cc)).2 i) (e i) (u (colLink (P i)))
+                    = entryFac ρ (!(decide (P i ∈ t))) (Cc i) (e i)
+                      (u (colLink (P i))))]
+            rw [Finset.prod_congr rfl (s₁ := Finset.univ)
+              (fun j _ => by rw [hsiteC (j + 3) j, hsiteC j j] :
+                ∀ j ∈ (Finset.univ : Finset (Fin 4)),
+                  pairColVal ρ μG
+                    (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                    (siteColIdx s P (fun i => decide (P i ∈ t)) a
+                      (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 e
+                      (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2
+                      (j + 3) j)
+                    (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                    (siteColIdx s P (fun i => decide (P i ∈ t)) a
+                      (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).1 e
+                      (swapFun (fun i => decide (P i ∈ t)) (R, Cc)).2
+                      j j)
+                  = pairColVal ρ μG
+                    (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                    (netColIdx s P Cc e (j + 3) j)
+                    (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                    (netColIdx s P Cc e j j))]
+    _ = ∑ a : Fin 4 → Fin d, ∑ R : Fin 4 → Fin d,
+        ∑ e : Fin 4 → Fin d, ∑ Cc : Fin 4 → Fin d,
+          ((d : ℂ)⁻¹) ^ 4
+          * ((∏ i, entryFac ρ (decide (P i ∈ t)) (a i) (R i)
+                (u (colLink (P i))))
+            * ∏ j, pairRowVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (netRowIdx s P a R (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (netRowIdx s P a R j j))
+          * ((∏ i, entryFac ρ (!(decide (P i ∈ t))) (Cc i) (e i)
+                (u (colLink (P i))))
+            * ∏ j, pairColVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (netColIdx s P Cc e (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (netColIdx s P Cc e j j)) :=
+      Finset.sum_congr rfl fun a _ => sum_comm_swap _
+    _ = ((d : ℂ)⁻¹) ^ 4
+        * (rowNetwork ρ μG s P (fun i => decide (P i ∈ t)) u
+          * colNetwork ρ μG s P (fun i => decide (P i ∈ t)) u) := by
+      have hIn : ∀ (a R : Fin 4 → Fin d),
+          (∑ e : Fin 4 → Fin d, ∑ Cc : Fin 4 → Fin d,
+            ((d : ℂ)⁻¹) ^ 4
+            * ((∏ i, entryFac ρ (decide (P i ∈ t)) (a i) (R i)
+                  (u (colLink (P i))))
+              * ∏ j, pairRowVal ρ μG
+                  (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                  (netRowIdx s P a R (j + 3) j)
+                  (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                  (netRowIdx s P a R j j))
+            * ((∏ i, entryFac ρ (!(decide (P i ∈ t))) (Cc i) (e i)
+                  (u (colLink (P i))))
+              * ∏ j, pairColVal ρ μG
+                  (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                  (netColIdx s P Cc e (j + 3) j)
+                  (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                  (netColIdx s P Cc e j j)))
+          = (((d : ℂ)⁻¹) ^ 4
+            * ((∏ i, entryFac ρ (decide (P i ∈ t)) (a i) (R i)
+                  (u (colLink (P i))))
+              * ∏ j, pairRowVal ρ μG
+                  (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                  (netRowIdx s P a R (j + 3) j)
+                  (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                  (netRowIdx s P a R j j)))
+            * colNetwork ρ μG s P (fun i => decide (P i ∈ t)) u := by
+        intro a R
+        simp only [← Finset.mul_sum]
+        rw [sum_comm_swap (fun (e Cc : Fin 4 → Fin d) =>
+          (∏ i, entryFac ρ (!(decide (P i ∈ t))) (Cc i) (e i)
+              (u (colLink (P i))))
+            * ∏ j, pairColVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (netColIdx s P Cc e (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (netColIdx s P Cc e j j))]
+        rfl
+      have hK : (∑ a : Fin 4 → Fin d, ∑ R : Fin 4 → Fin d,
+            ((d : ℂ)⁻¹ ^ 4
+              * ∏ i, entryFac ρ (decide (P i ∈ t)) (a i) (R i)
+                  (u (colLink (P i))))
+            * ∏ j, pairRowVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (netRowIdx s P a R (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (netRowIdx s P a R j j))
+          = (d : ℂ)⁻¹ ^ 4 * ∑ a : Fin 4 → Fin d, ∑ R : Fin 4 → Fin d,
+            (∏ i, entryFac ρ (decide (P i ∈ t)) (a i) (R i)
+                (u (colLink (P i))))
+            * ∏ j, pairRowVal ρ μG
+                (siteKind s P (fun i => decide (P i ∈ t)) (j + 3) j)
+                (netRowIdx s P a R (j + 3) j)
+                (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                (netRowIdx s P a R j j) := by
+        simp only [mul_assoc, ← Finset.mul_sum]
+      rw [Finset.sum_congr rfl (s₁ := Finset.univ)
+        (fun a _ => Finset.sum_congr rfl (s₁ := Finset.univ)
+          (fun R _ => hIn a R) :
+          ∀ a ∈ (Finset.univ : Finset (Fin 4 → Fin d)),
+            (∑ R : Fin 4 → Fin d, ∑ e : Fin 4 → Fin d,
+              ∑ Cc : Fin 4 → Fin d,
+                ((d : ℂ)⁻¹) ^ 4
+                * ((∏ i, entryFac ρ (decide (P i ∈ t)) (a i) (R i)
+                      (u (colLink (P i))))
+                  * ∏ j, pairRowVal ρ μG
+                      (siteKind s P (fun i => decide (P i ∈ t))
+                        (j + 3) j)
+                      (netRowIdx s P a R (j + 3) j)
+                      (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                      (netRowIdx s P a R j j))
+                * ((∏ i, entryFac ρ (!(decide (P i ∈ t))) (Cc i) (e i)
+                      (u (colLink (P i))))
+                  * ∏ j, pairColVal ρ μG
+                      (siteKind s P (fun i => decide (P i ∈ t))
+                        (j + 3) j)
+                      (netColIdx s P Cc e (j + 3) j)
+                      (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                      (netColIdx s P Cc e j j)))
+            = ∑ R : Fin 4 → Fin d,
+                (((d : ℂ)⁻¹) ^ 4
+                * ((∏ i, entryFac ρ (decide (P i ∈ t)) (a i) (R i)
+                      (u (colLink (P i))))
+                  * ∏ j, pairRowVal ρ μG
+                      (siteKind s P (fun i => decide (P i ∈ t))
+                        (j + 3) j)
+                      (netRowIdx s P a R (j + 3) j)
+                      (siteKind s P (fun i => decide (P i ∈ t)) j j)
+                      (netRowIdx s P a R j j)))
+                * colNetwork ρ μG s P (fun i => decide (P i ∈ t)) u)]
+      simp only [← Finset.sum_mul, ← Finset.mul_sum, rowNetwork,
+        colNetwork, ← mul_assoc]
+      rw [hK]
+
+/-- **One moment has nonnegative real part.** At a
+C4 (irreducible `ρ`, `0 < d`), the factorized moment
+is `((d)⁻¹)⁴` times `RN * star RN`, a nonnegative
+real multiple of a squared norm. -/
+theorem quadCharMoment_moment_re_nonneg (hN : Even N) (hN3 : 3 ≤ N)
+    (hd : 0 < d) (hρirr : RepIrreducible ρ)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    {C : Finset (LayerColumn N)} (hCmem : C ∈ primitiveQuads)
+    {t : Finset (LayerColumn N)} (ht : t ⊆ C) (u : LayerLink N → G) :
+    0 ≤ (quadCharMoment ρ μG C t u u).re := by
+  obtain ⟨s, P, hs, hP, hPmem, hPcover, hinc⟩ :=
+    c4_cycle_ordering hN hN3 hCmem
+  rw [quadCharMoment_eq_rowNetwork_mul ρ μG hN hd hρirr hρcont hs hP
+    hPmem hPcover hinc ht u,
+    colNetwork_eq_star_rowNetwork ρ μG s P (fun i => decide (P i ∈ t)) u]
+  set RN := rowNetwork ρ μG s P (fun i => decide (P i ∈ t)) u with hRN
+  have h1 : RN * star RN = ((‖RN‖ ^ 2 : ℝ) : ℂ) := by
+    have h := RCLike.mul_conj RN
+    rw [starRingEnd_apply, ← RCLike.ofReal_pow] at h
+    exact h
+  have hdcast : ((d : ℂ)⁻¹) ^ 4 = (((d : ℝ)⁻¹ ^ 4 : ℝ) : ℂ) := by
+    have h : ((d : ℂ)⁻¹) ^ 4 = RCLike.ofReal (((d : ℝ)⁻¹) ^ 4) := by
+      rw [RCLike.ofReal_pow, ← RCLike.algebraMap_eq_ofReal, map_inv₀,
+        map_natCast]
+    exact h
+  rw [h1, hdcast, ← Complex.ofReal_mul, Complex.ofReal_re]
+  exact mul_nonneg (pow_nonneg (inv_nonneg.mpr (Nat.cast_nonneg d)) 4)
+    (pow_nonneg (norm_nonneg _) 2)
+
+/-- **Per-pattern pair nonnegativity (L7 headline).**
+For every pattern `t` of a C4 column `C` (irreducible
+`ρ`, `0 < d`), the conjugate pair's sum has
+nonnegative real part: the complement moment is the
+star of the moment (L1), and one moment already has
+nonnegative real part. This closes every pattern
+class of the scoping at once — the row/column
+network separation is the Gram form. -/
+theorem quadCharMoment_pair_nonneg (hN : Even N) (hN3 : 3 ≤ N)
+    (hd : 0 < d) (hρirr : RepIrreducible ρ)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    {C : Finset (LayerColumn N)} (hCmem : C ∈ primitiveQuads)
+    {t : Finset (LayerColumn N)} (ht : t ⊆ C) (u : LayerLink N → G) :
+    0 ≤ (quadCharMoment ρ μG C t u u
+      + quadCharMoment ρ μG C (C \ t) u u).re := by
+  have h1 := quadCharMoment_moment_re_nonneg ρ μG hN hN3 hd hρirr hρcont
+    hCmem ht u
+  have h2 := quadCharMoment_compl_re ρ μG ht u
+  rw [Complex.add_re, h2]
+  exact add_nonneg h1 h1
+
+end PatternEvaluation
+
 end ThetLogos
