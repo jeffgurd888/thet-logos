@@ -3589,4 +3589,169 @@ theorem quadCharMoment_pair_nonneg (hN : Even N) (hN3 : 3 ≤ N)
 
 end PatternEvaluation
 
+/-! ## §5c-ii. The endpoint assembly
+
+The endpoint of the PW line: the diagonal sign of
+`κ₄^dep` at order `β⁴`. Scope, on the face:
+irreducible `ρ`, even `N ≥ 4`, the diagonal `u' = u`
+only. Untouched: orders `β⁵` and beyond; the
+off-diagonal functional `Φ(u, u')`; reducible `ρ`;
+`𝒜 ⪰ 0` in the large; `N = 2`. No cushion: nothing
+here bounds `Φ` away from `0` — the Gram squares of
+§PatternEvaluation can degenerate at special
+configurations, exactly as the probed seats showed.
+NO CLAIM; dials 0/4. -/
+
+section EndpointAssembly
+
+variable {G : Type*} [Group G] [MeasurableSpace G] [MeasurableInv G]
+  [TopologicalSpace G] [IsTopologicalGroup G] [BorelSpace G]
+  [SecondCountableTopology G] {d : ℕ}
+  (ρ : G →* ↥(Matrix.unitaryGroup (Fin d) ℂ)) {N : ℕ} [NeZero N]
+  (μG : Measure G) [IsProbabilityMeasure μG]
+  [μG.IsMulLeftInvariant] [μG.IsMulRightInvariant] [μG.IsInvInvariant]
+
+/-- **Case (a) core.** At `0 < d` with `ρ`
+irreducible, every primitive quad's diagonal moment
+is nonnegative: by `quadReMoment_primitive_eq` it is
+`2⁻⁴` times the sum of the real parts of the pattern
+moments, each nonnegative by
+`quadCharMoment_moment_re_nonneg`. -/
+theorem quadReMoment_nonneg_of_pos (hN : Even N) (hN3 : 3 ≤ N)
+    (hd : 0 < d) (hρirr : RepIrreducible ρ)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    {C : Finset (LayerColumn N)} (hC : C ∈ primitiveQuads)
+    (u : LayerLink N → G) : 0 ≤ quadReMoment ρ μG C u u := by
+  rw [quadReMoment_primitive_eq ρ μG hρcont (isPrimitiveQuad_of_mem hC) u u]
+  apply mul_nonneg (pow_nonneg (inv_nonneg.mpr (by norm_num)) 4)
+  rw [Complex.re_sum]
+  refine Finset.sum_nonneg fun t ht => ?_
+  exact quadCharMoment_moment_re_nonneg ρ μG hN hN3 hd hρirr hρcont hC
+    (Finset.mem_powerset.mp ht) u
+
+/-- **Case (b) bridge.** At `d = 1`, a character
+identically `1` forces the representation itself to
+be trivial: a `1 × 1` matrix is its single entry,
+and by `charFn_eq_entry_of_dim_one` the entry is
+the character. This converts the case split's
+`¬ ∃ h, charFn ρ h ≠ 1` into the `∀ g, repMatrix ρ g
+= 1` hypothesis the E1Pack trivial-case lemmas
+consume. -/
+theorem repMatrix_eq_one_of_dim_one_of_charFn_eq_one
+    (hd : d = 1) (hχ : ∀ g, charFn ρ g = 1) :
+    ∀ g, repMatrix ρ g = 1 := by
+  subst hd
+  intro g
+  have h00 : repMatrix ρ g ⟨0, by omega⟩ ⟨0, by omega⟩ = 1 := by
+    have h := charFn_eq_entry_of_dim_one ρ rfl g
+    rw [hχ g] at h
+    exact h.symm
+  ext i j
+  have hi : i = ⟨0, by omega⟩ := by
+    rw [Fin.eq_zero i]; exact Fin.mk_zero.symm
+  have hj : j = ⟨0, by omega⟩ := by
+    rw [Fin.eq_zero j]; exact Fin.mk_zero.symm
+  rw [hi, hj,
+    show (1 : Matrix (Fin 1) (Fin 1) ℂ) ⟨0, by omega⟩ ⟨0, by omega⟩ = 1
+      from Matrix.one_apply_eq _]
+  exact h00
+
+/-- **Case (c), character.** At `d = 0` the character
+vanishes identically: it is a trace over `Fin 0`. -/
+theorem charFn_eq_zero_of_dim_zero (hd : d = 0) (g : G) :
+    charFn ρ g = 0 := by
+  subst hd
+  simp [charFn, Matrix.trace]
+
+/-- **Case (c), moment.** At `d = 0` every column
+factor `colRe` vanishes, so the diagonal
+`quadReMoment` of a (nonempty) primitive quad is
+`0`: its integrand is a product with a zero factor. -/
+theorem quadReMoment_eq_zero_of_dim_zero (hd : d = 0)
+    {C : Finset (LayerColumn N)} (hC : IsPrimitiveQuad C)
+    (u : LayerLink N → G) : quadReMoment ρ μG C u u = 0 := by
+  obtain ⟨P, hP⟩ : ∃ P, P ∈ C := by
+    have hcard : 0 < C.card := by rw [hC.1]; norm_num
+    exact Finset.card_pos.mp hcard
+  have hcol : ∀ (Q : LayerColumn N) (α : LayerSite N → G),
+      colRe ρ u u Q α = 0 := by
+    intro Q α
+    show (charFn ρ _).re = 0
+    rw [charFn_eq_zero_of_dim_zero ρ hd]
+    simp
+  have hprod : ∀ α : LayerSite N → G,
+      ∏ Q ∈ C, colRe ρ u u Q α = 0 :=
+    fun α => Finset.prod_eq_zero hP (hcol P α)
+  show (∫ α, ∏ Q ∈ C, colRe ρ u u Q α
+    ∂(Measure.pi fun _ : LayerSite N => μG)) = 0
+  rw [show (fun α : LayerSite N → G => ∏ Q ∈ C, colRe ρ u u Q α)
+      = fun _ => (0 : ℝ) from funext hprod]
+  simp
+
+/-- **Case (c), baseline.** At `d = 0`, `e1 = 0`. -/
+theorem e1_eq_zero_of_dim_zero (hd : d = 0) : e1 ρ μG = 0 := by
+  show (∫ g, (charFn ρ g).re ∂μG) = 0
+  rw [show (fun g => (charFn ρ g).re) = fun _ => (0 : ℝ) from
+    funext fun g => by rw [charFn_eq_zero_of_dim_zero ρ hd]; simp]
+  simp
+
+/-- **Per-quad summand of `Φ`, nonnegative.** The
+case split is exhaustive at irreducible `ρ`:
+`d = 0` (case (c): moment and baseline both `0`);
+`d = 1` nontrivial (baseline `0`, case (a) core);
+`d = 1` trivial (moment `1`, baseline `1`, summand
+`0`); `2 ≤ d` (baseline `0`, case (a) core). -/
+theorem quadReMoment_sub_e1_nonneg (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (hρirr : RepIrreducible ρ) {C : Finset (LayerColumn N)}
+    (hC : C ∈ primitiveQuads) (u : LayerLink N → G) :
+    0 ≤ quadReMoment ρ μG C u u - (e1 ρ μG) ^ 4 := by
+  rcases Nat.eq_zero_or_pos d with hd0 | hdpos
+  · rw [quadReMoment_eq_zero_of_dim_zero ρ μG hd0
+      (isPrimitiveQuad_of_mem hC) u, e1_eq_zero_of_dim_zero ρ μG hd0]
+    norm_num
+  · rcases (show d = 1 ∨ 2 ≤ d by omega) with hd1 | hd2
+    · by_cases hne : ∃ h : G, charFn ρ h ≠ 1
+      · rw [e1_eq_zero_of_dim_one_ne ρ μG hd1 hρcont hne,
+          zero_pow (by norm_num : (4 : ℕ) ≠ 0), sub_zero]
+        exact quadReMoment_nonneg_of_pos ρ μG hN hN3 hdpos hρirr
+          hρcont hC u
+      · push_neg at hne
+        have htriv : ∀ g, repMatrix ρ g = 1 :=
+          repMatrix_eq_one_of_dim_one_of_charFn_eq_one ρ hd1 hne
+        rw [quadReMoment_eq_one_of_dim_one_trivial ρ μG hd1 htriv C u,
+          e1_eq_one_of_dim_one_trivial ρ μG hd1 htriv]
+        norm_num
+    · rw [e1_eq_zero_of_irreducible ρ μG hρirr hd2 hρcont,
+        zero_pow (by norm_num : (4 : ℕ) ≠ 0), sub_zero]
+      exact quadReMoment_nonneg_of_pos ρ μG hN hN3 hdpos hρirr
+        hρcont hC u
+
+/-- **The endpoint: `Φ` is nonnegative on the
+diagonal.** At irreducible `ρ`, even `N ≥ 4`, the
+sum over the primitive quads of the per-quad
+summands is nonnegative, summand by summand. -/
+theorem phi_diag_nonneg (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (hρirr : RepIrreducible ρ) (u : LayerLink N → G) :
+    0 ≤ phiFunctional ρ μG u := by
+  show 0 ≤ ∑ C ∈ primitiveQuads,
+    (quadReMoment ρ μG C u u - (e1 ρ μG) ^ 4)
+  refine Finset.sum_nonneg fun C hC => ?_
+  exact quadReMoment_sub_e1_nonneg ρ μG hN hN3 hρcont hρirr hC u
+
+/-- **The endpoint, transferred: `κ₄^dep` is
+nonnegative on the diagonal.** The diagonal sign of
+the `β⁴` dependent coefficient, at irreducible `ρ`,
+even `N ≥ 4` — via `κ₄^dep (u, u) = d⁻⁴ · Φ(u)` and
+`phi_diag_nonneg`. -/
+theorem kappa4dep_diag_nonneg (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (hρirr : RepIrreducible ρ) (u : LayerLink N → G) :
+    0 ≤ kappa4dep ρ μG u u :=
+  kappa4dep_diag_nonneg_of_phi_nonneg ρ μG u hN hN3 hρcont
+    (phi_diag_nonneg ρ μG hN hN3 hρcont hρirr u)
+
+end EndpointAssembly
+
 end ThetLogos
