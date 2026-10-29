@@ -105,6 +105,47 @@ labeled so and is **not** registered.
   entry where the Python side corrected the *statement*, not a
   number.
 
+### BR1-004 — B6-PROBE, the β⁶ joint-kernel channel probe (landed 2026-10-29)
+
+- **Python side:** `routeb-general-scratch/b6probe_seat.py`
+  (output `b6probe-run.txt`) — exact enumeration at N = 4 over
+  the two seats' stratum configurations; integer accumulation
+  with `Fraction` at every verdict line. Parent re-ran the
+  script at landing: output identical.
+- **Lean side:** `ThetLogos/PlaneCrossingBeta6Probe.lean` —
+  channel kernels defined from channel content at both seats;
+  proportionality theorems (never definitions);
+  `verdict_B6Probe`, axioms exactly
+  `[propext, Classical.choice, Quot.sound]`.
+- **Convention check (both sides):** the Python extraction
+  reproduced ker κ₄^dep from its own κ₄ form before any
+  channel was evaluated — constants at (C₃, χ),
+  {φ₀ = φ₂} at (S₃, std) — and the Lean side re-derived both
+  kernel characterizations in-module.
+- **Proposition checked (both sides):** at N = 4, seats
+  (C₃, χ) and (S₃, std), every new order-6 channel's diagonal
+  form vanishes identically on the joint kernel
+  K = ker κ₄^dep: each channel kernel is an exact positive
+  multiple of the seat's κ₄ kernel (C₃: 3111 = 3×,
+  2211-adj = 2×, 2211-opp = 1×, C6 = ¼×, Θ = ¼×; S₃:
+  3111 = 12×, 2211-adj = 8×, 2211-opp = 4×, C6 = ¼×, Θ
+  vanishing on the convention span below). Pre-registered
+  kill K-K6 does not fire; the pre-registered outcome is
+  (ii) — the regress continues. Every Lean constant
+  reproduced the Python table exactly; no disagreement was
+  recorded on either side.
+- **Convention recorded:** Θ at (S₃, std) had no landed
+  restriction convention (the Python side stopped that
+  channel, K-PROBE-a); the Lean module fixes the convention
+  on its face — K's pullback := the joint candidate span
+  {1, s₁, s₂, s₁s₂} — and proves vanishing on the whole span,
+  which implies vanishing under every candidate sub-reading
+  (the Python side independently verified the restriction is
+  exactly zero under every candidate reading).
+- **Verdict:** outcome (ii) at both seats, at seat scope only.
+  Not a statement about general (G, ρ), and not a statement
+  about 𝒜 ⪰ 0 in either direction.
+
 ## Standing rules going forward
 
 - Every future probe brick files its registry entry as part of
