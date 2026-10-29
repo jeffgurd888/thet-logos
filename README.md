@@ -36,7 +36,15 @@ its landed positivity fact (`rootWeights_not_realized`; dossier
 `whitepaper/qrd1-landing-2026-10-29.md`). The decision covers the
 three owned modes only: Floor 1 (the triad as notation) stands,
 Floors 2/3 stay killed, and a future signed allocation object
-would enter as a new entry, not a retrofit. NO CLAIM; dials 0/4.
+would enter as a new entry, not a retrofit. And A0 registers the
+campaign's central sufficient target as a Lean proposition for
+the first time: `LayerKernelPos` — "𝒜 ⪰ 0 on gauge-invariant
+observables" in owned vocabulary, with the landed sufficiency
+chain (β1 factorization + twirl reduction + Schur product)
+assembled in its dossier (`whitepaper/a0-landing-2026-10-29.md`).
+Registration only: no proof of 𝒜 ⪰ 0 is attempted there, and
+clause (a) of the finite theory remains its last open clause.
+NO CLAIM; dials 0/4.
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
 its endpoint: the β⁴ dependent coefficient is nonnegative on the
@@ -289,7 +297,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,150 theorem declarations**\*
-across 245 counted Lean modules, with whitepaper dossiers for every campaign.
+across 246 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
