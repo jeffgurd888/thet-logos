@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v4 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23648050.svg)](https://doi.org/10.5281/zenodo.23648050)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C125-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C150-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -17,6 +17,26 @@ foundations for 4D quantum field theory one machine-checked rung at a
 time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
+
+**2026-10-29 — the β⁶ selection rule, the cross-check registry,
+and the Q-ROOT decision.** B6-0 lands the order-6 weighted
+selection rule FULL *as corrected*: the scoping's card-4 line was
+FALSE under weighted sharing (an explicit N = 4 counterexample,
+registered in the registry below), and the disjunctive corrected
+statement is the landed one; no sign is asserted for β⁶, and its
+general sign stays FRONTIER. BRIDGE-1 opens the Span 1
+(Lean ↔ Python) cross-check registry (`whitepaper/
+cross-check-registry.md`): every probe ships with the exact Lean
+statement it checks and exact rational arithmetic at the verdict
+line; simulations audit and probe — the registry asserts nothing
+physical. And QR-D1 decides the Q-ROOT post at the owned level:
+**NO** — the triad (−1, 0, 2) is not realized as weights by any
+of the corpus's three canonical allocation modes, each fenced by
+its landed positivity fact (`rootWeights_not_realized`; dossier
+`whitepaper/qrd1-landing-2026-10-29.md`). The decision covers the
+three owned modes only: Floor 1 (the triad as notation) stands,
+Floors 2/3 stay killed, and a future signed allocation object
+would enter as a new entry, not a retrofit. NO CLAIM; dials 0/4.
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
 its endpoint: the β⁴ dependent coefficient is nonnegative on the
@@ -268,8 +288,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,125 theorem declarations**\*
-across 243 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,150 theorem declarations**\*
+across 245 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -283,8 +303,8 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (at the 2026-10-28 census an attribute-inclusive count
-reads 7,203); earlier running
+rule (at the 2026-10-29 census an attribute-inclusive count
+reads 7,228); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
