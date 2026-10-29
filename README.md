@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v4 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23648050.svg)](https://doi.org/10.5281/zenodo.23648050)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-5%2C684-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C125-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -17,6 +17,26 @@ foundations for 4D quantum field theory one machine-checked rung at a
 time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
+
+**2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
+its endpoint: the β⁴ dependent coefficient is nonnegative on the
+diagonal for every irreducible ρ at even N ≥ 4
+(`kappa4dep_diag_nonneg`) — explicitly NOT 𝒜 ⪰ 0: off-diagonal,
+β⁵+, and N = 2 are untouched, and Φ is not bounded away from
+zero, so there is no cushion. The β⁵ line then ran its priced
+path: selection (B5-0), channel definitions (B5-1, landed
+PARTIAL at its pre-named seam), a probe passing at both seats
+(B5-PROBE: the κ₅ channel form vanishes exactly on
+ker κ₄^dep and is a positive multiple of the κ₄ form — 2× and
+4× at the probed seats), and the assembly identity in its true
+form (B5-2): κ₅^dep = (4 + (M−4)·B)·κ₄^dep − (d⁻⁵/2)·κ₅^chanExcess
+— the naive identity κ₅^dep = channel is FALSE in two named
+ways. On the diagonal at irreducible ρ the dressing factor is
+exactly M > 0, so the β⁵ sign reduces to one unproved
+comparison: whether (d⁻⁵/2)·excess stays under M·κ₄^dep(u,u).
+The sign stays FRONTIER (the triple twirls are unowned).
+NO CLAIM on any Millennium statement — parts closed: 0;
+dials 0/4.
 
 **2026-10-23 — THE FINITE STANDARD MODEL LANDS.** Track 1 (the
 gauge algebra) is CLOSED at T1 via Route B: one representation
@@ -249,7 +269,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,125 theorem declarations**\*
-across 187 counted Lean modules, with whitepaper dossiers for every campaign.
+across 243 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -263,7 +283,8 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (an attribute-inclusive count reads 4,559); earlier running
+rule (at the 2026-10-28 census an attribute-inclusive count
+reads 7,203); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
