@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — Q7CR-6a: the C₇ shift action on the Q⁷ factor,
+registered.** The linker line's first brick
+(`ThetLogos.Q7C4R4Linker`): the register shift S₇ built by
+specializing the corpus's FluxTwist machinery, exact order 7,
+the unitary representation package q7Rep over ZMod 7, Fourier
+diagonalization and the Pontryagin identification cited from
+the corpus's own pins, and the realified action with block form
+1 ⊕ 2 ⊕ 2 ⊕ 2 stated exactly. The action was supplied by
+BONES under Jeff's delegation and is labeled as such; "via C4"
+survives only as "graded by C4" (dossier
+`whitepaper/q7cr6a-landing-2026-10-30.md`). NO CLAIM; dials
+0/4.
+
 **2026-10-30 — Gram dominance, registered.** The dominance
 conjecture is now stated in owned vocabulary
 (`ThetLogos.GramDominance`): GD-strong / GD-global / GD-kernel
@@ -557,7 +570,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,508 theorem declarations**\*
-across 263 counted Lean modules, with whitepaper dossiers for every campaign.
+across 264 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
