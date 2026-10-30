@@ -146,6 +146,45 @@ labeled so and is **not** registered.
   Not a statement about general (G, ρ), and not a statement
   about 𝒜 ⪰ 0 in either direction.
 
+### BR1-005 — A2-2-PROBE, the plaquette telescoping seat check (landed 2026-10-29)
+
+- **Python side:** `routeb-general-scratch/a22probe_seat.py`
+  (output `a22probe-run.txt`; verdict memo
+  `a22probe-verdict.md`) — exact polynomial arithmetic in
+  ℚ[t], t = e^{−1/2}, recovered by evaluation–interpolation
+  with counts sanity-checked to |G|⁴; sign checks
+  interval-certified; deterministic, seeded (20261029).
+  Parent re-ran the script at landing: output
+  byte-identical.
+- **Lean side:** none — this probe checks the REGISTERED
+  statement of `ThetLogos/PlaquetteTelescoping`
+  (`PlaqTelescoping` / `PlaqKernelPos`, A2-2a) at finite
+  seats; there is no Lean seat module, and none is implied.
+  The propositions checked are the registered ones, read
+  literally.
+- **Proposition checked:** at β = 1, seats (S₃, std) and
+  (D₄, std) (kill-bearing) with (ℤ₅, 1-dim character) as
+  control: (T) `PlaqBlock(u, u′) = Ψ(PlaqHol u, PlaqHol u′)`
+  exactly (residuals: 0 nonzero over 17,552 checks at Seat A,
+  67,536 at Seat B, 6,550 at the control); (P) Ψ's spectrum
+  interval-certified ≥ 0 at both kill-bearing seats, with
+  separate class-invariance exact; the coefficient law
+  c_π = (ĉ_π/dim π)⁴ exact at both kill-bearing seats (at
+  non-self-dual labels the law pairs k ↔ −k, certified at
+  the control: c_k = (ĉ_k·ĉ_{−k})²). Pre-registered kill
+  K-A2 does not fire; outcome: probe PASS, seat evidence
+  only.
+- **Certified correction (same volume):** the claim-path
+  memo's literal quotient form (R1) is CERTIFIED DEAD at
+  both kill-bearing seats — equal-quotient pairs with
+  block difference (1−t³)⁴/324 ≈ 1.12×10⁻³ (Seat A) and
+  (1−t⁴)⁴/1024 ≈ 5.46×10⁻⁴ (Seat B), intervals excluding 0.
+  The revised entry R2 (registered by A2-2a) is the live
+  statement.
+- **Verdict:** PASS at two nonabelian seats, seat scope
+  only. Not a statement about general (G, ρ); Route B's
+  proof bricks (A2-2b onward) are unlocked, not landed.
+
 ## BRIDGE-2 adoption — the landing-checklist amendment (2026-10-29)
 
 BRIDGE-2 (Span 1's forward duty, per the bridge scoping of
