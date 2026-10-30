@@ -18,6 +18,23 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — the A2-2 line closes: polynomial-stage
+PARTIAL, convergence proved, headline not claimed.**
+A2-2e as re-scoped (`ThetLogos.PlaqBlockLimit`) proves the
+approximant block and kernel converge to the true objects
+at general (G, ρ) — the uniform bound |Re tr ρ| ≤ d,
+dominated convergence, no irreducibility, no twirls — and
+records the non-transfer plainly: polynomial-stage
+identities do not become f_β theorems by passage to the
+limit. A2-2's final shape: (T)/(P) at K = 0, the contracted
+form at K = 1, both corner contractions at total orders
+≤ 2, class invariance closed — and the all-β factor
+theorem NOT claimed, blocked by two named seams (triple
+twirls, TW-1's brick; the J-pattern collapse, unpriced).
+A2-3 stays unpriced (dossier
+`whitepaper/a22e-landing-2026-10-30.md`). NO CLAIM; dials
+0/4.
+
 **2026-10-30 — B7-PROBE-a: outcome (ii) — β⁷ decides
 nothing at the seats, and kills nothing.** Every new
 order-7 channel vanishes on the joint kernel K₆ at both
@@ -658,7 +675,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,508 theorem declarations**\*
-across 269 counted Lean modules, with whitepaper dossiers for every campaign.
+across 270 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
