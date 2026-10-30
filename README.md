@@ -18,6 +18,22 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — A2-2d lands PARTIAL at its two named seams —
+reported at the same volume as a win.** The polynomial-stage
+assembly (`ThetLogos.PlaqBlockAssembly`): (T) and (P) FULL
+at K = 0 (PSD via the Gram form), the contracted form at
+K = 1 as the headline (block = (1 − β)⁴ + (β/d)⁴ · cycle
+integral), Ψ₁'s class invariance closed, datum rotation full
+at block level. What does not exist: uniform-in-K (T)/(P) —
+blocked by SEAM A2-2c-HIGHER-ORDERS (triple twirls unowned;
+their brick is TW-1) and SEAM A2-2d-J-PATTERNS (PSD and (T)
+at K = 1 need a J-invariance collapse around the cycle, not
+owned). The hypothesis gap is carried on every face. A2-2's
+result is this polynomial-stage PARTIAL; the all-β headline
+is not claimed (dossier
+`whitepaper/a22d-landing-2026-10-30.md`). NO CLAIM; dials
+0/4.
+
 **2026-10-30 — A2-2c: both corner contractions land at their
 priced orders.** The telescoping step
 (`ThetLogos.PlaqBlockContraction`): the mixed corner and the
@@ -628,7 +644,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,508 theorem declarations**\*
-across 268 counted Lean modules, with whitepaper dossiers for every campaign.
+across 269 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
