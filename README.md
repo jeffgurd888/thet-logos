@@ -18,6 +18,20 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — B7-2 COMPLETE: `kappa7dep_eq` lands; the
+β⁷ line's queued bricks close.** The order-7 assembly
+identity now stands as one named theorem (proved by
+transport of the total decomposition), with the probe
+consistency stated in its exact narrowed form: dressings
+and channels vanish on K₆ at the seats; the identity
+asserts nothing about the residuals' seat restrictions
+and no β⁷ sign. Line state: B7-0's claims settled (both
+confirmed), the probe certified outcome (ii) at both
+seats (K-K7 did not fire; the decision passes to β⁸,
+not queued), the sign FRONTIER (dossier
+`whitepaper/b72bv-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — B7-2b-iv: the order-7 total decomposition.**
 kappa7dep = A6·kappa6dep + A5·kappa5dep + A4·kappa4dep +
 d⁻⁷·(channels + residuals), proved — with A6 = 4 + (M−4)·B,
