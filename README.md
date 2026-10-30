@@ -18,6 +18,18 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — B7-2b-i: order-7 fiber machinery.** The
+β⁷ assembly's fiber expansion and migration lemmas are
+ported at order 7 (new module PlaneCrossingBeta7Fibers),
+with the constant fibers evaluated in closed form (cards
+1–3: A₇; the 7/21/35 splits; the fifteen triples at
+42/105/140/210) — no coefficient surprise, no
+predicted-dead fiber found live. Card accounting (7/6,
+then 5/4) is next in the chain; kappa7dep_eq remains a
+named seam, asserted nowhere (dossier
+`whitepaper/b72bi-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — B7-2a: the order-7 excesses are formed.**
 All seven channels' excesses now exist with proved
 baseline bookkeeping (new module PlaneCrossingBeta7Assembly),
