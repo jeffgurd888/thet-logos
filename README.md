@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v4 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23648050.svg)](https://doi.org/10.5281/zenodo.23648050)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C340-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C346-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -85,7 +85,15 @@ FALSE as stated (counterexample: the constant I function);
 the closure landed in Hermitian-kernel form, which is what
 the factor satisfies (dossier
 `whitepaper/a21-landing-2026-10-29.md`). The telescoping
-identity (A2-2) is unbuilt; 𝒜 ⪰ 0 is untouched. NO CLAIM;
+identity (A2-2) is unbuilt; 𝒜 ⪰ 0 is untouched. The
+viscous line opens with VISC-0 (`ViscousLine`): a
+registration pack assembling the diagonal one-signedness
+of the owned heat/ternary step (diagonal multipliers in
+(0, 1], generator values ≤ 0) from landed facts — a
+formality brick, priced and labeled as such, with the
+generator theorem (VISC-1) and the general-Hermitian
+transport (VISC-2) to follow (dossier
+`whitepaper/visc0-landing-2026-10-29.md`). NO CLAIM;
 dials 0/4.
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
@@ -338,8 +346,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,340 theorem declarations**\*
-across 250 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,346 theorem declarations**\*
+across 251 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -354,7 +362,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-29 census an attribute-inclusive count
-reads 7,418); earlier running
+reads 7,424); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
