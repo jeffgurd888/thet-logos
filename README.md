@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v4 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23648050.svg)](https://doi.org/10.5281/zenodo.23648050)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C346-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C353-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -93,8 +93,15 @@ of the owned heat/ternary step (diagonal multipliers in
 formality brick, priced and labeled as such, with the
 generator theorem (VISC-1) and the general-Hermitian
 transport (VISC-2) to follow (dossier
-`whitepaper/visc0-landing-2026-10-29.md`). NO CLAIM;
-dials 0/4.
+`whitepaper/visc0-landing-2026-10-29.md`). VISC-1 has now
+landed the generator theorem: `ternaryGenerator
+lam X = −(ΛX + XΛ)` is the step's derivative at 0 (on
+Hermitian inputs; in general applied to Xᴴ), its
+matrix-unit spectrum is exactly `−(λᵢ + λⱼ)`, and it is
+dissipative at the diagonal seat in trace form (dossier
+`whitepaper/visc1-landing-2026-10-29.md`) — the one brick
+shared with the parked TTK-2, built under this line only.
+NO CLAIM; dials 0/4.
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
 its endpoint: the β⁴ dependent coefficient is nonnegative on the
@@ -346,7 +353,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,346 theorem declarations**\*
+**7,353 theorem declarations**\*
 across 251 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
@@ -362,7 +369,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-29 census an attribute-inclusive count
-reads 7,424); earlier running
+reads 7,431); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
