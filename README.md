@@ -137,7 +137,24 @@ the torsion sweep lands `Nat.card (torsion of E2.Point)
 candidate ordinates and the x³ = 2 case excluded by
 integer arithmetic (dossier
 `whitepaper/b21-landing-2026-10-29.md`). NO CLAIM;
-dials 0/4.
+dials 0/4. Route B's telescoping brick is then scoped
+and registered (A2-2a, `PlaquetteTelescoping`): the
+statement that survives scoping is a revised entry —
+the plaquette block (the joint corner-stratum integral
+of four column factors around a column-graph plaquette)
+factors through the two plaquette holonomies into a
+kernel Ψ expected PSD and separately class in each
+argument (`PlaqTelescoping` / `PlaqKernelPos`, stated,
+unproved). The claim-path memo's literal quotient-form
+sentence does not survive scoping; its death is
+conditional on the seat probe (A2-2-PROBE, K-A2 armed)
+certifying the counterexample, and no proof brick fires
+before that probe passes (dossier
+`whitepaper/a22a-landing-2026-10-29.md`). The S3-1 wall-identity
+gate has also reported (paper): **DP-1 — two distinct
+walls**; factorization ⇔ the LOC-3 bridge is one wall,
+uniformity is another, and the campaigns do not merge
+(dossier `whitepaper/s31-wall-identity-gate-2026-10-29.md`).
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
 its endpoint: the β⁴ dependent coefficient is nonnegative on the
@@ -389,8 +406,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,382 theorem declarations**\*
-across 252 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,405 theorem declarations**\*
+across 253 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -405,7 +422,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-29 census an attribute-inclusive count
-reads 7,460); earlier running
+reads 7,483); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
