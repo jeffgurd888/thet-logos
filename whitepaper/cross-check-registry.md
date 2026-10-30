@@ -328,3 +328,34 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   class (run log entry (0,4) is the exhibiting
   counterexample); the verdict is independent of the reading
   (every candidate K-pullback reading restricts to zero).
+
+### BR1-009 — VL-0, the vortex-locus probe at the pin seat, Python side (landed 2026-10-30)
+
+- **Python side:** `routeb-general-scratch/vl0_seat.py` (output
+  `vl0-run.txt`) — exact rational arithmetic throughout (ℚ,
+  complex entries as rational pairs; sympy exact-Rational
+  cross-check agrees). Parent re-ran the script at landing:
+  run log byte-identical.
+- **Lean side:** queued — VL-2 (P-VL1: finrank of the kernel
+  of `commMap K₀` on W22 = d₀; P-VL2: the membership list)
+  and VL-3 (P-VL3, the family corollary in the probe's true
+  form). The value below is probe-grade (T4) until they land.
+- **Proposition checked:** at the registered seat
+  K₀ = (smDirac 1 2 3 5 7)², the real commutator system
+  [K₀, Σ cᵢ·dirs22ᵢ] = 0 over the W₂₂ span (rank, kernel
+  dimension d₀, kernel basis in dirs22 coordinates), the
+  family locus {y ∈ ℂ⁵ : [K₀, smDirac y] = 0}, and the
+  forced member D_F(y₀) (thermal_flux_vanishes).
+- **Result: d₀ = 10 (rank 12) — a middle value.** Kernel =
+  the family locus embedded in the SM directions (the E, U, D
+  directions individually; the (ν, R) pair confined to
+  yR = 7·yNu) ⊕ exactly one exotic complex direction
+  (exoticReEREbarR, exoticImEREbarR); the other ten exotic
+  directions are excluded. Family locus: real dimension 8
+  (ℂ³ over (yE, yU, yD) free × the (yNu, yR) ℂ-line
+  yR = 7·yNu) — NOT the ℂ-line (dim 2) the scoping expected;
+  P-VL3's statement follows the probe. Every kernel vector
+  verified by direct substitution on all 1024 entries.
+  K-VORTEX-1 does not fire (neither end); K-VORTEX-2 does
+  not fire (the kernel strictly exceeds the forced lines —
+  the exotic direction is forced by nothing landed).

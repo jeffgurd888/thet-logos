@@ -18,6 +18,24 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — VL-0: the flux-zero locus at the thermal seat
+has dimension 10 — and contains an exotic.** The
+vortex-locus probe (registry BR1-009, exact rational
+arithmetic, substitution-verified) computes the
+centralizer section of the W₂₂ span at K₀ =
+(smDirac 1 2 3 5 7)²: the kernel is the E, U, D directions
+individually, the Majorana pair confined to yR = 7·yNu —
+and exactly one exotic direction pair (EREbarR), the other
+ten exotics excluded. The family locus is 8-dimensional,
+not the expected 2. Neither framing kill fires: the locus
+is neither empty nor everything (K-VORTEX-1), and it
+strictly exceeds the lines landed theorems force
+(K-VORTEX-2 — the exotic commutation is forced by nothing
+in the corpus). The locus is the flux-ZERO sector — the
+silent sector, not a flow (dossier
+`whitepaper/vl0-landing-2026-10-30.md`). NO CLAIM; dials
+0/4.
+
 **2026-10-30 — the A2-2 line closes: polynomial-stage
 PARTIAL, convergence proved, headline not claimed.**
 A2-2e as re-scoped (`ThetLogos.PlaqBlockLimit`) proves the
