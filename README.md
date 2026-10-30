@@ -18,6 +18,20 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — S3-4: Δ-as-output is stated; the pier
+block closes.** DeltaAsOutput: the uniform trajectory
+gap plus the scaling limit's existence imply the limit
+system's correlations cluster exponentially at the same
+rate m — the gap as a conclusion-shaped property of the
+limit, in the weakest statable form, consuming S3-2's
+LimitGapClustering by name. Statement only: its proof
+is not priced and was not attempted; K-S3-4 checked and
+does not fire. The pier stands complete as chartered —
+first machine-checkable statements for Span 3's rungs,
+every gap between statement and proof named (dossier
+`whitepaper/s34-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4; continuum distance ZERO.
+
 **2026-10-30 — S3-3: the reconstruction pin, repaired —
 and the repair's limit proved.** (Statement repair, not
 a proof.) The tied pin OSReconstructionTied now binds
