@@ -1821,4 +1821,758 @@ theorem verdict_C3_B7 (φ : ZMod 3 → ℚ)
 
 end B7C3Verdict
 
+/-!
+# β⁷ probe, part 2: the (S₃, std) seat at N = 4 (B7-PROBE-c)
+
+Seat scope only: **N = 4**, seat **(S₃, std)** (`d = 2`).
+NO CLAIM.  Parts of the Clay Yang–Mills statement closed
+by this module: **0**.  Dials 0/4.  The β⁷ general sign
+stays FRONTIER and nothing here is a statement about
+𝒜 ⪰ 0 in the large, about all β, or about the continuum.
+
+**Pre-registered targets** (the Python side,
+`b7probe-run.txt`, exact rational arithmetic, registry
+**BR1-008**, the BRIDGE-1 target table for this part):
+the κ₄ kernel at this seat is
+`[1/4, 0, -1/8; 0, 0, 0; -1/8, 0, 1/16]` with kernel of
+the diagonal form exactly `{φ₀ = φ₂}`; the κ₅ channel is
+`4 ×` that kernel and every κ₆ channel is a positive
+multiple of it or factors through it on the orbit space
+(B5/B6 probes, consumed as landed), so seat-`K₆` is
+`ker κ₄^dep` — re-derived in this module below
+(`seatK6_S3`).  The new order-7 channel kernels are
+exact positive multiples of the seat κ₄ kernel:
+
+| channel | kernel | multiple of κ₄ kernel |
+|---|---|---|
+| `(4,1,1,1)` | `[5, 0, -5/2; 0, 0, 0; -5/2, 0, 5/4]` | `20 ×` |
+| `(3,2,1,1)`-adjacent | `[6, 0, -3; 0, 0, 0; -3, 0, 3/2]` | `24 ×` |
+| `(3,2,1,1)`-opposite | `[3, 0, -3/2; 0, 0, 0; -3/2, 0, 3/4]` | `12 ×` |
+| `(2,2,2,1)` | `[6, 0, -3; 0, 0, 0; -3, 0, 3/2]` | `24 ×` |
+| `(2,1,1,1,1,1)` on `C6` | `[3/8, 0, -3/16; 0, 0, 0; -3/16, 0, 3/32]` | `3/2 ×` |
+| `(2,1,1,1,1,1)` on `Θ(2,2,2)` | orbit kernel, §`B7S3ThetaDoubled` | `3 ×`, A3-gated |
+| `(1⁷)` on `Θ(1,3,3)` book | orbit kernel, §`B7S3Book` | `1/4 ×`, A3-gated |
+
+proved below as theorems about the channel kernels
+defined from their own entry content (the per-support-type
+enumeration matrices of the Python table, in the (S₃, std)
+mirror style of the β⁵/β⁶ probes: explicit exact matrices,
+calibrated against the κ₄ probe), never as definitions.
+Per-type fence: the Python table found the plaquette and
+wrap-chain kernels equal at this seat for the quad
+channels; the matrices below are the per-quad-type kernels.
+
+**Excess = raw at this seat**, as at (C₃, χ): every
+order-7 fully-split baseline carries a positive power of
+`e₁ = E χ_std`, and `E χ_std = 0` at this seat (the
+Python table's e1 check, and the mechanism of the β⁵
+probe at this seat), so every excess equals its raw
+channel sum.
+
+**The A3-gated nuance (on the record from BR1-008;
+certified here, not smoothed).**  The two orbit-pair
+channels — `(2,1,1,1,1,1)` on `Θ(2,2,2)` and the `(1⁷)`
+book on `Θ(1,3,3)` — do **not** factor through the plain
+product class `cls(g₃·g₅)` (resp. `cls(Lₐ·L_b)`): the
+run log's entry `(0, 4)` exhibits the failure (orbit `0`
+is `(id, id)`, orbit `4` is `((12), (12))`; the kernel
+vanishes there while the plain-product reading would
+force the `(0, 0)` value).  The exact factorization is
+through the **A3-gated product class**: the product's
+class on orbits whose two loop holonomies are both even,
+and κ₄'s zero class (the transposition class, index `1`)
+otherwise (`gatePair` below; theorems
+`K7S3Theta_gated`, `K7S3Book_gated`, and the plain
+reading's failure `K7S3Theta_not_plain`,
+`K7S3Book_not_plain`).  The kernel-reading convention is
+the B6-PROBE-c frame (constants; `span{1, sgn}` per even
+cycle; the joint span `span{1, s₁, s₂, s₁s₂}`): every
+candidate reading restricts to zero, so the verdict is
+**convention-independent** — stated in the verdict
+theorems, not assumed.
+
+**K-K7 was armed** at this seat exactly as at (C₃, χ):
+a certified negative value of any new channel on `K₆`
+would have landed the kill at full rank.  None occurs:
+every channel vanishes on `K₆`, **K-K7 does not fire at
+this seat**, and the β⁷ decision at the seats passes to
+β⁸ (see the assembled verdict `verdict_B7Probe`).  β⁸ is
+not queued; the regress has no internal stop — that is
+stated, not softened.
+
+**Interpretation cap (on the face)**: the multiples in
+the table are seat data — exact values of these channel
+forms at this one seat — not mechanism evidence.  No
+mechanism for the general β⁷ sign is asserted or
+suggested by the pattern of multiples.
+-/
+
+section B7S3Kappa4
+
+/-- **Kernel characterization at (S₃, std), re-derived
+in this module.**  The κ₄ seat form is consumed as
+exported (`K4S3` / `nS3` from the β⁵ probe); here its
+diagonal form is re-derived from its square form
+`formS3_k4_sq`: the form vanishes exactly on
+`{φ : Fin 3 → ℚ | φ 0 = φ 2}`. -/
+theorem kappa4S3_kernel_B7 (φ : Fin 3 → ℚ) :
+    (∑ a, ∑ b, φ a * (nS3 a * K4S3 a b * nS3 b) * φ b) = 0
+      ↔ φ 0 = φ 2 := by
+  rw [formS3_k4_sq]
+  constructor
+  · intro h
+    have h1 : (108 : ℚ) * (φ 0 - φ 2) = 0 :=
+      (pow_eq_zero_iff (show (2 : ℕ) ≠ 0 by norm_num)).mp h
+    rcases mul_eq_zero.mp h1 with h108 | hsub
+    · norm_num at h108
+    · exact sub_eq_zero.mp hsub
+  · intro h
+    rw [sub_eq_zero.mpr h]
+    norm_num
+
+/-- **Seat-`K₆` re-derivation at (S₃, std).**  `K₆` is
+`ker κ₄^dep ∩ ker κ₅^dep ∩ ker κ₆^dep` (diagonal forms).
+At this seat the κ₅ channel form vanishes on
+`ker κ₄^dep` (it is `4 ×` the κ₄ kernel, B5-PROBE:
+`verdict_S3`), and every κ₆ channel form vanishes there
+too (`verdict_S3_B6`, consumed as landed, the Θ channel
+under its joint-span convention).  Hence seat-`K₆` =
+`ker κ₄^dep`, which is exactly `{φ₀ = φ₂}` by
+`kappa4S3_kernel_B7`.  This theorem certifies the
+κ₅/κ₆ half of that identification in-module: from
+`φ ∈ ker κ₄^dep`, the κ₅ form and all five κ₆ channel
+forms of `verdict_S3_B6` vanish at `φ`. -/
+theorem seatK6_S3 (φ : Fin 3 → ℚ)
+    (h4 : ∑ a, ∑ b, φ a * (nS3 a * K4S3 a b * nS3 b) * φ b = 0) :
+    (φ 0 = φ 2)
+      ∧ (∑ a, ∑ b, φ a * (nS3 a * K5S3 a b * nS3 b) * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * (nS3 a * K6S3_3111 a b * nS3 b) * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * (nS3 a * K6S3_2211adj a b * nS3 b) * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * (nS3 a * K6S3_2211opp a b * nS3 b) * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * (nS3 a * K6S3_C6 a b * nS3 b) * φ b = 0)
+      ∧ (∀ ψ : Fin 11 → ℚ,
+          (∃ a b c d : ℚ, ψ = fun p => a + b * s1Theta p
+            + c * s2Theta p + d * s12Theta p) →
+          (∑ p, ∑ q, ψ p * (nThetaS3 p * K6S3Theta p q * nThetaS3 q)
+            * ψ q) = 0) :=
+  ⟨(kappa4S3_kernel_B7 φ).mp h4, verdict_S3 φ h4, verdict_S3_B6 φ h4⟩
+
+end B7S3Kappa4
+
+section B7S3Quad4111
+
+/-- The `(4,1,1,1)` channel seat kernel at (S₃, std):
+the per-support-type enumeration matrix of the Python
+table (BR1-008), `[5, 0, -5/2; 0, 0, 0; -5/2, 0, 5/4]`
+(plaquette and wrap-chain kernels equal). -/
+def K7S3_4111 : Matrix (Fin 3) (Fin 3) ℚ :=
+  ![![5, 0, -5 / 2], ![0, 0, 0], ![-5 / 2, 0, 5 / 4]]
+
+/-- **Proportionality, `(4,1,1,1)` at (S₃, std):
+exactly `20 ×` the κ₄ kernel** (Python target:
+`[5, 0, -5/2; …] = 20 · [1/4, 0, -1/8; …]`). -/
+theorem K7S3_4111_prop (a b : Fin 3) :
+    K7S3_4111 a b = 20 * K4S3 a b := by
+  fin_cases a <;> fin_cases b <;> simp [K7S3_4111, K4S3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- `(4,1,1,1)` kernel margins vanish exactly. -/
+theorem K7S3_4111_margins (a : Fin 3) :
+    ∑ b, nS3 b * K7S3_4111 a b = 0 := by
+  fin_cases a <;> rw [Fin.sum_univ_three] <;> simp [K7S3_4111, nS3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- The `(4,1,1,1)` diagonal form at (S₃, std) is
+exactly `20 ×` the κ₄ diagonal form. -/
+theorem formS3_k7_4111 (φ : Fin 3 → ℚ) :
+    (∑ a, ∑ b, φ a * (nS3 a * K7S3_4111 a b * nS3 b) * φ b)
+      = 20 * ∑ a, ∑ b, φ a * (nS3 a * K4S3 a b * nS3 b) * φ b := by
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun a _ => ?_)
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun b _ => ?_)
+  rw [K7S3_4111_prop]
+  ring
+
+end B7S3Quad4111
+
+section B7S3Quad3211
+
+/-- The `(3,2,1,1)`-**adjacent** channel seat kernel
+at (S₃, std): the per-support-type enumeration matrix
+of the Python table (BR1-008),
+`[6, 0, -3; 0, 0, 0; -3, 0, 3/2]` (plaquette and
+wrap-chain kernels equal). -/
+def K7S3_3211adj : Matrix (Fin 3) (Fin 3) ℚ :=
+  ![![6, 0, -3], ![0, 0, 0], ![-3, 0, 3 / 2]]
+
+/-- **Proportionality, `(3,2,1,1)`-adjacent at
+(S₃, std): exactly `24 ×` the κ₄ kernel.** -/
+theorem K7S3_3211adj_prop (a b : Fin 3) :
+    K7S3_3211adj a b = 24 * K4S3 a b := by
+  fin_cases a <;> fin_cases b <;> simp [K7S3_3211adj, K4S3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- `(3,2,1,1)`-adjacent kernel margins vanish
+exactly. -/
+theorem K7S3_3211adj_margins (a : Fin 3) :
+    ∑ b, nS3 b * K7S3_3211adj a b = 0 := by
+  fin_cases a <;> rw [Fin.sum_univ_three] <;> simp [K7S3_3211adj, nS3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- The `(3,2,1,1)`-adjacent diagonal form at (S₃, std)
+is exactly `24 ×` the κ₄ diagonal form. -/
+theorem formS3_k7_3211adj (φ : Fin 3 → ℚ) :
+    (∑ a, ∑ b, φ a * (nS3 a * K7S3_3211adj a b * nS3 b) * φ b)
+      = 24 * ∑ a, ∑ b, φ a * (nS3 a * K4S3 a b * nS3 b) * φ b := by
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun a _ => ?_)
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun b _ => ?_)
+  rw [K7S3_3211adj_prop]
+  ring
+
+/-- The `(3,2,1,1)`-**opposite** channel seat kernel
+at (S₃, std): the per-support-type enumeration matrix
+of the Python table (BR1-008),
+`[3, 0, -3/2; 0, 0, 0; -3/2, 0, 3/4]` (plaquette and
+wrap-chain kernels equal). -/
+def K7S3_3211opp : Matrix (Fin 3) (Fin 3) ℚ :=
+  ![![3, 0, -3 / 2], ![0, 0, 0], ![-3 / 2, 0, 3 / 4]]
+
+/-- **Proportionality, `(3,2,1,1)`-opposite at
+(S₃, std): exactly `12 ×` the κ₄ kernel.** -/
+theorem K7S3_3211opp_prop (a b : Fin 3) :
+    K7S3_3211opp a b = 12 * K4S3 a b := by
+  fin_cases a <;> fin_cases b <;> simp [K7S3_3211opp, K4S3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- `(3,2,1,1)`-opposite kernel margins vanish
+exactly. -/
+theorem K7S3_3211opp_margins (a : Fin 3) :
+    ∑ b, nS3 b * K7S3_3211opp a b = 0 := by
+  fin_cases a <;> rw [Fin.sum_univ_three] <;> simp [K7S3_3211opp, nS3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- The `(3,2,1,1)`-opposite diagonal form at (S₃, std)
+is exactly `12 ×` the κ₄ diagonal form. -/
+theorem formS3_k7_3211opp (φ : Fin 3 → ℚ) :
+    (∑ a, ∑ b, φ a * (nS3 a * K7S3_3211opp a b * nS3 b) * φ b)
+      = 12 * ∑ a, ∑ b, φ a * (nS3 a * K4S3 a b * nS3 b) * φ b := by
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun a _ => ?_)
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun b _ => ?_)
+  rw [K7S3_3211opp_prop]
+  ring
+
+end B7S3Quad3211
+
+section B7S3Quad2221
+
+/-- The `(2,2,2,1)` channel seat kernel at (S₃, std):
+the per-support-type enumeration matrix of the Python
+table (BR1-008), `[6, 0, -3; 0, 0, 0; -3, 0, 3/2]`
+(plaquette and wrap-chain kernels equal). -/
+def K7S3_2221 : Matrix (Fin 3) (Fin 3) ℚ :=
+  ![![6, 0, -3], ![0, 0, 0], ![-3, 0, 3 / 2]]
+
+/-- **Proportionality, `(2,2,2,1)` at (S₃, std):
+exactly `24 ×` the κ₄ kernel.** -/
+theorem K7S3_2221_prop (a b : Fin 3) :
+    K7S3_2221 a b = 24 * K4S3 a b := by
+  fin_cases a <;> fin_cases b <;> simp [K7S3_2221, K4S3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- `(2,2,2,1)` kernel margins vanish exactly. -/
+theorem K7S3_2221_margins (a : Fin 3) :
+    ∑ b, nS3 b * K7S3_2221 a b = 0 := by
+  fin_cases a <;> rw [Fin.sum_univ_three] <;> simp [K7S3_2221, nS3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- The `(2,2,2,1)` diagonal form at (S₃, std) is
+exactly `24 ×` the κ₄ diagonal form. -/
+theorem formS3_k7_2221 (φ : Fin 3 → ℚ) :
+    (∑ a, ∑ b, φ a * (nS3 a * K7S3_2221 a b * nS3 b) * φ b)
+      = 24 * ∑ a, ∑ b, φ a * (nS3 a * K4S3 a b * nS3 b) * φ b := by
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun a _ => ?_)
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun b _ => ?_)
+  rw [K7S3_2221_prop]
+  ring
+
+end B7S3Quad2221
+
+section B7S3C6Doubled
+
+/-- The `(2,1,1,1,1,1)` channel seat kernel on `C6`
+supports at (S₃, std): the enumeration matrix of the
+Python table (BR1-008),
+`[3/8, 0, -3/16; 0, 0, 0; -3/16, 0, 3/32]` (the doubled
+6-cycle's holonomy-class kernel).  Its fiber counts
+`[7776, 23328, 15552]` are exactly `36 × nS3`, as for
+the order-6 `C6` channel, so the diagonal form below
+is carried with the `nS3` weights of the other channels
+at this seat: the kernel matrix and its proportionality
+are the Python values exactly, and the form's zero set
+is unchanged by the constant fiber rescaling. -/
+def K7S3_211111C6 : Matrix (Fin 3) (Fin 3) ℚ :=
+  ![![3 / 8, 0, -3 / 16], ![0, 0, 0], ![-3 / 16, 0, 3 / 32]]
+
+/-- **Proportionality, `(2,1,1,1,1,1)` on `C6` at
+(S₃, std): exactly `(3/2) ×` the κ₄ kernel.** -/
+theorem K7S3_211111C6_prop (a b : Fin 3) :
+    K7S3_211111C6 a b = (3 / 2) * K4S3 a b := by
+  fin_cases a <;> fin_cases b <;> simp [K7S3_211111C6, K4S3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- `(2,1,1,1,1,1)`-on-`C6` kernel margins vanish
+exactly. -/
+theorem K7S3_211111C6_margins (a : Fin 3) :
+    ∑ b, nS3 b * K7S3_211111C6 a b = 0 := by
+  fin_cases a <;> rw [Fin.sum_univ_three] <;> simp [K7S3_211111C6, nS3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- The `(2,1,1,1,1,1)`-on-`C6` diagonal form at
+(S₃, std) is exactly `(3/2) ×` the κ₄ diagonal form
+(in the `nS3` fiber weights; see `K7S3_211111C6`). -/
+theorem formS3_k7_211111C6 (φ : Fin 3 → ℚ) :
+    (∑ a, ∑ b, φ a * (nS3 a * K7S3_211111C6 a b * nS3 b) * φ b)
+      = (3 / 2) * ∑ a, ∑ b, φ a * (nS3 a * K4S3 a b * nS3 b) * φ b := by
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun a _ => ?_)
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun b _ => ?_)
+  rw [K7S3_211111C6_prop]
+  ring
+
+end B7S3C6Doubled
+
+section B7S3ThetaDoubled
+
+/-- The **A3-gated product class** on Θ/book orbit
+profiles at (S₃, std): for the orbit representative
+pair `(g, h)` (the β⁶ probe's `thetaRepS3`, shared by
+the Θ and book orbit spaces), the class of the product
+`g · h` when both loop holonomies are even, and the
+zero class of κ₄ — the transposition class, index `1`,
+whose κ₄ row and column vanish — otherwise.  Evaluated
+on the representatives: the gated labels are
+`[0, 1, 2, 1, 1, 1, 1, 2, 1, 2, 0]`; the gate bites
+exactly at orbit `4 = ((12), (12))`, where the plain
+product class is `0` (the product is the identity) but
+the gated class is `1`. -/
+def gatePair : Fin 11 → Fin 3 :=
+  ![0, 1, 2, 1, 1, 1, 1, 2, 1, 2, 0]
+
+/-- The **plain product class** on orbit profiles:
+`cls(g · h)` of the representative pair, with no gate:
+`[0, 1, 2, 1, 0, 2, 1, 2, 1, 2, 0]`.  It agrees with
+`gatePair` except at orbit `4`. -/
+def plainProdPair : Fin 11 → Fin 3 :=
+  ![0, 1, 2, 1, 0, 2, 1, 2, 1, 2, 0]
+
+/-- The `(2,1,1,1,1,1)` channel orbit kernel on
+`Θ(2,2,2)` supports at (S₃, std): the enumeration
+matrix of the Python table (BR1-008; 11 orbits, the
+β⁶ probe's orbit representatives and fiber counts
+`nThetaS3`; nonzero only on the five support orbits
+`0, 2, 7, 9, 10`). -/
+def K7S3Theta : Matrix (Fin 11) (Fin 11) ℚ :=
+  ![![3 / 4, 0, -3 / 8, 0, 0, 0, 0, -3 / 8, 0, -3 / 8, 3 / 4],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![-3 / 8, 0, 3 / 16, 0, 0, 0, 0, 3 / 16, 0, 3 / 16, -3 / 8],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![-3 / 8, 0, 3 / 16, 0, 0, 0, 0, 3 / 16, 0, 3 / 16, -3 / 8],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![-3 / 8, 0, 3 / 16, 0, 0, 0, 0, 3 / 16, 0, 3 / 16, -3 / 8],
+    ![3 / 4, 0, -3 / 8, 0, 0, 0, 0, -3 / 8, 0, -3 / 8, 3 / 4]]
+
+/-- **Doubled-Θ outer factorization:** the orbit kernel
+is `(3/16) • m mᵀ` entrywise, with the β⁶ probe's factor
+`m = (2, 0, -1, 0, 0, 0, 0, -1, 0, -1, 2)` — six times
+the order-6 Θ kernel `(1/32) • m mᵀ`. -/
+theorem K7S3Theta_outer (p q : Fin 11) :
+    K7S3Theta p q = (3 / 16) * (mThetaS3 p * mThetaS3 q) := by
+  fin_cases p <;> fin_cases q <;>
+    simp [K7S3Theta, mThetaS3] <;> norm_num
+
+/-- **A3-gated factorization, `(2,1,1,1,1,1)` on
+`Θ(2,2,2)` at (S₃, std): exactly `3 ×` the κ₄ kernel
+read through the A3-gated product class** (BR1-008:
+`K[a][b] = 3 · κ₄[gate(a)][gate(b)]` entrywise, the
+Python side's verified factorization).  On the five
+support orbits both loops are even and the gate is the
+plain product class; on every other orbit the gated
+class is `1`, whose κ₄ row vanishes, matching the
+kernel's support. -/
+theorem K7S3Theta_gated (p q : Fin 11) :
+    K7S3Theta p q = 3 * K4S3 (gatePair p) (gatePair q) := by
+  fin_cases p <;> fin_cases q <;> simp [K7S3Theta, gatePair, K4S3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- **The plain product class does NOT factor the
+doubled-Θ kernel** (BR1-008, run-log entry `(0, 4)`):
+there is no scalar `c` with
+`K p q = c · κ₄[cls(g·h)(p)][cls(g·h)(q)]` for all
+orbits `p, q`.  At `(0, 0)` any such `c` is forced to
+`3` (the kernel is `3/4 = c · (1/4)`), but at `(0, 4)`
+— orbit `4`'s representative is `((12), (12))`, whose
+product is the identity, plain class `0` — the plain
+reading would give `c · κ₄[0][0] = 3/4` while the
+kernel is exactly `0`.  The same argument with the
+forced scalar read off `(0, 0)` also kills the
+`g · h⁻¹` plain reading, whose label at orbit `4` is
+likewise `0`. -/
+theorem K7S3Theta_not_plain :
+    ¬ ∃ c : ℚ, ∀ p q, K7S3Theta p q
+      = c * K4S3 (plainProdPair p) (plainProdPair q) := by
+  rintro ⟨c, hc⟩
+  have h00 := hc 0 0
+  have h04 := hc 0 4
+  have e00 : K7S3Theta 0 0 = 3 / 4 := by
+    rw [K7S3Theta_outer]; simp [mThetaS3]; norm_num
+  have e04 : K7S3Theta 0 4 = 0 := by
+    rw [K7S3Theta_outer]; simp [mThetaS3]
+  have eP0 : plainProdPair 0 = 0 := by simp [plainProdPair]
+  have eP4 : plainProdPair 4 = 0 := by simp [plainProdPair]
+  have eK : K4S3 0 0 = 1 / 4 := by
+    simp [K4S3, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.head_cons]
+  rw [e00, eP0, eK] at h00
+  rw [e04, eP0, eP4, eK] at h04
+  linarith
+
+/-- Doubled-Θ kernel margins vanish exactly
+(fiber-weighted): each row pairs against the constant
+profile's linear form `LThetaS3`, which is `0` (the
+linear form is the β⁶ probe's: same fibers `nThetaS3`,
+same factor `mThetaS3`). -/
+theorem K7S3Theta_margins (p : Fin 11) :
+    ∑ q, nThetaS3 q * K7S3Theta p q = 0 := by
+  have e : ∑ q, nThetaS3 q * K7S3Theta p q
+      = (3 / 16) * mThetaS3 p * LThetaS3 (fun _ => 1) := by
+    rw [LThetaS3, Finset.mul_sum]
+    refine Finset.sum_congr rfl (fun q _ => ?_)
+    rw [K7S3Theta_outer]
+    ring
+  rw [e, LThetaS3_const]
+  norm_num
+
+/-- The doubled-Θ diagonal form at (S₃, std) is
+`(3/16)` times the square of the Θ linear form. -/
+theorem formS3_k7_Theta (ψ : Fin 11 → ℚ) :
+    (∑ p, ∑ q, ψ p * (nThetaS3 p * K7S3Theta p q * nThetaS3 q) * ψ q)
+      = (3 / 16) * (LThetaS3 ψ) ^ 2 := by
+  have e : (∑ p, ∑ q, ψ p * (nThetaS3 p * K7S3Theta p q * nThetaS3 q) * ψ q)
+      = (3 / 16) * ∑ p, ∑ q, (ψ p * nThetaS3 p * mThetaS3 p)
+          * (ψ q * nThetaS3 q * mThetaS3 q) := by
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl (fun p _ => ?_)
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl (fun q _ => ?_)
+    rw [K7S3Theta_outer]
+    ring
+  rw [e, LThetaS3, pow_two, Fintype.sum_mul_sum]
+
+/-- **Doubled-Θ verdict at (S₃, std):** the diagonal
+form vanishes on every orbit profile in the joint
+candidate span `span{1, s₁, s₂, s₁s₂}` (the B6-PROBE-c
+convention, the largest candidate reading) — hence
+under every candidate sub-reading (constants alone, or
+constants with any one of the three sign pullbacks):
+the verdict for this channel is
+**convention-independent**. -/
+theorem K7S3Theta_form_eq_zero_of_span (ψ : Fin 11 → ℚ)
+    (hψ : ∃ a b c d : ℚ, ψ = fun p => a + b * s1Theta p
+      + c * s2Theta p + d * s12Theta p) :
+    (∑ p, ∑ q, ψ p * (nThetaS3 p * K7S3Theta p q * nThetaS3 q)
+      * ψ q) = 0 := by
+  rw [formS3_k7_Theta, LThetaS3_eq_zero_of_span ψ hψ]
+  norm_num
+
+end B7S3ThetaDoubled
+
+section B7S3Book
+
+/-- The Θ(1,3,3) book orbit fiber counts at (S₃, std),
+in the Python table's orbit order (BR1-008): exactly
+`6 ×` the Θ(2,2,2) fiber counts `nThetaS3` (the book
+orbit space is the same pair-orbit space, with the
+book's own loop holonomies `Lₐ, L_b` in place of
+`g₃, g₅`). -/
+def nBookS3 : Fin 11 → ℚ :=
+  ![7776, 23328, 15552, 23328, 23328, 46656, 46656, 15552,
+    46656, 15552, 15552]
+
+theorem nBookS3_eq (p : Fin 11) : nBookS3 p = 6 * nThetaS3 p := by
+  fin_cases p <;> simp [nBookS3, nThetaS3] <;> norm_num
+
+/-- The `(1⁷)` book channel orbit kernel on `Θ(1,3,3)`
+supports at (S₃, std): the enumeration matrix of the
+Python table (BR1-008; 11 orbits; nonzero only on the
+five support orbits `0, 2, 7, 9, 10`). -/
+def K7S3Book : Matrix (Fin 11) (Fin 11) ℚ :=
+  ![![1 / 16, 0, -1 / 32, 0, 0, 0, 0, -1 / 32, 0, -1 / 32, 1 / 16],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![-1 / 32, 0, 1 / 64, 0, 0, 0, 0, 1 / 64, 0, 1 / 64, -1 / 32],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![-1 / 32, 0, 1 / 64, 0, 0, 0, 0, 1 / 64, 0, 1 / 64, -1 / 32],
+    ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ![-1 / 32, 0, 1 / 64, 0, 0, 0, 0, 1 / 64, 0, 1 / 64, -1 / 32],
+    ![1 / 16, 0, -1 / 32, 0, 0, 0, 0, -1 / 32, 0, -1 / 32, 1 / 16]]
+
+/-- **Book outer factorization:** the orbit kernel is
+`(1/64) • m mᵀ` entrywise, with the same factor
+`m = (2, 0, -1, 0, 0, 0, 0, -1, 0, -1, 2)` as the Θ
+kernels at this seat — half the order-6 Θ kernel
+`(1/32) • m mᵀ`. -/
+theorem K7S3Book_outer (p q : Fin 11) :
+    K7S3Book p q = (1 / 64) * (mThetaS3 p * mThetaS3 q) := by
+  fin_cases p <;> fin_cases q <;>
+    simp [K7S3Book, mThetaS3] <;> norm_num
+
+/-- **A3-gated factorization, `(1⁷)` book at (S₃, std):
+exactly `(1/4) ×` the κ₄ kernel read through the
+A3-gated product class** (BR1-008:
+`K[a][b] = (1/4) · κ₄[gate(a)][gate(b)]` entrywise,
+with the gate on the book's loop holonomies `Lₐ, L_b`:
+the product's class when both are even, κ₄'s zero
+class `1` otherwise — the same `gatePair` labels, the
+orbit representatives being shared). -/
+theorem K7S3Book_gated (p q : Fin 11) :
+    K7S3Book p q = (1 / 4) * K4S3 (gatePair p) (gatePair q) := by
+  fin_cases p <;> fin_cases q <;> simp [K7S3Book, gatePair, K4S3,
+    Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> norm_num
+
+/-- **The plain product class does NOT factor the book
+kernel** (BR1-008, run-log entry `(0, 4)`): there is no
+scalar `c` with
+`K p q = c · κ₄[cls(Lₐ·L_b)(p)][cls(Lₐ·L_b)(q)]` for
+all orbits `p, q`.  At `(0, 0)` any such `c` is forced
+to `1/4` (the kernel is `1/16 = c · (1/4)`), but at
+`(0, 4)` the plain reading would give
+`c · κ₄[0][0] = 1/16` while the kernel is exactly `0`.
+The same argument kills the `Lₐ · L_b⁻¹` plain reading,
+whose label at orbit `4` is likewise `0`. -/
+theorem K7S3Book_not_plain :
+    ¬ ∃ c : ℚ, ∀ p q, K7S3Book p q
+      = c * K4S3 (plainProdPair p) (plainProdPair q) := by
+  rintro ⟨c, hc⟩
+  have h00 := hc 0 0
+  have h04 := hc 0 4
+  have e00 : K7S3Book 0 0 = 1 / 16 := by
+    rw [K7S3Book_outer]; simp [mThetaS3]; norm_num
+  have e04 : K7S3Book 0 4 = 0 := by
+    rw [K7S3Book_outer]; simp [mThetaS3]
+  have eP0 : plainProdPair 0 = 0 := by simp [plainProdPair]
+  have eP4 : plainProdPair 4 = 0 := by simp [plainProdPair]
+  have eK : K4S3 0 0 = 1 / 4 := by
+    simp [K4S3, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.head_cons]
+  rw [e00, eP0, eK] at h00
+  rw [e04, eP0, eP4, eK] at h04
+  linarith
+
+/-- The book linear form: the fiber-weighted pairing
+of an orbit profile against the kernel's factor `m`,
+with the book's own fibers `nBookS3`. -/
+def LBookS3 (ψ : Fin 11 → ℚ) : ℚ :=
+  ∑ p, ψ p * nBookS3 p * mThetaS3 p
+
+/-- The book linear form is exactly `6 ×` the Θ linear
+form (the book fibers are `6 ×` the Θ fibers). -/
+theorem LBookS3_eq (ψ : Fin 11 → ℚ) :
+    LBookS3 ψ = 6 * LThetaS3 ψ := by
+  rw [LBookS3, LThetaS3, Finset.mul_sum]
+  refine Finset.sum_congr rfl (fun p _ => ?_)
+  rw [nBookS3_eq]
+  ring
+
+/-- Book kernel margins vanish exactly
+(fiber-weighted). -/
+theorem K7S3Book_margins (p : Fin 11) :
+    ∑ q, nBookS3 q * K7S3Book p q = 0 := by
+  have e : ∑ q, nBookS3 q * K7S3Book p q
+      = (1 / 64) * mThetaS3 p * LBookS3 (fun _ => 1) := by
+    rw [LBookS3, Finset.mul_sum]
+    refine Finset.sum_congr rfl (fun q _ => ?_)
+    rw [K7S3Book_outer]
+    ring
+  rw [e, LBookS3_eq, LThetaS3_const]
+  norm_num
+
+/-- The book diagonal form at (S₃, std) is `(1/64)`
+times the square of its linear form. -/
+theorem formS3_k7_Book (ψ : Fin 11 → ℚ) :
+    (∑ p, ∑ q, ψ p * (nBookS3 p * K7S3Book p q * nBookS3 q) * ψ q)
+      = (1 / 64) * (LBookS3 ψ) ^ 2 := by
+  have e : (∑ p, ∑ q, ψ p * (nBookS3 p * K7S3Book p q * nBookS3 q) * ψ q)
+      = (1 / 64) * ∑ p, ∑ q, (ψ p * nBookS3 p * mThetaS3 p)
+          * (ψ q * nBookS3 q * mThetaS3 q) := by
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl (fun p _ => ?_)
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl (fun q _ => ?_)
+    rw [K7S3Book_outer]
+    ring
+  rw [e, LBookS3, pow_two, Fintype.sum_mul_sum]
+
+/-- **Book verdict at (S₃, std):** the diagonal form
+vanishes on every orbit profile in the joint candidate
+span `span{1, s₁, s₂, s₁s₂}` (the largest candidate
+reading for the book's orbit space, the sign pullbacks
+read on the book's loop holonomies) — hence under every
+candidate sub-reading: the verdict for this channel is
+**convention-independent**. -/
+theorem K7S3Book_form_eq_zero_of_span (ψ : Fin 11 → ℚ)
+    (hψ : ∃ a b c d : ℚ, ψ = fun p => a + b * s1Theta p
+      + c * s2Theta p + d * s12Theta p) :
+    (∑ p, ∑ q, ψ p * (nBookS3 p * K7S3Book p q * nBookS3 q)
+      * ψ q) = 0 := by
+  rw [formS3_k7_Book, LBookS3_eq, LThetaS3_eq_zero_of_span ψ hψ]
+  norm_num
+
+end B7S3Book
+
+section B7S3Verdict
+
+/-- **Joint verdict at (S₃, std), N = 4 (K-K7 check,
+B7-PROBE-c).**  For every observable `φ` in the joint
+kernel `K₆` — certified here by `φ` lying in the kernel
+of the κ₄ diagonal form, which is the whole joint
+kernel at this seat (`seatK6_S3`: exactly `{φ₀ = φ₂}`;
+the κ₅ channel is proportional to κ₄ at this seat,
+B5-PROBE, and every κ₆ channel vanishes on it,
+B6-PROBE) — **every** β⁷ channel's diagonal form at
+`φ` is exactly `0`: the `(4,1,1,1)` form (`20 × κ₄`),
+the `(3,2,1,1)`-adjacent form (`24 × κ₄`), the
+`(3,2,1,1)`-opposite form (`12 × κ₄`), the `(2,2,2,1)`
+form (`24 × κ₄`), the `(2,1,1,1,1,1)` form on `C6`
+supports (`(3/2) × κ₄`), the `(2,1,1,1,1,1)` form on
+`Θ(2,2,2)` supports on every orbit profile in the
+joint candidate span `span{1, s₁, s₂, s₁s₂}`, and the
+`(1⁷)` book form on `Θ(1,3,3)` supports on every orbit
+profile in the joint candidate span.  For the two
+orbit-pair channels the factorization is exactly the
+**A3-gated** one (`K7S3Theta_gated`, `K7S3Book_gated`;
+the plain product class does not factor them,
+`K7S3Theta_not_plain`, `K7S3Book_not_plain`), and their
+vanishing holds under **every** candidate kernel
+reading, so it is convention-independent.  No channel
+is negative on `K₆`; all vanish identically; **K-K7
+does not fire at (S₃, std)**, and the
+degenerate-perturbation regress continues past β⁷ at
+this seat.  Seat scope only; no general sign is
+asserted, and the multiples are seat data, not
+mechanism evidence. -/
+theorem verdict_S3_B7 (φ : Fin 3 → ℚ)
+    (h4 : ∑ a, ∑ b, φ a * (nS3 a * K4S3 a b * nS3 b) * φ b = 0) :
+    (∑ a, ∑ b, φ a * (nS3 a * K7S3_4111 a b * nS3 b) * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * (nS3 a * K7S3_3211adj a b * nS3 b) * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * (nS3 a * K7S3_3211opp a b * nS3 b) * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * (nS3 a * K7S3_2221 a b * nS3 b) * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * (nS3 a * K7S3_211111C6 a b * nS3 b) * φ b = 0)
+      ∧ (∀ ψ : Fin 11 → ℚ,
+          (∃ a b c d : ℚ, ψ = fun p => a + b * s1Theta p
+            + c * s2Theta p + d * s12Theta p) →
+          (∑ p, ∑ q, ψ p * (nThetaS3 p * K7S3Theta p q * nThetaS3 q)
+            * ψ q) = 0)
+      ∧ (∀ ψ : Fin 11 → ℚ,
+          (∃ a b c d : ℚ, ψ = fun p => a + b * s1Theta p
+            + c * s2Theta p + d * s12Theta p) →
+          (∑ p, ∑ q, ψ p * (nBookS3 p * K7S3Book p q * nBookS3 q)
+            * ψ q) = 0) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · rw [formS3_k7_4111, h4]; norm_num
+  · rw [formS3_k7_3211adj, h4]; norm_num
+  · rw [formS3_k7_3211opp, h4]; norm_num
+  · rw [formS3_k7_2221, h4]; norm_num
+  · rw [formS3_k7_211111C6, h4]; norm_num
+  · intro ψ hψ
+    exact K7S3Theta_form_eq_zero_of_span ψ hψ
+  · intro ψ hψ
+    exact K7S3Book_form_eq_zero_of_span ψ hψ
+
+end B7S3Verdict
+
+section B7JointVerdict
+
+/-- **β⁷ probe headline verdict (B7-PROBE, both seats,
+registry BR1-008).**  At both seats — (C₃, χ) by
+`verdict_C3_B7` (part 1) and (S₃, std) by
+`verdict_S3_B7` (part 2, with the two orbit-pair
+channels read under the A3-gated factorization and
+vanishing under every candidate kernel reading, hence
+convention-independently) — every new order-7 channel's
+diagonal form vanishes identically on the joint kernel
+`K₆ = ker κ₄^dep ∩ ker κ₅^dep ∩ ker κ₆^dep`, which at
+both seats equals `ker κ₄^dep` (constants at (C₃, χ);
+`{φ₀ = φ₂}` at (S₃, std); `seatK6_C3`, `seatK6_S3`).
+Per the pre-registered outcome table (β⁷ scoping,
+2026-10-29, §2) the outcome is **(ii) certified: every
+order-7 channel vanishes on `K₆` at both seats; K-K7
+does NOT fire at either seat; the β⁷ decision at the
+seats passes to β⁸.**  β⁸ is not queued, and the regress
+has **no internal stop**: short of a `K-Kn` kill at some
+later order, only an external event ends it — a general
+mechanism or 𝒜 ⪰ 0 proved directly.  That is stated
+here, not softened.  Seat scope only (N = 4, the two
+seats); nothing general about 𝒜 or the β⁷ sign is
+asserted: the β⁷ general sign stays FRONTIER, the
+multiples are seat data and not mechanism evidence, the
+𝒜 ⪰ 0 core is untouched by this verdict in either
+direction, NO CLAIM, parts of the Clay statement closed
+**0**, dials 0/4. -/
+theorem verdict_B7Probe (φ : ZMod 3 → ℚ)
+    (h4C : ∑ a, ∑ b, φ a * K4C3 a b * φ b = 0)
+    (ψ : Fin 3 → ℚ)
+    (h4S : ∑ a, ∑ b, ψ a * (nS3 a * K4S3 a b * nS3 b) * ψ b = 0) :
+    ((∑ a, ∑ b, φ a * K7C3_4111 a b * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * K7C3_3211adj a b * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * K7C3_3211opp a b * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * K7C3_2221 a b * φ b = 0)
+      ∧ (∑ a, ∑ b, φ a * K7C3_211111C6 a b * φ b = 0)
+      ∧ (∑ p, ∑ q, (fun _ => φ 0) p * K7C3_211111Theta p q
+          * (fun _ => φ 0) q = 0)
+      ∧ (∑ p, ∑ q, (fun _ => φ 0) p * K7C3_Theta133 p q
+          * (fun _ => φ 0) q = 0))
+    ∧ ((∑ a, ∑ b, ψ a * (nS3 a * K7S3_4111 a b * nS3 b) * ψ b = 0)
+      ∧ (∑ a, ∑ b, ψ a * (nS3 a * K7S3_3211adj a b * nS3 b) * ψ b = 0)
+      ∧ (∑ a, ∑ b, ψ a * (nS3 a * K7S3_3211opp a b * nS3 b) * ψ b = 0)
+      ∧ (∑ a, ∑ b, ψ a * (nS3 a * K7S3_2221 a b * nS3 b) * ψ b = 0)
+      ∧ (∑ a, ∑ b, ψ a * (nS3 a * K7S3_211111C6 a b * nS3 b) * ψ b = 0)
+      ∧ (∀ θ : Fin 11 → ℚ,
+          (∃ a b c d : ℚ, θ = fun p => a + b * s1Theta p
+            + c * s2Theta p + d * s12Theta p) →
+          (∑ p, ∑ q, θ p * (nThetaS3 p * K7S3Theta p q * nThetaS3 q)
+            * θ q) = 0)
+      ∧ (∀ θ : Fin 11 → ℚ,
+          (∃ a b c d : ℚ, θ = fun p => a + b * s1Theta p
+            + c * s2Theta p + d * s12Theta p) →
+          (∑ p, ∑ q, θ p * (nBookS3 p * K7S3Book p q * nBookS3 q)
+            * θ q) = 0)) :=
+  ⟨verdict_C3_B7 φ h4C, verdict_S3_B7 ψ h4S⟩
+
+end B7JointVerdict
+
 end ThetLogos

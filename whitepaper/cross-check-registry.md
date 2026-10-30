@@ -308,10 +308,12 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   enumeration of the Lean pattern sums: 102 entry checks, 0
   mismatches). Parent re-ran the script at landing: run log
   byte-identical.
-- **Lean side:** queued — B7-PROBE-b (Seat (C₃, χ)) and
-  B7-PROBE-c (Seat (S₃, std) + verdict), certifying the table
-  below against `ThetLogos.PlaneCrossingBeta7`'s definitions.
-  The verdict is probe-grade until they land.
+- **Lean side:** CERTIFIED 2026-10-30 — B7-PROBE-b
+  (`verdict_C3_B7`, Seat (C₃, χ)) and B7-PROBE-c
+  (`verdict_S3_B7` and the assembled `verdict_B7Probe`,
+  Seat (S₃, std); the A3-gated factorization and the plain
+  reading's failure both proved as theorems). The verdict
+  below is theorem-grade at both seats.
 - **Proposition checked:** on K₆ = ker κ₄^dep ∩ ker κ₅^dep ∩
   ker κ₆^dep at (C₃, χ) and (S₃, std), N = 4 (K₆ re-derived
   in-run: seat-K₆ = ker κ₄^dep at both seats), the restriction

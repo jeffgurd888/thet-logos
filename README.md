@@ -18,6 +18,21 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — B7-PROBE complete: outcome (ii) certified at
+both seats.** The assembled verdict (`verdict_B7Probe`,
+registry BR1-008 now certified): every order-7 channel
+vanishes on the joint kernel K₆ at (C₃, χ) and (S₃, std);
+K-K7 does not fire; the β⁷ decision at the seats passes to
+β⁸, which is not queued — the regress has no internal
+stop, stated on the verdict's face. At (S₃, std) the
+orbit channels' factorization is proved through the
+A3-gated product class, and the plain product class's
+failure is itself a theorem (the (0,4) entry). B7-2 (the
+order-7 assembly identity) is the line's remaining brick;
+the β⁷ sign stays FRONTIER (dossier
+`whitepaper/b7probe-c-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — B7-PROBE-b: β⁷ certified at (C₃, χ).** The
 Lean side of the β⁷ probe (`ThetLogos.PlaneCrossingBeta7Probe`)
 proves the seat re-derivation (seat-K₆ = ker κ₄^dep) and all
