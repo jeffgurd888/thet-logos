@@ -18,6 +18,18 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — B7-PROBE-b: β⁷ certified at (C₃, χ).** The
+Lean side of the β⁷ probe (`ThetLogos.PlaneCrossingBeta7Probe`)
+proves the seat re-derivation (seat-K₆ = ker κ₄^dep) and all
+seven order-7 channel proportionalities from the channels'
+own character sums — 5/2, 3, 3/2, 3, 3/4, 3/4, 1/8 times the
+seat κ₄ kernel — so every channel vanishes on K₆ and K-K7
+does not fire at this seat (registry BR1-008; Seat (S₃, std)
+certification next). Seat data under the interpretation
+cap; β⁷ general sign FRONTIER (dossier
+`whitepaper/b7probe-b-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — PHI-C-PROBE: the icosidodecahedron's
 incidence census, certified exactly.** The combinatorics
 salvage line opens (registry BR1-010): rank ∂₁ = 29,
@@ -706,7 +718,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,508 theorem declarations**\*
-across 270 counted Lean modules, with whitepaper dossiers for every campaign.
+across 271 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
