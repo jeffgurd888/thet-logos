@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — XYZ-2: the boundary marker.** A concrete
+tripotent now stands outside the ℤ[i] species: tripT,
+the rank-one partial isometry e₁₈·((1,1,1)/√3)ᴴ over the
+colour triplet (18, 20, 22), tripotent by direct entry
+computation, with entries exactly 1/√3 — so R5's kill
+route provably cannot extend to it (and neither can R1
+or R4, proved; R3 stays honestly open per-triple). The
+species boundary XYZ-1 died against is a theorem with
+an object beyond it. No triple is exhibited; the
+question stays open (dossier
+`whitepaper/xyz2-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — XYZ-1: K-XYZ-2 — the named pool is dead.**
 Every triple drawn from the sixteen named tripotents
 (1, cfMat, 1 − cfMat, gammaF, UJ, genC, the genH family,
