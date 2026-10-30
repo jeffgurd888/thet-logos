@@ -241,6 +241,48 @@ Fences: simulations audit and probe; they do not move the
 dials (0/4) and assert nothing physical. Span 3 of the bridge
 (continuum / reconstruction) stays named, unpriced, unbuilt.
 
+### BR1-007 — GD-PROBE-R-a, the re-registered Gram-dominance discriminator, Python side (landed 2026-10-30)
+
+- **Python side:** `routeb-general-scratch/gdprobeR_seat.py`
+  (output `gdprobeR-run.txt`) — exact rational arithmetic,
+  calibrated in-script against the B6-PROBE (BR1-004) seats
+  (reproduced exactly); two independent exact engines agreeing
+  (tensor vs direct α-enumeration). Parent re-ran the script
+  at landing: run log byte-identical.
+- **Lean side:** none yet — certification is GD-PROBE-R-b
+  (Seat 1, F21) and GD-PROBE-R-c (Seat 2, SL(2,3) + joint
+  verdict), queued behind this entry. The verdict below is
+  probe-grade until they land.
+- **Proposition checked:** the re-registered discriminator of
+  `scoping-gd-discriminator-rescope-2026-10-30.md` §4: step-0R
+  certificates (ker dim ≥ 3; e₁ = 0; escape-room target dim
+  ≥ 3; Θ orbits ≥ 10) at (F21 = C₇ ⋊ C₃, ρ₃) and
+  (SL(2,3), ρ₂′), then the six channel forms per seat against
+  the seat κ₄ form — proportionality (GD-strong), kernel
+  restriction to ker κ₄^dep (GD-kernel / K-Kn), and the Θ
+  tests (Θ-1) escape / (Θ-2) kernel restriction.
+- **Verdict: GD-ii — GD-strong DIES at full rank.** Both seats
+  ACCEPTED at step-0R (κ₄ rank 2 both, per the rank law; ker
+  dims 3 and 5; target dims 5 and 4 — the SL(2,3) demotion
+  contingency does not trigger). The exhibiting channel is
+  **Θ(2,2,2) at (F21, ρ₃)**: its orbit kernel (rank 14)
+  **escapes under (Θ-1)** — it factors through none of the six
+  single class variables and is a pullback multiple of κ₄
+  under none of them. Every class-space channel at F21 is a
+  positive multiple of κ₄ (λ = 10, 31, 50, 25, 7203/320) —
+  proportionality survived the full 5-dimensional escape room
+  there — and Θ escaped anyway. At SL(2,3), four channels are
+  identically zero forms (λ = 0; they fail GD-i's
+  positive-multiple requirement but are not non-multiples in
+  the strict sense — the GD-ii route does not depend on their
+  classification). **Every kernel restriction at both seats is
+  exactly ZERO, so GD-iii does NOT fire and Route A stands.**
+  GD-global and GD-kernel survive as targets, untouched.
+  Scope: N = 4, the two registered seats named above; quoting
+  this verdict beyond its scope is a registry violation.
+- **Fences:** NO CLAIM; parts 0; dials 0/4. Simulations audit
+  and probe; they do not move the dials.
+
 ## Standing rules going forward
 
 - Every future probe brick files its registry entry as part of

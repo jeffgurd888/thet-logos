@@ -18,6 +18,20 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — a kill, at full volume: Gram-dominance STRONG
+form is DEAD.** The re-registered discriminator (GD-PROBE-R,
+registry BR1-007) ran at two new nonabelian seats behind a
+passed gate: every class-space channel at the primary seat is
+a positive multiple of κ₄ — and the Θ(2,2,2) channel's orbit
+kernel escapes factorization through every single class
+variable, so proportionality was a small-seat artifact and
+GD-strong is killed as stated (dossier
+`whitepaper/gdprobeR-a-landing-2026-10-30.md`). Equally on the
+record: every kernel restriction is exactly zero at both
+seats — no K-Kn event, Route A stands, and GD-global /
+GD-kernel survive as the targets the attack now aims at.
+Probe-grade pending Lean certification. NO CLAIM; dials 0/4.
+
 **2026-10-30 — the product Dirac squares to the sum of its
 factors.** `ThetLogos.Q7C4R4Assembly` builds the general
 product Dirac-type operator on the registered ℝ⁴⁴⁸ in the
