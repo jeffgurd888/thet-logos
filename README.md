@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — the trifecta registered; one strong form
+refuted-as-stated.** Jeff's assignment of the laws to the
+Q⁷C⁴R⁴ factors (Q⁷ → First; C⁴ → Second; R⁴ → Zeroth and
+Third, as separate legs) is registered as data
+(`ThetLogos.Q7C4R4Trifecta`), and the C⁴ leg's literal strong
+form — the clock generating modular time and enforcing entropy
+growth — is recorded on the module's face as REFUTED-AS-STATED
+by the corpus's own landed stationarity theorems, with its
+weakened forms W1/W2 registered beside it (dossier
+`whitepaper/q7crt0-landing-2026-10-30.md`). The assignment is
+Jeff's T5 choice and no outcome can promote it; its
+consequences are what get tested. NO CLAIM; dials 0/4.
+
 **2026-10-30 — Q⁷C⁴R⁴ registered.** Jeff's named target is now
 a stated object: one real space ℝ⁴⁴⁸ — the 7-state register and
 the 4-level cyclic space realified, tensored over ℝ with the
@@ -495,7 +508,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,458 theorem declarations**\*
-across 259 counted Lean modules, with whitepaper dossiers for every campaign.
+across 260 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
