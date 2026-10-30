@@ -18,6 +18,25 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — S3-3: the reconstruction pin, repaired —
+and the repair's limit proved.** (Statement repair, not
+a proof.) The tied pin OSReconstructionTied now binds
+the output's carrier to the input's — and a theorem
+(osReconstructionTied_trivial) proves even the tied pin
+is satisfiable outright, because the 2026 marker types
+carry no Schwinger functions and no field data: no
+statable relation on them can say "output arises from
+input." The 2026 pin sits below the house pin standard
+even after maximal repair, now machine-checked; the
+re-charter (OSReconstructionCharter, over genuine
+OS-bundle data) is registered. K-S3-3 also fired: the
+finite reflection-positivity clause is NOT clause (a)
+of TransferFormPos — different quantification class,
+different form — and their equivalence stands as the
+named open question FiniteE2ClauseAQuestion (dossier
+`whitepaper/s33-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — S3-2: the scaling-limit pin.** "A
 continuum limit of the lattice theory" is now a sentence
 the house can point at: ScalingLimitOfLattice states,
