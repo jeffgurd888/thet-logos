@@ -18,6 +18,23 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — A2-2c: both corner contractions land at their
+priced orders.** The telescoping step
+(`ThetLogos.PlaqBlockContraction`): the mixed corner and the
+source/sink corner (the same-orientation Frobenius–Schur
+twirl) both contract in closed form at order 1 in each factor
+plus the degree-2 boundary, assembled on conjugate pairs per
+the probe's caveat; K-A2 does not fire at the landed orders.
+The bound is named, not hidden: total degree ≥ 3 needs
+triple twirls the corpus does not own (SEAM
+A2-2c-HIGHER-ORDERS — the β-line's wall too; its owner is
+TW-1), and the formulas carry an irreducibility hypothesis
+A2-2a's (T)/(P) do not — closing or carrying that gap is
+A2-2d's, whose pre-registered PARTIAL stop is now the
+expected landing shape (dossier
+`whitepaper/a22c-landing-2026-10-30.md`). NO CLAIM; dials
+0/4.
+
 **2026-10-30 — A2-2b: the plaquette block's reductions land;
 separate class invariance CLOSED.** Route B's telescoping
 continues (`ThetLogos.PlaqBlockReductions`): the block's
@@ -611,7 +628,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,508 theorem declarations**\*
-across 267 counted Lean modules, with whitepaper dossiers for every campaign.
+across 268 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
