@@ -18,6 +18,21 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — S3-0: the Span-3 pier's first pins.** The
+gap statements now exist at general (G, ρ): GapBound
+(mirrored from the landed transfer theorem's consequent —
+never from the Doeblin mixing bound), GapPackage,
+UniformVolumeGap / UniformTrajectoryGap with a
+nondegenerate admissibility class, the U(1) regression
+instances by definitional agreement, and the
+UniformMarginFactorization TARGET pin (labeled a target:
+not a result, not a premise) on the first Lean statement
+of the stratum column factorization. Proof-grade
+distance toward the continuum remains ZERO — these are
+statements, stated exactly so (dossier
+`whitepaper/s30-landing-2026-10-30.md`). NO CLAIM; dials
+0/4.
+
 **2026-10-30 — B7-2 COMPLETE: `kappa7dep_eq` lands; the
 β⁷ line's queued bricks close.** The order-7 assembly
 identity now stands as one named theorem (proved by
