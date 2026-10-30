@@ -185,6 +185,40 @@ labeled so and is **not** registered.
   only. Not a statement about general (G, ρ); Route B's
   proof bricks (A2-2b onward) are unlocked, not landed.
 
+### BR1-006 — GD-PROBE-a, the Gram-dominance discriminator, Python side (landed 2026-10-29)
+
+- **Python side:** `routeb-general-scratch/gdprobe_seat.py`
+  (output `gdprobe-run.txt`; verdict memo
+  `gdprobe-verdict.md`) — exact rational arithmetic,
+  calibrated in-script against BR1-004's seats, two
+  independent exact engines agreeing on full grids. Parent
+  re-ran the script at landing: output identical.
+- **Lean side:** none yet — GD-PROBE-b/c are HELD: the
+  probe's pre-registered step-0 gate failed at every seat
+  (below), so there is no discriminator verdict to certify.
+  The certifiable statements, if wanted as targets, are the
+  step-0 identities (κ₄ kernel = χχᵀ/d⁴ at the two primary
+  seats) plus the rejected-seat multiples table in the
+  dossier.
+- **Proposition checked:** the step-0 certificates
+  themselves — the κ₄ observable quotient dimension at
+  (S₄, std) and (Q₈, ρ₂), reserves (S₄, std⊗sign) and
+  (A₅, 3-dim) — against the pre-registered requirement ≥ 3.
+- **Verdict: STEP-0 GATE FAILS AT EVERY SEAT.** Every
+  seat's κ₄ form has rank 1 (per-quad kernel exactly
+  χχᵀ/d⁴ at every real-character seat, verified entrywise);
+  quotient dimension 1 < 3; all seats REJECTED as
+  discriminators in the pre-registered reserve order.
+  GD-i / GD-ii / GD-iii are NOT reached and no outcome is
+  routed. GD-iii does not fire: every channel restriction
+  to ker κ₄^dep is exactly zero at both primary seats.
+  The discriminator re-scopes on the record: a working
+  discriminator needs a κ₄ seat of rank ≥ 3, which no
+  real-character seat supplies (the complex-character seat
+  (C₃, χ) reaches rank 2); naming one is a new
+  pre-registration. Dossier:
+  `whitepaper/gdprobe-a-landing-2026-10-29.md`.
+
 ## BRIDGE-2 adoption — the landing-checklist amendment (2026-10-29)
 
 BRIDGE-2 (Span 1's forward duty, per the bridge scoping of
