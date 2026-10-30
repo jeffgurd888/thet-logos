@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v4 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23648050.svg)](https://doi.org/10.5281/zenodo.23648050)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C257-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C323-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -59,7 +59,20 @@ so the pre-registered kill K-K6 does **not** fire and the
 outcome is (ii): the regress continues, the β⁶ decision on K
 is vacuous, and nothing general follows (dossier
 `whitepaper/b6probe-landing-2026-10-29.md`; cross-check
-registry entry BR1-004). NO CLAIM; dials 0/4.
+registry entry BR1-004). B6-2 then closes the β⁶ line's
+priced path with the assembly identity in its true form
+(`kappa6dep_eq`): the κ₅ dressing factor is exactly
+`4 + (M−4)·B` again; the κ₄ coefficient A₄ is *not* a
+polynomial in M, B alone (it carries `½·(M−4)·μ₂/d²` from
+the doubled-penta fiber); and one extra term survives —
+`−d⁻⁶·e₁²·S4theta`, the quad-excess sum over Θ supports'
+rectangle 4-subsets, which no corpus counting reduces to a
+multiple of κ₄^dep. Both differences are on the module's
+face (dossier `whitepaper/b62-landing-2026-10-29.md`); no
+sign is asserted, and the β⁶ general sign stays FRONTIER.
+This batch also carries BRIDGE-2: the cross-check registry
+is now a mandatory item on every probe's landing checklist.
+NO CLAIM; dials 0/4.
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
 its endpoint: the β⁴ dependent coefficient is nonnegative on the
@@ -311,8 +324,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,257 theorem declarations**\*
-across 248 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,323 theorem declarations**\*
+across 249 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -327,7 +340,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-29 census an attribute-inclusive count
-reads 7,335); earlier running
+reads 7,401); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of

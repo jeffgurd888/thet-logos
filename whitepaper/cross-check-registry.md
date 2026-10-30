@@ -146,6 +146,28 @@ labeled so and is **not** registered.
   Not a statement about general (G, ρ), and not a statement
   about 𝒜 ⪰ 0 in either direction.
 
+## BRIDGE-2 adoption — the landing-checklist amendment (2026-10-29)
+
+BRIDGE-2 (Span 1's forward duty, per the bridge scoping of
+2026-10-28) is ADOPTED as of this entry and is a mandatory
+item on every future probe's landing checklist:
+
+- **Every probe landing names its registry entry ID in its
+  dossier, or registers a new entry in this file before its
+  dossier ships.** Unregistered probe numbers do not ship in
+  dossiers or posts.
+- **A probe with no statable Lean counterpart is
+  exhibit-grade per K-BR1 and says so in its dossier** — it is
+  not registered as a cross-check, and its numbers carry the
+  exhibit tier wherever they are quoted.
+- The registry step is part of the landing ceremony itself
+  (parent verification → registry entry → dossier → README →
+  commit → push), not an afterthought appended to it.
+
+Fences: simulations audit and probe; they do not move the
+dials (0/4) and assert nothing physical. Span 3 of the bridge
+(continuum / reconstruction) stays named, unpriced, unbuilt.
+
 ## Standing rules going forward
 
 - Every future probe brick files its registry entry as part of
