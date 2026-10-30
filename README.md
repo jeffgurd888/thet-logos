@@ -127,7 +127,16 @@ entering as a bound variable whose value the pin will
 *derive*, never input. The refined formula is Wiles's
 Remark 1, not the official statement: this rung closes
 ZERO parts of the BSD statement even in full (dossier
-`whitepaper/b20-landing-2026-10-29.md`). NO CLAIM;
+`whitepaper/b20-landing-2026-10-29.md`). B2-1 follows:
+the Nagell–Lutz criterion for E2 is refactored into the
+board's single shared seam (`NagellLutzCriterionE2`,
+sanctioned strength only) with rung 1's infinite-order
+hypothesis *derived* from it as its (3, 5)-instance, and
+the torsion sweep lands `Nat.card (torsion of E2.Point)
+= 1` conditional on that seam — the study's eight
+candidate ordinates and the x³ = 2 case excluded by
+integer arithmetic (dossier
+`whitepaper/b21-landing-2026-10-29.md`). NO CLAIM;
 dials 0/4.
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
@@ -380,7 +389,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,376 theorem declarations**\*
+**7,382 theorem declarations**\*
 across 252 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
@@ -396,7 +405,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-29 census an attribute-inclusive count
-reads 7,454); earlier running
+reads 7,460); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of

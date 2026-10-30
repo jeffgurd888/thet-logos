@@ -1,4 +1,6 @@
 import ThetLogos.BSDRankPin
+import Mathlib.RingTheory.Polynomial.RationalRoot
+import Mathlib.GroupTheory.Torsion
 import Mathlib.Tactic
 
 namespace ThetLogos
@@ -67,6 +69,16 @@ Honesty tiers in this file:
 - **T1 (proved):** the bad-prime support fact `E2_bad_prime_support`.
 - **T5 (statement, unproved by design):** `BSDRefinedE2` — a `def` stating
   a `Prop`, deliberately left unproved pending B2-1…B2-6.
+
+**B2-1 addition (the torsion sweep).** The final section discharges the
+torsion factor for `E2`, modulo the one shared seam: the sweep arithmetic
+over `ℤ` (the candidate ordinates with `y² ∣ 1728`, and the exclusion of
+rational cubes at `x³ = y² + 2`) is proved in-tree, and
+`E2_torsion_card_eq_one_of_nagellLutz` concludes
+`Nat.card (AddCommGroup.torsion E2.toAffine.Point) = 1` *conditional on*
+the labeled hypothesis `NagellLutzCriterionE2` from rung 1, in the
+sanctioned strength only. The board does not move: BSD parts closed by
+this section: **0**, NO CLAIM.
 
 Status: NO CLAIM on BSD. Parts of the official statement closed: 0.
 -/
@@ -167,5 +179,147 @@ theorem E2_bad_prime_support :
   · rintro (rfl | rfl)
     · norm_num
     · norm_num
+
+/-! ## B2-1: the torsion sweep for `E2`, modulo the shared seam -/
+
+/-- Integrality of a rational cube root: if `x : ℚ` satisfies
+`x ^ 3 = c` for `c : ℤ`, then `x` is an integer and that integer cubes
+to `c`. The route is the integral root theorem: `x` is a root of the
+monic cubic `X ^ 3 - C c` over `ℤ` (`exists_integer_of_is_root_of_monic`),
+so `x` is integral. No kernel decision procedure is run on `ℚ` goals. -/
+theorem int_cube_of_rat_cube {c : ℤ} {x : ℚ} (hx : x ^ 3 = (c : ℚ)) :
+    ∃ xi : ℤ, x = (xi : ℚ) ∧ xi ^ 3 = c := by
+  have hroot : Polynomial.aeval x (Polynomial.X ^ 3 - Polynomial.C c) = 0 := by
+    simp only [map_sub, map_pow, Polynomial.aeval_X, Polynomial.aeval_C,
+      algebraMap_int_eq, sub_eq_zero]
+    exact hx
+  obtain ⟨xi, hxi, -⟩ := exists_integer_of_is_root_of_monic
+    (p := (Polynomial.X ^ 3 - Polynomial.C c))
+    (Polynomial.monic_X_pow_sub_C c (by norm_num)) hroot
+  refine ⟨xi, by simpa using hxi, ?_⟩
+  have h2 : (xi : ℚ) ^ 3 = (c : ℚ) := by simpa [hxi] using hx
+  exact_mod_cast h2
+
+/-- The sweep's cube exclusions: for each value
+`c ∈ {2, 3, 6, 11, 18, 38, 66, 146, 578}` — namely `2` (the `y = 0`
+case, `x ^ 3 = 2`) and `y ^ 2 + 2` for the nonzero Nagell–Lutz
+candidate ordinates `y ∈ {±1, ±2, ±3, ±4, ±6, ±8, ±12, ±24}` — there
+is no rational cube root of `c`. By `int_cube_of_rat_cube` a rational
+root would be an integer `xi` with `xi ^ 3 = c`; positivity and
+`c < 729 = 9 ^ 3` force `1 ≤ xi ≤ 8`, and the finitely many remaining
+cases are checked by integer arithmetic. -/
+theorem rat_cube_ne_of_sweep_value {c : ℤ}
+    (hc : c = 2 ∨ c = 3 ∨ c = 6 ∨ c = 11 ∨ c = 18 ∨ c = 38 ∨ c = 66 ∨
+      c = 146 ∨ c = 578)
+    (x : ℚ) : x ^ 3 ≠ (c : ℚ) := by
+  intro hx
+  obtain ⟨xi, -, hxi⟩ := int_cube_of_rat_cube hx
+  have hc_pos : 0 < c := by
+    rcases hc with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;> norm_num
+  have hc_lt : c < 729 := by
+    rcases hc with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;> norm_num
+  have hpos : 0 < xi := by
+    by_contra hcon
+    have hle : xi ≤ 0 := by omega
+    have hnp : xi ^ 3 ≤ 0 := Odd.pow_nonpos (by norm_num) hle
+    omega
+  have hle8 : xi ≤ 8 := by
+    by_contra hcon
+    have h9 : (9 : ℤ) ≤ xi := by omega
+    have h729 : (729 : ℤ) ≤ xi ^ 3 := by
+      calc (729 : ℤ) = 9 ^ 3 := by norm_num
+        _ ≤ xi ^ 3 := pow_le_pow_left₀ (by norm_num) h9 3
+    omega
+  rcases hc with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
+    interval_cases xi <;> norm_num at hxi
+
+/-- The candidate enumeration: an integer whose square divides `1728`
+is one of `0, ±1, ±2, ±3, ±4, ±6, ±8, ±12, ±24`. From `y ^ 2 ∣ 1728`
+one gets `y ^ 2 ≤ 1728`, hence `-41 ≤ y ≤ 41`; the finitely many
+remaining cases are checked by integer arithmetic (the true divisors
+survive, the rest contradict the divisibility hypothesis). -/
+theorem eq_of_sq_dvd_1728 (y : ℤ) (h : y ^ 2 ∣ 1728) :
+    y = 0 ∨ y = 1 ∨ y = -1 ∨ y = 2 ∨ y = -2 ∨ y = 3 ∨ y = -3 ∨ y = 4 ∨
+    y = -4 ∨ y = 6 ∨ y = -6 ∨ y = 8 ∨ y = -8 ∨ y = 12 ∨ y = -12 ∨
+    y = 24 ∨ y = -24 := by
+  have hle : y ^ 2 ≤ 1728 := Int.le_of_dvd (by norm_num) h
+  have hhi : y ≤ 41 := by
+    by_contra hcon
+    have h42 : (42 : ℤ) ≤ y := by omega
+    have hsq : (1764 : ℤ) ≤ y ^ 2 := by
+      calc (1764 : ℤ) = 42 ^ 2 := by norm_num
+        _ ≤ y ^ 2 := pow_le_pow_left₀ (by norm_num) h42 2
+    omega
+  have hlo : -41 ≤ y := by
+    by_contra hcon
+    have h42 : (42 : ℤ) ≤ -y := by omega
+    have hsq : (1764 : ℤ) ≤ y ^ 2 := by
+      calc (1764 : ℤ) = 42 ^ 2 := by norm_num
+        _ ≤ (-y) ^ 2 := pow_le_pow_left₀ (by norm_num) h42 2
+        _ = y ^ 2 := by ring
+    omega
+  interval_cases y <;> norm_num at h <;> norm_num
+
+/-- The sweep's conclusion at the level of points, conditional on the
+shared seam: under `NagellLutzCriterionE2` (sanctioned strength only),
+every torsion point of `E2(ℚ)` — torsion in the criterion's own form,
+`∃ n : ℤ, n ≠ 0 ∧ n • P = 0` — is the point at infinity. The affine
+case is excluded candidate by candidate: the criterion gives integer
+coordinates `(xi, yi)` on `y ^ 2 = x ^ 3 - 2` with `yi = 0` or
+`yi ^ 2 ∣ 1728`; the enumeration `eq_of_sq_dvd_1728` lists the
+possible `yi`, and for each of them `xi ^ 3 = yi ^ 2 + 2` is one of
+the values excluded by `rat_cube_ne_of_sweep_value`. The point at
+infinity is handled separately — it is not an affine `Point.some`. -/
+theorem E2_point_eq_zero_of_torsion (hNL : NagellLutzCriterionE2)
+    (P : E2.toAffine.Point) (htors : ∃ n : ℤ, n ≠ 0 ∧ n • P = 0) :
+    P = 0 := by
+  cases P with
+  | zero => rfl
+  | some x y h =>
+    obtain ⟨xi, yi, hx, hy, hy0⟩ := hNL x y h htors
+    have heq : y ^ 2 = x ^ 3 - 2 := by
+      have heq0 := h.1
+      rw [WeierstrassCurve.Affine.equation_iff] at heq0
+      simp only [E2] at heq0
+      linarith [heq0]
+    rw [hx, hy] at heq
+    have hcube : (xi : ℚ) ^ 3 = ((yi ^ 2 + 2 : ℤ) : ℚ) := by
+      push_cast
+      linarith [heq]
+    rcases hy0 with h0 | hdvd
+    · subst h0
+      norm_num at hcube
+      exact absurd hcube (rat_cube_ne_of_sweep_value (by norm_num) xi)
+    · rcases eq_of_sq_dvd_1728 yi hdvd with rfl | rfl | rfl | rfl | rfl |
+        rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl |
+        rfl <;> norm_num at hcube <;>
+        exact absurd hcube (rat_cube_ne_of_sweep_value (by norm_num) xi)
+
+/-- **B2-1's card theorem.** Conditional on the one shared seam
+`NagellLutzCriterionE2`, the torsion subgroup of `E2(ℚ)` has
+cardinality `1`: it is the trivial subgroup. The membership form of
+Mathlib's torsion subgroup is finite additive order, i.e. a nonzero
+*natural* multiple vanishing; that is converted to the criterion's
+integer-multiple form (the cast `(n : ℤ)` with `n ≠ 0`) before
+`E2_point_eq_zero_of_torsion` is applied, so the subgroup is `⊥`,
+whose underlying type is a singleton. This is the `#tors = 1` the
+refined pin consumes; it is conditional on the seam, and it closes
+zero parts of the official BSD statement. -/
+theorem E2_torsion_card_eq_one_of_nagellLutz (hNL : NagellLutzCriterionE2) :
+    Nat.card (AddCommGroup.torsion E2.toAffine.Point) = 1 := by
+  have hbot : AddCommGroup.torsion E2.toAffine.Point = ⊥ := by
+    rw [AddSubgroup.eq_bot_iff_forall]
+    intro P hP
+    rw [AddCommGroup.mem_torsion, isOfFinAddOrder_iff_nsmul_eq_zero] at hP
+    obtain ⟨n, hn, hns⟩ := hP
+    apply E2_point_eq_zero_of_torsion hNL P
+    refine ⟨(n : ℤ), by exact_mod_cast hn.ne', ?_⟩
+    simpa using hns
+  rw [hbot]
+  refine Nat.card_eq_one_iff_unique.mpr ⟨⟨fun a b => ?_⟩,
+    ⟨⟨0, AddSubgroup.zero_mem _⟩⟩⟩
+  have ha : a.1 = 0 := AddSubgroup.mem_bot.mp a.2
+  have hb : b.1 = 0 := AddSubgroup.mem_bot.mp b.2
+  exact Subtype.ext (by rw [ha, hb])
 
 end ThetLogos

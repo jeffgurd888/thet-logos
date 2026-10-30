@@ -65,9 +65,15 @@ existence of the package is part of the debt, not a theorem of this file.
 - The worked curve `y² = x³ - 2` contributes finite proved pieces only:
   the point `(3, 5)`, `Δ = -1728`, `a₅ = 0`, `a₇ = 1`, and the
   Nagell–Lutz arithmetic `25 ∤ Δ`. The Nagell–Lutz theorem itself is not
-  in Mathlib and is not proved here: the infinite order of `(3, 5)` is
-  carried as the explicit hypothesis `E2InfiniteOrderHypothesis`. That
-  labeled gap is the `nagellLutz_seam`.
+  in Mathlib and is not proved here: it is carried as the single
+  explicit hypothesis `NagellLutzCriterionE2` — the criterion for `E2`
+  in the sanctioned strength only (a torsion point has integer affine
+  coordinates with `y = 0` or `y² ∣ 1728`). That labeled gap is the
+  `nagellLutz_seam`, and it is now the board's single seam of this
+  kind: the infinite order of `(3, 5)`,
+  `E2InfiniteOrderHypothesis`, is the criterion's `(3, 5)`-instance,
+  *derived* from it in this file
+  (`E2InfiniteOrderHypothesis_of_nagellLutz`), not a second seam.
 
 Honesty tiers in this file:
 - **T1 (proved):** everything with a proof term below — the tensor-rank
@@ -364,12 +370,59 @@ header. -/
 theorem five_sq_not_dvd_delta : ¬ ((5 : ℤ) ^ 2 ∣ E2Int.Δ) := by
   rw [E2Int_delta]; decide
 
-/-- The infinite order of `(3, 5)`, carried as an explicitly labeled
-hypothesis — the `nagellLutz_seam`. Nagell–Lutz would discharge it
-from `five_sq_not_dvd_delta` (and `5 ≠ 0`); nothing in this file
-discharges it. -/
+/-- **The single Nagell–Lutz seam of this board**
+(`nagellLutz_seam`), in the sanctioned strength only: every torsion
+point of `E2(ℚ)` in affine coordinates has *integer* affine
+coordinates whose `y`-coordinate satisfies `y = 0` or `y² ∣ 1728`
+(here `1728 = |Δ|`; divisibility by `Δ = -1728` is the same
+condition). A point is torsion if some nonzero integer multiple of
+it is `0`. The converse direction is *not* asserted, and no stronger
+form is sanctioned by this brick. The Nagell–Lutz criterion itself
+is not in Mathlib and is not proved here; it is carried as this one
+labeled hypothesis, discharging both rung 2's torsion sweep and —
+as its `(3, 5)`-instance, derived below — rung 1's
+`E2InfiniteOrderHypothesis`. -/
+def NagellLutzCriterionE2 : Prop :=
+  ∀ (x y : ℚ) (h : E2.toAffine.Nonsingular x y),
+    (∃ n : ℤ, n ≠ 0 ∧
+      n • (WeierstrassCurve.Affine.Point.some x y h :
+        E2.toAffine.Point) = 0) →
+    ∃ (xi yi : ℤ), x = (xi : ℚ) ∧ y = (yi : ℚ) ∧
+      (yi = 0 ∨ yi ^ 2 ∣ 1728)
+
+/-- The infinite order of `(3, 5)`, as a labeled `Prop` — the
+`(3, 5)`-instance of the single `nagellLutz_seam`. It is *derived*
+from `NagellLutzCriterionE2` by
+`E2InfiniteOrderHypothesis_of_nagellLutz` below (using
+`five_sq_not_dvd_delta` and `5 ≠ 0`); the seam itself is now the
+criterion, not this instance. -/
 def E2InfiniteOrderHypothesis : Prop :=
   ∀ n : ℤ, n • P35 = 0 → n = 0
+
+/-- The `(3, 5)`-instance of the Nagell–Lutz criterion: `(3, 5)` has
+infinite order, derived from `NagellLutzCriterionE2`. If `P35` were
+torsion, the criterion would give integer coordinates with
+`y = 0` — false, since `y = 5` — or `y² ∣ 1728` — i.e. `25 ∣ 1728`,
+false by `five_sq_not_dvd_delta` (with `Δ = -1728`). Only the
+sanctioned direction of the criterion is used. -/
+theorem E2InfiniteOrderHypothesis_of_nagellLutz
+    (hNL : NagellLutzCriterionE2) : E2InfiniteOrderHypothesis := by
+  intro n hn
+  by_contra hn0
+  have hEq : E2.toAffine.Equation 3 5 := by
+    rw [WeierstrassCurve.Affine.equation_iff]; norm_num [E2]
+  have hNons : E2.toAffine.Nonsingular 3 5 :=
+    WeierstrassCurve.Affine.equation_iff_nonsingular.mp hEq
+  have hP : P35 = WeierstrassCurve.Affine.Point.some 3 5 hNons := rfl
+  obtain ⟨xi, yi, hxi, hyi, hy⟩ :=
+    hNL 3 5 hNons ⟨n, hn0, by rw [← hP]; exact hn⟩
+  have hyi5 : yi = 5 := by exact_mod_cast hyi.symm
+  rcases hy with h0 | hdvd
+  · rw [hyi5] at h0; exact absurd h0 (by norm_num)
+  · have h25 : (5 : ℤ) ^ 2 ∣ (1728 : ℤ) := by
+      rw [← hyi5]; exact hdvd
+    exact five_sq_not_dvd_delta (by
+      rw [E2Int_delta]; exact dvd_neg.mpr h25)
 
 /-- Rank ≥ 1 reduction, cardinal form (no finiteness hypothesis):
 modulo the labeled `nagellLutz_seam` hypothesis, the rank space of
