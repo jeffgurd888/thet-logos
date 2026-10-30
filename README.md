@@ -18,6 +18,18 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — Gram dominance, registered.** The dominance
+conjecture is now stated in owned vocabulary
+(`ThetLogos.GramDominance`): GD-strong / GD-global / GD-kernel
+registered per order at orders 5 and 6 from the owned channel
+excesses and row-network squares, GD-cmp beside them for the
+β⁵ sign — targets asserted nowhere, with the uniform channel
+object FRONTIER-marked as resisting statement (dominance stays
+a per-order schema; dossier
+`whitepaper/gd0-landing-2026-10-30.md`). Its GD-strong instance
+stands registered in the same window its probe kill landed —
+kills register against statements now. NO CLAIM; dials 0/4.
+
 **2026-10-30 — a kill, at full volume: Gram-dominance STRONG
 form is DEAD.** The re-registered discriminator (GD-PROBE-R,
 registry BR1-007) ran at two new nonabelian seats behind a
@@ -545,7 +557,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,508 theorem declarations**\*
-across 262 counted Lean modules, with whitepaper dossiers for every campaign.
+across 263 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
