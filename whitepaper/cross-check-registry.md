@@ -359,3 +359,30 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   K-VORTEX-1 does not fire (neither end); K-VORTEX-2 does
   not fire (the kernel strictly exceeds the forced lines —
   the exotic direction is forced by nothing landed).
+
+### BR1-010 — PHI-C-PROBE, the icosidodecahedral incidence complex, Python side (landed 2026-10-30)
+
+- **Python side:** `routeb-general-scratch/phicprobe.py`
+  (output `phicprobe-run.txt`; explicit tables in
+  `phicprobe-tables.json`) — exact arithmetic throughout
+  (coordinates in ℚ(√5) with rational coefficients, incidence
+  over ℚ; no floats). Parent re-ran the script at landing:
+  run log and tables byte-identical.
+- **Lean side:** queued — PHI-C0 transcribes the exported
+  tables (orientation convention as recorded in the run
+  log); PHI-C1/C2/C3 prove against them. The values below
+  are probe-grade (T4) until PHI-C3 lands.
+- **Proposition checked:** for the icosidodecahedron as a
+  cell complex on S² (V = 30, E = 60, F = 32 = 20 triangles
+  + 12 pentagons), the oriented incidence maps ∂₁ (30×60),
+  ∂₂ (60×32) over ℚ: ranks, kernels, face-family
+  independence, and ∂₁∂₂ = 0. Self-checks (each edge in
+  exactly one triangle and one pentagon; 1-skeleton and
+  dual graph connected; Euler = 2) all pass exactly.
+- **Result: rank ∂₁ = 29; rank ∂₂ = 31; ker ∂₂ = the
+  constants (dim 1); triangle-boundary rank 20;
+  pentagon-boundary rank 12; ∂₁∂₂ = 0 entrywise; homology
+  (H₀, H₁, H₂) = (1, 0, 1)** — the scoping memo's §1 paper
+  values, certified exactly, no deviation on any item.
+  COMBINATORICS ONLY: this entry concerns a polyhedron's
+  chain complex and nothing else.

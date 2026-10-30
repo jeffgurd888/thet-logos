@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — PHI-C-PROBE: the icosidodecahedron's
+incidence census, certified exactly.** The combinatorics
+salvage line opens (registry BR1-010): rank ∂₁ = 29,
+rank ∂₂ = 31, ker ∂₂ = the constants, face-family ranks
+20 and 12, ∂₁∂₂ = 0, homology (1, 0, 1) — the scoping's
+paper values, proved in exact arithmetic, tables exported
+for the Lean bricks. Combinatorics only: the bridge to
+W₂₂ stays killed at scoping (K-PHI-1/2), the count matches
+stay refused as numerology (K-PHI-3), and this line
+carries zero W₂₂ content (dossier
+`whitepaper/phicprobe-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — VL-0: the flux-zero locus at the thermal seat
 has dimension 10 — and contains an exotic.** The
 vortex-locus probe (registry BR1-009, exact rational
