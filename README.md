@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v4 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23648050.svg)](https://doi.org/10.5281/zenodo.23648050)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C368-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C375-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -110,7 +110,15 @@ generator `−(KX + XK)` dissipative in trace form; the PSD
 hypothesis is load-bearing and on every statement's face,
 and the master kill K-VISC does not fire inside that
 scope (dossier `whitepaper/visc2-landing-2026-10-29.md`).
-NO CLAIM; dials 0/4.
+VISC-3 closes the line: the trace defect of a diagonal
+state has the closed form `∑ i, w i·(1 − exp(−2t·λᵢ))`,
+trapped sharply between its slowest and fastest occupied
+modes' defects, both bounds attained — one pack-level
+kill rides with it (the rate bound as first prescribed
+ran the wrong way at the slowest mode; the counterexample
+and the corrected pair are on the dossier's face,
+`whitepaper/visc3-landing-2026-10-29.md`). NO CLAIM;
+dials 0/4.
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
 its endpoint: the β⁴ dependent coefficient is nonnegative on the
@@ -362,7 +370,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,368 theorem declarations**\*
+**7,375 theorem declarations**\*
 across 251 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
@@ -378,7 +386,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-29 census an attribute-inclusive count
-reads 7,446); earlier running
+reads 7,453); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of

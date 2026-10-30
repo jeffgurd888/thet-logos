@@ -901,4 +901,221 @@ theorem genTransported_dissipative {K : Matrix ι ι ℂ}
 
 end Dissipativity
 
+section TraceDefect
+
+variable {N : ℕ}
+
+/-- **The trace defect of a diagonal state under the raw step**
+    (Tier T2): `1 − Re tr (ternaryStep lam t (diagState w))` —
+    the share of the state's trace spent by the raw step.
+    Finite level, raw step only; the normalized step is out of
+    scope for this line. -/
+noncomputable def traceDefect (lam : Fin N → ℝ) (t : ℝ)
+    (w : Fin N → ℝ) : ℝ :=
+  1 - (Matrix.trace (ternaryStep lam t (diagState w))).re
+
+/-- **The trace computation** (Tier T1 — proved): the trace of
+    the stepped diagonal state is the multiplier-weighted sum,
+    in complex form the cast of the real sum
+    `∑ i, w i * exp (−2t·lam i)` — each weight times its own
+    diagonal multiplier from `ternaryStep_diag`. This is the
+    K-VISC-3 check: the computation returns exactly the
+    multiplier-weighted sum, by the landed
+    `ternaryStep_trace`. -/
+theorem trace_ternaryStep_diagState (lam : Fin N → ℝ) (t : ℝ)
+    (w : Fin N → ℝ) :
+    Matrix.trace (ternaryStep lam t (diagState w))
+      = ((∑ i, w i * Real.exp (-2 * t * lam i) : ℝ) : ℂ) := by
+  calc Matrix.trace (ternaryStep lam t (diagState w))
+      = ∑ i, ((Real.exp (-2 * t * lam i) * w i : ℝ) : ℂ) :=
+        ternaryStep_trace lam t w
+    _ = ((∑ i, Real.exp (-2 * t * lam i) * w i : ℝ) : ℂ) :=
+        (Complex.ofReal_sum Finset.univ _).symm
+    _ = ((∑ i, w i * Real.exp (-2 * t * lam i) : ℝ) : ℂ) := by
+        congr 1
+        exact Finset.sum_congr rfl (fun i _ => mul_comm _ _)
+
+end TraceDefect
+
+section TraceDefectClosedForm
+
+variable {N : ℕ}
+
+/-- **The trace-defect closed form** (Tier T1 — proved): for a
+    state (`∑ i, w i = 1`),
+    `traceDefect lam t w = ∑ i, w i * (1 − exp (−2t·lam i))` —
+    each mode contributes its weight times the share of its own
+    multiplier spent by the step. From
+    `trace_ternaryStep_diagState` (via its real form
+    `ternaryStep_trace_re`). -/
+theorem traceDefect_eq_sum (lam : Fin N → ℝ) (t : ℝ)
+    (w : Fin N → ℝ) (hsum : ∑ i, w i = 1) :
+    traceDefect lam t w
+      = ∑ i, w i * (1 - Real.exp (-2 * t * lam i)) := by
+  unfold traceDefect
+  rw [ternaryStep_trace_re]
+  calc 1 - ∑ i, Real.exp (-2 * t * lam i) * w i
+      = ∑ i, w i - ∑ i, Real.exp (-2 * t * lam i) * w i := by
+        rw [hsum]
+    _ = ∑ i, (w i - Real.exp (-2 * t * lam i) * w i) :=
+        (Finset.sum_sub_distrib _ _).symm
+    _ = ∑ i, w i * (1 - Real.exp (-2 * t * lam i)) :=
+        Finset.sum_congr rfl (fun i _ => by ring)
+
+/-- **The trace defect is nonnegative on states** (Tier T1 —
+    proved): for a state with nonnegative weights, nonnegative
+    rates, and `t ≥ 0`, every summand of the closed form is a
+    product of nonnegatives, the second factor by VISC-0's
+    multiplier bound `ternaryStep_diag_multiplier_mem_Ioc`. -/
+theorem traceDefect_nonneg (lam : Fin N → ℝ) {t : ℝ} (ht : 0 ≤ t)
+    (hlam : ∀ i, 0 ≤ lam i) (w : Fin N → ℝ) (hw : ∀ i, 0 ≤ w i)
+    (hsum : ∑ i, w i = 1) :
+    0 ≤ traceDefect lam t w := by
+  rw [traceDefect_eq_sum lam t w hsum]
+  apply Finset.sum_nonneg
+  intro i _
+  have hmul := ternaryStep_diag_multiplier_mem_Ioc lam ht (hlam i)
+  exact mul_nonneg (hw i) (by linarith [hmul.2])
+
+/-- **The defect vanishes exactly on the ground line of the
+    support** (Tier T1 — proved): for a state with nonnegative
+    weights, nonnegative rates, and `t ≥ 0`,
+    `traceDefect lam t w = 0` iff every occupied mode has
+    `t * lam i = 0` — the occupied modes are exactly the ones
+    the step does not move. -/
+theorem traceDefect_eq_zero_of_support (lam : Fin N → ℝ) {t : ℝ}
+    (ht : 0 ≤ t) (hlam : ∀ i, 0 ≤ lam i) (w : Fin N → ℝ)
+    (hw : ∀ i, 0 ≤ w i) (hsum : ∑ i, w i = 1) :
+    traceDefect lam t w = 0
+      ↔ ∀ i, w i ≠ 0 → t * lam i = 0 := by
+  rw [traceDefect_eq_sum lam t w hsum]
+  have hnonneg : ∀ i ∈ Finset.univ,
+      0 ≤ w i * (1 - Real.exp (-2 * t * lam i)) := by
+    intro i _
+    have hmul := ternaryStep_diag_multiplier_mem_Ioc lam ht (hlam i)
+    exact mul_nonneg (hw i) (by linarith [hmul.2])
+  constructor
+  · intro h i hi
+    have hterm := (Finset.sum_eq_zero_iff_of_nonneg hnonneg).mp h
+      i (Finset.mem_univ i)
+    rcases mul_eq_zero.mp hterm with hw0 | h10
+    · exact absurd hw0 hi
+    · have hexp : Real.exp (-2 * t * lam i) = 1 := by
+        have h1 : (1 : ℝ) = Real.exp (-2 * t * lam i) :=
+          sub_eq_zero.mp h10
+        exact h1.symm
+      have harg : -2 * t * lam i = 0 :=
+        Real.exp_injective (show
+          Real.exp (-2 * t * lam i) = Real.exp 0 by
+          rw [hexp, Real.exp_zero])
+      have h2 : (-2 : ℝ) * (t * lam i) = 0 := by
+        have heq : -2 * t * lam i = (-2 : ℝ) * (t * lam i) := by
+          ring
+        rw [heq] at harg
+        exact harg
+      rcases mul_eq_zero.mp h2 with h3 | h3
+      · norm_num at h3
+      · exact h3
+  · intro h
+    apply Finset.sum_eq_zero
+    intro i _
+    by_cases hi : w i = 0
+    · simp [hi]
+    · have htl := h i hi
+      have hexp : Real.exp (-2 * t * lam i) = 1 := by
+        have hz : -2 * t * lam i = 0 := by
+          have heq : -2 * t * lam i = (-2 : ℝ) * (t * lam i) := by
+            ring
+          rw [heq, htl, mul_zero]
+        rw [hz, Real.exp_zero]
+      have hterm0 : w i * (1 - Real.exp (-2 * t * lam i)) = 0 := by
+        rw [hexp]
+        norm_num
+      exact hterm0
+
+/-- **Sharp lower bound at the slowest occupied mode** (Tier
+    T1 — proved): for a state with nonnegative weights and
+    `t ≥ 0`, if `i₀` is a slowest occupied mode
+    (`lam i₀ ≤ lam i` at every occupied mode), then
+    `1 − exp (−2t·lam i₀) ≤ traceDefect lam t w` — every other
+    occupied mode spends at least as much trace as the slowest
+    one. Sharpness is `traceDefect_eq_of_single` at `i₀`. -/
+theorem traceDefect_ge_slowest (lam : Fin N → ℝ) {t : ℝ}
+    (ht : 0 ≤ t) (w : Fin N → ℝ) (hw : ∀ i, 0 ≤ w i)
+    (hsum : ∑ i, w i = 1) {i₀ : Fin N}
+    (hslow : ∀ i, w i ≠ 0 → lam i₀ ≤ lam i) :
+    1 - Real.exp (-2 * t * lam i₀) ≤ traceDefect lam t w := by
+  rw [traceDefect_eq_sum lam t w hsum]
+  have hbase : ∑ i, w i * (1 - Real.exp (-2 * t * lam i₀))
+      = 1 - Real.exp (-2 * t * lam i₀) := by
+    rw [← Finset.sum_mul, hsum, one_mul]
+  rw [← hbase]
+  apply Finset.sum_le_sum
+  intro i _
+  by_cases hi : w i = 0
+  · simp [hi]
+  · have hle : Real.exp (-2 * t * lam i)
+        ≤ Real.exp (-2 * t * lam i₀) := by
+      apply Real.exp_le_exp.mpr
+      have hprod : 0 ≤ (2 * t) * (lam i - lam i₀) :=
+        mul_nonneg (by linarith) (sub_nonneg.mpr (hslow i hi))
+      nlinarith
+    exact mul_le_mul_of_nonneg_left (by linarith) (hw i)
+
+/-- **Sharp upper bound at the fastest occupied mode** (Tier
+    T1 — proved): for a state with nonnegative weights and
+    `t ≥ 0`, if `i₀` is a fastest occupied mode
+    (`lam i ≤ lam i₀` at every occupied mode), then
+    `traceDefect lam t w ≤ 1 − exp (−2t·lam i₀)` — no occupied
+    mode spends more trace than the fastest one. Sharpness is
+    `traceDefect_eq_of_single` at `i₀`. -/
+theorem traceDefect_le_fastest (lam : Fin N → ℝ) {t : ℝ}
+    (ht : 0 ≤ t) (w : Fin N → ℝ) (hw : ∀ i, 0 ≤ w i)
+    (hsum : ∑ i, w i = 1) {i₀ : Fin N}
+    (hfast : ∀ i, w i ≠ 0 → lam i ≤ lam i₀) :
+    traceDefect lam t w ≤ 1 - Real.exp (-2 * t * lam i₀) := by
+  rw [traceDefect_eq_sum lam t w hsum]
+  have hbase : ∑ i, w i * (1 - Real.exp (-2 * t * lam i₀))
+      = 1 - Real.exp (-2 * t * lam i₀) := by
+    rw [← Finset.sum_mul, hsum, one_mul]
+  rw [← hbase]
+  apply Finset.sum_le_sum
+  intro i _
+  by_cases hi : w i = 0
+  · simp [hi]
+  · have hle : Real.exp (-2 * t * lam i₀)
+        ≤ Real.exp (-2 * t * lam i) := by
+      apply Real.exp_le_exp.mpr
+      have hprod : 0 ≤ (2 * t) * (lam i₀ - lam i) :=
+        mul_nonneg (by linarith) (sub_nonneg.mpr (hfast i hi))
+      nlinarith
+    exact mul_le_mul_of_nonneg_left (by linarith) (hw i)
+
+/-- **Attainment: a single-mode state spends exactly its own
+    mode's share** (Tier T1 — proved): for the state
+    concentrated at `i₀`,
+    `traceDefect lam t (fun i => if i = i₀ then 1 else 0)
+      = 1 − exp (−2t·lam i₀)`.
+    Together with `traceDefect_ge_slowest` and
+    `traceDefect_le_fastest` this is the sharpness of the
+    diagonal-seat relaxation rate: both bounds are attained,
+    by the states concentrated at the respective modes. -/
+theorem traceDefect_eq_of_single (lam : Fin N → ℝ) (t : ℝ)
+    (i₀ : Fin N) :
+    traceDefect lam t (fun i => if i = i₀ then 1 else 0)
+      = 1 - Real.exp (-2 * t * lam i₀) := by
+  have hsum : ∑ i, (fun i => if i = i₀ then (1 : ℝ) else 0) i = 1 := by
+    rw [Finset.sum_eq_single i₀]
+    · simp
+    · intro b _ hb
+      simp [hb]
+    · simp
+  rw [traceDefect_eq_sum lam t _ hsum, Finset.sum_eq_single i₀]
+  · simp
+  · intro b _ hb
+    simp [hb]
+  · simp
+
+end TraceDefectClosedForm
+
 end ThetLogos
