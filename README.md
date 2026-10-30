@@ -18,6 +18,18 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — Q⁷C⁴R⁴ registered.** Jeff's named target is now
+a stated object: one real space ℝ⁴⁴⁸ — the 7-state register and
+the 4-level cyclic space realified, tensored over ℝ with the
+corpus's Minkowski R⁴ — with its three exact real pairings and
+its two-faces duality package stated in pin form
+(`ThetLogos.Q7C4R4Post`; dossier
+`whitepaper/q7cr0-landing-2026-10-30.md`). Registration only:
+nothing proved, the 448 stated as a proposition to prove later;
+Jeff's single-thermal-particle reading rides on the module's
+face as his attributed interpretation, tiered apart from the
+mechanics. NO CLAIM; dials 0/4.
+
 **2026-10-30 — the clock defect, measured.** `ThetLogos.ThermalZ4ClockDefect`
 proves the Z₄ clock shift is a broken symmetry of the ladder's
 thermal state, with the breaking measured exactly: a factor
@@ -483,7 +495,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,458 theorem declarations**\*
-across 258 counted Lean modules, with whitepaper dossiers for every campaign.
+across 259 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
