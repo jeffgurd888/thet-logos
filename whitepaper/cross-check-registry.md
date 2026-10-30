@@ -388,3 +388,53 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   values, certified exactly, no deviation on any item.
   COMBINATORICS ONLY: this entry concerns a polyhedron's
   chain complex and nothing else.
+
+### BR1-011 — XYZ-3, the first live tripotent family search, Python side (landed 2026-10-30)
+
+- **Python side:** `routeb-general-scratch/xyz3-search.py`
+  (run record `xyz3-run.txt`, pre-registration in its Section A
+  written before any search ran) — exact arithmetic throughout
+  (entries in ℚ(i,√3) as 4-tuples over ℚ in the basis
+  {1, i, √3, i√3}; no floats in any decision path). An
+  independent second implementation (plain dict matrices,
+  direct ternary products) recomputed three sample triples
+  and agreed exactly on round sizes and reached sets
+  (run record, Section E).
+- **Lean side:** the posted question and definitions mirrored
+  exactly — `xyz_tripotents_exist` and `MemGenTRO`
+  (`ThetLogos/XYZTripotents.lean` §3: the two-constructor
+  WORD closure, `of_mem` / `of_ternary`; no span in the
+  inductive), `ternaryMat` (`ThetLogos/TRO.lean`),
+  the generator definitions `UJ` (`ThetLogos/Scaffold32.lean`),
+  `genH`, `genM`, `genC`, `smGen`
+  (`ThetLogos/MartinettiRep.lean`), and `tripotent_tripT` /
+  `tripT` (`ThetLogos/XYZBoundaryMarker.lean`). Spot-entry
+  cross-checks against landed lemmas passed BEFORE searching
+  (`genM_seven_18_18`: genM 7 (18,18) = 1/√3;
+  `smGen_one_offdiag`: smGen 1 (0,1) = 1; `genH_supp_block`
+  supports; `tripT_entry_18_18` / `tripT_entry_18_20` /
+  `tripT_apply_of` entries) — run record, Section B.
+- **Proposition checked:** for the pre-registered list of
+  385 triples — unordered distinct pairs from
+  {UJ, genH k (k ∈ Fin 3), genM a (a ≠ 7)} (11 members,
+  55 pairs) × the 7-member tripT family (tripT, its
+  UJ-conjugate, its two other T₀ row positions, and its
+  transports to triplets T₁, T₂, T₃) — the exact MemGenTRO
+  word closure to depth ≤ 2 (ternary closure rounds,
+  cumulative), scored by which of the 12 `smGen g` are
+  reached as exact words. Depth 3 was NOT run: the
+  pre-registered rule required every triple to satisfy
+  |W≤2| ≤ 300 and dim span ≤ 96; observed max |W≤2| = 358
+  (max span dim 30), so depth stayed 2 for the whole list.
+- **Result: EXHAUSTED at depth ≤ 2 and the stated list.**
+  All 385 triples ran, no caps hit (20.4 s total). Max score
+  2/12; every reached generator is one of the triple's own
+  first-two pool members, reached by `of_mem` — no triple
+  produced a genuine `of_ternary` reach, and no triple
+  exceeds the corpus's documented partial positives
+  ({genC, UJ, gammaF} → 1 of 12; {genH 0, UJ, genM 0} →
+  2 of 12, both by membership). **This is K-XYZ-2 at the
+  stated depth and list ONLY — a family kill at full rank;
+  the question `xyz_tripotents_exist` stays OPEN.** Failure
+  to find is not a kill in any other form; no Python hit
+  occurred, so nothing promotes to XYZ-5. NO CLAIM; dials 0/4.

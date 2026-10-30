@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — XYZ-3: first live family EXHAUSTED at
+depth ≤ 2.** The exact word search (385 triples: the
+{UJ, genH, genM a≠7} pairs × the tripT family, ℚ(i,√3)
+exact, BRIDGE-1 registry BR1-011) reached at most 2 of
+12 generators — and every reach was a leaf: the only
+generators found were already members of the triple; no
+ternary word produced a new generator at depth ≤ 2.
+K-XYZ-2 fires at the stated depth and list; the
+question xyz_tripotents_exist stays OPEN, and XYZ-4 /
+XYZ-K1 schedule only on a parent decision (dossier
+`whitepaper/xyz3-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — C96-0: the Census-96 interface is
 pinned.** The arbitrary-Yukawa admissible space Adm96
 and the two statements now exist as frozen Lean names:
