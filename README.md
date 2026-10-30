@@ -18,6 +18,30 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — B7-2b-iii: B7-0's claims settle — both
+CONFIRMED.** Card 5 carries no live channel (its content
+erases through the lower excesses at a private column, as
+predicted), and the card-6 fibers split exactly as
+predicted: C₆/Θ(2,2,2) live, the rest factoring by
+private-column erasure. The same accounting evaluates
+the counts B7-2a refused to guess: adjacent pairs per
+primitive quad = 8, opposite = 4, now theorems (every
+primitive quad is a C₄ pattern). The total decomposition
+and kappa7dep_eq are the chain's last seam (dossier
+`whitepaper/b72biii-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
+**2026-10-30 — B7-2b-ii: card-7 and card-6 fibers.** The
+(1⁷) fiber is 5040 × the septuple pattern value (top
+weight −d⁻⁷ as forced); the card-6 fibers are exactly the
+six (2,1,1,1,1,1) patterns at 2520 each — settling the
+fiber-structure part of B7-0's card-6 claim in the
+predicted direction, with its family-split part deferred
+by name to the next sub-brick, where the card-5 claim
+also settles (dossier
+`whitepaper/b72bii-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — B7-2b-i: order-7 fiber machinery.** The
 β⁷ assembly's fiber expansion and migration lemmas are
 ported at order 7 (new module PlaneCrossingBeta7Fibers),
