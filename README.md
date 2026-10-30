@@ -18,6 +18,23 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — C96-0: the Census-96 interface is
+pinned.** The arbitrary-Yukawa admissible space Adm96
+and the two statements now exist as frozen Lean names:
+Census96 (the order-one solution space at three
+generations has finrank 402 = 3·46 + 3·88 — not 414;
+the mixing pair contributes 88, not 92) and, separately
+fenced, Census96Diag (46 — not the census). The pin was
+extracted from the actual census code (recovered from
+git history; it is purged from the working tree), which
+also corrected the scoping memo: no buildDirac ansatz
+constrains the admissible space — hermitian, γ-odd,
+J-compatible only. The 2352 dimension self-check is
+registered as a statement; its proof is the interface's
+first discharge (dossier
+`whitepaper/c960-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — XYZ-2: the boundary marker.** A concrete
 tripotent now stands outside the ℤ[i] species: tripT,
 the rank-one partial isometry e₁₈·((1,1,1)/√3)ᴴ over the
