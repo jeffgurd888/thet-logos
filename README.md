@@ -18,6 +18,18 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — S3-1-F1: FACT ⇔ BRIDGE is a theorem.**
+The stratum column factorization and the LOC-3 bridge
+statement are now formally the same proposition in two
+dialects (new module Span3WallIdentity: the real density
+layerKernelReal, its cast lemma and positivity, and the
+equivalence) — so any future result about one is a result
+about the other. Neither statement is proved; the
+uniformity wall is untouched; proof-grade distance
+toward the continuum remains ZERO (dossier
+`whitepaper/s31f1-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — S3-0: the Span-3 pier's first pins.** The
 gap statements now exist at general (G, ρ): GapBound
 (mirrored from the landed transfer theorem's consequent —
