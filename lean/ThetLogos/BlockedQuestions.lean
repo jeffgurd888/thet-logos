@@ -13,13 +13,16 @@ Every entry carries four things:
 2. **Why it is blocked** — the structural reason fifty years did not suffice.
 3. **The reformulation** — what the question becomes inside thet-logos,
    where time is derived from the thermal triple `(ρ, D, β)`, never postulated.
-4. **Status** — a proved fragment (Tier T3, machine-checked) or a labeled
-   conjecture (Tier T5, `sorry`).
+4. **Status** — a proved fragment (Tier T3, machine-checked) or a posted
+   question (Tier T5, stated as a proposition, unproved).
 
-The ledger rule applies with full force: a `sorry` in this module is a
-**formalized question**, never an answer. Promoting any conjecture below
-requires exhibiting the witness its statement demands; the `sorry` is the
-receipt for work not yet done.
+The ledger rule applies with full force: an entry stated as a proposition
+in this module is a **formalized question**, never an answer. Promoting
+any question below requires exhibiting the witness its statement demands,
+recorded as a new proved entry beside the standing post; the post is the
+receipt for work not yet done. This module contains no `sorry`: the
+questions are posted as statements because a statement is all they
+honestly are.
 
 - Q1. The problem of time → thermal time as physical time.
 - Q2. Emergence of the continuum from finite structure.
@@ -61,7 +64,7 @@ noncomputable def modularFreqDiff {N : ℕ} (β : ℝ) (lam : Fin N → ℝ)
     (i j : Fin N) : ℝ :=
   β * (lam i ^ 2 - lam j ^ 2)
 
-/-- Q1, open (Tier T5, `sorry`): there exists a thermal triple — inverse
+/-- Q1, open (Tier T5, posted statement): there exists a thermal triple — inverse
     temperature `β` (heat) and Dirac spectrum `lam` (geometry) — whose modular
     frequency differences reproduce an observed clock spectrum `obs` up to a
     nonzero global scale `c`.
@@ -69,11 +72,10 @@ noncomputable def modularFreqDiff {N : ℕ} (β : ℝ) (lam : Fin N → ℝ)
     Promote: exhibit `(β, lam, obs, c)` with `obs` a measured clock spectrum
     and the identity checked. Kill: proof that no modular flow can match real
     clock readings. -/
-theorem blockedQ1_physicalClock (N M : ℕ) :
+def blockedQ1_physicalClock (N M : ℕ) : Prop :=
     ∃ (β : ℝ) (lam : Fin N → ℝ) (obs : Fin M → ℝ) (c : ℝ), c ≠ 0 ∧
       ∃ f : Fin M → Fin N × Fin N, ∀ m : Fin M,
-        modularFreqDiff β lam (f m).1 (f m).2 = c * obs m := by
-  sorry
+        modularFreqDiff β lam (f m).1 (f m).2 = c * obs m
 
 /-! ## Q2. Emergence of the continuum
 
@@ -98,14 +100,13 @@ structure ContinuumLimitData where
   errVanishes : ∀ ε > 0, ∃ N₀, ∀ n ≥ N₀, errBound n < ε
   recoversLocality : Prop
 
-/-- Q2, open (Tier T5, `sorry`): a controlled continuum limit exists — finite
+/-- Q2, open (Tier T5, posted statement): a controlled continuum limit exists — finite
     triples recovering locality with vanishing error.
 
     Promote: exhibit the sequence with error bounds. Kill: proof that no such
     limit recovers locality. -/
-theorem blockedQ2_continuumLimit :
-    ∃ D : ContinuumLimitData, D.recoversLocality := by
-  sorry
+def blockedQ2_continuumLimit : Prop :=
+    ∃ D : ContinuumLimitData, D.recoversLocality
 
 /-! ## Q3. Three generations and the mass hierarchy
 
@@ -129,15 +130,14 @@ def HasThreefoldHierarchy {N : ℕ} (lam : Fin N → ℝ) : Prop :=
       ∀ i j k : Fin N, g i = g j → g i ≠ g k →
         |lam i - lam j| ≤ r * |lam i - lam k|
 
-/-- Q3, open (Tier T5, `sorry`): a Dirac spectrum with threefold hierarchy
+/-- Q3, open (Tier T5, posted statement): a Dirac spectrum with threefold hierarchy
     exists — three generations with a mass hierarchy, as a precise predicate.
 
     Promote: exhibit the spectrum (ideally from a tripled finite-triple
     construction). Kill: irrelevance — the framework may not be the right
     address for this question. -/
-theorem blockedQ3_threeGenerations (N : ℕ) :
-    ∃ lam : Fin N → ℝ, HasThreefoldHierarchy lam := by
-  sorry
+def blockedQ3_threeGenerations (N : ℕ) : Prop :=
+    ∃ lam : Fin N → ℝ, HasThreefoldHierarchy lam
 
 /-! ## Q4. Closed form for the spectral (mass) gap
 
@@ -180,18 +180,17 @@ theorem blockedQ4_gapPositive {n : ℕ} (D : Matrix (Fin n) (Fin n) ℂ)
     0 < spectralGap D hD :=
   spectralGap_pos D hD hpos
 
-/-- Q4, open (Tier T5, `sorry`): the spectral gap admits a closed form in the
+/-- Q4, open (Tier T5, posted statement): the spectral gap admits a closed form in the
     Yukawa inputs — for *any* Dirac-spectrum function (in particular the
     one-generation `DF_oneGen` construction), the gap is an elementary
     expression in its inputs.
 
     Promote: exhibit the expression `e`. Kill: proof that no such expression
     exists (expected to be very hard — stated honestly). -/
-theorem blockedQ4_closedFormGap (nYuk N : ℕ)
-    (diracSpec : (Fin nYuk → ℝ) → (Fin N → ℝ)) :
+def blockedQ4_closedFormGap (nYuk N : ℕ)
+    (diracSpec : (Fin nYuk → ℝ) → (Fin N → ℝ)) : Prop :=
     ∃ e : ClosedForm nYuk, ∀ y : Fin nYuk → ℝ,
-      e.eval y = spectrumGap (diracSpec y) := by
-  sorry
+      e.eval y = spectrumGap (diracSpec y)
 
 /-! ## Q4 amendment: why the closed form is blocked (2026-10-05)
 
@@ -262,15 +261,14 @@ structure LabRealization where
   bathsAreThermal : Prop
   cycleCloses : Prop
 
-/-- Q5, open (Tier T5, `sorry`): a laboratory realization extracting positive
+/-- Q5, open (Tier T5, posted statement): a laboratory realization extracting positive
     work from a finite-triple thermal cycle exists.
 
     Promote: a laboratory proposal with Hamiltonian, baths, and readout —
     even a 2-state toy. Kill: a no-go theorem showing finite-triple engines
     cannot couple to work extraction. -/
-theorem blockedQ5_physicalDevice :
+def blockedQ5_physicalDevice : Prop :=
     ∃ L : LabRealization,
-      0 < L.workOutput ∧ L.bathsAreThermal ∧ L.cycleCloses := by
-  sorry
+      0 < L.workOutput ∧ L.bathsAreThermal ∧ L.cycleCloses
 
 end ThetLogos

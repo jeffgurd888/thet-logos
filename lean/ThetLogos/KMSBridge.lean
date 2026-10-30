@@ -32,10 +32,11 @@ Tier map:
   Tomita–Takesaki theory is priced, not formalized.
 
 Note: the eigenbasis KMS target `kms_identity_diagonal`
-(ModularTime.lean, T3 sorry) is the diagonal specialization of
-`gibbs_kms_weight` (β = 1, K diagonal); discharging it through this route
-would need the exp-of-diagonal spectral lemma, so it is left untouched
-per intake scope.
+(ModularTime.lean, T3 — proved, discharged 2026-10-25; an earlier draft
+of this note cited it as a "T3 sorry", which was stale: ModularTime.lean
+contains no sorry of any kind) is the diagonal specialization of
+`gibbs_kms_weight` (β = 1, K diagonal); it stands proved in its own
+module and is left untouched here per intake scope.
 -/
 
 -- ============================================================================

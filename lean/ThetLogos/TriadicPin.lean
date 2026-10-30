@@ -7,7 +7,7 @@ import ThetLogos.XYZTripotents
 definitions only: the three sector families of the Martinetti
 representation and one `Prop`, `TriadicSectorExistence` (R3♯(sectors)
 in `whitepaper/xyz-triadic-pin-2026-10-17.md`), which sharpens Open
-Problem 2 (`xyz_tripotents_exist`, `XYZTripotents.lean:488`) by
+Problem 2 (`xyz_tripotents_exist`, `XYZTripotents.lean:489`) by
 restricting the existential to one tripotent drawn from each sector
 family. Nothing here is proved, and the `Prop` is not asserted.
 

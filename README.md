@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — zero sorrys: the census DROPS by seven, on
+purpose.** The corpus's seven posted questions (Q1–Q5, the XYZ
+tripotent existence post, and the root-weights post) were carried
+as theorems proved by `sorry`; they are now stated propositions
+(`def … : Prop`) in pin form — same names, same statements,
+unproved. The strict count falls 7,453 → 7,446 because the seven
+were posted questions, never proofs, and the house count no
+longer says otherwise. A full-corpus axiom sweep certifies no
+declaration depends on `sorryAx` (dossier
+`whitepaper/sorry0-landing-2026-10-30.md`). Reported at the same
+volume as any growth: NO CLAIM; zero parts of any official
+statement closed; dials 0/4.
+
 **2026-10-29 — the β⁶ selection rule, the cross-check registry,
 and the Q-ROOT decision.** B6-0 lands the order-6 weighted
 selection rule FULL *as corrected*: the scoping's card-4 line was
@@ -439,7 +452,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,453 theorem declarations**\*
+**7,446 theorem declarations**\*
 across 255 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
@@ -454,19 +467,27 @@ rule — the earlier figure of fifteen was an undercount, corrected by
 the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
-rule (at the 2026-10-29 census an attribute-inclusive count
-reads 7,531); earlier running
+rule (at the 2026-10-30 census an attribute-inclusive count
+reads 7,524); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
-every declaration in the counted corpus as it stood at 3,408: exactly
-seven declarations depend on `sorryAx` — the seven tier-quarantined
-open obligations, each containing its own `sorry`, with no transitive
-contamination of any other declaration; a further 9–11 declarations
-rest on the corpus's own explicitly stated T2 file axioms; the
-remaining 3,390–3,392 carry footprints inside Lean's standard three
-axioms alone (report:
-`whitepaper/corpus-dependency-audit-2026-10-21.md`).*
+every declaration in the counted corpus as it stood at 3,408. **As of
+2026-10-30 the corpus contains zero `sorry` terms and no declaration
+depends on `sorryAx`**: the seven open questions those audits named
+are now posted as stated propositions (`def … : Prop`) in pin form —
+`blockedQ1_physicalClock`, `blockedQ2_continuumLimit`,
+`blockedQ3_threeGenerations`, `blockedQ4_closedFormGap`,
+`blockedQ5_physicalDevice`, `xyz_tripotents_exist`,
+`rootWeights_realized` — unproved, exactly as open as they were
+(dossier: `whitepaper/sorry0-landing-2026-10-30.md`). The historical
+record stands: at the 2026-10-21/22 audit, exactly seven declarations
+depended on `sorryAx` — the seven tier-quarantined open obligations,
+each containing its own `sorry`, with no transitive contamination of
+any other declaration; a further 9–11 declarations rest on the
+corpus's own explicitly stated T2 file axioms; the remaining
+3,390–3,392 carry footprints inside Lean's standard three axioms
+alone (report: `whitepaper/corpus-dependency-audit-2026-10-21.md`).*
 
 ## Credit
 

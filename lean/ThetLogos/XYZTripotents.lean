@@ -28,7 +28,7 @@ What is done here (T3, machine-checked):
   (`sector_triple_fails`).
 
 What is open (T5): the general existence statement `xyz_tripotents_exist`
-is a single documented `sorry`. No new axioms are introduced.
+is a single documented posted statement (`def … : Prop`), unproved. No new axioms are introduced.
 -/
 
 namespace ThetLogos
@@ -481,15 +481,15 @@ theorem triple_genH_cannot_reach_genM :
     Failure criterion: a proof that no such triple exists.
 
     Status: the diagonal case is ruled out above (`no_diagonal_xyz_tripotents`,
-    `sector_triple_fails`); the general statement is open. In particular the
+    `sector_triple_fails`); the general statement is open, posted below as a
+    stated proposition (`def … : Prop`), not asserted. In particular the
     natural sector-projection candidates from the C_F decomposition do not
     suffice — any successful triple must reach the off-diagonal H/M-sector
     generators. -/
-theorem xyz_tripotents_exist :
+def xyz_tripotents_exist : Prop :=
     ∃ X Y Z : Matrix I32 I32 ℂ,
       Tripotent X ∧ Tripotent Y ∧ Tripotent Z ∧
-      ∀ g : Fin 12, MemGenTRO ({X, Y, Z} : Set (Matrix I32 I32 ℂ)) (smGen g) := by
-  sorry
+      ∀ g : Fin 12, MemGenTRO ({X, Y, Z} : Set (Matrix I32 I32 ℂ)) (smGen g)
 
 /-! ## §7. Candidate exploration (record)
 
@@ -579,7 +579,7 @@ non-pair-support tripotent. Next positive step is to prove `Tripotent
 
 Net third wave: 5 rubric rules (R1–R5), 2 new machine-checked no-go families,
 1 partial positive (1 of 12 generators). `xyz_tripotents_exist` still open
-(single documented T5 sorry).
+(single documented T5 posted statement).
 -/
 
 /-! ## §12. Candidate-triple screening rubric (R1–R5)

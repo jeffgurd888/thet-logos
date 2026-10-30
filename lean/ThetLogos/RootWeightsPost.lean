@@ -70,10 +70,10 @@ relabeling rule forbids re-posing them. This post asks about weights
 only.
 
 **Status: Tier T5 question-post. NO CLAIM.** Following the
-`BlockedQuestions` ledger rule: the placeholder below is a
+`BlockedQuestions` ledger rule: the posted statement below is a
 **formalized question**, never an answer. Nothing in this module
 decides anything; the definitions are Tier T2 data, the question is
-the placeholder.
+the posted statement.
 -/
 
 namespace ThetLogos
@@ -113,18 +113,18 @@ theorem rootWeightsRealized_iff (w : Fin 3 → ℝ) :
         (∃ lam : Fin 3 → ℝ, (∀ s, 0 < lam s) ∧ (fun s => (lam s)⁻¹) = w) :=
   Iff.rfl
 
-/-- **Q-ROOT, open (Tier T5, placeholder):** Jeff's triad
+/-- **Q-ROOT (Tier T5, posted statement):** Jeff's triad
     (−1, 0, 2) — void, unity-container, pair — is realized as
     *weights* by some allocation/kernel object of the corpus, in one
     of the three canonical modes of `RootWeightsRealized`.
 
-    Promote: exhibit the data (one mode suffices) — or open a new
-    entry for a corpus-native signed allocation object; this post is
-    not retrofitted. Kill: assemble the three landed positivity
-    fences (clock faithfulness; Gibbs weights are exponentials;
-    payoff reciprocals of positive rates) into the faithful-only
-    statement at this owned level. -/
-theorem rootWeights_realized : RootWeightsRealized rootTriadWeights := by
-  sorry
+    **DECIDED FALSE at the owned level by QR-D1
+    (`rootWeights_not_realized`, RootWeightsDecision.lean): no
+    canonical allocation mode realizes the triad. This post stands
+    as the posted question under the relabeling rule — it is not
+    retrofitted and not reopened. A corpus-native signed allocation
+    object, if one is ever built, enters as a NEW entry.** -/
+def rootWeights_realized : Prop :=
+  RootWeightsRealized rootTriadWeights
 
 end ThetLogos

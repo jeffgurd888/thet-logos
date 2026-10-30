@@ -30,7 +30,7 @@ Tier: T1 — STANDS WHOLE. Landed 2026-10-22: parent-verified on the
 exact shipped text (independent recompile green, token scan
 sorry/admit/axiom = 0/0/0, headline `#print axioms` = the standard
 three only). Dossier: `whitepaper/charpoly-factorization-2026-10-22.md`.
-Nothing here touches `blockedQ4_closedFormGap`, which stays `sorry`:
+Nothing here touches `blockedQ4_closedFormGap`, which stays a posted statement:
 per-sector closed forms do not survive the `min` selection (Obstruction 2
 of the amendment stands untouched).
 -/

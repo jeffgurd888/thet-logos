@@ -31,7 +31,7 @@ PROVED here (T3):
   support split (no S ↔ complement entries) — the proved mechanism of Q3.1.
 - `cf_support_card`: the C_F support has 20 dimensions (complement 12).
 
-TARGET (OPEN, labeled T3 sorrys — Q3.1/Q3.2, the two CCM C_F proof stages):
+TARGET (OPEN, labeled T3 work items — Q3.1/Q3.2, the two CCM C_F proof stages):
 - `cf_kernel_classification`: order-one + [D,C_F] = 0 (+ J, γ, self-adjoint)
   ⟹ D = smDirac(…) — i.e. the kernel is EXACTLY the 5 matrices.
 

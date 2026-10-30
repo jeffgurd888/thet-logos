@@ -33,7 +33,7 @@ What is proved here (Tier T1 throughout — machine-checked screening facts):
 
 Fences, stated precisely:
 
-- Open Problem 2 (`xyz_tripotents_exist`, `XYZTripotents.lean:488`)
+- Open Problem 2 (`xyz_tripotents_exist`, `XYZTripotents.lean:489`)
   quantifies over **all** matrices and remains OPEN and untouched:
   nothing here depends on it, and no screen here constrains triples
   outside the named sector families (e.g. tripotents with non-ℤ[i]

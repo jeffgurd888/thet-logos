@@ -21,7 +21,7 @@ This module installs the CORRECTED scaffold:
 - §2b discharges the minimal block multiplicity equality
   (1×1×1) + (4×1×2) + (1×3×1) = 12 with remainder 16 − 12 = 4;
 - §3 states the CCM-with-`[D,C_F]=0` classification target, with the analytic
-  work itemized as labeled T3 sorrys (cf. BlockedQuestions.lean Q3).
+  work itemized as labeled T3 work items (cf. BlockedQuestions.lean Q3).
 
 Tiers: §1–§2 are T3 (proved below, zero sorrys). §3 is T5 (target statement).
 -/
@@ -156,7 +156,7 @@ photon" condition), so its uniqueness theorem classifies order-one PLUS
 [D, C_F] = 0 — never the order-one-only nullspace.
 
 Hence any Q3 uniqueness formalization MUST carry the Dirac side. The target
-is stated here with the analytic work itemized as labeled T3 sorrys.
+is stated here with the analytic work itemized as labeled T3 work items.
 
 Evidence ledger for `AdmitsClassifyingDirac smFactors`:
 - order-one: T3 PROVED (MartinettiRep.lean: order-one for the imposed smDirac
@@ -195,7 +195,7 @@ scaffold list `A` — the opaque hypothesis yields no usable data, and
 `filters_do_not_classify` already proves the algebra-side filters are
 insufficient. The honest dependency: `ccm_classification` closes when the
 Dirac kernel classification `cf_kernel_classification` (ThetLogos.CFKernel,
-Q3.1/Q3.2) is discharged. Until then the sorry is the labeled target.
+Q3.1/Q3.2) is discharged. Until then this remains a labeled T3 work item.
 -/
 
 /-- T4 axiom: unpacking `AdmitsClassifyingDirac`.
