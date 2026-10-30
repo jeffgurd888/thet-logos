@@ -18,6 +18,21 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — A2-2b: the plaquette block's reductions land;
+separate class invariance CLOSED.** Route B's telescoping
+continues (`ThetLogos.PlaqBlockReductions`): the block's
+full-stratum form equals its corner-integral form, column
+words are rotation-invariant under trace, the corner kernel's
+elementary symmetries are proved from its own integral
+representation, and Ψ is separately class-invariant in each
+argument by change of variables alone — the registered
+(P)(ii) conjuncts. Two items defer to A2-2d with their
+obstructions named (both-arguments inversion is integrated,
+not factorwise; corner rotation needs a rotated datum);
+neither is a kill and neither is assumed (dossier
+`whitepaper/a22b-landing-2026-10-30.md`). NO CLAIM; dials
+0/4.
+
 **2026-10-30 — the GD verdict is certified at both seats.**
 GD-PROBE-R-c (`ThetLogos.GramDominanceProbeSL23`) certifies
 Seat 2 and assembles the joint verdict
@@ -596,7 +611,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,508 theorem declarations**\*
-across 266 counted Lean modules, with whitepaper dossiers for every campaign.
+across 267 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
