@@ -6448,6 +6448,10942 @@ sign is asserted for any fiber or family sum. -/
 
 end Fiber7c
 
+
+/-! ## B7-2b-iv: the total decomposition at order 7
+
+This section (B7-2b-iv) sums the landed fiber accounting
+(B7-2b-i/ii/iii: the fibers over cards `1`–`7`, both
+B7-0 settlements, and the evaluated ADJ/OPP counts
+`kappa7adjPairCount_eq` / `kappa7oppPairCount_eq`, which
+evaluate the split `(3,2,1,1)` baselines to `8` and `4`
+per primitive quad) into the total decomposition of
+`kappa7dep`: dressings of `kappa4dep`, `kappa5dep` and
+`kappa6dep` with coefficients read off the fibers,
+plus the seven B7-2a channel excesses, plus the
+residual terms the accounting forces (named on the
+face of the closing identity, not hidden). The
+variable context is exactly B7-1's: general `(G, ρ)`
+in the β-line's section context (no irreducibility),
+the fiber evaluations carrying `Even N`, `3 ≤ N` and
+continuity of `g ↦ repMatrix ρ g`. NO CLAIM; parts of
+the Clay Yang–Mills statement closed by this section:
+0; dials 0/4; no sign is asserted for `kappa7dep` or
+for any excess or residual: the β⁷ general sign is
+FRONTIER.
+
+The engine pattern values of B7-2b-iii (cards `4` and
+`5`) are converted here by one generic step: a density
+pattern value is its fully-split baseline (a product
+of `densMomentValue`s) plus a sum, over the exponent
+choices whose support has card at least `4`, of the
+binomial coefficient times the excess of the
+generalized character moment over its factored value
+(on supports of card at most `3` the generalized
+moment factors, by
+`integral_colRe_prod_pow_card_le_three7`, so exactly
+the card-`≥ 4` choices survive). -/
+
+section Total7
+
+variable {G : Type*} [Group G] [MeasurableSpace G] [MeasurableInv G]
+  [TopologicalSpace G] [IsTopologicalGroup G] [BorelSpace G]
+  [SecondCountableTopology G] {d : ℕ}
+  (ρ : G →* ↥(Matrix.unitaryGroup (Fin d) ℂ)) {N : ℕ} [NeZero N]
+  (μG : Measure G) [IsProbabilityMeasure μG]
+  [μG.IsMulLeftInvariant] [μG.IsMulRightInvariant] [μG.IsInvInvariant]
+
+/-- `densMomentValue 0 = 1`: the empty binomial sum. -/
+theorem densMomentValue_zero : densMomentValue ρ μG 0 = 1 := by
+  unfold densMomentValue
+  simp [realMoment_zero]
+
+/-- **The generic pattern-value conversion.** A density
+pattern value (exponent function `k` supported on `C`)
+is its fully-split baseline `∏_{P ∈ C} A_{k P}` plus
+the sum, over exponent choices `j ≤ k` whose support
+inside `C` has card at least `4`, of the binomial
+coefficient times the excess of the generalized
+character moment `colReMomentPow C j` over its
+factored value `∏_{P ∈ C} μ_{j P}`. -/
+theorem patternValue_eq_baseline_add_top (hN : Even N)
+    (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (k : LayerColumn N → ℕ) (hk : ∀ P ∉ C, k P = 0) :
+    ∫ α : LayerSite N → G,
+        ∏ P ∈ C, (colDensC ρ u u' P α) ^ (k P)
+        ∂(Measure.pi fun _ : LayerSite N => μG)
+      = (∏ P ∈ C, densMomentValue ρ μG (k P))
+        + ∑ j ∈ (Fintype.piFinset
+              (fun P => Finset.range (k P + 1))).filter
+            (fun j => 4 ≤ (C.filter (fun P => j P ≠ 0)).card),
+          (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+              * (-(d : ℝ)⁻¹) ^ (j P))
+            * (colReMomentPow ρ μG C j u u'
+              - ∏ P ∈ C, realMoment ρ μG (j P)) := by
+  classical
+  have hsmall : ∀ j ∈ Fintype.piFinset
+        (fun P => Finset.range (k P + 1)),
+      (C.filter (fun P => j P ≠ 0)).card ≤ 3 →
+      colReMomentPow ρ μG C j u u'
+        = ∏ P ∈ C, realMoment ρ μG (j P) := by
+    intro j _ hcard
+    rw [colReMomentPow_support_reduce]
+    show colReMomentPow ρ μG (C.filter (fun Q => j Q ≠ 0)) j u u'
+      = ∏ P ∈ C, realMoment ρ μG (j P)
+    unfold colReMomentPow
+    rw [integral_colRe_prod_pow_card_le_three7 ρ μG hN hN3
+      hρcont u u' _ hcard j]
+    refine Finset.prod_subset (Finset.filter_subset _ C)
+      (fun P hPC hP => ?_)
+    have hjP : j P = 0 := by
+      by_contra hne
+      exact hP (Finset.mem_filter.mpr ⟨hPC, hne⟩)
+    rw [hjP, realMoment_zero]
+  have hsumF : ∑ j ∈ Fintype.piFinset
+        (fun P => Finset.range (k P + 1)),
+        (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+            * (-(d : ℝ)⁻¹) ^ (j P))
+          * ∏ P ∈ C, realMoment ρ μG (j P)
+      = ∏ P ∈ C, densMomentValue ρ μG (k P) := by
+    have hterm : ∀ j ∈ Fintype.piFinset
+          (fun P => Finset.range (k P + 1)),
+        (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+            * (-(d : ℝ)⁻¹) ^ (j P))
+          * ∏ P ∈ C, realMoment ρ μG (j P)
+        = ∏ P ∈ Finset.univ, (((k P).choose (j P) : ℝ)
+            * (-(d : ℝ)⁻¹) ^ (j P) * realMoment ρ μG (j P)) := by
+      intro j hj
+      have hj0 : ∀ P ∉ C, j P = 0 := by
+        intro P hP
+        have hmem := Fintype.mem_piFinset.mp hj P
+        rw [hk P hP] at hmem
+        have hlt : j P < 1 := Finset.mem_range.mp hmem
+        omega
+      have hpm : (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+            * (-(d : ℝ)⁻¹) ^ (j P))
+          * ∏ P ∈ C, realMoment ρ μG (j P)
+        = ∏ P ∈ C, (((k P).choose (j P) : ℝ)
+            * (-(d : ℝ)⁻¹) ^ (j P) * realMoment ρ μG (j P)) :=
+        Finset.prod_mul_distrib.symm
+      rw [hpm]
+      refine Finset.prod_subset (Finset.subset_univ C)
+        (fun P _ hP => ?_)
+      rw [hj0 P hP, hk P hP]
+      norm_num [realMoment_zero]
+    have hprod : (∏ P, densMomentValue ρ μG (k P))
+        = ∑ j ∈ Fintype.piFinset
+            (fun P => Finset.range (k P + 1)),
+          ∏ P, (((k P).choose (j P) : ℝ)
+            * (-(d : ℝ)⁻¹) ^ (j P) * realMoment ρ μG (j P)) :=
+      Finset.prod_univ_sum (fun P => Finset.range (k P + 1))
+        (fun P a => ((k P).choose a : ℝ) * (-(d : ℝ)⁻¹) ^ a
+          * realMoment ρ μG a)
+    rw [Finset.sum_congr rfl hterm, ← hprod]
+    refine (Finset.prod_subset (Finset.subset_univ C)
+      (fun P _ hP => ?_)).symm
+    rw [hk P hP, densMomentValue_zero]
+  rw [integral_colDens_prod_pow_eq_sum ρ μG hρcont u u' C k hk]
+  have hsplit : ∀ j ∈ Fintype.piFinset
+        (fun P => Finset.range (k P + 1)),
+      (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+          * (-(d : ℝ)⁻¹) ^ (j P))
+        * colReMomentPow ρ μG C j u u'
+      = (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+            * (-(d : ℝ)⁻¹) ^ (j P))
+          * ∏ P ∈ C, realMoment ρ μG (j P)
+        + (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+            * (-(d : ℝ)⁻¹) ^ (j P))
+          * (colReMomentPow ρ μG C j u u'
+            - ∏ P ∈ C, realMoment ρ μG (j P)) :=
+    fun j _ => by ring
+  rw [Finset.sum_congr rfl hsplit, Finset.sum_add_distrib, hsumF]
+  congr 1
+  rw [Finset.sum_filter]
+  refine Finset.sum_congr rfl fun j hj => ?_
+  by_cases htop : 4 ≤ (C.filter (fun P => j P ≠ 0)).card
+  · rw [if_pos htop]
+  · rw [if_neg htop, hsmall j hj (by omega), sub_self, mul_zero]
+
+/-- Generalized character moments depend only on the
+values of the exponent function on the support. -/
+theorem colReMomentPow_congr_on {C : Finset (LayerColumn N)}
+    {a b : LayerColumn N → ℕ} (h : ∀ P ∈ C, a P = b P)
+    (u u' : LayerLink N → G) :
+    colReMomentPow ρ μG C a u u'
+      = colReMomentPow ρ μG C b u u' := by
+  unfold colReMomentPow
+  refine integral_congr_ae
+    (Filter.Eventually.of_forall fun α => ?_)
+  exact Finset.prod_congr rfl fun P hP => by rw [h P hP]
+
+/-- The generalized moment at the `(2,1,…,1)` pattern
+on `C` is the doubled quad moment at `P` (any support
+size: the moment construction is support-size blind). -/
+theorem colReMomentPow_eq_doubledQuadReMoment
+    (C : Finset (LayerColumn N)) {P : LayerColumn N}
+    (hP : P ∈ C) (u u' : LayerLink N → G) :
+    colReMomentPow ρ μG C
+        (fun Q => if Q = P then 2 else 1) u u'
+      = doubledQuadReMoment ρ μG C P u u' := by
+  refine integral_congr_ae
+    (Filter.Eventually.of_forall fun α => ?_)
+  show ∏ Q ∈ C, (colRe ρ u u' Q α)
+      ^ (if Q = P then 2 else 1)
+    = (colRe ρ u u' P α) ^ 2
+      * ∏ Q ∈ C.erase P, colRe ρ u u' Q α
+  rw [← Finset.mul_prod_erase C
+    (fun Q => (colRe ρ u u' Q α) ^ (if Q = P then 2 else 1)) hP]
+  refine congrArg₂ _ ?_ ?_
+  · simp
+  · refine Finset.prod_congr rfl fun Q hQ => ?_
+    have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+    simp [hQP]
+
+/-- The generalized moment at the `(3,1,…,1)` pattern
+on `C` is the tripled quad moment at `P`. -/
+theorem colReMomentPow_eq_tripledQuadReMoment
+    (C : Finset (LayerColumn N)) {P : LayerColumn N}
+    (hP : P ∈ C) (u u' : LayerLink N → G) :
+    colReMomentPow ρ μG C
+        (fun Q => if Q = P then 3 else 1) u u'
+      = tripledQuadReMoment ρ μG C P u u' := by
+  refine integral_congr_ae
+    (Filter.Eventually.of_forall fun α => ?_)
+  show ∏ Q ∈ C, (colRe ρ u u' Q α)
+      ^ (if Q = P then 3 else 1)
+    = (colRe ρ u u' P α) ^ 3
+      * ∏ Q ∈ C.erase P, colRe ρ u u' Q α
+  rw [← Finset.mul_prod_erase C
+    (fun Q => (colRe ρ u u' Q α) ^ (if Q = P then 3 else 1)) hP]
+  refine congrArg₂ _ ?_ ?_
+  · simp
+  · refine Finset.prod_congr rfl fun Q hQ => ?_
+    have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+    simp [hQP]
+
+/-- The generalized moment at the `(2,2,1,…,1)` pattern
+on `C` is the doubled-doubled quad moment at `(P, Q)`. -/
+theorem colReMomentPow_eq_doubledDoubledQuadReMoment
+    (C : Finset (LayerColumn N)) {P Q : LayerColumn N}
+    (hP : P ∈ C) (hQ : Q ∈ C) (hQP : Q ≠ P)
+    (u u' : LayerLink N → G) :
+    colReMomentPow ρ μG C
+        (fun R => if R = P then 2 else if R = Q then 2 else 1)
+        u u'
+      = doubledDoubledQuadReMoment ρ μG C P Q u u' := by
+  have hQmem : Q ∈ C.erase P := Finset.mem_erase.mpr ⟨hQP, hQ⟩
+  refine integral_congr_ae
+    (Filter.Eventually.of_forall fun α => ?_)
+  show ∏ R ∈ C, (colRe ρ u u' R α)
+      ^ (if R = P then 2 else if R = Q then 2 else 1)
+    = (colRe ρ u u' P α) ^ 2 * (colRe ρ u u' Q α) ^ 2
+      * ∏ R ∈ (C.erase P).erase Q, colRe ρ u u' R α
+  rw [← Finset.mul_prod_erase C
+      (fun R => (colRe ρ u u' R α)
+        ^ (if R = P then 2 else if R = Q then 2 else 1)) hP,
+    ← Finset.mul_prod_erase (C.erase P)
+      (fun R => (colRe ρ u u' R α)
+        ^ (if R = P then 2 else if R = Q then 2 else 1)) hQmem,
+    mul_assoc]
+  have hP' : (colRe ρ u u' P α)
+        ^ (if P = P then 2 else if P = Q then 2 else 1)
+      = (colRe ρ u u' P α) ^ 2 := by simp
+  have hQ' : (colRe ρ u u' Q α)
+        ^ (if Q = P then 2 else if Q = Q then 2 else 1)
+      = (colRe ρ u u' Q α) ^ 2 := by simp [hQP]
+  have hR' : ∏ R ∈ (C.erase P).erase Q,
+        (colRe ρ u u' R α)
+          ^ (if R = P then 2 else if R = Q then 2 else 1)
+      = ∏ R ∈ (C.erase P).erase Q, colRe ρ u u' R α :=
+    Finset.prod_congr rfl fun R hR => by
+      have hRP : R ≠ P :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+      have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+      simp [hRP, hRQ]
+  rw [hP', hQ', hR']
+
+/-- The doubled hexa moment is the doubled penta
+moment: both are the same integral construction
+(support-size blind). -/
+theorem doubledHexaReMoment_eq_doubledPentaReMoment
+    (C : Finset (LayerColumn N)) (P : LayerColumn N)
+    (u u' : LayerLink N → G) :
+    doubledHexaReMoment ρ μG C P u u'
+      = doubledPentaReMoment ρ μG C P u u' :=
+  rfl
+
+
+/-- Sum over `Icc 1 2`, expanded. -/
+theorem sum_Icc_one_two (f : ℕ → ℝ) :
+    ∑ a ∈ Finset.Icc 1 2, f a = f 1 + f 2 := by
+  rw [show Finset.Icc 1 2 = {1, 2} from by decide,
+    Finset.sum_insert (by decide), Finset.sum_singleton]
+
+/-- Sum over `Icc 1 3`, expanded. -/
+theorem sum_Icc_one_three (f : ℕ → ℝ) :
+    ∑ a ∈ Finset.Icc 1 3, f a = f 1 + f 2 + f 3 := by
+  rw [show Finset.Icc 1 3 = {1, 2, 3} from by decide,
+    Finset.sum_insert (by decide), Finset.sum_insert (by decide),
+    Finset.sum_singleton]
+  ring
+
+/-- Sum over `Icc 1 4`, expanded. -/
+theorem sum_Icc_one_four (f : ℕ → ℝ) :
+    ∑ a ∈ Finset.Icc 1 4, f a = f 1 + f 2 + f 3 + f 4 := by
+  rw [show Finset.Icc 1 4 = {1, 2, 3, 4} from by decide,
+    Finset.sum_insert (by decide), Finset.sum_insert (by decide),
+    Finset.sum_insert (by decide), Finset.sum_singleton]
+  ring
+
+/-- **The `(4,1,1,1)` pattern value.** For a 4-support
+`C` and `P ∈ C`, the quadrupled pattern value is its
+baseline `A₄B³` plus the order-4 excess of `C` at
+weight `4·d⁻⁴`, the doubled excess at `P` at weight
+`−6·d⁻⁵`, the tripled excess at `P` at weight
+`4·d⁻⁶`, and the quadrupled excess at `P` at weight
+`−d⁻⁷` (a summand of B7-2a's `kappa7chan4111Excess`).
+By the generic conversion
+(`patternValue_eq_baseline_add_top`): the surviving
+exponent choices are `(a,1,1,1)`, `a = 1,2,3,4`, with
+binomial coefficients `4, 6, 4, 1` at weights
+`c^{a+3}`. -/
+theorem patternValue4111 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 4) (P : LayerColumn N) (hP : P ∈ C) :
+    ∫ α : LayerSite N → G,
+        ∏ Q ∈ C, (colDensC ρ u u' Q α)
+          ^ (quadrupledQuadPattern7 C P Q)
+        ∂(Measure.pi fun _ : LayerSite N => μG)
+      = densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3
+        + 4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3) := by
+  classical
+  have hk0 : ∀ Q ∉ C, quadrupledQuadPattern7 C P Q = 0 := by
+    intro Q hQ
+    have hQP : Q ≠ P := fun h => hQ (h ▸ hP)
+    simp [quadrupledQuadPattern7, hQP, hQ]
+  rw [patternValue_eq_baseline_add_top ρ μG hN hN3 hρcont u u'
+    C _ hk0]
+  -- the baseline product
+  have hbase : (∏ Q ∈ C, densMomentValue ρ μG
+        (quadrupledQuadPattern7 C P Q))
+      = densMomentValue ρ μG 4
+        * (1 - e1 ρ μG / (d : ℝ)) ^ 3 := by
+    rw [← Finset.mul_prod_erase C _ hP]
+    have hPP : quadrupledQuadPattern7 C P P = 4 := by
+      simp [quadrupledQuadPattern7]
+    have hrest : ∀ Q ∈ C.erase P,
+        densMomentValue ρ μG (quadrupledQuadPattern7 C P Q)
+          = 1 - e1 ρ μG / (d : ℝ) := by
+      intro Q hQ
+      have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+      have hQC : Q ∈ C := (Finset.mem_erase.mp hQ).2
+      have hval : quadrupledQuadPattern7 C P Q = 1 := by
+        simp [quadrupledQuadPattern7, hQP, hQC]
+      rw [hval]
+      exact densMomentValue_one ρ μG
+    rw [hPP, Finset.prod_congr rfl hrest, Finset.prod_const,
+      Finset.card_erase_of_mem hP, hC,
+      show (4 - 1 : ℕ) = 3 from rfl]
+  rw [hbase]
+  -- the top sum, evaluated by the bijection `a ↦ (a,1,1,1)`
+  set g : ℕ → LayerColumn N → ℕ :=
+    fun a Q => if Q = P then a else if Q ∈ C then 1 else 0
+    with hg
+  have hmem : ∀ a ∈ Finset.Icc 1 4, g a
+      ∈ (Fintype.piFinset (fun Q => Finset.range
+          (quadrupledQuadPattern7 C P Q + 1))).filter
+        (fun j => 4 ≤ (C.filter (fun Q => j Q ≠ 0)).card) := by
+    intro a ha
+    have ha14 : 1 ≤ a ∧ a ≤ 4 := Finset.mem_Icc.mp ha
+    rw [Finset.mem_filter, Fintype.mem_piFinset]
+    constructor
+    · intro Q
+      rw [Finset.mem_range]
+      by_cases hQP : Q = P
+      · rw [hQP]
+        have hpat : quadrupledQuadPattern7 C P P = 4 := by
+          simp [quadrupledQuadPattern7]
+        rw [hpat]
+        show g a P < 4 + 1
+        simp only [hg, if_true]
+        omega
+      · by_cases hQC : Q ∈ C
+        · have hpat : quadrupledQuadPattern7 C P Q = 1 := by
+            simp [quadrupledQuadPattern7, hQP, hQC]
+          rw [hpat]
+          show g a Q < 1 + 1
+          simp only [hg, hQP, hQC, if_false, if_true]
+          omega
+        · have hpat : quadrupledQuadPattern7 C P Q = 0 :=
+            hk0 Q hQC
+          rw [hpat]
+          show g a Q < 0 + 1
+          simp only [hg, hQP, hQC, if_false, if_true]
+          omega
+    · have hfilt : C.filter (fun Q => g a Q ≠ 0) = C := by
+        refine Finset.filter_true_of_mem fun Q hQC => ?_
+        by_cases hQP : Q = P
+        · rw [hQP]
+          simp only [hg, if_true]
+          omega
+        · simp only [hg, hQP, hQC, if_false, if_true]
+          norm_num
+      rw [hfilt, hC]
+  have hinj : ∀ a₁ ∈ Finset.Icc 1 4, ∀ a₂ ∈ Finset.Icc 1 4,
+      g a₁ = g a₂ → a₁ = a₂ := by
+    intro a₁ _ a₂ _ h
+    have h1 : g a₁ P = a₁ := by simp only [hg, if_true]
+    have h2 : g a₂ P = a₂ := by simp only [hg, if_true]
+    rw [← h1, ← h2, h]
+  have hsurj : ∀ j ∈ (Fintype.piFinset (fun Q => Finset.range
+          (quadrupledQuadPattern7 C P Q + 1))).filter
+        (fun j => 4 ≤ (C.filter (fun Q => j Q ≠ 0)).card),
+      ∃ a, ∃ _ : a ∈ Finset.Icc 1 4, g a = j := by
+    intro j hj
+    rw [Finset.mem_filter, Fintype.mem_piFinset] at hj
+    obtain ⟨hjpi, hjcard⟩ := hj
+    have hsub : C.filter (fun Q => j Q ≠ 0) ⊆ C :=
+      Finset.filter_subset _ _
+    have hcardle : (C.filter (fun Q => j Q ≠ 0)).card ≤ 4 := by
+      rw [← hC]
+      exact Finset.card_le_card hsub
+    have hfiltereq : C.filter (fun Q => j Q ≠ 0) = C :=
+      Finset.eq_of_subset_of_card_le hsub (by omega)
+    have hjne : ∀ Q ∈ C, j Q ≠ 0 := by
+      intro Q hQC
+      have : Q ∈ C.filter (fun Q => j Q ≠ 0) := by
+        rw [hfiltereq]; exact hQC
+      exact (Finset.mem_filter.mp this).2
+    have hjP : j P ∈ Finset.Icc 1 4 := by
+      rw [Finset.mem_Icc]
+      have hlt := hjpi P
+      rw [Finset.mem_range] at hlt
+      have hpat : quadrupledQuadPattern7 C P P = 4 := by
+        simp [quadrupledQuadPattern7]
+      rw [hpat] at hlt
+      exact ⟨Nat.pos_of_ne_zero (hjne P hP), by omega⟩
+    refine ⟨j P, hjP, ?_⟩
+    funext Q
+    by_cases hQP : Q = P
+    · rw [hQP]
+      simp only [hg, if_true]
+    · by_cases hQC : Q ∈ C
+      · have hlt := hjpi Q
+        rw [Finset.mem_range] at hlt
+        have hpat : quadrupledQuadPattern7 C P Q = 1 := by
+          simp [quadrupledQuadPattern7, hQP, hQC]
+        rw [hpat] at hlt
+        have hjQ : j Q = 1 := by
+          have hne := hjne Q hQC
+          omega
+        simp only [hg, hQP, hQC, if_false, if_true, hjQ]
+      · have hlt := hjpi Q
+        rw [Finset.mem_range] at hlt
+        have hpat : quadrupledQuadPattern7 C P Q = 0 := hk0 Q hQC
+        rw [hpat] at hlt
+        have hjQ : j Q = 0 := by omega
+        simp only [hg, hQP, hQC, if_false, if_true, hjQ]
+  have htop : (∑ j ∈ (Fintype.piFinset (fun Q => Finset.range
+          (quadrupledQuadPattern7 C P Q + 1))).filter
+        (fun j => 4 ≤ (C.filter (fun Q => j Q ≠ 0)).card),
+      (∏ Q ∈ C, ((quadrupledQuadPattern7 C P Q).choose
+          (j Q) : ℝ) * (-(d : ℝ)⁻¹) ^ (j Q))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ Q ∈ C, realMoment ρ μG (j Q)))
+    = ∑ a ∈ Finset.Icc 1 4,
+      (∏ Q ∈ C, ((quadrupledQuadPattern7 C P Q).choose
+          (g a Q) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a Q))
+        * (colReMomentPow ρ μG C (g a) u u'
+          - ∏ Q ∈ C, realMoment ρ μG (g a Q)) :=
+    (Finset.sum_bij (fun a _ => g a) hmem hinj hsurj
+      (fun a _ => rfl)).symm
+  rw [htop, sum_Icc_one_four]
+  -- evaluate the four terms
+  have hcoeff : ∀ a : ℕ, ∀ ha : a ≤ 4,
+      (∏ Q ∈ C, ((quadrupledQuadPattern7 C P Q).choose
+          (g a Q) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a Q))
+        = ((Nat.choose 4 a : ℝ)) * (-(d : ℝ)⁻¹) ^ (a + 3) := by
+    intro a _
+    rw [← Finset.mul_prod_erase C _ hP]
+    have hPP : (quadrupledQuadPattern7 C P P).choose (g a P)
+          * (-(d : ℝ)⁻¹) ^ (g a P)
+        = ((Nat.choose 4 a : ℝ)) * (-(d : ℝ)⁻¹) ^ a := by
+      have hpat : quadrupledQuadPattern7 C P P = 4 := by
+        simp [quadrupledQuadPattern7]
+      have hgP : g a P = a := by simp only [hg, if_true]
+      rw [hpat, hgP]
+    have hrest : ∀ Q ∈ C.erase P,
+        ((quadrupledQuadPattern7 C P Q).choose (g a Q) : ℝ)
+          * (-(d : ℝ)⁻¹) ^ (g a Q) = (-(d : ℝ)⁻¹) := by
+      intro Q hQ
+      have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+      have hQC : Q ∈ C := (Finset.mem_erase.mp hQ).2
+      have hpat : quadrupledQuadPattern7 C P Q = 1 := by
+        simp [quadrupledQuadPattern7, hQP, hQC]
+      have hgQ : g a Q = 1 := by
+        simp only [hg, hQP, hQC, if_false, if_true]
+      rw [hpat, hgQ]
+      norm_num
+    rw [hPP, Finset.prod_congr rfl hrest, Finset.prod_const,
+      Finset.card_erase_of_mem hP, hC,
+      show (4 - 1 : ℕ) = 3 from rfl, mul_assoc, ← pow_add]
+  have hF : ∀ a : ℕ,
+      ∏ Q ∈ C, realMoment ρ μG (g a Q)
+        = realMoment ρ μG a * (e1 ρ μG) ^ 3 := by
+    intro a
+    rw [← Finset.mul_prod_erase C _ hP]
+    have hgP : g a P = a := by simp only [hg, if_true]
+    have hrest : ∀ Q ∈ C.erase P, realMoment ρ μG (g a Q)
+        = e1 ρ μG := by
+      intro Q hQ
+      have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+      have hQC : Q ∈ C := (Finset.mem_erase.mp hQ).2
+      have hgQ : g a Q = 1 := by
+        simp only [hg, hQP, hQC, if_false, if_true]
+      rw [hgQ, realMoment_one]
+    rw [hgP, Finset.prod_congr rfl hrest, Finset.prod_const,
+      Finset.card_erase_of_mem hP, hC,
+      show (4 - 1 : ℕ) = 3 from rfl]
+  have hM1 : colReMomentPow ρ μG C (g 1) u u'
+      = quadReMoment ρ μG C u u' := by
+    have hcong : ∀ Q ∈ C, g 1 Q = (fun _ => 1) Q := by
+      intro Q hQC
+      by_cases hQP : Q = P
+      · rw [hQP]
+        simp only [hg, if_true]
+      · simp only [hg, hQP, hQC, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_one]
+  have hM2 : colReMomentPow ρ μG C (g 2) u u'
+      = doubledQuadReMoment ρ μG C P u u' := by
+    have hcong : ∀ Q ∈ C, g 2 Q
+        = (fun Q => if Q = P then 2 else 1) Q := by
+      intro Q hQC
+      by_cases hQP : Q = P
+      · rw [hQP]
+        simp only [hg, if_true]
+      · simp only [hg, hQP, hQC, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_doubledQuadReMoment ρ μG C hP u u']
+  have hM3 : colReMomentPow ρ μG C (g 3) u u'
+      = tripledQuadReMoment ρ μG C P u u' := by
+    have hcong : ∀ Q ∈ C, g 3 Q
+        = (fun Q => if Q = P then 3 else 1) Q := by
+      intro Q hQC
+      by_cases hQP : Q = P
+      · rw [hQP]
+        simp only [hg, if_true]
+      · simp only [hg, hQP, hQC, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_tripledQuadReMoment ρ μG C hP u u']
+  have hM4 : colReMomentPow ρ μG C (g 4) u u'
+      = quadrupledQuadReMoment ρ μG C P u u' := by
+    have hcong : ∀ Q ∈ C, g 4 Q
+        = quadrupledQuadPattern7 C P Q := by
+      intro Q hQC
+      by_cases hQP : Q = P
+      · rw [hQP]
+        simp only [hg, quadrupledQuadPattern7, if_true]
+      · simp only [hg, quadrupledQuadPattern7, hQP, hQC,
+          if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_quadrupledQuadPattern7 ρ μG C hP u u']
+  rw [hcoeff 1 (by norm_num), hcoeff 2 (by norm_num),
+    hcoeff 3 (by norm_num), hcoeff 4 (by norm_num),
+    hF 1, hF 2, hF 3, hF 4, hM1, hM2, hM3, hM4]
+  norm_num [Nat.choose, realMoment_one]
+  ring
+
+/-- **Top-sum split at card 5.** The order-7 top sum
+(support at least `4` inside a 5-support `C`) splits
+into the full-support part and, for each erased column
+`x`, the part supported exactly on `C.erase x`. -/
+theorem topSum_card5_split (k : LayerColumn N → ℕ)
+    (C : Finset (LayerColumn N)) (hC : C.card = 5)
+    (u u' : LayerLink N → G) :
+    (∑ j ∈ (Fintype.piFinset
+        (fun P => Finset.range (k P + 1))).filter
+        (fun j => 4 ≤ (C.filter (fun P => j P ≠ 0)).card),
+      (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+          * (-(d : ℝ)⁻¹) ^ (j P))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ P ∈ C, realMoment ρ μG (j P)))
+    = (∑ j ∈ (Fintype.piFinset
+          (fun P => Finset.range (k P + 1))).filter
+        (fun j => (C.filter (fun P => j P ≠ 0)) = C),
+      (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+          * (-(d : ℝ)⁻¹) ^ (j P))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ P ∈ C, realMoment ρ μG (j P)))
+    + ∑ x ∈ C, ∑ j ∈ (Fintype.piFinset
+          (fun P => Finset.range (k P + 1))).filter
+        (fun j => j x = 0
+          ∧ (C.erase x).filter (fun P => j P ≠ 0) = C.erase x),
+      (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+          * (-(d : ℝ)⁻¹) ^ (j P))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ P ∈ C, realMoment ρ μG (j P)) := by
+  classical
+  -- a piece's support is exactly the erased support
+  have hsupp_of_piece : ∀ (j : LayerColumn N → ℕ)
+      (x : LayerColumn N), j x = 0 →
+      (C.erase x).filter (fun P => j P ≠ 0) = C.erase x →
+      C.filter (fun P => j P ≠ 0) = C.erase x := by
+    intro j x hjx0 hfx
+    apply Finset.Subset.antisymm
+    · intro y hy
+      rw [Finset.mem_filter] at hy
+      exact Finset.mem_erase.mpr
+        ⟨fun hyx => (hyx ▸ hy.2) hjx0, hy.1⟩
+    · intro y hy
+      have hy2 : y ∈ (C.erase x).filter (fun P => j P ≠ 0) := by
+        rw [hfx]; exact hy
+      rw [Finset.mem_filter] at hy2
+      exact Finset.mem_filter.mpr
+        ⟨(Finset.mem_erase.mp hy2.1).2, hy2.2⟩
+  have hdisjBx : ∀ x ∈ C, ∀ y ∈ C, x ≠ y →
+      Disjoint ((Fintype.piFinset
+          (fun P => Finset.range (k P + 1))).filter
+        (fun j => j x = 0
+          ∧ (C.erase x).filter (fun P => j P ≠ 0) = C.erase x))
+        ((Fintype.piFinset
+          (fun P => Finset.range (k P + 1))).filter
+        (fun j => j y = 0
+          ∧ (C.erase y).filter (fun P => j P ≠ 0) = C.erase y)) := by
+    intro x hxC y hyC hxy
+    rw [Finset.disjoint_left]
+    intro j hjx hjy
+    rw [Finset.mem_filter] at hjx hjy
+    have hEq : C.erase x = C.erase y :=
+      (hsupp_of_piece j x hjx.2.1 hjx.2.2).symm.trans
+        (hsupp_of_piece j y hjy.2.1 hjy.2.2)
+    have hxmem : x ∈ C.erase y :=
+      Finset.mem_erase.mpr ⟨hxy, hxC⟩
+    rw [← hEq] at hxmem
+    exact (Finset.mem_erase.mp hxmem).1 rfl
+  have hdisjB : Disjoint ((Fintype.piFinset
+          (fun P => Finset.range (k P + 1))).filter
+        (fun j => (C.filter (fun P => j P ≠ 0)) = C))
+      (C.biUnion (fun x => (Fintype.piFinset
+          (fun P => Finset.range (k P + 1))).filter
+        (fun j => j x = 0
+          ∧ (C.erase x).filter (fun P => j P ≠ 0)
+            = C.erase x))) := by
+    rw [Finset.disjoint_left]
+    intro j hjB hjU
+    rw [Finset.mem_filter] at hjB
+    rw [Finset.mem_biUnion] at hjU
+    obtain ⟨x, hxC, hjx⟩ := hjU
+    rw [Finset.mem_filter] at hjx
+    have hxmem : x ∈ C.filter (fun P => j P ≠ 0) := by
+      rw [hjB.2]; exact hxC
+    rw [Finset.mem_filter] at hxmem
+    exact hxmem.2 hjx.2.1
+  have hEq : (Fintype.piFinset
+        (fun P => Finset.range (k P + 1))).filter
+        (fun j => 4 ≤ (C.filter (fun P => j P ≠ 0)).card)
+      = ((Fintype.piFinset
+          (fun P => Finset.range (k P + 1))).filter
+        (fun j => (C.filter (fun P => j P ≠ 0)) = C))
+        ∪ (C.biUnion (fun x => (Fintype.piFinset
+          (fun P => Finset.range (k P + 1))).filter
+        (fun j => j x = 0
+          ∧ (C.erase x).filter (fun P => j P ≠ 0)
+            = C.erase x))) := by
+    ext j
+    simp only [Finset.mem_filter, Finset.mem_union,
+      Finset.mem_biUnion]
+    constructor
+    · intro hj
+      obtain ⟨hjS, hjcard⟩ := hj
+      by_cases hfull : (C.filter (fun P => j P ≠ 0)) = C
+      · exact Or.inl ⟨hjS, hfull⟩
+      · right
+        have hsub : C.filter (fun P => j P ≠ 0) ⊆ C :=
+          Finset.filter_subset _ _
+        have hcardle : (C.filter (fun P => j P ≠ 0)).card ≤ 5 := by
+          rw [← hC]; exact Finset.card_le_card hsub
+        have hcard4 : (C.filter (fun P => j P ≠ 0)).card = 4 := by
+          by_contra hne
+          have h5 : (C.filter (fun P => j P ≠ 0)).card = 5 := by
+            omega
+          exact hfull (Finset.eq_of_subset_of_card_le hsub
+            (by omega))
+        have hneC : ¬ C ⊆ C.filter (fun P => j P ≠ 0) := by
+          intro hsubC
+          exact hfull (Finset.Subset.antisymm hsub hsubC)
+        obtain ⟨x, hxC, hxnot⟩ := Finset.not_subset.mp hneC
+        have hjx0 : j x = 0 := by
+          by_contra hne
+          exact hxnot (Finset.mem_filter.mpr ⟨hxC, hne⟩)
+        have hce : (C.erase x).card = 4 := by
+          rw [Finset.card_erase_of_mem hxC, hC]
+        have hsupp : C.filter (fun P => j P ≠ 0) = C.erase x := by
+          apply Finset.eq_of_subset_of_card_le _ _
+          · intro y hy
+            rw [Finset.mem_filter] at hy
+            exact Finset.mem_erase.mpr
+              ⟨fun hyx => (hyx ▸ hy.2) hjx0, hy.1⟩
+          · omega
+        have hfx : (C.erase x).filter (fun P => j P ≠ 0)
+            = C.erase x := by
+          ext y
+          simp only [Finset.mem_filter, Finset.mem_erase]
+          constructor
+          · intro hy; exact ⟨hy.1.1, hy.1.2⟩
+          · intro hy
+            have hymem : y ∈ C.filter (fun P => j P ≠ 0) := by
+              rw [hsupp]; exact Finset.mem_erase.mpr ⟨hy.1, hy.2⟩
+            exact ⟨⟨hy.1, hy.2⟩,
+              (Finset.mem_filter.mp hymem).2⟩
+        exact ⟨x, hxC, hjS, hjx0, hfx⟩
+    · intro hj
+      rcases hj with ⟨hjS, hfull⟩ | ⟨x, hxC, hjS, hjx0, hfx⟩
+      · refine ⟨hjS, ?_⟩
+        have hfc : (C.filter (fun P => j P ≠ 0)).card = 5 := by
+          rw [hfull, hC]
+        omega
+      · refine ⟨hjS, ?_⟩
+        have hsupp := hsupp_of_piece j x hjx0 hfx
+        have hce : (C.erase x).card = 4 := by
+          rw [Finset.card_erase_of_mem hxC, hC]
+        rw [hsupp]; omega
+  rw [hEq, Finset.sum_union hdisjB, Finset.sum_biUnion hdisjBx]
+
+/-- **Piece-to-erased conversion.** A split piece at `x`
+is the generic top sum over the erased support for the
+pattern zeroed at `x`: same sum, summand rewritten over
+`C.erase x` (the `x` factors are `1`, and the moment
+reduces by support). -/
+theorem pieceSum_eq_topSum_erase (k : LayerColumn N → ℕ)
+    (C : Finset (LayerColumn N)) (hC : C.card = 5)
+    {x : LayerColumn N} (hx : x ∈ C) (u u' : LayerLink N → G) :
+    (∑ j ∈ (Fintype.piFinset
+        (fun P => Finset.range (k P + 1))).filter
+        (fun j => j x = 0
+          ∧ (C.erase x).filter (fun P => j P ≠ 0) = C.erase x),
+      (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+          * (-(d : ℝ)⁻¹) ^ (j P))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ P ∈ C, realMoment ρ μG (j P)))
+    = ∑ j ∈ (Fintype.piFinset (fun P => Finset.range
+          ((fun Q => if Q = x then 0 else k Q) P + 1))).filter
+        (fun j => 4 ≤ ((C.erase x).filter
+          (fun P => j P ≠ 0)).card),
+      (∏ P ∈ C.erase x, (((fun Q => if Q = x then 0 else k Q) P).choose
+            (j P) : ℝ) * (-(d : ℝ)⁻¹) ^ (j P))
+        * (colReMomentPow ρ μG (C.erase x) j u u'
+          - ∏ P ∈ C.erase x, realMoment ρ μG (j P)) := by
+  classical
+  have hCx : (C.erase x).card = 4 := by
+    rw [Finset.card_erase_of_mem hx, hC]
+  have hsupp : ∀ j : LayerColumn N → ℕ, j x = 0 →
+      (C.erase x).filter (fun P => j P ≠ 0) = C.erase x →
+      C.filter (fun P => j P ≠ 0) = C.erase x := by
+    intro j hjx0 hfx
+    apply Finset.Subset.antisymm
+    · intro y hy
+      rw [Finset.mem_filter] at hy
+      exact Finset.mem_erase.mpr
+        ⟨fun hyx => (hyx ▸ hy.2) hjx0, hy.1⟩
+    · intro y hy
+      have hy2 : y ∈ (C.erase x).filter (fun P => j P ≠ 0) := by
+        rw [hfx]; exact hy
+      rw [Finset.mem_filter] at hy2
+      exact Finset.mem_filter.mpr
+        ⟨(Finset.mem_erase.mp hy2.1).2, hy2.2⟩
+  refine Finset.sum_bij (fun j _ => j) ?_ ?_ ?_ ?_
+  · intro j hj
+    rw [Finset.mem_filter, Fintype.mem_piFinset] at hj ⊢
+    obtain ⟨hjpi, hjx0, hfx⟩ := hj
+    constructor
+    · intro P
+      have hlt := hjpi P
+      rw [Finset.mem_range] at hlt ⊢
+      by_cases hPx : P = x
+      · subst hPx; rw [hjx0]; simp
+      · have hkx : (fun Q => if Q = x then 0 else k Q) P = k P := by
+          simp only [if_neg hPx]
+        rw [hkx]; exact hlt
+    · rw [hfx, hCx]
+  · intro j₁ _ j₂ _ h; exact h
+  · intro j hj
+    rw [Finset.mem_filter, Fintype.mem_piFinset] at hj
+    obtain ⟨hjpi, hjcard⟩ := hj
+    have hjx0 : j x = 0 := by
+      have hmem := hjpi x
+      rw [Finset.mem_range] at hmem
+      have hx0 : (fun Q => if Q = x then 0 else k Q) x = 0 := by
+        simp
+      rw [hx0] at hmem; omega
+    have hfx : (C.erase x).filter (fun P => j P ≠ 0)
+        = C.erase x := by
+      apply Finset.eq_of_subset_of_card_le _ _
+      · exact Finset.filter_subset _ _
+      · rw [hCx]; exact hjcard
+    refine ⟨j, ?_, rfl⟩
+    rw [Finset.mem_filter, Fintype.mem_piFinset]
+    refine ⟨?_, hjx0, hfx⟩
+    intro P
+    have hlt := hjpi P
+    rw [Finset.mem_range] at hlt ⊢
+    have hle : (fun Q => if Q = x then 0 else k Q) P ≤ k P := by
+      by_cases hPx : P = x <;> simp [hPx]
+    omega
+  · intro j hj
+    rw [Finset.mem_filter] at hj
+    obtain ⟨hjpi, hjx0, hfx⟩ := hj
+    have hsuppj := hsupp j hjx0 hfx
+    have hkP : ∀ P ∈ C.erase x,
+        (fun Q => if Q = x then 0 else k Q) P = k P := by
+      intro P hP
+      simp only [if_neg (Finset.mem_erase.mp hP).1]
+    have hcoef : (∏ P ∈ C, ((k P).choose (j P) : ℝ)
+          * (-(d : ℝ)⁻¹) ^ (j P))
+        = ∏ P ∈ C.erase x, (((fun Q => if Q = x then 0
+              else k Q) P).choose (j P) : ℝ)
+          * (-(d : ℝ)⁻¹) ^ (j P) := by
+      rw [← Finset.mul_prod_erase C _ hx]
+      have hfx0 : ((k x).choose (j x) : ℝ)
+            * (-(d : ℝ)⁻¹) ^ (j x) = 1 := by
+        rw [hjx0]; simp
+      rw [hfx0, one_mul]
+      exact Finset.prod_congr rfl fun P hP => by rw [hkP P hP]
+    have hF : (∏ P ∈ C, realMoment ρ μG (j P))
+        = ∏ P ∈ C.erase x, realMoment ρ μG (j P) := by
+      rw [← Finset.mul_prod_erase C _ hx, hjx0,
+        realMoment_zero, one_mul]
+    have hM : colReMomentPow ρ μG C j u u'
+        = colReMomentPow ρ μG (C.erase x) j u u' := by
+      rw [colReMomentPow_support_reduce, hsuppj]
+    rw [hcoef, hF, hM]
+
+/-- On a 4-support, the generic top filter (support
+card at least `4`) is the full-support filter. -/
+theorem topFilter_card4_eq (k : LayerColumn N → ℕ)
+    (C : Finset (LayerColumn N)) (hC : C.card = 4) :
+    (Fintype.piFinset (fun P => Finset.range (k P + 1))).filter
+        (fun j => 4 ≤ (C.filter (fun P => j P ≠ 0)).card)
+    = (Fintype.piFinset (fun P => Finset.range (k P + 1))).filter
+        (fun j => (C.filter (fun P => j P ≠ 0)) = C) := by
+  ext j
+  simp only [Finset.mem_filter]
+  constructor
+  · intro hj
+    refine ⟨hj.1, Finset.eq_of_subset_of_card_le
+      (Finset.filter_subset _ _) ?_⟩
+    rw [hC]; exact hj.2
+  · intro hj
+    refine ⟨hj.1, ?_⟩
+    have hfc : (C.filter (fun P => j P ≠ 0)).card = 4 := by
+      rw [hj.2, hC]
+    omega
+
+/-- **The `(3,2,1,1)` pattern value on a 4-support.**
+Baseline `A₃A₂B²` plus the six full-support excesses:
+quad at `6·d⁻⁴`, doubled at `P` at `−6·d⁻⁵`, doubled
+at `Q` at `−3·d⁻⁵`, tripled at `P` at `2·d⁻⁶`,
+doubled-doubled at `3·d⁻⁶`, tripled-doubled at
+`−d⁻⁷`. -/
+theorem patternValue3211_card4 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 4) (P Q : LayerColumn N) (hP : P ∈ C)
+    (hQ : Q ∈ C) (hPQ : P ≠ Q) :
+    ∫ α : LayerSite N → G,
+        ∏ R ∈ C, (colDensC ρ u u' R α)
+          ^ (tripledDoubledQuadPattern7 C P Q R)
+        ∂(Measure.pi fun _ : LayerSite N => μG)
+      = densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2
+        + 6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2) := by
+  classical
+  have hk0 : ∀ R ∉ C, tripledDoubledQuadPattern7 C P Q R = 0 := by
+    intro R hR
+    have hRP : R ≠ P := fun h => hR (h ▸ hP)
+    have hRQ : R ≠ Q := fun h => hR (h ▸ hQ)
+    simp [tripledDoubledQuadPattern7, hRP, hRQ, hR]
+  have hQ' : Q ∈ C.erase P :=
+    Finset.mem_erase.mpr ⟨Ne.symm hPQ, hQ⟩
+  have hbase : ∏ R ∈ C, densMomentValue ρ μG
+        (tripledDoubledQuadPattern7 C P Q R)
+      = densMomentValue ρ μG 3 * (densMomentValue ρ μG 2
+        * (1 - e1 ρ μG / (d : ℝ)) ^ 2) := by
+    rw [← Finset.mul_prod_erase C _ hP,
+      ← Finset.mul_prod_erase (C.erase P) _ hQ']
+    have hPP : densMomentValue ρ μG
+          (tripledDoubledQuadPattern7 C P Q P)
+        = densMomentValue ρ μG 3 := by
+      congr 1; simp [tripledDoubledQuadPattern7]
+    have hQQ : densMomentValue ρ μG
+          (tripledDoubledQuadPattern7 C P Q Q)
+        = densMomentValue ρ μG 2 := by
+      congr 1; simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+    have hrest : ∀ R ∈ (C.erase P).erase Q,
+        densMomentValue ρ μG (tripledDoubledQuadPattern7 C P Q R)
+          = 1 - e1 ρ μG / (d : ℝ) := by
+      intro R hR
+      have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+      have hRP : R ≠ P :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+      have hRC : R ∈ C :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+      have hpat : tripledDoubledQuadPattern7 C P Q R = 1 := by
+        simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+      rw [hpat, densMomentValue_one]
+    rw [hPP, hQQ, Finset.prod_congr rfl hrest, Finset.prod_const,
+      Finset.card_erase_of_mem hQ', Finset.card_erase_of_mem hP, hC,
+      show ((4 - 1) - 1 : ℕ) = 2 from rfl]
+  rw [patternValue_eq_baseline_add_top ρ μG hN hN3 hρcont u u' C _
+    hk0, hbase, topFilter_card4_eq _ C hC]
+  -- the full-support top sum, bijected to `Icc 1 3 ×ˢ Icc 1 2`
+  set g : ℕ → ℕ → LayerColumn N → ℕ := fun a b R =>
+    if R = P then a else if R = Q then b
+    else if R ∈ C then 1 else 0 with hg
+  have hmem : ∀ p ∈ Finset.Icc 1 3 ×ˢ Finset.Icc 1 2,
+      g p.1 p.2 ∈ (Fintype.piFinset (fun R => Finset.range
+          (tripledDoubledQuadPattern7 C P Q R + 1))).filter
+        (fun j => (C.filter (fun R => j R ≠ 0)) = C) := by
+    intro p hp
+    obtain ⟨ha, hb⟩ := Finset.mem_product.mp hp
+    obtain ⟨ha1, ha3⟩ := Finset.mem_Icc.mp ha
+    obtain ⟨hb1, hb2⟩ := Finset.mem_Icc.mp hb
+    show g p.1 p.2 ∈ _
+    rw [Finset.mem_filter, Fintype.mem_piFinset]
+    constructor
+    · intro R
+      rw [Finset.mem_range]
+      by_cases hRP : R = P
+      · rw [hRP]
+        have hpat : tripledDoubledQuadPattern7 C P Q P = 3 := by
+          simp [tripledDoubledQuadPattern7]
+        rw [hpat]
+        show g p.1 p.2 P < 3 + 1
+        simp only [hg, if_true]
+        omega
+      · by_cases hRQ : R = Q
+        · rw [hRQ]
+          have hpat : tripledDoubledQuadPattern7 C P Q Q = 2 := by
+            simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+          rw [hpat]
+          show g p.1 p.2 Q < 2 + 1
+          simp only [hg, Ne.symm hPQ, if_false, if_true]
+          omega
+        · by_cases hRC : R ∈ C
+          · have hpat : tripledDoubledQuadPattern7 C P Q R = 1 := by
+              simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+            rw [hpat]
+            show g p.1 p.2 R < 1 + 1
+            simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+            omega
+          · have hpat : tripledDoubledQuadPattern7 C P Q R = 0 :=
+              hk0 R hRC
+            rw [hpat]
+            show g p.1 p.2 R < 0 + 1
+            simp only [hg, hRP, hRQ, hRC, if_false]
+            omega
+    · have hfilt : C.filter (fun R => g p.1 p.2 R ≠ 0) = C := by
+        refine Finset.filter_true_of_mem fun R hRC => ?_
+        by_cases hRP : R = P
+        · rw [hRP]; simp only [hg, if_true]; omega
+        · by_cases hRQ : R = Q
+          · rw [hRQ]
+            simp only [hg, Ne.symm hPQ, if_false, if_true]; omega
+          · simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+            norm_num
+      rw [hfilt]
+  have hinj : ∀ p₁ ∈ Finset.Icc 1 3 ×ˢ Finset.Icc 1 2,
+      ∀ p₂ ∈ Finset.Icc 1 3 ×ˢ Finset.Icc 1 2,
+      g p₁.1 p₁.2 = g p₂.1 p₂.2 → p₁ = p₂ := by
+    intro ⟨a₁, b₁⟩ _ ⟨a₂, b₂⟩ _ h
+    have ha : a₁ = a₂ := by
+      have hP := congrFun h P
+      simp only [hg, if_true] at hP
+      exact hP
+    have hb : b₁ = b₂ := by
+      have hQ := congrFun h Q
+      simp only [hg, Ne.symm hPQ, if_false, if_true] at hQ
+      exact hQ
+    rw [ha, hb]
+  have hsurj : ∀ j ∈ (Fintype.piFinset (fun R => Finset.range
+          (tripledDoubledQuadPattern7 C P Q R + 1))).filter
+        (fun j => (C.filter (fun R => j R ≠ 0)) = C),
+      ∃ p, ∃ _ : p ∈ Finset.Icc 1 3 ×ˢ Finset.Icc 1 2,
+        g p.1 p.2 = j := by
+    intro j hj
+    rw [Finset.mem_filter] at hj
+    obtain ⟨hjpi, hjfilt⟩ := hj
+    have hjpi' := Fintype.mem_piFinset.mp hjpi
+    have hjne : ∀ R ∈ C, j R ≠ 0 := by
+      intro R hRC
+      have hmem : R ∈ C.filter (fun R => j R ≠ 0) := by
+        rw [hjfilt]; exact hRC
+      exact (Finset.mem_filter.mp hmem).2
+    have hbound : ∀ R, j R ≤ tripledDoubledQuadPattern7 C P Q R := by
+      intro R
+      have hlt := hjpi' R
+      rw [Finset.mem_range] at hlt; omega
+    have hP3 : j P ≤ 3 := by
+      have hpat : tripledDoubledQuadPattern7 C P Q P = 3 := by
+        simp [tripledDoubledQuadPattern7]
+      have h := hbound P; rwa [hpat] at h
+    have hQ2 : j Q ≤ 2 := by
+      have hpat : tripledDoubledQuadPattern7 C P Q Q = 2 := by
+        simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+      have h := hbound Q; rwa [hpat] at h
+    refine ⟨(j P, j Q), Finset.mem_product.mpr
+      ⟨Finset.mem_Icc.mpr ⟨Nat.one_le_iff_ne_zero.mpr (hjne P hP), hP3⟩,
+       Finset.mem_Icc.mpr ⟨Nat.one_le_iff_ne_zero.mpr (hjne Q hQ), hQ2⟩⟩,
+      ?_⟩
+    show g (j P) (j Q) = j
+    funext R
+    by_cases hRP : R = P
+    · rw [hRP]; simp only [hg, if_true]
+    · by_cases hRQ : R = Q
+      · rw [hRQ]
+        simp only [hg, Ne.symm hPQ, if_false, if_true]
+      · by_cases hRC : R ∈ C
+        · have hpat : tripledDoubledQuadPattern7 C P Q R = 1 := by
+            simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+          have hjR : j R = 1 := by
+            have hb := hbound R; rw [hpat] at hb
+            have hne := hjne R hRC; omega
+          simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+          exact hjR.symm
+        · have hpat : tripledDoubledQuadPattern7 C P Q R = 0 :=
+            hk0 R hRC
+          have hjR : j R = 0 := by
+            have hb := hbound R; rw [hpat] at hb; omega
+          simp only [hg, hRP, hRQ, hRC, if_false]
+          exact hjR.symm
+  have htop : (∑ j ∈ (Fintype.piFinset (fun R => Finset.range
+          (tripledDoubledQuadPattern7 C P Q R + 1))).filter
+        (fun j => (C.filter (fun R => j R ≠ 0)) = C),
+      (∏ R ∈ C, ((tripledDoubledQuadPattern7 C P Q R).choose
+          (j R) : ℝ) * (-(d : ℝ)⁻¹) ^ (j R))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ R ∈ C, realMoment ρ μG (j R)))
+    = ∑ p ∈ Finset.Icc 1 3 ×ˢ Finset.Icc 1 2,
+      (∏ R ∈ C, ((tripledDoubledQuadPattern7 C P Q R).choose
+          (g p.1 p.2 R) : ℝ) * (-(d : ℝ)⁻¹) ^ (g p.1 p.2 R))
+        * (colReMomentPow ρ μG C (g p.1 p.2) u u'
+          - ∏ R ∈ C, realMoment ρ μG (g p.1 p.2 R)) :=
+    (Finset.sum_bij (fun p _ => g p.1 p.2) hmem hinj hsurj
+      (fun p _ => rfl)).symm
+  rw [htop]
+  simp only [Finset.sum_product, sum_Icc_one_three, sum_Icc_one_two]
+  -- evaluate the six terms
+  have hcoeff : ∀ a b : ℕ,
+      (∏ R ∈ C, ((tripledDoubledQuadPattern7 C P Q R).choose
+          (g a b R) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b R))
+        = ((Nat.choose 3 a : ℝ)) * (-(d : ℝ)⁻¹) ^ a
+          * (((Nat.choose 2 b : ℝ)) * (-(d : ℝ)⁻¹) ^ b
+            * (-(d : ℝ)⁻¹) ^ 2) := by
+    intro a b
+    rw [← Finset.mul_prod_erase C _ hP,
+      ← Finset.mul_prod_erase (C.erase P) _ hQ']
+    have hPP : ((tripledDoubledQuadPattern7 C P Q P).choose
+          (g a b P) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b P)
+        = ((Nat.choose 3 a : ℝ)) * (-(d : ℝ)⁻¹) ^ a := by
+      have hpat : tripledDoubledQuadPattern7 C P Q P = 3 := by
+        simp [tripledDoubledQuadPattern7]
+      have hgP : g a b P = a := by simp only [hg, if_true]
+      rw [hpat, hgP]
+    have hQQ : ((tripledDoubledQuadPattern7 C P Q Q).choose
+          (g a b Q) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b Q)
+        = ((Nat.choose 2 b : ℝ)) * (-(d : ℝ)⁻¹) ^ b := by
+      have hpat : tripledDoubledQuadPattern7 C P Q Q = 2 := by
+        simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+      have hgQ : g a b Q = b := by
+        simp only [hg, Ne.symm hPQ, if_false, if_true]
+      rw [hpat, hgQ]
+    have hrest : ∀ R ∈ (C.erase P).erase Q,
+        ((tripledDoubledQuadPattern7 C P Q R).choose
+          (g a b R) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b R)
+          = (-(d : ℝ)⁻¹) := by
+      intro R hR
+      have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+      have hRP : R ≠ P :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+      have hRC : R ∈ C :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+      have hpat : tripledDoubledQuadPattern7 C P Q R = 1 := by
+        simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+      have hgR : g a b R = 1 := by
+        simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+      rw [hpat, hgR]; norm_num
+    rw [hPP, hQQ, Finset.prod_congr rfl hrest, Finset.prod_const,
+      Finset.card_erase_of_mem hQ', Finset.card_erase_of_mem hP, hC,
+      show ((4 - 1) - 1 : ℕ) = 2 from rfl]
+  have hF : ∀ a b : ℕ,
+      (∏ R ∈ C, realMoment ρ μG (g a b R))
+        = realMoment ρ μG a
+          * (realMoment ρ μG b * (e1 ρ μG) ^ 2) := by
+    intro a b
+    have hgP : g a b P = a := by simp only [hg, if_true]
+    have hgQ : g a b Q = b := by
+      simp only [hg, Ne.symm hPQ, if_false, if_true]
+    rw [← Finset.mul_prod_erase C _ hP,
+      ← Finset.mul_prod_erase (C.erase P) _ hQ', hgP, hgQ]
+    have hrest : ∀ R ∈ (C.erase P).erase Q,
+        realMoment ρ μG (g a b R) = e1 ρ μG := by
+      intro R hR
+      have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+      have hRP : R ≠ P :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+      have hRC : R ∈ C :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+      have hgR : g a b R = 1 := by
+        simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+      rw [hgR, realMoment_one]
+    rw [Finset.prod_congr rfl hrest, Finset.prod_const,
+      Finset.card_erase_of_mem hQ', Finset.card_erase_of_mem hP, hC,
+      show ((4 - 1) - 1 : ℕ) = 2 from rfl]
+  -- the six moment identifications
+  have hgeval : ∀ (a b : ℕ) (R : LayerColumn N), R ∈ C →
+      g a b R = if R = P then a else if R = Q then b else 1 := by
+    intro a b R hRC
+    by_cases hRP : R = P
+    · rw [hRP]; simp only [hg, if_true]
+    · by_cases hRQ : R = Q
+      · rw [hRQ]
+        simp only [hg, Ne.symm hPQ, if_false, if_true]
+      · simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+  have hM11 : colReMomentPow ρ μG C (g 1 1) u u'
+      = quadReMoment ρ μG C u u' := by
+    have hcong : ∀ R ∈ C, g 1 1 R
+        = (fun _ => 1) R := by
+      intro R hRC
+      rw [hgeval 1 1 R hRC]
+      by_cases hRP : R = P
+      · simp only [hRP, hPQ, if_false, if_true]
+      · by_cases hRQ : R = Q
+        · simp only [hRQ, hRP, hPQ, Ne.symm hPQ, if_false, if_true]
+        · simp only [hRP, hRQ, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_one]
+  have hM21 : colReMomentPow ρ μG C (g 2 1) u u'
+      = doubledQuadReMoment ρ μG C P u u' := by
+    have hcong : ∀ R ∈ C, g 2 1 R
+        = (fun R => if R = P then 2 else 1) R := by
+      intro R hRC
+      rw [hgeval 2 1 R hRC]
+      by_cases hRP : R = P
+      · simp only [hRP, hPQ, if_false, if_true]
+      · by_cases hRQ : R = Q
+        · simp only [hRQ, hRP, hPQ, Ne.symm hPQ, if_false, if_true]
+        · simp only [hRP, hRQ, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_doubledQuadReMoment ρ μG C hP u u']
+  have hM12 : colReMomentPow ρ μG C (g 1 2) u u'
+      = doubledQuadReMoment ρ μG C Q u u' := by
+    have hcong : ∀ R ∈ C, g 1 2 R
+        = (fun R => if R = Q then 2 else 1) R := by
+      intro R hRC
+      rw [hgeval 1 2 R hRC]
+      by_cases hRP : R = P
+      · simp only [hRP, hPQ, if_false, if_true]
+      · by_cases hRQ : R = Q
+        · simp only [hRQ, hRP, hPQ, Ne.symm hPQ, if_false, if_true]
+        · simp only [hRP, hRQ, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_doubledQuadReMoment ρ μG C hQ u u']
+  have hM31 : colReMomentPow ρ μG C (g 3 1) u u'
+      = tripledQuadReMoment ρ μG C P u u' := by
+    have hcong : ∀ R ∈ C, g 3 1 R
+        = (fun R => if R = P then 3 else 1) R := by
+      intro R hRC
+      rw [hgeval 3 1 R hRC]
+      by_cases hRP : R = P
+      · simp only [hRP, hPQ, if_false, if_true]
+      · by_cases hRQ : R = Q
+        · simp only [hRQ, hRP, hPQ, Ne.symm hPQ, if_false, if_true]
+        · simp only [hRP, hRQ, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_tripledQuadReMoment ρ μG C hP u u']
+  have hM22 : colReMomentPow ρ μG C (g 2 2) u u'
+      = doubledDoubledQuadReMoment ρ μG C P Q u u' := by
+    have hcong : ∀ R ∈ C, g 2 2 R
+        = (fun R => if R = P then 2 else if R = Q then 2 else 1) R := by
+      intro R hRC
+      rw [hgeval 2 2 R hRC]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_doubledDoubledQuadReMoment ρ μG C hP hQ
+        (Ne.symm hPQ) u u']
+  have hM32 : colReMomentPow ρ μG C (g 3 2) u u'
+      = tripledDoubledQuadReMoment ρ μG C P Q u u' := by
+    have hcong : ∀ R ∈ C, g 3 2 R
+        = tripledDoubledQuadPattern7 C P Q R := by
+      intro R hRC
+      rw [hgeval 3 2 R hRC]
+      by_cases hRP : R = P
+      · rw [hRP]; simp [tripledDoubledQuadPattern7]
+      · by_cases hRQ : R = Q
+        · rw [hRQ]
+          simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+        · simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_tripledDoubledQuadPattern7 ρ μG C hP hQ
+        (Ne.symm hPQ) u u']
+  rw [hcoeff 1 1, hcoeff 2 1, hcoeff 1 2, hcoeff 3 1,
+    hcoeff 2 2, hcoeff 3 2,
+    hF 1 1, hF 2 1, hF 1 2, hF 3 1, hF 2 2, hF 3 2,
+    hM11, hM21, hM12, hM31, hM22, hM32]
+  norm_num [Nat.choose, realMoment_one]
+  ring
+
+/-- **The `(3,2,1,1,1)` pattern value on a 5-support.**
+Baseline `A₃A₂B³`, the six full-support excesses (at
+weights `d⁻⁵` through `d⁻⁸`), and the erasure parts:
+at `P` the `(2,1,1,1)` value on `C.erase P`, at `Q`
+the `(3,1,1,1)` value on `C.erase Q`, and at each
+light column `R` the `(3,2,1,1)` value on
+`C.erase R` (each minus its own baseline). -/
+theorem patternValue3211 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 5) (P Q : LayerColumn N) (hP : P ∈ C)
+    (hQ : Q ∈ C) (hPQ : P ≠ Q) :
+    ∫ α : LayerSite N → G,
+        ∏ R ∈ C, (colDensC ρ u u' R α)
+          ^ (tripledDoubledQuadPattern7 C P Q R)
+        ∂(Measure.pi fun _ : LayerSite N => μG)
+      = densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 3
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 6 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - 2 * ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        - 3 * ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 3)
+        + ((d : ℝ)⁻¹) ^ 8
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (3 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - 3 * ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+          + ((d : ℝ)⁻¹) ^ 6
+            * (tripledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (6 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 6 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + 2 * ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+            + 3 * ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - realMoment ρ μG 2 * realMoment ρ μG 2
+                  * (e1 ρ μG) ^ 2)
+            - ((d : ℝ)⁻¹) ^ 7
+              * (tripledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - realMoment ρ μG 3 * realMoment ρ μG 2
+                  * (e1 ρ μG) ^ 2)) := by
+  classical
+  have hk0 : ∀ R ∉ C, tripledDoubledQuadPattern7 C P Q R = 0 := by
+    intro R hR
+    have hRP : R ≠ P := fun h => hR (h ▸ hP)
+    have hRQ : R ≠ Q := fun h => hR (h ▸ hQ)
+    simp [tripledDoubledQuadPattern7, hRP, hRQ, hR]
+  have hQ' : Q ∈ C.erase P :=
+    Finset.mem_erase.mpr ⟨Ne.symm hPQ, hQ⟩
+  have hbase : ∏ R ∈ C, densMomentValue ρ μG
+        (tripledDoubledQuadPattern7 C P Q R)
+      = densMomentValue ρ μG 3 * (densMomentValue ρ μG 2
+        * (1 - e1 ρ μG / (d : ℝ)) ^ 3) := by
+    rw [← Finset.mul_prod_erase C _ hP,
+      ← Finset.mul_prod_erase (C.erase P) _ hQ']
+    have hPP : densMomentValue ρ μG
+          (tripledDoubledQuadPattern7 C P Q P)
+        = densMomentValue ρ μG 3 := by
+      congr 1; simp [tripledDoubledQuadPattern7]
+    have hQQ : densMomentValue ρ μG
+          (tripledDoubledQuadPattern7 C P Q Q)
+        = densMomentValue ρ μG 2 := by
+      congr 1; simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+    have hrest : ∀ R ∈ (C.erase P).erase Q,
+        densMomentValue ρ μG (tripledDoubledQuadPattern7 C P Q R)
+          = 1 - e1 ρ μG / (d : ℝ) := by
+      intro R hR
+      have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+      have hRP : R ≠ P :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+      have hRC : R ∈ C :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+      have hpat : tripledDoubledQuadPattern7 C P Q R = 1 := by
+        simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+      rw [hpat, densMomentValue_one]
+    rw [hPP, hQQ, Finset.prod_congr rfl hrest, Finset.prod_const,
+      Finset.card_erase_of_mem hQ', Finset.card_erase_of_mem hP, hC,
+      show ((5 - 1) - 1 : ℕ) = 3 from rfl]
+  rw [patternValue_eq_baseline_add_top ρ μG hN hN3 hρcont u u' C _
+    hk0, hbase, topSum_card5_split ρ μG (tripledDoubledQuadPattern7 C P Q)
+    C hC u u']
+  -- full-support part: bijection to `Icc 1 3 ×ˢ Icc 1 2`
+  set g : ℕ → ℕ → LayerColumn N → ℕ := fun a b R =>
+    if R = P then a else if R = Q then b
+    else if R ∈ C then 1 else 0 with hg
+  have hmem : ∀ p ∈ Finset.Icc 1 3 ×ˢ Finset.Icc 1 2,
+      g p.1 p.2 ∈ (Fintype.piFinset (fun R => Finset.range
+          (tripledDoubledQuadPattern7 C P Q R + 1))).filter
+        (fun j => (C.filter (fun R => j R ≠ 0)) = C) := by
+    intro p hp
+    obtain ⟨ha, hb⟩ := Finset.mem_product.mp hp
+    obtain ⟨ha1, ha3⟩ := Finset.mem_Icc.mp ha
+    obtain ⟨hb1, hb2⟩ := Finset.mem_Icc.mp hb
+    show g p.1 p.2 ∈ _
+    rw [Finset.mem_filter, Fintype.mem_piFinset]
+    constructor
+    · intro R
+      rw [Finset.mem_range]
+      by_cases hRP : R = P
+      · rw [hRP]
+        have hpat : tripledDoubledQuadPattern7 C P Q P = 3 := by
+          simp [tripledDoubledQuadPattern7]
+        rw [hpat]
+        show g p.1 p.2 P < 3 + 1
+        simp only [hg, if_true]
+        omega
+      · by_cases hRQ : R = Q
+        · rw [hRQ]
+          have hpat : tripledDoubledQuadPattern7 C P Q Q = 2 := by
+            simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+          rw [hpat]
+          show g p.1 p.2 Q < 2 + 1
+          simp only [hg, Ne.symm hPQ, if_false, if_true]
+          omega
+        · by_cases hRC : R ∈ C
+          · have hpat : tripledDoubledQuadPattern7 C P Q R = 1 := by
+              simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+            rw [hpat]
+            show g p.1 p.2 R < 1 + 1
+            simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+            omega
+          · have hpat : tripledDoubledQuadPattern7 C P Q R = 0 :=
+              hk0 R hRC
+            rw [hpat]
+            show g p.1 p.2 R < 0 + 1
+            simp only [hg, hRP, hRQ, hRC, if_false]
+            omega
+    · have hfilt : C.filter (fun R => g p.1 p.2 R ≠ 0) = C := by
+        refine Finset.filter_true_of_mem fun R hRC => ?_
+        by_cases hRP : R = P
+        · rw [hRP]; simp only [hg, if_true]; omega
+        · by_cases hRQ : R = Q
+          · rw [hRQ]
+            simp only [hg, Ne.symm hPQ, if_false, if_true]; omega
+          · simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+            norm_num
+      rw [hfilt]
+  have hinj : ∀ p₁ ∈ Finset.Icc 1 3 ×ˢ Finset.Icc 1 2,
+      ∀ p₂ ∈ Finset.Icc 1 3 ×ˢ Finset.Icc 1 2,
+      g p₁.1 p₁.2 = g p₂.1 p₂.2 → p₁ = p₂ := by
+    intro ⟨a₁, b₁⟩ _ ⟨a₂, b₂⟩ _ h
+    have ha : a₁ = a₂ := by
+      have hP := congrFun h P
+      simp only [hg, if_true] at hP
+      exact hP
+    have hb : b₁ = b₂ := by
+      have hQ := congrFun h Q
+      simp only [hg, Ne.symm hPQ, if_false, if_true] at hQ
+      exact hQ
+    rw [ha, hb]
+  have hsurj : ∀ j ∈ (Fintype.piFinset (fun R => Finset.range
+          (tripledDoubledQuadPattern7 C P Q R + 1))).filter
+        (fun j => (C.filter (fun R => j R ≠ 0)) = C),
+      ∃ p, ∃ _ : p ∈ Finset.Icc 1 3 ×ˢ Finset.Icc 1 2,
+        g p.1 p.2 = j := by
+    intro j hj
+    rw [Finset.mem_filter] at hj
+    obtain ⟨hjpi, hjfilt⟩ := hj
+    have hjpi' := Fintype.mem_piFinset.mp hjpi
+    have hjne : ∀ R ∈ C, j R ≠ 0 := by
+      intro R hRC
+      have hmem : R ∈ C.filter (fun R => j R ≠ 0) := by
+        rw [hjfilt]; exact hRC
+      exact (Finset.mem_filter.mp hmem).2
+    have hbound : ∀ R, j R ≤ tripledDoubledQuadPattern7 C P Q R := by
+      intro R
+      have hlt := hjpi' R
+      rw [Finset.mem_range] at hlt; omega
+    have hP3 : j P ≤ 3 := by
+      have hpat : tripledDoubledQuadPattern7 C P Q P = 3 := by
+        simp [tripledDoubledQuadPattern7]
+      have h := hbound P; rwa [hpat] at h
+    have hQ2 : j Q ≤ 2 := by
+      have hpat : tripledDoubledQuadPattern7 C P Q Q = 2 := by
+        simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+      have h := hbound Q; rwa [hpat] at h
+    refine ⟨(j P, j Q), Finset.mem_product.mpr
+      ⟨Finset.mem_Icc.mpr ⟨Nat.one_le_iff_ne_zero.mpr (hjne P hP), hP3⟩,
+       Finset.mem_Icc.mpr ⟨Nat.one_le_iff_ne_zero.mpr (hjne Q hQ), hQ2⟩⟩,
+      ?_⟩
+    show g (j P) (j Q) = j
+    funext R
+    by_cases hRP : R = P
+    · rw [hRP]; simp only [hg, if_true]
+    · by_cases hRQ : R = Q
+      · rw [hRQ]
+        simp only [hg, Ne.symm hPQ, if_false, if_true]
+      · by_cases hRC : R ∈ C
+        · have hpat : tripledDoubledQuadPattern7 C P Q R = 1 := by
+            simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+          have hjR : j R = 1 := by
+            have hb := hbound R; rw [hpat] at hb
+            have hne := hjne R hRC; omega
+          simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+          exact hjR.symm
+        · have hpat : tripledDoubledQuadPattern7 C P Q R = 0 :=
+            hk0 R hRC
+          have hjR : j R = 0 := by
+            have hb := hbound R; rw [hpat] at hb; omega
+          simp only [hg, hRP, hRQ, hRC, if_false]
+          exact hjR.symm
+  have hfull : (∑ j ∈ (Fintype.piFinset (fun R => Finset.range
+          (tripledDoubledQuadPattern7 C P Q R + 1))).filter
+        (fun j => (C.filter (fun R => j R ≠ 0)) = C),
+      (∏ R ∈ C, ((tripledDoubledQuadPattern7 C P Q R).choose
+          (j R) : ℝ) * (-(d : ℝ)⁻¹) ^ (j R))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ R ∈ C, realMoment ρ μG (j R)))
+    = - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 6 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - 2 * ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        - 3 * ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 3)
+        + ((d : ℝ)⁻¹) ^ 8
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 3) := by
+    have htop : (∑ j ∈ (Fintype.piFinset (fun R => Finset.range
+            (tripledDoubledQuadPattern7 C P Q R + 1))).filter
+          (fun j => (C.filter (fun R => j R ≠ 0)) = C),
+        (∏ R ∈ C, ((tripledDoubledQuadPattern7 C P Q R).choose
+            (j R) : ℝ) * (-(d : ℝ)⁻¹) ^ (j R))
+          * (colReMomentPow ρ μG C j u u'
+            - ∏ R ∈ C, realMoment ρ μG (j R)))
+      = ∑ p ∈ Finset.Icc 1 3 ×ˢ Finset.Icc 1 2,
+        (∏ R ∈ C, ((tripledDoubledQuadPattern7 C P Q R).choose
+            (g p.1 p.2 R) : ℝ) * (-(d : ℝ)⁻¹) ^ (g p.1 p.2 R))
+          * (colReMomentPow ρ μG C (g p.1 p.2) u u'
+            - ∏ R ∈ C, realMoment ρ μG (g p.1 p.2 R)) :=
+      (Finset.sum_bij (fun p _ => g p.1 p.2) hmem hinj hsurj
+        (fun p _ => rfl)).symm
+    rw [htop]
+    simp only [Finset.sum_product, sum_Icc_one_three, sum_Icc_one_two]
+    have hcoeff : ∀ a b : ℕ,
+        (∏ R ∈ C, ((tripledDoubledQuadPattern7 C P Q R).choose
+            (g a b R) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b R))
+          = ((Nat.choose 3 a : ℝ)) * (-(d : ℝ)⁻¹) ^ a
+            * (((Nat.choose 2 b : ℝ)) * (-(d : ℝ)⁻¹) ^ b
+              * (-(d : ℝ)⁻¹) ^ 3) := by
+      intro a b
+      rw [← Finset.mul_prod_erase C _ hP,
+        ← Finset.mul_prod_erase (C.erase P) _ hQ']
+      have hPP : ((tripledDoubledQuadPattern7 C P Q P).choose
+            (g a b P) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b P)
+          = ((Nat.choose 3 a : ℝ)) * (-(d : ℝ)⁻¹) ^ a := by
+        have hpat : tripledDoubledQuadPattern7 C P Q P = 3 := by
+          simp [tripledDoubledQuadPattern7]
+        have hgP : g a b P = a := by simp only [hg, if_true]
+        rw [hpat, hgP]
+      have hQQ : ((tripledDoubledQuadPattern7 C P Q Q).choose
+            (g a b Q) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b Q)
+          = ((Nat.choose 2 b : ℝ)) * (-(d : ℝ)⁻¹) ^ b := by
+        have hpat : tripledDoubledQuadPattern7 C P Q Q = 2 := by
+          simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+        have hgQ : g a b Q = b := by
+          simp only [hg, Ne.symm hPQ, if_false, if_true]
+        rw [hpat, hgQ]
+      have hrest : ∀ R ∈ (C.erase P).erase Q,
+          ((tripledDoubledQuadPattern7 C P Q R).choose
+            (g a b R) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b R)
+            = (-(d : ℝ)⁻¹) := by
+        intro R hR
+        have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+        have hRP : R ≠ P :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+        have hRC : R ∈ C :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+        have hpat : tripledDoubledQuadPattern7 C P Q R = 1 := by
+          simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+        have hgR : g a b R = 1 := by
+          simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+        rw [hpat, hgR]; norm_num
+      rw [hPP, hQQ, Finset.prod_congr rfl hrest, Finset.prod_const,
+        Finset.card_erase_of_mem hQ', Finset.card_erase_of_mem hP, hC,
+        show ((5 - 1) - 1 : ℕ) = 3 from rfl]
+    have hF : ∀ a b : ℕ,
+        (∏ R ∈ C, realMoment ρ μG (g a b R))
+          = realMoment ρ μG a
+            * (realMoment ρ μG b * (e1 ρ μG) ^ 3) := by
+      intro a b
+      have hgP : g a b P = a := by simp only [hg, if_true]
+      have hgQ : g a b Q = b := by
+        simp only [hg, Ne.symm hPQ, if_false, if_true]
+      rw [← Finset.mul_prod_erase C _ hP,
+        ← Finset.mul_prod_erase (C.erase P) _ hQ', hgP, hgQ]
+      have hrest : ∀ R ∈ (C.erase P).erase Q,
+          realMoment ρ μG (g a b R) = e1 ρ μG := by
+        intro R hR
+        have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+        have hRP : R ≠ P :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+        have hRC : R ∈ C :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+        have hgR : g a b R = 1 := by
+          simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+        rw [hgR, realMoment_one]
+      rw [Finset.prod_congr rfl hrest, Finset.prod_const,
+        Finset.card_erase_of_mem hQ', Finset.card_erase_of_mem hP, hC,
+        show ((5 - 1) - 1 : ℕ) = 3 from rfl]
+    have hgeval : ∀ (a b : ℕ) (R : LayerColumn N), R ∈ C →
+        g a b R = if R = P then a else if R = Q then b else 1 := by
+      intro a b R hRC
+      by_cases hRP : R = P
+      · rw [hRP]; simp only [hg, if_true]
+      · by_cases hRQ : R = Q
+        · rw [hRQ]
+          simp only [hg, Ne.symm hPQ, if_false, if_true]
+        · simp only [hg, hRP, hRQ, hRC, if_false, if_true]
+    have hM11 : colReMomentPow ρ μG C (g 1 1) u u'
+        = quadReMoment ρ μG C u u' := by
+      have hcong : ∀ R ∈ C, g 1 1 R = (fun _ => 1) R := by
+        intro R hRC
+        rw [hgeval 1 1 R hRC]
+        by_cases hRP : R = P
+        · simp only [hRP, hPQ, if_false, if_true]
+        · by_cases hRQ : R = Q
+          · simp only [hRQ, hRP, hPQ, Ne.symm hPQ, if_false, if_true]
+          · simp only [hRP, hRQ, if_false, if_true]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_one]
+    have hM21 : colReMomentPow ρ μG C (g 2 1) u u'
+        = doubledQuadReMoment ρ μG C P u u' := by
+      have hcong : ∀ R ∈ C, g 2 1 R
+          = (fun R => if R = P then 2 else 1) R := by
+        intro R hRC
+        rw [hgeval 2 1 R hRC]
+        by_cases hRP : R = P
+        · simp only [hRP, hPQ, if_false, if_true]
+        · by_cases hRQ : R = Q
+          · simp only [hRQ, hRP, hPQ, Ne.symm hPQ, if_false, if_true]
+          · simp only [hRP, hRQ, if_false, if_true]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_eq_doubledQuadReMoment ρ μG C hP u u']
+    have hM12 : colReMomentPow ρ μG C (g 1 2) u u'
+        = doubledQuadReMoment ρ μG C Q u u' := by
+      have hcong : ∀ R ∈ C, g 1 2 R
+          = (fun R => if R = Q then 2 else 1) R := by
+        intro R hRC
+        rw [hgeval 1 2 R hRC]
+        by_cases hRP : R = P
+        · simp only [hRP, hPQ, if_false, if_true]
+        · by_cases hRQ : R = Q
+          · simp only [hRQ, hRP, hPQ, Ne.symm hPQ, if_false, if_true]
+          · simp only [hRP, hRQ, if_false, if_true]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_eq_doubledQuadReMoment ρ μG C hQ u u']
+    have hM31 : colReMomentPow ρ μG C (g 3 1) u u'
+        = tripledQuadReMoment ρ μG C P u u' := by
+      have hcong : ∀ R ∈ C, g 3 1 R
+          = (fun R => if R = P then 3 else 1) R := by
+        intro R hRC
+        rw [hgeval 3 1 R hRC]
+        by_cases hRP : R = P
+        · simp only [hRP, hPQ, if_false, if_true]
+        · by_cases hRQ : R = Q
+          · simp only [hRQ, hRP, hPQ, Ne.symm hPQ, if_false, if_true]
+          · simp only [hRP, hRQ, if_false, if_true]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_eq_tripledQuadReMoment ρ μG C hP u u']
+    have hM22 : colReMomentPow ρ μG C (g 2 2) u u'
+        = doubledDoubledQuadReMoment ρ μG C P Q u u' := by
+      have hcong : ∀ R ∈ C, g 2 2 R
+          = (fun R => if R = P then 2 else if R = Q then 2
+              else 1) R := by
+        intro R hRC
+        rw [hgeval 2 2 R hRC]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_eq_doubledDoubledQuadReMoment ρ μG C hP hQ
+          (Ne.symm hPQ) u u']
+    have hM32 : colReMomentPow ρ μG C (g 3 2) u u'
+        = tripledDoubledQuadReMoment ρ μG C P Q u u' := by
+      have hcong : ∀ R ∈ C, g 3 2 R
+          = tripledDoubledQuadPattern7 C P Q R := by
+        intro R hRC
+        rw [hgeval 3 2 R hRC]
+        by_cases hRP : R = P
+        · rw [hRP]; simp [tripledDoubledQuadPattern7]
+        · by_cases hRQ : R = Q
+          · rw [hRQ]
+            simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+          · simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_tripledDoubledQuadPattern7 ρ μG C hP hQ
+          (Ne.symm hPQ) u u']
+    rw [hcoeff 1 1, hcoeff 2 1, hcoeff 1 2, hcoeff 3 1,
+      hcoeff 2 2, hcoeff 3 2,
+      hF 1 1, hF 2 1, hF 1 2, hF 3 1, hF 2 2, hF 3 2,
+      hM11, hM21, hM12, hM31, hM22, hM32]
+    norm_num [Nat.choose, realMoment_one]
+    ring
+  rw [hfull, ← Finset.sum_erase_add _ _ hP]
+  -- the piece at `P` is split off; `Q` and the lights remain
+  -- piece at `P`: the `(2,1,1,1)` value on `C.erase P`
+  have hpieceP : (∑ j ∈ (Fintype.piFinset
+        (fun R => Finset.range
+          (tripledDoubledQuadPattern7 C P Q R + 1))).filter
+        (fun j => j P = 0 ∧ (C.erase P).filter
+          (fun R => j R ≠ 0) = C.erase P),
+      (∏ R ∈ C, ((tripledDoubledQuadPattern7 C P Q R).choose
+          (j R) : ℝ) * (-(d : ℝ)⁻¹) ^ (j R))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ R ∈ C, realMoment ρ μG (j R)))
+    = 2 * ((d : ℝ)⁻¹) ^ 4
+        * (quadReMoment ρ μG (C.erase P) u u' - (e1 ρ μG) ^ 4)
+      - ((d : ℝ)⁻¹) ^ 5
+        * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) := by
+    rw [pieceSum_eq_topSum_erase ρ μG (tripledDoubledQuadPattern7 C P Q)
+      C hC hP u u']
+    have hgen := patternValue_eq_baseline_add_top ρ μG hN hN3
+      hρcont u u' (C.erase P)
+      (fun R => if R = P then 0
+        else tripledDoubledQuadPattern7 C P Q R)
+      (by intro R hR
+          by_cases hRP : R = P
+          · rw [hRP]; simp
+          · rw [if_neg hRP]
+            exact hk0 R (fun h => hR
+              (Finset.mem_erase.mpr ⟨hRP, h⟩)))
+    have hint : (∫ α : LayerSite N → G,
+          ∏ R ∈ C.erase P, (colDensC ρ u u' R α)
+            ^ ((fun R => if R = P then 0
+              else tripledDoubledQuadPattern7 C P Q R) R)
+          ∂(Measure.pi fun _ : LayerSite N => μG))
+        = ∫ α : LayerSite N → G,
+          ∏ R ∈ C.erase P, (colDensC ρ u u' R α)
+            ^ (if R = Q then 2 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) := by
+      refine integral_congr_ae
+        (Filter.Eventually.of_forall fun α => ?_)
+      refine Finset.prod_congr rfl fun R hR => ?_
+      have hRP : R ≠ P := (Finset.mem_erase.mp hR).1
+      have hRC : R ∈ C := (Finset.mem_erase.mp hR).2
+      congr 1
+      by_cases hRQ : R = Q
+      · rw [hRQ]
+        simp [tripledDoubledQuadPattern7, hRP, Ne.symm hPQ]
+      · simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+    have hbaseE : (∏ R ∈ C.erase P, densMomentValue ρ μG
+          ((fun R => if R = P then 0
+            else tripledDoubledQuadPattern7 C P Q R) R))
+        = densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3 := by
+      rw [← Finset.mul_prod_erase (C.erase P) _ hQ']
+      have hQQ : densMomentValue ρ μG
+            ((fun R => if R = P then 0
+              else tripledDoubledQuadPattern7 C P Q R) Q)
+          = densMomentValue ρ μG 2 := by
+        congr 1
+        simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+      have hrest : ∀ R ∈ (C.erase P).erase Q,
+          densMomentValue ρ μG
+            ((fun R => if R = P then 0
+              else tripledDoubledQuadPattern7 C P Q R) R)
+            = 1 - e1 ρ μG / (d : ℝ) := by
+        intro R hR
+        have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+        have hRP : R ≠ P :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+        have hRC : R ∈ C :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+        have hval : (fun R => if R = P then 0
+              else tripledDoubledQuadPattern7 C P Q R) R = 1 := by
+          simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+        rw [hval, densMomentValue_one]
+      have hcardP : (C.erase P).card = 4 := by
+        rw [Finset.card_erase_of_mem hP, hC]
+      rw [hQQ, Finset.prod_congr rfl hrest, Finset.prod_const,
+        Finset.card_erase_of_mem hQ', hcardP,
+        show (4 - 1 : ℕ) = 3 from rfl]
+    rw [hint, hbaseE,
+      integral_colDens_prod_quadruple_doubled ρ μG hN hN3 hρcont u u'
+        (C.erase P) (by rw [Finset.card_erase_of_mem hP, hC]) Q hQ']
+      at hgen
+    linarith
+  rw [hpieceP, ← Finset.sum_erase_add _ _ hQ']
+  -- piece at `Q`: the `(3,1,1,1)` value on `C.erase Q`
+  have hpieceQ : (∑ j ∈ (Fintype.piFinset
+        (fun R => Finset.range
+          (tripledDoubledQuadPattern7 C P Q R + 1))).filter
+        (fun j => j Q = 0 ∧ (C.erase Q).filter
+          (fun R => j R ≠ 0) = C.erase Q),
+      (∏ R ∈ C, ((tripledDoubledQuadPattern7 C P Q R).choose
+          (j R) : ℝ) * (-(d : ℝ)⁻¹) ^ (j R))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ R ∈ C, realMoment ρ μG (j R)))
+    = 3 * ((d : ℝ)⁻¹) ^ 4
+        * (quadReMoment ρ μG (C.erase Q) u u' - (e1 ρ μG) ^ 4)
+      - 3 * ((d : ℝ)⁻¹) ^ 5
+        * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      + ((d : ℝ)⁻¹) ^ 6
+        * (tripledQuadReMoment ρ μG (C.erase Q) P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) := by
+    have hP' : P ∈ C.erase Q :=
+      Finset.mem_erase.mpr ⟨hPQ, hP⟩
+    rw [pieceSum_eq_topSum_erase ρ μG (tripledDoubledQuadPattern7 C P Q)
+      C hC hQ u u']
+    have hgen := patternValue_eq_baseline_add_top ρ μG hN hN3
+      hρcont u u' (C.erase Q)
+      (fun R => if R = Q then 0
+        else tripledDoubledQuadPattern7 C P Q R)
+      (by intro R hR
+          by_cases hRQ : R = Q
+          · rw [hRQ]; simp
+          · rw [if_neg hRQ]
+            exact hk0 R (fun h => hR
+              (Finset.mem_erase.mpr ⟨hRQ, h⟩)))
+    have hint : (∫ α : LayerSite N → G,
+          ∏ R ∈ C.erase Q, (colDensC ρ u u' R α)
+            ^ ((fun R => if R = Q then 0
+              else tripledDoubledQuadPattern7 C P Q R) R)
+          ∂(Measure.pi fun _ : LayerSite N => μG))
+        = ∫ α : LayerSite N → G,
+          ∏ R ∈ C.erase Q, (colDensC ρ u u' R α)
+            ^ (if R = P then 3 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) := by
+      refine integral_congr_ae
+        (Filter.Eventually.of_forall fun α => ?_)
+      refine Finset.prod_congr rfl fun R hR => ?_
+      have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+      have hRC : R ∈ C := (Finset.mem_erase.mp hR).2
+      congr 1
+      by_cases hRP : R = P
+      · rw [hRP]
+        simp [tripledDoubledQuadPattern7, hPQ]
+      · simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+    have hbaseE : (∏ R ∈ C.erase Q, densMomentValue ρ μG
+          ((fun R => if R = Q then 0
+            else tripledDoubledQuadPattern7 C P Q R) R))
+        = densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 3 := by
+      rw [← Finset.mul_prod_erase (C.erase Q) _ hP']
+      have hPP : densMomentValue ρ μG
+            ((fun R => if R = Q then 0
+              else tripledDoubledQuadPattern7 C P Q R) P)
+          = densMomentValue ρ μG 3 := by
+        congr 1
+        simp [tripledDoubledQuadPattern7, hPQ]
+      have hrest : ∀ R ∈ (C.erase Q).erase P,
+          densMomentValue ρ μG
+            ((fun R => if R = Q then 0
+              else tripledDoubledQuadPattern7 C P Q R) R)
+            = 1 - e1 ρ μG / (d : ℝ) := by
+        intro R hR
+        have hRP : R ≠ P := (Finset.mem_erase.mp hR).1
+        have hRQ : R ≠ Q :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+        have hRC : R ∈ C :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+        have hval : (fun R => if R = Q then 0
+              else tripledDoubledQuadPattern7 C P Q R) R = 1 := by
+          simp [tripledDoubledQuadPattern7, hRP, hRQ, hRC]
+        rw [hval, densMomentValue_one]
+      have hcardQ : (C.erase Q).card = 4 := by
+        rw [Finset.card_erase_of_mem hQ, hC]
+      rw [hPP, Finset.prod_congr rfl hrest, Finset.prod_const,
+        Finset.card_erase_of_mem hP', hcardQ,
+        show (4 - 1 : ℕ) = 3 from rfl]
+    rw [hint, hbaseE,
+      integral_colDens_prod_quadruple_tripled ρ μG hN hN3 hρcont u u'
+        (C.erase Q) (by rw [Finset.card_erase_of_mem hQ, hC]) P hP']
+      at hgen
+    linarith
+  rw [hpieceQ]
+  -- pieces at light columns: the `(3,2,1,1)` value on `C.erase R`
+  have hpieceR : ∀ R ∈ (C.erase P).erase Q,
+      (∑ j ∈ (Fintype.piFinset (fun S => Finset.range
+          (tripledDoubledQuadPattern7 C P Q S + 1))).filter
+        (fun j => j R = 0 ∧ (C.erase R).filter
+          (fun S => j S ≠ 0) = C.erase R),
+      (∏ S ∈ C, ((tripledDoubledQuadPattern7 C P Q S).choose
+          (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ S ∈ C, realMoment ρ μG (j S)))
+    = 6 * ((d : ℝ)⁻¹) ^ 4
+        * (quadReMoment ρ μG (C.erase R) u u' - (e1 ρ μG) ^ 4)
+      - 6 * ((d : ℝ)⁻¹) ^ 5
+        * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      - 3 * ((d : ℝ)⁻¹) ^ 5
+        * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      + 2 * ((d : ℝ)⁻¹) ^ 6
+        * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+      + 3 * ((d : ℝ)⁻¹) ^ 6
+        * (doubledDoubledQuadReMoment ρ μG (C.erase R) P Q u u'
+          - realMoment ρ μG 2 * realMoment ρ μG 2
+            * (e1 ρ μG) ^ 2)
+      - ((d : ℝ)⁻¹) ^ 7
+        * (tripledDoubledQuadReMoment ρ μG (C.erase R) P Q u u'
+          - realMoment ρ μG 3 * realMoment ρ μG 2
+            * (e1 ρ μG) ^ 2) := by
+    intro R hR
+    have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+    have hRP : R ≠ P :=
+      (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+    have hRC : R ∈ C :=
+      (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+    have hP' : P ∈ C.erase R :=
+      Finset.mem_erase.mpr ⟨Ne.symm hRP, hP⟩
+    have hQ'R : Q ∈ C.erase R :=
+      Finset.mem_erase.mpr ⟨Ne.symm hRQ, hQ⟩
+    have hQ'' : Q ∈ (C.erase R).erase P :=
+      Finset.mem_erase.mpr ⟨Ne.symm hPQ, hQ'R⟩
+    have hcardR : (C.erase R).card = 4 := by
+      rw [Finset.card_erase_of_mem hRC, hC]
+    rw [pieceSum_eq_topSum_erase ρ μG (tripledDoubledQuadPattern7 C P Q)
+      C hC hRC u u']
+    have hgen := patternValue_eq_baseline_add_top ρ μG hN hN3
+      hρcont u u' (C.erase R)
+      (fun S => if S = R then 0
+        else tripledDoubledQuadPattern7 C P Q S)
+      (by intro S hS
+          by_cases hSR : S = R
+          · rw [hSR]; simp
+          · rw [if_neg hSR]
+            exact hk0 S (fun h => hS
+              (Finset.mem_erase.mpr ⟨hSR, h⟩)))
+    have hint : (∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase R, (colDensC ρ u u' S α)
+            ^ ((fun S => if S = R then 0
+              else tripledDoubledQuadPattern7 C P Q S) S)
+          ∂(Measure.pi fun _ : LayerSite N => μG))
+        = ∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase R, (colDensC ρ u u' S α)
+            ^ (tripledDoubledQuadPattern7 (C.erase R) P Q S)
+          ∂(Measure.pi fun _ : LayerSite N => μG) := by
+      refine integral_congr_ae
+        (Filter.Eventually.of_forall fun α => ?_)
+      refine Finset.prod_congr rfl fun S hS => ?_
+      have hSR : S ≠ R := (Finset.mem_erase.mp hS).1
+      have hSC : S ∈ C := (Finset.mem_erase.mp hS).2
+      congr 1
+      by_cases hSP : S = P
+      · rw [hSP]
+        simp [tripledDoubledQuadPattern7, Ne.symm hRP]
+      · by_cases hSQ : S = Q
+        · rw [hSQ]
+          simp [tripledDoubledQuadPattern7, Ne.symm hRQ,
+            Ne.symm hPQ]
+        · have hSmem : S ∈ C.erase R :=
+            Finset.mem_erase.mpr ⟨hSR, hSC⟩
+          simp [tripledDoubledQuadPattern7, hSR, hSP, hSQ, hSC,
+            hSmem]
+    have hbaseE : (∏ S ∈ C.erase R, densMomentValue ρ μG
+          ((fun S => if S = R then 0
+            else tripledDoubledQuadPattern7 C P Q S) S))
+        = densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2 := by
+      have hval0 : ∀ S ∈ C.erase R,
+          (fun S => if S = R then 0
+            else tripledDoubledQuadPattern7 C P Q S) S
+            = tripledDoubledQuadPattern7 (C.erase R) P Q S := by
+        intro S hS
+        have hSR : S ≠ R := (Finset.mem_erase.mp hS).1
+        have hSC : S ∈ C := (Finset.mem_erase.mp hS).2
+        by_cases hSP : S = P
+        · rw [hSP]
+          simp [tripledDoubledQuadPattern7, Ne.symm hRP]
+        · by_cases hSQ : S = Q
+          · rw [hSQ]
+            simp [tripledDoubledQuadPattern7, Ne.symm hRQ,
+              Ne.symm hPQ]
+          · have hSmem : S ∈ C.erase R :=
+              Finset.mem_erase.mpr ⟨hSR, hSC⟩
+            simp [tripledDoubledQuadPattern7, hSR, hSP, hSQ, hSC,
+              hSmem]
+      have hval : ∀ S ∈ C.erase R,
+          densMomentValue ρ μG
+            ((fun S => if S = R then 0
+              else tripledDoubledQuadPattern7 C P Q S) S)
+            = densMomentValue ρ μG
+              (tripledDoubledQuadPattern7 (C.erase R) P Q S) :=
+        fun S hS => by rw [hval0 S hS]
+      rw [Finset.prod_congr rfl hval]
+      rw [← Finset.mul_prod_erase (C.erase R) _ hP',
+        ← Finset.mul_prod_erase ((C.erase R).erase P) _ hQ'']
+      have hPP : densMomentValue ρ μG
+            (tripledDoubledQuadPattern7 (C.erase R) P Q P)
+          = densMomentValue ρ μG 3 := by
+        congr 1; simp [tripledDoubledQuadPattern7]
+      have hQQ : densMomentValue ρ μG
+            (tripledDoubledQuadPattern7 (C.erase R) P Q Q)
+          = densMomentValue ρ μG 2 := by
+        congr 1
+        simp [tripledDoubledQuadPattern7, Ne.symm hPQ]
+      have hrest : ∀ S ∈ ((C.erase R).erase P).erase Q,
+          densMomentValue ρ μG
+            (tripledDoubledQuadPattern7 (C.erase R) P Q S)
+            = 1 - e1 ρ μG / (d : ℝ) := by
+        intro S hS
+        have hSQ : S ≠ Q := (Finset.mem_erase.mp hS).1
+        have hSP : S ≠ P :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+        have hSC : S ∈ C.erase R :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2
+        have hpat : tripledDoubledQuadPattern7 (C.erase R) P Q S
+            = 1 := by
+          simp [tripledDoubledQuadPattern7, hSP, hSQ, hSC]
+        rw [hpat, densMomentValue_one]
+      rw [hPP, hQQ, Finset.prod_congr rfl hrest, Finset.prod_const,
+        Finset.card_erase_of_mem hQ'',
+        Finset.card_erase_of_mem hP', hcardR,
+        show ((4 - 1) - 1 : ℕ) = 2 from rfl]
+      ring
+    rw [hint, hbaseE,
+      patternValue3211_card4 ρ μG hN hN3 hρcont u u' (C.erase R)
+        hcardR P Q hP' hQ'R hPQ] at hgen
+    linarith
+  rw [Finset.sum_congr rfl hpieceR]
+  ring
+
+/-- **The `(2,2,2,1)` pattern value on a 4-support.**
+Baseline `A₂³B` plus the eight full-support excesses:
+quad at `8·d⁻⁴`, each doubled at `−4·d⁻⁵`, each
+doubled-doubled pair at `2·d⁻⁶`, the
+doubled-doubled-doubled at `−d⁻⁷`. -/
+theorem patternValue2221_card4 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 4) (P Q R : LayerColumn N) (hP : P ∈ C)
+    (hQ : Q ∈ C) (hR : R ∈ C) (hPQ : P ≠ Q) (hPR : P ≠ R)
+    (hQR : Q ≠ R) :
+    ∫ α : LayerSite N → G,
+        ∏ S ∈ C, (colDensC ρ u u' S α)
+          ^ (doubledDoubledDoubledQuadPattern7 C P Q R S)
+        ∂(Measure.pi fun _ : LayerSite N => μG)
+      = (densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ))
+        + 8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG) := by
+  classical
+  have hk0 : ∀ S ∉ C,
+      doubledDoubledDoubledQuadPattern7 C P Q R S = 0 := by
+    intro S hS
+    have hSP : S ≠ P := fun h => hS (h ▸ hP)
+    have hSQ : S ≠ Q := fun h => hS (h ▸ hQ)
+    have hSR : S ≠ R := fun h => hS (h ▸ hR)
+    simp [doubledDoubledDoubledQuadPattern7, hSP, hSQ, hSR, hS]
+  have hQ' : Q ∈ C.erase P :=
+    Finset.mem_erase.mpr ⟨Ne.symm hPQ, hQ⟩
+  have hR' : R ∈ (C.erase P).erase Q :=
+    Finset.mem_erase.mpr ⟨Ne.symm hQR,
+      Finset.mem_erase.mpr ⟨Ne.symm hPR, hR⟩⟩
+  have hbase : ∏ S ∈ C, densMomentValue ρ μG
+        (doubledDoubledDoubledQuadPattern7 C P Q R S)
+      = densMomentValue ρ μG 2 * (densMomentValue ρ μG 2
+        * (densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 1)) := by
+    rw [← Finset.mul_prod_erase C _ hP,
+      ← Finset.mul_prod_erase (C.erase P) _ hQ',
+      ← Finset.mul_prod_erase ((C.erase P).erase Q) _ hR']
+    have hPP : densMomentValue ρ μG
+          (doubledDoubledDoubledQuadPattern7 C P Q R P)
+        = densMomentValue ρ μG 2 := by
+      congr 1; simp [doubledDoubledDoubledQuadPattern7]
+    have hQQ : densMomentValue ρ μG
+          (doubledDoubledDoubledQuadPattern7 C P Q R Q)
+        = densMomentValue ρ μG 2 := by
+      congr 1
+      simp [doubledDoubledDoubledQuadPattern7, Ne.symm hPQ]
+    have hRR : densMomentValue ρ μG
+          (doubledDoubledDoubledQuadPattern7 C P Q R R)
+        = densMomentValue ρ μG 2 := by
+      congr 1
+      simp [doubledDoubledDoubledQuadPattern7, Ne.symm hPR,
+        Ne.symm hQR]
+    have hrest : ∀ S ∈ ((C.erase P).erase Q).erase R,
+        densMomentValue ρ μG
+          (doubledDoubledDoubledQuadPattern7 C P Q R S)
+          = 1 - e1 ρ μG / (d : ℝ) := by
+      intro S hS
+      have hSR : S ≠ R := (Finset.mem_erase.mp hS).1
+      have hSQ : S ≠ Q :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+      have hSP : S ≠ P :=
+        (Finset.mem_erase.mp
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2).1
+      have hSC : S ∈ C :=
+        (Finset.mem_erase.mp
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2).2
+      have hpat : doubledDoubledDoubledQuadPattern7 C P Q R S
+          = 1 := by
+        simp [doubledDoubledDoubledQuadPattern7, hSP, hSQ, hSR,
+          hSC]
+      rw [hpat, densMomentValue_one]
+    rw [hPP, hQQ, hRR, Finset.prod_congr rfl hrest,
+      Finset.prod_const, Finset.card_erase_of_mem hR',
+      Finset.card_erase_of_mem hQ', Finset.card_erase_of_mem hP, hC,
+      show ((4 - 1) - 1 - 1 : ℕ) = 1 from rfl]
+  rw [patternValue_eq_baseline_add_top ρ μG hN hN3 hρcont u u' C _
+    hk0, hbase, topFilter_card4_eq _ C hC]
+  -- bijection to `(Icc 1 2 ×ˢ Icc 1 2) ×ˢ Icc 1 2`
+  set g : ℕ → ℕ → ℕ → LayerColumn N → ℕ := fun a b c S =>
+    if S = P then a else if S = Q then b else if S = R then c
+    else if S ∈ C then 1 else 0 with hg
+  have hgeval : ∀ (a b c : ℕ) (S : LayerColumn N), S ∈ C →
+      g a b c S = if S = P then a else if S = Q then b
+        else if S = R then c else 1 := by
+    intro a b c S hSC
+    by_cases hSP : S = P
+    · rw [hSP]; simp only [hg, if_true]
+    · by_cases hSQ : S = Q
+      · rw [hSQ]
+        simp only [hg, Ne.symm hPQ, if_false, if_true]
+      · by_cases hSR : S = R
+        · rw [hSR]
+          simp only [hg, Ne.symm hPR, Ne.symm hQR, if_false,
+            if_true]
+        · simp only [hg, hSP, hSQ, hSR, hSC, if_false, if_true]
+  have hmem : ∀ p ∈ (Finset.Icc 1 2 ×ˢ Finset.Icc 1 2)
+        ×ˢ Finset.Icc 1 2,
+      g p.1.1 p.1.2 p.2 ∈ (Fintype.piFinset (fun S => Finset.range
+          (doubledDoubledDoubledQuadPattern7 C P Q R S + 1))).filter
+        (fun j => (C.filter (fun S => j S ≠ 0)) = C) := by
+    intro p hp
+    obtain ⟨hp12, hc⟩ := Finset.mem_product.mp hp
+    obtain ⟨ha, hb⟩ := Finset.mem_product.mp hp12
+    obtain ⟨ha1, ha2⟩ := Finset.mem_Icc.mp ha
+    obtain ⟨hb1, hb2⟩ := Finset.mem_Icc.mp hb
+    obtain ⟨hc1, hc2⟩ := Finset.mem_Icc.mp hc
+    show g p.1.1 p.1.2 p.2 ∈ _
+    rw [Finset.mem_filter, Fintype.mem_piFinset]
+    constructor
+    · intro S
+      rw [Finset.mem_range]
+      by_cases hSP : S = P
+      · rw [hSP]
+        have hpat : doubledDoubledDoubledQuadPattern7 C P Q R P
+            = 2 := by
+          simp [doubledDoubledDoubledQuadPattern7]
+        rw [hpat]
+        show g p.1.1 p.1.2 p.2 P < 2 + 1
+        simp only [hg, if_true]
+        omega
+      · by_cases hSQ : S = Q
+        · rw [hSQ]
+          have hpat : doubledDoubledDoubledQuadPattern7 C P Q R Q
+              = 2 := by
+            simp [doubledDoubledDoubledQuadPattern7, Ne.symm hPQ]
+          rw [hpat]
+          show g p.1.1 p.1.2 p.2 Q < 2 + 1
+          simp only [hg, Ne.symm hPQ, if_false, if_true]
+          omega
+        · by_cases hSR : S = R
+          · rw [hSR]
+            have hpat : doubledDoubledDoubledQuadPattern7 C P Q R R
+                = 2 := by
+              simp [doubledDoubledDoubledQuadPattern7,
+                Ne.symm hPR, Ne.symm hQR]
+            rw [hpat]
+            show g p.1.1 p.1.2 p.2 R < 2 + 1
+            simp only [hg, Ne.symm hPR, Ne.symm hQR, if_false,
+              if_true]
+            omega
+          · by_cases hSC : S ∈ C
+            · have hpat : doubledDoubledDoubledQuadPattern7
+                  C P Q R S = 1 := by
+                simp [doubledDoubledDoubledQuadPattern7, hSP, hSQ,
+                  hSR, hSC]
+              rw [hpat]
+              show g p.1.1 p.1.2 p.2 S < 1 + 1
+              simp only [hg, hSP, hSQ, hSR, hSC, if_false, if_true]
+              omega
+            · have hpat : doubledDoubledDoubledQuadPattern7
+                  C P Q R S = 0 := hk0 S hSC
+              rw [hpat]
+              show g p.1.1 p.1.2 p.2 S < 0 + 1
+              simp only [hg, hSP, hSQ, hSR, hSC, if_false]
+              omega
+    · have hfilt : C.filter (fun S => g p.1.1 p.1.2 p.2 S ≠ 0)
+          = C := by
+        refine Finset.filter_true_of_mem fun S hSC => ?_
+        by_cases hSP : S = P
+        · rw [hSP]; simp only [hg, if_true]; omega
+        · by_cases hSQ : S = Q
+          · rw [hSQ]
+            simp only [hg, Ne.symm hPQ, if_false, if_true]; omega
+          · by_cases hSR : S = R
+            · rw [hSR]
+              simp only [hg, Ne.symm hPR, Ne.symm hQR, if_false,
+                if_true]
+              omega
+            · simp only [hg, hSP, hSQ, hSR, hSC, if_false, if_true]
+              norm_num
+      rw [hfilt]
+  have hinj : ∀ p₁ ∈ (Finset.Icc 1 2 ×ˢ Finset.Icc 1 2)
+        ×ˢ Finset.Icc 1 2,
+      ∀ p₂ ∈ (Finset.Icc 1 2 ×ˢ Finset.Icc 1 2)
+        ×ˢ Finset.Icc 1 2,
+      g p₁.1.1 p₁.1.2 p₁.2 = g p₂.1.1 p₂.1.2 p₂.2 → p₁ = p₂ := by
+    intro ⟨⟨a₁, b₁⟩, c₁⟩ _ ⟨⟨a₂, b₂⟩, c₂⟩ _ h
+    have ha : a₁ = a₂ := by
+      have hP := congrFun h P
+      simp only [hg, if_true] at hP
+      exact hP
+    have hb : b₁ = b₂ := by
+      have hQ := congrFun h Q
+      simp only [hg, Ne.symm hPQ, if_false, if_true] at hQ
+      exact hQ
+    have hc : c₁ = c₂ := by
+      have hR := congrFun h R
+      simp only [hg, Ne.symm hPR, Ne.symm hQR, if_false, if_true]
+        at hR
+      exact hR
+    rw [ha, hb, hc]
+  have hsurj : ∀ j ∈ (Fintype.piFinset (fun S => Finset.range
+          (doubledDoubledDoubledQuadPattern7 C P Q R S + 1))).filter
+        (fun j => (C.filter (fun S => j S ≠ 0)) = C),
+      ∃ p, ∃ _ : p ∈ (Finset.Icc 1 2 ×ˢ Finset.Icc 1 2)
+        ×ˢ Finset.Icc 1 2, g p.1.1 p.1.2 p.2 = j := by
+    intro j hj
+    rw [Finset.mem_filter] at hj
+    obtain ⟨hjpi, hjfilt⟩ := hj
+    have hjpi' := Fintype.mem_piFinset.mp hjpi
+    have hjne : ∀ S ∈ C, j S ≠ 0 := by
+      intro S hSC
+      have hmem : S ∈ C.filter (fun S => j S ≠ 0) := by
+        rw [hjfilt]; exact hSC
+      exact (Finset.mem_filter.mp hmem).2
+    have hbound : ∀ S, j S
+        ≤ doubledDoubledDoubledQuadPattern7 C P Q R S := by
+      intro S
+      have hlt := hjpi' S
+      rw [Finset.mem_range] at hlt; omega
+    have hP2 : j P ≤ 2 := by
+      have hpat : doubledDoubledDoubledQuadPattern7 C P Q R P
+          = 2 := by
+        simp [doubledDoubledDoubledQuadPattern7]
+      have h := hbound P; rwa [hpat] at h
+    have hQ2 : j Q ≤ 2 := by
+      have hpat : doubledDoubledDoubledQuadPattern7 C P Q R Q
+          = 2 := by
+        simp [doubledDoubledDoubledQuadPattern7, Ne.symm hPQ]
+      have h := hbound Q; rwa [hpat] at h
+    have hR2 : j R ≤ 2 := by
+      have hpat : doubledDoubledDoubledQuadPattern7 C P Q R R
+          = 2 := by
+        simp [doubledDoubledDoubledQuadPattern7, Ne.symm hPR,
+          Ne.symm hQR]
+      have h := hbound R; rwa [hpat] at h
+    refine ⟨((j P, j Q), j R), Finset.mem_product.mpr
+      ⟨Finset.mem_product.mpr
+        ⟨Finset.mem_Icc.mpr
+          ⟨Nat.one_le_iff_ne_zero.mpr (hjne P hP), hP2⟩,
+         Finset.mem_Icc.mpr
+          ⟨Nat.one_le_iff_ne_zero.mpr (hjne Q hQ), hQ2⟩⟩,
+       Finset.mem_Icc.mpr
+        ⟨Nat.one_le_iff_ne_zero.mpr (hjne R hR), hR2⟩⟩, ?_⟩
+    show g (j P) (j Q) (j R) = j
+    funext S
+    by_cases hSP : S = P
+    · rw [hSP]; simp only [hg, if_true]
+    · by_cases hSQ : S = Q
+      · rw [hSQ]
+        simp only [hg, Ne.symm hPQ, if_false, if_true]
+      · by_cases hSR : S = R
+        · rw [hSR]
+          simp only [hg, Ne.symm hPR, Ne.symm hQR, if_false,
+            if_true]
+        · by_cases hSC : S ∈ C
+          · have hpat : doubledDoubledDoubledQuadPattern7
+                C P Q R S = 1 := by
+              simp [doubledDoubledDoubledQuadPattern7, hSP, hSQ,
+                hSR, hSC]
+            have hjS : j S = 1 := by
+              have hb := hbound S; rw [hpat] at hb
+              have hne := hjne S hSC; omega
+            simp only [hg, hSP, hSQ, hSR, hSC, if_false, if_true]
+            exact hjS.symm
+          · have hpat : doubledDoubledDoubledQuadPattern7
+                C P Q R S = 0 := hk0 S hSC
+            have hjS : j S = 0 := by
+              have hb := hbound S; rw [hpat] at hb; omega
+            simp only [hg, hSP, hSQ, hSR, hSC, if_false]
+            exact hjS.symm
+  have htop : (∑ j ∈ (Fintype.piFinset (fun S => Finset.range
+          (doubledDoubledDoubledQuadPattern7 C P Q R S + 1))).filter
+        (fun j => (C.filter (fun S => j S ≠ 0)) = C),
+      (∏ S ∈ C, ((doubledDoubledDoubledQuadPattern7 C P Q R S).choose
+          (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ S ∈ C, realMoment ρ μG (j S)))
+    = ∑ p ∈ (Finset.Icc 1 2 ×ˢ Finset.Icc 1 2) ×ˢ Finset.Icc 1 2,
+      (∏ S ∈ C, ((doubledDoubledDoubledQuadPattern7 C P Q R S).choose
+          (g p.1.1 p.1.2 p.2 S) : ℝ)
+        * (-(d : ℝ)⁻¹) ^ (g p.1.1 p.1.2 p.2 S))
+        * (colReMomentPow ρ μG C (g p.1.1 p.1.2 p.2) u u'
+          - ∏ S ∈ C, realMoment ρ μG (g p.1.1 p.1.2 p.2 S)) :=
+    (Finset.sum_bij (fun p _ => g p.1.1 p.1.2 p.2) hmem hinj hsurj
+      (fun p _ => rfl)).symm
+  rw [htop]
+  simp only [Finset.sum_product, sum_Icc_one_two]
+  -- evaluate the eight terms
+  have hcoeff : ∀ a b c : ℕ,
+      (∏ S ∈ C, ((doubledDoubledDoubledQuadPattern7 C P Q R S).choose
+          (g a b c S) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b c S))
+        = ((Nat.choose 2 a : ℝ)) * (-(d : ℝ)⁻¹) ^ a
+          * (((Nat.choose 2 b : ℝ)) * (-(d : ℝ)⁻¹) ^ b
+            * (((Nat.choose 2 c : ℝ)) * (-(d : ℝ)⁻¹) ^ c
+              * (-(d : ℝ)⁻¹) ^ 1)) := by
+    intro a b c
+    rw [← Finset.mul_prod_erase C _ hP,
+      ← Finset.mul_prod_erase (C.erase P) _ hQ',
+      ← Finset.mul_prod_erase ((C.erase P).erase Q) _ hR']
+    have hPP : ((doubledDoubledDoubledQuadPattern7 C P Q R P).choose
+          (g a b c P) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b c P)
+        = ((Nat.choose 2 a : ℝ)) * (-(d : ℝ)⁻¹) ^ a := by
+      have hpat : doubledDoubledDoubledQuadPattern7 C P Q R P
+          = 2 := by
+        simp [doubledDoubledDoubledQuadPattern7]
+      have hgP : g a b c P = a := by simp only [hg, if_true]
+      rw [hpat, hgP]
+    have hQQ : ((doubledDoubledDoubledQuadPattern7 C P Q R Q).choose
+          (g a b c Q) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b c Q)
+        = ((Nat.choose 2 b : ℝ)) * (-(d : ℝ)⁻¹) ^ b := by
+      have hpat : doubledDoubledDoubledQuadPattern7 C P Q R Q
+          = 2 := by
+        simp [doubledDoubledDoubledQuadPattern7, Ne.symm hPQ]
+      have hgQ : g a b c Q = b := by
+        simp only [hg, Ne.symm hPQ, if_false, if_true]
+      rw [hpat, hgQ]
+    have hRR : ((doubledDoubledDoubledQuadPattern7 C P Q R R).choose
+          (g a b c R) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b c R)
+        = ((Nat.choose 2 c : ℝ)) * (-(d : ℝ)⁻¹) ^ c := by
+      have hpat : doubledDoubledDoubledQuadPattern7 C P Q R R
+          = 2 := by
+        simp [doubledDoubledDoubledQuadPattern7, Ne.symm hPR,
+          Ne.symm hQR]
+      have hgR : g a b c R = c := by
+        simp only [hg, Ne.symm hPR, Ne.symm hQR, if_false, if_true]
+      rw [hpat, hgR]
+    have hrest : ∀ S ∈ ((C.erase P).erase Q).erase R,
+        ((doubledDoubledDoubledQuadPattern7 C P Q R S).choose
+          (g a b c S) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a b c S)
+          = (-(d : ℝ)⁻¹) := by
+      intro S hS
+      have hSR : S ≠ R := (Finset.mem_erase.mp hS).1
+      have hSQ : S ≠ Q :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+      have hSP : S ≠ P :=
+        (Finset.mem_erase.mp
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2).1
+      have hSC : S ∈ C :=
+        (Finset.mem_erase.mp
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2).2
+      have hpat : doubledDoubledDoubledQuadPattern7 C P Q R S
+          = 1 := by
+        simp [doubledDoubledDoubledQuadPattern7, hSP, hSQ, hSR,
+          hSC]
+      have hgS : g a b c S = 1 := by
+        simp only [hg, hSP, hSQ, hSR, hSC, if_false, if_true]
+      rw [hpat, hgS]; norm_num
+    rw [hPP, hQQ, hRR, Finset.prod_congr rfl hrest,
+      Finset.prod_const, Finset.card_erase_of_mem hR',
+      Finset.card_erase_of_mem hQ', Finset.card_erase_of_mem hP, hC,
+      show ((4 - 1) - 1 - 1 : ℕ) = 1 from rfl]
+  have hF : ∀ a b c : ℕ,
+      (∏ S ∈ C, realMoment ρ μG (g a b c S))
+        = realMoment ρ μG a
+          * (realMoment ρ μG b
+            * (realMoment ρ μG c * e1 ρ μG)) := by
+    intro a b c
+    have hgP : g a b c P = a := by simp only [hg, if_true]
+    have hgQ : g a b c Q = b := by
+      simp only [hg, Ne.symm hPQ, if_false, if_true]
+    have hgR : g a b c R = c := by
+      simp only [hg, Ne.symm hPR, Ne.symm hQR, if_false, if_true]
+    rw [← Finset.mul_prod_erase C _ hP,
+      ← Finset.mul_prod_erase (C.erase P) _ hQ',
+      ← Finset.mul_prod_erase ((C.erase P).erase Q) _ hR',
+      hgP, hgQ, hgR]
+    have hrest : ∀ S ∈ ((C.erase P).erase Q).erase R,
+        realMoment ρ μG (g a b c S) = e1 ρ μG := by
+      intro S hS
+      have hSR : S ≠ R := (Finset.mem_erase.mp hS).1
+      have hSQ : S ≠ Q :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+      have hSP : S ≠ P :=
+        (Finset.mem_erase.mp
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2).1
+      have hSC : S ∈ C :=
+        (Finset.mem_erase.mp
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2).2
+      have hgS : g a b c S = 1 := by
+        simp only [hg, hSP, hSQ, hSR, hSC, if_false, if_true]
+      rw [hgS, realMoment_one]
+    rw [Finset.prod_congr rfl hrest, Finset.prod_const,
+      Finset.card_erase_of_mem hR', Finset.card_erase_of_mem hQ',
+      Finset.card_erase_of_mem hP, hC,
+      show ((4 - 1) - 1 - 1 : ℕ) = 1 from rfl, pow_one]
+  -- the eight moment identifications
+  have hM111 : colReMomentPow ρ μG C (g 1 1 1) u u'
+      = quadReMoment ρ μG C u u' := by
+    have hcong : ∀ S ∈ C, g 1 1 1 S = (fun _ => 1) S := by
+      intro S hSC
+      rw [hgeval 1 1 1 S hSC]
+      by_cases hSP : S = P
+      · simp only [hSP, hPQ, hPR, if_false, if_true]
+      · by_cases hSQ : S = Q
+        · simp only [hSQ, hSP, hPQ, hQR, Ne.symm hPQ, if_false,
+            if_true]
+        · by_cases hSR : S = R
+          · simp only [hSR, hSP, hSQ, hPR, hQR, Ne.symm hPR,
+              Ne.symm hQR, if_false, if_true]
+          · simp only [hSP, hSQ, hSR, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_one]
+  have hM211 : colReMomentPow ρ μG C (g 2 1 1) u u'
+      = doubledQuadReMoment ρ μG C P u u' := by
+    have hcong : ∀ S ∈ C, g 2 1 1 S
+        = (fun S => if S = P then 2 else 1) S := by
+      intro S hSC
+      rw [hgeval 2 1 1 S hSC]
+      by_cases hSP : S = P
+      · simp only [hSP, hPQ, hPR, if_false, if_true]
+      · by_cases hSQ : S = Q
+        · simp only [hSQ, hSP, hPQ, hQR, Ne.symm hPQ, if_false,
+            if_true]
+        · by_cases hSR : S = R
+          · simp only [hSR, hSP, hSQ, hPR, hQR, Ne.symm hPR,
+              Ne.symm hQR, if_false, if_true]
+          · simp only [hSP, hSQ, hSR, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_doubledQuadReMoment ρ μG C hP u u']
+  have hM121 : colReMomentPow ρ μG C (g 1 2 1) u u'
+      = doubledQuadReMoment ρ μG C Q u u' := by
+    have hcong : ∀ S ∈ C, g 1 2 1 S
+        = (fun S => if S = Q then 2 else 1) S := by
+      intro S hSC
+      rw [hgeval 1 2 1 S hSC]
+      by_cases hSP : S = P
+      · simp only [hSP, hPQ, hPR, if_false, if_true]
+      · by_cases hSQ : S = Q
+        · simp only [hSQ, hSP, hPQ, hQR, Ne.symm hPQ, if_false,
+            if_true]
+        · by_cases hSR : S = R
+          · simp only [hSR, hSP, hSQ, hPR, hQR, Ne.symm hPR,
+              Ne.symm hQR, if_false, if_true]
+          · simp only [hSP, hSQ, hSR, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_doubledQuadReMoment ρ μG C hQ u u']
+  have hM112 : colReMomentPow ρ μG C (g 1 1 2) u u'
+      = doubledQuadReMoment ρ μG C R u u' := by
+    have hcong : ∀ S ∈ C, g 1 1 2 S
+        = (fun S => if S = R then 2 else 1) S := by
+      intro S hSC
+      rw [hgeval 1 1 2 S hSC]
+      by_cases hSP : S = P
+      · simp only [hSP, hPQ, hPR, if_false, if_true]
+      · by_cases hSQ : S = Q
+        · simp only [hSQ, hSP, hPQ, hQR, Ne.symm hPQ, if_false,
+            if_true]
+        · by_cases hSR : S = R
+          · simp only [hSR, hSP, hSQ, hPR, hQR, Ne.symm hPR,
+              Ne.symm hQR, if_false, if_true]
+          · simp only [hSP, hSQ, hSR, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_doubledQuadReMoment ρ μG C hR u u']
+  have hM221 : colReMomentPow ρ μG C (g 2 2 1) u u'
+      = doubledDoubledQuadReMoment ρ μG C P Q u u' := by
+    have hcong : ∀ S ∈ C, g 2 2 1 S
+        = (fun S => if S = P then 2 else if S = Q then 2
+            else 1) S := by
+      intro S hSC
+      rw [hgeval 2 2 1 S hSC]
+      by_cases hSP : S = P
+      · simp only [hSP, hPQ, hPR, if_false, if_true]
+      · by_cases hSQ : S = Q
+        · simp only [hSQ, hSP, hPQ, hQR, Ne.symm hPQ, if_false,
+            if_true]
+        · by_cases hSR : S = R
+          · simp only [hSR, hSP, hSQ, hPR, hQR, Ne.symm hPR,
+              Ne.symm hQR, if_false, if_true]
+          · simp only [hSP, hSQ, hSR, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_doubledDoubledQuadReMoment ρ μG C hP hQ
+        (Ne.symm hPQ) u u']
+  have hM212 : colReMomentPow ρ μG C (g 2 1 2) u u'
+      = doubledDoubledQuadReMoment ρ μG C P R u u' := by
+    have hcong : ∀ S ∈ C, g 2 1 2 S
+        = (fun S => if S = P then 2 else if S = R then 2
+            else 1) S := by
+      intro S hSC
+      rw [hgeval 2 1 2 S hSC]
+      by_cases hSP : S = P
+      · simp only [hSP, hPQ, hPR, if_false, if_true]
+      · by_cases hSQ : S = Q
+        · simp only [hSQ, hSP, hPQ, hQR, Ne.symm hPQ, if_false,
+            if_true]
+        · by_cases hSR : S = R
+          · simp only [hSR, hSP, hSQ, hPR, hQR, Ne.symm hPR,
+              Ne.symm hQR, if_false, if_true]
+          · simp only [hSP, hSQ, hSR, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_doubledDoubledQuadReMoment ρ μG C hP hR
+        (Ne.symm hPR) u u']
+  have hM122 : colReMomentPow ρ μG C (g 1 2 2) u u'
+      = doubledDoubledQuadReMoment ρ μG C Q R u u' := by
+    have hcong : ∀ S ∈ C, g 1 2 2 S
+        = (fun S => if S = Q then 2 else if S = R then 2
+            else 1) S := by
+      intro S hSC
+      rw [hgeval 1 2 2 S hSC]
+      by_cases hSP : S = P
+      · simp only [hSP, hPQ, hPR, if_false, if_true]
+      · by_cases hSQ : S = Q
+        · simp only [hSQ, hSP, hPQ, hQR, Ne.symm hPQ, if_false,
+            if_true]
+        · by_cases hSR : S = R
+          · simp only [hSR, hSP, hSQ, hPR, hQR, Ne.symm hPR,
+              Ne.symm hQR, if_false, if_true]
+          · simp only [hSP, hSQ, hSR, if_false, if_true]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_eq_doubledDoubledQuadReMoment ρ μG C hQ hR
+        (Ne.symm hQR) u u']
+  have hM222 : colReMomentPow ρ μG C (g 2 2 2) u u'
+      = doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u' := by
+    have hcong : ∀ S ∈ C, g 2 2 2 S
+        = doubledDoubledDoubledQuadPattern7 C P Q R S := by
+      intro S hSC
+      rw [hgeval 2 2 2 S hSC]
+      by_cases hSP : S = P
+      · rw [hSP]; simp [doubledDoubledDoubledQuadPattern7]
+      · by_cases hSQ : S = Q
+        · rw [hSQ]
+          simp [doubledDoubledDoubledQuadPattern7, Ne.symm hPQ]
+        · by_cases hSR : S = R
+          · rw [hSR]
+            simp [doubledDoubledDoubledQuadPattern7, Ne.symm hPR,
+              Ne.symm hQR]
+          · simp [doubledDoubledDoubledQuadPattern7, hSP, hSQ,
+              hSR, hSC]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_doubledDoubledDoubledQuadPattern7 ρ μG C hP
+        hQ hR (Ne.symm hPQ) (Ne.symm hPR) (Ne.symm hQR) u u']
+  rw [hcoeff 1 1 1, hcoeff 2 1 1, hcoeff 1 2 1, hcoeff 1 1 2,
+    hcoeff 2 2 1, hcoeff 2 1 2, hcoeff 1 2 2, hcoeff 2 2 2,
+    hF 1 1 1, hF 2 1 1, hF 1 2 1, hF 1 1 2,
+    hF 2 2 1, hF 2 1 2, hF 1 2 2, hF 2 2 2,
+    hM111, hM211, hM121, hM112, hM221, hM212, hM122, hM222]
+  norm_num [Nat.choose, realMoment_one]
+  ring
+/-- **The all-ones pattern value on a 4-support**:
+`B⁴ + d⁻⁴` times the order-4 excess. The top sum is
+the single fully-supported exponent choice. -/
+theorem patternValue1111 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (D : Finset (LayerColumn N))
+    (hD : D.card = 4) :
+    ∫ α : LayerSite N → G,
+        ∏ S ∈ D, (colDensC ρ u u' S α)
+          ^ (fun S => if S ∈ D then 1 else 0) S
+        ∂(Measure.pi fun _ : LayerSite N => μG)
+      = (1 - e1 ρ μG / (d : ℝ)) ^ 4
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG D u u' - (e1 ρ μG) ^ 4) := by
+  classical
+  have hk0 : ∀ S ∉ D, (fun S => if S ∈ D then 1 else 0) S = 0 := by
+    intro S hS; simp [hS]
+  have hbase : ∏ S ∈ D, densMomentValue ρ μG
+        ((fun S => if S ∈ D then 1 else 0) S)
+      = (1 - e1 ρ μG / (d : ℝ)) ^ 4 := by
+    have hrest : ∀ S ∈ D, densMomentValue ρ μG
+          ((fun S => if S ∈ D then 1 else 0) S)
+          = 1 - e1 ρ μG / (d : ℝ) := by
+      intro S hS
+      have hval : (fun S => if S ∈ D then 1 else 0) S = 1 := by
+        simp [hS]
+      rw [hval, densMomentValue_one]
+    rw [Finset.prod_congr rfl hrest, Finset.prod_const, hD]
+  rw [patternValue_eq_baseline_add_top ρ μG hN hN3 hρcont u u' D _
+    hk0, hbase]
+  have hfilter : (Fintype.piFinset (fun S => Finset.range
+        ((fun S => if S ∈ D then 1 else 0) S + 1))).filter
+      (fun j => 4 ≤ (D.filter (fun S => j S ≠ 0)).card)
+    = {(fun S => if S ∈ D then 1 else 0)} := by
+    ext j
+    simp only [Finset.mem_filter, Fintype.mem_piFinset,
+      Finset.mem_singleton]
+    constructor
+    · intro hj
+      obtain ⟨hjpi, hjcard⟩ := hj
+      have hsupp : D.filter (fun S => j S ≠ 0) = D := by
+        apply Finset.eq_of_subset_of_card_le _ _
+        · exact Finset.filter_subset _ _
+        · rw [hD]; exact hjcard
+      funext S
+      by_cases hSD : S ∈ D
+      · have hjne : j S ≠ 0 := by
+          have hmem : S ∈ D.filter (fun S => j S ≠ 0) := by
+            rw [hsupp]; exact hSD
+          exact (Finset.mem_filter.mp hmem).2
+        have hle : j S ≤ 1 := by
+          have hlt := hjpi S
+          rw [Finset.mem_range] at hlt
+          simp only [hSD, if_true] at hlt
+          omega
+        show j S = (if S ∈ D then 1 else 0)
+        rw [if_pos hSD]
+        omega
+      · have hle : j S ≤ 0 := by
+          have hlt := hjpi S
+          rw [Finset.mem_range] at hlt
+          simp only [hSD, if_false] at hlt
+          omega
+        show j S = (if S ∈ D then 1 else 0)
+        rw [if_neg hSD]
+        omega
+    · intro hj
+      rw [hj]
+      constructor
+      · intro S
+        rw [Finset.mem_range]
+        show (if S ∈ D then 1 else 0)
+          < (if S ∈ D then 1 else 0) + 1
+        by_cases hSD : S ∈ D
+        · rw [if_pos hSD]; norm_num
+        · rw [if_neg hSD]; norm_num
+      · have hsupp : D.filter (fun S =>
+            (fun S => if S ∈ D then 1 else 0) S ≠ 0) = D := by
+          refine Finset.filter_true_of_mem fun S hS => ?_
+          show (if S ∈ D then 1 else 0) ≠ 0
+          rw [if_pos hS]; norm_num
+        simp [hsupp, hD]
+  rw [hfilter, Finset.sum_singleton]
+  have hcoeff : (∏ S ∈ D, (((fun S => if S ∈ D then 1 else 0) S).choose
+        ((fun S => if S ∈ D then 1 else 0) S) : ℝ)
+      * (-(d : ℝ)⁻¹) ^ ((fun S => if S ∈ D then 1 else 0) S))
+    = (-(d : ℝ)⁻¹) ^ 4 := by
+    have hrest : ∀ S ∈ D,
+        (((fun S => if S ∈ D then 1 else 0) S).choose
+          ((fun S => if S ∈ D then 1 else 0) S) : ℝ)
+          * (-(d : ℝ)⁻¹) ^ ((fun S => if S ∈ D then 1 else 0) S)
+          = (-(d : ℝ)⁻¹) := by
+      intro S hS
+      have hval : (fun S => if S ∈ D then 1 else 0) S = 1 := by
+        simp [hS]
+      rw [hval]; norm_num
+    rw [Finset.prod_congr rfl hrest, Finset.prod_const, hD]
+  have hF : (∏ S ∈ D, realMoment ρ μG
+      ((fun S => if S ∈ D then 1 else 0) S)) = (e1 ρ μG) ^ 4 := by
+    have hrest : ∀ S ∈ D, realMoment ρ μG
+          ((fun S => if S ∈ D then 1 else 0) S) = e1 ρ μG := by
+      intro S hS
+      have hval : (fun S => if S ∈ D then 1 else 0) S = 1 := by
+        simp [hS]
+      rw [hval, realMoment_one]
+    rw [Finset.prod_congr rfl hrest, Finset.prod_const, hD]
+  have hM : colReMomentPow ρ μG D
+        (fun S => if S ∈ D then 1 else 0) u u'
+      = quadReMoment ρ μG D u u' := by
+    have hcong : ∀ S ∈ D,
+        (fun S => if S ∈ D then 1 else 0) S = (fun _ => 1) S := by
+      intro S hS
+      have hval : (fun S => if S ∈ D then 1 else 0) S = 1 := by
+        simp [hS]
+      rw [hval]
+    rw [colReMomentPow_congr_on ρ μG hcong u u',
+      colReMomentPow_one]
+  rw [hcoeff, hF, hM]
+  ring
+
+/-- **The `(3,1,1,1,1)` pattern value on a 5-support.**
+Baseline `A₃B⁴`, the three full-support excesses, the
+all-ones erasure at `P`, and at each light column
+the `(3,1,1,1)` erasure. -/
+theorem patternValue31111 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 5) (P : LayerColumn N) (hP : P ∈ C) :
+    ∫ α : LayerSite N → G,
+        ∏ S ∈ C, (colDensC ρ u u' S α)
+          ^ (tripledQuintuplePattern C P S)
+        ∂(Measure.pi fun _ : LayerSite N => μG)
+      = densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)) := by
+  classical
+  have hk0 : ∀ S ∉ C, tripledQuintuplePattern C P S = 0 := by
+    intro S hS
+    have hSP : S ≠ P := fun h => hS (h ▸ hP)
+    simp [tripledQuintuplePattern, hSP, hS]
+  have hbase : ∏ S ∈ C, densMomentValue ρ μG
+        (tripledQuintuplePattern C P S)
+      = densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4 := by
+    rw [← Finset.mul_prod_erase C _ hP]
+    have hPP : densMomentValue ρ μG (tripledQuintuplePattern C P P)
+        = densMomentValue ρ μG 3 := by
+      congr 1; simp [tripledQuintuplePattern]
+    have hrest : ∀ S ∈ C.erase P,
+        densMomentValue ρ μG (tripledQuintuplePattern C P S)
+          = 1 - e1 ρ μG / (d : ℝ) := by
+      intro S hS
+      have hSP : S ≠ P := (Finset.mem_erase.mp hS).1
+      have hSC : S ∈ C := (Finset.mem_erase.mp hS).2
+      have hpat : tripledQuintuplePattern C P S = 1 := by
+        simp [tripledQuintuplePattern, hSP, hSC]
+      rw [hpat, densMomentValue_one]
+    rw [hPP, Finset.prod_congr rfl hrest, Finset.prod_const,
+      Finset.card_erase_of_mem hP, hC, show (5 - 1 : ℕ) = 4 from rfl]
+  rw [patternValue_eq_baseline_add_top ρ μG hN hN3 hρcont u u' C _
+    hk0, hbase, topSum_card5_split ρ μG
+    (tripledQuintuplePattern C P) C hC u u']
+  -- full-support part: bijection to `Icc 1 3`
+  set g : ℕ → LayerColumn N → ℕ := fun a S =>
+    if S = P then a else if S ∈ C then 1 else 0 with hg
+  have hfull : (∑ j ∈ (Fintype.piFinset (fun S => Finset.range
+          (tripledQuintuplePattern C P S + 1))).filter
+        (fun j => (C.filter (fun S => j S ≠ 0)) = C),
+      (∏ S ∈ C, ((tripledQuintuplePattern C P S).choose
+          (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ S ∈ C, realMoment ρ μG (j S)))
+    = - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4) := by
+    have hmem : ∀ a ∈ Finset.Icc 1 3,
+        g a ∈ (Fintype.piFinset (fun S => Finset.range
+            (tripledQuintuplePattern C P S + 1))).filter
+          (fun j => (C.filter (fun S => j S ≠ 0)) = C) := by
+      intro a ha
+      obtain ⟨ha1, ha3⟩ := Finset.mem_Icc.mp ha
+      rw [Finset.mem_filter, Fintype.mem_piFinset]
+      constructor
+      · intro S
+        rw [Finset.mem_range]
+        by_cases hSP : S = P
+        · rw [hSP]
+          have hpat : tripledQuintuplePattern C P P = 3 := by
+            simp [tripledQuintuplePattern]
+          rw [hpat]
+          show g a P < 3 + 1
+          simp only [hg, if_true]
+          omega
+        · by_cases hSC : S ∈ C
+          · have hpat : tripledQuintuplePattern C P S = 1 := by
+              simp [tripledQuintuplePattern, hSP, hSC]
+            rw [hpat]
+            show g a S < 1 + 1
+            simp only [hg, hSP, hSC, if_false, if_true]
+            omega
+          · have hpat : tripledQuintuplePattern C P S = 0 :=
+              hk0 S hSC
+            rw [hpat]
+            show g a S < 0 + 1
+            simp only [hg, hSP, hSC, if_false]
+            omega
+      · have hfilt : C.filter (fun S => g a S ≠ 0) = C := by
+          refine Finset.filter_true_of_mem fun S hSC => ?_
+          by_cases hSP : S = P
+          · rw [hSP]; simp only [hg, if_true]; omega
+          · simp only [hg, hSP, hSC, if_false, if_true]
+            norm_num
+        rw [hfilt]
+    have hinj : ∀ a₁ ∈ Finset.Icc 1 3, ∀ a₂ ∈ Finset.Icc 1 3,
+        g a₁ = g a₂ → a₁ = a₂ := by
+      intro a₁ _ a₂ _ h
+      have h1 : g a₁ P = a₁ := by simp only [hg, if_true]
+      have h2 : g a₂ P = a₂ := by simp only [hg, if_true]
+      rw [← h1, ← h2, h]
+    have hsurj : ∀ j ∈ (Fintype.piFinset (fun S => Finset.range
+            (tripledQuintuplePattern C P S + 1))).filter
+          (fun j => (C.filter (fun S => j S ≠ 0)) = C),
+        ∃ a, ∃ _ : a ∈ Finset.Icc 1 3, g a = j := by
+      intro j hj
+      rw [Finset.mem_filter] at hj
+      obtain ⟨hjpi, hjfilt⟩ := hj
+      have hjpi' := Fintype.mem_piFinset.mp hjpi
+      have hjne : ∀ S ∈ C, j S ≠ 0 := by
+        intro S hSC
+        have hmem : S ∈ C.filter (fun S => j S ≠ 0) := by
+          rw [hjfilt]; exact hSC
+        exact (Finset.mem_filter.mp hmem).2
+      have hbound : ∀ S, j S ≤ tripledQuintuplePattern C P S := by
+        intro S
+        have hlt := hjpi' S
+        rw [Finset.mem_range] at hlt; omega
+      have hP3 : j P ≤ 3 := by
+        have hpat : tripledQuintuplePattern C P P = 3 := by
+          simp [tripledQuintuplePattern]
+        have h := hbound P; rwa [hpat] at h
+      refine ⟨j P, Finset.mem_Icc.mpr
+        ⟨Nat.one_le_iff_ne_zero.mpr (hjne P hP), hP3⟩, ?_⟩
+      show g (j P) = j
+      funext S
+      by_cases hSP : S = P
+      · rw [hSP]; simp only [hg, if_true]
+      · by_cases hSC : S ∈ C
+        · have hpat : tripledQuintuplePattern C P S = 1 := by
+            simp [tripledQuintuplePattern, hSP, hSC]
+          have hjS : j S = 1 := by
+            have hb := hbound S; rw [hpat] at hb
+            have hne := hjne S hSC; omega
+          simp only [hg, hSP, hSC, if_false, if_true]
+          exact hjS.symm
+        · have hpat : tripledQuintuplePattern C P S = 0 :=
+            hk0 S hSC
+          have hjS : j S = 0 := by
+            have hb := hbound S; rw [hpat] at hb; omega
+          simp only [hg, hSP, hSC, if_false]
+          exact hjS.symm
+    have htop : (∑ j ∈ (Fintype.piFinset (fun S => Finset.range
+            (tripledQuintuplePattern C P S + 1))).filter
+          (fun j => (C.filter (fun S => j S ≠ 0)) = C),
+        (∏ S ∈ C, ((tripledQuintuplePattern C P S).choose
+            (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+          * (colReMomentPow ρ μG C j u u'
+            - ∏ S ∈ C, realMoment ρ μG (j S)))
+      = ∑ a ∈ Finset.Icc 1 3,
+        (∏ S ∈ C, ((tripledQuintuplePattern C P S).choose
+            (g a S) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a S))
+          * (colReMomentPow ρ μG C (g a) u u'
+            - ∏ S ∈ C, realMoment ρ μG (g a S)) :=
+      (Finset.sum_bij (fun a _ => g a) hmem hinj hsurj
+        (fun a _ => rfl)).symm
+    rw [htop, sum_Icc_one_three]
+    have hcoeff : ∀ a : ℕ,
+        (∏ S ∈ C, ((tripledQuintuplePattern C P S).choose
+            (g a S) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a S))
+          = ((Nat.choose 3 a : ℝ)) * (-(d : ℝ)⁻¹) ^ a
+            * (-(d : ℝ)⁻¹) ^ 4 := by
+      intro a
+      rw [← Finset.mul_prod_erase C _ hP]
+      have hPP : ((tripledQuintuplePattern C P P).choose
+            (g a P) : ℝ) * (-(d : ℝ)⁻¹) ^ (g a P)
+          = ((Nat.choose 3 a : ℝ)) * (-(d : ℝ)⁻¹) ^ a := by
+        have hpat : tripledQuintuplePattern C P P = 3 := by
+          simp [tripledQuintuplePattern]
+        have hgP : g a P = a := by simp only [hg, if_true]
+        rw [hpat, hgP]
+      have hrest : ∀ S ∈ C.erase P,
+          ((tripledQuintuplePattern C P S).choose (g a S) : ℝ)
+            * (-(d : ℝ)⁻¹) ^ (g a S) = (-(d : ℝ)⁻¹) := by
+        intro S hS
+        have hSP : S ≠ P := (Finset.mem_erase.mp hS).1
+        have hSC : S ∈ C := (Finset.mem_erase.mp hS).2
+        have hpat : tripledQuintuplePattern C P S = 1 := by
+          simp [tripledQuintuplePattern, hSP, hSC]
+        have hgS : g a S = 1 := by
+          simp only [hg, hSP, hSC, if_false, if_true]
+        rw [hpat, hgS]; norm_num
+      rw [hPP, Finset.prod_congr rfl hrest, Finset.prod_const,
+        Finset.card_erase_of_mem hP, hC,
+        show (5 - 1 : ℕ) = 4 from rfl]
+    have hF : ∀ a : ℕ,
+        (∏ S ∈ C, realMoment ρ μG (g a S))
+          = realMoment ρ μG a * (e1 ρ μG) ^ 4 := by
+      intro a
+      have hgP : g a P = a := by simp only [hg, if_true]
+      rw [← Finset.mul_prod_erase C _ hP, hgP]
+      have hrest : ∀ S ∈ C.erase P,
+          realMoment ρ μG (g a S) = e1 ρ μG := by
+        intro S hS
+        have hSP : S ≠ P := (Finset.mem_erase.mp hS).1
+        have hSC : S ∈ C := (Finset.mem_erase.mp hS).2
+        have hgS : g a S = 1 := by
+          simp only [hg, hSP, hSC, if_false, if_true]
+        rw [hgS, realMoment_one]
+      rw [Finset.prod_congr rfl hrest, Finset.prod_const,
+        Finset.card_erase_of_mem hP, hC,
+        show (5 - 1 : ℕ) = 4 from rfl]
+    have hgeval : ∀ (a : ℕ) (S : LayerColumn N), S ∈ C →
+        g a S = if S = P then a else 1 := by
+      intro a S hSC
+      by_cases hSP : S = P
+      · rw [hSP]; simp only [hg, if_true]
+      · simp only [hg, hSP, hSC, if_false, if_true]
+    have hM1 : colReMomentPow ρ μG C (g 1) u u'
+        = quadReMoment ρ μG C u u' := by
+      have hcong : ∀ S ∈ C, g 1 S = (fun _ => 1) S := by
+        intro S hSC
+        rw [hgeval 1 S hSC]
+        by_cases hSP : S = P
+        · simp only [hSP, if_true]
+        · simp only [hSP, if_false]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_one]
+    have hM2 : colReMomentPow ρ μG C (g 2) u u'
+        = doubledQuadReMoment ρ μG C P u u' := by
+      have hcong : ∀ S ∈ C, g 2 S
+          = (fun S => if S = P then 2 else 1) S := by
+        intro S hSC
+        rw [hgeval 2 S hSC]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_eq_doubledQuadReMoment ρ μG C hP u u']
+    have hM3 : colReMomentPow ρ μG C (g 3) u u'
+        = tripledQuadReMoment ρ μG C P u u' := by
+      have hcong : ∀ S ∈ C, g 3 S
+          = (fun S => if S = P then 3 else 1) S := by
+        intro S hSC
+        rw [hgeval 3 S hSC]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_eq_tripledQuadReMoment ρ μG C hP u u']
+    rw [hcoeff 1, hcoeff 2, hcoeff 3, hF 1, hF 2, hF 3,
+      hM1, hM2, hM3]
+    norm_num [Nat.choose, realMoment_one]
+    ring
+  rw [hfull, ← Finset.sum_erase_add _ _ hP]
+  -- the piece at `P` is split off; the lights remain
+  -- piece at `P`: the all-ones value on `C.erase P`
+  have hpieceP : (∑ j ∈ (Fintype.piFinset
+        (fun S => Finset.range
+          (tripledQuintuplePattern C P S + 1))).filter
+        (fun j => j P = 0 ∧ (C.erase P).filter
+          (fun S => j S ≠ 0) = C.erase P),
+      (∏ S ∈ C, ((tripledQuintuplePattern C P S).choose
+          (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ S ∈ C, realMoment ρ μG (j S)))
+    = ((d : ℝ)⁻¹) ^ 4
+        * (quadReMoment ρ μG (C.erase P) u u'
+          - (e1 ρ μG) ^ 4) := by
+    have hcardD : (C.erase P).card = 4 := by
+      rw [Finset.card_erase_of_mem hP, hC]
+    rw [pieceSum_eq_topSum_erase ρ μG
+      (tripledQuintuplePattern C P) C hC hP u u']
+    have hgen := patternValue_eq_baseline_add_top ρ μG hN hN3
+      hρcont u u' (C.erase P)
+      (fun S => if S = P then 0 else tripledQuintuplePattern C P S)
+      (by intro S hS
+          by_cases hSP : S = P
+          · rw [hSP]; simp
+          · rw [if_neg hSP]
+            exact hk0 S (fun h => hS
+              (Finset.mem_erase.mpr ⟨hSP, h⟩)))
+    have hval : ∀ S ∈ C.erase P,
+        (fun S => if S = P then 0
+          else tripledQuintuplePattern C P S) S
+          = (fun S => if S ∈ C.erase P then 1 else 0) S := by
+      intro S hS
+      have hSP : S ≠ P := (Finset.mem_erase.mp hS).1
+      have hSC : S ∈ C := (Finset.mem_erase.mp hS).2
+      simp [tripledQuintuplePattern, hSP, hSC, hS]
+    have hint : (∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase P, (colDensC ρ u u' S α)
+            ^ ((fun S => if S = P then 0
+              else tripledQuintuplePattern C P S) S)
+          ∂(Measure.pi fun _ : LayerSite N => μG))
+        = ∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase P, (colDensC ρ u u' S α)
+            ^ (fun S => if S ∈ C.erase P then 1 else 0) S
+          ∂(Measure.pi fun _ : LayerSite N => μG) := by
+      refine integral_congr_ae
+        (Filter.Eventually.of_forall fun α => ?_)
+      exact Finset.prod_congr rfl fun S hS => by rw [hval S hS]
+    have hbaseE : (∏ S ∈ C.erase P, densMomentValue ρ μG
+          ((fun S => if S = P then 0
+            else tripledQuintuplePattern C P S) S))
+        = (1 - e1 ρ μG / (d : ℝ)) ^ 4 := by
+      have hvalD : ∀ S ∈ C.erase P,
+          densMomentValue ρ μG
+            ((fun S => if S = P then 0
+              else tripledQuintuplePattern C P S) S)
+            = densMomentValue ρ μG
+              ((fun S => if S ∈ C.erase P then 1 else 0) S) :=
+        fun S hS => by rw [hval S hS]
+      rw [Finset.prod_congr rfl hvalD]
+      have hrest : ∀ S ∈ C.erase P, densMomentValue ρ μG
+            ((fun S => if S ∈ C.erase P then 1 else 0) S)
+            = 1 - e1 ρ μG / (d : ℝ) := by
+        intro S hS
+        have hval2 : (fun S => if S ∈ C.erase P then 1 else 0) S
+            = 1 := by
+          simp [hS]
+        rw [hval2, densMomentValue_one]
+      rw [Finset.prod_congr rfl hrest, Finset.prod_const, hcardD]
+    rw [hint, hbaseE,
+      patternValue1111 ρ μG hN hN3 hρcont u u' (C.erase P) hcardD]
+      at hgen
+    linarith
+  rw [hpieceP]
+  -- pieces at light columns: the `(3,1,1,1)` value on `C.erase R`
+  have hpieceR : ∀ R ∈ C.erase P,
+      (∑ j ∈ (Fintype.piFinset (fun S => Finset.range
+          (tripledQuintuplePattern C P S + 1))).filter
+        (fun j => j R = 0 ∧ (C.erase R).filter
+          (fun S => j S ≠ 0) = C.erase R),
+      (∏ S ∈ C, ((tripledQuintuplePattern C P S).choose
+          (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ S ∈ C, realMoment ρ μG (j S)))
+    = 3 * ((d : ℝ)⁻¹) ^ 4
+        * (quadReMoment ρ μG (C.erase R) u u' - (e1 ρ μG) ^ 4)
+      - 3 * ((d : ℝ)⁻¹) ^ 5
+        * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      + ((d : ℝ)⁻¹) ^ 6
+        * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) := by
+    intro R hR
+    have hRP : R ≠ P := (Finset.mem_erase.mp hR).1
+    have hRC : R ∈ C := (Finset.mem_erase.mp hR).2
+    have hP' : P ∈ C.erase R :=
+      Finset.mem_erase.mpr ⟨Ne.symm hRP, hP⟩
+    have hcardR : (C.erase R).card = 4 := by
+      rw [Finset.card_erase_of_mem hRC, hC]
+    rw [pieceSum_eq_topSum_erase ρ μG
+      (tripledQuintuplePattern C P) C hC hRC u u']
+    have hgen := patternValue_eq_baseline_add_top ρ μG hN hN3
+      hρcont u u' (C.erase R)
+      (fun S => if S = R then 0 else tripledQuintuplePattern C P S)
+      (by intro S hS
+          by_cases hSR : S = R
+          · rw [hSR]; simp
+          · rw [if_neg hSR]
+            exact hk0 S (fun h => hS
+              (Finset.mem_erase.mpr ⟨hSR, h⟩)))
+    have hint : (∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase R, (colDensC ρ u u' S α)
+            ^ ((fun S => if S = R then 0
+              else tripledQuintuplePattern C P S) S)
+          ∂(Measure.pi fun _ : LayerSite N => μG))
+        = ∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase R, (colDensC ρ u u' S α)
+            ^ (if S = P then 3 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) := by
+      refine integral_congr_ae
+        (Filter.Eventually.of_forall fun α => ?_)
+      refine Finset.prod_congr rfl fun S hS => ?_
+      have hSR : S ≠ R := (Finset.mem_erase.mp hS).1
+      have hSC : S ∈ C := (Finset.mem_erase.mp hS).2
+      congr 1
+      by_cases hSP : S = P
+      · rw [hSP]
+        simp [tripledQuintuplePattern, Ne.symm hRP]
+      · simp [tripledQuintuplePattern, hSR, hSP, hSC]
+    have hbaseE : (∏ S ∈ C.erase R, densMomentValue ρ μG
+          ((fun S => if S = R then 0
+            else tripledQuintuplePattern C P S) S))
+        = densMomentValue ρ μG 3
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 3 := by
+      rw [← Finset.mul_prod_erase (C.erase R) _ hP']
+      have hPP : densMomentValue ρ μG
+            ((fun S => if S = R then 0
+              else tripledQuintuplePattern C P S) P)
+          = densMomentValue ρ μG 3 := by
+        congr 1
+        simp [tripledQuintuplePattern, Ne.symm hRP]
+      have hrest : ∀ S ∈ (C.erase R).erase P,
+          densMomentValue ρ μG
+            ((fun S => if S = R then 0
+              else tripledQuintuplePattern C P S) S)
+            = 1 - e1 ρ μG / (d : ℝ) := by
+        intro S hS
+        have hSP : S ≠ P := (Finset.mem_erase.mp hS).1
+        have hSR : S ≠ R :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+        have hSC : S ∈ C :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2
+        have hval : (fun S => if S = R then 0
+              else tripledQuintuplePattern C P S) S = 1 := by
+          simp [tripledQuintuplePattern, hSR, hSP, hSC]
+        rw [hval, densMomentValue_one]
+      have hcardRP : ((C.erase R).erase P).card = 3 := by
+        rw [Finset.card_erase_of_mem hP', hcardR]
+      rw [hPP, Finset.prod_congr rfl hrest, Finset.prod_const,
+        hcardRP]
+    rw [hint, hbaseE,
+      integral_colDens_prod_quadruple_tripled ρ μG hN hN3 hρcont u u'
+        (C.erase R) hcardR P hP'] at hgen
+    linarith
+  rw [Finset.sum_congr rfl hpieceR]
+  ring
+/-- **The `(2,2,1,1,1)` pattern value on a 5-support.**
+Baseline `A₂²B³`, the four full-support excesses, the
+doubled erasures at `P` and `Q`, and at each light
+column the `(2,2,1,1)` erasure. -/
+theorem patternValue22111 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 5) (P Q : LayerColumn N)
+    (hP : P ∈ C) (hQ : Q ∈ C) (hQP : Q ≠ P) :
+    ∫ α : LayerSite N → G,
+        ∏ S ∈ C, (colDensC ρ u u' S α)
+          ^ (doubledDoubledQuintuplePattern C P Q S)
+        ∂(Measure.pi fun _ : LayerSite N => μG)
+      = densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)) := by
+  classical
+  have hk0 : ∀ S ∉ C, doubledDoubledQuintuplePattern C P Q S
+      = 0 := by
+    intro S hS
+    have hSP : S ≠ P := fun h => hS (h ▸ hP)
+    have hSQ : S ≠ Q := fun h => hS (h ▸ hQ)
+    simp [doubledDoubledQuintuplePattern, hSP, hSQ, hS]
+  have hQeP : Q ∈ C.erase P := Finset.mem_erase.mpr ⟨hQP, hQ⟩
+  have hbase : ∏ S ∈ C, densMomentValue ρ μG
+        (doubledDoubledQuintuplePattern C P Q S)
+      = densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2
+            * (1 - e1 ρ μG / (d : ℝ)) ^ 3) := by
+    rw [← Finset.mul_prod_erase C _ hP,
+      ← Finset.mul_prod_erase (C.erase P) _ hQeP]
+    have hPP : densMomentValue ρ μG
+          (doubledDoubledQuintuplePattern C P Q P)
+        = densMomentValue ρ μG 2 := by
+      congr 1; simp [doubledDoubledQuintuplePattern]
+    have hQQ : densMomentValue ρ μG
+          (doubledDoubledQuintuplePattern C P Q Q)
+        = densMomentValue ρ μG 2 := by
+      congr 1; simp [doubledDoubledQuintuplePattern, hQP]
+    have hrest : ∀ S ∈ (C.erase P).erase Q,
+        densMomentValue ρ μG
+          (doubledDoubledQuintuplePattern C P Q S)
+          = 1 - e1 ρ μG / (d : ℝ) := by
+      intro S hS
+      have hSP : S ≠ P :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+      have hSC : S ∈ C :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2
+      have hSQ : S ≠ Q := (Finset.mem_erase.mp hS).1
+      have hpat : doubledDoubledQuintuplePattern C P Q S = 1 := by
+        simp [doubledDoubledQuintuplePattern, hSP, hSQ, hSC]
+      rw [hpat, densMomentValue_one]
+    have hcardPP : ((C.erase P).erase Q).card = 3 := by
+      rw [Finset.card_erase_of_mem hQeP,
+        Finset.card_erase_of_mem hP, hC,
+        show (5 - 1 : ℕ) = 4 from rfl,
+        show (4 - 1 : ℕ) = 3 from rfl]
+    rw [hPP, hQQ, Finset.prod_congr rfl hrest, Finset.prod_const,
+      hcardPP]
+  rw [patternValue_eq_baseline_add_top ρ μG hN hN3 hρcont u u' C _
+    hk0, hbase, topSum_card5_split ρ μG
+    (doubledDoubledQuintuplePattern C P Q) C hC u u']
+  -- full-support part: bijection to `(Icc 1 2) ×ˢ (Icc 1 2)`
+  set g : ℕ × ℕ → LayerColumn N → ℕ := fun p S =>
+    if S = P then p.1 else if S = Q then p.2
+    else if S ∈ C then 1 else 0 with hg
+  have hfull : (∑ j ∈ (Fintype.piFinset (fun S => Finset.range
+          (doubledDoubledQuintuplePattern C P Q S + 1))).filter
+        (fun j => (C.filter (fun S => j S ≠ 0)) = C),
+      (∏ S ∈ C, ((doubledDoubledQuintuplePattern C P Q S).choose
+          (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ S ∈ C, realMoment ρ μG (j S)))
+    = - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3) := by
+    have hmem : ∀ p ∈ Finset.Icc 1 2 ×ˢ Finset.Icc 1 2,
+        g p ∈ (Fintype.piFinset (fun S => Finset.range
+            (doubledDoubledQuintuplePattern C P Q S + 1))).filter
+          (fun j => (C.filter (fun S => j S ≠ 0)) = C) := by
+      intro p hp
+      obtain ⟨hp1, hp2⟩ := Finset.mem_product.mp hp
+      obtain ⟨hp11, hp12⟩ := Finset.mem_Icc.mp hp1
+      obtain ⟨hp21, hp22⟩ := Finset.mem_Icc.mp hp2
+      rw [Finset.mem_filter, Fintype.mem_piFinset]
+      constructor
+      · intro S
+        rw [Finset.mem_range]
+        by_cases hSP : S = P
+        · rw [hSP]
+          have hpat : doubledDoubledQuintuplePattern C P Q P
+              = 2 := by
+            simp [doubledDoubledQuintuplePattern]
+          rw [hpat]
+          show g p P < 2 + 1
+          simp only [hg, if_true]
+          omega
+        · by_cases hSQ : S = Q
+          · rw [hSQ]
+            have hpat : doubledDoubledQuintuplePattern C P Q Q
+                = 2 := by
+              simp [doubledDoubledQuintuplePattern, hQP]
+            rw [hpat]
+            show g p Q < 2 + 1
+            simp only [hg, hQP, if_false, if_true]
+            omega
+          · by_cases hSC : S ∈ C
+            · have hpat : doubledDoubledQuintuplePattern C P Q S
+                  = 1 := by
+                simp [doubledDoubledQuintuplePattern, hSP, hSQ,
+                  hSC]
+              rw [hpat]
+              show g p S < 1 + 1
+              simp only [hg, hSP, hSQ, hSC, if_false, if_true]
+              omega
+            · have hpat : doubledDoubledQuintuplePattern C P Q S
+                  = 0 := hk0 S hSC
+              rw [hpat]
+              show g p S < 0 + 1
+              simp only [hg, hSP, hSQ, hSC, if_false]
+              omega
+      · have hfilt : C.filter (fun S => g p S ≠ 0) = C := by
+          refine Finset.filter_true_of_mem fun S hSC => ?_
+          by_cases hSP : S = P
+          · rw [hSP]; simp only [hg, if_true]; omega
+          · by_cases hSQ : S = Q
+            · rw [hSQ]
+              simp only [hg, hQP, if_false, if_true]; omega
+            · simp only [hg, hSP, hSQ, hSC, if_false, if_true]
+              norm_num
+        rw [hfilt]
+    have hinj : ∀ p₁ ∈ Finset.Icc 1 2 ×ˢ Finset.Icc 1 2,
+        ∀ p₂ ∈ Finset.Icc 1 2 ×ˢ Finset.Icc 1 2,
+        g p₁ = g p₂ → p₁ = p₂ := by
+      intro p₁ _ p₂ _ h
+      have h1 : g p₁ P = p₁.1 := by simp only [hg, if_true]
+      have h2 : g p₂ P = p₂.1 := by simp only [hg, if_true]
+      have h3 : g p₁ Q = p₁.2 := by
+        simp only [hg, hQP, if_false, if_true]
+      have h4 : g p₂ Q = p₂.2 := by
+        simp only [hg, hQP, if_false, if_true]
+      have e1 : p₁.1 = p₂.1 := by rw [← h1, ← h2, h]
+      have e2 : p₁.2 = p₂.2 := by rw [← h3, ← h4, h]
+      exact Prod.ext e1 e2
+    have hsurj : ∀ j ∈ (Fintype.piFinset (fun S => Finset.range
+            (doubledDoubledQuintuplePattern C P Q S + 1))).filter
+          (fun j => (C.filter (fun S => j S ≠ 0)) = C),
+        ∃ p, ∃ _ : p ∈ Finset.Icc 1 2 ×ˢ Finset.Icc 1 2,
+          g p = j := by
+      intro j hj
+      rw [Finset.mem_filter] at hj
+      obtain ⟨hjpi, hjfilt⟩ := hj
+      have hjpi' := Fintype.mem_piFinset.mp hjpi
+      have hjne : ∀ S ∈ C, j S ≠ 0 := by
+        intro S hSC
+        have hmem : S ∈ C.filter (fun S => j S ≠ 0) := by
+          rw [hjfilt]; exact hSC
+        exact (Finset.mem_filter.mp hmem).2
+      have hbound : ∀ S, j S
+          ≤ doubledDoubledQuintuplePattern C P Q S := by
+        intro S
+        have hlt := hjpi' S
+        rw [Finset.mem_range] at hlt; omega
+      have hP2 : j P ≤ 2 := by
+        have hpat : doubledDoubledQuintuplePattern C P Q P = 2 := by
+          simp [doubledDoubledQuintuplePattern]
+        have h := hbound P; rwa [hpat] at h
+      have hQ2 : j Q ≤ 2 := by
+        have hpat : doubledDoubledQuintuplePattern C P Q Q = 2 := by
+          simp [doubledDoubledQuintuplePattern, hQP]
+        have h := hbound Q; rwa [hpat] at h
+      refine ⟨(j P, j Q), Finset.mem_product.mpr
+        ⟨Finset.mem_Icc.mpr
+          ⟨Nat.one_le_iff_ne_zero.mpr (hjne P hP), hP2⟩,
+         Finset.mem_Icc.mpr
+          ⟨Nat.one_le_iff_ne_zero.mpr (hjne Q hQ), hQ2⟩⟩, ?_⟩
+      show g (j P, j Q) = j
+      funext S
+      by_cases hSP : S = P
+      · rw [hSP]; simp only [hg, if_true]
+      · by_cases hSQ : S = Q
+        · rw [hSQ]; simp only [hg, hQP, if_false, if_true]
+        · by_cases hSC : S ∈ C
+          · have hpat : doubledDoubledQuintuplePattern C P Q S
+                = 1 := by
+              simp [doubledDoubledQuintuplePattern, hSP, hSQ, hSC]
+            have hjS : j S = 1 := by
+              have hb := hbound S; rw [hpat] at hb
+              have hne := hjne S hSC; omega
+            simp only [hg, hSP, hSQ, hSC, if_false, if_true]
+            exact hjS.symm
+          · have hpat : doubledDoubledQuintuplePattern C P Q S
+                = 0 := hk0 S hSC
+            have hjS : j S = 0 := by
+              have hb := hbound S; rw [hpat] at hb; omega
+            simp only [hg, hSP, hSQ, hSC, if_false]
+            exact hjS.symm
+    have htop : (∑ j ∈ (Fintype.piFinset (fun S => Finset.range
+            (doubledDoubledQuintuplePattern C P Q S + 1))).filter
+          (fun j => (C.filter (fun S => j S ≠ 0)) = C),
+        (∏ S ∈ C, ((doubledDoubledQuintuplePattern C P Q S).choose
+            (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+          * (colReMomentPow ρ μG C j u u'
+            - ∏ S ∈ C, realMoment ρ μG (j S)))
+      = ∑ p ∈ Finset.Icc 1 2 ×ˢ Finset.Icc 1 2,
+        (∏ S ∈ C, ((doubledDoubledQuintuplePattern C P Q S).choose
+            (g p S) : ℝ) * (-(d : ℝ)⁻¹) ^ (g p S))
+          * (colReMomentPow ρ μG C (g p) u u'
+            - ∏ S ∈ C, realMoment ρ μG (g p S)) :=
+      (Finset.sum_bij (fun p _ => g p) hmem hinj hsurj
+        (fun p _ => rfl)).symm
+    rw [htop, Finset.sum_product]
+    simp only [sum_Icc_one_two]
+    have hcoeff : ∀ p : ℕ × ℕ,
+        (∏ S ∈ C, ((doubledDoubledQuintuplePattern C P Q S).choose
+            (g p S) : ℝ) * (-(d : ℝ)⁻¹) ^ (g p S))
+          = ((Nat.choose 2 p.1 : ℝ)) * (-(d : ℝ)⁻¹) ^ p.1
+            * (((Nat.choose 2 p.2 : ℝ)) * (-(d : ℝ)⁻¹) ^ p.2
+              * (-(d : ℝ)⁻¹) ^ 3) := by
+      intro p
+      rw [← Finset.mul_prod_erase C _ hP,
+        ← Finset.mul_prod_erase (C.erase P) _ hQeP]
+      have hPP : ((doubledDoubledQuintuplePattern C P Q P).choose
+            (g p P) : ℝ) * (-(d : ℝ)⁻¹) ^ (g p P)
+          = ((Nat.choose 2 p.1 : ℝ)) * (-(d : ℝ)⁻¹) ^ p.1 := by
+        have hpat : doubledDoubledQuintuplePattern C P Q P
+            = 2 := by
+          simp [doubledDoubledQuintuplePattern]
+        have hgP : g p P = p.1 := by simp only [hg, if_true]
+        rw [hpat, hgP]
+      have hQQ : ((doubledDoubledQuintuplePattern C P Q Q).choose
+            (g p Q) : ℝ) * (-(d : ℝ)⁻¹) ^ (g p Q)
+          = ((Nat.choose 2 p.2 : ℝ)) * (-(d : ℝ)⁻¹) ^ p.2 := by
+        have hpat : doubledDoubledQuintuplePattern C P Q Q
+            = 2 := by
+          simp [doubledDoubledQuintuplePattern, hQP]
+        have hgQ : g p Q = p.2 := by
+          simp only [hg, hQP, if_false, if_true]
+        rw [hpat, hgQ]
+      have hrest : ∀ S ∈ (C.erase P).erase Q,
+          ((doubledDoubledQuintuplePattern C P Q S).choose
+              (g p S) : ℝ) * (-(d : ℝ)⁻¹) ^ (g p S)
+            = (-(d : ℝ)⁻¹) := by
+        intro S hS
+        have hSP : S ≠ P :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+        have hSC : S ∈ C :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2
+        have hSQ : S ≠ Q := (Finset.mem_erase.mp hS).1
+        have hpat : doubledDoubledQuintuplePattern C P Q S
+            = 1 := by
+          simp [doubledDoubledQuintuplePattern, hSP, hSQ, hSC]
+        have hgS : g p S = 1 := by
+          simp only [hg, hSP, hSQ, hSC, if_false, if_true]
+        rw [hpat, hgS]; norm_num
+      have hcardPP : ((C.erase P).erase Q).card = 3 := by
+        rw [Finset.card_erase_of_mem hQeP,
+          Finset.card_erase_of_mem hP, hC,
+          show (5 - 1 : ℕ) = 4 from rfl,
+          show (4 - 1 : ℕ) = 3 from rfl]
+      rw [hPP, hQQ, Finset.prod_congr rfl hrest, Finset.prod_const,
+        hcardPP]
+    have hF : ∀ p : ℕ × ℕ,
+        (∏ S ∈ C, realMoment ρ μG (g p S))
+          = realMoment ρ μG p.1
+            * (realMoment ρ μG p.2 * (e1 ρ μG) ^ 3) := by
+      intro p
+      have hgP : g p P = p.1 := by simp only [hg, if_true]
+      have hgQ : g p Q = p.2 := by
+        simp only [hg, hQP, if_false, if_true]
+      rw [← Finset.mul_prod_erase C _ hP, hgP,
+        ← Finset.mul_prod_erase (C.erase P) _ hQeP, hgQ]
+      have hrest : ∀ S ∈ (C.erase P).erase Q,
+          realMoment ρ μG (g p S) = e1 ρ μG := by
+        intro S hS
+        have hSP : S ≠ P :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+        have hSC : S ∈ C :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2
+        have hSQ : S ≠ Q := (Finset.mem_erase.mp hS).1
+        have hgS : g p S = 1 := by
+          simp only [hg, hSP, hSQ, hSC, if_false, if_true]
+        rw [hgS, realMoment_one]
+      have hcardPP : ((C.erase P).erase Q).card = 3 := by
+        rw [Finset.card_erase_of_mem hQeP,
+          Finset.card_erase_of_mem hP, hC,
+          show (5 - 1 : ℕ) = 4 from rfl,
+          show (4 - 1 : ℕ) = 3 from rfl]
+      rw [Finset.prod_congr rfl hrest, Finset.prod_const, hcardPP]
+    have hgeval : ∀ (p : ℕ × ℕ) (S : LayerColumn N), S ∈ C →
+        g p S = if S = P then p.1 else if S = Q then p.2 else 1 := by
+      intro p S hSC
+      by_cases hSP : S = P
+      · rw [hSP]; simp only [hg, if_true]
+      · by_cases hSQ : S = Q
+        · rw [hSQ]; simp only [hg, hQP, if_false, if_true]
+        · simp only [hg, hSP, hSQ, hSC, if_false, if_true]
+    have hM11 : colReMomentPow ρ μG C (g (1, 1)) u u'
+        = quadReMoment ρ μG C u u' := by
+      have hcong : ∀ S ∈ C, g (1, 1) S = (fun _ => 1) S := by
+        intro S hSC
+        rw [hgeval (1, 1) S hSC]
+        by_cases hSP : S = P
+        · simp only [hSP, if_true]
+        · by_cases hSQ : S = Q
+          · simp only [hSP, hSQ, hQP, if_false, if_true]
+          · simp only [hSP, hSQ, if_false]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_one]
+    have hM21 : colReMomentPow ρ μG C (g (2, 1)) u u'
+        = doubledQuadReMoment ρ μG C P u u' := by
+      have hcong : ∀ S ∈ C, g (2, 1) S
+          = (fun S => if S = P then 2 else 1) S := by
+        intro S hSC
+        rw [hgeval (2, 1) S hSC]
+        by_cases hSP : S = P
+        · simp only [hSP, if_true]
+        · by_cases hSQ : S = Q
+          · simp only [hSP, hSQ, if_false, if_true]
+          · simp only [hSP, hSQ, if_false]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_eq_doubledQuadReMoment ρ μG C hP u u']
+    have hM12 : colReMomentPow ρ μG C (g (1, 2)) u u'
+        = doubledQuadReMoment ρ μG C Q u u' := by
+      have hcong : ∀ S ∈ C, g (1, 2) S
+          = (fun S => if S = Q then 2 else 1) S := by
+        intro S hSC
+        rw [hgeval (1, 2) S hSC]
+        by_cases hSP : S = P
+        · rw [hSP]
+          have hPQ : ¬ (P = Q) := Ne.symm hQP
+          simp only [if_true, hPQ, if_false]
+        · simp only [hSP, if_false]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_eq_doubledQuadReMoment ρ μG C hQ u u']
+    have hM22 : colReMomentPow ρ μG C (g (2, 2)) u u'
+        = doubledDoubledQuadReMoment ρ μG C P Q u u' := by
+      have hcong : ∀ S ∈ C, g (2, 2) S
+          = (fun S => if S = P then 2 else if S = Q then 2
+              else 1) S := by
+        intro S hSC
+        rw [hgeval (2, 2) S hSC]
+      rw [colReMomentPow_congr_on ρ μG hcong u u',
+        colReMomentPow_eq_doubledDoubledQuadReMoment ρ μG C
+          hP hQ hQP u u']
+    rw [hcoeff (1, 1), hcoeff (1, 2), hcoeff (2, 1), hcoeff (2, 2),
+      hF (1, 1), hF (1, 2), hF (2, 1), hF (2, 2),
+      hM11, hM12, hM21, hM22]
+    norm_num [Nat.choose, realMoment_one]
+    ring
+  rw [hfull, ← Finset.sum_erase_add _ _ hP]
+  -- the piece at `P` is split off; `Q` and the lights remain
+  -- piece at `P`: the doubled value at `Q` on `C.erase P`
+  have hpieceP : (∑ j ∈ (Fintype.piFinset
+        (fun S => Finset.range
+          (doubledDoubledQuintuplePattern C P Q S + 1))).filter
+        (fun j => j P = 0 ∧ (C.erase P).filter
+          (fun S => j S ≠ 0) = C.erase P),
+      (∏ S ∈ C, ((doubledDoubledQuintuplePattern C P Q S).choose
+          (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ S ∈ C, realMoment ρ μG (j S)))
+    = 2 * ((d : ℝ)⁻¹) ^ 4
+        * (quadReMoment ρ μG (C.erase P) u u' - (e1 ρ μG) ^ 4)
+      - ((d : ℝ)⁻¹) ^ 5
+        * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) := by
+    have hcardP : (C.erase P).card = 4 := by
+      rw [Finset.card_erase_of_mem hP, hC]
+    rw [pieceSum_eq_topSum_erase ρ μG
+      (doubledDoubledQuintuplePattern C P Q) C hC hP u u']
+    have hgen := patternValue_eq_baseline_add_top ρ μG hN hN3
+      hρcont u u' (C.erase P)
+      (fun S => if S = P then 0
+        else doubledDoubledQuintuplePattern C P Q S)
+      (by intro S hS
+          by_cases hSP : S = P
+          · rw [hSP]; simp
+          · rw [if_neg hSP]
+            exact hk0 S (fun h => hS
+              (Finset.mem_erase.mpr ⟨hSP, h⟩)))
+    have hint : (∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase P, (colDensC ρ u u' S α)
+            ^ ((fun S => if S = P then 0
+              else doubledDoubledQuintuplePattern C P Q S) S)
+          ∂(Measure.pi fun _ : LayerSite N => μG))
+        = ∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase P, (colDensC ρ u u' S α)
+            ^ (if S = Q then 2 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) := by
+      refine integral_congr_ae
+        (Filter.Eventually.of_forall fun α => ?_)
+      refine Finset.prod_congr rfl fun S hS => ?_
+      have hSP : S ≠ P := (Finset.mem_erase.mp hS).1
+      have hSC : S ∈ C := (Finset.mem_erase.mp hS).2
+      congr 1
+      by_cases hSQ : S = Q
+      · rw [hSQ]
+        simp [doubledDoubledQuintuplePattern, hQP, hSP]
+      · simp [doubledDoubledQuintuplePattern, hSP, hSQ, hSC]
+    have hbaseE : (∏ S ∈ C.erase P, densMomentValue ρ μG
+          ((fun S => if S = P then 0
+            else doubledDoubledQuintuplePattern C P Q S) S))
+        = densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 3 := by
+      rw [← Finset.mul_prod_erase (C.erase P) _ hQeP]
+      have hQQ : densMomentValue ρ μG
+            ((fun S => if S = P then 0
+              else doubledDoubledQuintuplePattern C P Q S) Q)
+          = densMomentValue ρ μG 2 := by
+        congr 1
+        simp [doubledDoubledQuintuplePattern, hQP]
+      have hrest : ∀ S ∈ (C.erase P).erase Q,
+          densMomentValue ρ μG
+            ((fun S => if S = P then 0
+              else doubledDoubledQuintuplePattern C P Q S) S)
+            = 1 - e1 ρ μG / (d : ℝ) := by
+        intro S hS
+        have hSP : S ≠ P :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+        have hSC : S ∈ C :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2
+        have hSQ : S ≠ Q := (Finset.mem_erase.mp hS).1
+        have hval : (fun S => if S = P then 0
+              else doubledDoubledQuintuplePattern C P Q S) S
+            = 1 := by
+          simp [doubledDoubledQuintuplePattern, hSP, hSQ, hSC]
+        rw [hval, densMomentValue_one]
+      have hcardPQ : ((C.erase P).erase Q).card = 3 := by
+        rw [Finset.card_erase_of_mem hQeP, hcardP,
+          show (4 - 1 : ℕ) = 3 from rfl]
+      rw [hQQ, Finset.prod_congr rfl hrest, Finset.prod_const,
+        hcardPQ]
+    rw [hint, hbaseE,
+      integral_colDens_prod_quadruple_doubled ρ μG hN hN3 hρcont
+        u u' (C.erase P) hcardP Q hQeP] at hgen
+    linarith
+  rw [hpieceP, ← Finset.sum_erase_add _ _ hQeP]
+  -- piece at `Q`: the doubled value at `P` on `C.erase Q`
+  have hPeQ : P ∈ C.erase Q :=
+    Finset.mem_erase.mpr ⟨Ne.symm hQP, hP⟩
+  have hpieceQ : (∑ j ∈ (Fintype.piFinset
+        (fun S => Finset.range
+          (doubledDoubledQuintuplePattern C P Q S + 1))).filter
+        (fun j => j Q = 0 ∧ (C.erase Q).filter
+          (fun S => j S ≠ 0) = C.erase Q),
+      (∏ S ∈ C, ((doubledDoubledQuintuplePattern C P Q S).choose
+          (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ S ∈ C, realMoment ρ μG (j S)))
+    = 2 * ((d : ℝ)⁻¹) ^ 4
+        * (quadReMoment ρ μG (C.erase Q) u u' - (e1 ρ μG) ^ 4)
+      - ((d : ℝ)⁻¹) ^ 5
+        * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) := by
+    have hcardQ : (C.erase Q).card = 4 := by
+      rw [Finset.card_erase_of_mem hQ, hC]
+    rw [pieceSum_eq_topSum_erase ρ μG
+      (doubledDoubledQuintuplePattern C P Q) C hC hQ u u']
+    have hgen := patternValue_eq_baseline_add_top ρ μG hN hN3
+      hρcont u u' (C.erase Q)
+      (fun S => if S = Q then 0
+        else doubledDoubledQuintuplePattern C P Q S)
+      (by intro S hS
+          by_cases hSQ : S = Q
+          · rw [hSQ]; simp
+          · rw [if_neg hSQ]
+            exact hk0 S (fun h => hS
+              (Finset.mem_erase.mpr ⟨hSQ, h⟩)))
+    have hint : (∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase Q, (colDensC ρ u u' S α)
+            ^ ((fun S => if S = Q then 0
+              else doubledDoubledQuintuplePattern C P Q S) S)
+          ∂(Measure.pi fun _ : LayerSite N => μG))
+        = ∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase Q, (colDensC ρ u u' S α)
+            ^ (if S = P then 2 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) := by
+      refine integral_congr_ae
+        (Filter.Eventually.of_forall fun α => ?_)
+      refine Finset.prod_congr rfl fun S hS => ?_
+      have hSQ : S ≠ Q := (Finset.mem_erase.mp hS).1
+      have hSC : S ∈ C := (Finset.mem_erase.mp hS).2
+      congr 1
+      by_cases hSP : S = P
+      · rw [hSP]
+        simp [doubledDoubledQuintuplePattern, Ne.symm hQP]
+      · simp [doubledDoubledQuintuplePattern, hSP, hSQ, hSC]
+    have hbaseE : (∏ S ∈ C.erase Q, densMomentValue ρ μG
+          ((fun S => if S = Q then 0
+            else doubledDoubledQuintuplePattern C P Q S) S))
+        = densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 3 := by
+      rw [← Finset.mul_prod_erase (C.erase Q) _ hPeQ]
+      have hPP : densMomentValue ρ μG
+            ((fun S => if S = Q then 0
+              else doubledDoubledQuintuplePattern C P Q S) P)
+          = densMomentValue ρ μG 2 := by
+        congr 1
+        simp [doubledDoubledQuintuplePattern, Ne.symm hQP]
+      have hrest : ∀ S ∈ (C.erase Q).erase P,
+          densMomentValue ρ μG
+            ((fun S => if S = Q then 0
+              else doubledDoubledQuintuplePattern C P Q S) S)
+            = 1 - e1 ρ μG / (d : ℝ) := by
+        intro S hS
+        have hSQ : S ≠ Q :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+        have hSC : S ∈ C :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).2
+        have hSP : S ≠ P := (Finset.mem_erase.mp hS).1
+        have hval : (fun S => if S = Q then 0
+              else doubledDoubledQuintuplePattern C P Q S) S
+            = 1 := by
+          simp [doubledDoubledQuintuplePattern, hSP, hSQ, hSC]
+        rw [hval, densMomentValue_one]
+      have hcardQP : ((C.erase Q).erase P).card = 3 := by
+        rw [Finset.card_erase_of_mem hPeQ, hcardQ,
+          show (4 - 1 : ℕ) = 3 from rfl]
+      rw [hPP, Finset.prod_congr rfl hrest, Finset.prod_const,
+        hcardQP]
+    rw [hint, hbaseE,
+      integral_colDens_prod_quadruple_doubled ρ μG hN hN3 hρcont
+        u u' (C.erase Q) hcardQ P hPeQ] at hgen
+    linarith
+  rw [hpieceQ]
+  -- pieces at light columns: the `(2,2,1,1)` value on `C.erase R`
+  have hpieceR : ∀ R ∈ (C.erase P).erase Q,
+      (∑ j ∈ (Fintype.piFinset (fun S => Finset.range
+          (doubledDoubledQuintuplePattern C P Q S + 1))).filter
+        (fun j => j R = 0 ∧ (C.erase R).filter
+          (fun S => j S ≠ 0) = C.erase R),
+      (∏ S ∈ C, ((doubledDoubledQuintuplePattern C P Q S).choose
+          (j S) : ℝ) * (-(d : ℝ)⁻¹) ^ (j S))
+        * (colReMomentPow ρ μG C j u u'
+          - ∏ S ∈ C, realMoment ρ μG (j S)))
+    = 4 * ((d : ℝ)⁻¹) ^ 4
+        * (quadReMoment ρ μG (C.erase R) u u' - (e1 ρ μG) ^ 4)
+      - 2 * ((d : ℝ)⁻¹) ^ 5
+        * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      - 2 * ((d : ℝ)⁻¹) ^ 5
+        * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      + ((d : ℝ)⁻¹) ^ 6
+        * (doubledDoubledQuadReMoment ρ μG (C.erase R) P Q u u'
+          - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) := by
+    intro R hR
+    have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+    have hRP : R ≠ P :=
+      (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+    have hRC : R ∈ C :=
+      (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+    have hP' : P ∈ C.erase R :=
+      Finset.mem_erase.mpr ⟨Ne.symm hRP, hP⟩
+    have hQ' : Q ∈ C.erase R :=
+      Finset.mem_erase.mpr ⟨Ne.symm hRQ, hQ⟩
+    have hcardR : (C.erase R).card = 4 := by
+      rw [Finset.card_erase_of_mem hRC, hC]
+    rw [pieceSum_eq_topSum_erase ρ μG
+      (doubledDoubledQuintuplePattern C P Q) C hC hRC u u']
+    have hgen := patternValue_eq_baseline_add_top ρ μG hN hN3
+      hρcont u u' (C.erase R)
+      (fun S => if S = R then 0
+        else doubledDoubledQuintuplePattern C P Q S)
+      (by intro S hS
+          by_cases hSR : S = R
+          · rw [hSR]; simp
+          · rw [if_neg hSR]
+            exact hk0 S (fun h => hS
+              (Finset.mem_erase.mpr ⟨hSR, h⟩)))
+    have hint : (∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase R, (colDensC ρ u u' S α)
+            ^ ((fun S => if S = R then 0
+              else doubledDoubledQuintuplePattern C P Q S) S)
+          ∂(Measure.pi fun _ : LayerSite N => μG))
+        = ∫ α : LayerSite N → G,
+          ∏ S ∈ C.erase R, (colDensC ρ u u' S α)
+            ^ (if S = P then 2 else if S = Q then 2 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) := by
+      refine integral_congr_ae
+        (Filter.Eventually.of_forall fun α => ?_)
+      refine Finset.prod_congr rfl fun S hS => ?_
+      have hSR : S ≠ R := (Finset.mem_erase.mp hS).1
+      have hSC : S ∈ C := (Finset.mem_erase.mp hS).2
+      congr 1
+      by_cases hSP : S = P
+      · rw [hSP]
+        simp [doubledDoubledQuintuplePattern, Ne.symm hRP]
+      · by_cases hSQ : S = Q
+        · rw [hSQ]
+          simp [doubledDoubledQuintuplePattern, Ne.symm hRQ, hQP]
+        · simp [doubledDoubledQuintuplePattern, hSP, hSQ, hSC,
+            hSR]
+    have hbaseE : (∏ S ∈ C.erase R, densMomentValue ρ μG
+          ((fun S => if S = R then 0
+            else doubledDoubledQuintuplePattern C P Q S) S))
+        = (densMomentValue ρ μG 2) ^ 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2 := by
+      have hQeRP : Q ∈ (C.erase R).erase P :=
+        Finset.mem_erase.mpr ⟨hQP, hQ'⟩
+      rw [← Finset.mul_prod_erase (C.erase R) _ hP',
+        ← Finset.mul_prod_erase ((C.erase R).erase P) _ hQeRP]
+      have hPP : densMomentValue ρ μG
+            ((fun S => if S = R then 0
+              else doubledDoubledQuintuplePattern C P Q S) P)
+          = densMomentValue ρ μG 2 := by
+        congr 1
+        simp [doubledDoubledQuintuplePattern, Ne.symm hRP]
+      have hQQ : densMomentValue ρ μG
+            ((fun S => if S = R then 0
+              else doubledDoubledQuintuplePattern C P Q S) Q)
+          = densMomentValue ρ μG 2 := by
+        congr 1
+        simp [doubledDoubledQuintuplePattern, Ne.symm hRQ, hQP]
+      have hrest : ∀ S ∈ ((C.erase R).erase P).erase Q,
+          densMomentValue ρ μG
+            ((fun S => if S = R then 0
+              else doubledDoubledQuintuplePattern C P Q S) S)
+            = 1 - e1 ρ μG / (d : ℝ) := by
+        intro S hS
+        have hSP : S ≠ P :=
+          (Finset.mem_erase.mp
+            (Finset.mem_erase.mp hS).2).1
+        have hSR : S ≠ R :=
+          (Finset.mem_erase.mp
+            (Finset.mem_erase.mp
+              (Finset.mem_erase.mp hS).2).2).1
+        have hSC : S ∈ C :=
+          (Finset.mem_erase.mp
+            (Finset.mem_erase.mp
+              (Finset.mem_erase.mp hS).2).2).2
+        have hSQ : S ≠ Q := (Finset.mem_erase.mp hS).1
+        have hval : (fun S => if S = R then 0
+              else doubledDoubledQuintuplePattern C P Q S) S
+            = 1 := by
+          simp [doubledDoubledQuintuplePattern, hSP, hSQ, hSC,
+            hSR]
+        rw [hval, densMomentValue_one]
+      have hcardRPQ : (((C.erase R).erase P).erase Q).card = 2 := by
+        rw [Finset.card_erase_of_mem hQeRP,
+          Finset.card_erase_of_mem hP', hcardR,
+          show (4 - 1 : ℕ) = 3 from rfl,
+          show (3 - 1 : ℕ) = 2 from rfl]
+      rw [hPP, hQQ, Finset.prod_congr rfl hrest, Finset.prod_const,
+        hcardRPQ, pow_two]
+      ring
+    rw [hint, hbaseE,
+      integral_colDens_prod_quadruple_doubled_doubled ρ μG hN hN3
+        hρcont u u' (C.erase R) hcardR P Q hP' hQ' hQP] at hgen
+    linarith
+  rw [Finset.sum_congr rfl hpieceR]
+  ring
+theorem sum_powerset_eq_sum_cards7 (F : Finset (LayerColumn N) → ℝ)
+    (hF : ∀ C : Finset (LayerColumn N),
+      C.card = 0 ∨ 8 ≤ C.card → F C = 0) :
+    ∑ C ∈ Finset.univ.powerset, F C
+      = ∑ j ∈ Finset.range 8,
+          ∑ C ∈ Finset.univ.powersetCard j, F C := by
+  classical
+  have hdisj : Set.PairwiseDisjoint
+      (↑(Finset.range
+        ((Finset.univ : Finset (LayerColumn N)).card + 1)) : Set ℕ)
+      (fun i => (Finset.univ : Finset (LayerColumn N)).powersetCard
+        i) := by
+    intro i _ j _ hij
+    refine Finset.disjoint_left.mpr ?_
+    intro C hCi hCj
+    exact hij (by
+      have h1 := (Finset.mem_powersetCard.mp hCi).2
+      have h2 := (Finset.mem_powersetCard.mp hCj).2
+      omega)
+  have h1 : ∑ C ∈ Finset.univ.powerset, F C
+      = ∑ j ∈ Finset.range (Fintype.card (LayerColumn N) + 1),
+          ∑ C ∈ Finset.univ.powersetCard j, F C := by
+    rw [Finset.powerset_card_biUnion, Finset.sum_biUnion hdisj,
+      Finset.card_univ]
+  rw [h1]
+  by_cases hM : Fintype.card (LayerColumn N) + 1 ≤ 8
+  · refine Finset.sum_subset
+      (fun j hj => Finset.mem_range.mpr (by
+        have hlt := Finset.mem_range.mp hj
+        omega))
+      (fun j _ hj => ?_)
+    have hjM : Fintype.card (LayerColumn N) < j := by
+      simp only [Finset.mem_range, not_lt] at hj
+      omega
+    have hempty : (Finset.univ : Finset (LayerColumn N)).powersetCard
+        j = ∅ := by
+      refine Finset.eq_empty_iff_forall_notMem.mpr fun C hC => ?_
+      have hCle : C.card ≤ Fintype.card (LayerColumn N) := by
+        have hsub : C ⊆ Finset.univ := Finset.subset_univ C
+        have hle := Finset.card_le_card hsub
+        rwa [Finset.card_univ] at hle
+      have hCj : C.card = j := (Finset.mem_powersetCard.mp hC).2
+      omega
+    rw [hempty, Finset.sum_empty]
+  · refine (Finset.sum_subset
+      (fun j hj => Finset.mem_range.mpr (by
+        have hlt := Finset.mem_range.mp hj
+        omega))
+      (fun j _ hj8 => ?_)).symm
+    simp only [Finset.mem_range, not_lt] at hj8
+    refine Finset.sum_eq_zero fun C hC => ?_
+    exact hF C (Or.inr (by
+      have hCj := (Finset.mem_powersetCard.mp hC).2
+      omega))
+
+/-- **The card-4 fiber, aggregated**: the multinomial
+fiber over a 4-support is the weighted sum of the three
+pattern values `(4,1,1,1)`, `(3,2,1,1)`, `(2,2,2,1)`
+at weights `210`, `420`, `105`. -/
+theorem fiber_card_four7_agg (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 4) :
+    ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG)
+      = ∑ P ∈ C, (210 : ℝ) * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3
+        + 4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (420 : ℝ) * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2
+        + 6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P,
+            ∑ R ∈ (C.erase P).erase Q, (105 : ℝ) * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ))
+        + 8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)) := by
+  classical
+  have hk4111 : ∀ P ∈ C, ∀ Q ∉ C,
+      quadrupledQuadPattern7 C P Q = 0 := by
+    intro P hP Q hQ
+    have hQP : Q ≠ P := fun h => hQ (h ▸ hP)
+    simp [quadrupledQuadPattern7, hQP, hQ]
+  have hk3211 : ∀ P ∈ C, ∀ Q ∈ C, ∀ R ∉ C,
+      tripledDoubledQuadPattern7 C P Q R = 0 := by
+    intro P hP Q hQ R hR
+    have hRP : R ≠ P := fun h => hR (h ▸ hP)
+    have hRQ : R ≠ Q := fun h => hR (h ▸ hQ)
+    simp [tripledDoubledQuadPattern7, hRP, hRQ, hR]
+  have hk2221 : ∀ P ∈ C, ∀ Q ∈ C, ∀ R ∈ C, ∀ S ∉ C,
+      doubledDoubledDoubledQuadPattern7 C P Q R S = 0 := by
+    intro P hP Q hQ R hR S hS
+    have hSP : S ≠ P := fun h => hS (h ▸ hP)
+    have hSQ : S ≠ Q := fun h => hS (h ▸ hQ)
+    have hSR : S ≠ R := fun h => hS (h ▸ hR)
+    simp [doubledDoubledDoubledQuadPattern7, hSP, hSQ, hSR, hS]
+  have e4111 : ∀ P ∈ C, (210 : ℝ)
+          * (∑ j ∈ Fintype.piFinset
+              (fun Q => Finset.range
+                (quadrupledQuadPattern7 C P Q + 1)),
+            (∏ Q ∈ C,
+              ((quadrupledQuadPattern7 C P Q).choose
+                  (j Q) : ℝ)
+                * (-(d : ℝ)⁻¹) ^ (j Q))
+              * colReMomentPow ρ μG C j u u')
+      = (210 : ℝ) * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3
+        + 4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3)) := by
+    intro P hP
+    congr 1
+    rw [← integral_colDens_prod_pow_eq_sum ρ μG hρcont u u' C
+      (quadrupledQuadPattern7 C P) (hk4111 P hP),
+      patternValue4111 ρ μG hN hN3 hρcont u u' C hC P hP]
+  have e3211 : ∀ P ∈ C, ∀ Q ∈ C.erase P, (420 : ℝ)
+          * (∑ j ∈ Fintype.piFinset
+              (fun R => Finset.range
+                (tripledDoubledQuadPattern7 C P Q R + 1)),
+            (∏ R ∈ C,
+              ((tripledDoubledQuadPattern7 C P Q R).choose
+                  (j R) : ℝ)
+                * (-(d : ℝ)⁻¹) ^ (j R))
+              * colReMomentPow ρ μG C j u u')
+      = (420 : ℝ) * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2
+        + 6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)) := by
+    intro P hP Q hQ
+    have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+    congr 1
+    rw [← integral_colDens_prod_pow_eq_sum ρ μG hρcont u u' C
+      (tripledDoubledQuadPattern7 C P Q) (hk3211 P hP Q
+        (Finset.mem_erase.mp hQ).2),
+      patternValue3211_card4 ρ μG hN hN3 hρcont u u' C hC P Q hP
+        (Finset.mem_erase.mp hQ).2 (Ne.symm hQP)]
+  have e2221 : ∀ P ∈ C, ∀ Q ∈ C.erase P,
+      ∀ R ∈ (C.erase P).erase Q, (105 : ℝ)
+          * (∑ j ∈ Fintype.piFinset
+              (fun S => Finset.range
+                (doubledDoubledDoubledQuadPattern7 C P Q R S
+                  + 1)),
+            (∏ S ∈ C,
+              ((doubledDoubledDoubledQuadPattern7 C P Q R
+                  S).choose (j S) : ℝ)
+                * (-(d : ℝ)⁻¹) ^ (j S))
+              * colReMomentPow ρ μG C j u u')
+      = (105 : ℝ) * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ))
+        + 8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)) := by
+    intro P hP Q hQ R hR
+    have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+    have hRP : R ≠ P :=
+      (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+    have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+    congr 1
+    rw [← integral_colDens_prod_pow_eq_sum ρ μG hρcont u u' C
+      (doubledDoubledDoubledQuadPattern7 C P Q R)
+      (hk2221 P hP Q (Finset.mem_erase.mp hQ).2 R
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2),
+      patternValue2221_card4 ρ μG hN hN3 hρcont u u' C hC P Q R hP
+        (Finset.mem_erase.mp hQ).2
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).2
+        (Ne.symm hQP) (Ne.symm hRP) (Ne.symm hRQ)]
+  rw [fiber_card_four7 ρ μG hN hN3 hρcont u u' C hC,
+    Finset.sum_congr rfl (fun P hP => e4111 P hP),
+    Finset.sum_congr rfl (fun P hP => Finset.sum_congr rfl
+      (fun Q hQ => e3211 P hP Q hQ)),
+    Finset.sum_congr rfl (fun P hP => Finset.sum_congr rfl
+      (fun Q hQ => Finset.sum_congr rfl
+        (fun R hR => e2221 P hP Q hQ R hR)))]
+
+/-- **The card-5 fiber, aggregated**: the multinomial
+fiber over a 5-support is the weighted sum of the two
+pattern values `(3,1,1,1,1)` and `(2,2,1,1,1)` at
+weights `840` and `630`. -/
+theorem fiber_card_five7_agg (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 5) :
+    ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG)
+      = ∑ P ∈ C, (840 : ℝ) * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (630 : ℝ) * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))) := by
+  classical
+  have hk31111 : ∀ P ∈ C, ∀ Q ∉ C,
+      tripledQuintuplePattern C P Q = 0 := by
+    intro P hP Q hQ
+    have hQP : Q ≠ P := fun h => hQ (h ▸ hP)
+    simp [tripledQuintuplePattern, hQP, hQ]
+  have hk22111 : ∀ P ∈ C, ∀ Q ∈ C, ∀ R ∉ C,
+      doubledDoubledQuintuplePattern C P Q R = 0 := by
+    intro P hP Q hQ R hR
+    have hRP : R ≠ P := fun h => hR (h ▸ hP)
+    have hRQ : R ≠ Q := fun h => hR (h ▸ hQ)
+    simp [doubledDoubledQuintuplePattern, hRP, hRQ, hR]
+  have e31111 : ∀ P ∈ C, (840 : ℝ)
+          * (∑ j ∈ Fintype.piFinset
+              (fun Q => Finset.range
+                (tripledQuintuplePattern C P Q + 1)),
+            (∏ Q ∈ C,
+              ((tripledQuintuplePattern C P Q).choose
+                  (j Q) : ℝ)
+                * (-(d : ℝ)⁻¹) ^ (j Q))
+              * colReMomentPow ρ μG C j u u')
+      = (840 : ℝ) * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))) := by
+    intro P hP
+    congr 1
+    rw [← integral_colDens_prod_pow_eq_sum ρ μG hρcont u u' C
+      (tripledQuintuplePattern C P) (hk31111 P hP),
+      patternValue31111 ρ μG hN hN3 hρcont u u' C hC P hP]
+  have e22111 : ∀ P ∈ C, ∀ Q ∈ C.erase P, (630 : ℝ)
+          * (∑ j ∈ Fintype.piFinset
+              (fun R => Finset.range
+                (doubledDoubledQuintuplePattern C P Q R
+                  + 1)),
+            (∏ R ∈ C,
+              ((doubledDoubledQuintuplePattern C P Q R).choose
+                  (j R) : ℝ)
+                * (-(d : ℝ)⁻¹) ^ (j R))
+              * colReMomentPow ρ μG C j u u')
+      = (630 : ℝ) * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))) := by
+    intro P hP Q hQ
+    have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+    congr 1
+    rw [← integral_colDens_prod_pow_eq_sum ρ μG hρcont u u' C
+      (doubledDoubledQuintuplePattern C P Q) (hk22111 P hP Q
+        (Finset.mem_erase.mp hQ).2),
+      patternValue22111 ρ μG hN hN3 hρcont u u' C hC P Q hP
+        (Finset.mem_erase.mp hQ).2 hQP]
+  rw [fiber_card_five7 ρ μG hN hN3 hρcont u u' C hC,
+    Finset.sum_congr rfl (fun P hP => e31111 P hP),
+    Finset.sum_congr rfl (fun P hP => Finset.sum_congr rfl
+      (fun Q hQ => e22111 P hP Q hQ))]
+set_option maxHeartbeats 1600000 in
+/-- **The total expansion at order 7.** The raw
+seventh coefficient is the closed constant
+`kappa7Const` plus the four dependent excess groups
+(cards 4–7), in the native forms read off the landed
+fiber accounting. -/
+theorem betaCoeff7_total (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∫ α : LayerSite N → G, (layerDensSum ρ α u u') ^ 7
+        ∂(Measure.pi fun _ : LayerSite N => μG)
+      = kappa7Const (N := N) ρ μG
+        + ∑ C ∈ Finset.univ.powersetCard 4, (∑ P ∈ C, (210 : ℝ) * (4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (420 : ℝ) * (6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P,
+            ∑ R ∈ (C.erase P).erase Q, (105 : ℝ) * (8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)))
+        + ∑ C ∈ Finset.univ.powersetCard 5, (∑ P ∈ C, (840 : ℝ) * (- 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (630 : ℝ) * (- 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))))
+        + ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+            (2520 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 5
+              * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 6
+              * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+            - ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 7
+              * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5))
+        + ∑ C ∈ Finset.univ.powersetCard 7,
+            (5040 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+            * ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * ∑ T ∈ Finset.powersetCard 5 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5)
+          + ((d : ℝ)⁻¹) ^ 6
+            * ∑ T ∈ Finset.powersetCard 6 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6)
+          - ((d : ℝ)⁻¹) ^ 7
+            * (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7)) := by
+  classical
+  have hch1 : ((Nat.choose (Fintype.card (LayerColumn N)) 1 : ℝ))
+      = colCount N := by
+    have h := cast_factorial_mul_choose6 (N := N) 1
+    have hprod : (∏ i ∈ Finset.range 1, (colCount N - (i : ℝ)))
+        = colCount N := by
+      simp only [Finset.prod_range_succ, Finset.prod_range_zero,
+        Nat.cast_ofNat, Nat.cast_zero, Nat.cast_one]
+      ring
+    rw [hprod] at h
+    have hfact : ((Nat.factorial 1 : ℕ) : ℝ) = 1 := by
+      norm_num [Nat.factorial]
+    rw [hfact, one_mul] at h
+    exact h
+  have hch2 : ((Nat.choose (Fintype.card (LayerColumn N)) 2 : ℝ))
+      = colCount N * (colCount N - 1) / 2 := by
+    have h := cast_factorial_mul_choose6 (N := N) 2
+    have hprod : (∏ i ∈ Finset.range 2, (colCount N - (i : ℝ)))
+        = colCount N * (colCount N - 1) := by
+      simp only [Finset.prod_range_succ, Finset.prod_range_zero,
+        Nat.cast_ofNat, Nat.cast_zero, Nat.cast_one]
+      ring
+    rw [hprod] at h
+    have hfact : ((Nat.factorial 2 : ℕ) : ℝ) = 2 := by
+      norm_num [Nat.factorial]
+    rw [hfact] at h
+    rw [eq_div_iff (by norm_num : (2 : ℝ) ≠ 0), mul_comm]
+    exact h
+  have hch3 : ((Nat.choose (Fintype.card (LayerColumn N)) 3 : ℝ))
+      = colCount N * (colCount N - 1) * (colCount N - 2) / 6 := by
+    have h := cast_factorial_mul_choose6 (N := N) 3
+    have hprod : (∏ i ∈ Finset.range 3, (colCount N - (i : ℝ)))
+        = colCount N * (colCount N - 1) * (colCount N - 2) := by
+      simp only [Finset.prod_range_succ, Finset.prod_range_zero,
+        Nat.cast_ofNat, Nat.cast_zero, Nat.cast_one]
+      ring
+    rw [hprod] at h
+    have hfact : ((Nat.factorial 3 : ℕ) : ℝ) = 6 := by
+      norm_num [Nat.factorial]
+    rw [hfact] at h
+    rw [eq_div_iff (by norm_num : (6 : ℝ) ≠ 0), mul_comm]
+    exact h
+  have hch4 : ((Nat.choose (Fintype.card (LayerColumn N)) 4 : ℝ))
+      = colCount N * (colCount N - 1) * (colCount N - 2) * (colCount N - 3) / 24 := by
+    have h := cast_factorial_mul_choose6 (N := N) 4
+    have hprod : (∏ i ∈ Finset.range 4, (colCount N - (i : ℝ)))
+        = colCount N * (colCount N - 1) * (colCount N - 2) * (colCount N - 3) := by
+      simp only [Finset.prod_range_succ, Finset.prod_range_zero,
+        Nat.cast_ofNat, Nat.cast_zero, Nat.cast_one]
+      ring
+    rw [hprod] at h
+    have hfact : ((Nat.factorial 4 : ℕ) : ℝ) = 24 := by
+      norm_num [Nat.factorial]
+    rw [hfact] at h
+    rw [eq_div_iff (by norm_num : (24 : ℝ) ≠ 0), mul_comm]
+    exact h
+  have hch5 : ((Nat.choose (Fintype.card (LayerColumn N)) 5 : ℝ))
+      = colCount N * (colCount N - 1) * (colCount N - 2) * (colCount N - 3) * (colCount N - 4) / 120 := by
+    have h := cast_factorial_mul_choose6 (N := N) 5
+    have hprod : (∏ i ∈ Finset.range 5, (colCount N - (i : ℝ)))
+        = colCount N * (colCount N - 1) * (colCount N - 2) * (colCount N - 3) * (colCount N - 4) := by
+      simp only [Finset.prod_range_succ, Finset.prod_range_zero,
+        Nat.cast_ofNat, Nat.cast_zero, Nat.cast_one]
+      ring
+    rw [hprod] at h
+    have hfact : ((Nat.factorial 5 : ℕ) : ℝ) = 120 := by
+      norm_num [Nat.factorial]
+    rw [hfact] at h
+    rw [eq_div_iff (by norm_num : (120 : ℝ) ≠ 0), mul_comm]
+    exact h
+  have hch6 : ((Nat.choose (Fintype.card (LayerColumn N)) 6 : ℝ))
+      = colCount N * (colCount N - 1) * (colCount N - 2) * (colCount N - 3) * (colCount N - 4) * (colCount N - 5) / 720 := by
+    have h := cast_factorial_mul_choose6 (N := N) 6
+    have hprod : (∏ i ∈ Finset.range 6, (colCount N - (i : ℝ)))
+        = colCount N * (colCount N - 1) * (colCount N - 2) * (colCount N - 3) * (colCount N - 4) * (colCount N - 5) := by
+      simp only [Finset.prod_range_succ, Finset.prod_range_zero,
+        Nat.cast_ofNat, Nat.cast_zero, Nat.cast_one]
+      ring
+    rw [hprod] at h
+    have hfact : ((Nat.factorial 6 : ℕ) : ℝ) = 720 := by
+      norm_num [Nat.factorial]
+    rw [hfact] at h
+    rw [eq_div_iff (by norm_num : (720 : ℝ) ≠ 0), mul_comm]
+    exact h
+  have hch7 : ((Nat.choose (Fintype.card (LayerColumn N)) 7 : ℝ))
+      = colCount N * (colCount N - 1) * (colCount N - 2) * (colCount N - 3) * (colCount N - 4) * (colCount N - 5) * (colCount N - 6) / 5040 := by
+    have h := cast_factorial_mul_choose6 (N := N) 7
+    have hprod : (∏ i ∈ Finset.range 7, (colCount N - (i : ℝ)))
+        = colCount N * (colCount N - 1) * (colCount N - 2) * (colCount N - 3) * (colCount N - 4) * (colCount N - 5) * (colCount N - 6) := by
+      simp only [Finset.prod_range_succ, Finset.prod_range_zero,
+        Nat.cast_ofNat, Nat.cast_zero, Nat.cast_one]
+      ring
+    rw [hprod] at h
+    have hfact : ((Nat.factorial 7 : ℕ) : ℝ) = 5040 := by
+      norm_num [Nat.factorial]
+    rw [hfact] at h
+    rw [eq_div_iff (by norm_num : (5040 : ℝ) ≠ 0), mul_comm]
+    exact h
+  have hFibVanish : ∀ C : Finset (LayerColumn N),
+      C.card = 0 ∨ 8 ≤ C.card → ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG) = 0 := by
+    intro C hC
+    rw [fiber7_eq_empty_of_card_ne C hC, Finset.sum_empty]
+  have hG0 : ∑ C ∈ Finset.univ.powersetCard 0, ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG) = 0 :=
+    Finset.sum_eq_zero fun C hC => hFibVanish C
+      (Or.inl (Finset.mem_powersetCard.mp hC).2)
+  have hG1 : ∑ C ∈ Finset.univ.powersetCard 1, ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG)
+      = ((Nat.choose (Fintype.card (LayerColumn N)) 1 : ℝ)) * (densMomentValue ρ μG 7) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+      fiber_card_one7 ρ μG hN hN3 hρcont u u' C
+        (Finset.mem_powersetCard.mp hC).2),
+      Finset.sum_const, Finset.card_powersetCard, Finset.card_univ,
+      nsmul_eq_mul]
+  have hG2 : ∑ C ∈ Finset.univ.powersetCard 2, ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG)
+      = ((Nat.choose (Fintype.card (LayerColumn N)) 2 : ℝ)) * (7 * (densMomentValue ρ μG 1 * densMomentValue ρ μG 6)
+        + 21 * (densMomentValue ρ μG 2 * densMomentValue ρ μG 5)
+        + 35 * (densMomentValue ρ μG 3 * densMomentValue ρ μG 4)
+        + 35 * (densMomentValue ρ μG 4 * densMomentValue ρ μG 3)
+        + 21 * (densMomentValue ρ μG 5 * densMomentValue ρ μG 2)
+        + 7 * (densMomentValue ρ μG 6 * densMomentValue ρ μG 1)) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+      fiber_card_two7 ρ μG hN hN3 hρcont u u' C
+        (Finset.mem_powersetCard.mp hC).2),
+      Finset.sum_const, Finset.card_powersetCard, Finset.card_univ,
+      nsmul_eq_mul]
+  have hG3 : ∑ C ∈ Finset.univ.powersetCard 3, ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG)
+      = ((Nat.choose (Fintype.card (LayerColumn N)) 3 : ℝ)) * (42 * (densMomentValue ρ μG 5
+          * (densMomentValue ρ μG 1 * densMomentValue ρ μG 1))
+        + 42 * (densMomentValue ρ μG 1
+          * (densMomentValue ρ μG 5 * densMomentValue ρ μG 1))
+        + 42 * (densMomentValue ρ μG 1
+          * (densMomentValue ρ μG 1 * densMomentValue ρ μG 5))
+        + 105 * (densMomentValue ρ μG 4
+          * (densMomentValue ρ μG 2 * densMomentValue ρ μG 1))
+        + 105 * (densMomentValue ρ μG 4
+          * (densMomentValue ρ μG 1 * densMomentValue ρ μG 2))
+        + 105 * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 4 * densMomentValue ρ μG 1))
+        + 105 * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 1 * densMomentValue ρ μG 4))
+        + 105 * (densMomentValue ρ μG 1
+          * (densMomentValue ρ μG 4 * densMomentValue ρ μG 2))
+        + 105 * (densMomentValue ρ μG 1
+          * (densMomentValue ρ μG 2 * densMomentValue ρ μG 4))
+        + 140 * (densMomentValue ρ μG 3
+          * (densMomentValue ρ μG 3 * densMomentValue ρ μG 1))
+        + 140 * (densMomentValue ρ μG 3
+          * (densMomentValue ρ μG 1 * densMomentValue ρ μG 3))
+        + 140 * (densMomentValue ρ μG 1
+          * (densMomentValue ρ μG 3 * densMomentValue ρ μG 3))
+        + 210 * (densMomentValue ρ μG 3
+          * (densMomentValue ρ μG 2 * densMomentValue ρ μG 2))
+        + 210 * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2))
+        + 210 * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * densMomentValue ρ μG 3))) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+      fiber_card_three7 ρ μG hN hN3 hρcont u u' C
+        (Finset.mem_powersetCard.mp hC).2),
+      Finset.sum_const, Finset.card_powersetCard, Finset.card_univ,
+      nsmul_eq_mul]
+  have hsplit4111 : ∀ (C : Finset (LayerColumn N))
+      (P : LayerColumn N), (210 : ℝ) * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3
+        + 4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3))
+      = (210 : ℝ) * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3) + (210 : ℝ) * (4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3)) :=
+    fun C P => by ring
+  have hsplit3211 : ∀ (C : Finset (LayerColumn N))
+      (P Q : LayerColumn N), (420 : ℝ) * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2
+        + 6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2))
+      = (420 : ℝ) * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2) + (420 : ℝ) * (6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)) :=
+    fun C P Q => by ring
+  have hsplit2221 : ∀ (C : Finset (LayerColumn N))
+      (P Q R : LayerColumn N), (105 : ℝ) * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ))
+        + 8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG))
+      = (105 : ℝ) * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ))) + (105 : ℝ) * (8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)) :=
+    fun C P Q R => by ring
+  have hbase4111 : ∀ (C : Finset (LayerColumn N)), C.card = 4 →
+      ∑ P ∈ C, (210 : ℝ) * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)
+        = 840 * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3) := by
+    intro C hcard
+    rw [Finset.sum_const, hcard, nsmul_eq_mul]; ring
+  have hbase3211 : ∀ (C : Finset (LayerColumn N)), C.card = 4 →
+      ∑ P ∈ C, ∑ Q ∈ C.erase P, (420 : ℝ) * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2)
+        = 5040 * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2) := by
+    intro C hcard
+    rw [Finset.sum_congr rfl (fun P hP => by
+      rw [Finset.sum_const, Finset.card_erase_of_mem hP, hcard,
+        show (4 - 1 : ℕ) = 3 from rfl, nsmul_eq_mul]),
+      Finset.sum_const, hcard, nsmul_eq_mul]
+    ring
+  have hbase2221 : ∀ (C : Finset (LayerColumn N)), C.card = 4 →
+      ∑ P ∈ C, ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        (105 : ℝ) * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ)))
+        = 2520 * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ))) := by
+    intro C hcard
+    rw [Finset.sum_congr rfl (fun P hP =>
+      Finset.sum_congr rfl (fun Q hQ => by
+        rw [Finset.sum_const, Finset.card_erase_of_mem hQ,
+          Finset.card_erase_of_mem hP, hcard,
+          show (4 - 1 : ℕ) = 3 from rfl,
+          show (3 - 1 : ℕ) = 2 from rfl, nsmul_eq_mul])),
+      Finset.sum_congr rfl (fun P hP => by
+        rw [Finset.sum_const, Finset.card_erase_of_mem hP, hcard,
+          show (4 - 1 : ℕ) = 3 from rfl, nsmul_eq_mul]),
+      Finset.sum_const, hcard, nsmul_eq_mul]
+    ring
+  have hfam4111 : ∀ (C : Finset (LayerColumn N)), C.card = 4 →
+      (∑ P ∈ C, (210 : ℝ) * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3
+        + 4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3)))
+        = 840 * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3) + ∑ P ∈ C, (210 : ℝ) * (4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3)) := by
+    intro C hcard
+    rw [Finset.sum_congr rfl (fun P hP => hsplit4111 C P),
+      Finset.sum_add_distrib, hbase4111 C hcard]
+  have hfam3211 : ∀ (C : Finset (LayerColumn N)), C.card = 4 →
+      (∑ P ∈ C, ∑ Q ∈ C.erase P, (420 : ℝ) * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2
+        + 6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)))
+        = 5040 * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2)
+          + ∑ P ∈ C, ∑ Q ∈ C.erase P, (420 : ℝ) * (6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)) := by
+    intro C hcard
+    rw [Finset.sum_congr rfl (fun P hP => Finset.sum_congr rfl
+        (fun Q hQ => hsplit3211 C P Q)),
+      Finset.sum_congr rfl (fun P _ => Finset.sum_add_distrib),
+      Finset.sum_add_distrib, hbase3211 C hcard]
+  have hfam2221 : ∀ (C : Finset (LayerColumn N)), C.card = 4 →
+      (∑ P ∈ C, ∑ Q ∈ C.erase P,
+        ∑ R ∈ (C.erase P).erase Q, (105 : ℝ) * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ))
+        + 8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)))
+        = 2520 * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ)))
+          + ∑ P ∈ C, ∑ Q ∈ C.erase P,
+            ∑ R ∈ (C.erase P).erase Q, (105 : ℝ) * (8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)) := by
+    intro C hcard
+    rw [Finset.sum_congr rfl (fun P hP => Finset.sum_congr rfl
+        (fun Q hQ => Finset.sum_congr rfl
+          (fun R hR => hsplit2221 C P Q R))),
+      Finset.sum_congr rfl (fun P _ => Finset.sum_congr rfl
+        (fun Q _ => Finset.sum_add_distrib)),
+      Finset.sum_congr rfl (fun P _ => Finset.sum_add_distrib),
+      Finset.sum_add_distrib, hbase2221 C hcard]
+  have hCsplit4 : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, (210 : ℝ) * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3
+        + 4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (420 : ℝ) * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2
+        + 6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P,
+            ∑ R ∈ (C.erase P).erase Q, (105 : ℝ) * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ))
+        + 8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)))
+        = (840 * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3) + 5040 * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2)
+            + 2520 * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ))))
+          + (∑ P ∈ C, (210 : ℝ) * (4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (420 : ℝ) * (6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P,
+            ∑ R ∈ (C.erase P).erase Q, (105 : ℝ) * (8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)))  := by
+    intro C hC
+    have hcard : C.card = 4 := (Finset.mem_powersetCard.mp hC).2
+    rw [hfam4111 C hcard, hfam3211 C hcard, hfam2221 C hcard]
+    ring
+  have hG4 : ∑ C ∈ Finset.univ.powersetCard 4, ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG)
+      = ((Nat.choose (Fintype.card (LayerColumn N)) 4 : ℝ)) * (840 * (densMomentValue ρ μG 4 * (1 - e1 ρ μG / (d : ℝ)) ^ 3) + 5040 * (densMomentValue ρ μG 3 * densMomentValue ρ μG 2
+          * (1 - e1 ρ μG / (d : ℝ)) ^ 2)
+          + 2520 * ((densMomentValue ρ μG 2) ^ 3 * (1 - e1 ρ μG / (d : ℝ))))
+        + ∑ C ∈ Finset.univ.powersetCard 4, (∑ P ∈ C, (210 : ℝ) * (4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (420 : ℝ) * (6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P,
+            ∑ R ∈ (C.erase P).erase Q, (105 : ℝ) * (8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG))) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+      fiber_card_four7_agg ρ μG hN hN3 hρcont u u' C
+        (Finset.mem_powersetCard.mp hC).2),
+      Finset.sum_congr rfl (fun C hC => hCsplit4 C hC),
+      Finset.sum_add_distrib, Finset.sum_const,
+      Finset.card_powersetCard, Finset.card_univ, nsmul_eq_mul]
+  have hsplit31111 : ∀ (C : Finset (LayerColumn N))
+      (P : LayerColumn N), (840 : ℝ) * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)))
+      = (840 : ℝ) * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4) + (840 : ℝ) * (- 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))) :=
+    fun C P => by ring
+  have hsplit22111 : ∀ (C : Finset (LayerColumn N))
+      (P Q : LayerColumn N), (630 : ℝ) * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)))
+      = (630 : ℝ) * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)) + (630 : ℝ) * (- 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))) :=
+    fun C P Q => by ring
+  have hbase31111 : ∀ (C : Finset (LayerColumn N)), C.card = 5 →
+      ∑ P ∈ C, (840 : ℝ) * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4)
+        = 4200 * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4) := by
+    intro C hcard
+    rw [Finset.sum_const, hcard, nsmul_eq_mul]; ring
+  have hbase22111 : ∀ (C : Finset (LayerColumn N)), C.card = 5 →
+      ∑ P ∈ C, ∑ Q ∈ C.erase P, (630 : ℝ) * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3))
+        = 12600 * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)) := by
+    intro C hcard
+    rw [Finset.sum_congr rfl (fun P hP => by
+      rw [Finset.sum_const, Finset.card_erase_of_mem hP, hcard,
+        show (5 - 1 : ℕ) = 4 from rfl, nsmul_eq_mul]),
+      Finset.sum_const, hcard, nsmul_eq_mul]
+    ring
+  have hfam31111 : ∀ (C : Finset (LayerColumn N)), C.card = 5 →
+      (∑ P ∈ C, (840 : ℝ) * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))))
+        = 4200 * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4) + ∑ P ∈ C, (840 : ℝ) * (- 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))) := by
+    intro C hcard
+    rw [Finset.sum_congr rfl (fun P hP => hsplit31111 C P),
+      Finset.sum_add_distrib, hbase31111 C hcard]
+  have hfam22111 : ∀ (C : Finset (LayerColumn N)), C.card = 5 →
+      (∑ P ∈ C, ∑ Q ∈ C.erase P, (630 : ℝ) * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))))
+        = 12600 * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3))
+          + ∑ P ∈ C, ∑ Q ∈ C.erase P, (630 : ℝ) * (- 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))) := by
+    intro C hcard
+    rw [Finset.sum_congr rfl (fun P hP => Finset.sum_congr rfl
+        (fun Q hQ => hsplit22111 C P Q)),
+      Finset.sum_congr rfl (fun P _ => Finset.sum_add_distrib),
+      Finset.sum_add_distrib, hbase22111 C hcard]
+  have hCsplit5 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, (840 : ℝ) * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (630 : ℝ) * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))))
+        = (4200 * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4) + 12600 * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)))
+          + (∑ P ∈ C, (840 : ℝ) * (- 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (630 : ℝ) * (- 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))))  := by
+    intro C hC
+    have hcard : C.card = 5 := (Finset.mem_powersetCard.mp hC).2
+    rw [hfam31111 C hcard, hfam22111 C hcard]
+    ring
+  have hG5 : ∑ C ∈ Finset.univ.powersetCard 5, ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG)
+      = ((Nat.choose (Fintype.card (LayerColumn N)) 5 : ℝ)) * (4200 * (densMomentValue ρ μG 3 * (1 - e1 ρ μG / (d : ℝ)) ^ 4) + 12600 * (densMomentValue ρ μG 2
+          * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 3)))
+        + ∑ C ∈ Finset.univ.powersetCard 5, (∑ P ∈ C, (840 : ℝ) * (- 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (630 : ℝ) * (- 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)))) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+      fiber_card_five7_agg ρ μG hN hN3 hρcont u u' C
+        (Finset.mem_powersetCard.mp hC).2),
+      Finset.sum_congr rfl (fun C hC => hCsplit5 C hC),
+      Finset.sum_add_distrib, Finset.sum_const,
+      Finset.card_powersetCard, Finset.card_univ, nsmul_eq_mul]
+  have hsplit6 : ∀ (C : Finset (LayerColumn N))
+      (P : LayerColumn N), (2520 : ℝ) * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 5
+            + ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 5
+              * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 6
+              * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+            - ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 7
+              * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5))
+      = (2520 : ℝ) * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 5) + (2520 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 5
+              * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 6
+              * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+            - ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 7
+              * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)) :=
+    fun C P => by ring
+  have hCsplit6 : ∀ C ∈ Finset.univ.powersetCard 6,
+      ∑ P ∈ C, (2520 : ℝ) * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 5
+            + ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 5
+              * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 6
+              * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+            - ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 7
+              * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5))
+        = 15120 * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 5)
+          + ∑ P ∈ C, (2520 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 5
+              * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 6
+              * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+            - ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 7
+              * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)) := by
+    intro C hC
+    have hcard : C.card = 6 := (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P hP => hsplit6 C P),
+      Finset.sum_add_distrib]
+    congr 1
+    · rw [Finset.sum_const, hcard, nsmul_eq_mul]; ring
+  have hG6 : ∑ C ∈ Finset.univ.powersetCard 6, ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG)
+      = ((Nat.choose (Fintype.card (LayerColumn N)) 6 : ℝ)) * (15120 * (densMomentValue ρ μG 2 * (1 - e1 ρ μG / (d : ℝ)) ^ 5))
+        + ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+            (2520 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 5
+              * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 6
+              * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+            - ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 7
+              * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+      fiber_card_six7 ρ μG hN hN3 hρcont u u' C
+        (Finset.mem_powersetCard.mp hC).2),
+      Finset.sum_congr rfl (fun C hC => hCsplit6 C hC),
+      Finset.sum_add_distrib, Finset.sum_const,
+      Finset.card_powersetCard, Finset.card_univ, nsmul_eq_mul]
+  have hsplit7 : ∀ (C : Finset (LayerColumn N)),
+      (5040 * ((1 - e1 ρ μG / (d : ℝ)) ^ 7
+          + ((d : ℝ)⁻¹) ^ 4
+            * ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * ∑ T ∈ Finset.powersetCard 5 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5)
+          + ((d : ℝ)⁻¹) ^ 6
+            * ∑ T ∈ Finset.powersetCard 6 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6)
+          - ((d : ℝ)⁻¹) ^ 7
+            * (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7)))
+      = 5040 * ((1 - e1 ρ μG / (d : ℝ)) ^ 7) + (5040 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+            * ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * ∑ T ∈ Finset.powersetCard 5 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5)
+          + ((d : ℝ)⁻¹) ^ 6
+            * ∑ T ∈ Finset.powersetCard 6 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6)
+          - ((d : ℝ)⁻¹) ^ 7
+            * (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7)) :=
+    fun C => by ring
+  have hG7 : ∑ C ∈ Finset.univ.powersetCard 7, ∑ k ∈ (Finset.piAntidiag Finset.univ 7).filter
+          (fun k => multSupport k = C),
+        ((Nat.multinomial Finset.univ k : ℝ))
+          * ∫ α : LayerSite N → G,
+              ∏ P ∈ Finset.univ, (colDensC ρ u u' P α) ^ (k P)
+              ∂(Measure.pi fun _ : LayerSite N => μG)
+      = ((Nat.choose (Fintype.card (LayerColumn N)) 7 : ℝ)) * (5040 * ((1 - e1 ρ μG / (d : ℝ)) ^ 7))
+        + ∑ C ∈ Finset.univ.powersetCard 7,
+            (5040 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+            * ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * ∑ T ∈ Finset.powersetCard 5 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5)
+          + ((d : ℝ)⁻¹) ^ 6
+            * ∑ T ∈ Finset.powersetCard 6 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6)
+          - ((d : ℝ)⁻¹) ^ 7
+            * (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7)) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+      fiber_card_seven7 ρ μG hN hN3 hρcont u u' C
+        (Finset.mem_powersetCard.mp hC).2),
+      Finset.sum_congr rfl (fun C hC => hsplit7 C),
+      Finset.sum_add_distrib, Finset.sum_const,
+      Finset.card_powersetCard, Finset.card_univ, nsmul_eq_mul]
+  rw [integral_layerDensSum_pow_seven ρ μG hN hρcont u u',
+    sum_piAntidiag7_fiberwise,
+    sum_powerset_eq_sum_cards7 _ hFibVanish]
+  simp only [Finset.sum_range_succ, Finset.sum_range_zero]
+  rw [hG0, hG1, hG2, hG3, hG4, hG5, hG6, hG7]
+  unfold kappa7Const
+  rw [hch1, hch2, hch3, hch4, hch5, hch6, hch7, densMomentValue_one]
+  ring
+/-- **Card-3 factorization, plain moment**: on a
+3-support the all-distinct moment is `e₁³`. -/
+theorem quadReMoment_eq_of_card_three (hN : Even N)
+    (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (D : Finset (LayerColumn N))
+    (hD : D.card = 3) :
+    quadReMoment ρ μG D u u' = (e1 ρ μG) ^ 3 := by
+  classical
+  unfold quadReMoment
+  rw [integral_colRe_prod_of_card_le_three ρ μG hN hN3
+    hρcont u u' D (le_of_eq hD), hD]
+
+/-- **Card-3 factorization, doubled moment**: on a
+3-support the doubled moment at any seat is `μ₂e₁²`
+(the two remaining columns are distinct and split). -/
+theorem doubledQuadReMoment_eq_of_card_three (hN : Even N)
+    (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (D : Finset (LayerColumn N))
+    (hD : D.card = 3) {R : LayerColumn N} (hR : R ∈ D) :
+    doubledQuadReMoment ρ μG D R u u'
+      = realMoment ρ μG 2 * (e1 ρ μG) ^ 2 := by
+  classical
+  have hcong : ∀ α : LayerSite N → G,
+      (colRe ρ u u' R α) ^ 2
+          * ∏ Z ∈ D.erase R, colRe ρ u u' Z α
+        = ∏ Z ∈ D,
+            (colRe ρ u u' Z α) ^ (if Z = R then 2 else 1) := by
+    intro α
+    rw [← Finset.mul_prod_erase D
+      (fun Z => (colRe ρ u u' Z α) ^ (if Z = R then 2 else 1))
+      hR, if_pos rfl]
+    refine congrArg _ ?_
+    exact Finset.prod_congr rfl fun Z hZ => by
+      rw [if_neg (Finset.mem_erase.mp hZ).1, pow_one]
+  calc doubledQuadReMoment ρ μG D R u u'
+      = ∫ α : LayerSite N → G,
+          ∏ Z ∈ D,
+            (colRe ρ u u' Z α) ^ (if Z = R then 2 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) :=
+        integral_congr_ae (Filter.Eventually.of_forall hcong)
+    _ = ∏ Z ∈ D, realMoment ρ μG (if Z = R then 2 else 1) :=
+        integral_colRe_prod_pow_card_le_three6 ρ μG hN hN3
+          hρcont u u' D (le_of_eq hD)
+          (fun Z => if Z = R then 2 else 1)
+    _ = realMoment ρ μG 2 * (e1 ρ μG) ^ 2 := by
+        rw [← Finset.mul_prod_erase D
+          (fun Z => realMoment ρ μG (if Z = R then 2 else 1))
+          hR, if_pos rfl]
+        have h2 : ∀ Z ∈ D.erase R,
+            realMoment ρ μG (if Z = R then 2 else 1)
+              = e1 ρ μG := by
+          intro Z hZ
+          rw [if_neg (Finset.mem_erase.mp hZ).1, realMoment_one]
+        rw [Finset.prod_congr rfl h2, Finset.prod_const]
+        have h3 : (D.erase R).card = 2 := by
+          rw [Finset.card_erase_of_mem hR, hD]
+        rw [h3]
+
+/-- **Card-3 factorization, tripled moment**: on a
+3-support the tripled moment at any seat is `μ₃e₁²`. -/
+theorem tripledQuadReMoment_eq_of_card_three (hN : Even N)
+    (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (D : Finset (LayerColumn N))
+    (hD : D.card = 3) {R : LayerColumn N} (hR : R ∈ D) :
+    tripledQuadReMoment ρ μG D R u u'
+      = realMoment ρ μG 3 * (e1 ρ μG) ^ 2 := by
+  classical
+  have hcong : ∀ α : LayerSite N → G,
+      (colRe ρ u u' R α) ^ 3
+          * ∏ Z ∈ D.erase R, colRe ρ u u' Z α
+        = ∏ Z ∈ D,
+            (colRe ρ u u' Z α) ^ (if Z = R then 3 else 1) := by
+    intro α
+    rw [← Finset.mul_prod_erase D
+      (fun Z => (colRe ρ u u' Z α) ^ (if Z = R then 3 else 1))
+      hR, if_pos rfl]
+    refine congrArg _ ?_
+    exact Finset.prod_congr rfl fun Z hZ => by
+      rw [if_neg (Finset.mem_erase.mp hZ).1, pow_one]
+  calc tripledQuadReMoment ρ μG D R u u'
+      = ∫ α : LayerSite N → G,
+          ∏ Z ∈ D,
+            (colRe ρ u u' Z α) ^ (if Z = R then 3 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) :=
+        integral_congr_ae (Filter.Eventually.of_forall hcong)
+    _ = ∏ Z ∈ D, realMoment ρ μG (if Z = R then 3 else 1) :=
+        integral_colRe_prod_pow_card_le_three6 ρ μG hN hN3
+          hρcont u u' D (le_of_eq hD)
+          (fun Z => if Z = R then 3 else 1)
+    _ = realMoment ρ μG 3 * (e1 ρ μG) ^ 2 := by
+        rw [← Finset.mul_prod_erase D
+          (fun Z => realMoment ρ μG (if Z = R then 3 else 1))
+          hR, if_pos rfl]
+        have h2 : ∀ Z ∈ D.erase R,
+            realMoment ρ μG (if Z = R then 3 else 1)
+              = e1 ρ μG := by
+          intro Z hZ
+          rw [if_neg (Finset.mem_erase.mp hZ).1, realMoment_one]
+        rw [Finset.prod_congr rfl h2, Finset.prod_const]
+        have h3 : (D.erase R).card = 2 := by
+          rw [Finset.card_erase_of_mem hR, hD]
+        rw [h3]
+
+/-- **Card-3 factorization, quadrupled moment**: on a
+3-support the quadrupled moment at any seat is
+`μ₄e₁²`. -/
+theorem quadrupledQuadReMoment_eq_of_card_three (hN : Even N)
+    (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (D : Finset (LayerColumn N))
+    (hD : D.card = 3) {R : LayerColumn N} (hR : R ∈ D) :
+    quadrupledQuadReMoment ρ μG D R u u'
+      = realMoment ρ μG 4 * (e1 ρ μG) ^ 2 := by
+  classical
+  have hcong : ∀ α : LayerSite N → G,
+      (colRe ρ u u' R α) ^ 4
+          * ∏ Z ∈ D.erase R, colRe ρ u u' Z α
+        = ∏ Z ∈ D,
+            (colRe ρ u u' Z α) ^ (if Z = R then 4 else 1) := by
+    intro α
+    rw [← Finset.mul_prod_erase D
+      (fun Z => (colRe ρ u u' Z α) ^ (if Z = R then 4 else 1))
+      hR, if_pos rfl]
+    refine congrArg _ ?_
+    exact Finset.prod_congr rfl fun Z hZ => by
+      rw [if_neg (Finset.mem_erase.mp hZ).1, pow_one]
+  calc quadrupledQuadReMoment ρ μG D R u u'
+      = ∫ α : LayerSite N → G,
+          ∏ Z ∈ D,
+            (colRe ρ u u' Z α) ^ (if Z = R then 4 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) :=
+        integral_congr_ae (Filter.Eventually.of_forall hcong)
+    _ = ∏ Z ∈ D, realMoment ρ μG (if Z = R then 4 else 1) :=
+        integral_colRe_prod_pow_card_le_three6 ρ μG hN hN3
+          hρcont u u' D (le_of_eq hD)
+          (fun Z => if Z = R then 4 else 1)
+    _ = realMoment ρ μG 4 * (e1 ρ μG) ^ 2 := by
+        rw [← Finset.mul_prod_erase D
+          (fun Z => realMoment ρ μG (if Z = R then 4 else 1))
+          hR, if_pos rfl]
+        have h2 : ∀ Z ∈ D.erase R,
+            realMoment ρ μG (if Z = R then 4 else 1)
+              = e1 ρ μG := by
+          intro Z hZ
+          rw [if_neg (Finset.mem_erase.mp hZ).1, realMoment_one]
+        rw [Finset.prod_congr rfl h2, Finset.prod_const]
+        have h3 : (D.erase R).card = 2 := by
+          rw [Finset.card_erase_of_mem hR, hD]
+        rw [h3]
+
+/-- **Card-3 factorization, doubled-doubled moment**:
+on a 3-support the `(2,2,1)` moment at an ordered pair
+of distinct seats is `μ₂²e₁`. -/
+theorem doubledDoubledQuadReMoment_eq_of_card_three
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (D : Finset (LayerColumn N))
+    (hD : D.card = 3) {P Q : LayerColumn N} (hP : P ∈ D)
+    (hQ : Q ∈ D.erase P) :
+    doubledDoubledQuadReMoment ρ μG D P Q u u'
+      = (realMoment ρ μG 2) ^ 2 * e1 ρ μG := by
+  classical
+  have hQC : Q ∈ D := (Finset.mem_erase.mp hQ).2
+  have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+  have hcong : ∀ α : LayerSite N → G,
+      (colRe ρ u u' P α) ^ 2 * (colRe ρ u u' Q α) ^ 2
+          * ∏ R ∈ (D.erase P).erase Q, colRe ρ u u' R α
+        = ∏ R ∈ D, (colRe ρ u u' R α)
+            ^ (if R = P then 2 else if R = Q then 2 else 1) := by
+    intro α
+    have hrest : ∏ R ∈ (D.erase P).erase Q, colRe ρ u u' R α
+        = ∏ R ∈ (D.erase P).erase Q, (colRe ρ u u' R α)
+            ^ (if R = P then 2 else if R = Q then 2 else 1) :=
+      Finset.prod_congr rfl fun R hR => by
+        have hRP : R ≠ P :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+        have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+        rw [if_neg hRP, if_neg hRQ, pow_one]
+    rw [hrest,
+      ← Finset.mul_prod_erase D
+        (fun R => (colRe ρ u u' R α)
+          ^ (if R = P then 2 else if R = Q then 2 else 1)) hP,
+      ← Finset.mul_prod_erase (D.erase P)
+        (fun R => (colRe ρ u u' R α)
+          ^ (if R = P then 2 else if R = Q then 2 else 1)) hQ,
+      if_pos rfl, if_neg hQP, if_pos rfl]
+    ring
+  calc doubledDoubledQuadReMoment ρ μG D P Q u u'
+      = ∫ α : LayerSite N → G,
+          ∏ R ∈ D, (colRe ρ u u' R α)
+            ^ (if R = P then 2 else if R = Q then 2 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) :=
+        integral_congr_ae (Filter.Eventually.of_forall hcong)
+    _ = ∏ R ∈ D, realMoment ρ μG
+          (if R = P then 2 else if R = Q then 2 else 1) :=
+        integral_colRe_prod_pow_card_le_three6 ρ μG hN hN3
+          hρcont u u' D (le_of_eq hD)
+          (fun R => if R = P then 2 else if R = Q then 2 else 1)
+    _ = (realMoment ρ μG 2) ^ 2 * e1 ρ μG := by
+        rw [← Finset.mul_prod_erase D
+          (fun R => realMoment ρ μG
+            (if R = P then 2 else if R = Q then 2 else 1)) hP,
+          if_pos rfl,
+          ← Finset.mul_prod_erase (D.erase P)
+          (fun R => realMoment ρ μG
+            (if R = P then 2 else if R = Q then 2 else 1)) hQ,
+          if_neg hQP, if_pos rfl]
+        have h2 : ∀ Z ∈ (D.erase P).erase Q, realMoment ρ μG
+            (if Z = P then 2 else if Z = Q then 2 else 1)
+              = e1 ρ μG := by
+          intro Z hZ
+          rw [if_neg (Finset.mem_erase.mp
+              (Finset.mem_erase.mp hZ).2).1,
+            if_neg (Finset.mem_erase.mp hZ).1, realMoment_one]
+        rw [Finset.prod_congr rfl h2, Finset.prod_const]
+        have hcard : ((D.erase P).erase Q).card = 1 := by
+          rw [Finset.card_erase_of_mem hQ,
+            Finset.card_erase_of_mem hP, hD]
+        rw [hcard, pow_one]
+        ring
+
+/-- **Card-3 factorization, tripled-doubled moment**:
+on a 3-support the `(3,2,1)` moment at an ordered pair
+of distinct seats is `μ₃μ₂e₁`. -/
+theorem tripledDoubledQuadReMoment_eq_of_card_three
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (D : Finset (LayerColumn N))
+    (hD : D.card = 3) {P Q : LayerColumn N} (hP : P ∈ D)
+    (hQ : Q ∈ D.erase P) :
+    tripledDoubledQuadReMoment ρ μG D P Q u u'
+      = realMoment ρ μG 3 * realMoment ρ μG 2 * e1 ρ μG := by
+  classical
+  have hQC : Q ∈ D := (Finset.mem_erase.mp hQ).2
+  have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+  have hcong : ∀ α : LayerSite N → G,
+      (colRe ρ u u' P α) ^ 3 * (colRe ρ u u' Q α) ^ 2
+          * ∏ R ∈ (D.erase P).erase Q, colRe ρ u u' R α
+        = ∏ R ∈ D, (colRe ρ u u' R α)
+            ^ (if R = P then 3 else if R = Q then 2 else 1) := by
+    intro α
+    have hrest : ∏ R ∈ (D.erase P).erase Q, colRe ρ u u' R α
+        = ∏ R ∈ (D.erase P).erase Q, (colRe ρ u u' R α)
+            ^ (if R = P then 3 else if R = Q then 2 else 1) :=
+      Finset.prod_congr rfl fun R hR => by
+        have hRP : R ≠ P :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hR).2).1
+        have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+        rw [if_neg hRP, if_neg hRQ, pow_one]
+    rw [hrest,
+      ← Finset.mul_prod_erase D
+        (fun R => (colRe ρ u u' R α)
+          ^ (if R = P then 3 else if R = Q then 2 else 1)) hP,
+      ← Finset.mul_prod_erase (D.erase P)
+        (fun R => (colRe ρ u u' R α)
+          ^ (if R = P then 3 else if R = Q then 2 else 1)) hQ,
+      if_pos rfl, if_neg hQP, if_pos rfl]
+    ring
+  calc tripledDoubledQuadReMoment ρ μG D P Q u u'
+      = ∫ α : LayerSite N → G,
+          ∏ R ∈ D, (colRe ρ u u' R α)
+            ^ (if R = P then 3 else if R = Q then 2 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) :=
+        integral_congr_ae (Filter.Eventually.of_forall hcong)
+    _ = ∏ R ∈ D, realMoment ρ μG
+          (if R = P then 3 else if R = Q then 2 else 1) :=
+        integral_colRe_prod_pow_card_le_three6 ρ μG hN hN3
+          hρcont u u' D (le_of_eq hD)
+          (fun R => if R = P then 3 else if R = Q then 2 else 1)
+    _ = realMoment ρ μG 3 * realMoment ρ μG 2 * e1 ρ μG := by
+        rw [← Finset.mul_prod_erase D
+          (fun R => realMoment ρ μG
+            (if R = P then 3 else if R = Q then 2 else 1)) hP,
+          if_pos rfl,
+          ← Finset.mul_prod_erase (D.erase P)
+          (fun R => realMoment ρ μG
+            (if R = P then 3 else if R = Q then 2 else 1)) hQ,
+          if_neg hQP, if_pos rfl]
+        have h2 : ∀ Z ∈ (D.erase P).erase Q, realMoment ρ μG
+            (if Z = P then 3 else if Z = Q then 2 else 1)
+              = e1 ρ μG := by
+          intro Z hZ
+          rw [if_neg (Finset.mem_erase.mp
+              (Finset.mem_erase.mp hZ).2).1,
+            if_neg (Finset.mem_erase.mp hZ).1, realMoment_one]
+        rw [Finset.prod_congr rfl h2, Finset.prod_const]
+        have hcard : ((D.erase P).erase Q).card = 1 := by
+          rw [Finset.card_erase_of_mem hQ,
+            Finset.card_erase_of_mem hP, hD]
+        rw [hcard, pow_one]
+        ring
+
+/-- **Card-3 factorization, triple-doubled moment**:
+on a 3-support the `(2,2,2)` moment at an ordered
+triple of distinct seats (filling the support) is
+`μ₂³`. -/
+theorem doubledDoubledDoubledQuadReMoment_eq_of_card_three
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (D : Finset (LayerColumn N))
+    (hD : D.card = 3) {P Q R : LayerColumn N} (hP : P ∈ D)
+    (hQ : Q ∈ D.erase P) (hR : R ∈ (D.erase P).erase Q) :
+    doubledDoubledDoubledQuadReMoment ρ μG D P Q R u u'
+      = (realMoment ρ μG 2) ^ 3 := by
+  classical
+  have hQC : Q ∈ D := (Finset.mem_erase.mp hQ).2
+  have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+  have hRC : R ∈ D.erase P := (Finset.mem_erase.mp hR).2
+  have hRD : R ∈ D := (Finset.mem_erase.mp hRC).2
+  have hRP : R ≠ P := (Finset.mem_erase.mp hRC).1
+  have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+  have hcong : ∀ α : LayerSite N → G,
+      (colRe ρ u u' P α) ^ 2 * (colRe ρ u u' Q α) ^ 2
+          * (colRe ρ u u' R α) ^ 2
+          * ∏ S ∈ ((D.erase P).erase Q).erase R,
+              colRe ρ u u' S α
+        = ∏ S ∈ D, (colRe ρ u u' S α)
+            ^ (if S = P then 2 else if S = Q then 2
+              else if S = R then 2 else 1) := by
+    intro α
+    have hrest : ∏ S ∈ ((D.erase P).erase Q).erase R,
+          colRe ρ u u' S α
+        = ∏ S ∈ ((D.erase P).erase Q).erase R,
+            (colRe ρ u u' S α)
+            ^ (if S = P then 2 else if S = Q then 2
+              else if S = R then 2 else 1) :=
+      Finset.prod_congr rfl fun S hS => by
+        have hSP : S ≠ P :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp
+            (Finset.mem_erase.mp hS).2).2).1
+        have hSQ : S ≠ Q :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hS).2).1
+        have hSR : S ≠ R := (Finset.mem_erase.mp hS).1
+        rw [if_neg hSP, if_neg hSQ, if_neg hSR, pow_one]
+    rw [hrest,
+      ← Finset.mul_prod_erase D
+        (fun S => (colRe ρ u u' S α)
+          ^ (if S = P then 2 else if S = Q then 2
+            else if S = R then 2 else 1)) hP,
+      ← Finset.mul_prod_erase (D.erase P)
+        (fun S => (colRe ρ u u' S α)
+          ^ (if S = P then 2 else if S = Q then 2
+            else if S = R then 2 else 1)) hQ,
+      ← Finset.mul_prod_erase ((D.erase P).erase Q)
+        (fun S => (colRe ρ u u' S α)
+          ^ (if S = P then 2 else if S = Q then 2
+            else if S = R then 2 else 1)) hR,
+      if_pos rfl, if_neg hQP, if_pos rfl, if_neg hRP,
+      if_neg hRQ, if_pos rfl]
+    ring
+  calc doubledDoubledDoubledQuadReMoment ρ μG D P Q R u u'
+      = ∫ α : LayerSite N → G,
+          ∏ S ∈ D, (colRe ρ u u' S α)
+            ^ (if S = P then 2 else if S = Q then 2
+              else if S = R then 2 else 1)
+          ∂(Measure.pi fun _ : LayerSite N => μG) :=
+        integral_congr_ae (Filter.Eventually.of_forall hcong)
+    _ = ∏ S ∈ D, realMoment ρ μG
+          (if S = P then 2 else if S = Q then 2
+            else if S = R then 2 else 1) :=
+        integral_colRe_prod_pow_card_le_three6 ρ μG hN hN3
+          hρcont u u' D (le_of_eq hD)
+          (fun S => if S = P then 2 else if S = Q then 2
+            else if S = R then 2 else 1)
+    _ = (realMoment ρ μG 2) ^ 3 := by
+        rw [← Finset.mul_prod_erase D
+          (fun S => realMoment ρ μG
+            (if S = P then 2 else if S = Q then 2
+              else if S = R then 2 else 1)) hP,
+          if_pos rfl,
+          ← Finset.mul_prod_erase (D.erase P)
+          (fun S => realMoment ρ μG
+            (if S = P then 2 else if S = Q then 2
+              else if S = R then 2 else 1)) hQ,
+          if_neg hQP, if_pos rfl,
+          ← Finset.mul_prod_erase ((D.erase P).erase Q)
+          (fun S => realMoment ρ μG
+            (if S = P then 2 else if S = Q then 2
+              else if S = R then 2 else 1)) hR,
+          if_neg hRP, if_neg hRQ, if_pos rfl]
+        have hempty : ((D.erase P).erase Q).erase R
+            = ∅ := by
+          apply Finset.card_eq_zero.mp
+          rw [Finset.card_erase_of_mem hR,
+            Finset.card_erase_of_mem hQ,
+            Finset.card_erase_of_mem hP, hD]
+        rw [hempty, Finset.prod_empty]
+        ring
+/-- **Quadrupled excess vanishes off primitive
+quads.** At a non-primitive 4-support, a private
+column either is the quadrupled seat (strip it:
+`μ₄` times a card-3 plain moment, which is `e₁³`)
+or is a single (strip it: `e₁` times a card-3
+quadrupled moment, which is `μ₄e₁²`). -/
+theorem quadrupledQuadReMoment_sub_eq_zero_of_not_primitive
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) {C : Finset (LayerColumn N)}
+    (hC : C.card = 4) (hCnp : ¬ IsPrimitiveQuad C)
+    {P : LayerColumn N} (hP : P ∈ C) :
+    quadrupledQuadReMoment ρ μG C P u u'
+      - realMoment ρ μG 4 * (e1 ρ μG) ^ 3 = 0 := by
+  classical
+  have hprivC : ∃ X ∈ C, ∃ s ∈ colSites X,
+      ∀ Y ∈ C, Y ≠ X → s ∉ colSites Y := by
+    by_contra hcon
+    push_neg at hcon
+    exact hCnp ⟨hC, hcon⟩
+  obtain ⟨X, hXC, s, hsX, hpriv⟩ := hprivC
+  have hcard3 : (C.erase X).card = 3 := by
+    rw [Finset.card_erase_of_mem hXC, hC]
+  by_cases hXP : X = P
+  · subst hXP
+    rw [quadrupledQuadReMoment_strip_quadrupled ρ μG hN hN3
+      hρcont u u' hsX hpriv,
+      quadReMoment_eq_of_card_three ρ μG hN hN3 hρcont u u'
+        (C.erase X) hcard3]
+    ring
+  · have hPX : P ∈ C.erase X :=
+      Finset.mem_erase.mpr ⟨Ne.symm hXP, hP⟩
+    rw [quadrupledQuadReMoment_strip_single ρ μG hN hN3
+      hρcont u u' hP hXC hXP hsX hpriv,
+      quadrupledQuadReMoment_eq_of_card_three ρ μG hN hN3
+        hρcont u u' (C.erase X) hcard3 hPX]
+    ring
+
+/-- **Tripled-doubled excess vanishes off primitive
+quads.** At a non-primitive 4-support, a private
+column is the tripled seat, the doubled seat, or a
+single; each strip leaves a card-3 moment that
+factors at the baseline `μ₃μ₂e₁²`. -/
+theorem tripledDoubledQuadReMoment_sub_eq_zero_of_not_primitive
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) {C : Finset (LayerColumn N)}
+    (hC : C.card = 4) (hCnp : ¬ IsPrimitiveQuad C)
+    {P Q : LayerColumn N} (hP : P ∈ C) (hQ : Q ∈ C.erase P) :
+    tripledDoubledQuadReMoment ρ μG C P Q u u'
+      - realMoment ρ μG 3 * realMoment ρ μG 2
+        * (e1 ρ μG) ^ 2 = 0 := by
+  classical
+  have hQC : Q ∈ C := (Finset.mem_erase.mp hQ).2
+  have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+  have hprivC : ∃ X ∈ C, ∃ s ∈ colSites X,
+      ∀ Y ∈ C, Y ≠ X → s ∉ colSites Y := by
+    by_contra hcon
+    push_neg at hcon
+    exact hCnp ⟨hC, hcon⟩
+  obtain ⟨X, hXC, s, hsX, hpriv⟩ := hprivC
+  have hcard3 : (C.erase X).card = 3 := by
+    rw [Finset.card_erase_of_mem hXC, hC]
+  by_cases hXP : X = P
+  · subst hXP
+    have hQX : Q ∈ (C.erase X) :=
+      Finset.mem_erase.mpr ⟨hQP, hQC⟩
+    rw [tripledDoubledQuadReMoment_strip_tripled ρ μG hN
+      hN3 hρcont u u' hQC hQP hsX hpriv,
+      doubledQuadReMoment_eq_of_card_three ρ μG hN hN3
+        hρcont u u' (C.erase X) hcard3 hQX]
+    ring
+  · by_cases hXQ : X = Q
+    · subst hXQ
+      have hPX : P ∈ (C.erase X) :=
+        Finset.mem_erase.mpr ⟨Ne.symm hQP, hP⟩
+      rw [tripledDoubledQuadReMoment_strip_doubled ρ μG hN
+        hN3 hρcont u u' hP hQP hsX hpriv,
+        tripledQuadReMoment_eq_of_card_three ρ μG hN hN3
+          hρcont u u' (C.erase X) hcard3 hPX]
+      ring
+    · have hPX : P ∈ C.erase X :=
+        Finset.mem_erase.mpr ⟨Ne.symm hXP, hP⟩
+      have hQX : Q ∈ (C.erase X).erase P :=
+        Finset.mem_erase.mpr ⟨hQP,
+          Finset.mem_erase.mpr ⟨Ne.symm hXQ, hQC⟩⟩
+      rw [tripledDoubledQuadReMoment_strip_single ρ μG hN
+        hN3 hρcont u u' hP hQC hXC hXP hXQ hQP hsX hpriv,
+        tripledDoubledQuadReMoment_eq_of_card_three ρ μG
+          hN hN3 hρcont u u' (C.erase X) hcard3 hPX hQX]
+      ring
+
+/-- **Triple-doubled excess vanishes off primitive
+quads.** At a non-primitive 4-support, a private
+column is one of the three doubled seats or a
+single; each strip leaves a card-3 moment that
+factors at the baseline `μ₂³e₁`. -/
+theorem doubledDoubledDoubledQuadReMoment_sub_eq_zero_of_not_primitive
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) {C : Finset (LayerColumn N)}
+    (hC : C.card = 4) (hCnp : ¬ IsPrimitiveQuad C)
+    {P Q R : LayerColumn N} (hP : P ∈ C)
+    (hQ : Q ∈ C.erase P) (hR : R ∈ (C.erase P).erase Q) :
+    doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+      - (realMoment ρ μG 2) ^ 3 * e1 ρ μG = 0 := by
+  classical
+  have hQC : Q ∈ C := (Finset.mem_erase.mp hQ).2
+  have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+  have hRP' : R ∈ C.erase P := (Finset.mem_erase.mp hR).2
+  have hRC : R ∈ C := (Finset.mem_erase.mp hRP').2
+  have hRP : R ≠ P := (Finset.mem_erase.mp hRP').1
+  have hRQ : R ≠ Q := (Finset.mem_erase.mp hR).1
+  have hprivC : ∃ X ∈ C, ∃ s ∈ colSites X,
+      ∀ Y ∈ C, Y ≠ X → s ∉ colSites Y := by
+    by_contra hcon
+    push_neg at hcon
+    exact hCnp ⟨hC, hcon⟩
+  obtain ⟨X, hXC, s, hsX, hpriv⟩ := hprivC
+  have hcard3 : (C.erase X).card = 3 := by
+    rw [Finset.card_erase_of_mem hXC, hC]
+  by_cases hXP : X = P
+  · subst hXP
+    have hQX : Q ∈ (C.erase X) :=
+      Finset.mem_erase.mpr ⟨hQP, hQC⟩
+    have hRX : R ∈ (C.erase X).erase Q :=
+      Finset.mem_erase.mpr ⟨hRQ, hRP'⟩
+    rw [doubledDoubledDoubledQuadReMoment_strip_first ρ μG
+      hN hN3 hρcont u u' hQC hRC hQP hRP hRQ hsX hpriv,
+      doubledDoubledQuadReMoment_eq_of_card_three ρ μG hN
+        hN3 hρcont u u' (C.erase X) hcard3 hQX hRX]
+    ring
+  · by_cases hXQ : X = Q
+    · subst hXQ
+      have hPX : P ∈ (C.erase X) :=
+        Finset.mem_erase.mpr ⟨Ne.symm hQP, hP⟩
+      have hRX : R ∈ (C.erase X).erase P :=
+        Finset.mem_erase.mpr ⟨hRP,
+          Finset.mem_erase.mpr ⟨hRQ, hRC⟩⟩
+      rw [doubledDoubledDoubledQuadReMoment_strip_second
+        ρ μG hN hN3 hρcont u u' hP hRC hQP hRP hRQ hsX
+        hpriv,
+        doubledDoubledQuadReMoment_eq_of_card_three ρ μG
+          hN hN3 hρcont u u' (C.erase X) hcard3 hPX hRX]
+      ring
+    · by_cases hXR : X = R
+      · subst hXR
+        have hPX : P ∈ (C.erase X) :=
+          Finset.mem_erase.mpr ⟨Ne.symm hRP, hP⟩
+        have hQX : Q ∈ (C.erase X).erase P :=
+          Finset.mem_erase.mpr ⟨hQP,
+            Finset.mem_erase.mpr ⟨Ne.symm hRQ, hQC⟩⟩
+        rw [doubledDoubledDoubledQuadReMoment_strip_third
+          ρ μG hN hN3 hρcont u u' hP hQC hQP hRP hRQ hsX
+          hpriv,
+          doubledDoubledQuadReMoment_eq_of_card_three ρ μG
+            hN hN3 hρcont u u' (C.erase X) hcard3 hPX hQX]
+        ring
+      · have hPX : P ∈ C.erase X :=
+          Finset.mem_erase.mpr ⟨Ne.symm hXP, hP⟩
+        have hQX : Q ∈ (C.erase X).erase P :=
+          Finset.mem_erase.mpr ⟨hQP,
+            Finset.mem_erase.mpr ⟨Ne.symm hXQ, hQC⟩⟩
+        have hRX : R ∈ ((C.erase X).erase P).erase Q :=
+          Finset.mem_erase.mpr ⟨hRQ,
+            Finset.mem_erase.mpr ⟨hRP,
+              Finset.mem_erase.mpr ⟨Ne.symm hXR, hRC⟩⟩⟩
+        rw [doubledDoubledDoubledQuadReMoment_strip_single
+          ρ μG hN hN3 hρcont u u' hP hQC hRC hXC hXP hXQ
+          hXR hQP hRP hRQ hsX hpriv,
+          doubledDoubledDoubledQuadReMoment_eq_of_card_three
+            ρ μG hN hN3 hρcont u u' (C.erase X) hcard3 hPX
+            hQX hRX]
+        ring
+
+/-- **The `(4,1,1,1)` excess sum, converted**: the
+`powersetCard 4` quadrupled excess sum is the B7-2a
+channel excess (the summand vanishes off primitive
+quads). -/
+theorem sum_powersetCard_four_quadrupled_excess (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        (quadrupledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 4 * (e1 ρ μG) ^ 3)
+      = kappa7chan4111Excess ρ μG u u' := by
+  classical
+  show _ = ∑ C ∈ primitiveQuads, ∑ P ∈ C,
+    (quadrupledQuadReMoment ρ μG C P u u'
+      - realMoment ρ μG 4 * (e1 ρ μG) ^ 3)
+  refine (Finset.sum_subset ?_ ?_).symm
+  · intro C hC
+    exact Finset.mem_powersetCard.mpr
+      ⟨Finset.subset_univ C, (Finset.mem_filter.mp hC).2.1⟩
+  · intro C hCunivers hCnotprim
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hCunivers).2
+    have hnp : ¬ IsPrimitiveQuad C := fun hp =>
+      hCnotprim (Finset.mem_filter.mpr ⟨Finset.mem_univ C, hp⟩)
+    rw [Finset.sum_eq_zero]
+    intro P hP
+    exact quadrupledQuadReMoment_sub_eq_zero_of_not_primitive
+      ρ μG hN hN3 hρcont u u' hcard hnp hP
+
+/-- **The `(3,2,1,1)` excess sum, converted**: the
+`powersetCard 4` tripled-doubled excess sum is the
+B7-2a (unsplit) channel excess. -/
+theorem sum_powersetCard_four_tripledDoubled_excess
+    (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P,
+        (tripledDoubledQuadReMoment ρ μG C P Q u u'
+          - realMoment ρ μG 3 * realMoment ρ μG 2
+            * (e1 ρ μG) ^ 2)
+      = kappa7chan3211Excess ρ μG u u' := by
+  classical
+  show _ = ∑ C ∈ primitiveQuads, ∑ P ∈ C, ∑ Q ∈ C.erase P,
+    (tripledDoubledQuadReMoment ρ μG C P Q u u'
+      - realMoment ρ μG 3 * realMoment ρ μG 2
+        * (e1 ρ μG) ^ 2)
+  refine (Finset.sum_subset ?_ ?_).symm
+  · intro C hC
+    exact Finset.mem_powersetCard.mpr
+      ⟨Finset.subset_univ C, (Finset.mem_filter.mp hC).2.1⟩
+  · intro C hCunivers hCnotprim
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hCunivers).2
+    have hnp : ¬ IsPrimitiveQuad C := fun hp =>
+      hCnotprim (Finset.mem_filter.mpr ⟨Finset.mem_univ C, hp⟩)
+    rw [Finset.sum_eq_zero]
+    intro P hP
+    rw [Finset.sum_eq_zero]
+    intro Q hQ
+    exact tripledDoubledQuadReMoment_sub_eq_zero_of_not_primitive
+      ρ μG hN hN3 hρcont u u' hcard hnp hP hQ
+
+/-- **The `(2,2,2,1)` excess sum, converted**: the
+`powersetCard 4` triple-doubled excess sum is the
+B7-2a channel excess. -/
+theorem sum_powersetCard_four_tripledDoubledDoubled_excess
+    (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+          - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)
+      = kappa7chan2221Excess ρ μG u u' := by
+  classical
+  show _ = ∑ C ∈ primitiveQuads, ∑ P ∈ C, ∑ Q ∈ C.erase P,
+    ∑ R ∈ (C.erase P).erase Q,
+    (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+      - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)
+  refine (Finset.sum_subset ?_ ?_).symm
+  · intro C hC
+    exact Finset.mem_powersetCard.mpr
+      ⟨Finset.subset_univ C, (Finset.mem_filter.mp hC).2.1⟩
+  · intro C hCunivers hCnotprim
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hCunivers).2
+    have hnp : ¬ IsPrimitiveQuad C := fun hp =>
+      hCnotprim (Finset.mem_filter.mpr ⟨Finset.mem_univ C, hp⟩)
+    rw [Finset.sum_eq_zero]
+    intro P hP
+    rw [Finset.sum_eq_zero]
+    intro Q hQ
+    rw [Finset.sum_eq_zero]
+    intro R hR
+    exact doubledDoubledDoubledQuadReMoment_sub_eq_zero_of_not_primitive
+      ρ μG hN hN3 hρcont u u' hcard hnp hP hQ hR
+
+/-- **Counting, card 4, support-only summand over one
+seat**: each 4-support is counted once per seat. -/
+theorem cnt4a (f : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C, f C
+      = 4 * ∑ C ∈ Finset.univ.powersetCard 4, f C := by
+  classical
+  rw [Finset.sum_congr rfl (fun C hC => by
+    rw [Finset.sum_const, (Finset.mem_powersetCard.mp hC).2,
+      nsmul_eq_mul, Nat.cast_ofNat]), Finset.mul_sum]
+
+/-- **Counting, card 4, support-only summand over two
+seats**: `4 · 3` ordered seat pairs. -/
+theorem cnt4b (f : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, f C
+      = 12 * ∑ C ∈ Finset.univ.powersetCard 4, f C := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 4,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P, f C = 12 * f C := by
+    intro C hC
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P hP => by
+      rw [Finset.sum_const, Finset.card_erase_of_mem hP,
+        hcard, show (4 - 1 : ℕ) = 3 from rfl, nsmul_eq_mul, Nat.cast_ofNat]),
+      ← Finset.mul_sum, Finset.sum_const, hcard, nsmul_eq_mul, Nat.cast_ofNat]
+    ring
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 4, support-only summand over
+three seats**: `4 · 3 · 2` ordered seat triples. -/
+theorem cnt4c (f : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, f C
+      = 24 * ∑ C ∈ Finset.univ.powersetCard 4, f C := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 4,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P,
+        ∑ R ∈ (C.erase P).erase Q, f C = 24 * f C := by
+    intro C hC
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P hP =>
+      Finset.sum_congr rfl (fun Q hQ => by
+        rw [Finset.sum_const, Finset.card_erase_of_mem hQ,
+          Finset.card_erase_of_mem hP, hcard,
+          show (4 - 1 : ℕ) = 3 from rfl,
+          show (3 - 1 : ℕ) = 2 from rfl, nsmul_eq_mul, Nat.cast_ofNat])),
+      Finset.sum_congr rfl (fun P hP => by
+        rw [← Finset.mul_sum, Finset.sum_const,
+          Finset.card_erase_of_mem hP, hcard,
+          show (4 - 1 : ℕ) = 3 from rfl, nsmul_eq_mul, Nat.cast_ofNat]),
+      ← Finset.mul_sum, Finset.sum_const, hcard, nsmul_eq_mul, Nat.cast_ofNat]
+    ring
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 4, first-seat summand over two
+seats**: the second seat contributes a factor `3`. -/
+theorem cnt4d (g : Finset (LayerColumn N) → LayerColumn N → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, g C P
+      = 3 * ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C, g C P := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 4,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P, g C P
+        = 3 * ∑ P ∈ C, g C P := by
+    intro C hC
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P hP => by
+      rw [Finset.sum_const, Finset.card_erase_of_mem hP,
+        hcard, show (4 - 1 : ℕ) = 3 from rfl, nsmul_eq_mul, Nat.cast_ofNat]),
+      Finset.mul_sum]
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 4, second-seat summand over two
+seats**: by the erase swap, also a factor `3`. -/
+theorem cnt4e (g : Finset (LayerColumn N) → LayerColumn N → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, g C Q
+      = 3 * ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C, g C P := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 4,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P, g C Q
+        = 3 * ∑ P ∈ C, g C P := by
+    intro C hC
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [sum_sum_erase_swap C (fun P Q => g C Q),
+      Finset.sum_congr rfl (fun Q hQ => by
+        rw [Finset.sum_const, Finset.card_erase_of_mem hQ,
+          hcard, show (4 - 1 : ℕ) = 3 from rfl,
+          nsmul_eq_mul, Nat.cast_ofNat]),
+      Finset.mul_sum]
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 4, first-seat summand over three
+seats**: the remaining seats contribute `3 · 2`. -/
+theorem cnt4f (g : Finset (LayerColumn N) → LayerColumn N → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, g C P
+      = 6 * ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C, g C P := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 4,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P,
+        ∑ R ∈ (C.erase P).erase Q, g C P
+        = 6 * ∑ P ∈ C, g C P := by
+    intro C hC
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P hP =>
+      Finset.sum_congr rfl (fun Q hQ => by
+        rw [Finset.sum_const, Finset.card_erase_of_mem hQ,
+          Finset.card_erase_of_mem hP, hcard,
+          show (4 - 1 : ℕ) = 3 from rfl,
+          show (3 - 1 : ℕ) = 2 from rfl, nsmul_eq_mul, Nat.cast_ofNat])),
+      Finset.sum_congr rfl (fun P hP => by
+        rw [← Finset.mul_sum, Finset.sum_const,
+          Finset.card_erase_of_mem hP, hcard,
+          show (4 - 1 : ℕ) = 3 from rfl, nsmul_eq_mul, Nat.cast_ofNat]),
+      Finset.mul_sum]
+    ring
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 4, second-seat summand over
+three seats**: also `3 · 2`. -/
+theorem cnt4g (g : Finset (LayerColumn N) → LayerColumn N → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, g C Q
+      = 6 * ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C, g C P := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 4,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P,
+        ∑ R ∈ (C.erase P).erase Q, g C Q
+        = 6 * ∑ P ∈ C, g C P := by
+    intro C hC
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P hP =>
+      Finset.sum_congr rfl (fun Q hQ => by
+        rw [Finset.sum_const, Finset.card_erase_of_mem hQ,
+          Finset.card_erase_of_mem hP, hcard,
+          show (4 - 1 : ℕ) = 3 from rfl,
+          show (3 - 1 : ℕ) = 2 from rfl, nsmul_eq_mul, Nat.cast_ofNat])),
+      sum_sum_erase_swap C
+        (fun P Q => (2 : ℝ) * g C Q),
+      Finset.sum_congr rfl (fun Q hQ => by
+        rw [← Finset.mul_sum, Finset.sum_const,
+          Finset.card_erase_of_mem hQ, hcard,
+          show (4 - 1 : ℕ) = 3 from rfl, nsmul_eq_mul, Nat.cast_ofNat]),
+      Finset.mul_sum]
+    ring
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 4, third-seat summand over three
+seats**: also `3 · 2`. -/
+theorem cnt4h (g : Finset (LayerColumn N) → LayerColumn N → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, g C R
+      = 6 * ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C, g C P := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 4,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P,
+        ∑ R ∈ (C.erase P).erase Q, g C R
+        = 6 * ∑ P ∈ C, g C P := by
+    intro C hC
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P _ =>
+      sum_sum_erase_swap (C.erase P) (fun Q R => g C R)),
+      Finset.sum_congr rfl (fun P hP =>
+        Finset.sum_congr rfl (fun R hR => by
+          rw [Finset.sum_const, Finset.card_erase_of_mem hR,
+            Finset.card_erase_of_mem hP, hcard,
+            show (4 - 1 : ℕ) = 3 from rfl,
+            show (3 - 1 : ℕ) = 2 from rfl, nsmul_eq_mul, Nat.cast_ofNat])),
+      sum_sum_erase_swap C (fun P R => (2 : ℝ) * g C R),
+      Finset.sum_congr rfl (fun R hR => by
+        rw [← Finset.mul_sum, Finset.sum_const,
+          Finset.card_erase_of_mem hR, hcard,
+          show (4 - 1 : ℕ) = 3 from rfl, nsmul_eq_mul, Nat.cast_ofNat]),
+      Finset.mul_sum]
+    ring
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 4, pair summand over three
+seats, first pair**: the third seat contributes
+a factor `2`. -/
+theorem cnt4i
+    (h : Finset (LayerColumn N) → LayerColumn N → LayerColumn N → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, h C P Q
+      = 2 * ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+          ∑ Q ∈ C.erase P, h C P Q := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 4,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P,
+        ∑ R ∈ (C.erase P).erase Q, h C P Q
+        = 2 * ∑ P ∈ C, ∑ Q ∈ C.erase P, h C P Q := by
+    intro C hC
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P hP =>
+      Finset.sum_congr rfl (fun Q hQ => by
+        rw [Finset.sum_const, Finset.card_erase_of_mem hQ,
+          Finset.card_erase_of_mem hP, hcard,
+          show (4 - 1 : ℕ) = 3 from rfl,
+          show (3 - 1 : ℕ) = 2 from rfl, nsmul_eq_mul, Nat.cast_ofNat])),
+      Finset.sum_congr rfl (fun P _ => by
+        rw [← Finset.mul_sum])]
+    rw [Finset.mul_sum]
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 4, pair summand over three
+seats, split pair `(P, R)`**: also a factor `2`. -/
+theorem cnt4j
+    (h : Finset (LayerColumn N) → LayerColumn N → LayerColumn N → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, h C P R
+      = 2 * ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+          ∑ Q ∈ C.erase P, h C P Q := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 4,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P,
+        ∑ R ∈ (C.erase P).erase Q, h C P R
+        = 2 * ∑ P ∈ C, ∑ Q ∈ C.erase P, h C P Q := by
+    intro C hC
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P _ =>
+      sum_sum_erase_swap (C.erase P) (fun Q R => h C P R)),
+      Finset.sum_congr rfl (fun P hP =>
+        Finset.sum_congr rfl (fun R hR => by
+          rw [Finset.sum_const, Finset.card_erase_of_mem hR,
+            Finset.card_erase_of_mem hP, hcard,
+            show (4 - 1 : ℕ) = 3 from rfl,
+            show (3 - 1 : ℕ) = 2 from rfl, nsmul_eq_mul, Nat.cast_ofNat])),
+      Finset.sum_congr rfl (fun P _ => by
+        rw [← Finset.mul_sum])]
+    rw [Finset.mul_sum]
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 4, pair summand over three
+seats, second pair `(Q, R)`**: also a factor `2`
+(the free seat is rotated to the innermost sum,
+where it contributes the constant count `2`). -/
+theorem cnt4k
+    (h : Finset (LayerColumn N) → LayerColumn N → LayerColumn N → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, h C Q R
+      = 2 * ∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+          ∑ Q ∈ C.erase P, h C P Q := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 4,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P,
+        ∑ R ∈ (C.erase P).erase Q, h C Q R
+        = 2 * ∑ P ∈ C, ∑ Q ∈ C.erase P, h C P Q := by
+    intro C hC
+    have hcard : C.card = 4 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [sum_sum_erase_swap C
+        (fun P Q => ∑ R ∈ (C.erase P).erase Q, h C Q R),
+      Finset.sum_congr rfl (fun Q _ =>
+        Finset.sum_congr rfl (fun P _ => by
+          rw [Finset.erase_right_comm])),
+      Finset.sum_congr rfl (fun Q _ =>
+        sum_sum_erase_swap (C.erase Q) (fun P R => h C Q R)),
+      Finset.sum_congr rfl (fun Q hQ =>
+        Finset.sum_congr rfl (fun R hR => by
+          rw [Finset.sum_const, Finset.card_erase_of_mem hR,
+            Finset.card_erase_of_mem hQ, hcard,
+            show (4 - 1 : ℕ) = 3 from rfl,
+            show (3 - 1 : ℕ) = 2 from rfl, nsmul_eq_mul,
+            Nat.cast_ofNat])),
+      Finset.sum_congr rfl (fun Q _ => by
+        rw [← Finset.mul_sum]),
+      Finset.mul_sum]
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 5, support-only summand over one
+seat**: factor `5`. -/
+theorem cnt5a (f : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, f C
+      = 5 * ∑ C ∈ Finset.univ.powersetCard 5, f C := by
+  classical
+  rw [Finset.sum_congr rfl (fun C hC => by
+    rw [Finset.sum_const, (Finset.mem_powersetCard.mp hC).2,
+      nsmul_eq_mul, Nat.cast_ofNat]), Finset.mul_sum]
+
+/-- **Counting, card 5, support-only summand over two
+seats**: factor `5 · 4`. -/
+theorem cnt5b (f : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, f C
+      = 20 * ∑ C ∈ Finset.univ.powersetCard 5, f C := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 5,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P, f C = 20 * f C := by
+    intro C hC
+    have hcard : C.card = 5 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P hP => by
+      rw [Finset.sum_const, Finset.card_erase_of_mem hP,
+        hcard, show (5 - 1 : ℕ) = 4 from rfl, nsmul_eq_mul, Nat.cast_ofNat]),
+      ← Finset.mul_sum, Finset.sum_const, hcard, nsmul_eq_mul, Nat.cast_ofNat]
+    ring
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 5, first-seat summand over two
+seats**: factor `4`. -/
+theorem cnt5c (g : Finset (LayerColumn N) → LayerColumn N → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, g C P
+      = 4 * ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, g C P := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 5,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P, g C P
+        = 4 * ∑ P ∈ C, g C P := by
+    intro C hC
+    have hcard : C.card = 5 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [Finset.sum_congr rfl (fun P hP => by
+      rw [Finset.sum_const, Finset.card_erase_of_mem hP,
+        hcard, show (5 - 1 : ℕ) = 4 from rfl, nsmul_eq_mul, Nat.cast_ofNat]),
+      Finset.mul_sum]
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 5, second-seat summand over two
+seats**: factor `4`. -/
+theorem cnt5d (g : Finset (LayerColumn N) → LayerColumn N → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, g C Q
+      = 4 * ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, g C P := by
+  classical
+  have key : ∀ C ∈ Finset.univ.powersetCard 5,
+      ∑ P ∈ C, ∑ Q ∈ C.erase P, g C Q
+        = 4 * ∑ P ∈ C, g C P := by
+    intro C hC
+    have hcard : C.card = 5 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [sum_sum_erase_swap C (fun P Q => g C Q),
+      Finset.sum_congr rfl (fun Q hQ => by
+        rw [Finset.sum_const, Finset.card_erase_of_mem hQ,
+          hcard, show (5 - 1 : ℕ) = 4 from rfl,
+          nsmul_eq_mul, Nat.cast_ofNat]),
+      Finset.mul_sum]
+  rw [Finset.sum_congr rfl key, Finset.mul_sum]
+
+/-- **Counting, card 6, support-only summand over one
+seat**: factor `6`. -/
+theorem cnt6a (f : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, f C
+      = 6 * ∑ C ∈ Finset.univ.powersetCard 6, f C := by
+  classical
+  rw [Finset.sum_congr rfl (fun C hC => by
+    rw [Finset.sum_const, (Finset.mem_powersetCard.mp hC).2,
+      nsmul_eq_mul, Nat.cast_ofNat]), Finset.mul_sum]
+
+/-- **Erasure rotation at card 5**: in a triple sum
+over distinct seats of a 5-support, the erased seat
+can be rotated to the front. -/
+theorem sum_erase_rotate5
+    (F : Finset (LayerColumn N) → LayerColumn N → LayerColumn N → ℝ)
+    (C : Finset (LayerColumn N)) :
+    ∑ P ∈ C, ∑ Q ∈ C.erase P,
+      ∑ R ∈ (C.erase P).erase Q, F (C.erase R) P Q
+      = ∑ R ∈ C, ∑ P ∈ C.erase R,
+        ∑ Q ∈ (C.erase R).erase P, F (C.erase R) P Q := by
+  classical
+  have step1 : ∀ P ∈ C, ∑ Q ∈ C.erase P,
+        ∑ R ∈ (C.erase P).erase Q, F (C.erase R) P Q
+      = ∑ R ∈ C.erase P, ∑ Q ∈ (C.erase P).erase R,
+          F (C.erase R) P Q := by
+    intro P _
+    exact sum_sum_erase_swap (C.erase P)
+      (fun Q R => F (C.erase R) P Q)
+  rw [Finset.sum_congr rfl step1,
+    sum_sum_erase_swap C
+      (fun P R => ∑ Q ∈ (C.erase P).erase R, F (C.erase R) P Q)]
+  refine Finset.sum_congr rfl fun R _ => Finset.sum_congr rfl
+    fun P hP => ?_
+  rw [Finset.erase_right_comm]
+/-- **The tripled-penta excess sum at one 5-support,
+factored** (the `μ₃` analogue of
+`doubledPenta_excess_sum_factor`): a private column
+of the support splits the sum into `μ₃` times the
+erased quad excesses plus `e₁` times the erased
+tripled excesses; all other erasures are
+non-primitive and vanish. -/
+theorem tripledPenta_excess_sum_factor (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 5) :
+    ∑ P ∈ C, (tripledQuadReMoment ρ μG C P u u'
+        - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+      = realMoment ρ μG 3 * ∑ x ∈ C,
+            (quadReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 4)
+        + e1 ρ μG * ∑ x ∈ C, ∑ P ∈ C.erase x,
+            (tripledQuadReMoment ρ μG (C.erase x) P u u'
+              - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) := by
+  classical
+  obtain ⟨X, hXC, s, hsX, hpriv⟩ :=
+    exists_private_column_of_card_five (N := N) hN hN3 hC
+  have hnp : ∀ x ∈ C, x ≠ X → ¬ IsPrimitiveQuad (C.erase x) := by
+    intro x hx hxX hprim
+    have hXCx : X ∈ C.erase x :=
+      Finset.mem_erase.mpr ⟨Ne.symm hxX, hXC⟩
+    obtain ⟨Q, hQ, hQX, hsQ⟩ := hprim.2 X hXCx s hsX
+    exact hpriv Q (Finset.mem_erase.mp hQ).2 hQX hsQ
+  have hvan4 : ∀ x ∈ C, x ≠ X →
+      quadReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 4 = 0 := by
+    intro x hx hxX
+    have hcard : (C.erase x).card = 4 := by
+      rw [Finset.card_erase_of_mem hx, hC]
+    exact excess_eq_zero_of_not_primitive ρ μG hN hN3 hρcont
+      u u' hcard (hnp x hx hxX)
+  have hvantrip : ∀ x ∈ C, x ≠ X →
+      ∑ P ∈ C.erase x,
+          (tripledQuadReMoment ρ μG (C.erase x) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) = 0 := by
+    intro x hx hxX
+    have hcard : (C.erase x).card = 4 := by
+      rw [Finset.card_erase_of_mem hx, hC]
+    refine Finset.sum_eq_zero fun P hP => ?_
+    exact tripledQuadReMoment_sub_eq_zero_of_not_primitive ρ μG
+      hN hN3 hρcont u u' hcard (hnp x hx hxX) hP
+  have htermX : (tripledQuadReMoment ρ μG C X u u'
+        - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+      = realMoment ρ μG 3
+          * (quadReMoment ρ μG (C.erase X) u u' - (e1 ρ μG) ^ 4) := by
+    rw [tripledQuadReMoment_strip_tripled ρ μG hN hN3 hρcont
+        u u' hsX hpriv]
+    ring
+  have hterm : ∀ P ∈ C.erase X,
+      (tripledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        = e1 ρ μG * (tripledQuadReMoment ρ μG (C.erase X) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) := by
+    intro P hP
+    rw [tripledQuadReMoment_strip_single ρ μG hN hN3 hρcont
+        u u' (Finset.mem_erase.mp hP).2 hXC
+        (Ne.symm (Finset.mem_erase.mp hP).1) hsX hpriv]
+    ring
+  calc ∑ P ∈ C, (tripledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+      = (tripledQuadReMoment ρ μG C X u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ∑ P ∈ C.erase X, (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4) :=
+        (Finset.add_sum_erase C _ hXC).symm
+    _ = realMoment ρ μG 3
+            * (quadReMoment ρ μG (C.erase X) u u' - (e1 ρ μG) ^ 4)
+          + ∑ P ∈ C.erase X, e1 ρ μG
+              * (tripledQuadReMoment ρ μG (C.erase X) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) := by
+          rw [htermX, Finset.sum_congr rfl hterm]
+    _ = realMoment ρ μG 3 * ∑ x ∈ C,
+            (quadReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 4)
+          + e1 ρ μG * ∑ x ∈ C, ∑ P ∈ C.erase x,
+              (tripledQuadReMoment ρ μG (C.erase x) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) := by
+          rw [← Finset.mul_sum]
+          congr 1
+          · exact congrArg (fun t => realMoment ρ μG 3 * t)
+              (Finset.sum_eq_single X
+                (fun x hx hxX => hvan4 x hx hxX)
+                (fun h => absurd hXC h)).symm
+          · exact congrArg (fun t => e1 ρ μG * t)
+              (Finset.sum_eq_single X
+                (fun x hx hxX => hvantrip x hx hxX)
+                (fun h => absurd hXC h)).symm
+
+/-- **The erased tripled excess sum at order 5,
+converted**: summing the tripled excesses of all
+erasures of all 5-supports counts each 4-support
+`colCount N − 4` times. -/
+theorem sum_powersetCard_five_tripled_erase (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ R ∈ C.erase P,
+        (tripledQuadReMoment ρ μG (C.erase R) P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+      = (colCount N - 4) * kappa6chan3111Excess ρ μG u u' := by
+  classical
+  have hswap : ∀ C : Finset (LayerColumn N),
+      (∑ P ∈ C, ∑ R ∈ C.erase P,
+          (tripledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))
+        = ∑ R ∈ C, ∑ P ∈ C.erase R,
+            (tripledQuadReMoment ρ μG (C.erase R) P u u'
+              - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) :=
+    fun C => sum_sum_erase_swap C
+      (fun a b => tripledQuadReMoment ρ μG (C.erase b) a u u'
+        - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+  rw [Finset.sum_congr rfl (fun C _ => hswap C),
+    sum_powersetCard_five_erase_apply
+      (fun T => ∑ P ∈ T,
+        (tripledQuadReMoment ρ μG T P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)),
+    sum_powersetCard_four_tripled_excess ρ μG hN hN3 hρcont
+      u u']
+
+/-- **The tripled-penta excess sum, converted**:
+`μ₃` times the dressed order-4 excess sum plus `e₁`
+times the dressed `(3,1,1,1)` channel excess. -/
+theorem sum_powersetCard_five_tripledPenta_excess (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+        (tripledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+      = realMoment ρ μG 3 * ((colCount N - 4)
+            * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + e1 ρ μG * ((colCount N - 4)
+            * kappa6chan3111Excess ρ μG u u') := by
+  classical
+  have hF' : (∑ C ∈ Finset.univ.powersetCard 5, ∑ x ∈ C,
+        ∑ P ∈ C.erase x,
+          (tripledQuadReMoment ρ μG (C.erase x) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))
+      = (colCount N - 4) * kappa6chan3111Excess ρ μG u u' := by
+    rw [sum_powersetCard_five_erase_apply
+        (fun T => ∑ P ∈ T,
+          (tripledQuadReMoment ρ μG T P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)),
+      sum_powersetCard_four_tripled_excess ρ μG hN hN3 hρcont
+        u u']
+  rw [Finset.sum_congr rfl (fun C hC =>
+      tripledPenta_excess_sum_factor ρ μG hN hN3 hρcont u u' C
+        (Finset.mem_powersetCard.mp hC).2),
+    Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
+    sum_powersetCard_five_erase_excess ρ μG hN hN3 hρcont u u',
+    hF']
+
+/-- **The doubled-doubled-penta excess sum at one
+5-support, factored**: a private column splits the
+ordered-pair sum into `2μ₂` times the erased doubled
+excesses plus `e₁` times the erased doubled-doubled
+excesses (the private column can sit in either
+doubled seat, hence the `2`); all other erasures
+are non-primitive and vanish. -/
+theorem ddPenta_excess_sum_factor (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 5) :
+    ∑ P ∈ C, ∑ Q ∈ C.erase P,
+        (doubledDoubledQuadReMoment ρ μG C P Q u u'
+          - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+      = 2 * realMoment ρ μG 2 * ∑ x ∈ C, ∑ P ∈ C.erase x,
+            (doubledQuadReMoment ρ μG (C.erase x) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + e1 ρ μG * ∑ x ∈ C, ∑ P ∈ C.erase x,
+            ∑ Q ∈ (C.erase x).erase P,
+            (doubledDoubledQuadReMoment ρ μG (C.erase x) P Q u u'
+              - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) := by
+  classical
+  obtain ⟨X, hXC, s, hsX, hpriv⟩ :=
+    exists_private_column_of_card_five (N := N) hN hN3 hC
+  have hnp : ∀ x ∈ C, x ≠ X → ¬ IsPrimitiveQuad (C.erase x) := by
+    intro x hx hxX hprim
+    have hXCx : X ∈ C.erase x :=
+      Finset.mem_erase.mpr ⟨Ne.symm hxX, hXC⟩
+    obtain ⟨Q, hQ, hQX, hsQ⟩ := hprim.2 X hXCx s hsX
+    exact hpriv Q (Finset.mem_erase.mp hQ).2 hQX hsQ
+  have hvandbl : ∀ x ∈ C, x ≠ X →
+      ∑ P ∈ C.erase x,
+          (doubledQuadReMoment ρ μG (C.erase x) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) = 0 := by
+    intro x hx hxX
+    have hcard : (C.erase x).card = 4 := by
+      rw [Finset.card_erase_of_mem hx, hC]
+    refine Finset.sum_eq_zero fun P hP => ?_
+    exact doubledQuadReMoment_sub_eq_zero_of_not_primitive ρ μG
+      hN hN3 hρcont u u' hcard (hnp x hx hxX) hP
+  have hvandd : ∀ x ∈ C, x ≠ X →
+      ∑ P ∈ C.erase x, ∑ Q ∈ (C.erase x).erase P,
+          (doubledDoubledQuadReMoment ρ μG (C.erase x) P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) = 0 := by
+    intro x hx hxX
+    have hcard : (C.erase x).card = 4 := by
+      rw [Finset.card_erase_of_mem hx, hC]
+    refine Finset.sum_eq_zero fun P hP =>
+      Finset.sum_eq_zero fun Q hQ => ?_
+    exact doubledDoubledQuadReMoment_sub_eq_zero_of_not_primitive
+      ρ μG hN hN3 hρcont u u' hcard (hnp x hx hxX) hP hQ
+  have htermX : ∑ Q ∈ C.erase X,
+        (doubledDoubledQuadReMoment ρ μG C X Q u u'
+          - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+      = realMoment ρ μG 2 * ∑ Q ∈ C.erase X,
+          (doubledQuadReMoment ρ μG (C.erase X) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) := by
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl fun Q hQ => ?_
+    have hQC : Q ∈ C := (Finset.mem_erase.mp hQ).2
+    have hQP : Q ≠ X := (Finset.mem_erase.mp hQ).1
+    rw [doubledDoubledQuadReMoment_strip_first ρ μG hN hN3
+      hρcont u u' hQC hQP hsX hpriv]
+    ring
+  have hterm : ∀ P ∈ C.erase X,
+      ∑ Q ∈ C.erase P,
+          (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        = realMoment ρ μG 2
+            * (doubledQuadReMoment ρ μG (C.erase X) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+          + e1 ρ μG * ∑ Q ∈ (C.erase X).erase P,
+              (doubledDoubledQuadReMoment ρ μG (C.erase X) P Q
+                u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) := by
+    intro P hP
+    have hPC : P ∈ C := (Finset.mem_erase.mp hP).2
+    have hPX : P ≠ X := (Finset.mem_erase.mp hP).1
+    have hXPe : X ∈ C.erase P :=
+      Finset.mem_erase.mpr ⟨Ne.symm hPX, hXC⟩
+    rw [← Finset.add_sum_erase (C.erase P) _ hXPe]
+    congr 1
+    · rw [doubledDoubledQuadReMoment_strip_second ρ μG hN hN3
+        hρcont u u' hPC (Ne.symm hPX) hsX hpriv]
+      ring
+    · have hset : (C.erase P).erase X = (C.erase X).erase P :=
+        Finset.erase_right_comm
+      rw [hset, Finset.mul_sum]
+      refine Finset.sum_congr rfl fun Q hQ => ?_
+      have hQX : Q ≠ X :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hQ).2).1
+      have hQC : Q ∈ C :=
+        (Finset.mem_erase.mp (Finset.mem_erase.mp hQ).2).2
+      have hQP : Q ≠ P := (Finset.mem_erase.mp hQ).1
+      rw [doubledDoubledQuadReMoment_strip_single ρ μG hN hN3
+        hρcont u u' hPC hQC hXC (Ne.symm hPX) (Ne.symm hQX)
+        hQP hsX hpriv]
+      ring
+  have hS : (∑ x ∈ C, ∑ P ∈ C.erase x,
+        (doubledQuadReMoment ρ μG (C.erase x) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ∑ P ∈ C.erase X,
+          (doubledQuadReMoment ρ μG (C.erase X) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    Finset.sum_eq_single X
+      (fun x hx hxX => hvandbl x hx hxX)
+      (fun h => absurd hXC h)
+  have hT : (∑ x ∈ C, ∑ P ∈ C.erase x,
+        ∑ Q ∈ (C.erase x).erase P,
+        (doubledDoubledQuadReMoment ρ μG (C.erase x) P Q u u'
+          - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = ∑ P ∈ C.erase X, ∑ Q ∈ (C.erase X).erase P,
+          (doubledDoubledQuadReMoment ρ μG (C.erase X) P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) :=
+    Finset.sum_eq_single X
+      (fun x hx hxX => hvandd x hx hxX)
+      (fun h => absurd hXC h)
+  calc ∑ P ∈ C, ∑ Q ∈ C.erase P,
+          (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+      = (∑ Q ∈ C.erase X,
+            (doubledDoubledQuadReMoment ρ μG C X Q u u'
+              - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3))
+          + ∑ P ∈ C.erase X, ∑ Q ∈ C.erase P,
+              (doubledDoubledQuadReMoment ρ μG C P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3) :=
+        (Finset.add_sum_erase C _ hXC).symm
+    _ = realMoment ρ μG 2 * ∑ Q ∈ C.erase X,
+              (doubledQuadReMoment ρ μG (C.erase X) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+          + ∑ P ∈ C.erase X, (realMoment ρ μG 2
+              * (doubledQuadReMoment ρ μG (C.erase X) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + e1 ρ μG * ∑ Q ∈ (C.erase X).erase P,
+                (doubledDoubledQuadReMoment ρ μG (C.erase X) P Q
+                  u u'
+                  - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)) := by
+          rw [htermX, Finset.sum_congr rfl hterm]
+    _ = 2 * realMoment ρ μG 2 * ∑ x ∈ C, ∑ P ∈ C.erase x,
+              (doubledQuadReMoment ρ μG (C.erase x) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+          + e1 ρ μG * ∑ x ∈ C, ∑ P ∈ C.erase x,
+              ∑ Q ∈ (C.erase x).erase P,
+              (doubledDoubledQuadReMoment ρ μG (C.erase x) P Q
+                u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) := by
+          rw [Finset.sum_add_distrib, ← Finset.mul_sum,
+            ← Finset.mul_sum, ← hS, ← hT]
+          ring
+
+/-- **The doubled-doubled-penta excess sum,
+converted**: `2μ₂` times the dressed `(2,1,1,1)`
+channel excess plus `e₁` times the dressed
+`(2,2,1,1)` channel excess. -/
+theorem sum_powersetCard_five_ddPenta_excess (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P,
+        (doubledDoubledQuadReMoment ρ μG C P Q u u'
+          - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+      = 2 * realMoment ρ μG 2 * ((colCount N - 4)
+            * kappa5chanExcess ρ μG u u')
+        + e1 ρ μG * ((colCount N - 4)
+            * kappa6chan2211Excess ρ μG u u') := by
+  classical
+  have hF1 : (∑ C ∈ Finset.univ.powersetCard 5, ∑ x ∈ C,
+        ∑ P ∈ C.erase x,
+          (doubledQuadReMoment ρ μG (C.erase x) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = (colCount N - 4) * kappa5chanExcess ρ μG u u' := by
+    rw [sum_powersetCard_five_erase_apply
+        (fun T => ∑ P ∈ T,
+          (doubledQuadReMoment ρ μG T P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+      sum_powersetCard_four_doubled_excess ρ μG hN hN3 hρcont
+        u u']
+  have hF2 : (∑ C ∈ Finset.univ.powersetCard 5, ∑ x ∈ C,
+        ∑ P ∈ C.erase x, ∑ Q ∈ (C.erase x).erase P,
+          (doubledDoubledQuadReMoment ρ μG (C.erase x) P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = (colCount N - 4) * kappa6chan2211Excess ρ μG u u' := by
+    rw [sum_powersetCard_five_erase_apply
+        (fun T => ∑ P ∈ T, ∑ Q ∈ T.erase P,
+          (doubledDoubledQuadReMoment ρ μG T P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)),
+      sum_powersetCard_four_doubledDoubled_excess ρ μG hN hN3
+        hρcont u u']
+  rw [Finset.sum_congr rfl (fun C hC =>
+      ddPenta_excess_sum_factor ρ μG hN hN3 hρcont u u' C
+        (Finset.mem_powersetCard.mp hC).2),
+    Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
+    hF1, hF2]
+/-- **Erasure counting, 7 → 6 (generic)**: the
+order-7 analogue of `sum_powersetCard_six_erase_apply`,
+proved by the same indicator-and-bijection argument
+with the card values shifted by one. -/
+theorem sum_powersetCard_seven_erase_apply
+    (g : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 7, ∑ x ∈ C, g (C.erase x)
+      = (colCount N - 6) * ∑ T ∈ Finset.univ.powersetCard 6, g T := by
+  classical
+  have step1 : ∀ C ∈ Finset.univ.powersetCard 7,
+      ∑ x ∈ C, g (C.erase x)
+        = ∑ x ∈ Finset.univ, (if x ∈ C then g (C.erase x)
+            else 0) := fun C _ =>
+    (Finset.sum_congr rfl (fun x hx => (if_pos hx).symm)).trans
+      (Finset.sum_subset (Finset.subset_univ C)
+        (fun x _ hx => if_neg hx))
+  have step2 : ∀ x : LayerColumn N,
+      ∑ C ∈ Finset.univ.powersetCard 7, (if x ∈ C then
+          g (C.erase x) else 0)
+      = ∑ T ∈ Finset.univ.powersetCard 6, (if x ∈ T then 0
+          else g T) := by
+    intro x
+    have hA : ∑ C ∈ Finset.univ.powersetCard 7, (if x ∈ C then
+          g (C.erase x) else 0)
+      = ∑ C ∈ (Finset.univ.powersetCard 7).filter
+          (fun C => x ∈ C), g (C.erase x) :=
+      (Finset.sum_filter _ _).symm
+    have hB : ∑ T ∈ Finset.univ.powersetCard 6, (if x ∈ T then 0
+          else g T)
+      = ∑ T ∈ (Finset.univ.powersetCard 6).filter
+          (fun T => x ∉ T), g T := by
+      rw [Finset.sum_filter]
+      refine Finset.sum_congr rfl fun T _ => ?_
+      by_cases hxT : x ∈ T <;> simp [hxT]
+    rw [hA, hB]
+    refine Finset.sum_bij (fun C _ => C.erase x) ?_ ?_ ?_ ?_
+    · intro C hC
+      have hC6 : C ∈ Finset.univ.powersetCard 7 :=
+        (Finset.mem_filter.mp hC).1
+      have hxC : x ∈ C := (Finset.mem_filter.mp hC).2
+      rw [Finset.mem_filter]
+      refine ⟨Finset.mem_powersetCard.mpr
+        ⟨(Finset.erase_subset x C).trans (Finset.subset_univ C),
+          by
+          rw [Finset.card_erase_of_mem hxC,
+            (Finset.mem_powersetCard.mp hC6).2]⟩, ?_⟩
+      exact fun h => (Finset.mem_erase.mp h).1 rfl
+    · intro C hC C' hC' h
+      have hxC : x ∈ C := (Finset.mem_filter.mp hC).2
+      have hxC' : x ∈ C' := (Finset.mem_filter.mp hC').2
+      have h1 : insert x (C.erase x) = C :=
+        Finset.insert_erase hxC
+      have h2 : insert x (C'.erase x) = C' :=
+        Finset.insert_erase hxC'
+      rw [← h1, ← h2, h]
+    · intro T hT
+      have hT5 : T ∈ Finset.univ.powersetCard 6 :=
+        (Finset.mem_filter.mp hT).1
+      have hxT : x ∉ T := (Finset.mem_filter.mp hT).2
+      refine ⟨insert x T, ?_, ?_⟩
+      · rw [Finset.mem_filter]
+        refine ⟨Finset.mem_powersetCard.mpr
+          ⟨Finset.insert_subset (Finset.mem_univ x)
+            (Finset.mem_powersetCard.mp hT5).1, by
+            rw [Finset.card_insert_of_notMem hxT,
+              (Finset.mem_powersetCard.mp hT5).2]⟩,
+          Finset.mem_insert_self x T⟩
+      · exact Finset.erase_insert hxT
+    · intro C _
+      rfl
+  have step3 : ∀ T ∈ Finset.univ.powersetCard 6,
+      ∑ x ∈ Finset.univ, (if x ∈ T then (0 : ℝ) else g T)
+        = (colCount N - 6) * g T := by
+    intro T hT
+    have hT5 : T.card = 6 := (Finset.mem_powersetCard.mp hT).2
+    have h5M : 6 ≤ Fintype.card (LayerColumn N) := by
+      have hle := Finset.card_le_card (Finset.subset_univ T)
+      rwa [Finset.card_univ, hT5] at hle
+    have hform : ∀ x : LayerColumn N,
+        (if x ∈ T then (0 : ℝ) else g T)
+        = (if x ∉ T then g T else 0) := fun x => (ite_not _ _ _).symm
+    rw [Finset.sum_congr rfl (fun x _ => hform x),
+      ← Finset.sum_filter, Finset.sum_const]
+    have hcard : (Finset.univ.filter (fun x => x ∉ T)).card
+        = Fintype.card (LayerColumn N) - 6 := by
+      have hset : Finset.univ.filter (fun x => x ∉ T)
+          = Finset.univ \ T := by
+        refine Finset.ext fun x => ?_
+        simp [Finset.mem_sdiff]
+      rw [hset, Finset.card_sdiff, Finset.inter_univ,
+        Finset.card_univ, hT5]
+    rw [hcard, nsmul_eq_mul, Nat.cast_sub h5M, Nat.cast_ofNat]
+    rfl
+  rw [Finset.sum_congr rfl step1, Finset.sum_comm,
+    Finset.sum_congr rfl (fun x _ => step2 x), Finset.sum_comm,
+    Finset.sum_congr rfl step3, ← Finset.mul_sum]
+/-- **6-subsets of a 7-support are its erasures**:
+the card-7 analogue of
+`sum_powersetCard_five_subset_eq_sum_erase`. -/
+theorem sum_powersetCard_six_subset_eq_sum_erase
+    (C : Finset (LayerColumn N)) (hC : C.card = 7)
+    (f : Finset (LayerColumn N) → ℝ) :
+    ∑ D ∈ Finset.powersetCard 6 C, f D
+      = ∑ x ∈ C, f (C.erase x) := by
+  classical
+  refine (Finset.sum_bij (fun x _ => C.erase x) ?_ ?_ ?_ ?_).symm
+  · intro x hx
+    exact Finset.mem_powersetCard.mpr
+      ⟨Finset.erase_subset x C, by
+        rw [Finset.card_erase_of_mem hx, hC]⟩
+  · intro x _ x' hx' h
+    by_contra hne
+    have hmem : x' ∈ C.erase x :=
+      Finset.mem_erase.mpr ⟨Ne.symm hne, hx'⟩
+    rw [h] at hmem
+    exact (Finset.mem_erase.mp hmem).1 rfl
+  · intro D hD
+    have hsub : D ⊆ C := (Finset.mem_powersetCard.mp hD).1
+    have hcard : D.card = 6 := (Finset.mem_powersetCard.mp hD).2
+    have hsdcard : (C \ D).card = 1 := by
+      rw [Finset.card_sdiff, Finset.inter_eq_left.mpr hsub, hC, hcard]
+    obtain ⟨x, hx⟩ := Finset.card_eq_one.mp hsdcard
+    have hxCD : x ∈ C \ D := by
+      rw [hx]; exact Finset.mem_singleton_self x
+    have hxC : x ∈ C := (Finset.mem_sdiff.mp hxCD).1
+    have hxD : x ∉ D := (Finset.mem_sdiff.mp hxCD).2
+    refine ⟨x, hxC, ?_⟩
+    refine Finset.ext fun z => ?_
+    simp only [Finset.mem_erase]
+    constructor
+    · rintro ⟨hzx, hzC⟩
+      by_contra hzD
+      have hz : z ∈ C \ D := Finset.mem_sdiff.mpr ⟨hzC, hzD⟩
+      rw [hx, Finset.mem_singleton] at hz
+      exact hzx hz
+    · intro hzD
+      exact ⟨fun h => hxD (h ▸ hzD), hsub hzD⟩
+  · intro x _
+    rfl
+/-- **The card-6 4-subset sum, generic in the
+summand**: each 4-support lies in
+`(colCount N − 4)(colCount N − 5)/2` 6-supports.
+(The generic form of
+`sum_powersetCard_six_quad_subset`.) -/
+theorem sum_powersetCard_six_four_subset_apply
+    (g : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 6,
+      ∑ T ∈ Finset.powersetCard 4 C, g T
+      = ((colCount N - 4) * (colCount N - 5) / 2)
+        * ∑ T ∈ Finset.univ.powersetCard 4, g T := by
+  classical
+  have h2 : 2 * (∑ C ∈ Finset.univ.powersetCard 6,
+        ∑ T ∈ Finset.powersetCard 4 C, g T)
+      = (colCount N - 5) * ((colCount N - 4)
+          * ∑ T ∈ Finset.univ.powersetCard 4, g T) := by
+    have step1 : ∀ C ∈ Finset.univ.powersetCard 6,
+        2 * ∑ T ∈ Finset.powersetCard 4 C, g T
+          = ∑ x ∈ C, ∑ T ∈ Finset.powersetCard 4 (C.erase x),
+              g T := by
+      intro C hC
+      have hC6 : C.card = 6 :=
+        (Finset.mem_powersetCard.mp hC).2
+      rw [two_mul_sum_powersetCard_four_subset C hC6 g,
+        sum_powersetCard_five_subset_eq_sum_erase C hC6
+          (fun D => ∑ T ∈ Finset.powersetCard 4 D, g T)]
+    have step2 : (∑ C ∈ Finset.univ.powersetCard 6,
+          ∑ x ∈ C, ∑ T ∈ Finset.powersetCard 4 (C.erase x),
+            g T)
+        = (colCount N - 5) * ∑ D ∈ Finset.univ.powersetCard 5,
+            ∑ T ∈ Finset.powersetCard 4 D, g T :=
+      sum_powersetCard_six_erase_apply
+        (fun D => ∑ T ∈ Finset.powersetCard 4 D, g T)
+    have step3 : (∑ D ∈ Finset.univ.powersetCard 5,
+          ∑ T ∈ Finset.powersetCard 4 D, g T)
+        = (colCount N - 4)
+            * ∑ T ∈ Finset.univ.powersetCard 4, g T := by
+      rw [Finset.sum_congr rfl (fun D hD =>
+          sum_powersetCard_four_subset_eq_sum_erase D
+            (Finset.mem_powersetCard.mp hD).2 g)]
+      exact sum_powersetCard_five_erase_apply g
+    rw [Finset.mul_sum, Finset.sum_congr rfl step1, step2,
+      step3]
+  have hI : (∑ C ∈ Finset.univ.powersetCard 6,
+        ∑ T ∈ Finset.powersetCard 4 C, g T)
+      = ((colCount N - 5) * ((colCount N - 4)
+          * ∑ T ∈ Finset.univ.powersetCard 4, g T)) / 2 := by
+    linarith
+  rw [hI]
+  ring
+
+/-- **The card-6 5-subset sum, generic in the
+summand**: each 5-support lies in `colCount N − 5`
+6-supports. -/
+theorem sum_powersetCard_six_five_subset_apply
+    (g : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 6,
+      ∑ T ∈ Finset.powersetCard 5 C, g T
+      = (colCount N - 5)
+        * ∑ T ∈ Finset.univ.powersetCard 5, g T := by
+  classical
+  rw [Finset.sum_congr rfl (fun C hC =>
+      sum_powersetCard_five_subset_eq_sum_erase C
+        (Finset.mem_powersetCard.mp hC).2 g)]
+  exact sum_powersetCard_six_erase_apply g
+
+/-- **The card-7 6-subset sum, generic in the
+summand**: each 6-support lies in `colCount N − 6`
+7-supports. -/
+theorem sum_powersetCard_seven_six_subset_apply
+    (g : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 7,
+      ∑ T ∈ Finset.powersetCard 6 C, g T
+      = (colCount N - 6)
+        * ∑ T ∈ Finset.univ.powersetCard 6, g T := by
+  classical
+  rw [Finset.sum_congr rfl (fun C hC =>
+      sum_powersetCard_six_subset_eq_sum_erase C
+        (Finset.mem_powersetCard.mp hC).2 g)]
+  exact sum_powersetCard_seven_erase_apply g
+/-- **Two times the 5-subset sum of a 7-support**:
+each 5-subset of a 7-support lies in exactly two
+6-subsets (the card-7 analogue of
+`two_mul_sum_powersetCard_four_subset`). -/
+theorem two_mul_sum_powersetCard_five_subset
+    (C : Finset (LayerColumn N)) (hC : C.card = 7)
+    (f : Finset (LayerColumn N) → ℝ) :
+    2 * ∑ T ∈ Finset.powersetCard 5 C, f T
+      = ∑ D ∈ Finset.powersetCard 6 C,
+          ∑ T ∈ Finset.powersetCard 5 D, f T := by
+  classical
+  have h1 : ∀ T ∈ Finset.powersetCard 5 C,
+      ∑ z ∈ C \ T, f T = 2 * f T := by
+    intro T hT
+    have hsub : T ⊆ C := (Finset.mem_powersetCard.mp hT).1
+    have hcard : T.card = 5 := (Finset.mem_powersetCard.mp hT).2
+    rw [Finset.sum_const, Finset.card_sdiff,
+      Finset.inter_eq_left.mpr hsub, hC, hcard, nsmul_eq_mul]
+    norm_num
+  have hset : ∀ T : Finset (LayerColumn N),
+      C.filter (fun z => z ∉ T) = C \ T := fun T =>
+    Finset.ext fun z => by simp [Finset.mem_sdiff]
+  have h2 : ∑ T ∈ Finset.powersetCard 5 C, ∑ z ∈ C \ T, f T
+      = ∑ T ∈ Finset.powersetCard 5 C,
+          ∑ z ∈ C, (if z ∉ T then f T else 0) := by
+    refine Finset.sum_congr rfl fun T _ => ?_
+    rw [← hset T, Finset.sum_filter]
+  have h3 : ∑ T ∈ Finset.powersetCard 5 C,
+        ∑ z ∈ C, (if z ∉ T then f T else 0)
+      = ∑ z ∈ C, ∑ T ∈ Finset.powersetCard 5 (C.erase z), f T := by
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl fun z _ => ?_
+    have hset : (Finset.powersetCard 5 C).filter (fun T => z ∉ T)
+        = Finset.powersetCard 5 (C.erase z) := by
+      refine Finset.ext fun T => ?_
+      simp only [Finset.mem_filter, Finset.mem_powersetCard]
+      constructor
+      · rintro ⟨⟨hsub, hcard⟩, hzT⟩
+        exact ⟨Finset.subset_erase.mpr ⟨hsub, hzT⟩, hcard⟩
+      · rintro ⟨hsub, hcard⟩
+        refine ⟨⟨hsub.trans (Finset.erase_subset z C), hcard⟩, ?_⟩
+        exact fun h => (Finset.mem_erase.mp (hsub h)).1 rfl
+    rw [← Finset.sum_filter, hset]
+  have h4 : ∑ D ∈ Finset.powersetCard 6 C,
+        ∑ T ∈ Finset.powersetCard 5 D, f T
+      = ∑ z ∈ C, ∑ T ∈ Finset.powersetCard 5 (C.erase z), f T :=
+    sum_powersetCard_six_subset_eq_sum_erase C hC
+      (fun D => ∑ T ∈ Finset.powersetCard 5 D, f T)
+  calc 2 * ∑ T ∈ Finset.powersetCard 5 C, f T
+      = ∑ T ∈ Finset.powersetCard 5 C, ∑ z ∈ C \ T, f T := by
+        rw [Finset.mul_sum]
+        exact Finset.sum_congr rfl fun T hT => (h1 T hT).symm
+    _ = ∑ z ∈ C, ∑ T ∈ Finset.powersetCard 5 (C.erase z), f T :=
+        h2.trans h3
+    _ = ∑ D ∈ Finset.powersetCard 6 C,
+          ∑ T ∈ Finset.powersetCard 5 D, f T := h4.symm
+/-- **The card-7 5-subset sum, generic in the
+summand**: each 5-support lies in
+`(colCount N − 5)(colCount N − 6)/2` 7-supports. -/
+theorem sum_powersetCard_seven_five_subset_apply
+    (g : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 7,
+      ∑ T ∈ Finset.powersetCard 5 C, g T
+      = ((colCount N - 5) * (colCount N - 6) / 2)
+        * ∑ T ∈ Finset.univ.powersetCard 5, g T := by
+  classical
+  have h2 : 2 * (∑ C ∈ Finset.univ.powersetCard 7,
+        ∑ T ∈ Finset.powersetCard 5 C, g T)
+      = (colCount N - 6) * ((colCount N - 5)
+          * ∑ T ∈ Finset.univ.powersetCard 5, g T) := by
+    have step1 : ∀ C ∈ Finset.univ.powersetCard 7,
+        2 * ∑ T ∈ Finset.powersetCard 5 C, g T
+          = ∑ x ∈ C, ∑ T ∈ Finset.powersetCard 5 (C.erase x),
+              g T := by
+      intro C hC
+      have hC7 : C.card = 7 :=
+        (Finset.mem_powersetCard.mp hC).2
+      rw [two_mul_sum_powersetCard_five_subset C hC7 g,
+        sum_powersetCard_six_subset_eq_sum_erase C hC7
+          (fun D => ∑ T ∈ Finset.powersetCard 5 D, g T)]
+    have step2 : (∑ C ∈ Finset.univ.powersetCard 7,
+          ∑ x ∈ C, ∑ T ∈ Finset.powersetCard 5 (C.erase x),
+            g T)
+        = (colCount N - 6) * ∑ D ∈ Finset.univ.powersetCard 6,
+            ∑ T ∈ Finset.powersetCard 5 D, g T :=
+      sum_powersetCard_seven_erase_apply
+        (fun D => ∑ T ∈ Finset.powersetCard 5 D, g T)
+    have step3 : (∑ D ∈ Finset.univ.powersetCard 6,
+          ∑ T ∈ Finset.powersetCard 5 D, g T)
+        = (colCount N - 5)
+            * ∑ T ∈ Finset.univ.powersetCard 5, g T := by
+      rw [Finset.sum_congr rfl (fun D hD =>
+          sum_powersetCard_five_subset_eq_sum_erase D
+            (Finset.mem_powersetCard.mp hD).2 g)]
+      exact sum_powersetCard_six_erase_apply g
+    rw [Finset.mul_sum, Finset.sum_congr rfl step1, step2,
+      step3]
+  have hI : (∑ C ∈ Finset.univ.powersetCard 7,
+        ∑ T ∈ Finset.powersetCard 5 C, g T)
+      = ((colCount N - 6) * ((colCount N - 5)
+          * ∑ T ∈ Finset.univ.powersetCard 5, g T)) / 2 := by
+    linarith
+  rw [hI]
+  ring
+
+/-- **Three times the 4-subset sum of a 7-support**:
+each 4-subset of a 7-support lies in exactly three
+6-subsets. -/
+theorem three_mul_sum_powersetCard_four_subset
+    (C : Finset (LayerColumn N)) (hC : C.card = 7)
+    (f : Finset (LayerColumn N) → ℝ) :
+    ∑ D ∈ Finset.powersetCard 6 C,
+      ∑ T ∈ Finset.powersetCard 4 D, f T
+      = 3 * ∑ T ∈ Finset.powersetCard 4 C, f T := by
+  classical
+  have h1 : ∀ T ∈ Finset.powersetCard 4 C,
+      ∑ z ∈ C \ T, f T = 3 * f T := by
+    intro T hT
+    have hsub : T ⊆ C := (Finset.mem_powersetCard.mp hT).1
+    have hcard : T.card = 4 := (Finset.mem_powersetCard.mp hT).2
+    rw [Finset.sum_const, Finset.card_sdiff,
+      Finset.inter_eq_left.mpr hsub, hC, hcard, nsmul_eq_mul]
+    norm_num
+  have hset : ∀ T : Finset (LayerColumn N),
+      C.filter (fun z => z ∉ T) = C \ T := fun T =>
+    Finset.ext fun z => by simp [Finset.mem_sdiff]
+  have h2 : ∑ T ∈ Finset.powersetCard 4 C, ∑ z ∈ C \ T, f T
+      = ∑ T ∈ Finset.powersetCard 4 C,
+          ∑ z ∈ C, (if z ∉ T then f T else 0) := by
+    refine Finset.sum_congr rfl fun T _ => ?_
+    rw [← hset T, Finset.sum_filter]
+  have h3 : ∑ T ∈ Finset.powersetCard 4 C,
+        ∑ z ∈ C, (if z ∉ T then f T else 0)
+      = ∑ z ∈ C, ∑ T ∈ Finset.powersetCard 4 (C.erase z),
+          f T := by
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl fun z _ => ?_
+    have hset : (Finset.powersetCard 4 C).filter (fun T => z ∉ T)
+        = Finset.powersetCard 4 (C.erase z) := by
+      refine Finset.ext fun T => ?_
+      simp only [Finset.mem_filter, Finset.mem_powersetCard]
+      constructor
+      · rintro ⟨⟨hsub, hcard⟩, hzT⟩
+        exact ⟨Finset.subset_erase.mpr ⟨hsub, hzT⟩, hcard⟩
+      · rintro ⟨hsub, hcard⟩
+        refine ⟨⟨hsub.trans (Finset.erase_subset z C), hcard⟩, ?_⟩
+        exact fun h => (Finset.mem_erase.mp (hsub h)).1 rfl
+    rw [← Finset.sum_filter, hset]
+  calc ∑ D ∈ Finset.powersetCard 6 C,
+        ∑ T ∈ Finset.powersetCard 4 D, f T
+      = ∑ z ∈ C, ∑ T ∈ Finset.powersetCard 4 (C.erase z),
+          f T :=
+        sum_powersetCard_six_subset_eq_sum_erase C hC
+          (fun D => ∑ T ∈ Finset.powersetCard 4 D, f T)
+    _ = ∑ T ∈ Finset.powersetCard 4 C, ∑ z ∈ C \ T, f T :=
+        (h2.trans h3).symm
+    _ = 3 * ∑ T ∈ Finset.powersetCard 4 C, f T := by
+        rw [Finset.mul_sum]
+        exact Finset.sum_congr rfl fun T hT => h1 T hT
+
+/-- **The card-7 4-subset sum, generic in the
+summand**: each 4-support lies in
+`(colCount N − 4)(colCount N − 5)(colCount N − 6)/6`
+7-supports. -/
+theorem sum_powersetCard_seven_four_subset_apply
+    (g : Finset (LayerColumn N) → ℝ) :
+    ∑ C ∈ Finset.univ.powersetCard 7,
+      ∑ T ∈ Finset.powersetCard 4 C, g T
+      = ((colCount N - 4) * (colCount N - 5)
+          * (colCount N - 6) / 6)
+        * ∑ T ∈ Finset.univ.powersetCard 4, g T := by
+  classical
+  have step2 : (∑ C ∈ Finset.univ.powersetCard 7,
+        ∑ D ∈ Finset.powersetCard 6 C,
+        ∑ T ∈ Finset.powersetCard 4 D, g T)
+      = (colCount N - 6) * ∑ D ∈ Finset.univ.powersetCard 6,
+          ∑ T ∈ Finset.powersetCard 4 D, g T := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        sum_powersetCard_six_subset_eq_sum_erase C
+          (Finset.mem_powersetCard.mp hC).2
+          (fun D => ∑ T ∈ Finset.powersetCard 4 D, g T))]
+    exact sum_powersetCard_seven_erase_apply
+      (fun D => ∑ T ∈ Finset.powersetCard 4 D, g T)
+  have h3 : 3 * (∑ C ∈ Finset.univ.powersetCard 7,
+        ∑ T ∈ Finset.powersetCard 4 C, g T)
+      = (colCount N - 6)
+          * (((colCount N - 4) * (colCount N - 5) / 2)
+            * ∑ T ∈ Finset.univ.powersetCard 4, g T) := by
+    calc 3 * (∑ C ∈ Finset.univ.powersetCard 7,
+          ∑ T ∈ Finset.powersetCard 4 C, g T)
+        = ∑ C ∈ Finset.univ.powersetCard 7,
+            ∑ D ∈ Finset.powersetCard 6 C,
+            ∑ T ∈ Finset.powersetCard 4 D, g T := by
+          rw [Finset.mul_sum, Finset.sum_congr rfl
+            (fun C hC => (three_mul_sum_powersetCard_four_subset
+              C (Finset.mem_powersetCard.mp hC).2 g).symm)]
+      _ = (colCount N - 6) * ∑ D ∈ Finset.univ.powersetCard 6,
+            ∑ T ∈ Finset.powersetCard 4 D, g T := step2
+      _ = (colCount N - 6)
+            * (((colCount N - 4) * (colCount N - 5) / 2)
+              * ∑ T ∈ Finset.univ.powersetCard 4, g T) := by
+          rw [sum_powersetCard_six_four_subset_apply g]
+  have hI : (∑ C ∈ Finset.univ.powersetCard 7,
+        ∑ T ∈ Finset.powersetCard 4 C, g T)
+      = ((colCount N - 6)
+          * (((colCount N - 4) * (colCount N - 5) / 2)
+            * ∑ T ∈ Finset.univ.powersetCard 4, g T)) / 3 := by
+    linarith
+  rw [hI]
+  ring
+/-- **The erased quad excess, seen through the
+second seat at order 5**: rotating the erasure to
+the front and counting the free seat gives
+`4 · (colCount N − 4)` times the order-4 excess
+sum. -/
+theorem sum_powersetCard_five_erase_quad_through (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ R ∈ C.erase P,
+        (quadReMoment ρ μG (C.erase R) u u' - (e1 ρ μG) ^ 4)
+      = 4 * ((colCount N - 4)
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+  classical
+  have step1 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ∑ R ∈ C.erase P,
+          (quadReMoment ρ μG (C.erase R) u u' - (e1 ρ μG) ^ 4))
+        = ∑ R ∈ C, (4 : ℝ)
+            * (quadReMoment ρ μG (C.erase R) u u'
+              - (e1 ρ μG) ^ 4) := by
+    intro C hC
+    have hcard : C.card = 5 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [sum_sum_erase_swap C
+      (fun P R => quadReMoment ρ μG (C.erase R) u u'
+        - (e1 ρ μG) ^ 4)]
+    refine Finset.sum_congr rfl fun R hR => ?_
+    rw [Finset.sum_const, Finset.card_erase_of_mem hR, hcard,
+      show (5 - 1 : ℕ) = 4 from rfl, nsmul_eq_mul,
+      Nat.cast_ofNat]
+  have step2 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ R ∈ C, (4 : ℝ)
+          * (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4))
+        = 4 * ∑ R ∈ C,
+            (quadReMoment ρ μG (C.erase R) u u'
+              - (e1 ρ μG) ^ 4) := by
+    intro C _
+    rw [← Finset.mul_sum]
+  rw [Finset.sum_congr rfl step1, Finset.sum_congr rfl step2,
+    ← Finset.mul_sum,
+    sum_powersetCard_five_erase_excess ρ μG hN hN3 hρcont u u']
+
+/-- **The rotated quad excess at order 5**: in the
+`(2,2,1,1,1)`-family remainder sum, rotating the
+erased seat to the front leaves the order-4 excess
+sum dressed by `(colCount N − 4) · 12`. -/
+theorem sum_powersetCard_five_rotate_quad (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        (quadReMoment ρ μG (C.erase R) u u' - (e1 ρ μG) ^ 4)
+      = (colCount N - 4) * (12
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+  classical
+  rw [Finset.sum_congr rfl (fun C _ => sum_erase_rotate5
+      (fun T _ _ => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) C),
+    sum_powersetCard_five_erase_apply
+      (fun T => ∑ P ∈ T, ∑ Q ∈ T.erase P,
+        (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)),
+    cnt4b]
+
+/-- **The rotated doubled excess at order 5, first
+seat**: dressed by `(colCount N − 4) · 3`. -/
+theorem sum_powersetCard_five_rotate_doubled_first (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        (doubledQuadReMoment ρ μG (C.erase R) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      = (colCount N - 4) * (3 * kappa5chanExcess ρ μG u u') := by
+  classical
+  rw [Finset.sum_congr rfl (fun C _ => sum_erase_rotate5
+      (fun T P _ => doubledQuadReMoment ρ μG T P u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) C),
+    sum_powersetCard_five_erase_apply
+      (fun T => ∑ P ∈ T, ∑ Q ∈ T.erase P,
+        (doubledQuadReMoment ρ μG T P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+    cnt4d, sum_powersetCard_four_doubled_excess ρ μG hN hN3
+      hρcont u u']
+
+/-- **The rotated doubled excess at order 5, second
+seat**: dressed by `(colCount N − 4) · 3`. -/
+theorem sum_powersetCard_five_rotate_doubled_second (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      = (colCount N - 4) * (3 * kappa5chanExcess ρ μG u u') := by
+  classical
+  rw [Finset.sum_congr rfl (fun C _ => sum_erase_rotate5
+      (fun T _ Q => doubledQuadReMoment ρ μG T Q u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) C),
+    sum_powersetCard_five_erase_apply
+      (fun T => ∑ P ∈ T, ∑ Q ∈ T.erase P,
+        (doubledQuadReMoment ρ μG T Q u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+    cnt4e, sum_powersetCard_four_doubled_excess ρ μG hN hN3
+      hρcont u u']
+
+/-- **The rotated doubled-doubled excess at order
+5**: dressed by `colCount N − 4`. -/
+theorem sum_powersetCard_five_rotate_dd (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        (doubledDoubledQuadReMoment ρ μG (C.erase R) P Q u u'
+          - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+      = (colCount N - 4) * kappa6chan2211Excess ρ μG u u' := by
+  classical
+  rw [Finset.sum_congr rfl (fun C _ => sum_erase_rotate5
+      (fun T P Q => doubledDoubledQuadReMoment ρ μG T P Q u u'
+        - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) C),
+    sum_powersetCard_five_erase_apply
+      (fun T => ∑ P ∈ T, ∑ Q ∈ T.erase P,
+        (doubledDoubledQuadReMoment ρ μG T P Q u u'
+          - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)),
+    sum_powersetCard_four_doubledDoubled_excess ρ μG hN hN3
+      hρcont u u']
+
+/-- **The erased quad excess over the free second
+seat at order 5**: dressed by
+`(colCount N − 4) · 4`. -/
+theorem sum_powersetCard_five_erase_quad_seat (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P,
+        (quadReMoment ρ μG (C.erase P) u u' - (e1 ρ μG) ^ 4)
+      = (colCount N - 4) * (4
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+  classical
+  have step1 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ∑ Q ∈ C.erase P,
+          (quadReMoment ρ μG (C.erase P) u u' - (e1 ρ μG) ^ 4))
+        = ∑ P ∈ C, (4 : ℝ)
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4) := by
+    intro C hC
+    have hcard : C.card = 5 :=
+      (Finset.mem_powersetCard.mp hC).2
+    refine Finset.sum_congr rfl fun P hP => ?_
+    rw [Finset.sum_const, Finset.card_erase_of_mem hP, hcard,
+      show (5 - 1 : ℕ) = 4 from rfl, nsmul_eq_mul,
+      Nat.cast_ofNat]
+  rw [Finset.sum_congr rfl step1,
+    sum_powersetCard_five_erase_apply
+      (fun T => (4 : ℝ) * (quadReMoment ρ μG T u u'
+        - (e1 ρ μG) ^ 4)),
+    ← Finset.mul_sum]
+
+/-- **The erased doubled excess over its own seat
+at order 5**: dressed by `colCount N − 4`. -/
+theorem sum_powersetCard_five_erase_doubled_seat (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P,
+        (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      = (colCount N - 4) * kappa5chanExcess ρ μG u u' := by
+  classical
+  rw [sum_powersetCard_five_erase_apply
+      (fun T => ∑ Q ∈ T,
+        (doubledQuadReMoment ρ μG T Q u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+    sum_powersetCard_four_doubled_excess ρ μG hN hN3 hρcont
+      u u']
+
+/-- **The erased quad excess over the free first
+seat at order 5** (the mirror bracket): dressed by
+`(colCount N − 4) · 4`. -/
+theorem sum_powersetCard_five_erase_quad_seat2 (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P,
+        (quadReMoment ρ μG (C.erase Q) u u' - (e1 ρ μG) ^ 4)
+      = (colCount N - 4) * (4
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+  classical
+  have step1 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ∑ Q ∈ C.erase P,
+          (quadReMoment ρ μG (C.erase Q) u u' - (e1 ρ μG) ^ 4))
+        = ∑ Q ∈ C, (4 : ℝ)
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4) := by
+    intro C hC
+    have hcard : C.card = 5 :=
+      (Finset.mem_powersetCard.mp hC).2
+    rw [sum_sum_erase_swap C
+      (fun P Q => quadReMoment ρ μG (C.erase Q) u u'
+        - (e1 ρ μG) ^ 4)]
+    refine Finset.sum_congr rfl fun Q hQ => ?_
+    rw [Finset.sum_const, Finset.card_erase_of_mem hQ, hcard,
+      show (5 - 1 : ℕ) = 4 from rfl, nsmul_eq_mul,
+      Nat.cast_ofNat]
+  rw [Finset.sum_congr rfl step1,
+    sum_powersetCard_five_erase_apply
+      (fun T => (4 : ℝ) * (quadReMoment ρ μG T u u'
+        - (e1 ρ μG) ^ 4)),
+    ← Finset.mul_sum]
+
+/-- **The erased doubled excess over the mirror
+seat at order 5**: dressed by `colCount N − 4`. -/
+theorem sum_powersetCard_five_erase_doubled_seat2 (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P,
+        (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      = (colCount N - 4) * kappa5chanExcess ρ μG u u' := by
+  classical
+  have hswap : ∀ C : Finset (LayerColumn N),
+      (∑ P ∈ C, ∑ Q ∈ C.erase P,
+          (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        = ∑ Q ∈ C, ∑ P ∈ C.erase Q,
+            (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C => sum_sum_erase_swap C
+      (fun a b => doubledQuadReMoment ρ μG (C.erase b) a u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+  rw [Finset.sum_congr rfl (fun C _ => hswap C),
+    sum_powersetCard_five_erase_apply
+      (fun T => ∑ P ∈ T,
+        (doubledQuadReMoment ρ μG T P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+    sum_powersetCard_four_doubled_excess ρ μG hN hN3 hρcont
+      u u']
+/-- **The insert bijection**: summing a function
+of `insert P T` over the `k`-subsets of `C ∸ P`
+is summing it over the `(k+1)`-subsets of `C`
+that contain `P`. -/
+theorem sum_powersetCard_insert_apply (k : ℕ)
+    (C : Finset (LayerColumn N)) (P : LayerColumn N)
+    (hP : P ∈ C) (f : Finset (LayerColumn N) → ℝ) :
+    ∑ T ∈ Finset.powersetCard k (C.erase P), f (insert P T)
+      = ∑ U ∈ (Finset.powersetCard (k + 1) C).filter
+          (fun U => P ∈ U), f U := by
+  classical
+  refine Finset.sum_bij (fun T _ => insert P T) ?_ ?_ ?_ ?_
+  · intro T hT
+    have hsub : T ⊆ C.erase P :=
+      (Finset.mem_powersetCard.mp hT).1
+    have hcard : T.card = k :=
+      (Finset.mem_powersetCard.mp hT).2
+    have hPnot : P ∉ T :=
+      fun h => (Finset.mem_erase.mp (hsub h)).1 rfl
+    rw [Finset.mem_filter]
+    exact ⟨Finset.mem_powersetCard.mpr
+      ⟨Finset.insert_subset hP
+          (hsub.trans (Finset.erase_subset P C)),
+        by rw [Finset.card_insert_of_notMem hPnot, hcard]⟩,
+      Finset.mem_insert_self P T⟩
+  · intro T hT T' hT' h
+    have hPnot : P ∉ T := fun hh =>
+      (Finset.mem_erase.mp
+        ((Finset.mem_powersetCard.mp hT).1 hh)).1 rfl
+    have hPnot' : P ∉ T' := fun hh =>
+      (Finset.mem_erase.mp
+        ((Finset.mem_powersetCard.mp hT').1 hh)).1 rfl
+    have h2 : (insert P T).erase P = (insert P T').erase P := by
+      rw [h]
+    rwa [Finset.erase_insert hPnot, Finset.erase_insert hPnot']
+      at h2
+  · intro U hU
+    have hPU : P ∈ U := (Finset.mem_filter.mp hU).2
+    have hsub : U ⊆ C :=
+      (Finset.mem_powersetCard.mp
+        (Finset.mem_filter.mp hU).1).1
+    have hcard : U.card = k + 1 :=
+      (Finset.mem_powersetCard.mp
+        (Finset.mem_filter.mp hU).1).2
+    refine ⟨U.erase P, Finset.mem_powersetCard.mpr ⟨?_, ?_⟩,
+      Finset.insert_erase hPU⟩
+    · exact Finset.subset_erase.mpr
+        ⟨(Finset.erase_subset P U).trans hsub,
+          fun h => (Finset.mem_erase.mp h).1 rfl⟩
+    · rw [Finset.card_erase_of_mem hPU, hcard,
+        Nat.add_sub_cancel]
+  · intro T _
+    rfl
+
+/-- **The containing-subset swap**: summing a
+seat-dependent function over the `k`-subsets
+containing each seat reassembles as the sum over
+`k`-subsets of the sum over their own seats. -/
+theorem sum_mem_filter_swap (C : Finset (LayerColumn N))
+    (k : ℕ) (F : Finset (LayerColumn N) → LayerColumn N → ℝ) :
+    ∑ P ∈ C, ∑ U ∈ (Finset.powersetCard k C).filter
+        (fun U => P ∈ U), F U P
+      = ∑ U ∈ Finset.powersetCard k C, ∑ P ∈ U, F U P := by
+  classical
+  rw [Finset.sum_congr rfl
+    (fun P _ => Finset.sum_filter _ _)]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun U hU => ?_
+  have hsub : U ⊆ C := (Finset.mem_powersetCard.mp hU).1
+  rw [← Finset.sum_filter]
+  congr 1
+  rw [Finset.filter_mem_eq_inter,
+    Finset.inter_eq_right.mpr hsub]
+
+/-- **The containing-subset count**: a
+seat-independent summand over the `k`-subsets
+containing each seat reassembles with the factor
+`k` (the subset's own cardinality). -/
+theorem sum_mem_filter_card (C : Finset (LayerColumn N))
+    (k : ℕ) (f : Finset (LayerColumn N) → ℝ) :
+    ∑ P ∈ C, ∑ U ∈ (Finset.powersetCard k C).filter
+        (fun U => P ∈ U), f U
+      = ∑ U ∈ Finset.powersetCard k C, (k : ℝ) * f U := by
+  classical
+  rw [sum_mem_filter_swap C k (fun U _ => f U)]
+  refine Finset.sum_congr rfl fun U hU => ?_
+  rw [Finset.sum_const, (Finset.mem_powersetCard.mp hU).2,
+    nsmul_eq_mul]
+
+/-- **The erased 4-subset sum at order 6**: each
+`(C, P)` sees the 4-subsets of `C ∸ P`; erasing
+twice and counting gives
+`(colCount N − 5)(colCount N − 4)` times the
+order-4 excess sum. -/
+theorem sum_powersetCard_six_erase_four_subset (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+      ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+        (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+      = (colCount N - 5) * ((colCount N - 4)
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+  classical
+  have step1 : ∀ C ∈ Finset.univ.powersetCard 6, ∀ P ∈ C,
+      (∑ T ∈ Finset.powersetCard 4 (C.erase P),
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        = ∑ x ∈ C.erase P,
+            (quadReMoment ρ μG ((C.erase x).erase P) u u'
+              - (e1 ρ μG) ^ 4) := by
+    intro C hC P hP
+    have hcard : (C.erase P).card = 5 := by
+      rw [Finset.card_erase_of_mem hP,
+        (Finset.mem_powersetCard.mp hC).2]
+    rw [sum_powersetCard_four_subset_eq_sum_erase (C.erase P)
+      hcard (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)]
+    refine Finset.sum_congr rfl fun x _ => ?_
+    rw [Finset.erase_right_comm]
+  rw [Finset.sum_congr rfl (fun C hC =>
+      Finset.sum_congr rfl (fun P hP => step1 C hC P hP)),
+    Finset.sum_congr rfl (fun C _ => sum_sum_erase_swap C
+      (fun P x => quadReMoment ρ μG ((C.erase x).erase P) u u'
+        - (e1 ρ μG) ^ 4)),
+    sum_powersetCard_six_erase_apply
+      (fun D => ∑ P ∈ D,
+        (quadReMoment ρ μG (D.erase P) u u' - (e1 ρ μG) ^ 4)),
+    sum_powersetCard_five_erase_excess ρ μG hN hN3 hρcont u u']
+
+/-- **The order-5 quad excess in penta dress**:
+the plain 5-support excess sum is `e₁` times the
+`(colCount N − 4)`-dressed order-4 excess sum. -/
+theorem sum_powersetCard_five_penta_quad (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ D ∈ Finset.univ.powersetCard 5,
+      (quadReMoment ρ μG D u u' - (e1 ρ μG) ^ 5)
+      = e1 ρ μG * ((colCount N - 4)
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+  classical
+  have hqp : (∑ D ∈ Finset.univ.powersetCard 5,
+        (quadReMoment ρ μG D u u' - (e1 ρ μG) ^ 5))
+      = ∑ D ∈ Finset.univ.powersetCard 5,
+          (pentaReMoment ρ μG D u u' - (e1 ρ μG) ^ 5) :=
+    Finset.sum_congr rfl fun C _ => by
+      rw [pentaReMoment_eq_quadReMoment]
+  rw [hqp, sum_powersetCard_five_penta_excess ρ μG hN hN3
+    hρcont u u']
+
+/-- **The erased penta excess sum at order 6**:
+dressed by `(colCount N − 5) · e₁(colCount N − 4)`
+over the order-4 excess sum. -/
+theorem sum_powersetCard_six_erase_penta (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+      (quadReMoment ρ μG (C.erase P) u u' - (e1 ρ μG) ^ 5)
+      = (colCount N - 5) * (e1 ρ μG * ((colCount N - 4)
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))) := by
+  classical
+  rw [sum_powersetCard_six_erase_apply
+      (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5),
+    sum_powersetCard_five_penta_quad ρ μG hN hN3 hρcont u u']
+
+/-- **The inserted quad excess sum at order 6**:
+each 4-support is hit by `(colCount N − 4)
+(colCount N − 5)` pairs `(C, P)` through the
+insert bijection, as `4` times the card-6
+4-subset count. -/
+theorem sum_powersetCard_six_insert_quad (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+      ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+        (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+      = 4 * (((colCount N - 4) * (colCount N - 5) / 2)
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+  classical
+  have hC : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+          (quadReMoment ρ μG (insert P T) u u'
+            - (e1 ρ μG) ^ 4))
+        = ∑ U ∈ Finset.powersetCard 4 C, (4 : ℝ)
+            * (quadReMoment ρ μG U u u' - (e1 ρ μG) ^ 4) := by
+    intro C _
+    rw [Finset.sum_congr rfl (fun P hP =>
+        sum_powersetCard_insert_apply 3 C P hP
+          (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)),
+      show (3 + 1 : ℕ) = 4 from rfl,
+      sum_mem_filter_card C 4
+        (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4),
+      Nat.cast_ofNat]
+  have hmul : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ U ∈ Finset.powersetCard 4 C, (4 : ℝ)
+          * (quadReMoment ρ μG U u u' - (e1 ρ μG) ^ 4))
+        = 4 * ∑ U ∈ Finset.powersetCard 4 C,
+            (quadReMoment ρ μG U u u' - (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  rw [Finset.sum_congr rfl hC, Finset.sum_congr rfl hmul,
+    ← Finset.mul_sum, sum_powersetCard_six_four_subset_apply]
+
+/-- **The inserted penta excess sum at order 6**:
+`5 · (colCount N − 5) · e₁(colCount N − 4)` over
+the order-4 excess sum. -/
+theorem sum_powersetCard_six_insert_penta (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+      ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+        (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+      = 5 * ((colCount N - 5) * (e1 ρ μG * ((colCount N - 4)
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))) := by
+  classical
+  have hC : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+          (quadReMoment ρ μG (insert P T) u u'
+            - (e1 ρ μG) ^ 5))
+        = ∑ U ∈ Finset.powersetCard 5 C, (5 : ℝ)
+            * (quadReMoment ρ μG U u u' - (e1 ρ μG) ^ 5) := by
+    intro C _
+    rw [Finset.sum_congr rfl (fun P hP =>
+        sum_powersetCard_insert_apply 4 C P hP
+          (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5)),
+      show (4 + 1 : ℕ) = 5 from rfl,
+      sum_mem_filter_card C 5
+        (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5),
+      Nat.cast_ofNat]
+  have hmul : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ U ∈ Finset.powersetCard 5 C, (5 : ℝ)
+          * (quadReMoment ρ μG U u u' - (e1 ρ μG) ^ 5))
+        = 5 * ∑ U ∈ Finset.powersetCard 5 C,
+            (quadReMoment ρ μG U u u' - (e1 ρ μG) ^ 5) :=
+    fun C _ => by rw [Finset.mul_sum]
+  rw [Finset.sum_congr rfl hC, Finset.sum_congr rfl hmul,
+    ← Finset.mul_sum,
+    sum_powersetCard_six_penta_subset ρ μG hN hN3 hρcont u u',
+    sum_powersetCard_five_penta_quad ρ μG hN hN3 hρcont u u']
+
+/-- **The seated hexa excess sum at order 6**:
+`6` times the landed order-6 hexa conversion. -/
+theorem sum_powersetCard_six_seat_hexa (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+      (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+      = 6 * (kappa6chanC6Excess ρ μG u u'
+          + kappa6chanThetaExcess ρ μG u u'
+          + (e1 ρ μG) ^ 2 * (((colCount N - 4) * (colCount N - 5)
+              / 2) * ∑ T ∈ Finset.univ.powersetCard 4,
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ∑ C ∈ thetaSupports,
+                ∑ T ∈ Finset.powersetCard 4 C,
+                  (quadReMoment ρ μG T u u'
+                    - (e1 ρ μG) ^ 4))) := by
+  classical
+  rw [cnt6a, sum_powersetCard_six_hexaExcess_convert ρ μG hN
+    hN3 hρcont u u']
+
+/-- **The inserted doubled excess sum at order
+6**: through the insert bijection and the swap,
+the card-6 4-subset count of the order-5 channel
+excess. -/
+theorem sum_powersetCard_six_insert_doubled (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+      ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+        (doubledQuadReMoment ρ μG (insert P T) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      = ((colCount N - 4) * (colCount N - 5) / 2)
+          * kappa5chanExcess ρ μG u u' := by
+  classical
+  have hC : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+          (doubledQuadReMoment ρ μG (insert P T) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        = ∑ U ∈ Finset.powersetCard 4 C, ∑ P ∈ U,
+            (doubledQuadReMoment ρ μG U P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) := by
+    intro C _
+    rw [Finset.sum_congr rfl (fun P hP =>
+        sum_powersetCard_insert_apply 3 C P hP
+          (fun U => doubledQuadReMoment ρ μG U P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+      show (3 + 1 : ℕ) = 4 from rfl,
+      sum_mem_filter_swap C 4
+        (fun U P => doubledQuadReMoment ρ μG U P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)]
+  rw [Finset.sum_congr rfl hC,
+    sum_powersetCard_six_four_subset_apply
+      (fun U => ∑ P ∈ U,
+        (doubledQuadReMoment ρ μG U P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+    sum_powersetCard_four_doubled_excess ρ μG hN hN3 hρcont
+      u u']
+
+/-- **The inserted doubled-penta excess sum at
+order 6**: through the insert bijection and the
+swap, the card-6 5-subset count of the landed
+order-5 doubled-penta conversion. -/
+theorem sum_powersetCard_six_insert_doubledPenta (hN : Even N)
+    (hN3 : 3 ≤ N) (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+      ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+        (doubledQuadReMoment ρ μG (insert P T) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+      = (colCount N - 5)
+          * (realMoment ρ μG 2 * ((colCount N - 4)
+              * ∑ T ∈ Finset.univ.powersetCard 4,
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+            + e1 ρ μG * ((colCount N - 4)
+              * kappa5chanExcess ρ μG u u')) := by
+  classical
+  have hC : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+          (doubledQuadReMoment ρ μG (insert P T) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+        = ∑ U ∈ Finset.powersetCard 5 C, ∑ P ∈ U,
+            (doubledQuadReMoment ρ μG U P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 4) := by
+    intro C _
+    rw [Finset.sum_congr rfl (fun P hP =>
+        sum_powersetCard_insert_apply 4 C P hP
+          (fun U => doubledQuadReMoment ρ μG U P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)),
+      show (4 + 1 : ℕ) = 5 from rfl,
+      sum_mem_filter_swap C 5
+        (fun U P => doubledQuadReMoment ρ μG U P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)]
+  have hbridge : (∑ U ∈ Finset.univ.powersetCard 5, ∑ P ∈ U,
+        (doubledQuadReMoment ρ μG U P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+      = ∑ U ∈ Finset.univ.powersetCard 5, ∑ P ∈ U,
+          (doubledPentaReMoment ρ μG U P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4) :=
+    Finset.sum_congr rfl fun U _ => Finset.sum_congr rfl
+      fun P _ => by
+        rw [doubledPentaReMoment_eq_doubledQuadReMoment]
+  rw [Finset.sum_congr rfl hC,
+    sum_powersetCard_six_five_subset_apply
+      (fun U => ∑ P ∈ U,
+        (doubledQuadReMoment ρ μG U P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)),
+    hbridge, sum_powersetCard_five_doubledPenta_excess ρ μG hN
+      hN3 hρcont u u']
+/-- **Residual R1 (new at order 7)**: the doubled
+excess summed over the 4-subsets of the `Θ`
+supports — the doubled sibling of the order-6
+residual `S4theta`, forced by the `(2,1,1,1,1,1)`
+conversion on `Θ` supports, whose 4-subsets are
+primitive (so their doubled excesses do not
+vanish, unlike on the rest family). -/
+noncomputable def theta4SubsetDoubledSum
+    (u u' : LayerLink N → G) : ℝ :=
+  ∑ C ∈ thetaSupports, ∑ T ∈ Finset.powersetCard 4 C,
+    ∑ P ∈ T, (doubledQuadReMoment ρ μG T P u u'
+      - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+
+/-- **Residual R2 (new at order 7)**: the erased
+hexa excess summed over the book (Θ(1,3,3))
+supports — the part of the order-7 erasure sum
+that the book supports do not return to the
+order-6 pool. -/
+noncomputable def bookHexaEraseSum
+    (u u' : LayerLink N → G) : ℝ :=
+  ∑ C ∈ theta133Supports, ∑ x ∈ C,
+    (hexaReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 6)
+
+/-- **Residual R3 (new at order 7)**: the
+4-subset quad excess summed over the book
+(Θ(1,3,3)) supports — the part of the order-7
+4-subset sum carried by the book supports. -/
+noncomputable def book4SubsetSum
+    (u u' : LayerLink N → G) : ℝ :=
+  ∑ C ∈ theta133Supports, ∑ T ∈ Finset.powersetCard 4 C,
+    (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+
+/-- **The doubled excess over a 4-subset of a
+`C₆` support vanishes seat by seat**: such a
+4-subset is not primitive (the order-6 counting
+argument), and the doubled excess vanishes on
+non-primitive supports. -/
+theorem doubled_excess_sum_eq_zero_of_subset_c6Supports
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) {C : Finset (LayerColumn N)}
+    (hC : C ∈ c6Supports) {T : Finset (LayerColumn N)}
+    (hT : T ∈ Finset.powersetCard 4 C) :
+    ∑ P ∈ T, (doubledQuadReMoment ρ μG T P u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) = 0 := by
+  classical
+  obtain ⟨hsub, hTcard⟩ := Finset.mem_powersetCard.mp hT
+  refine Finset.sum_eq_zero fun P hP => ?_
+  refine doubledQuadReMoment_sub_eq_zero_of_not_primitive ρ μG
+    hN hN3 hρcont u u' hTcard ?_ hP
+  intro hprim
+  have hCcard : C.card = 6 := card_eq_six_of_mem_c6Supports hC
+  have hpat := hasSixPatternC6_of_mem_c6Supports hC
+  have hsuppSub : quadSupport T ⊆ quadSupport C := by
+    intro s hs
+    obtain ⟨P, hPT, hsP⟩ := Finset.mem_biUnion.mp hs
+    exact Finset.mem_biUnion.mpr ⟨P, hsub hPT, hsP⟩
+  have hdegT : ∀ s ∈ quadSupport T, siteDegree T s = 2 := by
+    intro s hs
+    have hle1 : 2 ≤ siteDegree T s := two_le_siteDegree hprim hs
+    have hle2 : siteDegree T s ≤ siteDegree C s :=
+      Finset.card_le_card (by
+        intro P hP
+        rw [Finset.mem_filter] at hP ⊢
+        exact ⟨hsub hP.1, hP.2⟩)
+    have hC2 : siteDegree C s = 2 := hpat.2 s (hsuppSub hs)
+    omega
+  have hqcard : (quadSupport T).card = 4 := by
+    have hsum := sum_siteDegree_eq hN hprim.1
+    rw [Finset.sum_congr rfl hdegT, Finset.sum_const] at hsum
+    simp only [nsmul_eq_mul, Nat.cast_id] at hsum
+    omega
+  have hsdiffCard : (quadSupport C \ quadSupport T).card = 2 := by
+    rw [Finset.card_sdiff, Finset.inter_eq_left.mpr hsuppSub,
+      hpat.1, hqcard]
+  have hCTcard : (C \ T).card = 2 := by
+    rw [Finset.card_sdiff, Finset.inter_eq_left.mpr hsub,
+      hCcard, hTcard]
+  obtain ⟨x, y, hxy, hCT⟩ := Finset.card_eq_two.mp hCTcard
+  have hxCT : x ∈ C \ T := by
+    rw [hCT]; exact Finset.mem_insert_self x {y}
+  have hyCT : y ∈ C \ T := by
+    rw [hCT]
+    exact Finset.mem_insert_of_mem (Finset.mem_singleton_self y)
+  have hcol : ∀ z ∈ C \ T,
+      colSites z = quadSupport C \ quadSupport T := by
+    intro z hz
+    have hzC : z ∈ C := (Finset.mem_sdiff.mp hz).1
+    have hzT : z ∉ T := (Finset.mem_sdiff.mp hz).2
+    have hsub2 : colSites z ⊆ quadSupport C \ quadSupport T := by
+      intro s hs
+      rw [Finset.mem_sdiff]
+      refine ⟨Finset.mem_biUnion.mpr ⟨z, hzC, hs⟩, ?_⟩
+      intro hsT
+      have hT2 : (T.filter (fun P => s ∈ colSites P)).card = 2 :=
+        hdegT s hsT
+      have hC2 : (C.filter (fun P => s ∈ colSites P)).card = 2 :=
+        hpat.2 s (hsuppSub hsT)
+      have hsubf : insert z (T.filter (fun P => s ∈ colSites P))
+          ⊆ C.filter (fun P => s ∈ colSites P) := by
+        intro P hP
+        rw [Finset.mem_filter]
+        rcases Finset.mem_insert.mp hP with rfl | hP
+        · exact ⟨hzC, hs⟩
+        · exact ⟨hsub (Finset.mem_filter.mp hP).1,
+            (Finset.mem_filter.mp hP).2⟩
+      have hcard := Finset.card_le_card hsubf
+      rw [Finset.card_insert_of_notMem (by
+        rw [Finset.mem_filter]
+        exact fun h => hzT h.1)] at hcard
+      omega
+    exact Finset.eq_of_subset_of_card_le hsub2
+      (le_of_eq (by rw [hsdiffCard, card_colSites_two hN z]))
+  have h1 : colSites x = colSites y := by
+    rw [hcol x hxCT, hcol y hyCT]
+  exact hxy (colSites_eq_imp hN hN3 h1)
+
+/-- **The doubled-hexa excess sum at a private
+(rest) 6-support factors through its 4-subsets**:
+`2μ₂e₁` times the 4-subset quad excess sum, plus
+`e₁²` times the 4-subset doubled excess sum.
+The private seat contributes `μ₂ · (e₁ · S)` by
+the doubled strip and the penta erasure identity;
+the remaining seats contribute
+`e₁ · (μ₂ · S + e₁ · T)` by the single strip and
+the order-5 doubled-penta factor identity; the
+4-subsets through the private column are
+non-primitive, so both subset sums run over the
+erasure only. -/
+theorem doubledHexaExcess_sum_eq_of_private (hN : Even N)
+    (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 6) (X : LayerColumn N) (hX : X ∈ C)
+    (s : LayerSite N) (hsX : s ∈ colSites X)
+    (hdeg : siteDegree C s = 1) :
+    ∑ P ∈ C, (doubledHexaReMoment ρ μG C P u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)
+      = 2 * realMoment ρ μG 2 * e1 ρ μG
+          * ∑ T ∈ Finset.powersetCard 4 C,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+        + (e1 ρ μG) ^ 2
+          * ∑ T ∈ Finset.powersetCard 4 C, ∑ P ∈ T,
+            (doubledQuadReMoment ρ μG T P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) := by
+  classical
+  have hpriv : ∀ Y ∈ C, Y ≠ X → s ∉ colSites Y := by
+    intro Y hY hYX hsY
+    have hdeg' : (C.filter (fun Q => s ∈ colSites Q)).card = 1 :=
+      hdeg
+    have hlt : 1 < (C.filter (fun Q => s ∈ colSites Q)).card :=
+      Finset.one_lt_card.mpr
+        ⟨X, Finset.mem_filter.mpr ⟨hX, hsX⟩,
+          Y, Finset.mem_filter.mpr ⟨hY, hsY⟩, Ne.symm hYX⟩
+    omega
+  have hDcard : (C.erase X).card = 5 := by
+    rw [Finset.card_erase_of_mem hX, hC]
+  have hnp : ∀ T ∈ Finset.powersetCard 4 C, X ∈ T →
+      ¬ IsPrimitiveQuad T := by
+    intro T hT hXT hprim
+    obtain ⟨Q, hQ, hQX, hsQ⟩ := hprim.2 X hXT s hsX
+    exact hpriv Q ((Finset.mem_powersetCard.mp hT).1 hQ) hQX hsQ
+  have hsplit : ∀ g : Finset (LayerColumn N) → ℝ,
+      (∀ T ∈ Finset.powersetCard 4 C, X ∈ T → g T = 0) →
+      (∑ T ∈ Finset.powersetCard 4 C, g T)
+        = ∑ x ∈ C.erase X, g ((C.erase X).erase x) := by
+    intro g hg
+    have hset : (Finset.powersetCard 4 C).filter
+        (fun T => ¬ X ∈ T) = Finset.powersetCard 4 (C.erase X) := by
+      refine Finset.ext fun T => ?_
+      simp only [Finset.mem_filter, Finset.mem_powersetCard]
+      constructor
+      · rintro ⟨⟨hsub, hcard⟩, hXT⟩
+        exact ⟨Finset.subset_erase.mpr ⟨hsub, hXT⟩, hcard⟩
+      · rintro ⟨hsub, hcard⟩
+        refine ⟨⟨hsub.trans (Finset.erase_subset X C), hcard⟩, ?_⟩
+        exact fun h => (Finset.mem_erase.mp (hsub h)).1 rfl
+    have hsum := Finset.sum_filter_add_sum_filter_not
+      (Finset.powersetCard 4 C) (fun T => X ∈ T) g
+    have hzero : ∑ T ∈ (Finset.powersetCard 4 C).filter
+        (fun T => X ∈ T), g T = 0 :=
+      Finset.sum_eq_zero fun T hT => hg T
+        (Finset.mem_filter.mp hT).1 (Finset.mem_filter.mp hT).2
+    rw [← hsum, hzero, hset, zero_add,
+      sum_powersetCard_four_subset_eq_sum_erase (C.erase X)
+        hDcard g]
+  have hvanQ : ∀ T ∈ Finset.powersetCard 4 C, X ∈ T →
+      (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) = 0 :=
+    fun T hT hXT => excess_eq_zero_of_not_primitive ρ μG hN hN3
+      hρcont u u' (Finset.mem_powersetCard.mp hT).2 (hnp T hT hXT)
+  have hvanD : ∀ T ∈ Finset.powersetCard 4 C, X ∈ T →
+      (∑ P ∈ T, (doubledQuadReMoment ρ μG T P u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)) = 0 :=
+    fun T hT hXT => Finset.sum_eq_zero fun P hP =>
+      doubledQuadReMoment_sub_eq_zero_of_not_primitive ρ μG hN
+        hN3 hρcont u u' (Finset.mem_powersetCard.mp hT).2
+        (hnp T hT hXT) hP
+  have htermX : (doubledHexaReMoment ρ μG C X u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)
+      = realMoment ρ μG 2 * (e1 ρ μG)
+          * ∑ x ∈ C.erase X,
+            (quadReMoment ρ μG ((C.erase X).erase x) u u'
+              - (e1 ρ μG) ^ 4) := by
+    have h1 : doubledHexaReMoment ρ μG C X u u'
+        = realMoment ρ μG 2
+          * quadReMoment ρ μG (C.erase X) u u' :=
+      doubledHexaReMoment_strip_doubled ρ μG hN hN3 hρcont
+        u u' hsX hpriv
+    have h2 := pentaExcess_eq_e1_sum_erase ρ μG hN hN3 hρcont
+      u u' (C.erase X) hDcard
+    have h3 : quadReMoment ρ μG (C.erase X) u u'
+        = e1 ρ μG * ∑ x ∈ C.erase X,
+            (quadReMoment ρ μG ((C.erase X).erase x) u u'
+              - (e1 ρ μG) ^ 4) + (e1 ρ μG) ^ 5 := by
+      linarith
+    rw [h1, h3]
+    ring
+  have hterm : ∀ P ∈ C.erase X,
+      (doubledHexaReMoment ρ μG C P u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)
+      = e1 ρ μG * (doubledPentaReMoment ρ μG (C.erase X) P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 4) := by
+    intro P hP
+    have hPC : P ∈ C := (Finset.mem_erase.mp hP).2
+    have hPX : P ≠ X := (Finset.mem_erase.mp hP).1
+    rw [doubledHexaReMoment_strip_single ρ μG hN hN3 hρcont
+        u u' hPC hX (Ne.symm hPX) hsX hpriv,
+      doubledHexaReMoment_eq_doubledPentaReMoment]
+    ring
+  calc ∑ P ∈ C, (doubledHexaReMoment ρ μG C P u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)
+      = (doubledHexaReMoment ρ μG C X u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)
+        + ∑ P ∈ C.erase X, (doubledHexaReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 5) :=
+        (Finset.add_sum_erase C _ hX).symm
+    _ = realMoment ρ μG 2 * (e1 ρ μG)
+          * ∑ x ∈ C.erase X,
+            (quadReMoment ρ μG ((C.erase X).erase x) u u'
+              - (e1 ρ μG) ^ 4)
+        + e1 ρ μG * (realMoment ρ μG 2
+          * ∑ x ∈ C.erase X,
+            (quadReMoment ρ μG ((C.erase X).erase x) u u'
+              - (e1 ρ μG) ^ 4)
+          + e1 ρ μG * ∑ x ∈ C.erase X, ∑ P ∈ (C.erase X).erase x,
+            (doubledQuadReMoment ρ μG ((C.erase X).erase x) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)) := by
+        rw [htermX, Finset.sum_congr rfl hterm,
+          ← Finset.mul_sum,
+          doubledPenta_excess_sum_factor ρ μG hN hN3 hρcont u u'
+            (C.erase X) hDcard]
+    _ = 2 * realMoment ρ μG 2 * e1 ρ μG
+          * ∑ T ∈ Finset.powersetCard 4 C,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+        + (e1 ρ μG) ^ 2
+          * ∑ T ∈ Finset.powersetCard 4 C, ∑ P ∈ T,
+            (doubledQuadReMoment ρ μG T P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) := by
+        rw [hsplit (fun T => quadReMoment ρ μG T u u'
+            - (e1 ρ μG) ^ 4) hvanQ,
+          hsplit (fun T => ∑ P ∈ T,
+            (doubledQuadReMoment ρ μG T P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)) hvanD]
+        ring
+
+/-- **The order-7 `(2,1,1,1,1,1)` conversion**:
+the seated doubled-hexa excess sum over all
+6-supports is the two channel excesses (`C₆` and
+`Θ`), plus `2μ₂e₁` times the order-6 `Θ` 4-subset
+residual gap, plus `e₁²` times the doubled
+sibling gap (residual R1). On the rest family the
+private factor identity applies; on `C₆` supports
+both subset sums vanish. -/
+theorem sum_powersetCard_six_doubledHexaExcess_convert
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+      (doubledHexaReMoment ρ μG C P u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)
+      = kappa7chan211111C6Excess ρ μG u u'
+        + kappa7chan211111ThetaExcess ρ μG u u'
+        + 2 * realMoment ρ μG 2 * e1 ρ μG
+          * (((colCount N - 4) * (colCount N - 5) / 2)
+            * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ∑ C ∈ thetaSupports,
+              ∑ T ∈ Finset.powersetCard 4 C,
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + (e1 ρ μG) ^ 2
+          * (((colCount N - 4) * (colCount N - 5) / 2)
+            * kappa5chanExcess ρ μG u u'
+            - theta4SubsetDoubledSum ρ μG u u') := by
+  classical
+  have hC6 : (∑ C ∈ c6Supports, ∑ P ∈ C,
+        (doubledHexaReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 5))
+      = kappa7chan211111C6Excess ρ μG u u' := rfl
+  have hTh : (∑ C ∈ thetaSupports, ∑ P ∈ C,
+        (doubledHexaReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 5))
+      = kappa7chan211111ThetaExcess ρ μG u u' := rfl
+  have hRest : (∑ C ∈ (Finset.univ.powersetCard 6).filter
+        (fun C => C ∉ c6Supports ∧ C ∉ thetaSupports),
+        ∑ P ∈ C, (doubledHexaReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 5))
+      = 2 * realMoment ρ μG 2 * e1 ρ μG
+          * ∑ C ∈ (Finset.univ.powersetCard 6).filter
+            (fun C => C ∉ c6Supports ∧ C ∉ thetaSupports),
+            ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+        + (e1 ρ μG) ^ 2
+          * ∑ C ∈ (Finset.univ.powersetCard 6).filter
+            (fun C => C ∉ c6Supports ∧ C ∉ thetaSupports),
+            ∑ T ∈ Finset.powersetCard 4 C, ∑ P ∈ T,
+              (doubledQuadReMoment ρ μG T P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) := by
+    rw [Finset.mul_sum, Finset.mul_sum,
+      ← Finset.sum_add_distrib]
+    refine Finset.sum_congr rfl fun C hC => ?_
+    have hCcard : C.card = 6 :=
+      (Finset.mem_powersetCard.mp (Finset.mem_filter.mp hC).1).2
+    have hnot : C ∉ c6Supports ∧ C ∉ thetaSupports :=
+      (Finset.mem_filter.mp hC).2
+    have hpriv : HasPrivateColumn C := by
+      rcases mem_c6_or_theta_or_private_of_card_six hN hN3 C
+          hCcard with h | h | h
+      · exact absurd h hnot.1
+      · exact absurd h hnot.2
+      · exact h
+    obtain ⟨X, hXC, s, hsX, hdeg⟩ := hpriv
+    exact doubledHexaExcess_sum_eq_of_private ρ μG hN hN3
+      hρcont u u' C hCcard X hXC s hsX hdeg
+  have hS4c6 : (∑ C ∈ c6Supports,
+        ∑ T ∈ Finset.powersetCard 4 C,
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) = 0 :=
+    Finset.sum_eq_zero fun C hC => Finset.sum_eq_zero fun T hT =>
+      excess_eq_zero_of_subset_c6Supports ρ μG hN hN3 hρcont
+        u u' hC hT
+  have hsplitS4 := sum_powersetCard_six_split_apply
+    (fun C => ∑ T ∈ Finset.powersetCard 4 C,
+      (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+  rw [hS4c6] at hsplitS4
+  have hRestS4 : (∑ C ∈ (Finset.univ.powersetCard 6).filter
+        (fun C => C ∉ c6Supports ∧ C ∉ thetaSupports),
+        ∑ T ∈ Finset.powersetCard 4 C,
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+      = ((colCount N - 4) * (colCount N - 5) / 2)
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+        - ∑ C ∈ thetaSupports,
+            ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) := by
+    have hI := sum_powersetCard_six_four_subset_apply
+      (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+    linarith
+  have hS4Dc6 : (∑ C ∈ c6Supports,
+        ∑ T ∈ Finset.powersetCard 4 C, ∑ P ∈ T,
+          (doubledQuadReMoment ρ μG T P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)) = 0 :=
+    Finset.sum_eq_zero fun C hC => Finset.sum_eq_zero fun T hT =>
+      doubled_excess_sum_eq_zero_of_subset_c6Supports ρ μG hN
+        hN3 hρcont u u' hC hT
+  have hsplitS4D := sum_powersetCard_six_split_apply
+    (fun C => ∑ T ∈ Finset.powersetCard 4 C, ∑ P ∈ T,
+      (doubledQuadReMoment ρ μG T P u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+  rw [hS4Dc6] at hsplitS4D
+  have hRestS4D : (∑ C ∈ (Finset.univ.powersetCard 6).filter
+        (fun C => C ∉ c6Supports ∧ C ∉ thetaSupports),
+        ∑ T ∈ Finset.powersetCard 4 C, ∑ P ∈ T,
+          (doubledQuadReMoment ρ μG T P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((colCount N - 4) * (colCount N - 5) / 2)
+          * kappa5chanExcess ρ μG u u'
+        - theta4SubsetDoubledSum ρ μG u u' := by
+    have hI := sum_powersetCard_six_four_subset_apply
+      (fun T => ∑ P ∈ T,
+        (doubledQuadReMoment ρ μG T P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+    rw [sum_powersetCard_four_doubled_excess ρ μG hN hN3
+      hρcont u u'] at hI
+    have htheta : (∑ C ∈ thetaSupports,
+          ∑ T ∈ Finset.powersetCard 4 C, ∑ P ∈ T,
+            (doubledQuadReMoment ρ μG T P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        = theta4SubsetDoubledSum ρ μG u u' := rfl
+    linarith
+  rw [sum_powersetCard_six_split_apply
+      (fun C => ∑ P ∈ C, (doubledHexaReMoment ρ μG C P u u'
+        - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)),
+    hC6, hTh, hRest, hRestS4, hRestS4D]
+  ring
+/-- **A non-book 7-support has a private column**:
+the contrapositive of B7-0's card-7 classification
+— a fully shared 7-support carries the
+`Θ(1,3,3)` pattern. The multiplicity fed to the
+classification is the support's indicator. -/
+theorem hasPrivateColumn_of_not_mem_theta133Supports
+    (hN : Even N) (hN3 : 3 ≤ N)
+    {C : Finset (LayerColumn N)} (hC : C.card = 7)
+    (hC7 : C ∉ theta133Supports) : HasPrivateColumn C := by
+  classical
+  by_contra hcon
+  set m : LayerColumn N → ℕ := fun P => if P ∈ C then 1 else 0
+    with hm_def
+  have hmult : multSupport m = C := by
+    refine Finset.ext fun P => ?_
+    simp only [multSupport, Finset.mem_filter,
+      Finset.mem_univ, true_and, hm_def]
+    constructor
+    · intro h
+      by_contra hPC
+      rw [if_neg hPC] at h
+      exact h rfl
+    · intro hP
+      rw [if_pos hP]
+      exact one_ne_zero
+  have hall : ∀ P ∈ multSupport m, m P = 1 := by
+    intro P hP
+    rw [hmult] at hP
+    simp only [hm_def, if_pos hP]
+  have hm7 : ∑ P, m P = 7 := by
+    have h2 : ∀ P, m P = if P ∈ C then 1 else 0 := fun P => rfl
+    rw [Finset.sum_congr rfl (fun P _ => h2 P),
+      Finset.sum_boole, Finset.filter_univ_mem, Nat.cast_id,
+      hC]
+  have hW : WFullyShared m := by
+    intro s hs
+    rw [hmult] at hs
+    rw [wSiteDegree_eq_siteDegree_of_all_one m hall s, hmult]
+    obtain ⟨P, hPC, hsP⟩ := Finset.mem_biUnion.mp hs
+    have hge1 : 1 ≤ siteDegree C s := by
+      have hsd : siteDegree C s
+          = (C.filter (fun P => s ∈ colSites P)).card := rfl
+      rw [hsd]
+      exact Finset.one_le_card.mpr
+        ⟨P, Finset.mem_filter.mpr ⟨hPC, hsP⟩⟩
+    have hne1 : siteDegree C s ≠ 1 := by
+      intro hdeg
+      exact hcon ⟨P, hPC, s, hsP, hdeg⟩
+    omega
+  have hpat := card_seven_classification hN hN3 m hm7 hW
+    (by rw [hmult]; exact hC)
+  rw [hmult] at hpat
+  exact hC7 (Finset.mem_filter.mpr
+    ⟨Finset.mem_univ C, hC, hpat⟩)
+
+/-- **The hepta excess at a private 7-support**:
+`e₁` times the full erasure hexa sum, minus
+`2e₁³` times the 4-subset quad excess sum. The
+private seat's erasure carries the strip; every
+other erasure is a rest 6-support (the private
+column stays private in it), whose hexa excess is
+the `e₁²` 4-subset form; the double count of
+4-subsets of the erased support is `2`, and the
+4-subsets through the private column are
+non-primitive. -/
+theorem heptaExcess_eq_of_private (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) (C : Finset (LayerColumn N))
+    (hC : C.card = 7) (X : LayerColumn N) (hX : X ∈ C)
+    (s : LayerSite N) (hsX : s ∈ colSites X)
+    (hdeg : siteDegree C s = 1) :
+    heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7
+      = e1 ρ μG * ∑ x ∈ C,
+          (hexaReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 6)
+        - 2 * (e1 ρ μG) ^ 3 * ∑ T ∈ Finset.powersetCard 4 C,
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) := by
+  classical
+  have hpriv : ∀ Y ∈ C, Y ≠ X → s ∉ colSites Y := by
+    intro Y hY hYX hsY
+    have hdeg' : (C.filter (fun Q => s ∈ colSites Q)).card = 1 :=
+      hdeg
+    have hlt : 1 < (C.filter (fun Q => s ∈ colSites Q)).card :=
+      Finset.one_lt_card.mpr
+        ⟨X, Finset.mem_filter.mpr ⟨hX, hsX⟩,
+          Y, Finset.mem_filter.mpr ⟨hY, hsY⟩, Ne.symm hYX⟩
+    omega
+  have hDcard : (C.erase X).card = 6 := by
+    rw [Finset.card_erase_of_mem hX, hC]
+  have hfact : quadReMoment ρ μG C u u'
+      = (e1 ρ μG) * quadReMoment ρ μG (C.erase X) u u' := by
+    have hsF : ∀ P ∈ C.erase X, s ∉ colSites P :=
+      fun P hP => hpriv P (Finset.mem_erase.mp hP).2
+        (Finset.mem_erase.mp hP).1
+    have hXF : X ∉ C.erase X :=
+      fun h => (Finset.mem_erase.mp h).1 rfl
+    have hsplit : quadReMoment ρ μG C u u'
+        = ∫ α : LayerSite N → G,
+            (∏ P ∈ C.erase X,
+              (colRe ρ u u' P α) ^ ((fun _ : LayerColumn N => 1) P))
+              * (colRe ρ u u' X α) ^ (1 : ℕ)
+            ∂(Measure.pi fun _ : LayerSite N => μG) := by
+      refine integral_congr_ae
+        (Filter.Eventually.of_forall fun α => ?_)
+      show (∏ P ∈ C, colRe ρ u u' P α) = _
+      rw [← Finset.mul_prod_erase C
+        (fun P => colRe ρ u u' P α) hX]
+      simp only [pow_one]
+      ring
+    calc quadReMoment ρ μG C u u'
+        = ∫ α : LayerSite N → G,
+            (∏ P ∈ C.erase X,
+              (colRe ρ u u' P α) ^ ((fun _ : LayerColumn N => 1) P))
+              * (colRe ρ u u' X α) ^ (1 : ℕ)
+            ∂(Measure.pi fun _ : LayerSite N => μG) := hsplit
+      _ = realMoment ρ μG 1
+            * ∫ α : LayerSite N → G, ∏ P ∈ C.erase X,
+                (colRe ρ u u' P α)
+                  ^ ((fun _ : LayerColumn N => 1) P)
+              ∂(Measure.pi fun _ : LayerSite N => μG) :=
+          integral_colRe_pow_split_finset ρ μG hN hN3 hρcont
+            u u' (C.erase X) (fun _ => 1) X hXF s hsX hsF 1
+      _ = (e1 ρ μG) * quadReMoment ρ μG (C.erase X) u u' := by
+          rw [realMoment_one]
+          refine congrArg _ ?_
+          refine integral_congr_ae
+            (Filter.Eventually.of_forall fun α => ?_)
+          exact Finset.prod_congr rfl fun P _ => pow_one _
+  have hnp : ∀ T ∈ Finset.powersetCard 4 C, X ∈ T →
+      ¬ IsPrimitiveQuad T := by
+    intro T hT hXT hprim
+    obtain ⟨Q, hQ, hQX, hsQ⟩ := hprim.2 X hXT s hsX
+    exact hpriv Q ((Finset.mem_powersetCard.mp hT).1 hQ) hQX hsQ
+  have hsplitC : (∑ T ∈ Finset.powersetCard 4 C,
+        (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+      = ∑ T ∈ Finset.powersetCard 4 (C.erase X),
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) := by
+    have hset : (Finset.powersetCard 4 C).filter
+        (fun T => ¬ X ∈ T)
+        = Finset.powersetCard 4 (C.erase X) := by
+      refine Finset.ext fun T => ?_
+      simp only [Finset.mem_filter, Finset.mem_powersetCard]
+      constructor
+      · rintro ⟨⟨hsub, hcard⟩, hXT⟩
+        exact ⟨Finset.subset_erase.mpr ⟨hsub, hXT⟩, hcard⟩
+      · rintro ⟨hsub, hcard⟩
+        refine ⟨⟨hsub.trans (Finset.erase_subset X C), hcard⟩, ?_⟩
+        exact fun h => (Finset.mem_erase.mp (hsub h)).1 rfl
+    have hsum := Finset.sum_filter_add_sum_filter_not
+      (Finset.powersetCard 4 C) (fun T => X ∈ T)
+      (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+    have hzero : ∑ T ∈ (Finset.powersetCard 4 C).filter
+        (fun T => X ∈ T),
+        (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) = 0 :=
+      Finset.sum_eq_zero fun T hT =>
+        excess_eq_zero_of_not_primitive ρ μG hN hN3 hρcont u u'
+          (Finset.mem_powersetCard.mp
+            (Finset.mem_filter.mp hT).1).2
+          (hnp T (Finset.mem_filter.mp hT).1
+            (Finset.mem_filter.mp hT).2)
+    rw [← hsum, hzero, hset, zero_add]
+  have hrest : ∀ x ∈ C.erase X,
+      C.erase x ∈ (Finset.univ.powersetCard 6).filter
+        (fun C => C ∉ c6Supports ∧ C ∉ thetaSupports) := by
+    intro x hx
+    have hxC : x ∈ C := (Finset.mem_erase.mp hx).2
+    have hxX : x ≠ X := (Finset.mem_erase.mp hx).1
+    have hcard : (C.erase x).card = 6 := by
+      rw [Finset.card_erase_of_mem hxC, hC]
+    have hdegx : siteDegree (C.erase x) s = 1 := by
+      have hfil : (C.erase x).filter (fun Q => s ∈ colSites Q)
+          = {X} := by
+        refine Finset.eq_singleton_iff_unique_mem.mpr ⟨?_, ?_⟩
+        · exact Finset.mem_filter.mpr
+            ⟨Finset.mem_erase.mpr ⟨Ne.symm hxX, hX⟩, hsX⟩
+        · intro Q hQ
+          have hQC : Q ∈ C :=
+            (Finset.mem_erase.mp (Finset.mem_filter.mp hQ).1).2
+          by_contra hQX
+          exact hpriv Q hQC hQX (Finset.mem_filter.mp hQ).2
+      have hsd : siteDegree (C.erase x) s
+          = ((C.erase x).filter (fun Q => s ∈ colSites Q)).card :=
+        rfl
+      rw [hsd, hfil, Finset.card_singleton]
+    have hsSupp : s ∈ quadSupport (C.erase x) :=
+      Finset.mem_biUnion.mpr
+        ⟨X, Finset.mem_erase.mpr ⟨Ne.symm hxX, hX⟩, hsX⟩
+    refine Finset.mem_filter.mpr
+      ⟨Finset.mem_powersetCard.mpr ⟨Finset.subset_univ _, hcard⟩,
+        ?_, ?_⟩
+    · intro hmem
+      have hpat := (Finset.mem_filter.mp hmem).2.2
+      have h2 := hpat.2 s hsSupp
+      omega
+    · intro hmem
+      obtain ⟨-, a, b, hab, ha, hb, hda, hdb, hrest2⟩ :=
+        (Finset.mem_filter.mp hmem).2.2
+      by_cases hsa : s = a
+      · rw [hsa, hda] at hdegx
+        omega
+      · by_cases hsb : s = b
+        · rw [hsb, hdb] at hdegx
+          omega
+        · have h2 := hrest2 s hsSupp hsa hsb
+          omega
+  have hsplitx : ∀ x ∈ C.erase X,
+      (∑ T ∈ Finset.powersetCard 4 (C.erase x),
+        (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+      = ∑ T ∈ Finset.powersetCard 4 ((C.erase X).erase x),
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) := by
+    intro x hx
+    have hxC : x ∈ C := (Finset.mem_erase.mp hx).2
+    have hset : (Finset.powersetCard 4 (C.erase x)).filter
+        (fun T => ¬ X ∈ T)
+        = Finset.powersetCard 4 ((C.erase x).erase X) := by
+      refine Finset.ext fun T => ?_
+      simp only [Finset.mem_filter, Finset.mem_powersetCard]
+      constructor
+      · rintro ⟨⟨hsub, hcard⟩, hXT⟩
+        exact ⟨Finset.subset_erase.mpr ⟨hsub, hXT⟩, hcard⟩
+      · rintro ⟨hsub, hcard⟩
+        refine ⟨⟨hsub.trans (Finset.erase_subset X (C.erase x)),
+          hcard⟩, ?_⟩
+        exact fun h => (Finset.mem_erase.mp (hsub h)).1 rfl
+    have hsum := Finset.sum_filter_add_sum_filter_not
+      (Finset.powersetCard 4 (C.erase x)) (fun T => X ∈ T)
+      (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+    have hzero : ∑ T ∈ (Finset.powersetCard 4 (C.erase x)).filter
+        (fun T => X ∈ T),
+        (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) = 0 :=
+      Finset.sum_eq_zero fun T hT =>
+        excess_eq_zero_of_not_primitive ρ μG hN hN3 hρcont u u'
+          (Finset.mem_powersetCard.mp
+            (Finset.mem_filter.mp hT).1).2
+          (hnp T (Finset.mem_powersetCard.mpr
+              ⟨(Finset.mem_powersetCard.mp
+                (Finset.mem_filter.mp hT).1).1.trans
+                (Finset.erase_subset x C),
+                (Finset.mem_powersetCard.mp
+                  (Finset.mem_filter.mp hT).1).2⟩)
+            (Finset.mem_filter.mp hT).2)
+    rw [← hsum, hzero, hset, zero_add, Finset.erase_right_comm]
+  have hmain : (∑ x ∈ C,
+        (hexaReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 6))
+      = (hexaReMoment ρ μG (C.erase X) u u' - (e1 ρ μG) ^ 6)
+        + 2 * (e1 ρ μG) ^ 2
+          * ∑ T ∈ Finset.powersetCard 4 (C.erase X),
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) := by
+    have h2 : (∑ x ∈ C.erase X,
+          ∑ T ∈ Finset.powersetCard 4 ((C.erase X).erase x),
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        = 2 * ∑ T ∈ Finset.powersetCard 4 (C.erase X),
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) := by
+      calc (∑ x ∈ C.erase X,
+            ∑ T ∈ Finset.powersetCard 4 ((C.erase X).erase x),
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+          = ∑ D ∈ Finset.powersetCard 5 (C.erase X),
+              ∑ T ∈ Finset.powersetCard 4 D,
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) :=
+            (sum_powersetCard_five_subset_eq_sum_erase
+              (C.erase X) hDcard
+              (fun D => ∑ T ∈ Finset.powersetCard 4 D,
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))).symm
+        _ = 2 * ∑ T ∈ Finset.powersetCard 4 (C.erase X),
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) :=
+            (two_mul_sum_powersetCard_four_subset (C.erase X)
+              hDcard
+              (fun T => quadReMoment ρ μG T u u'
+                - (e1 ρ μG) ^ 4)).symm
+    calc (∑ x ∈ C,
+          (hexaReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 6))
+        = (hexaReMoment ρ μG (C.erase X) u u' - (e1 ρ μG) ^ 6)
+          + ∑ x ∈ C.erase X,
+            (hexaReMoment ρ μG (C.erase x) u u'
+              - (e1 ρ μG) ^ 6) :=
+          (Finset.add_sum_erase C _ hX).symm
+      _ = (hexaReMoment ρ μG (C.erase X) u u' - (e1 ρ μG) ^ 6)
+          + ∑ x ∈ C.erase X, (e1 ρ μG) ^ 2
+            * ∑ T ∈ Finset.powersetCard 4 ((C.erase X).erase x),
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) := by
+          refine congrArg _ (Finset.sum_congr rfl fun x hx => ?_)
+          rw [hexaExcess_eq_e1_sq_sum_fourSubsets_of_mem_rest
+            ρ μG hN hN3 hρcont u u' (hrest x hx), hsplitx x hx]
+      _ = (hexaReMoment ρ μG (C.erase X) u u' - (e1 ρ μG) ^ 6)
+          + 2 * (e1 ρ μG) ^ 2
+            * ∑ T ∈ Finset.powersetCard 4 (C.erase X),
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) := by
+          rw [← Finset.mul_sum, h2]
+          ring
+  calc heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7
+      = (e1 ρ μG) * quadReMoment ρ μG (C.erase X) u u'
+          - (e1 ρ μG) ^ 7 := by
+        rw [heptaReMoment_eq_quadReMoment, hfact]
+    _ = (e1 ρ μG)
+          * (hexaReMoment ρ μG (C.erase X) u u'
+            - (e1 ρ μG) ^ 6) := by
+        rw [hexaReMoment_eq_quadReMoment]
+        ring
+    _ = e1 ρ μG * ∑ x ∈ C,
+          (hexaReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 6)
+        - 2 * (e1 ρ μG) ^ 3 * ∑ T ∈ Finset.powersetCard 4 C,
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) := by
+        rw [hmain, hsplitC]
+        ring
+/-- **The card-7 4-subset conversion**: the
+`(colCount N − 4)(colCount N − 5)(colCount N − 6)/6`
+count of the order-4 excess sum (the generic
+subset count itself). -/
+theorem sum_powersetCard_seven_four_subset_convert
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 7,
+      ∑ T ∈ Finset.powersetCard 4 C,
+        (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+      = ((colCount N - 4) * (colCount N - 5)
+          * (colCount N - 6) / 6)
+        * ∑ T ∈ Finset.univ.powersetCard 4,
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) :=
+  sum_powersetCard_seven_four_subset_apply
+    (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+
+/-- **The card-7 5-subset conversion**: the
+`(colCount N − 5)(colCount N − 6)/2` count of the
+order-5 penta-dressed excess sum. -/
+theorem sum_powersetCard_seven_five_subset_convert
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 7,
+      ∑ T ∈ Finset.powersetCard 5 C,
+        (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5)
+      = ((colCount N - 5) * (colCount N - 6) / 2)
+        * (e1 ρ μG * ((colCount N - 4)
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))) := by
+  classical
+  rw [sum_powersetCard_seven_five_subset_apply,
+    sum_powersetCard_five_penta_quad ρ μG hN hN3 hρcont u u']
+
+/-- **The card-7 6-subset conversion**:
+`colCount N − 6` times the landed order-6 hexa
+conversion (the summand is the quad-headed form
+of the hexa excess). -/
+theorem sum_powersetCard_seven_six_subset_convert
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 7,
+      ∑ T ∈ Finset.powersetCard 6 C,
+        (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6)
+      = (colCount N - 6) * (kappa6chanC6Excess ρ μG u u'
+          + kappa6chanThetaExcess ρ μG u u'
+          + (e1 ρ μG) ^ 2 * (((colCount N - 4) * (colCount N - 5)
+              / 2) * ∑ T ∈ Finset.univ.powersetCard 4,
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ∑ C ∈ thetaSupports,
+                ∑ T ∈ Finset.powersetCard 4 C,
+                  (quadReMoment ρ μG T u u'
+                    - (e1 ρ μG) ^ 4))) := by
+  classical
+  have hbridge : ∀ T : Finset (LayerColumn N),
+      (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6)
+        = (hexaReMoment ρ μG T u u' - (e1 ρ μG) ^ 6) :=
+    fun T => by rw [hexaReMoment_eq_quadReMoment]
+  rw [Finset.sum_congr rfl (fun C _ =>
+      Finset.sum_congr rfl (fun T _ => hbridge T)),
+    sum_powersetCard_seven_six_subset_apply,
+    sum_powersetCard_six_hexaExcess_convert ρ μG hN hN3
+      hρcont u u']
+
+/-- **The order-7 hepta conversion**: the hepta
+excess sum over all 7-supports is the book
+channel excess, plus `e₁` times the
+`(colCount N − 6)`-dressed order-6 hexa pool,
+minus the two book residuals (R2: the book
+erasure hexa sum; R3: the book 4-subset sum, at
+`2e₁³`). On non-book supports the private factor
+identity applies; the erasure and 4-subset totals
+are the generic counts, with the book parts
+peeled off as the residuals. -/
+theorem sum_powersetCard_seven_heptaExcess_convert
+    (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 7,
+      (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7)
+      = kappa7chanTheta133Excess ρ μG u u'
+        + e1 ρ μG * ((colCount N - 6)
+          * ∑ D ∈ Finset.univ.powersetCard 6,
+            (hexaReMoment ρ μG D u u' - (e1 ρ μG) ^ 6))
+        - e1 ρ μG * bookHexaEraseSum ρ μG u u'
+        - 2 * (e1 ρ μG) ^ 3
+          * (((colCount N - 4) * (colCount N - 5)
+              * (colCount N - 6) / 6)
+            * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - book4SubsetSum ρ μG u u') := by
+  classical
+  have hbookset : ((Finset.univ.powersetCard 7).filter
+      (fun C => C ∈ theta133Supports)
+      : Finset (Finset (LayerColumn N))) = theta133Supports := by
+    refine Finset.ext fun S => ?_
+    constructor
+    · intro h
+      exact (Finset.mem_filter.mp h).2
+    · intro h
+      refine Finset.mem_filter.mpr
+        ⟨Finset.mem_powersetCard.mpr
+          ⟨Finset.subset_univ S,
+            card_eq_seven_of_mem_theta133Supports h⟩, h⟩
+  have hsplit := Finset.sum_filter_add_sum_filter_not
+    (Finset.univ.powersetCard 7) (fun C => C ∈ theta133Supports)
+    (fun C => heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7)
+  have hbook : (∑ C ∈ (Finset.univ.powersetCard 7).filter
+        (fun C => C ∈ theta133Supports),
+        (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7))
+      = kappa7chanTheta133Excess ρ μG u u' := by
+    rw [hbookset]
+    rfl
+  have hnonbook : (∑ C ∈ (Finset.univ.powersetCard 7).filter
+        (fun C => C ∉ theta133Supports),
+        (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7))
+      = e1 ρ μG * ∑ C ∈ (Finset.univ.powersetCard 7).filter
+          (fun C => C ∉ theta133Supports), ∑ x ∈ C,
+            (hexaReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 6)
+        - 2 * (e1 ρ μG) ^ 3
+          * ∑ C ∈ (Finset.univ.powersetCard 7).filter
+            (fun C => C ∉ theta133Supports),
+            ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) := by
+    rw [Finset.mul_sum, Finset.mul_sum,
+      ← Finset.sum_sub_distrib]
+    refine Finset.sum_congr rfl fun C hC => ?_
+    have hCcard : C.card = 7 :=
+      (Finset.mem_powersetCard.mp (Finset.mem_filter.mp hC).1).2
+    have hCnot : C ∉ theta133Supports :=
+      (Finset.mem_filter.mp hC).2
+    obtain ⟨X, hXC, s, hsX, hdeg⟩ :=
+      hasPrivateColumn_of_not_mem_theta133Supports
+        hN hN3 hCcard hCnot
+    exact heptaExcess_eq_of_private ρ μG hN hN3 hρcont u u'
+      C hCcard X hXC s hsX hdeg
+  have hsplitE := Finset.sum_filter_add_sum_filter_not
+    (Finset.univ.powersetCard 7) (fun C => C ∈ theta133Supports)
+    (fun C => ∑ x ∈ C,
+      (hexaReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 6))
+  have hbookE : (∑ C ∈ (Finset.univ.powersetCard 7).filter
+        (fun C => C ∈ theta133Supports), ∑ x ∈ C,
+          (hexaReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 6))
+      = bookHexaEraseSum ρ μG u u' := by
+    rw [hbookset]
+    rfl
+  have hEt : (∑ C ∈ (Finset.univ.powersetCard 7).filter
+        (fun C => C ∉ theta133Supports), ∑ x ∈ C,
+          (hexaReMoment ρ μG (C.erase x) u u' - (e1 ρ μG) ^ 6))
+      = (colCount N - 6)
+          * ∑ D ∈ Finset.univ.powersetCard 6,
+            (hexaReMoment ρ μG D u u' - (e1 ρ μG) ^ 6)
+        - bookHexaEraseSum ρ μG u u' := by
+    have hE := sum_powersetCard_seven_erase_apply
+      (fun D => hexaReMoment ρ μG D u u' - (e1 ρ μG) ^ 6)
+    linarith
+  have hsplitQ := Finset.sum_filter_add_sum_filter_not
+    (Finset.univ.powersetCard 7) (fun C => C ∈ theta133Supports)
+    (fun C => ∑ T ∈ Finset.powersetCard 4 C,
+      (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+  have hbookQ : (∑ C ∈ (Finset.univ.powersetCard 7).filter
+        (fun C => C ∈ theta133Supports),
+        ∑ T ∈ Finset.powersetCard 4 C,
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+      = book4SubsetSum ρ μG u u' := by
+    rw [hbookset]
+    rfl
+  have hQt : (∑ C ∈ (Finset.univ.powersetCard 7).filter
+        (fun C => C ∉ theta133Supports),
+        ∑ T ∈ Finset.powersetCard 4 C,
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+      = ((colCount N - 4) * (colCount N - 5)
+          * (colCount N - 6) / 6)
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+        - book4SubsetSum ρ μG u u' := by
+    have hQ := sum_powersetCard_seven_four_subset_apply
+      (fun T => quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+    linarith
+  rw [← hsplit, hbook, hnonbook, hEt, hQt]
+  ring
+/-- **Assembly of the `(4,1,1,1)` family**: the
+summed pattern rest is the order-4 excess sum at
+`16 d⁻⁴` per unit weight, the order-5 channel at
+`-6 d⁻⁵`, the order-6 `(3,1,1,1)` channel at
+`4 d⁻⁶`, and the order-7 `(4,1,1,1)` channel at
+`-d⁻⁷`. -/
+theorem sum_exagg4_4111 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        (210 : ℝ) * (4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3)))
+      = 210 * (16 * ((d : ℝ)⁻¹) ^ 4
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5 * kappa5chanExcess ρ μG u u'
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * kappa6chan3111Excess ρ μG u u'
+        - ((d : ℝ)⁻¹) ^ 7
+          * kappa7chan4111Excess ρ μG u u') := by
+    classical
+  have hdist : ∀ C ∈ Finset.univ.powersetCard 4, ∀ P ∈ C,
+      (210 : ℝ) * (4 * ((d : ℝ)⁻¹) ^ 4
+        * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+      - 6 * ((d : ℝ)⁻¹) ^ 5
+        * (doubledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+      + 4 * ((d : ℝ)⁻¹) ^ 6
+        * (tripledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+      - ((d : ℝ)⁻¹) ^ 7
+        * (quadrupledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 4 * (e1 ρ μG) ^ 3))
+      = ((210 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4)
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - ((210 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5)
+          * (doubledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + ((210 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 6)
+          * (tripledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((210 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+          * (quadrupledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 4 * (e1 ρ μG) ^ 3) := fun C _ P _ => by ring
+  rw [Finset.sum_congr rfl (fun C hC =>
+    Finset.sum_congr rfl (fun P hP => hdist C hC P hP))]
+  simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+  have aA : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ((210 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4))
+      = 4 * (((210 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4)
+        * ∑ T ∈ Finset.univ.powersetCard 4,
+          (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+    rw [cnt4a (fun C => ((210 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4)
+      * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)), ← Finset.mul_sum]
+  have hmulB : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((210 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5)
+        * (doubledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((210 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5)
+        * ∑ P ∈ C, (doubledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ((210 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((210 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5)
+        * kappa5chanExcess ρ μG u u' := by
+    rw [Finset.sum_congr rfl hmulB, ← Finset.mul_sum,
+      sum_powersetCard_four_doubled_excess ρ μG hN hN3
+        hρcont u u']
+  have hmulC : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((210 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 6)
+        * (tripledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))
+      = ((210 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 6)
+        * ∑ P ∈ C, (tripledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aC : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ((210 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 6) * (tripledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))
+      = ((210 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 6)
+        * kappa6chan3111Excess ρ μG u u' := by
+    rw [Finset.sum_congr rfl hmulC, ← Finset.mul_sum,
+      sum_powersetCard_four_tripled_excess ρ μG hN hN3
+        hρcont u u']
+  have hmulD : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((210 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (quadrupledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 4 * (e1 ρ μG) ^ 3))
+      = ((210 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * ∑ P ∈ C, (quadrupledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 4 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aD : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ((210 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (quadrupledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 4 * (e1 ρ μG) ^ 3))
+      = ((210 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * kappa7chan4111Excess ρ μG u u' := by
+    rw [Finset.sum_congr rfl hmulD, ← Finset.mul_sum,
+      sum_powersetCard_four_quadrupled_excess ρ μG hN hN3
+        hρcont u u']
+  rw [aA, aB, aC, aD]
+  simp only [← Finset.sum_sub_distrib]
+  ring
+
+/-- **Assembly of the `(3,2,1,1)` family**: the
+summed pattern rest is the order-4 excess sum at
+`72 d⁻⁴` per unit weight, the order-5 channel at
+`−27 d⁻⁵` (both doubled seats), the order-6
+`(3,1,1,1)` channel at `6 d⁻⁶`, the order-6
+`(2,2,1,1)` channel at `3 d⁻⁶`, and the order-7
+`(3,2,1,1)` channel at `−d⁻⁷`. -/
+theorem sum_exagg4_3211 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, (420 : ℝ) * (6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)))
+    = 420 * (72 * ((d : ℝ)⁻¹) ^ 4
+        * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+      - 27 * ((d : ℝ)⁻¹) ^ 5 * kappa5chanExcess ρ μG u u'
+      + 6 * ((d : ℝ)⁻¹) ^ 6
+        * kappa6chan3111Excess ρ μG u u'
+      + 3 * ((d : ℝ)⁻¹) ^ 6
+        * kappa6chan2211Excess ρ μG u u'
+      - ((d : ℝ)⁻¹) ^ 7
+        * kappa7chan3211Excess ρ μG u u') := by
+  classical
+  have hdist : ∀ C ∈ Finset.univ.powersetCard 4, ∀ P ∈ C,
+      ∀ Q ∈ C.erase P, (420 : ℝ) * (6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2))
+      = ((420 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - ((420 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + ((420 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((420 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2 * (e1 ρ μG) ^ 2) :=
+    fun C _ P _ Q _ => by ring
+  rw [Finset.sum_congr rfl (fun C hC =>
+    Finset.sum_congr rfl (fun P hP =>
+      Finset.sum_congr rfl (fun Q hQ => hdist C hC P hP Q hQ)))]
+  simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+  have aA : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P,
+        ((420 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4))
+      = 12 * (((420 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+    rw [cnt4b (fun C => ((420 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 4)
+      * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)), ← Finset.mul_sum]
+  have hmulB : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((420 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((420 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5)
+        * ∑ P ∈ C, (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P,
+        ((420 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = 3 * (((420 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5)
+        * kappa5chanExcess ρ μG u u') := by
+    rw [cnt4d (fun C P => ((420 : ℝ) * 6 * ((d : ℝ)⁻¹) ^ 5)
+        * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+      Finset.sum_congr rfl hmulB, ← Finset.mul_sum,
+      sum_powersetCard_four_doubled_excess ρ μG hN hN3
+        hρcont u u']
+  have hmulC : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5)
+        * ∑ P ∈ C, (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aC : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P,
+        ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = 3 * (((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5)
+        * kappa5chanExcess ρ μG u u') := by
+    rw [cnt4e (fun C Q => ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5)
+        * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+      Finset.sum_congr rfl hmulC, ← Finset.mul_sum,
+      sum_powersetCard_four_doubled_excess ρ μG hN hN3
+        hρcont u u']
+  have hmulD : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((420 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))
+      = ((420 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6)
+        * ∑ P ∈ C, (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aD : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P,
+        ((420 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))
+      = 3 * (((420 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6)
+        * kappa6chan3111Excess ρ μG u u') := by
+    rw [cnt4d (fun C P => ((420 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6)
+        * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)),
+      Finset.sum_congr rfl hmulD, ← Finset.mul_sum,
+      sum_powersetCard_four_tripled_excess ρ μG hN hN3
+        hρcont u u']
+  have hmulE2 : ∀ C ∈ Finset.univ.powersetCard 4, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P,
+        ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6)
+        * ∑ Q ∈ C.erase P, (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulE1 : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6)
+        * ∑ Q ∈ C.erase P, (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6)
+        * ∑ P ∈ C, ∑ Q ∈ C.erase P, (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aE : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P,
+        ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = ((420 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6)
+        * kappa6chan2211Excess ρ μG u u' := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulE2 C hC P hP)),
+      Finset.sum_congr rfl hmulE1, ← Finset.mul_sum,
+      sum_powersetCard_four_doubledDoubled_excess ρ μG hN hN3
+        hρcont u u']
+  have hmulF2 : ∀ C ∈ Finset.univ.powersetCard 4, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P,
+        ((420 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2 * (e1 ρ μG) ^ 2))
+      = ((420 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * ∑ Q ∈ C.erase P, (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2 * (e1 ρ μG) ^ 2) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulF1 : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((420 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * ∑ Q ∈ C.erase P, (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2 * (e1 ρ μG) ^ 2))
+      = ((420 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * ∑ P ∈ C, ∑ Q ∈ C.erase P, (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2 * (e1 ρ μG) ^ 2) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aF : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P,
+        ((420 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2 * (e1 ρ μG) ^ 2))
+      = ((420 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * kappa7chan3211Excess ρ μG u u' := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulF2 C hC P hP)),
+      Finset.sum_congr rfl hmulF1, ← Finset.mul_sum,
+      sum_powersetCard_four_tripledDoubled_excess ρ μG hN hN3
+        hρcont u u']
+  rw [aA, aB, aC, aD, aE, aF]
+  simp only [← Finset.sum_sub_distrib]
+  ring
+
+/-- **Assembly of the `(2,2,2,1)` family**: the
+summed pattern rest is the order-4 excess sum at
+`192 d⁻⁴` per unit weight, the order-5 channel at
+`−72 d⁻⁵` (all three doubled seats), the order-6
+`(2,2,1,1)` channel at `12 d⁻⁶` (all three pairs),
+and the order-7 `(2,2,2,1)` channel at `−d⁻⁷`. -/
+theorem sum_exagg4_2221 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+      ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+      (105 : ℝ) * (8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)))
+    = 105 * (192 * ((d : ℝ)⁻¹) ^ 4
+        * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+      - 72 * ((d : ℝ)⁻¹) ^ 5 * kappa5chanExcess ρ μG u u'
+      + 12 * ((d : ℝ)⁻¹) ^ 6
+        * kappa6chan2211Excess ρ μG u u'
+      - ((d : ℝ)⁻¹) ^ 7
+        * kappa7chan2221Excess ρ μG u u') := by
+  classical
+  have hdist : ∀ C ∈ Finset.univ.powersetCard 4, ∀ P ∈ C,
+      ∀ Q ∈ C.erase P, ∀ R ∈ (C.erase P).erase Q,
+      (105 : ℝ) * (8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG))
+      = ((105 : ℝ) * 8 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((105 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG) :=
+    fun C _ P _ Q _ R _ => by ring
+  rw [Finset.sum_congr rfl (fun C hC =>
+    Finset.sum_congr rfl (fun P hP =>
+      Finset.sum_congr rfl (fun Q hQ =>
+        Finset.sum_congr rfl (fun R hR =>
+          hdist C hC P hP Q hQ R hR))))]
+  simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+  have aA : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((105 : ℝ) * 8 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4))
+      = 24 * (((105 : ℝ) * 8 * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+    rw [cnt4c (fun C => ((105 : ℝ) * 8 * ((d : ℝ)⁻¹) ^ 4)
+      * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)), ← Finset.mul_sum]
+  have hmulB : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5)
+        * ∑ P ∈ C, (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB1 : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = 6 * (((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5)
+        * kappa5chanExcess ρ μG u u') := by
+    rw [cnt4f (fun C P => ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5)
+        * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+      Finset.sum_congr rfl hmulB, ← Finset.mul_sum,
+      sum_powersetCard_four_doubled_excess ρ μG hN hN3
+        hρcont u u']
+  have aB2 : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = 6 * (((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5)
+        * kappa5chanExcess ρ μG u u') := by
+    rw [cnt4g (fun C Q => ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5)
+        * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+      Finset.sum_congr rfl hmulB, ← Finset.mul_sum,
+      sum_powersetCard_four_doubled_excess ρ μG hN hN3
+        hρcont u u']
+  have aB3 : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = 6 * (((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5)
+        * kappa5chanExcess ρ μG u u') := by
+    rw [cnt4h (fun C R => ((105 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5)
+        * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)),
+      Finset.sum_congr rfl hmulB, ← Finset.mul_sum,
+      sum_powersetCard_four_doubled_excess ρ μG hN hN3
+        hρcont u u']
+  have hmulC2 : ∀ C ∈ Finset.univ.powersetCard 4, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P,
+        ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6)
+        * ∑ Q ∈ C.erase P, (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulC1 : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6)
+        * ∑ Q ∈ C.erase P, (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6)
+        * ∑ P ∈ C, ∑ Q ∈ C.erase P, (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aC1 : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = 2 * (((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6)
+        * kappa6chan2211Excess ρ μG u u') := by
+    rw [cnt4i (fun C P Q =>
+        ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)),
+      Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulC2 C hC P hP)),
+      Finset.sum_congr rfl hmulC1, ← Finset.mul_sum,
+      sum_powersetCard_four_doubledDoubled_excess ρ μG hN hN3
+        hρcont u u']
+  have aC2 : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = 2 * (((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6)
+        * kappa6chan2211Excess ρ μG u u') := by
+    rw [cnt4j (fun C P R =>
+        ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)),
+      Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulC2 C hC P hP)),
+      Finset.sum_congr rfl hmulC1, ← Finset.mul_sum,
+      sum_powersetCard_four_doubledDoubled_excess ρ μG hN hN3
+        hρcont u u']
+  have aC3 : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = 2 * (((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6)
+        * kappa6chan2211Excess ρ μG u u') := by
+    rw [cnt4k (fun C Q R =>
+        ((105 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)),
+      Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulC2 C hC P hP)),
+      Finset.sum_congr rfl hmulC1, ← Finset.mul_sum,
+      sum_powersetCard_four_doubledDoubled_excess ρ μG hN hN3
+        hρcont u u']
+  have hmulD3 : ∀ C ∈ Finset.univ.powersetCard 4, ∀ P ∈ C,
+      ∀ Q ∈ C.erase P,
+      (∑ R ∈ (C.erase P).erase Q,
+        ((105 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG))
+      = ((105 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * ∑ R ∈ (C.erase P).erase Q, (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG) :=
+    fun C _ P _ Q _ => by rw [Finset.mul_sum]
+  have hmulD2 : ∀ C ∈ Finset.univ.powersetCard 4, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P, ((105 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * ∑ R ∈ (C.erase P).erase Q, (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG))
+      = ((105 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulD1 : ∀ C ∈ Finset.univ.powersetCard 4,
+      (∑ P ∈ C, ((105 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG))
+      = ((105 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * ∑ P ∈ C, ∑ Q ∈ C.erase P,
+          ∑ R ∈ (C.erase P).erase Q, (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aD : (∑ C ∈ Finset.univ.powersetCard 4, ∑ P ∈ C,
+        ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((105 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG))
+      = ((105 : ℝ) * ((d : ℝ)⁻¹) ^ 7)
+        * kappa7chan2221Excess ρ μG u u' := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP =>
+          Finset.sum_congr rfl (fun Q hQ =>
+            hmulD3 C hC P hP Q hQ))),
+      Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulD2 C hC P hP)),
+      Finset.sum_congr rfl hmulD1, ← Finset.mul_sum,
+      sum_powersetCard_four_tripledDoubledDoubled_excess
+        ρ μG hN hN3 hρcont u u']
+  rw [aA, aB1, aB2, aB3, aC1, aC2, aC3, aD]
+  simp only [← Finset.sum_sub_distrib]
+  ring
+
+/-- **Assembly of the card-4 family** (B7-2b-iv):
+the three pattern families sum to the order-4
+excess sum at `53760 d⁻⁴`, the order-5 channel at
+`−20160 d⁻⁵`, the order-6 channels at `3360 d⁻⁶`
+and `2520 d⁻⁶`, and the order-7 channels at
+`−210 d⁻⁷`, `−420 d⁻⁷`, `−105 d⁻⁷`. -/
+theorem sum_exagg4_convert (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 4, (∑ P ∈ C, (210 : ℝ) * (4 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 4 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (quadrupledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 4 * (e1 ρ μG) ^ 3))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (420 : ℝ) * (6 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 6 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 3 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 2 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledDoubledQuadReMoment ρ μG C P Q u u'
+            - realMoment ρ μG 3 * realMoment ρ μG 2
+              * (e1 ρ μG) ^ 2))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P,
+            ∑ R ∈ (C.erase P).erase Q, (105 : ℝ) * (8 * ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 4)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - 4 * ((d : ℝ)⁻¹) ^ 5
+          * (doubledQuadReMoment ρ μG C R u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C P R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledDoubledQuadReMoment ρ μG C Q R u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledDoubledQuadReMoment ρ μG C P Q R u u'
+            - (realMoment ρ μG 2) ^ 3 * e1 ρ μG)))
+      = 53760 * ((d : ℝ)⁻¹) ^ 4
+          * ∑ T ∈ Finset.univ.powersetCard 4,
+            (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+        - 20160 * ((d : ℝ)⁻¹) ^ 5 * kappa5chanExcess ρ μG u u'
+        + 3360 * ((d : ℝ)⁻¹) ^ 6
+          * kappa6chan3111Excess ρ μG u u'
+        + 2520 * ((d : ℝ)⁻¹) ^ 6
+          * kappa6chan2211Excess ρ μG u u'
+        - 210 * ((d : ℝ)⁻¹) ^ 7
+          * kappa7chan4111Excess ρ μG u u'
+        - 420 * ((d : ℝ)⁻¹) ^ 7
+          * kappa7chan3211Excess ρ μG u u'
+        - 105 * ((d : ℝ)⁻¹) ^ 7
+          * kappa7chan2221Excess ρ μG u u' := by
+  classical
+  simp only [Finset.sum_add_distrib]
+  rw [sum_exagg4_4111 ρ μG hN hN3 hρcont u u',
+    sum_exagg4_3211 ρ μG hN hN3 hρcont u u',
+    sum_exagg4_2221 ρ μG hN hN3 hρcont u u']
+  ring
+
+/-- **Assembly of the `(3,1,1,1,1)` family**: the
+summed pattern rest, read off the landed
+conversions: the penta pool at `-3 d⁻⁵` per unit
+weight (five seats), the doubled pool at
+`3 d⁻⁶`, the tripled pool at `-d⁻⁷`, the erased
+order-4 pool at `d⁻⁴`, and the through-erasure
+terms at `3 d⁻⁴`, `-3 d⁻⁵`, `d⁻⁶`. -/
+theorem sum_exagg5_31111 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, (840 : ℝ) * (- 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))))
+    = 840 * (- 15 * ((d : ℝ)⁻¹) ^ 5 * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))
+      + 3 * ((d : ℝ)⁻¹) ^ 6 * (realMoment ρ μG 2 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + e1 ρ μG * ((colCount N - 4) * kappa5chanExcess ρ μG u u'))
+      - ((d : ℝ)⁻¹) ^ 7 * (realMoment ρ μG 3 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + e1 ρ μG * ((colCount N - 4) * kappa6chan3111Excess ρ μG u u'))
+      + ((d : ℝ)⁻¹) ^ 4 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+      + (3 * ((d : ℝ)⁻¹) ^ 4 * (4 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))
+        - 3 * ((d : ℝ)⁻¹) ^ 5 * ((colCount N - 4) * kappa5chanExcess ρ μG u u')
+        + ((d : ℝ)⁻¹) ^ 6 * ((colCount N - 4) * kappa6chan3111Excess ρ μG u u'))) := by
+  classical
+  have hDPV : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+        (doubledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+      = (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+        (doubledPentaReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)) :=
+    Finset.sum_congr rfl (fun C _ =>
+      Finset.sum_congr rfl (fun P _ => by
+        rw [doubledPentaReMoment_eq_doubledQuadReMoment]))
+  have hpush : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (840 : ℝ) * (∑ R ∈ C.erase P, (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)))
+      = ∑ R ∈ C.erase P, (((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4)
+        - ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)) :=
+    fun C _ P _ => by
+      rw [Finset.mul_sum]
+      exact Finset.sum_congr rfl (fun R _ => by ring)
+  have hdist : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (840 : ℝ) * (- 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)))
+      = - ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P, (((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4)
+          - ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+          + ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)) := by
+    intro C hC P hP
+    rw [← hpush C hC P hP]
+    ring
+  rw [Finset.sum_congr rfl (fun C hC =>
+    Finset.sum_congr rfl (fun P hP => hdist C hC P hP))]
+  simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+  have aA1 : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, - ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5))
+      = 5 * (- ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))) := by
+    rw [cnt5a (fun C => - ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)), ← Finset.mul_sum,
+      sum_powersetCard_five_penta_quad ρ μG hN hN3 hρcont u u']
+  have hmulA2 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+      = ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6) * ∑ P ∈ C, (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aA2 : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+      = ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 6) * (realMoment ρ μG 2 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + e1 ρ μG * ((colCount N - 4) * kappa5chanExcess ρ μG u u')) := by
+    rw [Finset.sum_congr rfl hmulA2, ← Finset.mul_sum, hDPV,
+      sum_powersetCard_five_doubledPenta_excess ρ μG hN hN3 hρcont u u']
+  have hmulA3 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4))
+      = ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * ∑ P ∈ C, (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aA3 : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4))
+      = ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (realMoment ρ μG 3 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + e1 ρ μG * ((colCount N - 4) * kappa6chan3111Excess ρ μG u u')) := by
+    rw [Finset.sum_congr rfl hmulA3, ← Finset.mul_sum,
+      sum_powersetCard_five_tripledPenta_excess ρ μG hN hN3 hρcont u u']
+  have hmulA4 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ∑ P ∈ C, (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aA4 : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+    rw [Finset.sum_congr rfl hmulA4, ← Finset.mul_sum,
+      sum_powersetCard_five_erase_excess ρ μG hN hN3 hρcont u u']
+  have hmulA5a2 : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ R ∈ C.erase P, ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 4) * ∑ R ∈ C.erase P, (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulA5a1 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 4) * ∑ R ∈ C.erase P, (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 4) * ∑ P ∈ C, ∑ R ∈ C.erase P, (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aA5a : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ R ∈ C.erase P,
+        ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 4) * (4 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulA5a2 C hC P hP)),
+      Finset.sum_congr rfl hmulA5a1, ← Finset.mul_sum,
+      sum_powersetCard_five_erase_quad_through ρ μG hN hN3 hρcont u u']
+  have hmulA5b2 : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ R ∈ C.erase P, ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * ∑ R ∈ C.erase P, (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulA5b1 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * ∑ R ∈ C.erase P, (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * ∑ P ∈ C, ∑ R ∈ C.erase P, (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aA5b : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ R ∈ C.erase P,
+        ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((840 : ℝ) * 3 * ((d : ℝ)⁻¹) ^ 5) * ((colCount N - 4) * kappa5chanExcess ρ μG u u') := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulA5b2 C hC P hP)),
+      Finset.sum_congr rfl hmulA5b1, ← Finset.mul_sum,
+      sum_powersetCard_five_doubled_erase ρ μG hN hN3 hρcont u u']
+  have hmulA5c2 : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ R ∈ C.erase P, ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))
+      = ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ R ∈ C.erase P, (tripledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulA5c1 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ R ∈ C.erase P, (tripledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))
+      = ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ P ∈ C, ∑ R ∈ C.erase P, (tripledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aA5c : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ R ∈ C.erase P,
+        ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 3))
+      = ((840 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ((colCount N - 4) * kappa6chan3111Excess ρ μG u u') := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulA5c2 C hC P hP)),
+      Finset.sum_congr rfl hmulA5c1, ← Finset.mul_sum,
+      sum_powersetCard_five_tripled_erase ρ μG hN hN3 hρcont u u']
+  rw [aA1, aA2, aA3, aA4, aA5a, aA5b, aA5c]
+  simp only [← Finset.sum_sub_distrib]
+  ring
+
+/-- **Assembly of the `(2,2,1,1,1)` family**: the
+summed pattern rest, read off the landed
+conversions: the penta pool at `-4 d⁻⁵` per unit
+weight (twenty seats), the doubled pool at
+`2 d⁻⁶` on each seat (four seats each), the
+doubled-doubled pool at `-d⁻⁷`, the erased
+brackets at `2 d⁻⁴` / `-d⁻⁵` on each seat, and
+the rotated terms at `4 d⁻⁴`, `-2 d⁻⁵`, `-2 d⁻⁵`,
+`d⁻⁶`. -/
+theorem sum_exagg5_22111 (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, (630 : ℝ) * (- 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))))
+    = 630 * (- 80 * ((d : ℝ)⁻¹) ^ 5 * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))
+      + 8 * ((d : ℝ)⁻¹) ^ 6 * (realMoment ρ μG 2 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + e1 ρ μG * ((colCount N - 4) * kappa5chanExcess ρ μG u u'))
+      + 8 * ((d : ℝ)⁻¹) ^ 6 * (realMoment ρ μG 2 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + e1 ρ μG * ((colCount N - 4) * kappa5chanExcess ρ μG u u'))
+      - ((d : ℝ)⁻¹) ^ 7 * (2 * realMoment ρ μG 2 * ((colCount N - 4) * kappa5chanExcess ρ μG u u')
+        + e1 ρ μG * ((colCount N - 4) * kappa6chan2211Excess ρ μG u u'))
+      + (2 * ((d : ℝ)⁻¹) ^ 4 * ((colCount N - 4) * (4 * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))
+        - ((d : ℝ)⁻¹) ^ 5 * ((colCount N - 4) * kappa5chanExcess ρ μG u u'))
+      + (2 * ((d : ℝ)⁻¹) ^ 4 * ((colCount N - 4) * (4 * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))
+        - ((d : ℝ)⁻¹) ^ 5 * ((colCount N - 4) * kappa5chanExcess ρ μG u u'))
+      + (4 * ((d : ℝ)⁻¹) ^ 4 * ((colCount N - 4) * (12 * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))
+        - 2 * ((d : ℝ)⁻¹) ^ 5 * ((colCount N - 4) * (3 * kappa5chanExcess ρ μG u u'))
+        - 2 * ((d : ℝ)⁻¹) ^ 5 * ((colCount N - 4) * (3 * kappa5chanExcess ρ μG u u'))
+        + ((d : ℝ)⁻¹) ^ 6 * ((colCount N - 4) * kappa6chan2211Excess ρ μG u u'))) := by
+  classical
+  have hDPV : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+        (doubledQuadReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+      = (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C,
+        (doubledPentaReMoment ρ μG C P u u'
+          - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)) :=
+    Finset.sum_congr rfl (fun C _ =>
+      Finset.sum_congr rfl (fun P _ => by
+        rw [doubledPentaReMoment_eq_doubledQuadReMoment]))
+  have hpush : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      ∀ Q ∈ C.erase P,
+      (630 : ℝ) * (∑ R ∈ (C.erase P).erase Q, (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)))
+      = ∑ R ∈ (C.erase P).erase Q, (((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4)
+        - ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        - ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)) :=
+    fun C _ P _ Q _ => by
+      rw [Finset.mul_sum]
+      exact Finset.sum_congr rfl (fun R _ => by ring)
+  have hdist : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      ∀ Q ∈ C.erase P,
+      (630 : ℝ) * (- 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)))
+      = - ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4) - ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase Q) u u'
+            - (e1 ρ μG) ^ 4) - ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q, (((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4)
+          - ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+          - ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+          + ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2)) := by
+    intro C hC P hP Q hQ
+    rw [← hpush C hC P hP Q hQ]
+    ring
+  rw [Finset.sum_congr rfl (fun C hC =>
+    Finset.sum_congr rfl (fun P hP =>
+      Finset.sum_congr rfl (fun Q hQ => hdist C hC P hP Q hQ)))]
+  simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+  have aB1 : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, - ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5))
+      = 20 * (- ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))) := by
+    rw [cnt5b (fun C => - ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 5) * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)), ← Finset.mul_sum,
+      sum_powersetCard_five_penta_quad ρ μG hN hN3 hρcont u u']
+  have hmulB2 : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * ∑ P ∈ C, (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB2 : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+      = 4 * (((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (realMoment ρ μG 2 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + e1 ρ μG * ((colCount N - 4) * kappa5chanExcess ρ μG u u'))) := by
+    rw [cnt5c (fun C P => ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)),
+      Finset.sum_congr rfl hmulB2, ← Finset.mul_sum, hDPV,
+      sum_powersetCard_five_doubledPenta_excess ρ μG hN hN3 hρcont u u']
+  have aB3 : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+      = 4 * (((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (realMoment ρ μG 2 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + e1 ρ μG * ((colCount N - 4) * kappa5chanExcess ρ μG u u'))) := by
+    rw [cnt5d (fun C Q => ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)),
+      Finset.sum_congr rfl hmulB2, ← Finset.mul_sum, hDPV,
+      sum_powersetCard_five_doubledPenta_excess ρ μG hN hN3 hρcont u u']
+  have hmulB4q : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * ∑ Q ∈ C.erase P, (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulB4p : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * ∑ Q ∈ C.erase P, (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * ∑ P ∈ C, ∑ Q ∈ C.erase P, (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB4 : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (2 * realMoment ρ μG 2 * ((colCount N - 4) * kappa5chanExcess ρ μG u u')
+        + e1 ρ μG * ((colCount N - 4) * kappa6chan2211Excess ρ μG u u')) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulB4q C hC P hP)),
+      Finset.sum_congr rfl hmulB4p, ← Finset.mul_sum,
+      sum_powersetCard_five_ddPenta_excess ρ μG hN hN3 hρcont u u']
+  have hmulB5aq : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ Q ∈ C.erase P, (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulB5ap : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ Q ∈ C.erase P, (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ P ∈ C, ∑ Q ∈ C.erase P, (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB5a : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ((colCount N - 4) * (4 * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulB5aq C hC P hP)),
+      Finset.sum_congr rfl hmulB5ap, ← Finset.mul_sum,
+      sum_powersetCard_five_erase_quad_seat ρ μG hN hN3 hρcont u u']
+  have hmulB5bq : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ Q ∈ C.erase P, (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulB5bp : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ Q ∈ C.erase P, (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ P ∈ C, ∑ Q ∈ C.erase P, (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB5b : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ((colCount N - 4) * kappa5chanExcess ρ μG u u') := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulB5bq C hC P hP)),
+      Finset.sum_congr rfl hmulB5bp, ← Finset.mul_sum,
+      sum_powersetCard_five_erase_doubled_seat ρ μG hN hN3 hρcont u u']
+  have hmulB6aq : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase Q) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ Q ∈ C.erase P, (quadReMoment ρ μG (C.erase Q) u u'
+            - (e1 ρ μG) ^ 4) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulB6ap : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ Q ∈ C.erase P, (quadReMoment ρ μG (C.erase Q) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ P ∈ C, ∑ Q ∈ C.erase P, (quadReMoment ρ μG (C.erase Q) u u'
+            - (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB6a : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase Q) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ((colCount N - 4) * (4 * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulB6aq C hC P hP)),
+      Finset.sum_congr rfl hmulB6ap, ← Finset.mul_sum,
+      sum_powersetCard_five_erase_quad_seat2 ρ μG hN hN3 hρcont u u']
+  have hmulB6bq : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ Q ∈ C.erase P, (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulB6bp : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ Q ∈ C.erase P, (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ P ∈ C, ∑ Q ∈ C.erase P, (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB6b : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ((colCount N - 4) * kappa5chanExcess ρ μG u u') := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulB6bq C hC P hP)),
+      Finset.sum_congr rfl hmulB6bp, ← Finset.mul_sum,
+      sum_powersetCard_five_erase_doubled_seat2 ρ μG hN hN3 hρcont u u']
+  have hmulB7ar : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      ∀ Q ∈ C.erase P,
+      (∑ R ∈ (C.erase P).erase Q, ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * ∑ R ∈ (C.erase P).erase Q, (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4) :=
+    fun C _ P _ Q _ => by rw [Finset.mul_sum]
+  have hmulB7aq : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P, ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * ∑ R ∈ (C.erase P).erase Q, (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulB7ap : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * ∑ P ∈ C, ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB7a : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * (quadReMoment ρ μG (C.erase R) u u'
+            - (e1 ρ μG) ^ 4))
+      = ((630 : ℝ) * 4 * ((d : ℝ)⁻¹) ^ 4) * ((colCount N - 4) * (12 * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP =>
+          Finset.sum_congr rfl (fun Q hQ => hmulB7ar C hC P hP Q hQ))),
+      Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulB7aq C hC P hP)),
+      Finset.sum_congr rfl hmulB7ap, ← Finset.mul_sum,
+      sum_powersetCard_five_rotate_quad ρ μG hN hN3 hρcont u u']
+  have hmulB7br : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      ∀ Q ∈ C.erase P,
+      (∑ R ∈ (C.erase P).erase Q, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ R ∈ (C.erase P).erase Q, (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ P _ Q _ => by rw [Finset.mul_sum]
+  have hmulB7bq : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ R ∈ (C.erase P).erase Q, (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulB7bp : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ P ∈ C, ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB7b : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ((colCount N - 4) * (3 * kappa5chanExcess ρ μG u u')) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP =>
+          Finset.sum_congr rfl (fun Q hQ => hmulB7br C hC P hP Q hQ))),
+      Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulB7bq C hC P hP)),
+      Finset.sum_congr rfl hmulB7bp, ← Finset.mul_sum,
+      sum_powersetCard_five_rotate_doubled_first ρ μG hN hN3 hρcont u u']
+  have hmulB7cr : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      ∀ Q ∈ C.erase P,
+      (∑ R ∈ (C.erase P).erase Q, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ R ∈ (C.erase P).erase Q, (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ P _ Q _ => by rw [Finset.mul_sum]
+  have hmulB7cq : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ R ∈ (C.erase P).erase Q, (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulB7cp : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ P ∈ C, ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB7c : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((630 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ((colCount N - 4) * (3 * kappa5chanExcess ρ μG u u')) := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP =>
+          Finset.sum_congr rfl (fun Q hQ => hmulB7cr C hC P hP Q hQ))),
+      Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulB7cq C hC P hP)),
+      Finset.sum_congr rfl hmulB7cp, ← Finset.mul_sum,
+      sum_powersetCard_five_rotate_doubled_second ρ μG hN hN3 hρcont u u']
+  have hmulB7dr : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      ∀ Q ∈ C.erase P,
+      (∑ R ∈ (C.erase P).erase Q, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ R ∈ (C.erase P).erase Q, (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) :=
+    fun C _ P _ Q _ => by rw [Finset.mul_sum]
+  have hmulB7dq : ∀ C ∈ Finset.univ.powersetCard 5, ∀ P ∈ C,
+      (∑ Q ∈ C.erase P, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ R ∈ (C.erase P).erase Q, (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) :=
+    fun C _ P _ => by rw [Finset.mul_sum]
+  have hmulB7dp : ∀ C ∈ Finset.univ.powersetCard 5,
+      (∑ P ∈ C, ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ P ∈ C, ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q, (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aB7d : (∑ C ∈ Finset.univ.powersetCard 5, ∑ P ∈ C, ∑ Q ∈ C.erase P, ∑ R ∈ (C.erase P).erase Q,
+        ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))
+      = ((630 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ((colCount N - 4) * kappa6chan2211Excess ρ μG u u') := by
+    rw [Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP =>
+          Finset.sum_congr rfl (fun Q hQ => hmulB7dr C hC P hP Q hQ))),
+      Finset.sum_congr rfl (fun C hC =>
+        Finset.sum_congr rfl (fun P hP => hmulB7dq C hC P hP)),
+      Finset.sum_congr rfl hmulB7dp, ← Finset.mul_sum,
+      sum_powersetCard_five_rotate_dd ρ μG hN hN3 hρcont u u']
+  rw [aB1, aB2, aB3, aB4, aB5a, aB5b, aB6a, aB6b, aB7a, aB7b,
+    aB7c, aB7d]
+  simp only [← Finset.sum_sub_distrib]
+  ring
+
+/-- **Assembly of the card-5 family** (B7-2b-iv):
+the two pattern families sum to the totals read
+off the landed conversions. -/
+theorem sum_exagg5_convert (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 5, (∑ P ∈ C, (840 : ℝ) * (- 3 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 3 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (tripledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 3 * (e1 ρ μG) ^ 4)
+        + ((d : ℝ)⁻¹) ^ 4
+          * (quadReMoment ρ μG (C.erase P) u u'
+            - (e1 ρ μG) ^ 4)
+        + ∑ R ∈ C.erase P,
+          (3 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 3 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (tripledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 3 * (e1 ρ μG) ^ 3)))
+        + ∑ P ∈ C, ∑ Q ∈ C.erase P, (630 : ℝ) * (- 4 * ((d : ℝ)⁻¹) ^ 5
+          * (quadReMoment ρ μG C u u' - (e1 ρ μG) ^ 5)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C P u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        + 2 * ((d : ℝ)⁻¹) ^ 6
+          * (doubledQuadReMoment ρ μG C Q u u'
+            - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((d : ℝ)⁻¹) ^ 7
+          * (doubledDoubledQuadReMoment ρ μG C P Q u u'
+            - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 3)
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase P) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase P) Q u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + (2 * ((d : ℝ)⁻¹) ^ 4
+            * (quadReMoment ρ μG (C.erase Q) u u'
+              - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * (doubledQuadReMoment ρ μG (C.erase Q) P u u'
+              - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+        + ∑ R ∈ (C.erase P).erase Q,
+          (4 * ((d : ℝ)⁻¹) ^ 4
+              * (quadReMoment ρ μG (C.erase R) u u'
+                - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * (doubledQuadReMoment ρ μG (C.erase R) Q u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * (doubledDoubledQuadReMoment ρ μG (C.erase R)
+                  P Q u u'
+                - (realMoment ρ μG 2) ^ 2 * (e1 ρ μG) ^ 2))))
+      = 51240 * ((d : ℝ)⁻¹) ^ 4 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        - 63000 * ((d : ℝ)⁻¹) ^ 5 * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))
+        + 12600 * ((d : ℝ)⁻¹) ^ 6 * (realMoment ρ μG 2 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        + e1 ρ μG * ((colCount N - 4) * kappa5chanExcess ρ μG u u'))
+        - 11340 * ((d : ℝ)⁻¹) ^ 5 * ((colCount N - 4) * kappa5chanExcess ρ μG u u')
+        + 840 * ((d : ℝ)⁻¹) ^ 6 * ((colCount N - 4) * kappa6chan3111Excess ρ μG u u')
+        + 630 * ((d : ℝ)⁻¹) ^ 6 * ((colCount N - 4) * kappa6chan2211Excess ρ μG u u')
+        - 840 * ((d : ℝ)⁻¹) ^ 7
+          * (realMoment ρ μG 3 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+            + e1 ρ μG * ((colCount N - 4) * kappa6chan3111Excess ρ μG u u'))
+        - 630 * ((d : ℝ)⁻¹) ^ 7 * (2 * realMoment ρ μG 2 * ((colCount N - 4) * kappa5chanExcess ρ μG u u')
+        + e1 ρ μG * ((colCount N - 4) * kappa6chan2211Excess ρ μG u u')) := by
+  classical
+  rw [Finset.sum_add_distrib,
+    sum_exagg5_31111 ρ μG hN hN3 hρcont u u',
+    sum_exagg5_22111 ρ μG hN hN3 hρcont u u']
+  ring
+/-- **Assembly of the card-6 family** (B7-2b-iv):
+the summed `W`-rest at weight `2520`, read off
+the eight landed card-6 conversions. -/
+theorem sum_w6rest_convert (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+            (2520 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 5
+              * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 6
+              * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+            - ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 7
+              * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5))
+      = 2520 * (((d : ℝ)⁻¹) ^ 4 * ((colCount N - 5) * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))
+        - ((d : ℝ)⁻¹) ^ 5 * ((colCount N - 5) * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))))
+        + 2 * ((d : ℝ)⁻¹) ^ 4 * (4 * (((colCount N - 4) * (colCount N - 5) / 2) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))
+        - 2 * ((d : ℝ)⁻¹) ^ 5 * (5 * ((colCount N - 5) * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))))
+        + 2 * ((d : ℝ)⁻¹) ^ 6 * (6 * (kappa6chanC6Excess ρ μG u u'
+          + kappa6chanThetaExcess ρ μG u u'
+          + (e1 ρ μG) ^ 2 * (((colCount N - 4) * (colCount N - 5) / 2)
+            * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ∑ C ∈ thetaSupports,
+              ∑ T ∈ Finset.powersetCard 4 C,
+                (quadReMoment ρ μG T u u'
+                  - (e1 ρ μG) ^ 4))))
+        - ((d : ℝ)⁻¹) ^ 5 * (((colCount N - 4) * (colCount N - 5) / 2) * kappa5chanExcess ρ μG u u')
+        + ((d : ℝ)⁻¹) ^ 6 * ((colCount N - 5)
+          * (realMoment ρ μG 2 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+            + e1 ρ μG * ((colCount N - 4)
+              * kappa5chanExcess ρ μG u u')))
+        - ((d : ℝ)⁻¹) ^ 7 * (kappa7chan211111C6Excess ρ μG u u'
+        + kappa7chan211111ThetaExcess ρ μG u u'
+        + 2 * realMoment ρ μG 2 * e1 ρ μG
+          * (((colCount N - 4) * (colCount N - 5) / 2) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ∑ C ∈ thetaSupports,
+              ∑ T ∈ Finset.powersetCard 4 C,
+                (quadReMoment ρ μG T u u'
+                  - (e1 ρ μG) ^ 4))
+        + (e1 ρ μG) ^ 2
+          * (((colCount N - 4) * (colCount N - 5) / 2) * kappa5chanExcess ρ μG u u'
+            - theta4SubsetDoubledSum ρ μG u u'))) := by
+  classical
+  have hdist : ∀ C ∈ Finset.univ.powersetCard 6, ∀ P ∈ C,
+      (2520 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 5
+              * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 6
+              * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+            - ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 7
+              * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+        - ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5)
+        + ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+        - ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+        + ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+        - ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+        + ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+        - ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5) :=
+    fun C _ P _ => by ring
+  have step : ((((((((∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) - (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5))) + (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4))) - (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5))) + (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6))) - (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))) + (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))) - (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)))
+      = ∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C,
+            (2520 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 5
+              * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 4
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4)
+            - 2 * ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5)
+            + 2 * ((d : ℝ)⁻¹) ^ 6
+              * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6)
+            - ((d : ℝ)⁻¹) ^ 5
+              * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3)
+            + ((d : ℝ)⁻¹) ^ 6
+              * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4)
+            - ((d : ℝ)⁻¹) ^ 7
+              * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5)) := by
+    simp only [← Finset.sum_sub_distrib, ← Finset.sum_add_distrib]
+    exact Finset.sum_congr rfl (fun C hC =>
+      Finset.sum_congr rfl (fun P hP => (hdist C hC P hP).symm))
+  have hmulW1 : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ∑ P ∈ C, ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aW1 : (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ((colCount N - 5) * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))) := by
+    rw [Finset.sum_congr rfl hmulW1, ← Finset.mul_sum,
+      sum_powersetCard_six_erase_four_subset ρ μG hN hN3 hρcont u u']
+  have hmulW2 : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ P ∈ C, (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aW2 : (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (quadReMoment ρ μG (C.erase P) u u'
+                - (e1 ρ μG) ^ 5))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ((colCount N - 5) * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))) := by
+    rw [Finset.sum_congr rfl hmulW2, ← Finset.mul_sum,
+      sum_powersetCard_six_erase_penta ρ μG hN hN3 hρcont u u']
+  have hmulW3 : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4))
+      = ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ P ∈ C, ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aW3 : (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 4))
+      = ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 4) * (4 * (((colCount N - 4) * (colCount N - 5) / 2) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))) := by
+    rw [Finset.sum_congr rfl hmulW3, ← Finset.mul_sum,
+      sum_powersetCard_six_insert_quad ρ μG hN hN3 hρcont u u']
+  have hmulW4 : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5))
+      = ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ P ∈ C, ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aW4 : (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (quadReMoment ρ μG (insert P T) u u' - (e1 ρ μG) ^ 5))
+      = ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 5) * (5 * ((colCount N - 5) * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))))) := by
+    rw [Finset.sum_congr rfl hmulW4, ← Finset.mul_sum,
+      sum_powersetCard_six_insert_penta ρ μG hN hN3 hρcont u u']
+  have hmulW5 : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6))
+      = ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * ∑ P ∈ C, (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aW5 : (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (hexaReMoment ρ μG C u u' - (e1 ρ μG) ^ 6))
+      = ((2520 : ℝ) * 2 * ((d : ℝ)⁻¹) ^ 6) * (6 * (kappa6chanC6Excess ρ μG u u'
+          + kappa6chanThetaExcess ρ μG u u'
+          + (e1 ρ μG) ^ 2 * (((colCount N - 4) * (colCount N - 5) / 2)
+            * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ∑ C ∈ thetaSupports,
+              ∑ T ∈ Finset.powersetCard 4 C,
+                (quadReMoment ρ μG T u u'
+                  - (e1 ρ μG) ^ 4)))) := by
+    rw [Finset.sum_congr rfl hmulW5, ← Finset.mul_sum,
+      sum_powersetCard_six_seat_hexa ρ μG hN hN3 hρcont u u']
+  have hmulW6 : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ P ∈ C, ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aW6 : (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 3 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 3))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (((colCount N - 4) * (colCount N - 5) / 2) * kappa5chanExcess ρ μG u u') := by
+    rw [Finset.sum_congr rfl hmulW6, ← Finset.mul_sum,
+      sum_powersetCard_six_insert_doubled ρ μG hN hN3 hρcont u u']
+  have hmulW7 : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ P ∈ C, ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aW7 : (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ T ∈ Finset.powersetCard 4 (C.erase P),
+                (doubledQuadReMoment ρ μG (insert P T) P u u'
+                  - realMoment ρ μG 2 * (e1 ρ μG) ^ 4))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ((colCount N - 5)
+          * (realMoment ρ μG 2 * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+            + e1 ρ μG * ((colCount N - 4)
+              * kappa5chanExcess ρ μG u u'))) := by
+    rw [Finset.sum_congr rfl hmulW7, ← Finset.mul_sum,
+      sum_powersetCard_six_insert_doubledPenta ρ μG hN hN3 hρcont u u']
+  have hmulW8 : ∀ C ∈ Finset.univ.powersetCard 6,
+      (∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * ∑ P ∈ C, (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5) :=
+    fun C _ => by rw [Finset.mul_sum]
+  have aW8 : (∑ C ∈ Finset.univ.powersetCard 6, ∑ P ∈ C, ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (doubledHexaReMoment ρ μG C P u u'
+                - realMoment ρ μG 2 * (e1 ρ μG) ^ 5))
+      = ((2520 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (kappa7chan211111C6Excess ρ μG u u'
+        + kappa7chan211111ThetaExcess ρ μG u u'
+        + 2 * realMoment ρ μG 2 * e1 ρ μG
+          * (((colCount N - 4) * (colCount N - 5) / 2) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ∑ C ∈ thetaSupports,
+              ∑ T ∈ Finset.powersetCard 4 C,
+                (quadReMoment ρ μG T u u'
+                  - (e1 ρ μG) ^ 4))
+        + (e1 ρ μG) ^ 2
+          * (((colCount N - 4) * (colCount N - 5) / 2) * kappa5chanExcess ρ μG u u'
+            - theta4SubsetDoubledSum ρ μG u u')) := by
+    rw [Finset.sum_congr rfl hmulW8, ← Finset.mul_sum,
+      sum_powersetCard_six_doubledHexaExcess_convert ρ μG hN hN3 hρcont u u']
+  rw [← step, aW1, aW2, aW3, aW4, aW5, aW6, aW7, aW8]
+  ring
+
+/-- **Assembly of the card-7 family** (B7-2b-iv):
+the summed `W`-rest at weight `5040`, read off
+the four landed card-7 conversions, with the raw
+order-6 hexa pool inside the hepta term folded
+through the landed order-6 conversion. -/
+theorem sum_w7rest_convert (hN : Even N) (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    ∑ C ∈ Finset.univ.powersetCard 7,
+            (5040 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+            * ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * ∑ T ∈ Finset.powersetCard 5 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5)
+          + ((d : ℝ)⁻¹) ^ 6
+            * ∑ T ∈ Finset.powersetCard 6 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6)
+          - ((d : ℝ)⁻¹) ^ 7
+            * (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7))
+      = 5040 * (((d : ℝ)⁻¹) ^ 4 * (((colCount N - 4) * (colCount N - 5)
+          * (colCount N - 6) / 6) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+        - ((d : ℝ)⁻¹) ^ 5 * (((colCount N - 5) * (colCount N - 6) / 2)
+        * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))))
+        + ((d : ℝ)⁻¹) ^ 6 * ((colCount N - 6) * (kappa6chanC6Excess ρ μG u u'
+          + kappa6chanThetaExcess ρ μG u u'
+          + (e1 ρ μG) ^ 2 * (((colCount N - 4) * (colCount N - 5) / 2)
+            * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ∑ C ∈ thetaSupports,
+              ∑ T ∈ Finset.powersetCard 4 C,
+                (quadReMoment ρ μG T u u'
+                  - (e1 ρ μG) ^ 4))))
+        - ((d : ℝ)⁻¹) ^ 7 * (kappa7chanTheta133Excess ρ μG u u'
+        + e1 ρ μG * ((colCount N - 6) * (kappa6chanC6Excess ρ μG u u'
+          + kappa6chanThetaExcess ρ μG u u'
+          + (e1 ρ μG) ^ 2 * (((colCount N - 4) * (colCount N - 5) / 2)
+            * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ∑ C ∈ thetaSupports,
+              ∑ T ∈ Finset.powersetCard 4 C,
+                (quadReMoment ρ μG T u u'
+                  - (e1 ρ μG) ^ 4))))
+        - e1 ρ μG * bookHexaEraseSum ρ μG u u'
+        - 2 * (e1 ρ μG) ^ 3
+          * (((colCount N - 4) * (colCount N - 5)
+          * (colCount N - 6) / 6) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - book4SubsetSum ρ μG u u'))) := by
+  classical
+  have hdist : ∀ C ∈ Finset.univ.powersetCard 7,
+      (5040 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+            * ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * ∑ T ∈ Finset.powersetCard 5 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5)
+          + ((d : ℝ)⁻¹) ^ 6
+            * ∑ T ∈ Finset.powersetCard 6 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6)
+          - ((d : ℝ)⁻¹) ^ 7
+            * (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7))
+      = ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+        - ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 5 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5)
+        + ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ T ∈ Finset.powersetCard 6 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6)
+        - ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7) :=
+    fun C _ => by ring
+  have step : (((∑ C ∈ Finset.univ.powersetCard 7, ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) - (∑ C ∈ Finset.univ.powersetCard 7, ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 5 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5))) + (∑ C ∈ Finset.univ.powersetCard 7, ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ T ∈ Finset.powersetCard 6 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6))) - (∑ C ∈ Finset.univ.powersetCard 7, ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7))
+      = ∑ C ∈ Finset.univ.powersetCard 7,
+            (5040 : ℝ) * (((d : ℝ)⁻¹) ^ 4
+            * ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+          - ((d : ℝ)⁻¹) ^ 5
+            * ∑ T ∈ Finset.powersetCard 5 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5)
+          + ((d : ℝ)⁻¹) ^ 6
+            * ∑ T ∈ Finset.powersetCard 6 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6)
+          - ((d : ℝ)⁻¹) ^ 7
+            * (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7)) := by
+    rw [← Finset.sum_sub_distrib, ← Finset.sum_add_distrib,
+      ← Finset.sum_sub_distrib]
+    exact Finset.sum_congr rfl (fun C hC => (hdist C hC).symm)
+  have aZ1 : (∑ C ∈ Finset.univ.powersetCard 7, ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * ∑ T ∈ Finset.powersetCard 4 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4))
+      = ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 4) * (((colCount N - 4) * (colCount N - 5)
+          * (colCount N - 6) / 6) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)) := by
+    rw [← Finset.mul_sum,
+      sum_powersetCard_seven_four_subset_convert ρ μG hN hN3 hρcont u u']
+  have aZ2 : (∑ C ∈ Finset.univ.powersetCard 7, ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * ∑ T ∈ Finset.powersetCard 5 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 5))
+      = ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 5) * (((colCount N - 5) * (colCount N - 6) / 2)
+        * (e1 ρ μG * ((colCount N - 4) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)))) := by
+    rw [← Finset.mul_sum,
+      sum_powersetCard_seven_five_subset_convert ρ μG hN hN3 hρcont u u']
+  have aZ3 : (∑ C ∈ Finset.univ.powersetCard 7, ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ∑ T ∈ Finset.powersetCard 6 C,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 6))
+      = ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 6) * ((colCount N - 6) * (kappa6chanC6Excess ρ μG u u'
+          + kappa6chanThetaExcess ρ μG u u'
+          + (e1 ρ μG) ^ 2 * (((colCount N - 4) * (colCount N - 5) / 2)
+            * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - ∑ C ∈ thetaSupports,
+              ∑ T ∈ Finset.powersetCard 4 C,
+                (quadReMoment ρ μG T u u'
+                  - (e1 ρ μG) ^ 4)))) := by
+    rw [← Finset.mul_sum,
+      sum_powersetCard_seven_six_subset_convert ρ μG hN hN3 hρcont u u']
+  have aZ4 : (∑ C ∈ Finset.univ.powersetCard 7, ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (heptaReMoment ρ μG C u u' - (e1 ρ μG) ^ 7))
+      = ((5040 : ℝ) * ((d : ℝ)⁻¹) ^ 7) * (kappa7chanTheta133Excess ρ μG u u'
+        + e1 ρ μG * ((colCount N - 6) * ∑ D ∈ Finset.univ.powersetCard 6,
+            (hexaReMoment ρ μG D u u' - (e1 ρ μG) ^ 6))
+        - e1 ρ μG * bookHexaEraseSum ρ μG u u'
+        - 2 * (e1 ρ μG) ^ 3
+          * (((colCount N - 4) * (colCount N - 5)
+          * (colCount N - 6) / 6) * ∑ T ∈ Finset.univ.powersetCard 4,
+              (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            - book4SubsetSum ρ μG u u')) := by
+    rw [← Finset.mul_sum,
+      sum_powersetCard_seven_heptaExcess_convert ρ μG hN hN3 hρcont u u']
+  rw [← step, aZ1, aZ2, aZ3, aZ4,
+    sum_powersetCard_six_hexaExcess_convert ρ μG hN hN3 hρcont u u']
+  ring
+set_option maxHeartbeats 1600000 in
+/-- **The total decomposition at order 7**
+(B7-2b-iv, the headline): `κ₇^dep` is the
+order-6 dependent part dressed by the same
+factor `4 + (colCount N − 4) B` as at orders 5
+and 6, plus order-5 and order-4 dressings read
+off the landed fiber accounting, plus the seven
+B7-2a channel excesses at `d⁻⁷` with weights
+`-1/24` (`(4,1,1,1)`), `-1/12` (`(3,2,1,1)`,
+split into its adjacent and opposite parts),
+`-1/48` (`(2,2,2,1)`), `-1/2` (`(2,1,1,1,1,1)`
+C6), `-1/2` (`(2,1,1,1,1,1)` theta), `-1`
+(theta133 book), plus the forced residuals:
+the order-6 C6/theta channels reappear at
+`2 e₁ d⁻⁷` (the hepta conversion's hexa pool
+carries one more power of the dressing than
+the order-6 dressing absorbs), the theta
+4-subset sums `S4theta`, `S4thetaD` at
+`e₁ (μ₂ − 2 e₁²) d⁻⁷` and `(e₁²/2) d⁻⁷`, and
+the book residuals `bookHexaEraseSum` at
+`e₁ d⁻⁷` and `book4SubsetSum` at
+`-2 e₁³ d⁻⁷`. Every coefficient is read off
+the landed accounting (B7-2b-i/ii/iii and the
+B7-2a excesses); nothing is fitted. The
+statement sits in B7-1's exact variable
+context, so the B7-2b-v packaging as
+`kappa7dep_eq` is a rename. FENCE: NO CLAIM;
+this is a finite counting identity inside the
+corpus — parts closed 0, dials 0/4. -/
+theorem kappa7dep_total_decomposition (hN : Even N)
+    (hN3 : 3 ≤ N)
+    (hρcont : Continuous fun g : G => repMatrix ρ g)
+    (u u' : LayerLink N → G) :
+    kappa7dep ρ μG u u'
+      = (4 + (colCount N - 4) * (1 - e1 ρ μG / (d : ℝ)))
+          * kappa6dep ρ μG u u'
+        + (- (1 / 2) * ((1 - e1 ρ μG / (d : ℝ)) ^ 2 * (colCount N : ℝ) ^ 2
+            - 7 * (1 - e1 ρ μG / (d : ℝ)) ^ 2 * (colCount N : ℝ)
+            + 12 * (1 - e1 ρ μG / (d : ℝ)) ^ 2
+            + 6 * (1 - e1 ρ μG / (d : ℝ)) * (colCount N : ℝ)
+            - 24 * (1 - e1 ρ μG / (d : ℝ))
+            + (colCount N : ℝ)
+            - (colCount N - 4) * (realMoment ρ μG 2 / (d : ℝ) ^ 2)
+            + 12))
+          * kappa5dep ρ μG u u'
+        + ((1 / 6) * ((1 - e1 ρ μG / (d : ℝ)) ^ 3 * (colCount N : ℝ) ^ 3
+            - 9 * (1 - e1 ρ μG / (d : ℝ)) ^ 3 * (colCount N : ℝ) ^ 2
+            + 26 * (1 - e1 ρ μG / (d : ℝ)) ^ 3 * (colCount N : ℝ)
+            - 24 * (1 - e1 ρ μG / (d : ℝ)) ^ 3
+            + 6 * (1 - e1 ρ μG / (d : ℝ)) ^ 2 * (colCount N : ℝ) ^ 2
+            - 42 * (1 - e1 ρ μG / (d : ℝ)) ^ 2 * (colCount N : ℝ)
+            + 72 * (1 - e1 ρ μG / (d : ℝ)) ^ 2
+            - 3 * (1 - e1 ρ μG / (d : ℝ)) * (colCount N : ℝ) ^ 2 * (realMoment ρ μG 2 / (d : ℝ) ^ 2)
+            + 3 * (1 - e1 ρ μG / (d : ℝ)) * (colCount N : ℝ) ^ 2
+            + 21 * (1 - e1 ρ μG / (d : ℝ)) * (colCount N : ℝ) * (realMoment ρ μG 2 / (d : ℝ) ^ 2)
+            + 6 * (1 - e1 ρ μG / (d : ℝ)) * (colCount N : ℝ)
+            - 36 * (1 - e1 ρ μG / (d : ℝ)) * (realMoment ρ μG 2 / (d : ℝ) ^ 2)
+            - 72 * (1 - e1 ρ μG / (d : ℝ))
+            - (colCount N : ℝ) * (realMoment ρ μG 3 / (d : ℝ) ^ 3)
+            - 9 * (colCount N : ℝ) * (realMoment ρ μG 2 / (d : ℝ) ^ 2)
+            + 10 * (colCount N : ℝ)
+            + 4 * (realMoment ρ μG 3 / (d : ℝ) ^ 3)
+            + 36 * (realMoment ρ μG 2 / (d : ℝ) ^ 2)
+            + 24))
+          * kappa4dep ρ μG u u'
+        + ((d : ℝ)⁻¹) ^ 7
+          * (- (1 / 24) * kappa7chan4111Excess ρ μG u u'
+            - (1 / 12) * (kappa7chan3211AdjExcess ρ μG u u'
+              + kappa7chan3211OppExcess ρ μG u u')
+            - (1 / 48) * kappa7chan2221Excess ρ μG u u'
+            - (1 / 2) * kappa7chan211111C6Excess ρ μG u u'
+            - (1 / 2)
+              * kappa7chan211111ThetaExcess ρ μG u u'
+            - kappa7chanTheta133Excess ρ μG u u'
+            + 2 * e1 ρ μG
+              * (kappa6chanC6Excess ρ μG u u'
+                + kappa6chanThetaExcess ρ μG u u')
+            + e1 ρ μG * (realMoment ρ μG 2
+                - 2 * (e1 ρ μG) ^ 2)
+              * ∑ C ∈ thetaSupports,
+              ∑ T ∈ Finset.powersetCard 4 C,
+                (quadReMoment ρ μG T u u' - (e1 ρ μG) ^ 4)
+            + ((e1 ρ μG) ^ 2 / 2)
+              * theta4SubsetDoubledSum ρ μG u u'
+            + e1 ρ μG * bookHexaEraseSum ρ μG u u'
+            - 2 * (e1 ρ μG) ^ 3
+              * book4SubsetSum ρ μG u u') := by
+  classical
+  have hβ : betaCoeff7 ρ μG u u'
+      = (∫ α : LayerSite N → G, (layerDensSum ρ α u u') ^ 7
+          ∂(Measure.pi fun _ : LayerSite N => μG)) / 5040 := by
+    have hcong : (∫ α : LayerSite N → G,
+          (layerDensSum ρ α u u') ^ 7 / 5040
+          ∂(Measure.pi fun _ : LayerSite N => μG))
+        = ∫ α : LayerSite N → G,
+          (5040 : ℝ)⁻¹ * (layerDensSum ρ α u u') ^ 7
+          ∂(Measure.pi fun _ : LayerSite N => μG) := by
+      apply integral_congr_ae
+      filter_upwards with α
+      rw [div_eq_inv_mul]
+    show betaCoeff7 ρ μG u u' = _
+    unfold betaCoeff7
+    rw [hcong, integral_const_mul, div_eq_inv_mul]
+  rw [kappa7dep_def, hβ,
+    betaCoeff7_total ρ μG hN hN3 hρcont u u',
+    sum_exagg4_convert ρ μG hN hN3 hρcont u u',
+    sum_exagg5_convert ρ μG hN hN3 hρcont u u',
+    sum_w6rest_convert ρ μG hN hN3 hρcont u u',
+    sum_w7rest_convert ρ μG hN hN3 hρcont u u',
+    kappa6dep_eq ρ μG hN hN3 hρcont u u',
+    kappa5dep_eq ρ μG hN hN3 hρcont u u',
+    kappa4dep_eq ρ μG hN hN3 hρcont u u',
+    sum_powersetCard_four_eq_primitive ρ μG hN hN3 hρcont u u',
+    ← kappa7chan3211Adj_add_Opp_excess ρ μG u u']
+  ring
+
+#print axioms kappa7dep_total_decomposition
+
+/-! **B7-2b-iv close.** The total decomposition
+at order 7 is landed above as
+`kappa7dep_total_decomposition`, in B7-1's
+exact variable context (Even `N`, `3 ≤ N`,
+continuity of `g ↦ repMatrix ρ g`), so the
+B7-2b-v packaging as `kappa7dep_eq` is a thin
+rename. Dressings as landed: order 6 by
+`4 + (colCount N − 4) B` (the order-5/order-6
+factor again — no new dressing shape at this
+order); order 5 and order 4 by the displayed
+polynomials in `B`, `colCount N`, `μ₂/d²`,
+`μ₃/d³`. Surprises at full rank: the order-6
+C6/theta channels reappear at `2 e₁ d⁻⁷`; the
+theta 4-subset sum reappears at
+`e₁ (μ₂ − 2 e₁²) d⁻⁷` beside its doubled
+companion at `(e₁²/2) d⁻⁷`; the theta133 book
+carries two named residuals
+(`bookHexaEraseSum`, `book4SubsetSum`). The
+evaluated ADJ/OPP counts (8 and 4 per
+primitive quad) are absorbed in excess form
+through `kappa7chan3211Adj_add_Opp_excess`.
+FENCES: NO CLAIM; parts closed 0; dials 0/4;
+the β line's continuum content is untouched
+by this finite identity. -/
+
+end Total7
+
 #print axioms fiber_card_one7
 #print axioms fiber_card_two7
 #print axioms fiber_card_three7

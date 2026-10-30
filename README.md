@@ -18,6 +18,17 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — B7-2b-iv: the order-7 total decomposition.**
+kappa7dep = A6·kappa6dep + A5·kappa5dep + A4·kappa4dep +
+d⁻⁷·(channels + residuals), proved — with A6 = 4 + (M−4)·B,
+the same dressing factor as orders 5 and 6: no new
+dressing shape at order 7. The residuals are named, not
+fitted: the order-6 C₆/Θ excesses reappear dressed by
+2e₁, alongside the theta and book residual sums. One
+sub-brick (the kappa7dep_eq packaging) closes B7-2
+(dossier `whitepaper/b72biv-landing-2026-10-30.md`). NO
+CLAIM; dials 0/4; β⁷ sign FRONTIER.
+
 **2026-10-30 — B7-2b-iii: B7-0's claims settle — both
 CONFIRMED.** Card 5 carries no live channel (its content
 erases through the lower excesses at a private column, as
