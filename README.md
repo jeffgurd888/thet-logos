@@ -18,6 +18,16 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — the clock defect, measured.** `ThetLogos.ThermalZ4ClockDefect`
+proves the Z₄ clock shift is a broken symmetry of the ladder's
+thermal state, with the breaking measured exactly: a factor
+exp(−β/4) per step and exp(+3β/4) at the wrap, and (for β > 0)
+non-invariance of the shifted state — the defect is the ladder's
+slope (dossier `whitepaper/z4kms1-landing-2026-10-30.md`).
+Labeled on its face as raw material for the C⁴ leg's weakened
+form W2; it lands neither W2 nor any part of any official
+statement. NO CLAIM; dials 0/4.
+
 **2026-10-30 — the ladder is a Gibbs state.** `ThetLogos.ThermalZ4KMS`
 identifies the Z₄ ladder's weight function with the Gibbs state
 of the named diagonal generator H₄ over the full algebra M₄(ℂ) —
@@ -472,8 +482,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,456 theorem declarations**\*
-across 257 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,458 theorem declarations**\*
+across 258 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -488,7 +498,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-30 census an attribute-inclusive count
-reads 7,534); earlier running
+reads 7,536); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
