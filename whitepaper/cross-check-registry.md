@@ -299,3 +299,32 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   violation on the face of this file.
 - New entries are appended, never rewritten; corrections add a
   dated amendment under the entry they correct.
+
+### BR1-008 — B7-PROBE-a, the β⁷ probe at the owned seats, Python side (landed 2026-10-30)
+
+- **Python side:** `routeb-general-scratch/b7probe_seat.py`
+  (output `b7probe-run.txt`) — exact rational arithmetic; two
+  independent computations (extraction engine vs direct
+  enumeration of the Lean pattern sums: 102 entry checks, 0
+  mismatches). Parent re-ran the script at landing: run log
+  byte-identical.
+- **Lean side:** queued — B7-PROBE-b (Seat (C₃, χ)) and
+  B7-PROBE-c (Seat (S₃, std) + verdict), certifying the table
+  below against `ThetLogos.PlaneCrossingBeta7`'s definitions.
+  The verdict is probe-grade until they land.
+- **Proposition checked:** on K₆ = ker κ₄^dep ∩ ker κ₅^dep ∩
+  ker κ₆^dep at (C₃, χ) and (S₃, std), N = 4 (K₆ re-derived
+  in-run: seat-K₆ = ker κ₄^dep at both seats), the restriction
+  of every new order-7 channel excess (B7-1's list) — the
+  β⁷ decision at the seats, with K-K7 armed.
+- **Result: OUTCOME (ii) — every channel vanishes on K₆ at
+  both seats; the decision passes to β⁸; K-K7 does NOT
+  fire.** Class-space shape: the positive-multiple pattern
+  (multiples at (C₃, χ): 5/2, 3, 3/2, 3, 3/4, 3/4, 1/8; at
+  (S₃, std): 20, 24, 12, 24, 3/2, 3, 1/4 — seat data only,
+  interpretation capped per the GD line's ruling). Nuance on
+  the record: at (S₃, std) the orbit-pair channels factor
+  through the A3-gated product class, not the plain product
+  class (run log entry (0,4) is the exhibiting
+  counterexample); the verdict is independent of the reading
+  (every candidate K-pullback reading restricts to zero).

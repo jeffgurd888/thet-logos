@@ -18,6 +18,20 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — B7-PROBE-a: outcome (ii) — β⁷ decides
+nothing at the seats, and kills nothing.** Every new
+order-7 channel vanishes on the joint kernel K₆ at both
+owned seats ((C₃, χ), (S₃, std)); the decision passes to
+β⁸, and the pre-registered kill K-K7 does NOT fire — Route
+A is neither killed nor advanced at order 7 (registry
+BR1-008; probe-grade, Lean certification queued as
+B7-PROBE-b/c). The class-space multiples continue the
+positive-multiple pattern (5/2…20× table in the dossier) —
+recorded as seat data under the interpretation cap, not as
+mechanism evidence (dossier
+`whitepaper/b7probe-a-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — A2-2d lands PARTIAL at its two named seams —
 reported at the same volume as a win.** The polynomial-stage
 assembly (`ThetLogos.PlaqBlockAssembly`): (T) and (P) FULL
