@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — XYZ-1: K-XYZ-2 — the named pool is dead.**
+Every triple drawn from the sixteen named tripotents
+(1, cfMat, 1 − cfMat, gammaF, UJ, genC, the genH family,
+genM a≠7) fails to generate the twelve generators:
+all sixteen are Gaussian-integer-valued (entry facts now
+proved for each), and ℤ[i]-valued triples provably miss
+genM 7 (rubric R5). The named-pool chapter is closed.
+This is a FAMILY kill: the question xyz_tripotents_exist
+stays OPEN — what remains is everything outside ℤ[i],
+starting at the 1/√3 boundary (dossier
+`whitepaper/xyz1-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — S3-4: Δ-as-output is stated; the pier
 block closes.** DeltaAsOutput: the uniform trajectory
 gap plus the scaling limit's existence imply the limit
