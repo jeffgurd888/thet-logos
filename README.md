@@ -18,6 +18,20 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — B7-2a: the order-7 excesses are formed.**
+All seven channels' excesses now exist with proved
+baseline bookkeeping (new module PlaneCrossingBeta7Assembly),
+including the split identity (adjacent + opposite excesses
+sum to the unsplit (3,2,1,1) excess). On the record at
+full rank: the ADJ/OPP baseline totals are NOT numerals —
+no landed result makes the per-quad heavy-pair counts
+constant — so the split excesses carry explicit counting
+sums rather than a fitted guess. The assembly identity
+kappa7dep_eq is B7-2b's named seam, asserted nowhere yet;
+B7-0's card-5/card-6 claims settle there (dossier
+`whitepaper/b72a-landing-2026-10-30.md`). NO CLAIM; dials
+0/4; the β⁷ sign stays FRONTIER.
+
 **2026-10-30 — XYZ-0: the tripotent campaign's gate is
 confirmed.** The target `xyz_tripotents_exist` stands in
 the tree in its converted form (a stated proposition, one
