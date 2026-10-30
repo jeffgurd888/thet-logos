@@ -18,6 +18,21 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — C96-1: decoupling proved; 2352
+DISCHARGED.** The three-generation order-one condition
+splits exactly over the nine generation blocks (no
+cross-block coupling), and the admissible space's
+dimension is now a theorem: finrank Adm96 = 2352
+(3·272 + 3·512, by explicit linear equivalences — the
+interface pin's self-check passes, so the 402 question
+is well-posed against the pinned space). The solution
+space decomposes as 3 diagonal copies of the 1-gen
+solution space × 3 pair pieces (named Census96PairSol);
+the 46 and 88 finranks are the next bricks' targets,
+not touched here (dossier
+`whitepaper/c961-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — XYZ-3: first live family EXHAUSTED at
 depth ≤ 2.** The exact word search (385 triples: the
 {UJ, genH, genM a≠7} pairs × the tripT family, ℚ(i,√3)
