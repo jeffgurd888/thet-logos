@@ -18,6 +18,18 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — the GD verdict is certified at both seats.**
+GD-PROBE-R-c (`ThetLogos.GramDominanceProbeSL23`) certifies
+Seat 2 and assembles the joint verdict
+(`gd_probe_R_joint_verdict`, registry BR1-007 now certified):
+GD-strong is dead at both re-registered seats (Θ escape at
+F21; identically-zero channels at SL(2,3)), GD-iii fired at
+neither — every kernel restriction exactly zero, Route A
+stands at theorem grade — and GD-global / GD-kernel stand as
+the live targets (dossier
+`whitepaper/gdprobeR-c-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — GD-ii is now certified in Lean at Seat 1.**
 GD-PROBE-R-b (`ThetLogos.GramDominanceProbeF21`) proves the
 F21 verdict: the κ₄ kernel theorem, every channel's kernel
@@ -584,7 +596,7 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
 **7,508 theorem declarations**\*
-across 265 counted Lean modules, with whitepaper dossiers for every campaign.
+across 266 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):

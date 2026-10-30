@@ -249,10 +249,15 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   (reproduced exactly); two independent exact engines agreeing
   (tensor vs direct α-enumeration). Parent re-ran the script
   at landing: run log byte-identical.
-- **Lean side:** none yet — certification is GD-PROBE-R-b
-  (Seat 1, F21) and GD-PROBE-R-c (Seat 2, SL(2,3) + joint
-  verdict), queued behind this entry. The verdict below is
-  probe-grade until they land.
+- **Lean side:** CERTIFIED 2026-10-30 — GD-PROBE-R-b
+  (`ThetLogos.GramDominanceProbeF21`,
+  `gd_probe_R_b_verdict_F21`: kernel theorem, GD-iii
+  non-firing, multiples, and the Θ escape proved under all
+  six readings) and GD-PROBE-R-c
+  (`ThetLogos.GramDominanceProbeSL23`,
+  `gd_probe_R_joint_verdict` assembling both seats; standard
+  three axioms on the headlines, parent-checked). The
+  verdict below is theorem-grade at both seats.
 - **Proposition checked:** the re-registered discriminator of
   `scoping-gd-discriminator-rescope-2026-10-30.md` §4: step-0R
   certificates (ker dim ≥ 3; e₁ = 0; escape-room target dim
