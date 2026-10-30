@@ -18,6 +18,18 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — the product Dirac squares to the sum of its
+factors.** `ThetLogos.Q7C4R4Assembly` builds the general
+product Dirac-type operator on the registered ℝ⁴⁴⁸ in the
+filed shape (grading signs explicit, parameterized over factor
+operator packages) and proves its two headline tests as stated:
+D² is the Kronecker sum of the factor squares, and D is
+self-adjoint w.r.t. the registered composite pairing — the
+filed shape's kill point passes (dossier
+`whitepaper/q7cr1b-landing-2026-10-30.md`). Evidence for none
+of the line's larger nouns by itself; no number claimed.
+NO CLAIM; dials 0/4.
+
 **2026-10-30 — realification lands; the grading survives it.**
 `ThetLogos.Q7C4R4Realify` carries complex factor operators and
 their gradings to the realified Q⁷C⁴R⁴ factors: the complex
@@ -518,8 +530,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,482 theorem declarations**\*
-across 261 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,508 theorem declarations**\*
+across 262 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -534,7 +546,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-30 census an attribute-inclusive count
-reads 7,560); earlier running
+reads 7,586); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
