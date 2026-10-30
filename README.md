@@ -18,6 +18,17 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — the Z₄ ladder, built honest.** A new module
+(`ThetLogos.ThermalZ4Ladder`) states the 4-state Gibbs ladder
+with its energy ladder E_k = k/4 declared as a chosen input and
+its step ratios in honest form: three within-ladder steps of
+exp(−β/4) and the wrap step at exp(+3β/4) — a staircase that
+does not close as a cycle (dossier
+`whitepaper/z4ladder-landing-2026-10-30.md`). The dropped
+draft's content-free algebra structures and its vacuous KMS
+structure were refused on the record, not landed. NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — zero sorrys: the census DROPS by seven, on
 purpose.** The corpus's seven posted questions (Q1–Q5, the XYZ
 tripotent existence post, and the root-weights post) were carried
@@ -452,8 +463,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,446 theorem declarations**\*
-across 255 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,451 theorem declarations**\*
+across 256 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -468,7 +479,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-30 census an attribute-inclusive count
-reads 7,524); earlier running
+reads 7,529); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
