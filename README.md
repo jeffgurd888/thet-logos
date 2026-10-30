@@ -18,6 +18,24 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — S3-1-F2: FACT ⇒ 𝒜 ⪰ 0 (per instance) is
+proved; the assembly is PARTIAL at a named weld.**
+`fact_implies_layerKernelPos`: if the stratum column
+factorization holds at (β, N), the layer kernel is
+positive — the constant-kernel pairing computation,
+formalized (FACT itself remains unproved; the core
+proposition is not proved by an implication). The full
+sufficiency assembly to clause (a) is registered as a
+target pin, blocked by a named missing component — the
+LayerKernelPos-to-slice weld (no integral-kernel Schur
+theorem is landed) — and by the tree's duplicate
+`reflSite_eq_torusShift_zero` declaration, which
+currently prevents even stating the weld in one
+environment; the duplicate is now a named blocker on
+the record (dossier
+`whitepaper/s31f2-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — S3-1-F1: FACT ⇔ BRIDGE is a theorem.**
 The stratum column factorization and the LOC-3 bridge
 statement are now formally the same proposition in two
