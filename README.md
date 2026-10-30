@@ -18,6 +18,17 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — realification lands; the grading survives it.**
+`ThetLogos.Q7C4R4Realify` carries complex factor operators and
+their gradings to the realified Q⁷C⁴R⁴ factors: the complex
+structure as a real operator (J² = −1), self-adjointness
+transported across the registered real pairing, and grading
+anticommutation transported in its exact shape — the filed
+product-Dirac shape's first kill point passes (dossier
+`whitepaper/q7cr1a-landing-2026-10-30.md`). General over factor
+operators; no operator is chosen and no number is claimed by
+this line. NO CLAIM; dials 0/4.
+
 **2026-10-30 — the trifecta registered; one strong form
 refuted-as-stated.** Jeff's assignment of the laws to the
 Q⁷C⁴R⁴ factors (Q⁷ → First; C⁴ → Second; R⁴ → Zeroth and
@@ -507,8 +518,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,458 theorem declarations**\*
-across 260 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,482 theorem declarations**\*
+across 261 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -523,7 +534,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-30 census an attribute-inclusive count
-reads 7,536); earlier running
+reads 7,560); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
