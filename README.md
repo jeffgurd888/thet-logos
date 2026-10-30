@@ -18,6 +18,24 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — S3-2: the scaling-limit pin.** "A
+continuum limit of the lattice theory" is now a sentence
+the house can point at: ScalingLimitOfLattice states,
+over owned objects only, an admissible trajectory with
+its gap floor m > 0 as a labeled hypothesis, the finite
+correlations converging pointwise on stated test
+configurations (the weakest convergence stateable
+without distribution infrastructure, named as such), and
+the limit identified as OS Schwinger data by reference,
+opacity inherited. Both pre-registered kills were
+checked and do NOT fire — the floor does real work on
+the limit system itself (LimitGapClustering: the limit's
+connected two-point function decays at rate ≥ m), and
+the limit-object type smuggles no content. The pin is
+conditional: it asserts nothing exists (dossier
+`whitepaper/s32-landing-2026-10-30.md`). NO CLAIM;
+dials 0/4; continuum distance ZERO.
+
 **2026-10-30 — S3-1-F2: FACT ⇒ 𝒜 ⪰ 0 (per instance) is
 proved; the assembly is PARTIAL at a named weld.**
 `fact_implies_layerKernelPos`: if the stratum column
