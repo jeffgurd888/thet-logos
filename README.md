@@ -155,6 +155,18 @@ gate has also reported (paper): **DP-1 — two distinct
 walls**; factorization ⇔ the LOC-3 bridge is one wall,
 uniformity is another, and the campaigns do not merge
 (dossier `whitepaper/s31-wall-identity-gate-2026-10-29.md`).
+B7-0 lands the β⁷ selection rule FULL
+(`OrderSevenSelection`): the new order-7 channels are
+exactly (4,1,1,1), (3,2,1,1), (2,2,2,1) on primitive
+quads, (2,1,1,1,1,1) on C6 and on Θ(2,2,2), and (1⁷) on
+the new book support Θ(1,3,3); card 5 dies by erasure
+exactly as scoped (distinctly-shared cards at order 7
+are {4, 6, 7}), and the card-7 abstract types are
+killed by proof, not prediction — no survivor beyond
+Θ(1,3,3). No sign is asserted; the β⁷ sign stays
+FRONTIER and B7-PROBE is held behind the
+Gram-dominance discriminator (dossier
+`whitepaper/b70-landing-2026-10-29.md`).
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
 its endpoint: the β⁴ dependent coefficient is nonnegative on the
@@ -406,8 +418,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,405 theorem declarations**\*
-across 253 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,431 theorem declarations**\*
+across 254 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -422,7 +434,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-29 census an attribute-inclusive count
-reads 7,483); earlier running
+reads 7,509); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
