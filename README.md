@@ -166,7 +166,28 @@ killed by proof, not prediction — no survivor beyond
 Θ(1,3,3). No sign is asserted; the β⁷ sign stays
 FRONTIER and B7-PROBE is held behind the
 Gram-dominance discriminator (dossier
-`whitepaper/b70-landing-2026-10-29.md`).
+`whitepaper/b70-landing-2026-10-29.md`). The A2-2
+telescoping probe has since PASSED at both kill-bearing
+seats ((T) exact, Ψ PSD, coefficient law exact; registry
+BR1-005), certifying the quotient form R1 dead and
+unlocking Route B's proof bricks
+(`whitepaper/a22probe-landing-2026-10-29.md`); and the
+Gram-dominance discriminator GD-PROBE-a has reported
+its pre-registered step-0 gate FAILING at every seat —
+every real-character seat's κ₄ form is rank one
+(χχᵀ/d⁴), so no tested seat discriminates; GD-iii did
+not fire, no outcome was routed, and the probe
+re-scopes on the record
+(`whitepaper/gdprobe-a-landing-2026-10-29.md`). B7-1
+lands the β⁷ definitions (`PlaneCrossingBeta7`):
+`betaCoeff7`, the order-7 expansion with tail R₈,
+`kappa7Const` over the 15 partitions of 7 (moments-one
+audit passing unadjusted), `kappa7dep`, and the channel
+definitions for exactly B7-0's live list — including the
+(3,2,1,1) adjacent/opposite split at the definition
+level, beyond the β⁶ mirror; the C6/Θ/Θ(1,3,3) support
+families are B7-2's construction (dossier
+`whitepaper/b71-landing-2026-10-30.md`).
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
 its endpoint: the β⁴ dependent coefficient is nonnegative on the
@@ -418,8 +439,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,431 theorem declarations**\*
-across 254 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,453 theorem declarations**\*
+across 255 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -434,7 +455,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-29 census an attribute-inclusive count
-reads 7,509); earlier running
+reads 7,531); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
