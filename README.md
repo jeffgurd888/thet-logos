@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v4 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23648050.svg)](https://doi.org/10.5281/zenodo.23648050)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C375-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-7%2C376-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
@@ -117,7 +117,17 @@ modes' defects, both bounds attained — one pack-level
 kill rides with it (the rate bound as first prescribed
 ran the wrong way at the slowest mode; the counterexample
 and the corrected pair are on the dossier's face,
-`whitepaper/visc3-landing-2026-10-29.md`). NO CLAIM;
+`whitepaper/visc3-landing-2026-10-29.md`). BSD rung 2
+opens with B2-0 (`BSDRefinedPin`): the refined-formula
+pin for E2 stated in full — seams as named hypotheses
+(Sha finiteness under the Gross–Zagier/Kolyvagin region
+licence; the Tamagawa value as the study's Tate read-off),
+the (c) value Props at their scoped bars, and `sha`
+entering as a bound variable whose value the pin will
+*derive*, never input. The refined formula is Wiles's
+Remark 1, not the official statement: this rung closes
+ZERO parts of the BSD statement even in full (dossier
+`whitepaper/b20-landing-2026-10-29.md`). NO CLAIM;
 dials 0/4.
 
 **2026-10-28 — the β⁴ endpoint and the β⁵ assembly.** PW-5 lands
@@ -370,8 +380,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**7,375 theorem declarations**\*
-across 251 counted Lean modules, with whitepaper dossiers for every campaign.
+**7,376 theorem declarations**\*
+across 252 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
@@ -386,7 +396,7 @@ the full-corpus double-check sweep of 2026-10-18/19, which also
 reconciled the counted chain at 116 modules (see
 `whitepaper/double-check-sweep-2026-10-18.md`). Under the strict
 rule (at the 2026-10-29 census an attribute-inclusive count
-reads 7,453); earlier running
+reads 7,454); earlier running
 totals summed dossier figures made under mixed patterns — the full
 reconciliation is printed in Paper v3, §0. A full proof-dependency
 audit (2026-10-21/22) then inspected the complete axiom footprint of
