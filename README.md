@@ -18,6 +18,22 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — XYZ-0: the tripotent campaign's gate is
+confirmed.** The target `xyz_tripotents_exist` stands in
+the tree in its converted form (a stated proposition, one
+of the seven SORRY-0 conversions): three tripotents in
+M₃₂(ℂ) generating all twelve smGen generators — genuinely
+open, with proved fences around it (no diagonal triple,
+the sector-projection triple fails, conjugation does not
+escape, single-sector triples are support-trapped; the
+R1–R5 screening rubric is the standing intake). The
+campaign dossier restates the attack and the priced path
+(XYZ-1 named-pool kill, XYZ-2 boundary marker, XYZ-3 first
+live search; XYZ-4/K1 held for a parent decision on
+XYZ-3's outcome) — failure to find is not a kill, on the
+face (dossier `whitepaper/xyz0-landing-2026-10-30.md`). NO
+CLAIM; dials 0/4.
+
 **2026-10-30 — B7-PROBE complete: outcome (ii) certified at
 both seats.** The assembled verdict (`verdict_B7Probe`,
 registry BR1-008 now certified): every order-7 channel
