@@ -630,3 +630,34 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
 - **Fence:** the decision is a theorem ABOUT THE CORPUS (the gravity
   coefficient is imported, not derived); it seats no gravity object and
   Dial 2 stays 0. NO CLAIM; dials 0/4.
+
+## BR1-017 - GR-POSE-2 fluctuation-response coefficients (matrix-level instance)
+
+- **Lean side:** `GravityPoseResponse.lean` - along the GR-POSE-0 pin's
+  frozen path `poseVarAPath P t = D0 + (t:ℂ) • B` with
+  `B = P.oneForm + oppositeOneForm P.oneForm`: the moment laws
+  `poseVarA_trace_sq` (M2(t) = c0 + c1 t + c2 t^2 with c0 = tr(D0^2),
+  c1 = tr(D0 B + B D0), c2 = tr(B^2)), `poseVarA_M1` (affine, slope
+  `poseVarAM1C1 = 2 * tr(P.oneForm)`), `poseVarA_M0` (= 32 at the seat),
+  and the first variations `poseVarA_firstVariation_M2 / _M1` as `deriv`
+  theorems; `poseVarA_discharged : PoseVarA P`.
+- **Counterpart:** `grpose2-bridge1-crosscheck.py` (exact `Fraction`
+  arithmetic) checks a MATRIX-LEVEL instance (n = 4) of the same
+  `fluctuatedDirac` construction (explicit rational D0 and one-form A,
+  UJ the pair-swap permutation) - NOT the 32x32 smDirac seat: exhibiting
+  a fully `PoseVarAPathData`-satisfying seat instance is disproportionate
+  for an arithmetic check, the construction and trace identities are
+  size-independent, and the Lean coefficient formulas quantify over the
+  construction applied to any A. No algebraic-one-form condition is
+  checked at this level; M0 = 4 at this level (the seat value is 32).
+- **Result:** AGREEMENT (exact rationals). Python instance values:
+  c0 = 3377/720, c1 = 179/7, c2 = 1315729/88200; M1 const = 17/12,
+  M1 slope = 353/210 = 2 * tr(A); direct M1(t)/M2(t) at seven exact t
+  values agree with the affine/quadratic forms at every t, and an
+  independent exact quadratic fit from M2(0), M2(1), M2(2) reproduces
+  (c0, c1, c2) exactly. Run record:
+  `routeb-general-scratch/grpose2-bridge1-run.txt` (outside the repo).
+- **Fence:** the response law is the finite shadow of the variational
+  pose - a theorem about how the finite action's numbers move under
+  finite fluctuation. It seats no gravity object; Dial 2 stays 0.
+  NO CLAIM; dials 0/4.
