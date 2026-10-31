@@ -18,6 +18,17 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-31 — Q7CR-SA0: the moment backbone.** The
+Q⁷C⁴R⁴ spectral action is defined numerically (never as
+an operator f(D²)), and its moments compose: at general
+k, the composite's k-th moment is the trinomial
+composition of the three factors' moments off the landed
+D² identity (M 0 = 448 on the face). Finite moments are
+coefficient-grade data — NOT Seeley–DeWitt coefficients;
+Dial 1 unmoved by construction (dossier
+`whitepaper/sa0-landing-2026-10-31.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-30 — XYZ-4: PARTIAL — first genuine ternary
 reaches.** The symmetry-reduced search (diagonal-unitary
 invariance patterns, pre-registered) closed all 11
