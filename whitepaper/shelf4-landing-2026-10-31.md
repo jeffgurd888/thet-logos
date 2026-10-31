@@ -21,7 +21,19 @@ named (purity is not entropy; the T-ENT gate stands).
 `whitepaper/gauntlet-schrodinger-2026-10-16.md`: "What
 does not exist: **partial trace** — zero hits in Mathlib,
 zero in the corpus — and no channel/purity vocabulary
-anywhere." **Retired as of this landing.**
+anywhere." **Retired as of this landing** — with one precision,
+added as an addendum the same night (the builder's
+report surfaced it after the landing commit): the corpus
+was no longer at zero when this fill landed —
+`ThetLogos/DecoherenceToy.lean` carries a seat-specific,
+one-direction block trace `partialTraceB` with its own
+small package, built for the dephasing toy after the
+2026-10-16 fence was written. What this fill retires is
+the **general-API absence** the fence named: both
+directions, general finite index types, and the purity
+vocabulary as standalone stock (none of which
+DecoherenceToy has). The new module states exactly this
+on its own face.
 
 ## What is stocked
 
