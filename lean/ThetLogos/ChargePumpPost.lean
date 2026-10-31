@@ -643,4 +643,132 @@ theorem chargePumpH2_proved : chargePumpH2 := by
     ⟨chargePump_turned_sum_eq_one β,
       chargePump_energy_cycle_sum_eq_zero β⟩⟩
 
+/-! ## PUMP-3: the drive characterization — who does the pumping
+
+The transported quantity throughout this section is the
+POPULATION OF THE CHOSEN RUNG LABEL `B = {2, 3}`, and nothing
+else. The registered characterization `chargePumpH3` is a
+statement about population transport by bijective drives on
+the rung set: a bijection transports zero sector population of
+this chosen label for EVERY weight vector if and only if it
+preserves the chosen sector partition. The proof is native to
+this module — the separation line imports this module, so no
+result from that line is cited here.
+
+Forward: a partition-preserving bijection either fixes the two
+`B` rungs or swaps them (it is injective, and both images lie
+in the two-element sector), so the `B` population — the rung-`2`
+weight plus the rung-`3` weight — is unchanged for every
+weight vector. Reverse: if the bijection moved some rung
+across the sector boundary, the basis weight concentrated at
+the image of that rung detects it — its `B` population is `1`
+on exactly one side of the transport and `0` on the other, in
+both crossing directions (a `B` rung leaving, or an `A` rung
+entering, detected by the same concentrated weight). This is
+why the external clock drive, which does not preserve the
+partition (the registration's face check), can transport the
+label's population per step while a sector-preserving drive
+cannot; net transported population per cycle remains exactly
+zero (H2, landed above), and the drive is external protocol
+throughout — the state alone does nothing
+(`gibbsWeight_stationary`, cited at registration). NO CLAIM;
+dials 0/4. -/
+
+/-- The `B` population of the basis weight concentrated at a
+single rung `p` (value `1` at `p`, `0` elsewhere) is `1` if
+`p` lies in the sector and `0` otherwise. -/
+theorem chargePump_popB_basis (p : Fin 4) :
+    popB (fun x : Fin 4 => if x = p then (1 : ℝ) else 0)
+      = if p ∈ chargePumpSectorB then 1 else 0 := by
+  simp [popB]
+
+/-- The transported `B` population of the basis weight
+concentrated at `π k₀`, for an injective drive `π`: the
+transported weight at rung `k` picks out exactly `k = k₀`
+(injectivity), so the transported population is `1` if `k₀`
+lies in the sector and `0` otherwise. -/
+theorem chargePump_popB_basis_comp {π : Fin 4 → Fin 4}
+    (hπ : Function.Injective π) (k₀ : Fin 4) :
+    popB ((fun x : Fin 4 => if x = π k₀ then (1 : ℝ) else 0) ∘ π)
+      = if k₀ ∈ chargePumpSectorB then 1 else 0 := by
+  have hsum : ∀ k : Fin 4,
+      (if π k = π k₀ then (1 : ℝ) else 0)
+        = (if k = k₀ then (1 : ℝ) else 0) := by
+    intro k
+    by_cases hk : k = k₀
+    · subst hk; simp
+    · have hne : π k ≠ π k₀ := fun h => hk (hπ h)
+      simp [hk, hne]
+  unfold popB
+  show (∑ k ∈ chargePumpSectorB, (if π k = π k₀ then (1 : ℝ) else 0))
+      = if k₀ ∈ chargePumpSectorB then 1 else 0
+  rw [Finset.sum_congr rfl (fun k _ => hsum k)]
+  simp
+
+/-- **H3 discharged in full (PUMP-3 headline).** The registered
+Prop `chargePumpH3` holds: for every bijection `π` of the rung
+set, transporting zero sector population of the chosen label
+for every weight vector is equivalent to preserving the
+sector partition pointwise. Forward, both `B` rungs map into
+the two-element sector and injectivity forces the pair to be
+fixed or swapped, leaving the population `w 2 + w 3`
+unchanged. Reverse, the basis weight concentrated at `π k`
+has transported population detecting exactly the membership
+of `k`, and untransported population detecting exactly the
+membership of `π k`; invariance for that one weight therefore
+forces the two memberships to agree, for every rung `k` —
+both crossing directions at once. Tier T1. NO CLAIM; dials
+0/4. -/
+theorem chargePumpH3_proved : chargePumpH3 := by
+  intro π hπ
+  constructor
+  · intro hinv k
+    have h_eq : (if k ∈ chargePumpSectorB then (1 : ℝ) else 0)
+        = (if π k ∈ chargePumpSectorB then (1 : ℝ) else 0) := by
+      rw [← chargePump_popB_basis_comp hπ.injective k,
+        ← chargePump_popB_basis (π k)]
+      exact hinv _
+    constructor
+    · intro hk
+      by_cases hp : π k ∈ chargePumpSectorB
+      · exact hp
+      · exfalso
+        rw [if_pos hk, if_neg hp] at h_eq
+        exact one_ne_zero h_eq
+    · intro hp
+      by_cases hk : k ∈ chargePumpSectorB
+      · exact hk
+      · exfalso
+        rw [if_neg hk, if_pos hp] at h_eq
+        exact zero_ne_one h_eq
+  · intro hpres w
+    have h2B : π 2 ∈ chargePumpSectorB :=
+      (hpres 2).mp (by simp [chargePumpSectorB])
+    have h3B : π 3 ∈ chargePumpSectorB :=
+      (hpres 3).mp (by simp [chargePumpSectorB])
+    have hne : π 2 ≠ π 3 :=
+      fun h => (by decide : (2 : Fin 4) ≠ 3) (hπ.injective h)
+    have h2cases : π 2 = 2 ∨ π 2 = 3 := by
+      simpa [chargePumpSectorB] using h2B
+    have h3cases : π 3 = 2 ∨ π 3 = 3 := by
+      simpa [chargePumpSectorB] using h3B
+    rw [chargePump_popB_eq (w ∘ π), chargePump_popB_eq w]
+    show w (π 2) + w (π 3) = w 2 + w 3
+    rcases h2cases with h2 | h2 <;> rcases h3cases with h3 | h3
+    · exact absurd (h2.trans h3.symm) hne
+    · rw [h2, h3]
+    · rw [h2, h3]; ring
+    · exact absurd (h2.trans h3.symm) hne
+
+/-- **The PUMP line's registered claim set, assembled.** The
+three registered headline Props of this line all hold:
+`chargePumpH1` (per-step flux identity, PUMP-1),
+`chargePumpH2` (full-cycle accounting, PUMP-2), and
+`chargePumpH3` (the drive characterization, PUMP-3). A pure
+conjunction of the three landed `*_proved` results; it asserts
+no new outcome class. Tier T1. NO CLAIM; dials 0/4. -/
+theorem chargePump_registered_claims_proved :
+    chargePumpH1 ∧ chargePumpH2 ∧ chargePumpH3 :=
+  ⟨chargePumpH1_proved, chargePumpH2_proved, chargePumpH3_proved⟩
+
 end ThetLogos
