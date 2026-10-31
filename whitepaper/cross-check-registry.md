@@ -458,3 +458,50 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   failure to find is not a kill; XYZ-5 does not fire.
   Dossier: `whitepaper/xyz4-landing-2026-10-30.md`.
   NO CLAIM; dials 0/4.
+
+### BR1-012 — Q7CR-2, the instantiated Q⁷C⁴R⁴ spectrum, Python ↔ Lean (landed 2026-10-30)
+
+- **Python side:** `routeb-general-scratch/q7cr2-spectrum.py`
+  (run record `q7cr2-run.txt`) — exact arithmetic throughout
+  (`fractions.Fraction`; no float eigenvalues in any certified
+  value). Factor package laws verified on exact matrices
+  (Q⁷/C⁴ Hermitian packages; R⁴ against the Minkowski form).
+  The composite D² spectrum computed as the exact
+  Kronecker-sum (sumset) of the three factor-square spectra:
+  448 eigenvalues; spectral trace M1 = 2723; second moment
+  M2 = 1518111/64; minimum 1/64 (multiplicity 16); maximum
+  841/64 (multiplicity 32); 14 distinct values. A variation
+  run with the Q⁷ diagonal's first pair changed (3 ↦ 4) gave
+  M1′ = 3619 ≠ 2723.
+- **Lean side:** `ThetLogos/Q7C4R4Spectrum.lean` — anchors
+  `diracQ7C4R4` / `diracQ7C4R4_sq`
+  (`ThetLogos/Q7C4R4Assembly.lean`), `FactorOp`
+  (`ThetLogos/Q7C4R4Realify.lean`), `z4Energy`
+  (`ThetLogos/ThermalZ4Ladder.lean`). Factor packages are
+  labeled choices on the module's face: Q⁷ CHOSEN diagonal
+  (3, -3, 2, -2, 1, -1, 0) under the swap-pairing grading;
+  C⁴ the ladder-generator analog — T2 input `z4Energy`,
+  centering CHOSEN — (-3/8, -1/8, 1/8, 3/8) under reversal;
+  R⁴ CHOSEN diagonal (0, 2, -2, 0) under the spatial swap.
+  Required names `s₇ : Fin 14 → ℝ`, `s₄ : Fin 8 → ℝ`,
+  `s_R : Fin 4 → ℝ` (§4). An explicit real eigenbasis
+  (`basisComp`, §5) diagonalizes the composite D²
+  (`dirac_sq_basisComp_eig`); the eigenvalue multiset
+  `spectrumQ7CR2` (§6) carries `spectrumQ7CR2_card` = 448,
+  `spectrumQ7CR2_sum` = 2723, `spectrumQ7CR2_sq_sum`
+  = 1518111/64, with endpoints 1/64 and 841/64 attained.
+  Axiom check on the headlines: propext, Classical.choice,
+  Quot.sound only.
+- **Proposition checked:** the D² spectrum of the
+  instantiated Q⁷C⁴R⁴ product Dirac is the sumset multiset
+  of the factor-square spectra, with product multiplicities;
+  Python and Lean agree exactly on count, both moments, and
+  the endpoints.
+- **Result: exact agreement.** K-Q7CR-2 evaluated in the
+  landed form and does NOT fire: a second admissible Q⁷
+  package (`factorQ7'`, first diagonal pair 4, -4) is
+  certified with spectral trace 3619 ≠ 2723
+  (`k_q7cr2_not_forced`), so the spectrum is an explicit
+  function of the factor data, not forced. No measured
+  number is claimed by this line; no entropy language.
+  NO CLAIM; dials 0/4.

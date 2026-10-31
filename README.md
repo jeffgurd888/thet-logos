@@ -18,6 +18,17 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-31 — Q7CR-2: the spectrum does work.** The
+instantiated Q⁷C⁴R⁴ Dirac's square has its spectrum
+certified in Lean: the sumset of the factor squares'
+spectra (14 distinct values, 1/64 to 841/64, trace
+2723), cross-checked exactly under BRIDGE-1 (BR1-012).
+And it is NOT forced — a second admissible Q⁷ package
+provably changes the spectrum, so K-Q7CR-2 does not
+fire: the spectrum carries information about its
+factors (dossier `whitepaper/q7cr2-landing-2026-10-31.md`).
+NO CLAIM; dials 0/4; no measured number claimed.
+
 **2026-10-31 — Q7CR-SA0: the moment backbone.** The
 Q⁷C⁴R⁴ spectral action is defined numerically (never as
 an operator f(D²)), and its moments compose: at general
