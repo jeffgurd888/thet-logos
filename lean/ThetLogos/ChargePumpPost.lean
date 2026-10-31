@@ -268,4 +268,193 @@ numeral `2`, in `B`; rung `1` is not. Tier T1. -/
 theorem chargePump_face_check : χB (z4Shift 1) ≠ χB 1 := by
   norm_num [χB, chargePumpSectorB, z4Shift]
 
+/-! ## PUMP-1: the one-turn flux identity
+
+The transported quantity throughout this section is the
+POPULATION OF THE CHOSEN RUNG LABEL `B = {2, 3}` — `popB` of a
+weight function — and nothing else: no charge operator is owned
+or asserted at this seat (the registration's honesty clause).
+One clock turn redistributes that population inside the closed
+4-cycle: the turned population of `B` is read off rung by rung
+below, and the one-turn flux at step `0` is exactly the rung-`0`
+weight minus the rung-`2` weight. Net transported population
+over the full cycle is zero (that accounting is the next
+brick's registered content, not this one's); nothing here
+asserts any one-way transfer. The hypothesis `β > 0` is carried
+on every positivity statement and is never dropped: at `β = 0`
+the flux vanishes, and no statement here asserts transport at
+`β ≤ 0` beyond that proved vanishing. Conservation and
+stationarity are rails, cited from the landed ladder and
+`KMSBridge`, never results of this brick: the weights sum to
+`1` (`z4Weight_sum_eq_one`), the drive permutes them, and the
+state's own modular flow does nothing
+(`gibbsWeight_stationary`) — the drive is the external
+`z4Shift` protocol. No field object appears anywhere. NO
+CLAIM; dials 0/4. -/
+
+/-- The population of the chosen label `B = {2, 3}` of a weight
+function is its rung-`2` weight plus its rung-`3` weight. -/
+theorem chargePump_popB_eq (w : Fin 4 → ℝ) :
+    popB w = w 2 + w 3 := by
+  rw [popB, chargePumpSectorB]
+  rw [Finset.sum_insert (by decide), Finset.sum_singleton]
+
+/-- The unturned population of the chosen label: the Gibbs
+weights at rungs `2` and `3`. -/
+theorem chargePump_popB_weight (β : ℝ) :
+    popB (z4Weight β) = z4Weight β 2 + z4Weight β 3 :=
+  chargePump_popB_eq _
+
+/-- One clock turn moves the label population's support: the
+turned weight at rung `2` is the rung-`3` weight, and at rung
+`3` it is the rung-`0` weight (the wrap of the 4-cycle). -/
+theorem chargePump_popB_shifted (β : ℝ) :
+    popB (z4ShiftedWeight β) = z4Weight β 3 + z4Weight β 0 := by
+  rw [chargePump_popB_eq]
+  have h2 : z4ShiftedWeight β 2 = z4Weight β 3 := by
+    have hidx : (2 : Fin 4) + 1 = 3 := by decide
+    rw [z4ShiftedWeight, z4Shift, hidx]
+  have h3 : z4ShiftedWeight β 3 = z4Weight β 0 := by
+    have hidx : (3 : Fin 4) + 1 = 0 := by decide
+    rw [z4ShiftedWeight, z4Shift, hidx]
+  rw [h2, h3]
+
+/-- The `j`-times-turned population of the chosen label, in the
+registered turned-weight form: the weights at rungs `2 + j` and
+`3 + j` (modular addition on `Fin 4`). -/
+theorem chargePump_popB_turned (β : ℝ) (j : Fin 4) :
+    popB (chargePumpTurnedWeight β j)
+      = z4Weight β (2 + j) + z4Weight β (3 + j) := by
+  rw [chargePump_popB_eq]
+  rfl
+
+/-- **The one-turn flux identity (H1, first face).** The
+one-turn change in the chosen label's population is the
+rung-`0` weight minus the rung-`2` weight: the turn carries
+rung `3`'s population out of the label at the wrap and rung
+`2`'s population into rung `3`, leaving exactly this
+difference. A redistribution inside the closed 4-cycle. -/
+theorem chargePump_flux_eq (β : ℝ) :
+    popB (z4ShiftedWeight β) - popB (z4Weight β)
+      = z4Weight β 0 - z4Weight β 2 := by
+  rw [chargePump_popB_shifted, chargePump_popB_weight]
+  ring
+
+/-- **The general-step flux formula.** At every step `j`, the
+per-step flux of the chosen label's population is the rung-`j`
+weight minus the rung-`(j+2)` weight (indices mod `4` in the
+registered turned-weight form): each step's gain at the wrap
+is the weight two rungs ahead of the rung the label loses. -/
+theorem chargePumpFlux_eq (β : ℝ) (j : Fin 4) :
+    chargePumpFlux β j = z4Weight β j - z4Weight β (j + 2) := by
+  have ha : ∀ j : Fin 4, 2 + (j + 1) = j + 3 := by
+    intro j; fin_cases j <;> decide
+  have hb : ∀ j : Fin 4, 3 + (j + 1) = j := by
+    intro j; fin_cases j <;> decide
+  have hc : ∀ j : Fin 4, 3 + j = j + 3 := by
+    intro j; fin_cases j <;> decide
+  have hd : ∀ j : Fin 4, 2 + j = j + 2 := by
+    intro j; rw [add_comm]
+  rw [chargePumpFlux, chargePump_popB_turned β (j + 1),
+    chargePump_popB_turned β j, ha j, hb j, hc j, hd j]
+  ring
+
+/-- The step-`0` flux in the registered `chargePumpFlux` form:
+`chargePumpFlux β 0 = z4Weight β 0 − z4Weight β 2`, the same
+one-turn identity as `chargePump_flux_eq`. -/
+theorem chargePumpFlux_zero_eq (β : ℝ) :
+    chargePumpFlux β 0 = z4Weight β 0 - z4Weight β 2 := by
+  have hidx : (0 : Fin 4) + 2 = 2 := by decide
+  rw [chargePumpFlux_eq β 0, hidx]
+
+/-- **The closed form (H1, second face).** Against the ladder's
+landed normalization — energies `0, 1/4, 1/2, 3/4`, so rung `0`
+carries numerator `1` and rung `2` carries numerator
+`exp (−β/2)`, both over the same partition sum:
+`z4Weight β 0 − z4Weight β 2
+  = (1 − Real.exp (−β / 2)) / z4Partition β`. -/
+theorem chargePump_weight_sub_closed (β : ℝ) :
+    z4Weight β 0 - z4Weight β 2
+      = (1 - Real.exp (-β / 2)) / z4Partition β := by
+  have hE0 : z4Energy (0 : Fin 4) = 0 := by
+    unfold z4Energy; simp
+  have hE2 : z4Energy (2 : Fin 4) = 1 / 2 := by
+    unfold z4Energy; norm_num
+  have hexp : -β * z4Energy (2 : Fin 4) = -β / 2 := by
+    rw [hE2]; ring
+  unfold z4Weight
+  rw [hE0, hexp]
+  simp only [mul_zero, Real.exp_zero]
+  rw [← sub_div]
+
+/-- The step-`0` flux in closed form:
+`chargePumpFlux β 0 = (1 − Real.exp (−β / 2)) / z4Partition β`
+at every `β`. -/
+theorem chargePumpFlux_closed (β : ℝ) :
+    chargePumpFlux β 0
+      = (1 - Real.exp (-β / 2)) / z4Partition β := by
+  rw [chargePumpFlux_zero_eq, chargePump_weight_sub_closed]
+
+/-- **Positivity exactly at `β > 0` (H1, teeth).** For every
+`β` with `0 < β` — the hypothesis is on the statement and is
+never dropped — the one-turn flux of the chosen label's
+population is strictly positive: `exp (−β/2) < 1` exactly
+because `β > 0`, and the partition sum is positive. -/
+theorem chargePumpFlux_pos_of_pos {β : ℝ} (hβ : 0 < β) :
+    0 < chargePumpFlux β 0 := by
+  rw [chargePumpFlux_closed]
+  apply div_pos _ (z4Partition_pos β)
+  have hexp : Real.exp (-β / 2) < 1 := by
+    rw [Real.exp_lt_one_iff]; linarith
+  linarith
+
+/-- **The boundary clause (H1).** At `β = 0` the weights are
+uniform and the one-turn flux of the chosen label's population
+is exactly `0`. This vanishing is the only transport statement
+made at the boundary; nothing is asserted at `β < 0` here
+beyond what the iff below records. -/
+theorem chargePumpFlux_zero_at_zero : chargePumpFlux 0 0 = 0 := by
+  rw [chargePumpFlux_closed]
+  simp
+
+/-- **The iff form.** The one-turn flux of the chosen label's
+population is strictly positive if and only if `β > 0`: at
+`β ≤ 0` the closed form's numerator `1 − exp (−β/2)` is
+nonpositive while the partition sum stays positive, so the
+flux is nonpositive. The seat hypothesis `β > 0` is therefore
+exact, not a convenience. -/
+theorem chargePumpFlux_pos_iff (β : ℝ) :
+    0 < chargePumpFlux β 0 ↔ 0 < β := by
+  constructor
+  · intro h
+    by_contra hcon
+    push_neg at hcon
+    rw [chargePumpFlux_closed] at h
+    have hexp : (1 : ℝ) ≤ Real.exp (-β / 2) :=
+      Real.one_le_exp_iff.mpr (by linarith)
+    have hnonpos : (1 - Real.exp (-β / 2)) / z4Partition β ≤ 0 :=
+      div_nonpos_of_nonpos_of_nonneg (by linarith)
+        (z4Partition_pos β).le
+    linarith
+  · exact chargePumpFlux_pos_of_pos
+
+/-- **H1 discharged in full (PUMP-1 headline).** The registered
+Prop `chargePumpH1` holds: the one-turn flux identity and its
+closed form at every `β`, strict positivity of the chosen
+label's population flux at every `β > 0` (hypothesis never
+dropped), and the vanishing at `β = 0`. Tier T1. NO CLAIM;
+dials 0/4. -/
+theorem chargePumpH1_proved : chargePumpH1 := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro β
+    exact ⟨chargePump_flux_eq β,
+      by rw [chargePump_flux_eq β, chargePump_weight_sub_closed]⟩
+  · intro β hβ
+    rw [chargePump_flux_eq β]
+    have h := chargePumpFlux_pos_of_pos hβ
+    rwa [chargePumpFlux_zero_eq β] at h
+  · rw [chargePump_flux_eq]
+    have h := chargePumpFlux_zero_at_zero
+    rwa [chargePumpFlux_zero_eq] at h
+
 end ThetLogos
