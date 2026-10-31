@@ -357,4 +357,213 @@ theorem chargeSeparation_face_check_partition_preserving :
   intro β
   rw [chargeSeparation_sectorSwap_expectation, sub_self]
 
+/-! ## SEP-1 — the static imbalance theorem (S1), proved
+
+The static value is COMPUTED from the landed ladder weights
+(K-SEP-1): the expectation identity first (SEP-0's registered
+identity Prop, discharged here), then the `popB` read on the Gibbs
+weights, then the exp factorization of the landed partition sum.
+No value is re-entered. Fences K-PUMP-4/K-PUMP-5 carry over: this
+is a MEASURED expectation of the registered observable `Qsep` on a
+thermal state, in population language for the underlying weights;
+no charge operator beyond the registered diagonal `Qsep` is owned
+or asserted, and no EM field object appears. The theorem is a
+statement about a thermal state's measured imbalance — NOT a
+mechanism claim, and it borrows nothing from the composite line.
+NO CLAIM; dials 0/4. -/
+
+/-- SEP-0's registered expectation identity, discharged: for
+weights summing to `1`, `⟨Qsep⟩_w = 2 * popB w - 1` — the
+expectation of the registered observable is the sector imbalance
+against PUMP-0's chosen grading. Tier T1. -/
+theorem chargeSeparation_expectationIdentity_proved :
+    chargeSeparationExpectationIdentity := by
+  intro w hw
+  have c0 : χB 0 = 0 := by simp [χB, chargePumpSectorB]
+  have c1 : χB 1 = 0 := by simp [χB, chargePumpSectorB]
+  have c2 : χB 2 = 1 := by simp [χB, chargePumpSectorB]
+  have c3 : χB 3 = 1 := by simp [χB, chargePumpSectorB]
+  have hexp : chargeSeparationExpectation w
+      = - w 0 - w 1 + w 2 + w 3 := by
+    simp only [chargeSeparationExpectation, Fin.sum_univ_four,
+      c0, c1, c2, c3]
+    ring
+  have hsum : w 0 + w 1 + w 2 + w 3 = 1 := by
+    have h := hw
+    rwa [Fin.sum_univ_four] at h
+  rw [hexp, chargePump_popB_eq]
+  linarith
+
+/-- The landed partition sum, factorized through `exp (-β/4)`:
+`z4Partition β = (1 + exp (-β/4)) * (1 + exp (-β/2))`, from the
+ladder's rung exponentials `1, exp (-β/4), exp (-β/2),
+exp (-β/2) * exp (-β/4)` — the `/4` convention of the chosen
+ladder intact, numeral-for-numeral. Tier T1. -/
+theorem chargeSeparation_partition_factor (β : ℝ) :
+    z4Partition β
+      = (1 + Real.exp (-β / 4)) * (1 + Real.exp (-β / 2)) := by
+  have e0 : Real.exp (-β * z4Energy 0) = 1 := by
+    simp [z4Energy]
+  have e1 : Real.exp (-β * z4Energy 1) = Real.exp (-β / 4) := by
+    congr 1
+    simp [z4Energy]
+    ring
+  have e2 : Real.exp (-β * z4Energy 2) = Real.exp (-β / 2) := by
+    congr 1
+    simp [z4Energy]
+    ring
+  have e3 : Real.exp (-β * z4Energy 3)
+      = Real.exp (-β / 2) * Real.exp (-β / 4) := by
+    rw [← Real.exp_add]
+    congr 1
+    simp [z4Energy]
+    ring
+  unfold z4Partition
+  rw [Fin.sum_univ_four, e0, e1, e2, e3]
+  ring
+
+/-- The rung-`2` Gibbs weight in closed form, read off the landed
+ladder definition: `z4Weight β 2 = exp (-β/2) / z4Partition β`.
+Tier T1. -/
+theorem chargeSeparation_weight_two (β : ℝ) :
+    z4Weight β 2 = Real.exp (-β / 2) / z4Partition β := by
+  unfold z4Weight
+  congr 1
+  congr 1
+  simp [z4Energy]
+  ring
+
+/-- The rung-`3` Gibbs weight in closed form, read off the landed
+ladder definition:
+`z4Weight β 3 = (exp (-β/2) * exp (-β/4)) / z4Partition β`.
+Tier T1. -/
+theorem chargeSeparation_weight_three (β : ℝ) :
+    z4Weight β 3
+      = (Real.exp (-β / 2) * Real.exp (-β / 4)) / z4Partition β := by
+  unfold z4Weight
+  congr 1
+  rw [← Real.exp_add]
+  congr 1
+  simp [z4Energy]
+  ring
+
+/-- **The `popB` read (K-SEP-1's named step).** The Gibbs state's
+sector-`B` population, computed from the landed ladder weights:
+`popB (z4Weight β) = exp (-β/2) / (1 + exp (-β/2))` — the rung-`2`
+and rung-`3` weights over the factorized partition sum, the common
+factor `(1 + exp (-β/4))` cancelling exactly. Tier T1. -/
+theorem chargeSeparation_popB_gibbs (β : ℝ) :
+    popB (z4Weight β)
+      = Real.exp (-β / 2) / (1 + Real.exp (-β / 2)) := by
+  have hu : (0 : ℝ) < 1 + Real.exp (-β / 4) := by
+    linarith [Real.exp_pos (-β / 4)]
+  have hv : (0 : ℝ) < 1 + Real.exp (-β / 2) := by
+    linarith [Real.exp_pos (-β / 2)]
+  rw [chargePump_popB_weight, chargeSeparation_weight_two,
+    chargeSeparation_weight_three, chargeSeparation_partition_factor]
+  field_simp
+
+/-- **(S1, the static value.)** The thermal state's measured
+sector imbalance, computed from the landed ladder weights:
+`⟨Qsep⟩_{ρ(β)} = (exp (-β/2) - 1) / (exp (-β/2) + 1)` for every
+`β`. The thermal state IS separated against the chosen grading,
+by this exact amount, and nothing separated it — no operator
+appears in this statement. Tier T1. -/
+theorem chargeSeparation_static_value (β : ℝ) :
+    chargeSeparationExpectation (z4Weight β)
+      = (Real.exp (-β / 2) - 1) / (Real.exp (-β / 2) + 1) := by
+  have hv : (0 : ℝ) < 1 + Real.exp (-β / 2) := by
+    linarith [Real.exp_pos (-β / 2)]
+  rw [chargeSeparation_expectationIdentity_proved _
+    (z4Weight_sum_eq_one β), chargeSeparation_popB_gibbs]
+  field_simp
+  ring
+
+/-- **(S1, the tanh form.)** The same static value in hyperbolic
+form: `⟨Qsep⟩_{ρ(β)} = -Real.tanh (β/4)` for every `β`, bridged
+from the registered exp form by exp algebra — `Real.tanh_eq`
+unfolds the pin's definition, and the factor `exp (-β/4)` is
+factored through numerator and denominator via
+`exp (β/4) * exp (-β/4) = 1`. Both forms are stated; the exp form
+is the registered one. Tier T1. -/
+theorem chargeSeparation_static_tanh (β : ℝ) :
+    chargeSeparationExpectation (z4Weight β)
+      = -Real.tanh (β / 4) := by
+  have hq : (0 : ℝ) < Real.exp (-β / 4) := Real.exp_pos _
+  have hp : (0 : ℝ) < Real.exp (β / 4) := Real.exp_pos _
+  have hprod : Real.exp (β / 4) * Real.exp (-β / 4) = 1 := by
+    rw [← Real.exp_add]
+    have h0 : β / 4 + -β / 4 = (0 : ℝ) := by ring
+    rw [h0, Real.exp_zero]
+  have hv : Real.exp (-β / 2)
+      = Real.exp (-β / 4) * Real.exp (-β / 4) := by
+    rw [← Real.exp_add]
+    congr 1
+    ring
+  have hneg : Real.exp (-(β / 4)) = Real.exp (-β / 4) := by
+    congr 1
+    ring
+  have key : ∀ p q : ℝ, p * q = 1 → q ≠ 0 → p + q ≠ 0 →
+      (q * q - 1) / (q * q + 1) = -((p - q) / (p + q)) := by
+    intro p q hpq hq0 hsum
+    have h1 : q * q + 1 ≠ 0 :=
+      ne_of_gt (by linarith [mul_self_nonneg q])
+    field_simp
+    linear_combination 2 * q * hpq
+  rw [chargeSeparation_static_value, Real.tanh_eq, hneg, hv]
+  exact key _ _ hprod hq.ne' (ne_of_gt (by linarith))
+
+/-- **(S1, the zero clause.)** The static value is `0 ↔ β = 0`:
+from the closed form, the value vanishes iff `exp (-β/2) = 1`,
+iff `β = 0` by exp injectivity at `1`. The `β = 0` endpoint is
+exactly the K-SEP-4 guard SEP-0 proved at registration, now a
+corollary of the theorem. Tier T1. -/
+theorem chargeSeparation_static_eq_zero_iff (β : ℝ) :
+    chargeSeparationExpectation (z4Weight β) = 0 ↔ β = 0 := by
+  rw [chargeSeparation_static_value]
+  have hv : (0 : ℝ) < Real.exp (-β / 2) := Real.exp_pos _
+  constructor
+  · intro h
+    have hden : Real.exp (-β / 2) + 1 ≠ 0 := ne_of_gt (by linarith)
+    have hnum : Real.exp (-β / 2) - 1 = 0 := by
+      rcases div_eq_zero_iff.mp h with h1 | h1
+      · exact h1
+      · exact absurd h1 hden
+    have h1 : Real.exp (-β / 2) = 1 := by linarith
+    have h2 : -β / 2 = 0 := (Real.exp_eq_one_iff _).mp h1
+    linarith
+  · intro h
+    rw [h]
+    simp
+
+/-- **(S1, the sign clause.)** For `β > 0` the static value is
+strictly negative: `exp (-β/2) < 1` by exp monotonicity, so the
+closed form's numerator is negative and its denominator positive
+— population sits in sector `A`, the low rungs, exactly as the
+falling Gibbs weights require. The K-SEP-4 nonzero instance, at
+theorem grade. Tier T1. -/
+theorem chargeSeparation_static_neg (β : ℝ) (hβ : 0 < β) :
+    chargeSeparationExpectation (z4Weight β) < 0 := by
+  rw [chargeSeparation_static_value]
+  have hv : Real.exp (-β / 2) < 1 := by
+    have h1 : Real.exp (-β / 2) < Real.exp 0 := by
+      apply Real.exp_lt_exp.mpr
+      linarith
+    simpa using h1
+  have hpos : (0 : ℝ) < Real.exp (-β / 2) := Real.exp_pos _
+  exact div_neg_of_neg_of_pos (by linarith) (by linarith)
+
+/-- **(S1) The static separation of the thermal state — the
+registered headline Prop `chargeSeparationS1`, discharged in
+full.** The exp closed form, the `0 ↔ β = 0` clause, and the
+`β > 0` strict-negativity clause, assembled from the named steps
+above: the expectation identity, the `popB` read, and the exp
+factorization of the landed partition sum (K-SEP-1: computed from
+the ladder weights, not re-entered). Tier T1. NO CLAIM; dials
+0/4. -/
+theorem chargeSeparationS1_holds : chargeSeparationS1 := by
+  refine ⟨fun β => chargeSeparation_static_value β,
+    fun β => chargeSeparation_static_eq_zero_iff β,
+    fun β hβ => chargeSeparation_static_neg β hβ⟩
+
 end ThetLogos
