@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-31 — SEP-0: the imbalance observable,
+registered.** The separation line (survived scoping in
+reduced form) opens: Qsep, the sector-imbalance
+observable over the pump's sectors, with its static
+value, one-turn action (= exactly twice the pump flux),
+iff characterization, and no-go corollaries registered
+— and the vacuity guards proved on the face in both
+directions (nonzero at β > 0; exactly zero at β = 0 and
+under partition-preserving drives). The observable is
+read, not applied; the clock does the moving (dossier
+`whitepaper/sep0-landing-2026-10-31.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-31 — PUMP-0: the driven pump, registered.**
 The spectral density matrix charge pump is pinned at
 the corpus's owned four-rung ladder: chosen sector
