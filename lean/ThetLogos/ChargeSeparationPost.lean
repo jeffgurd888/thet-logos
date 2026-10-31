@@ -566,4 +566,195 @@ theorem chargeSeparationS1_holds : chargeSeparationS1 := by
     fun β => chargeSeparation_static_eq_zero_iff β,
     fun β hβ => chargeSeparation_static_neg β hβ⟩
 
+/-! ## SEP-2 — the driven step's action on the imbalance (S2), proved
+
+Route, per the SEP-2 pack: SEP-1's proved identity
+`⟨Qsep⟩_w = 2 * popB w - 1` reduces the one-turn imbalance change
+to `2 *` the `popB` change, and the `popB` change is PUMP-1's flux
+— cited (`chargePump_flux_eq`, `chargePumpFlux_zero_eq`,
+`chargePumpFlux_closed`), never recomputed. The factor-2
+consistency clause is carried IN the headline assembly below: the
+change equals `2 * chargePumpFlux β 0` and `2 *` PUMP-1's closed
+form, exactly as registered in `chargeSeparationS2`.
+
+Item-3 seam, named exactly: the corpus owns NO permutation-unitary
+matrix object for `z4Shift` (no landed name), so the matrix-level
+conjugation identity for such a unitary is not asserted here.
+What is landed at operator level is everything the diagonal
+observable reads: the turned weight vector IS the diagonal of the
+named state read at the shifted rungs
+(`chargeSeparation_turned_state_diagonal`), and the expectation is
+the trace form on diagonal states
+(`chargeSeparation_expectation_eq_trace`). Fences K-PUMP-4/5
+carry over: population language, the external clock does the
+moving, no field object, not a mechanism claim. NO CLAIM; dials
+0/4. -/
+
+/-- The bridge between the two registered one-turn weight forms:
+PUMP-0's `chargePumpTurnedWeight` at one turn IS SEP-0's
+`z4ShiftedWeight` — both are the Gibbs weights read at `k + 1`.
+Tier T1. -/
+theorem chargeSeparation_turnedWeight_one_eq (β : ℝ) :
+    chargePumpTurnedWeight β 1 = z4ShiftedWeight β := by
+  funext k
+  rfl
+
+/-- Every turned weight vector still sums to `1`: the clock
+permutes the rungs, so the turned weights are the Gibbs weights
+read in a rotated order (indices mod `4`). Tier T1. -/
+theorem chargeSeparation_turnedWeight_sum (β : ℝ) (j : Fin 4) :
+    ∑ k : Fin 4, chargePumpTurnedWeight β j k = 1 := by
+  have h : ∀ k : Fin 4, chargePumpTurnedWeight β j k
+      = z4Weight β (Equiv.addRight j k) := fun k => rfl
+  rw [Finset.sum_congr rfl (fun k _ => h k), Equiv.sum_comp,
+    z4Weight_sum_eq_one]
+
+/-- **(S2, weight form — the registered statement.)** One clock
+turn changes the imbalance by exactly
+`2 * (z4Weight β 0 - z4Weight β 2)`: SEP-1's identity reduces the
+change to `2 *` the `popB` change, and the `popB` change is
+PUMP-1's one-turn flux, cited as `chargePump_flux_eq` — the flux
+is not recomputed here. Tier T1. -/
+theorem chargeSeparation_delta_expectation (β : ℝ) :
+    chargeSeparationExpectation (z4ShiftedWeight β)
+        - chargeSeparationExpectation (z4Weight β)
+      = 2 * (z4Weight β 0 - z4Weight β 2) := by
+  have hshift_sum : ∑ k : Fin 4, z4ShiftedWeight β k = 1 := by
+    rw [← chargeSeparation_turnedWeight_one_eq β]
+    exact chargeSeparation_turnedWeight_sum β 1
+  have hflux := chargePump_flux_eq β
+  rw [chargeSeparation_expectationIdentity_proved _ hshift_sum,
+    chargeSeparation_expectationIdentity_proved _
+      (z4Weight_sum_eq_one β)]
+  linarith [hflux]
+
+/-- **(S2, the factor-2 consistency clause, first face.)** The
+one-turn imbalance change equals `2 * chargePumpFlux β 0` —
+exactly twice PUMP-1's registered flux at step `0`, by
+`chargePumpFlux_zero_eq`. No constant is adjusted on either line:
+the `2` is SEP-1's identity factor and the flux is PUMP-1's own.
+Tier T1. -/
+theorem chargeSeparation_delta_eq_two_flux (β : ℝ) :
+    chargeSeparationExpectation (z4ShiftedWeight β)
+        - chargeSeparationExpectation (z4Weight β)
+      = 2 * chargePumpFlux β 0 := by
+  rw [chargeSeparation_delta_expectation, chargePumpFlux_zero_eq]
+
+/-- **(S2, the factor-2 consistency clause, closed-form face.)**
+The one-turn imbalance change equals `2 *` PUMP-1's closed form
+`(1 - Real.exp (-β / 2)) / z4Partition β`, by
+`chargePump_weight_sub_closed`. Tier T1. -/
+theorem chargeSeparation_delta_closed (β : ℝ) :
+    chargeSeparationExpectation (z4ShiftedWeight β)
+        - chargeSeparationExpectation (z4Weight β)
+      = 2 * ((1 - Real.exp (-β / 2)) / z4Partition β) := by
+  rw [chargeSeparation_delta_expectation,
+    chargePump_weight_sub_closed]
+
+/-- **(S2) The driven step's action on the imbalance — the
+registered headline Prop `chargeSeparationS2`, discharged in
+full.** Both clauses of the registered statement, with the
+factor-2 consistency clause in the same headline: the change is
+`2 * (z4Weight β 0 - z4Weight β 2)`, i.e. `2 * chargePumpFlux β 0`,
+i.e. `2 *` PUMP-1's closed form. Tier T1. NO CLAIM; dials 0/4. -/
+theorem chargeSeparationS2_holds : chargeSeparationS2 :=
+  ⟨fun β => chargeSeparation_delta_expectation β,
+    fun β => chargeSeparation_delta_closed β⟩
+
+/-- The per-step form of S2, at every clock step `j`: the
+imbalance change across step `j` is `2 * chargePumpFlux β j` —
+the same SEP-1 identity applied to the turned weights, with
+PUMP-1's flux read in its registered general-`j` form. Tier T1. -/
+theorem chargeSeparation_delta_turned (β : ℝ) (j : Fin 4) :
+    chargeSeparationExpectation (chargePumpTurnedWeight β (j + 1))
+        - chargeSeparationExpectation (chargePumpTurnedWeight β j)
+      = 2 * chargePumpFlux β j := by
+  rw [chargeSeparation_expectationIdentity_proved _
+      (chargeSeparation_turnedWeight_sum β (j + 1)),
+    chargeSeparation_expectationIdentity_proved _
+      (chargeSeparation_turnedWeight_sum β j)]
+  unfold chargePumpFlux
+  ring
+
+/-- **Cycle corollary.** The four-turn sum of the per-step
+imbalance changes is exactly `0`: by PUMP-1's general-`j` formula
+(`chargePumpFlux_eq`) the four fluxes are
+`w 0 - w 2`, `w 1 - w 3`, `w 2 - w 0`, `w 3 - w 1`, cancelling in
+pairs — all separation at this seat is redistributive within the
+cycle (K-SEP-1, K-PUMP-4). Tier T1. -/
+theorem chargeSeparation_cycle_sum_zero (β : ℝ) :
+    ∑ j : Fin 4,
+        (chargeSeparationExpectation (chargePumpTurnedWeight β (j + 1))
+          - chargeSeparationExpectation (chargePumpTurnedWeight β j))
+      = 0 := by
+  have e0 := chargePumpFlux_eq β 0
+  have e1 := chargePumpFlux_eq β 1
+  have e2 := chargePumpFlux_eq β 2
+  have e3 := chargePumpFlux_eq β 3
+  have i0 : (0 : Fin 4) + 2 = 2 := by decide
+  have i1 : (1 : Fin 4) + 2 = 3 := by decide
+  have i2 : (2 : Fin 4) + 2 = 0 := by decide
+  have i3 : (3 : Fin 4) + 2 = 1 := by decide
+  rw [i0] at e0
+  rw [i1] at e1
+  rw [i2] at e2
+  rw [i3] at e3
+  simp only [chargeSeparation_delta_turned]
+  rw [Fin.sum_univ_four, e0, e1, e2, e3]
+  ring
+
+/-! ## SEP-2, item 3 — the operator level, as far as the landed objects carry it
+
+The seam, named exactly (see also the SEP-2 header above): the
+corpus owns no permutation-unitary matrix object for `z4Shift`,
+so no matrix-level conjugation identity for such a unitary is
+stated or asserted in this brick. What the landed names DO
+support, and what is proved below, is the diagonal bridge in
+full: the expectation is the trace of `diagonal w * Qsep` for
+every weight vector `w`, and PUMP-0's registered turned weight
+vector is entry-for-entry the diagonal of the named state
+`chargePumpState β` read at the shifted rungs — which is all a
+permutation conjugation of a diagonal state changes, and all the
+diagonal observable `Qsep` reads. -/
+
+/-- **The trace form of the expectation.** For every weight
+vector `w`, `⟨Qsep⟩_w` is the trace of the diagonal state
+`Matrix.diagonal w` against the registered observable:
+`⟨Qsep⟩_w = Matrix.trace (Matrix.diagonal w * Qsep)` — the
+diagonal-matrix evaluation of the expectation, by
+`Matrix.trace_diagonal` on the product of the two diagonals.
+Tier T1. -/
+theorem chargeSeparation_expectation_eq_trace (w : Fin 4 → ℝ) :
+    chargeSeparationExpectation w
+      = Matrix.trace (Matrix.diagonal w * Qsep) := by
+  rw [Qsep, Matrix.diagonal_mul_diagonal, Matrix.trace_diagonal]
+  rfl
+
+/-- **The diagonal bridge.** PUMP-0's registered turned weight at
+one turn, read at rung `k`, IS the diagonal entry of the named
+state `chargePumpState β` at the shifted rung `z4Shift k`: by the
+landed `z4_gibbsState_eq` the state is the diagonal of the Gibbs
+weights, so its shifted diagonal entries are exactly the turned
+weights. This is the diagonal content of the clock conjugation,
+in exactly the form the landed names support. Tier T1. -/
+theorem chargeSeparation_turned_state_diagonal (β : ℝ) (k : Fin 4) :
+    chargePumpState β (z4Shift k) (z4Shift k)
+      = ((chargePumpTurnedWeight β 1 k : ℝ) : ℂ) := by
+  have h : chargePumpState β
+      = Matrix.diagonal (fun k : Fin 4 => ((z4Weight β k : ℝ) : ℂ)) :=
+    z4_gibbsState_eq β
+  rw [h, Matrix.diagonal_apply_eq]
+  rfl
+
+/-- The turned expectation in trace form: the one-turn imbalance
+is the trace of the turned diagonal weights against `Qsep`,
+combining the trace form with the diagonal bridge above — the
+operator-level reading of S2 at the seam named in this section's
+header. Tier T1. -/
+theorem chargeSeparation_turned_expectation_eq_trace (β : ℝ) :
+    chargeSeparationExpectation (chargePumpTurnedWeight β 1)
+      = Matrix.trace
+          (Matrix.diagonal (chargePumpTurnedWeight β 1) * Qsep) :=
+  chargeSeparation_expectation_eq_trace _
+
 end ThetLogos
