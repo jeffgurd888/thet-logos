@@ -3,6 +3,7 @@ import Mathlib.LinearAlgebra.Complex.FiniteDimensional
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 import Mathlib.LinearAlgebra.TensorProduct.Basis
 import ThetLogos.Q7C4R4Assembly
+import ThetLogos.Q7C4R4Spectrum
 
 /-!
 # ThetLogos.SpectralActionQ7CR — the finite spectral action of the
@@ -908,5 +909,381 @@ theorem spectral_action_composition_produced (F₇ : FactorOp 7)
           + (spectralList_of_factorSq F₄ finrank_c4_factor).e j
           + SR.e k) / Λ ^ 2) :=
   spectral_action_composition F₇ F₄ F_R _ _ SR f Λ
+
+/-! ## §7. Q7CR-SA2 — the instantiated evaluation at Q7CR-2's seat
+
+The instantiated evaluation (scoping memo §4, brick Q7CR-SA2):
+SA0/SA1's composition machinery evaluated AT Q7CR-2's chosen
+seat — the factor packages `factorQ7` (Q⁷ CHOSEN diagonal
+`a₇ = (3, −3, 2, −2, 1, −1, 0)`), `factorC4` (centered C⁴ ladder
+data `d₄ = (−3/8, −1/8, 1/8, 3/8)`) and `factorR` (R⁴ CHOSEN
+diagonal `r_R = (0, 2, −2, 0)`) of `ThetLogos.Q7C4R4Spectrum`,
+whose certified factor-square eigenvalue functions are `s₇`
+(`Fin 14 → ℝ`), `s₄` (`Fin 8 → ℝ`) and `s_R` (`Fin 4 → ℝ`), and
+whose composite eigenvalue multiset `spectrumQ7CR2` carries the
+proved anchors `spectrumQ7CR2_card` (`448`),
+`spectrumQ7CR2_sum` (`2723`) and `spectrumQ7CR2_sq_sum`
+(`1518111 / 64`). No 448-dimensional trace is computed here:
+the composition theorems are the computation (memo §4) — the
+factor moments are read off the factor spectral lists (§7.1–7.2)
+and the composite moments are assembled from them by SA0's
+`moment_composition` in its printed forms (§5), then checked
+numeral-for-numeral against Q7CR-2's multiset anchors (§7.3).
+
+**Inputs ledger, §7 instance (memo §6 discipline).** The seat's
+inputs are exactly Q7CR-2's labeled choices named above (the
+three factor packages, with their diagonals and gradings), the
+cutoff coefficients and the scale `Λ` stated in each §7.4
+statement. Nothing else enters: no measured number, no
+curvature or manifold data, no Seeley–DeWitt prefactor.
+
+**K-SA-3 seam, inherited and stated.** §6.5's production reaches
+the two complex factors through the pin's spectral theorem; the
+R⁴ factor's list is NOT produced that way (its package
+self-adjointness is for the indefinite `minkowskiInner`). At
+this instantiated seat the factor lists are DISCHARGED from
+Q7CR-2's certified forms (§7.1): the Q⁷/C⁴ lists are Q7CR-2's
+explicit real site eigenbases (`basisC`) reindexed to the
+registered `Fin 14` / `Fin 8` lists, and the R⁴ list is consumed
+AS SUPPLIED DATA — Q7CR-2's explicit site eigenbasis
+(`Pi.basisFun ℝ (Fin 4)`, `factorR_basis_eigen`) with eigenvalue
+function `s_R`. The evaluation below is of the instantiated
+composite whose factor lists are Q7CR-2's registered data, in
+exactly that form; no §6.5-style production of the R⁴ list from
+its package is asserted or used.
+
+**Fences (standing SA-line discipline, restated at this seat).**
+The action here is NUMERICAL (spectral sums / moments) — never
+an operator `f (D²)`. The finite moments `448 / 2723 /
+1518111 / 64` are coefficient-grade finite data attached to the
+chosen seat: they are NEVER Seeley–DeWitt coefficients or
+gravity terms, and no curvature slot exists in this object.
+Dial 1 is unmoved by construction (K-SA-4: any coincidence of
+an output with a measured value is a new-entry matter, not a
+claim of this line). The bounded-commutator criterion is
+VACUOUS in finite dimension; the testable content here is the
+spectrum and the trace-level consequences of `D²`. This line
+is NOT a gauntlet item: no bearing on the meta-kill, the
+trifecta, or the C⁴ leg, in either direction. NO CLAIM; dials
+0/4. The Python companion of this section is registered as
+BR1-014 in `whitepaper/cross-check-registry.md`. -/
+
+/-! ### §7.1. The seat's spectral lists, discharged from Q7CR-2 -/
+
+/-- **The Q⁷ seat spectral list**: Q7CR-2's explicit real site
+eigenbasis `basisC 7` (eigenvectors of `factorQ7.D²` by
+`factorQ7_basisC_eigen`), reindexed along `finProdFinEquiv` to
+the registered index `Fin 14`, with eigenvalue function Q7CR-2's
+`s₇`. -/
+noncomputable def spectralListQ7Seat :
+    SpectralList (Fin 7 → ℂ) (Fin 14) (factorQ7.D ^ 2) where
+  e := s₇
+  b := (basisC 7).reindex (finProdFinEquiv (m := 7) (n := 2))
+  eig := by
+    intro i
+    simp only [Module.Basis.reindex_apply]
+    exact factorQ7_basisC_eigen _ _
+
+/-- **The C⁴ seat spectral list**: Q7CR-2's explicit real site
+eigenbasis `basisC 4` (eigenvectors of `factorC4.D²` by
+`factorC4_basisC_eigen`), reindexed along `finProdFinEquiv` to
+the registered index `Fin 8`, with eigenvalue function Q7CR-2's
+`s₄`. -/
+noncomputable def spectralListC4Seat :
+    SpectralList (Fin 4 → ℂ) (Fin 8) (factorC4.D ^ 2) where
+  e := s₄
+  b := (basisC 4).reindex (finProdFinEquiv (m := 4) (n := 2))
+  eig := by
+    intro i
+    simp only [Module.Basis.reindex_apply]
+    exact factorC4_basisC_eigen _ _
+
+/-- **The R⁴ seat spectral list, consumed as supplied data**
+(K-SA-3 inherited, see the §7 header): Q7CR-2's explicit site
+eigenbasis `Pi.basisFun ℝ (Fin 4)` (eigenvectors of
+`factorR.D²` by `factorR_basis_eigen`), with eigenvalue
+function Q7CR-2's `s_R`. This list is Q7CR-2's registered data,
+not a §6.5 production from the R⁴ package. -/
+noncomputable def spectralListRSeat :
+    SpectralList Minkowski (Fin 4) (factorR.D ^ 2) where
+  e := s_R
+  b := Pi.basisFun ℝ (Fin 4)
+  eig := fun m => factorR_basis_eigen m
+
+/-- **The composite seat spectral list in tensored form**
+(SA-COMP-1's packaging at the seat): the tensoring, along
+§6.2, of the three discharged factor lists of §7.1. -/
+noncomputable def spectralListSeat :
+    SpectralList q7c4r4Composite (Fin 14 × Fin 8 × Fin 4)
+      ((diracQ7C4R4 factorQ7 factorC4 factorR) ^ 2) :=
+  SpectralList.tensorQ factorQ7 factorC4 factorR
+    spectralListQ7Seat spectralListC4Seat spectralListRSeat
+
+/-- **The composite seat spectral list in Q7CR-2's direct
+form**: Q7CR-2's composite real eigenbasis `basisComp` with
+eigenvalue function `eigComp` (its eigenbasis theorem
+`dirac_sq_basisComp_eig`). Its eigenvalue multiset is
+`spectrumQ7CR2` on the nose. -/
+noncomputable def spectralListCompSeat :
+    SpectralList q7c4r4Composite compIndex
+      ((diracQ7C4R4 factorQ7 factorC4 factorR) ^ 2) where
+  e := eigComp
+  b := basisComp
+  eig := dirac_sq_basisComp_eig
+
+/-! ### §7.2. The factor moments at the seat
+
+Read off the §7.1 lists by `SpectralList.trace_pow_eq_sum`:
+`tr ((D²)^p) = ∑ i, (e i)^p`, with the sums evaluated by
+Q7CR-2's factor anchors (`sum_s₇`, `sum_s₇_sq`, `sum_s₄`,
+`sum_s₄_sq`, `sum_s_R`, `sum_s_R_sq`). The power-zero values
+are §3's dimension counts, restated at the seat. -/
+
+/-- Seat Q⁷ factor moment, power 0: `a 0 = 14`. -/
+theorem seat_mom7_zero : q7crMom7 factorQ7 0 = 14 :=
+  q7crMom7_zero factorQ7
+
+/-- Seat Q⁷ factor moment, power 1: `a 1 = 56`. -/
+theorem seat_mom7_one : q7crMom7 factorQ7 1 = 56 := by
+  unfold q7crMom7
+  rw [SpectralList.trace_pow_eq_sum spectralListQ7Seat 1]
+  simp only [pow_one]
+  exact sum_s₇
+
+/-- Seat Q⁷ factor moment, power 2: `a 2 = 392`. -/
+theorem seat_mom7_two : q7crMom7 factorQ7 2 = 392 := by
+  unfold q7crMom7
+  rw [SpectralList.trace_pow_eq_sum spectralListQ7Seat 2]
+  exact sum_s₇_sq
+
+/-- Seat C⁴ factor moment, power 0: `b 0 = 8`. -/
+theorem seat_mom4_zero : q7crMom4 factorC4 0 = 8 :=
+  q7crMom4_zero factorC4
+
+/-- Seat C⁴ factor moment, power 1: `b 1 = 5 / 8`. -/
+theorem seat_mom4_one : q7crMom4 factorC4 1 = 5 / 8 := by
+  unfold q7crMom4
+  rw [SpectralList.trace_pow_eq_sum spectralListC4Seat 1]
+  simp only [pow_one]
+  exact sum_s₄
+
+/-- Seat C⁴ factor moment, power 2: `b 2 = 41 / 512`. -/
+theorem seat_mom4_two : q7crMom4 factorC4 2 = 41 / 512 := by
+  unfold q7crMom4
+  rw [SpectralList.trace_pow_eq_sum spectralListC4Seat 2]
+  exact sum_s₄_sq
+
+/-- Seat R⁴ factor moment, power 0: `c 0 = 4`. -/
+theorem seat_momR_zero : q7crMomR factorR 0 = 4 :=
+  q7crMomR_zero factorR
+
+/-- Seat R⁴ factor moment, power 1: `c 1 = 8`. -/
+theorem seat_momR_one : q7crMomR factorR 1 = 8 := by
+  unfold q7crMomR
+  rw [SpectralList.trace_pow_eq_sum spectralListRSeat 1]
+  simp only [pow_one]
+  exact sum_s_R
+
+/-- Seat R⁴ factor moment, power 2: `c 2 = 32`. -/
+theorem seat_momR_two : q7crMomR factorR 2 = 32 := by
+  unfold q7crMomR
+  rw [SpectralList.trace_pow_eq_sum spectralListRSeat 2]
+  exact sum_s_R_sq
+
+/-! ### §7.3. The composite moments at the seat
+
+Assembled from the §7.2 factor moments by SA0's
+`moment_composition`, in the printed forms of §5
+(`q7crMoment_zero`, `moment_one`, `moment_two`) — the
+composition theorems are the computation — and then tied
+numeral-for-numeral to Q7CR-2's proved multiset anchors on
+`spectrumQ7CR2`. These are the spectral-action values
+`M 0 / M 1 / M 2` at the seat: traces of `(D²)^k` for the
+instantiated composite, as spectral sums over its certified
+spectrum. Coefficient-grade finite data only — never
+Seeley–DeWitt coefficients or gravity terms (see §7 header). -/
+
+/-- **Seat composite moment `M 0 = 448`** — the composite real
+dimension, as a spectral-action value. -/
+theorem seat_M0 :
+    q7crMoment factorQ7 factorC4 factorR 0 = 448 :=
+  q7crMoment_zero factorQ7 factorC4 factorR
+
+/-- **Seat composite moment `M 1 = 2723`**, assembled by
+SA-COMP-2's printed first form from the §7.2 factor moments:
+`32 · 56 + 56 · (5 / 8) + 112 · 8 = 2723`. -/
+theorem seat_M1 :
+    q7crMoment factorQ7 factorC4 factorR 1 = 2723 := by
+  rw [moment_one, seat_mom7_one, seat_mom4_one, seat_momR_one]
+  norm_num
+
+/-- **Seat composite moment `M 2 = 1518111 / 64`**, assembled
+by SA-COMP-2's printed second form from the §7.2 factor
+moments. -/
+theorem seat_M2 :
+    q7crMoment factorQ7 factorC4 factorR 2 = 1518111 / 64 := by
+  rw [moment_two, seat_mom7_one, seat_mom4_one, seat_momR_one,
+    seat_mom7_two, seat_mom4_two, seat_momR_two]
+  norm_num
+
+/-- The seat's `M 0` is Q7CR-2's multiset anchor
+`spectrumQ7CR2_card`, routed through §7.1's packaging: the
+spectral sum of the constant `1` over the seat's spectrum. -/
+theorem seat_M0_eq_card :
+    q7crMoment factorQ7 factorC4 factorR 0
+      = spectrumQ7CR2.card := by
+  rw [seat_M0, spectrumQ7CR2_card]
+  norm_num
+
+/-- The seat's `M 1` is Q7CR-2's multiset anchor
+`spectrumQ7CR2_sum`: the trace of the instantiated `D²` is the
+sum of its certified eigenvalue multiset. -/
+theorem seat_M1_eq_sum :
+    q7crMoment factorQ7 factorC4 factorR 1
+      = spectrumQ7CR2.sum := by
+  rw [seat_M1, spectrumQ7CR2_sum]
+
+/-- The seat's `M 2` is Q7CR-2's multiset anchor
+`spectrumQ7CR2_sq_sum`: the trace of the instantiated `D⁴` is
+the sum of the squares of its certified eigenvalue multiset. -/
+theorem seat_M2_eq_sq_sum :
+    q7crMoment factorQ7 factorC4 factorR 2
+      = (spectrumQ7CR2.map fun v => v ^ 2).sum := by
+  rw [seat_M2, spectrumQ7CR2_sq_sum]
+
+/-! ### §7.4. Polynomial-cutoff evaluations at the seat
+
+SA-COMP-4 instantiated (`spectral_action_poly_composition` at
+the §7.1 tensored list, with the seat's registered factor
+moment functions), and the first three cutoffs evaluated
+numeral-for-numeral: the polynomial cutoffs `f = x⁰`, `f = x¹`,
+`f = x²` as coefficient data, in both the moment form
+(`q7crActionPoly`) and the spectral-sum form (`specSumIdx` on
+the tensored list, the two forms agreeing by SA-COMP-5). The
+`x¹` and `x²` values carry their exact `Λ`-dependence on the
+face: `2723 / Λ²` and `(1518111 / 64) / (Λ²)²`. -/
+
+/-- **SA-COMP-4 at the seat.** For every polynomial cutoff, the
+spectral-sum action on the tensored seat list is the trinomial
+assembly of the seat's factor moments. -/
+theorem spectral_action_poly_composition_seat (K : ℕ)
+    (c : Fin (K + 1) → ℝ) (Λ : ℝ) :
+    specSumIdx spectralListSeat.e (polyCutoff K c) Λ
+      = ∑ k : Fin (K + 1), c k *
+        ((∑ l ∈ Finset.range (k.val + 1),
+          ∑ i ∈ Finset.range (l + 1),
+          (Nat.choose k.val l * Nat.choose l i : ℝ)
+            * q7crMom7 factorQ7 i * q7crMom4 factorC4 (l - i)
+            * q7crMomR factorR (k.val - l)) / (Λ ^ 2) ^ k.val) :=
+  spectral_action_poly_composition factorQ7 factorC4 factorR
+    spectralListQ7Seat spectralListC4Seat spectralListRSeat K c Λ
+
+/-- The `x⁰` cutoff, as coefficient data at degree `0`, is the
+constant function `1`. -/
+theorem polyCutoff_seat_x0 :
+    polyCutoff 0 (fun _ => (1 : ℝ)) = fun _ => 1 := by
+  funext x
+  simp [polyCutoff]
+
+/-- The `x¹` cutoff, as coefficient data at degree `1`
+(`c k = k`), is the identity function. -/
+theorem polyCutoff_seat_x1 :
+    polyCutoff 1 (fun k : Fin 2 => (k.val : ℝ)) = fun x => x := by
+  funext x
+  simp [polyCutoff, Fin.sum_univ_two]
+
+/-- The `x²` cutoff, as coefficient data at degree `2`
+(`c k = 1` exactly at `k = 2`), is the squaring function. -/
+theorem polyCutoff_seat_x2 :
+    polyCutoff 2 (fun k : Fin 3 => if k.val = 2 then (1 : ℝ) else 0)
+      = fun x => x ^ 2 := by
+  funext x
+  simp [polyCutoff, Fin.sum_univ_three]
+
+/-- **Polynomial action at the seat, `f = x⁰`:** the moment
+form is `M 0 = 448`, at every scale `Λ`. -/
+theorem seat_action_x0 (Λ : ℝ) :
+    q7crActionPoly factorQ7 factorC4 factorR 0 (fun _ => (1 : ℝ)) Λ
+      = 448 := by
+  unfold q7crActionPoly
+  rw [Fin.sum_univ_one]
+  simp [seat_M0]
+
+/-- **Polynomial action at the seat, `f = x¹`:** the moment
+form is `M 1 / Λ² = 2723 / Λ²`. -/
+theorem seat_action_x1 (Λ : ℝ) :
+    q7crActionPoly factorQ7 factorC4 factorR 1
+        (fun k : Fin 2 => (k.val : ℝ)) Λ
+      = 2723 / Λ ^ 2 := by
+  unfold q7crActionPoly
+  rw [Fin.sum_univ_two]
+  simp [seat_M1]
+
+/-- **Polynomial action at the seat, `f = x²`:** the moment
+form is `M 2 / (Λ²)² = (1518111 / 64) / (Λ²)²`. -/
+theorem seat_action_x2 (Λ : ℝ) :
+    q7crActionPoly factorQ7 factorC4 factorR 2
+        (fun k : Fin 3 => if k.val = 2 then (1 : ℝ) else 0) Λ
+      = (1518111 / 64) / (Λ ^ 2) ^ 2 := by
+  unfold q7crActionPoly
+  rw [Fin.sum_univ_three]
+  simp [seat_M2]
+
+/-- **Spectral-sum action at the seat, `f = x⁰`:** on the
+tensored seat list, the spectral-sum form agrees with the
+moment form (SA-COMP-5) at the value `448`. -/
+theorem seat_specSum_x0 (Λ : ℝ) :
+    specSumIdx spectralListSeat.e
+        (polyCutoff 0 (fun _ => (1 : ℝ))) Λ = 448 :=
+  (spectral_sum_eq_actionPoly factorQ7 factorC4 factorR
+    spectralListSeat 0 (fun _ => (1 : ℝ)) Λ).trans (seat_action_x0 Λ)
+
+/-- **Spectral-sum action at the seat, `f = x¹`:** the
+spectral-sum form agrees with the moment form at the value
+`2723 / Λ²`. -/
+theorem seat_specSum_x1 (Λ : ℝ) :
+    specSumIdx spectralListSeat.e
+        (polyCutoff 1 (fun k : Fin 2 => (k.val : ℝ))) Λ
+      = 2723 / Λ ^ 2 :=
+  (spectral_sum_eq_actionPoly factorQ7 factorC4 factorR
+    spectralListSeat 1 (fun k : Fin 2 => (k.val : ℝ)) Λ).trans
+    (seat_action_x1 Λ)
+
+/-- **Spectral-sum action at the seat, `f = x²`:** the
+spectral-sum form agrees with the moment form at the value
+`(1518111 / 64) / (Λ²)²`. -/
+theorem seat_specSum_x2 (Λ : ℝ) :
+    specSumIdx spectralListSeat.e
+        (polyCutoff 2
+          (fun k : Fin 3 => if k.val = 2 then (1 : ℝ) else 0)) Λ
+      = (1518111 / 64) / (Λ ^ 2) ^ 2 :=
+  (spectral_sum_eq_actionPoly factorQ7 factorC4 factorR
+    spectralListSeat 2
+      (fun k : Fin 3 => if k.val = 2 then (1 : ℝ) else 0) Λ).trans
+    (seat_action_x2 Λ)
+
+/-! ### §7.5. The heat trace at the seat (SA-COMP-3 instantiated)
+
+SA-COMP-3's factorization, instantiated at the §7.1 lists: the
+composite seat's heat trace is the product of the three factor
+heat traces, each evaluated on its registered eigenvalue
+function (`s₇`, `s₄`, `s_R`). This is a factorization statement
+about the seat's spectral sums (the heat cutoff is a chosen
+one-parameter family, memo §6 item 1); it is not an asymptotic
+expansion and carries no coefficient reading. The K-SA-3 seam
+of the §7 header applies verbatim: the R⁴ factor trace is the
+trace over the supplied R⁴ list of §7.1. -/
+
+/-- **Heat-trace factorization at the seat.** The instantiated
+composite's heat trace (spectral-sum form, heat cutoff
+`x ↦ exp (−t·x)` at `Λ = 1`, over the tensored seat list) is
+the product of the three factor heat traces at the seat. -/
+theorem heat_trace_factorization_seat (t : ℝ) :
+    specSumIdx spectralListSeat.e (fun x => Real.exp (-t * x)) 1
+      = specSum s₇ (fun x => Real.exp (-t * x)) 1
+        * specSum s₄ (fun x => Real.exp (-t * x)) 1
+        * specSum s_R (fun x => Real.exp (-t * x)) 1 :=
+  heat_trace_factorization factorQ7 factorC4 factorR
+    spectralListQ7Seat spectralListC4Seat spectralListRSeat t
 
 end ThetLogos

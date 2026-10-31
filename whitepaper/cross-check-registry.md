@@ -505,3 +505,51 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   function of the factor data, not forced. No measured
   number is claimed by this line; no entropy language.
   NO CLAIM; dials 0/4.
+
+### BR1-014 — Q7CR-SA2, the instantiated spectral-action evaluation, Python ↔ Lean (landed 2026-10-31)
+
+- **Python side:** `routeb-general-scratch/sa2-eval.py`
+  (run record `sa2-run.txt`) — exact arithmetic throughout
+  (`fractions.Fraction`; no floats at any verdict line). From
+  Q7CR-2's factor data alone (Q⁷ diagonal (3, −3, 2, −2, 1, −1, 0);
+  C⁴ centered ladder `d₄ k = k/4 − 3/8`; R⁴ diagonal
+  (0, 2, −2, 0)): the factor-square eigenvalue lists (realified
+  14/8/4), their moments, the 448-value sumset spectrum with
+  moments by direct summation AND by SA0's printed composition
+  forms (the two routes identical in-run), the endpoints, and
+  the polynomial actions for `f = x⁰, x¹, x²` at Λ = 1, 2 in
+  both moment and spectral-sum form. 33 checks, all AGREE.
+- **Lean side:** `ThetLogos/SpectralActionQ7CR.lean` §7
+  (Q7CR-SA2) — the seat's factor spectral lists discharged from
+  Q7CR-2's certified forms (`spectralListQ7Seat`,
+  `spectralListC4Seat`; the R⁴ list `spectralListRSeat`
+  consumed AS SUPPLIED DATA from Q7CR-2's explicit site
+  eigenbasis — the K-SA-3 seam inherited and stated on §7's
+  face, no §6.5-style production of the R⁴ list asserted);
+  factor moments `seat_mom7/4/R_zero/one/two`
+  (14/56/392; 8, 5/8, 41/512; 4/8/32) read off the lists by
+  `SpectralList.trace_pow_eq_sum` against Q7CR-2's factor
+  anchors; composite moments assembled by SA-COMP-2's printed
+  forms — `seat_M0` = 448, `seat_M1` = 2723, `seat_M2` =
+  1518111/64 — and tied to Q7CR-2's multiset anchors
+  (`seat_M0_eq_card`, `seat_M1_eq_sum`, `seat_M2_eq_sq_sum`);
+  SA-COMP-4 instantiated (`spectral_action_poly_composition_seat`)
+  with the `x⁰/x¹/x²` cutoffs evaluated in moment and
+  spectral-sum form (`seat_action_x0/x1/x2`, `seat_specSum_x0/x1/x2`:
+  448 at every Λ; 2723/Λ²; (1518111/64)/(Λ²)²); SA-COMP-3
+  instantiated at the seat (`heat_trace_factorization_seat`).
+- **Proposition checked:** the spectral action of the
+  instantiated Q⁷C⁴R⁴ composite at Q7CR-2's seat, evaluated by
+  the composition machinery, has moments M 0 = 448,
+  M 1 = 2723, M 2 = 1518111/64 and the stated polynomial-cutoff
+  values; Python and Lean agree exactly on every value.
+- **Result: exact agreement (33/33 checks).** Fences on the
+  face of §7 and restated here: the action is NUMERICAL
+  (spectral sums/moments), never an operator `f (D²)`; the
+  finite moments are coefficient-grade data of the chosen
+  seat, NEVER Seeley–DeWitt coefficients or gravity terms, and
+  no curvature slot exists in this object; any coincidence of
+  an output with a measured value is a new-entry Dial-1 matter
+  (K-SA-4), not a result of this line. The SA line is not a
+  gauntlet item: no bearing on the meta-kill, the trifecta, or
+  the C⁴ leg. NO CLAIM; dials 0/4.
