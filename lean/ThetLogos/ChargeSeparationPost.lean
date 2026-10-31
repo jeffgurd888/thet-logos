@@ -757,4 +757,402 @@ theorem chargeSeparation_turned_expectation_eq_trace (β : ℝ) :
           (Matrix.diagonal (chargePumpTurnedWeight β 1) * Qsep) :=
   chargeSeparation_expectation_eq_trace _
 
+/-! ## SEP-3 — the iff characterization (S3) and the no-go corollaries (S4)
+
+The verdict brick for Card SEP. S3 is discharged in its registered
+quantifier shape: the drive ranges over ALL bijective `π : Fin 4 →
+Fin 4`, the separation side is existence of a `β` with changed
+imbalance, and the preservation side is the registered membership
+iff against PUMP-0's `chargePumpSectorB`. The two factors are
+proved separately and each is necessary:
+
+- a partition-preserving drive changes no state's imbalance at any
+  `β` (the forward guard, generalizing SEP-0's swap face check);
+- if a drive changes no Gibbs imbalance at the single test value
+  `β = 4 * Real.log 2` — where the weights are the superincreasing
+  rationals `(8, 4, 2, 1) / 15` — then it preserves the partition
+  (the backward guard: equality at that one `β` already pins the
+  image of sector `B`).
+
+The clock clause is SEP-2's delta read against SEP-1's zero
+clause. S4(ii)'s normalized-state stationarity is transported from
+the landed unnormalized `gibbsWeight_stationary` by factoring the
+normalization scalar through the conjugation — that transport is
+this brick's named work, done in
+`chargeSeparationS4_stationary` below. Fences K-SEP-1..4 and
+K-PUMP-4/5 carry over: population language only, the drive is
+external, no field object, not a mechanism claim. NO CLAIM; dials
+0/4. -/
+
+/-- A bijective drive permutes the Gibbs weights without changing
+their total: the composed weights still sum to `1`, by
+`Equiv.sum_comp` for the equivalence built from the bijection.
+Tier T1. -/
+theorem chargeSeparation_comp_sum_eq_one (π : Fin 4 → Fin 4)
+    (hπ : Function.Bijective π) (β : ℝ) :
+    ∑ k : Fin 4, ((z4Weight β) ∘ π) k = 1 := by
+  simpa only [Function.comp_apply, Equiv.ofBijective_apply,
+    z4Weight_sum_eq_one] using
+    (Equiv.ofBijective π hπ).sum_comp (z4Weight β)
+
+/-- **The forward guard, population form.** A partition-preserving
+bijective drive preserves the sector population of EVERY weight
+function: it maps sector `B` onto itself (the image equality is
+the content — injectivity plus preservation in both directions),
+so the sum over `B` is unchanged. Tier T1. -/
+theorem chargeSeparation_popB_comp_of_preserves (π : Fin 4 → Fin 4)
+    (hπ : Function.Bijective π)
+    (hpres : ∀ k : Fin 4, k ∈ chargePumpSectorB
+      ↔ π k ∈ chargePumpSectorB)
+    (w : Fin 4 → ℝ) :
+    popB (w ∘ π) = popB w := by
+  have himg : chargePumpSectorB.image π = chargePumpSectorB := by
+    ext j
+    simp only [Finset.mem_image]
+    constructor
+    · rintro ⟨k, hk, rfl⟩
+      exact (hpres k).mp hk
+    · intro hj
+      obtain ⟨k, hk⟩ := hπ.surjective j
+      exact ⟨k, (hpres k).mpr (hk ▸ hj), hk⟩
+  unfold popB
+  simp only [Function.comp_apply]
+  calc (∑ k ∈ chargePumpSectorB, w (π k))
+      = ∑ j ∈ chargePumpSectorB.image π, w j :=
+        (Finset.sum_image
+          (fun x _ y _ hxy => hπ.injective hxy)).symm
+    _ = ∑ j ∈ chargePumpSectorB, w j := by rw [himg]
+
+/-- **The forward guard, imbalance form.** A partition-preserving
+bijective drive changes no Gibbs state's measured imbalance, at
+any `β`: SEP-1's expectation identity reduces the imbalance to
+`2 * popB - 1`, the composed weights sum to `1`, and the
+population is preserved. Tier T1. -/
+theorem chargeSeparation_expectation_comp_of_preserves
+    (π : Fin 4 → Fin 4) (hπ : Function.Bijective π)
+    (hpres : ∀ k : Fin 4, k ∈ chargePumpSectorB
+      ↔ π k ∈ chargePumpSectorB)
+    (β : ℝ) :
+    chargeSeparationExpectation ((z4Weight β) ∘ π)
+      = chargeSeparationExpectation (z4Weight β) := by
+  rw [chargeSeparation_expectationIdentity_proved _
+      (chargeSeparation_comp_sum_eq_one π hπ β),
+    chargeSeparation_expectationIdentity_proved _
+      (z4Weight_sum_eq_one β),
+    chargeSeparation_popB_comp_of_preserves π hπ hpres]
+
+/-- The Gibbs weights at the test value `β = 4 * Real.log 2`,
+where `exp (-β / 4) = 1 / 2`: the weights are
+`(8 / 15) * (1 / 2) ^ k.val` — the superincreasing rationals
+`(8, 4, 2, 1) / 15`. Computed from the landed ladder weights, not
+entered. Tier T1. -/
+theorem chargeSeparation_weight_log_two (k : Fin 4) :
+    z4Weight (4 * Real.log 2) k = (8 / 15) * (1 / 2) ^ k.val := by
+  have hL : Real.exp (-Real.log 2) = 1 / 2 := by
+    rw [Real.exp_neg, Real.exp_log (by norm_num : (0 : ℝ) < 2)]
+    norm_num
+  have hexp : ∀ j : Fin 4,
+      Real.exp (-(4 * Real.log 2) * z4Energy j) = (1 / 2) ^ j.val := by
+    intro j
+    rw [z4Energy_eq]
+    have e1 : -(4 * Real.log 2) * ((j.val : ℝ) / 4)
+        = (j.val : ℝ) * (-Real.log 2) := by ring
+    rw [e1, Real.exp_nat_mul, hL]
+  have hpart : z4Partition (4 * Real.log 2) = 15 / 8 := by
+    unfold z4Partition
+    rw [Fin.sum_univ_four, hexp 0, hexp 1, hexp 2, hexp 3]
+    norm_num
+  unfold z4Weight
+  rw [hexp k, hpart, div_eq_iff (by norm_num : (15 : ℝ) / 8 ≠ 0)]
+  ring
+
+/-- **The pair pin at the test value.** Two DISTINCT rungs whose
+test-value Gibbs weights sum to `1 / 5` — the value of
+`w 2 + w 3` there — both lie in sector `B`: the pair sums of
+`(8, 4, 2, 1) / 15` are all distinct, and `1 / 5 = 3 / 15` is the
+pair `{2, 3}` alone. Decided rung-by-rung from the computed
+weights. Tier T1. -/
+theorem chargeSeparation_pair_mem_of_weight_sum {a b : Fin 4}
+    (hab : a ≠ b)
+    (h : z4Weight (4 * Real.log 2) a + z4Weight (4 * Real.log 2) b
+      = 1 / 5) :
+    a ∈ chargePumpSectorB ∧ b ∈ chargePumpSectorB := by
+  rw [chargeSeparation_weight_log_two,
+    chargeSeparation_weight_log_two] at h
+  fin_cases a <;> fin_cases b
+  all_goals simp only [Fin.val_zero, Fin.val_one, Fin.mk.injEq] at h hab
+  all_goals norm_num [chargePumpSectorB] at ⊢
+  all_goals norm_num at h
+
+/-- **The backward guard.** If a bijective drive changes no
+imbalance at the single test value `β = 4 * Real.log 2`, it
+preserves the partition: equality there forces
+`w (π 2) + w (π 3) = w 2 + w 3 = 1 / 5` (through SEP-1's identity
+and the `popB` rung expansion), the pair pin puts `π 2, π 3 ∈ B`,
+the two values are distinct, so `{π 2, π 3} = {2, 3}` as a pair,
+and injectivity keeps `π 0, π 1` out of `B` — the membership iff
+then holds rung by rung. Tier T1. -/
+theorem chargeSeparation_preserves_of_expectation_eq_log_two
+    (π : Fin 4 → Fin 4) (hπ : Function.Bijective π)
+    (h : chargeSeparationExpectation ((z4Weight (4 * Real.log 2)) ∘ π)
+      = chargeSeparationExpectation (z4Weight (4 * Real.log 2))) :
+    ∀ k : Fin 4, k ∈ chargePumpSectorB
+      ↔ π k ∈ chargePumpSectorB := by
+  have hpop : popB ((z4Weight (4 * Real.log 2)) ∘ π)
+      = popB (z4Weight (4 * Real.log 2)) := by
+    have i1 := chargeSeparation_expectationIdentity_proved
+      ((z4Weight (4 * Real.log 2)) ∘ π)
+      (chargeSeparation_comp_sum_eq_one π hπ _)
+    have i2 := chargeSeparation_expectationIdentity_proved
+      (z4Weight (4 * Real.log 2)) (z4Weight_sum_eq_one _)
+    rw [h] at i1
+    linarith
+  have hpopB : ∀ f : Fin 4 → ℝ, popB f = f 2 + f 3 := by
+    intro f
+    simp [popB, chargePumpSectorB]
+  rw [hpopB, hpopB] at hpop
+  simp only [Function.comp_apply] at hpop
+  have hw23 : z4Weight (4 * Real.log 2) 2
+      + z4Weight (4 * Real.log 2) 3 = 1 / 5 := by
+    norm_num [chargeSeparation_weight_log_two]
+  have hπ23 : π 2 ≠ π 3 :=
+    fun hh => (by decide : (2 : Fin 4) ≠ 3) (hπ.injective hh)
+  obtain ⟨h2B, h3B⟩ :=
+    chargeSeparation_pair_mem_of_weight_sum hπ23 (hpop.trans hw23)
+  have hB : ∀ x : Fin 4, x ∈ chargePumpSectorB ↔ x = 2 ∨ x = 3 := by
+    intro x
+    simp [chargePumpSectorB]
+  have hcases : (π 2 = 2 ∧ π 3 = 3) ∨ (π 2 = 3 ∧ π 3 = 2) := by
+    have a2 := (hB _).mp h2B
+    have a3 := (hB _).mp h3B
+    rcases a2 with r2 | r2 <;> rcases a3 with r3 | r3
+    · exact absurd (hπ.injective (r2.trans r3.symm)) (by decide)
+    · exact Or.inl ⟨r2, r3⟩
+    · exact Or.inr ⟨r2, r3⟩
+    · exact absurd (hπ.injective (r2.trans r3.symm)) (by decide)
+  rcases hcases with ⟨e2, e3⟩ | ⟨e2, e3⟩
+  · intro k
+    fin_cases k
+    · constructor
+      · intro hk
+        simp [chargePumpSectorB] at hk
+      · intro hk
+        rw [hB] at hk
+        rcases hk with hh | hh
+        · exact absurd (hπ.injective (hh.trans e2.symm)) (by decide)
+        · exact absurd (hπ.injective (hh.trans e3.symm)) (by decide)
+    · constructor
+      · intro hk
+        simp [chargePumpSectorB] at hk
+      · intro hk
+        rw [hB] at hk
+        rcases hk with hh | hh
+        · exact absurd (hπ.injective (hh.trans e2.symm)) (by decide)
+        · exact absurd (hπ.injective (hh.trans e3.symm)) (by decide)
+    · constructor
+      · intro _
+        rw [hB]
+        exact Or.inl e2
+      · intro _
+        simp [chargePumpSectorB]
+    · constructor
+      · intro _
+        rw [hB]
+        exact Or.inr e3
+      · intro _
+        simp [chargePumpSectorB]
+  · intro k
+    fin_cases k
+    · constructor
+      · intro hk
+        simp [chargePumpSectorB] at hk
+      · intro hk
+        rw [hB] at hk
+        rcases hk with hh | hh
+        · exact absurd (hπ.injective (hh.trans e3.symm)) (by decide)
+        · exact absurd (hπ.injective (hh.trans e2.symm)) (by decide)
+    · constructor
+      · intro hk
+        simp [chargePumpSectorB] at hk
+      · intro hk
+        rw [hB] at hk
+        rcases hk with hh | hh
+        · exact absurd (hπ.injective (hh.trans e3.symm)) (by decide)
+        · exact absurd (hπ.injective (hh.trans e2.symm)) (by decide)
+    · constructor
+      · intro _
+        rw [hB]
+        exact Or.inr e2
+      · intro _
+        simp [chargePumpSectorB]
+    · constructor
+      · intro _
+        rw [hB]
+        exact Or.inl e3
+      · intro _
+        simp [chargePumpSectorB]
+
+/-- **(S3) The separation iff — the registered headline Prop
+`chargeSeparationS3`, discharged in full, in its registered
+quantifier shape.** First clause: a bijective drive changes some
+Gibbs state's imbalance iff it fails to preserve the partition —
+forward by the forward guard (preservation kills every change),
+backward by the backward guard (no change at the test value
+already forces preservation). Second clause: for the clock
+specifically, the turned imbalance differs from the imbalance iff
+`β ≠ 0` — at `β = 0` by SEP-0's face check, and for `β ≠ 0` by
+SEP-2's closed form, whose numerator vanishes only at
+`exp (-β / 2) = 1`. The two factors (drive crosses the grading;
+state is sector-uneven) are independent and each is necessary —
+K-SEP-4's guard as a theorem. Tier T1. NO CLAIM; dials 0/4. -/
+theorem chargeSeparationS3_holds : chargeSeparationS3 := by
+  refine ⟨?_, ?_⟩
+  · intro π hπ
+    constructor
+    · rintro ⟨β, hβ⟩ hpres
+      exact hβ (chargeSeparation_expectation_comp_of_preserves
+        π hπ hpres β)
+    · intro hpres
+      by_contra hcon
+      push Not at hcon
+      exact hpres
+        (chargeSeparation_preserves_of_expectation_eq_log_two
+          π hπ (hcon _))
+  · intro β
+    constructor
+    · intro hne hβ0
+      subst hβ0
+      exact hne (sub_eq_zero.mp
+        chargeSeparation_face_check_beta_zero)
+    · intro hβ hEq
+      have hd := chargeSeparation_delta_closed β
+      rw [hEq, sub_self] at hd
+      have hx : (1 - Real.exp (-β / 2)) / z4Partition β = 0 :=
+        (mul_eq_zero.mp hd.symm).resolve_left (by norm_num)
+      have hnum : (1 : ℝ) - Real.exp (-β / 2) = 0 := by
+        rcases div_eq_zero_iff.mp hx with hh | hh
+        · exact hh
+        · exact absurd hh (z4Partition_pos β).ne'
+      have hexp1 : Real.exp (-β / 2) = 1 := by linarith
+      have hβ0 : -β / 2 = 0 := (Real.exp_eq_one_iff _).mp hexp1
+      exact hβ (by linarith)
+
+/-! ## SEP-3 (continued) — the no-go corollaries (S4), proved -/
+
+/-- **(S4(i)) Diagonal-unitary invariance.** Conjugation of the
+named state by a diagonal unitary — phases `d` with `‖d k‖ = 1`
+at every rung — returns the state exactly: the state is diagonal
+in the same basis, so each diagonal entry picks up the factor
+`d k * star (d k) = ‖d k‖ ^ 2 = 1` and nothing else moves. A
+phase drive changes no population, hence no imbalance. Tier T1. -/
+theorem chargeSeparationS4_diagonal (d : Fin 4 → ℂ) (β : ℝ)
+    (hd : ∀ k : Fin 4, ‖d k‖ = 1) :
+    Matrix.diagonal d * chargePumpState β
+        * Matrix.conjTranspose (Matrix.diagonal d)
+      = chargePumpState β := by
+  have hct : Matrix.conjTranspose (Matrix.diagonal d)
+      = Matrix.diagonal (fun k => star (d k)) := by
+    ext i j
+    by_cases h : i = j
+    · subst h
+      simp [Matrix.conjTranspose_apply, Matrix.diagonal_apply_eq]
+    · have h1 : (Matrix.diagonal d) j i = 0 :=
+        Matrix.diagonal_apply_ne _ (fun hh => h hh.symm)
+      have h2 : (Matrix.diagonal (fun k => star (d k))) i j = 0 :=
+        Matrix.diagonal_apply_ne _ h
+      rw [Matrix.conjTranspose_apply, h1, h2, star_zero]
+  have hkey : ∀ k : Fin 4, d k * ((z4Weight β k : ℝ) : ℂ) * star (d k)
+      = ((z4Weight β k : ℝ) : ℂ) := by
+    intro k
+    have hmul : d k * star (d k) = 1 := by
+      have h1 : d k * star (d k) = ((‖d k‖ ^ 2 : ℝ) : ℂ) := by
+        simp [Complex.mul_conj, Complex.normSq_eq_norm_sq]
+      rw [hd k] at h1
+      norm_num at h1
+      exact h1
+    calc d k * ((z4Weight β k : ℝ) : ℂ) * star (d k)
+        = ((z4Weight β k : ℝ) : ℂ) * (d k * star (d k)) := by ring
+      _ = ((z4Weight β k : ℝ) : ℂ) := by rw [hmul, mul_one]
+  unfold chargePumpState
+  rw [z4_gibbsState_eq, hct, Matrix.diagonal_mul_diagonal,
+    Matrix.diagonal_mul_diagonal]
+  congr 1
+  funext k
+  simpa only [Pi.mul_apply] using hkey k
+
+/-- **(S4(ii)) Modular-flow stationarity, NORMALIZED-state form —
+this brick's named transport.** The registered S4(ii) is stated
+for the normalized named state `chargePumpState β`, while the
+landed `gibbsWeight_stationary` (KMSBridge) fixes the
+UNNORMALIZED Gibbs weight under its own modular flow. The
+transport is exactly the normalization scalar: the state is
+`(gibbsZ z4Generator β)⁻¹ • gibbsWeight z4Generator β`, the scalar
+factors out of the conjugation on both sides
+(`Algebra.mul_smul_comm`, `Algebra.smul_mul_assoc`), and the
+landed stationarity closes the body. The state's own flow changes
+no imbalance, because it changes nothing: the state-alone
+separation operator does not exist at this seat (K-SEP-2 as a
+theorem). Tier T1. -/
+theorem chargeSeparationS4_stationary (β s : ℝ) :
+    NormedSpace.exp ((Complex.I * (s : ℂ)) • z4Generator)
+        * chargePumpState β
+        * NormedSpace.exp ((-(Complex.I * (s : ℂ))) • z4Generator)
+      = chargePumpState β := by
+  have hw := gibbsWeight_stationary z4Generator β s
+  unfold chargePumpState gibbsState
+  rw [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, hw]
+
+/-- Four clock turns are the identity on rungs: `k + 4 = k` in
+`Fin 4`, read on values. Tier T1. -/
+theorem chargeSeparation_shift_four (k : Fin 4) :
+    z4Shift (z4Shift (z4Shift (z4Shift k))) = k := by
+  apply Fin.eq_of_val_eq
+  have hk : k.val < 4 := k.isLt
+  simp only [z4Shift, Fin.val_add, Fin.val_one]
+  omega
+
+/-- **(S4) The no-go corollaries — the registered headline Prop
+`chargeSeparationS4`, discharged in full.** (i) Diagonal-unitary
+invariance, (ii) normalized-state modular stationarity (the
+transport from `gibbsWeight_stationary` named in the
+registration), and (iii) conservation plus cycle return: every
+bijective drive preserves total population (the permutation sum),
+four clock turns return the imbalance exactly (the four-shift
+identity), and the per-turn imbalance changes sum to `0` over the
+cycle (SEP-2's landed cycle corollary, assembled here). All
+separation at this seat is driven, temporary within the cycle,
+and redistributive (K-SEP-1, K-PUMP-4). Tier T1. NO CLAIM; dials
+0/4. -/
+theorem chargeSeparationS4_holds : chargeSeparationS4 :=
+  ⟨fun d β hd => chargeSeparationS4_diagonal d β hd,
+    fun β s => chargeSeparationS4_stationary β s,
+    ⟨fun π hπ β => chargeSeparation_comp_sum_eq_one π hπ β,
+      fun β => by
+        have hfun : (fun k => z4Weight β
+            (z4Shift (z4Shift (z4Shift (z4Shift k)))))
+            = z4Weight β :=
+          funext fun k => congrArg _ (chargeSeparation_shift_four k)
+        rw [hfun],
+      fun β => chargeSeparation_cycle_sum_zero β⟩⟩
+
+/-- **The Card SEP verdict assembly.** One checkable object
+collecting the line's four registered headlines at their proved
+status: S1 (SEP-1, the static value `= -tanh (β / 4)`, zero iff
+`β = 0`), S2 (SEP-2, one turn changes the imbalance by exactly
+`2 ×` the PUMP-1 flux), S3 (SEP-3, the two-factor iff), and S4
+(SEP-3, the three no-gos). The line's outcome: a thermal state's
+measured sector imbalance against a CHOSEN grading is exact and
+iff-gated — separation by a drive occurs iff the drive fails
+sector preservation AND `β ≠ 0`; the state alone, diagonal phase
+drives, and sector-preserving drives separate nothing, and the
+cycle returns everything. NO CLAIM; dials 0/4: the grading is
+chosen pin data, the separated quantity is a rung-label
+population (not an owned charge), the drive is external, and no
+measured number is derived. Tier T1. -/
+theorem chargeSeparation_verdict :
+    chargeSeparationS1 ∧ chargeSeparationS2
+      ∧ chargeSeparationS3 ∧ chargeSeparationS4 :=
+  ⟨chargeSeparationS1_holds, chargeSeparationS2_holds,
+    chargeSeparationS3_holds, chargeSeparationS4_holds⟩
+
 end ThetLogos
