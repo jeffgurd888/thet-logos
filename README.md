@@ -1085,8 +1085,8 @@ now T1 (`ThetLogos.LatticeGramSeries`; dossier
 `whitepaper/gram-route-c-2026-10-23.md`). The clause at general
 (G, ρ) remains open: Route B (averaging) is the named next brick.
 
-**9,745 theorem declarations**\*
-across 325 counted Lean modules, with whitepaper dossiers for every campaign.
+**9,769 theorem declarations**\*
+across 326 counted Lean modules, with whitepaper dossiers for every campaign.
 
 \* *Theorem count and verification scope subject to reproducible build
 and proof-dependency audit. Count method (adopted 2026-10-17):
