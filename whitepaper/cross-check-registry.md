@@ -553,3 +553,53 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   (K-SA-4), not a result of this line. The SA line is not a
   gauntlet item: no bearing on the meta-kill, the trifecta, or
   the C⁴ leg. NO CLAIM; dials 0/4.
+
+### BR1-015 — C96-4, the Census-96 discharge (402 = 3·46 + 3·88), Python ↔ Lean (landed 2026-10-31)
+
+- **Python side:** `attack4_corrected/attack4_3gen.py`
+  (extracted from git commit `90a80e7`, where it was read
+  after its purge from the working tree by `457d150`;
+  re-run record `routeb-general-scratch/c964-attack4-run.txt`,
+  with its one-generation dependency `attack4_corrected.py`
+  and `results/dbasis.npy` extracted from the same commit) —
+  a NUMERICAL rank computation throughout (normal-equation
+  eigenvalues, relative tolerance 1e-8; T4 probe). Its census
+  steps report: admissible dimension at C^96 = 2352
+  (= 3x272 diag + 3x512 off-diag); per-diagonal-block
+  order-one nullity 46 (gap 0.774); per-mixing-block
+  order-one nullity 88 (gap 0.774); TOTAL order-one nullity
+  at C^96: 402 (= 3x46 diag + 3x88 mixing). Honest seam, on
+  the record: the historical script then errors in its
+  Step 4 (classification of the mixing directions,
+  `np.tensordot` shape mismatch, line 231) — a bug in the
+  file as committed, after every census number was printed;
+  the script was re-run unmodified and the classification
+  step is not part of this check.
+- **Lean side:** `ThetLogos/Census96Assembly.lean` (C96-4) —
+  `finrank_census96Sol_eq` / `census96_proved`:
+  `Module.finrank ℝ Census96Sol = 402`, by the landed
+  decoupling equiv `census96SolEquiv` and finrank additivity
+  over products and pi types, consuming exactly the two
+  proved sector numbers `finrank_sol32_eq = 46` (C96-2b) and
+  `finrank_pairSpace_eq = 88` (C96-3b2; `PairSpace` is
+  `Census96PairSol` by its landed definition), with
+  `Fintype.card (Fin 3) = 3` and `card_genPair = 3`; plus the
+  separately fenced diagonal pin `census96Diag_proved`
+  (`finrank ℝ Diag96Sol = 46`, the `smDirac3diagLM` image of
+  `Sol32` under an injective map — the flavour-diagonal
+  corollary, NOT the census). All three headlines on exactly
+  [propext, Classical.choice, Quot.sound].
+- **Proposition checked:** the three-generation order-one
+  census numbers — per-diagonal nullity 46, per-mixing-pair
+  nullity 88, total 402 via the split 3·46 + 3·88 — agree
+  between the Python census and the Lean theorem, with
+  **402 ≠ 414 = 9·46** on the face (the mixing pair
+  contributes 88, not 92).
+- **Result: exact agreement.** The T4 note in
+  `ThreeGen.lean`'s header is promoted by this discharge:
+  the note becomes a proved theorem — exactly that, no
+  more. Fences: generations IMPOSED; CKM/PMNS input-only;
+  no flavour quantity derived; posted question Q3
+  (generations) OPEN regardless of outcome; the old
+  46 → 10 gloss UNSOUND AS STATED, never cited. NO CLAIM;
+  dials 0/4.
