@@ -1,0 +1,33 @@
+# THE META-KILL EVALUATION — the gauntlet block's closing step. **THE META-KILL DOES NOT FIRE.** The claim survives only in the memo's itemized sense — and most of what fell out is kills.
+
+**The criterion (gauntlet memo §3, verbatim):** "If Q7CR-1 through Q7CR-5 land and the registered space with its priced operators determines none of the §1 items beyond restatement — no working spectrum (Item 4 dead or tautological), no separation reading (Item 2 dead in its stated form), no fluctuation content (Item 1 dead for this object), no finite metric content (Item 7 empty) — then the claim 'things fall out of the unification' DIES at full rank." The firing condition is the conjunction: NO item determined beyond restatement. Q7CR-1..5 have all landed (1a, 1b, 2, 3, 4, 5, with SA0/SA1/SA2, the trifecta tests, the LOOP line, and 6a/6b/6c around them). The evaluation, item by item:
+
+## Determined beyond restatement — positively, each in its narrow registered sense only
+
+- **Item 4 (a spectrum that does work) — DETERMINED, survives narrowly.** Q7CR-2 computed the instantiated operator's spectrum (moments M 0 = 448, M 1 = 2723, M 2 = 1518111/64; eigenvalues in [1/64, 841/64]; BR1-012/BR1-014 cross-checked). K-Q7CR-2 did NOT fire: the spectrum is NOT forced — it varies with the free factor data (`spectrumOf_not_forced`), so it is not a tautology. Per the memo's standing warning in reverse, this promotes Item 4 ONLY: one finite fact about one instantiated operator on one registered space.
+- **Item 1 (fluctuation content) — DETERMINED, survives narrowly.** Q7CR-4: the fluctuation space of the instantiated pair is nonzero and not pure-gauge — a stated witness one-form is separated from every commutator by a proved trace functional (value −448 on the witness). K-Q7CR-4 did NOT fire. The survival is reported in the memo's narrow words only: "the fluctuation space of this stated pair is this stated space" — never "gauge fields derived"; a physical gauge field still needs the manifold factor, which is absent (Item 6's fence).
+
+## Determined beyond restatement — negatively (determinations by proof, not by silence)
+
+- **Item 2 (charge separation) — DETERMINED: DEAD in its stated form.** K-Q7CR-3 FIRED at Q7CR-3: the C⁴-character charge grading is mixed by D and D² with no invariant spectral reading (`criterion_fails` on an explicit test vector; charge sectors contain no D₄²-eigenvector). Jeff's purpose clause ("causing charge separation") is dead in this form; any other weighting is a new entry under the relabeling rule. (The PUMP/SEP miniatures are separate objects at a different seat and neither feed nor rescue this item.)
+- **Item 9 (the duality headline as a proved linker) — the mediation promotion DEAD; weaker forms determined.** K-Q7CR-6c fired at scoping (no intertwining exists; F₄ acts only on the C⁴ factor). What stands instead, determined: the grading correspondence (6b, bookkeeping-grade) and the covariance decision (6c: ORBIT COVARIANCE — the C₇ action permutes the D₇-package family and is NOT a symmetry of the instantiated package, `factorQ7_not_symm`). "via C4" survives only as "graded by C4."
+- **Item 8 (the trifecta correspondence) — itemized, mixed, mostly negative.** Once Jeff spoke the assignment, the legs were tested one by one: First — capacity DEAD (K-T-Q7-1), energy additivity discharged (T-Q7-2); Second — strong form REFUTED-AS-STATED (T0), section form DEAD (K-T-C4-1), grading form W2 PROVED (T-C4-2); Third — strong form DEAD (K-T-R4-2), degeneracy form standing (ground degeneracy exactly 2 at R⁴, 16 at the composite); Zeroth — contact form DEAD (K-T-R4-1), leg = pure definition. The correspondence as a sentence is not promoted; its items stand exactly as listed.
+
+## Not counted toward the claim, by the memo's own rules
+
+- **Item 5 (dynamics) — an owned object, NOT a fall-out.** Q7CR-5 landed `dynHeat`/`dynGen` with proved laws, the generator labeled CHOSEN. Per the memo: a chosen dynamics can never be retroactively "fallen out." It is recorded as built-and-labeled, and contributes nothing to the claim's survival.
+- **Item 7 (finite metric content) — UNDETERMINED.** Q7CR-3's second half (the finite Connes distance) was deferred behind Q7CR-4 and remains an outstanding follow-on brick; it has not landed, so Item 7 is neither fallen out nor dead. The meta-kill's conjunction fails on Items 4/1/2 regardless — but Item 7 is recorded here as OPEN, not silently dropped: the line's one named unfinished test.
+- **Item 3 (a derived measured number) — untouched, by design.** No brick was aimed at it; no measured number is claimed by this line; nothing from this line enters the Dial-1 process. Dials remain 0/4.
+- **Item 6 (the continuum reading) — species (c), FRONTIER.** No brick touched it; the R⁴ factor is a finite Minkowski seat, not spacetime.
+
+## Verdict
+
+**The META-KILL DOES NOT FIRE** — its firing condition (no item determined beyond restatement) is false: Items 4 and 1 were determined positively in their narrow senses, Item 2 was determined negatively by proof, Items 8 and 9 were determined item-by-item. **And the claim "everything we need falls out of the unification" is NOT promoted as a sentence** — per the memo, sentences are not theorems. What fell out of the composite, at full rank and complete: one finite spectrum fact; one narrow fluctuation fact; one owned-but-chosen dynamics (not a fall-out); a charge-separation mechanism DEAD in its stated form; a mediation headline DEAD with a grading correspondence and an orbit action standing in its place; a trifecta whose strong forms are dead and whose surviving forms are one additivity, one grading, one degeneracy count, and definitions. The object ℝ⁴⁴⁸ stands untouched by all of it — a stated space with stated pairings and now stated operators — exactly as the memo required the two to be kept separate: the object is not the claim about it, and the claim's narrow survivals are not the object.
+
+**Gauntlet accounting, final:** §1 items — determined positively (narrow): 2 (Items 4, 1). Determined negatively: 2 (Items 2, 9-promotion). Itemized mixed: 1 (Item 8). Owned-but-not-fallen-out: 1 (Item 5). Undetermined: 1 (Item 7 — Connes-distance follow-on outstanding). By design untouched: 1 (Item 3). FRONTIER: 1 (Item 6). Kills fired inside the block, all at full rank: K-Q7CR-3, K-Q7CR-6c (at scoping), K-T-Q7-1, K-T-C4-1, K-T-R4-2, K-T-R4-1. Kills evaluated and NOT firing: K-Q7CR-1, K-Q7CR-2, K-Q7CR-4, K-Q7CR-6b, K-T-Q7-2, K-T-C4-2.
+
+**NO CLAIM. Millennium parts closed 0. Dials 0/4. Census unchanged by this evaluation: 9,120 strict / 9,198 attribute-inclusive / 314 modules.**
+
+## Backers since last landing
+
+No change to the backer roll since the last landing.
