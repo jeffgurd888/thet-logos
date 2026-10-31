@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-31 — SE-0: the Shadow Entropy pin.** The
+honest rebuild of the dropped thermo-shadow file opens
+with its registration: the Maxwell–Boltzmann density,
+the quadratic weight family, and the four target
+statements (base value, seat identity −½·log(1 + 2aτ),
+the named nonzero seat −½·log 2, and the nullity —
+asymmetry and constant filtering shift the entropy by
+exactly nothing). The first-quoted candidate identity
+was false and was killed at scoping; only the corrected
+form registers (dossier
+`whitepaper/se0-landing-2026-10-31.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-31 — Q7CR-SA1: PARTIAL at the K-SA-3 seam.**
 The spectral-sum composition is proved (sumset,
 heat-trace factorization, polynomial agreement), and
