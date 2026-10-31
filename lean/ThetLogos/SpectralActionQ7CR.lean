@@ -1,5 +1,7 @@
 import Mathlib.Tactic
 import Mathlib.LinearAlgebra.Complex.FiniteDimensional
+import Mathlib.Analysis.InnerProductSpace.Spectrum
+import Mathlib.LinearAlgebra.TensorProduct.Basis
 import ThetLogos.Q7C4R4Assembly
 
 /-!
@@ -437,5 +439,474 @@ theorem moment_two (F₇ : FactorOp 7) (F₄ : FactorOp 4)
   norm_num [Finset.sum_range_succ, q7crMom7_zero, q7crMom4_zero,
     q7crMomR_zero]
   ring
+
+/-! ## §6. Q7CR-SA1 — the spectral-sum composition
+
+The spectral-sum side of the action (scoping memo §3.1, §3.3):
+eigenvalue data packaged WITH diagonalization witnesses
+(`SpectralList`), the tensoring of factor witnesses across the
+Kronecker sum (SA-COMP-1), the heat-trace factorization
+(SA-COMP-3), and the agreement of the spectral-sum and moment
+forms on polynomial cutoffs (SA-COMP-5, with SA-COMP-4 as its
+composition corollary).
+
+**K-SA-3 status (named, exact).** Diagonalization data is
+PRODUCED from the pin where the pin's seat reaches, and consumed
+as supplied data where it does not:
+
+* For the two realified complex factors the production goes
+  through (§6.5): the pin has no `InnerProductSpace ℝ` instance
+  on the plain function space `Fin n → ℂ`, so the registered
+  pairing `factorPair n` is installed as a local inner product
+  through the pin's own `InnerProductSpace.Core` /
+  `InnerProductSpace.ofCore` route, the factor square is
+  symmetric for it from the package's own `D_selfadj`, and
+  `LinearMap.IsSymmetric.eigenvectorBasis` /
+  `LinearMap.IsSymmetric.eigenvalues` of
+  `Mathlib/Analysis/InnerProductSpace/Spectrum.lean` supply the
+  eigenvalue list and orthonormal eigenbasis.
+* The R⁴ factor's seat is NOT reached by those APIs, and this is
+  the exact mismatch: `FactorOpR.D_selfadj` is self-adjointness
+  for `minkowskiInner`, the INDEFINITE η-pairing (signature
+  (−,+,+,+); `minkowskiInner x x` takes negative values), so it
+  is not a positive-definite inner product and no
+  `InnerProductSpace.Core` with inner `minkowskiInner` exists;
+  the pin's spectral APIs require a positive-definite
+  `InnerProductSpace` and `LinearMap.IsSymmetric` with respect
+  to THAT inner product — at this seat the Euclidean Pi inner
+  product, for which the package carries no symmetry hypothesis
+  at all. The composite seat inherits the same obstruction
+  (its registered pairing is the product pairing, indefinite
+  through the R⁴ factor). So the R⁴ spectral list is consumed
+  as supplied data in SA-COMP-1/3/5, exactly as the memo's
+  K-SA-3 fences: the list-level identities below are theorems
+  about supplied lists and their sumsets, and the step "the R⁴
+  factor's own spectral list is produced from its package" is
+  the FRONTIER-marked step at this seat only. The moment
+  backbone (§4, SA0) never touches an eigenvalue and is
+  unaffected.
+
+Fences as in the header: numeric forms only, never an operator
+`f (D²)`; the moments are NOT Seeley–DeWitt coefficients; no
+curvature slot; Dial 1 unmoved; no measured number is claimed
+by this line; NO CLAIM. -/
+
+/-! ### §6.1. Spectral lists as data with witnesses -/
+
+/-- **A spectral list for `X`, as supplied data with its
+diagonalization witness**: an eigenvalue function `e` on a finite
+index type, a basis `b` of the space, and the eigenvector law
+`X (b i) = e i • b i` for every index. This is the memo's §3.1
+definition — eigenvalue data as data, with the witness carried,
+not asserted into existence. Taking the index to be a general
+finite type (rather than `Fin n`) is what lets the composite's
+list live on the product index of §6.2 with its multiplicities
+on the nose. -/
+structure SpectralList (V : Type*) [AddCommGroup V] [Module ℝ V]
+    (ι : Type*) [Fintype ι] (X : Module.End ℝ V) where
+  /-- The eigenvalue list, as a function on the index type. -/
+  e : ι → ℝ
+  /-- The diagonalizing basis (the witness). -/
+  b : Module.Basis ι ℝ V
+  /-- Every basis vector is an eigenvector with eigenvalue `e i`. -/
+  eig : ∀ i, X (b i) = e i • b i
+
+/-- The eigenvalue multiset of a spectral list (the list read
+with multiplicities). -/
+noncomputable def SpectralList.eigenMultiset {V : Type*}
+    [AddCommGroup V] [Module ℝ V] {ι : Type*} [Fintype ι]
+    {X : Module.End ℝ V} (S : SpectralList V ι X) : Multiset ℝ :=
+  (Finset.univ.val).map S.e
+
+/-- **The composite spectral list, at the level of eigenvalue
+functions**: the sumset of the three factor-square lists,
+`specComp e₇ e₄ eR (i, j, k) = e₇ i + e₄ j + eR k` on the product
+index `Fin 14 × Fin 8 × Fin 4` (cardinality `14 · 8 · 4 = 448`). -/
+def specComp (e₇ : Fin 14 → ℝ) (e₄ : Fin 8 → ℝ) (eR : Fin 4 → ℝ) :
+    (Fin 14 × Fin 8 × Fin 4) → ℝ :=
+  fun p => e₇ p.1 + e₄ p.2.1 + eR p.2.2
+
+/-- **The spectral-sum form at a general finite index type.**
+SA0's `specSum` is indexed by `Fin n`; the composite's list lives
+on the product index, so SA1 uses this general-index form, which
+restricts to `specSum` on `Fin n` on the nose. -/
+noncomputable def specSumIdx {ι : Type*} [Fintype ι] (e : ι → ℝ) (f : ℝ → ℝ)
+    (Λ : ℝ) : ℝ :=
+  ∑ i, f (e i / Λ ^ 2)
+
+/-- The general-index spectral sum restricts to SA0's `specSum`
+at a `Fin n` index. -/
+theorem specSumIdx_fin {n : ℕ} (e : Fin n → ℝ) (f : ℝ → ℝ)
+    (Λ : ℝ) : specSumIdx e f Λ = specSum e f Λ :=
+  rfl
+
+/-- A spectral list for a power, from a spectral list for the
+base: same witness basis, eigenvalues raised to the power. -/
+def SpectralList.pow {V : Type*} [AddCommGroup V] [Module ℝ V]
+    {ι : Type*} [Fintype ι] {X : Module.End ℝ V}
+    (S : SpectralList V ι X) (k : ℕ) : SpectralList V ι (X ^ k) where
+  e := fun i => (S.e i) ^ k
+  b := S.b
+  eig := by
+    intro i
+    induction k with
+    | zero => simp
+    | succ n ih =>
+      rw [pow_succ', Module.End.mul_apply, ih, map_smul, S.eig i,
+        smul_smul, ← pow_succ]
+
+/-- The trace of an endomorphism with a spectral list is the sum
+of its eigenvalues (the diagonal of its matrix in the witness
+basis). -/
+theorem SpectralList.trace_eq_sum {V : Type*} [AddCommGroup V]
+    [Module ℝ V] {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {X : Module.End ℝ V} (S : SpectralList V ι X) :
+    LinearMap.trace ℝ V X = ∑ i, S.e i := by
+  rw [LinearMap.trace_eq_matrix_trace ℝ S.b]
+  unfold Matrix.trace Matrix.diag
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [LinearMap.toMatrix_apply, S.eig i]
+  simp
+
+/-- The trace of a power, from a spectral list:
+`tr (X^k) = ∑ i, (e i)^k` — the bridge SA-COMP-5 stands on. -/
+theorem SpectralList.trace_pow_eq_sum {V : Type*} [AddCommGroup V]
+    [Module ℝ V] {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {X : Module.End ℝ V} (S : SpectralList V ι X) (k : ℕ) :
+    LinearMap.trace ℝ V (X ^ k) = ∑ i, (S.e i) ^ k :=
+  (S.pow k).trace_eq_sum
+
+/-! ### §6.2. Tensoring witnesses — SA-COMP-1 -/
+
+/-- The Kronecker-sum eigenvector law on pure tensors: a tensor
+product of eigenvectors of the three factor squares is an
+eigenvector of the Kronecker sum, with eigenvalue the sum of the
+factor eigenvalues. -/
+theorem kronecker_sum_eigenvector
+    (A : Module.End ℝ (Fin 7 → ℂ)) (B : Module.End ℝ (Fin 4 → ℂ))
+    (C : Module.End ℝ Minkowski)
+    (x : Fin 7 → ℂ) (y : Fin 4 → ℂ) (z : Minkowski)
+    (a b c : ℝ) (hx : A x = a • x) (hy : B y = b • y)
+    (hz : C z = c • z) :
+    (opTensorQ A 1 1 + opTensorQ 1 B 1 + opTensorQ 1 1 C)
+        ((x ⊗ₜ[ℝ] y) ⊗ₜ[ℝ] z)
+      = (a + b + c) • ((x ⊗ₜ[ℝ] y) ⊗ₜ[ℝ] z) := by
+  rw [LinearMap.add_apply, LinearMap.add_apply, opTensorQ_tmul,
+    opTensorQ_tmul, opTensorQ_tmul, hx, hy, hz]
+  simp only [Module.End.one_apply, TensorProduct.smul_tmul,
+    TensorProduct.tmul_smul]
+  rw [add_smul, add_smul]
+
+/-- **Tensoring of witnesses.** From spectral lists for the three
+factor squares, a spectral list for the composite square
+`(diracQ7C4R4 F₇ F₄ F_R)²`: the witness is the tensor product of
+the factor eigenbases (reindexed along the associator of the
+product index), and the eigenvalue function is `specComp` of the
+factor lists — the sumset, with multiplicities. The composite
+list is PRODUCED here from the factor lists; producing the
+factor lists themselves is §6.5's business (and its named seam). -/
+noncomputable def SpectralList.tensorQ (F₇ : FactorOp 7)
+    (F₄ : FactorOp 4) (F_R : FactorOpR)
+    (S₇ : SpectralList (Fin 7 → ℂ) (Fin 14) (F₇.D ^ 2)) (S₄ : SpectralList (Fin 4 → ℂ) (Fin 8) (F₄.D ^ 2))
+    (SR : SpectralList Minkowski (Fin 4) (F_R.D ^ 2)) :
+    SpectralList q7c4r4Composite (Fin 14 × Fin 8 × Fin 4)
+      ((diracQ7C4R4 F₇ F₄ F_R) ^ 2) where
+  e := specComp S₇.e S₄.e SR.e
+  b := ((S₇.b.tensorProduct S₄.b).tensorProduct SR.b).reindex
+    (Equiv.prodAssoc (Fin 14) (Fin 8) (Fin 4))
+  eig := by
+    intro p
+    obtain ⟨i, j, k⟩ := p
+    have hvec : (((S₇.b.tensorProduct S₄.b).tensorProduct SR.b).reindex
+        (Equiv.prodAssoc (Fin 14) (Fin 8) (Fin 4))) (i, j, k)
+        = (S₇.b i ⊗ₜ[ℝ] S₄.b j) ⊗ₜ[ℝ] SR.b k := by
+      simp [Module.Basis.reindex_apply, Module.Basis.tensorProduct_apply]
+    rw [hvec, diracQ7C4R4_sq]
+    exact kronecker_sum_eigenvector _ _ _ _ _ _ _ _ _
+      (S₇.eig i) (S₄.eig j) (SR.eig k)
+
+/-- **SA-COMP-1 — the composite's spectrum is the sumset, and the
+spectral-sum action composes.** For every cutoff `f` and scale
+`Λ`, the spectral-sum action of the composite, evaluated on the
+tensored spectral list of §6.2, is the triple sum of `f` over the
+sumset of the factor-square eigenvalue lists — the action of the
+composite assembled from factor spectral data by addition alone.
+(The identity is false for a generic operator on the composite:
+it holds because 1b's anchor makes `D²` a Kronecker sum.) -/
+theorem spectral_action_composition (F₇ : FactorOp 7)
+    (F₄ : FactorOp 4) (F_R : FactorOpR)
+    (S₇ : SpectralList (Fin 7 → ℂ) (Fin 14) (F₇.D ^ 2)) (S₄ : SpectralList (Fin 4 → ℂ) (Fin 8) (F₄.D ^ 2))
+    (SR : SpectralList Minkowski (Fin 4) (F_R.D ^ 2)) (f : ℝ → ℝ) (Λ : ℝ) :
+    specSumIdx (SpectralList.tensorQ F₇ F₄ F_R S₇ S₄ SR).e f Λ
+      = ∑ i, ∑ j, ∑ k,
+        f ((S₇.e i + S₄.e j + SR.e k) / Λ ^ 2) := by
+  unfold specSumIdx
+  rw [Fintype.sum_prod_type]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [Fintype.sum_prod_type]
+  apply Finset.sum_congr rfl
+  intro j _
+  apply Finset.sum_congr rfl
+  intro k _
+  rfl
+
+/-- SA-COMP-1 at the multiset level: the composite's eigenvalue
+multiset is the sumset multiset of the factor lists — the image
+of the product multiset of the three index multisets under
+addition of the three coordinates. -/
+theorem eigenMultiset_tensorQ (F₇ : FactorOp 7) (F₄ : FactorOp 4)
+    (F_R : FactorOpR) (S₇ : SpectralList (Fin 7 → ℂ) (Fin 14) (F₇.D ^ 2))
+    (S₄ : SpectralList (Fin 4 → ℂ) (Fin 8) (F₄.D ^ 2)) (SR : SpectralList Minkowski (Fin 4) (F_R.D ^ 2)) :
+    (SpectralList.tensorQ F₇ F₄ F_R S₇ S₄ SR).eigenMultiset
+      = ((Finset.univ.val).product
+          ((Finset.univ.val).product Finset.univ.val)).map
+        (fun p : Fin 14 × Fin 8 × Fin 4 =>
+          S₇.e p.1 + S₄.e p.2.1 + SR.e p.2.2) := by
+  unfold SpectralList.eigenMultiset
+  show Multiset.map (specComp S₇.e S₄.e SR.e)
+      (Finset.univ : Finset (Fin 14 × Fin 8 × Fin 4)).val = _
+  rw [← Finset.univ_product_univ, Finset.product_val,
+    ← Finset.univ_product_univ, Finset.product_val]
+  rfl
+
+/-! ### §6.3. SA-COMP-3 — heat-trace factorization -/
+
+/-- A triple sum of a product of separated factors factorizes. -/
+theorem sum_triple_mul {α β γ : Type*} [Fintype α] [Fintype β]
+    [Fintype γ] (f : α → ℝ) (g : β → ℝ) (h : γ → ℝ) :
+    (∑ i, ∑ j, ∑ k, f i * g j * h k)
+      = (∑ i, f i) * (∑ j, g j) * (∑ k, h k) := by
+  have h1 : ∀ (i : α) (j : β), (∑ k, f i * g j * h k)
+      = (f i * g j) * ∑ k, h k := by
+    intro i j
+    rw [Finset.mul_sum]
+  have h2 : ∀ i : α, (∑ j, ∑ k, f i * g j * h k)
+      = f i * ((∑ j, g j) * (∑ k, h k)) := by
+    intro i
+    rw [Finset.sum_congr rfl (fun j _ => h1 i j), ← Finset.sum_mul,
+      ← Finset.mul_sum, mul_assoc]
+  rw [Finset.sum_congr rfl (fun i _ => h2 i), ← Finset.sum_mul,
+    ← mul_assoc]
+
+/-- **SA-COMP-3 — heat-trace factorization.** The composite heat
+trace (the spectral-sum form of §3.1 with the heat cutoff
+`x ↦ exp (−t·x)` at `Λ = 1`, over the tensored spectral list) is
+the PRODUCT of the three factor heat traces:
+`exp (−t(λ+μ+ν)) = exp (−tλ) exp (−tμ) exp (−tν)` over the
+sumset, then the triple sum factorizes. The exact finite analogue
+of heat-kernel multiplicativity — a theorem here, not an
+asymptotic. -/
+theorem heat_trace_factorization (F₇ : FactorOp 7)
+    (F₄ : FactorOp 4) (F_R : FactorOpR)
+    (S₇ : SpectralList (Fin 7 → ℂ) (Fin 14) (F₇.D ^ 2)) (S₄ : SpectralList (Fin 4 → ℂ) (Fin 8) (F₄.D ^ 2))
+    (SR : SpectralList Minkowski (Fin 4) (F_R.D ^ 2)) (t : ℝ) :
+    specSumIdx (SpectralList.tensorQ F₇ F₄ F_R S₇ S₄ SR).e
+        (fun x => Real.exp (-t * x)) 1
+      = specSum S₇.e (fun x => Real.exp (-t * x)) 1
+        * specSum S₄.e (fun x => Real.exp (-t * x)) 1
+        * specSum SR.e (fun x => Real.exp (-t * x)) 1 := by
+  rw [spectral_action_composition]
+  unfold specSum
+  have hexp : ∀ i j k, Real.exp
+        (-t * ((S₇.e i + S₄.e j + SR.e k) / (1 : ℝ) ^ 2))
+      = Real.exp (-t * (S₇.e i / (1 : ℝ) ^ 2))
+        * Real.exp (-t * (S₄.e j / (1 : ℝ) ^ 2))
+        * Real.exp (-t * (SR.e k / (1 : ℝ) ^ 2)) := by
+    intro i j k
+    have h : -t * ((S₇.e i + S₄.e j + SR.e k) / (1 : ℝ) ^ 2)
+        = (-t * (S₇.e i / (1 : ℝ) ^ 2))
+          + (-t * (S₄.e j / (1 : ℝ) ^ 2))
+          + (-t * (SR.e k / (1 : ℝ) ^ 2)) := by ring
+    rw [h, Real.exp_add, Real.exp_add]
+  rw [Finset.sum_congr rfl (fun i _ => Finset.sum_congr rfl
+    (fun j _ => Finset.sum_congr rfl (fun k _ => hexp i j k)))]
+  exact sum_triple_mul _ _ _
+
+/-! ### §6.4. The polynomial action — SA-COMP-5 and SA-COMP-4 -/
+
+/-- A polynomial cutoff as a function: `x ↦ ∑ k, c k · x^k` for
+coefficients `c : Fin (K+1) → ℝ` at a stated degree `K`. -/
+def polyCutoff (K : ℕ) (c : Fin (K + 1) → ℝ) : ℝ → ℝ :=
+  fun x => ∑ k : Fin (K + 1), c k * x ^ k.val
+
+/-- **SA-COMP-5 — the two forms agree on polynomial cutoffs.**
+For a polynomial cutoff, the spectral-sum form of the action,
+evaluated on ANY spectral list of the composite square (any
+witness, any indexing), equals the moment form `q7crActionPoly`:
+expand the polynomial over the list and use
+`tr ((D²)^k) = ∑ i, (e i)^k` term by term. This is what licenses
+computing the action from whichever side is cheaper. -/
+theorem spectral_sum_eq_actionPoly (F₇ : FactorOp 7)
+    (F₄ : FactorOp 4) (F_R : FactorOpR) {ι : Type*} [Fintype ι]
+    [DecidableEq ι] (S : SpectralList q7c4r4Composite ι ((diracQ7C4R4 F₇ F₄ F_R) ^ 2))
+    (K : ℕ) (c : Fin (K + 1) → ℝ) (Λ : ℝ) :
+    specSumIdx S.e (polyCutoff K c) Λ
+      = q7crActionPoly F₇ F₄ F_R K c Λ := by
+  unfold specSumIdx polyCutoff q7crActionPoly q7crMoment
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro k _
+  rw [SpectralList.trace_pow_eq_sum S k.val, Finset.sum_div,
+    Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [div_pow]
+
+/-- **SA-COMP-4 — the action composes (corollary of SA-COMP-2).**
+The polynomial action of the composite is the same assembly with
+every composite moment replaced by SA-COMP-2's trinomial
+polynomial in the factor moments: for any polynomial cutoff, the
+action is an explicit function of `Λ` and the factor moment
+sequences alone, with no 448-dimensional computation anywhere. -/
+theorem q7crActionPoly_composition (F₇ : FactorOp 7)
+    (F₄ : FactorOp 4) (F_R : FactorOpR) (K : ℕ)
+    (c : Fin (K + 1) → ℝ) (Λ : ℝ) :
+    q7crActionPoly F₇ F₄ F_R K c Λ
+      = ∑ k : Fin (K + 1), c k *
+        ((∑ l ∈ Finset.range (k.val + 1),
+          ∑ i ∈ Finset.range (l + 1),
+          (Nat.choose k.val l * Nat.choose l i : ℝ)
+            * q7crMom7 F₇ i * q7crMom4 F₄ (l - i)
+            * q7crMomR F_R (k.val - l)) / (Λ ^ 2) ^ k.val) := by
+  unfold q7crActionPoly
+  apply Finset.sum_congr rfl
+  intro k _
+  rw [moment_composition]
+
+/-- SA-COMP-4 in spectral-sum dress (SA-COMP-1 + SA-COMP-5 +
+SA-COMP-2 chained): the spectral-sum action on the tensored
+composite list, for a polynomial cutoff, is the trinomial
+assembly of the factor moments. -/
+theorem spectral_action_poly_composition (F₇ : FactorOp 7)
+    (F₄ : FactorOp 4) (F_R : FactorOpR)
+    (S₇ : SpectralList (Fin 7 → ℂ) (Fin 14) (F₇.D ^ 2)) (S₄ : SpectralList (Fin 4 → ℂ) (Fin 8) (F₄.D ^ 2))
+    (SR : SpectralList Minkowski (Fin 4) (F_R.D ^ 2)) (K : ℕ)
+    (c : Fin (K + 1) → ℝ) (Λ : ℝ) :
+    specSumIdx (SpectralList.tensorQ F₇ F₄ F_R S₇ S₄ SR).e
+        (polyCutoff K c) Λ
+      = ∑ k : Fin (K + 1), c k *
+        ((∑ l ∈ Finset.range (k.val + 1),
+          ∑ i ∈ Finset.range (l + 1),
+          (Nat.choose k.val l * Nat.choose l i : ℝ)
+            * q7crMom7 F₇ i * q7crMom4 F₄ (l - i)
+            * q7crMomR F_R (k.val - l)) / (Λ ^ 2) ^ k.val) := by
+  rw [spectral_sum_eq_actionPoly, q7crActionPoly_composition]
+
+/-! ### §6.5. Production where the pin reaches — and the seam
+
+For the two realified complex factors, diagonalization data is
+PRODUCED from the package, via the pin's real spectral theorem.
+The seat needs one adapter: the pin has NO `InnerProductSpace ℝ`
+instance on the plain function space `Fin n → ℂ` (its inner
+product spaces on function spaces live on `PiLp 2` /
+`EuclideanSpace`, a different type), so the registered pairing
+is installed as a local inner product through the pin's own
+`InnerProductSpace.Core` / `InnerProductSpace.ofCore` route
+(the GNS / exterior-power pattern): the core's inner is
+`factorPair n` on the nose, positive-definite because
+`factorPair n x x = ∑ k, ‖x k‖²`. Inside the production the
+spectral APIs of `Mathlib/Analysis/InnerProductSpace/Spectrum.lean`
+then apply verbatim. The R⁴ seat is not reached — see §6's
+header for the exact mismatch (K-SA-3). -/
+
+/-- The registered real pairing of a complex factor, packaged as
+an inner-product core: `factorPair n` is a positive-definite
+real inner product on `Fin n → ℂ`. -/
+@[instance_reducible]
+noncomputable def factorInnerCore (n : ℕ) :
+    InnerProductSpace.Core ℝ (Fin n → ℂ) where
+  inner := factorPair n
+  conj_inner_symm := by
+    intro x y
+    simp [factorPair_symm]
+  re_inner_nonneg := by
+    intro x
+    show 0 ≤ factorPair n x x
+    have h : factorPair n x x = ∑ k, ‖x k‖ ^ 2 := by
+      unfold factorPair cplxPair
+      simp [← Complex.normSq_eq_norm_sq, Complex.normSq_apply]
+    rw [h]
+    exact Finset.sum_nonneg (fun k _ => sq_nonneg _)
+  definite := by
+    intro x hx
+    have h : factorPair n x x = ∑ k, ‖x k‖ ^ 2 := by
+      unfold factorPair cplxPair
+      simp [← Complex.normSq_eq_norm_sq, Complex.normSq_apply]
+    rw [h] at hx
+    have hk := (Finset.sum_eq_zero_iff_of_nonneg
+      (fun k _ => sq_nonneg (‖x k‖))).mp hx
+    funext k
+    have h2 := hk k (Finset.mem_univ k)
+    simp at h2
+    exact h2
+  add_left := factorPair_add_left n
+  smul_left := by
+    intro x y r
+    show factorPair n (r • x) y = _
+    rw [factorPair_smul_left]
+    simp [smul_eq_mul]
+
+/-- A complex factor package's square is symmetric for the
+registered pairing (its self-adjointness, applied twice). This
+is the symmetry the spectral theorem consumes, stated at the
+pairing seat where the package carries it. -/
+theorem factorSq_factorPair_symmetric {n : ℕ} (F : FactorOp n)
+    (x y : Fin n → ℂ) :
+    factorPair n ((F.D ^ 2) x) y = factorPair n x ((F.D ^ 2) y) := by
+  rw [pow_two, Module.End.mul_apply, Module.End.mul_apply,
+    F.D_selfadj, F.D_selfadj]
+
+/-- **Production, at a complex factor.** The spectral list of a
+complex factor package's square, produced from the package by
+the pin's spectral theorem
+(`LinearMap.IsSymmetric.eigenvectorBasis` /
+`LinearMap.IsSymmetric.eigenvalues` of the Spectrum file),
+at a stated real dimension `m` with its finrank certificate.
+The norm and inner product of the spectral theorem are the
+locally installed core instances of `factorInnerCore` (the
+pin has no `InnerProductSpace ℝ` instance on the plain
+function space `Fin n → ℂ`); the produced data — eigenvalue
+function, basis, eigenvector law — mention no norm and are
+ordinary spectral-list data for the rest of this section. -/
+noncomputable def spectralList_of_factorSq {n m : ℕ}
+    (F : FactorOp n) (hn : Module.finrank ℝ (Fin n → ℂ) = m) :
+    SpectralList (Fin n → ℂ) (Fin m) (F.D ^ 2) := by
+  letI : InnerProductSpace.Core ℝ (Fin n → ℂ) := factorInnerCore n
+  letI : SeminormedAddCommGroup (Fin n → ℂ) :=
+    InnerProductSpace.Core.toSeminormedAddCommGroup (𝕜 := ℝ)
+  letI : NormedAddCommGroup (Fin n → ℂ) :=
+    InnerProductSpace.Core.toNormedAddCommGroup (𝕜 := ℝ)
+  letI : InnerProductSpace ℝ (Fin n → ℂ) :=
+    InnerProductSpace.ofCore (𝕜 := ℝ) (F := Fin n → ℂ)
+      (inferInstance : PreInnerProductSpace.Core ℝ (Fin n → ℂ))
+  have hsym : LinearMap.IsSymmetric (F.D ^ 2) :=
+    factorSq_factorPair_symmetric F
+  exact { e := hsym.eigenvalues hn
+          b := (hsym.eigenvectorBasis hn).toBasis
+          eig := by
+            intro i
+            exact hsym.apply_eigenvectorBasis hn i }
+
+/-- **Production assembled as far as the pin reaches.** With the
+two complex factors' lists produced in-house
+(`spectralList_of_factorSq` at the registered dimensions 14 and
+8), SA-COMP-1's composite list needs only the R⁴ list supplied:
+the tensored list at the produced Q⁷/C⁴ witnesses and any
+supplied R⁴ witness. This is the exact boundary of K-SA-3 at
+this seat. -/
+theorem spectral_action_composition_produced (F₇ : FactorOp 7)
+    (F₄ : FactorOp 4) (F_R : FactorOpR)
+    (SR : SpectralList Minkowski (Fin 4) (F_R.D ^ 2)) (f : ℝ → ℝ) (Λ : ℝ) :
+    specSumIdx (SpectralList.tensorQ F₇ F₄ F_R
+        (spectralList_of_factorSq F₇ finrank_q7_factor)
+        (spectralList_of_factorSq F₄ finrank_c4_factor)
+        SR).e f Λ
+      = ∑ i, ∑ j, ∑ k,
+        f (((spectralList_of_factorSq F₇ finrank_q7_factor).e i
+          + (spectralList_of_factorSq F₄ finrank_c4_factor).e j
+          + SR.e k) / Λ ^ 2) :=
+  spectral_action_composition F₇ F₄ F_R _ _ SR f Λ
 
 end ThetLogos

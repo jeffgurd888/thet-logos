@@ -18,6 +18,27 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-31 — Q7CR-SA1: PARTIAL at the K-SA-3 seam.**
+The spectral-sum composition is proved (sumset,
+heat-trace factorization, polynomial agreement), and
+diagonalization is PRODUCED from the pin for the two
+complex factors — but the R⁴ factor's own spectral list
+stays consumed-as-data: its self-adjointness is for the
+INDEFINITE Minkowski pairing, and the pin's spectral
+theorem is a positive-definite theorem. The seam is
+named exactly, on the module's face and in dossier
+`whitepaper/sa1-landing-2026-10-31.md`. NO CLAIM;
+dials 0/4.
+
+**2026-10-31 — SHELF-4: partial trace stocked.** The
+finite-dimensional partial trace (plus purity
+vocabulary) now exists in the corpus — the 2026-10-16
+Schrödinger-gauntlet fence ("zero hits in Mathlib, zero
+in the corpus") is retired: both partial traces, trace
+preservation, and the product-state factorization are
+theorems (dossier `whitepaper/shelf4-landing-2026-10-31.md`).
+NO CLAIM; dials 0/4.
+
 **2026-10-31 — Q7CR-2: the spectrum does work.** The
 instantiated Q⁷C⁴R⁴ Dirac's square has its spectrum
 certified in Lean: the sumset of the factor squares'
