@@ -603,3 +603,30 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   (generations) OPEN regardless of outcome; the old
   46 → 10 gloss UNSOUND AS STATED, never cited. NO CLAIM;
   dials 0/4.
+
+## BR1-016 - GR-POSE-1 decision arithmetic (the SA-FLIP-1 separation's finite part)
+
+- **Lean side:** `GravityPoseDecision.lean` - `poseKill_decision : PoseKill`
+  (no functional of the finite spectral data alone carries the R-response),
+  resting on the landed separation `seely_dewitt_a2_affine` and
+  `a2_grav_coeff_ne_zero` (`SpectralActionA2.lean`, via the GR-POSE-0 pin's
+  frozen `PoseKillClassC` / `PoseKillGravC` pair).
+- **Counterpart:** `grpose1-crosscheck.py` (exact rational arithmetic,
+  `fractions.Fraction`; the prefactor `((4*pi)^2)^-1` carried as a formal
+  nonzero unit; no floats at any verdict line) evaluates the separation's
+  finite part independently: the identity trace piece 128/6 = 64/3, the
+  E_A piece 32, the assembled slope 64/3 + 32 = 160/3 != 0, the finite
+  part `4 * Tr` exactly R-blind at sampled traces and R values, and the
+  decision's arithmetic core (an R-independent functional matching the
+  response at R = 0 and R = 1 would force slope 0 - excluded, the slope
+  being 160/3 in prefactor units).
+- **Result:** AGREEMENT (42/42 checks, exact). Run record:
+  `routeb-general-scratch/grpose1-crosscheck-run.txt` (outside the repo).
+- **Relationship to BR1-014:** BR1-014 checked the SA2 seat moments
+  (M0/M1/M2 and factor moments, 33 checks); the Gilkey trace split
+  (64/3, 32, 160/3) was NOT among them. Same discipline and
+  spectral-action family, disjoint proposition - a new entry, not an
+  amendment.
+- **Fence:** the decision is a theorem ABOUT THE CORPUS (the gravity
+  coefficient is imported, not derived); it seats no gravity object and
+  Dial 2 stays 0. NO CLAIM; dials 0/4.
