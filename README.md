@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-30 — XYZ-4: PARTIAL — first genuine ternary
+reaches.** The symmetry-reduced search (diagonal-unitary
+invariance patterns, pre-registered) closed all 11
+patterns and fed 7,260 triples: max score 4/12, and 357
+genuine ternary-word reaches — all permutation-orbit
+mates of pool members; smGen 11 (genM 7) unreached in
+any form. The searched slice is exhausted; the reduced
+family is not (1/√2 frames outside the pre-registered
+alphabet) — so PARTIAL, not exhausted; the question
+stays OPEN and XYZ-5 does not fire (dossier
+`whitepaper/xyz4-landing-2026-10-30.md`, registry
+BR1-013). NO CLAIM; dials 0/4.
+
 **2026-10-30 — C96-1: decoupling proved; 2352
 DISCHARGED.** The three-generation order-one condition
 splits exactly over the nine generation blocks (no

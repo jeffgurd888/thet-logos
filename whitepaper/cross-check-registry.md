@@ -438,3 +438,23 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   the question `xyz_tripotents_exist` stays OPEN.** Failure
   to find is not a kill in any other form; no Python hit
   occurred, so nothing promotes to XYZ-5. NO CLAIM; dials 0/4.
+
+### BR1-013 — XYZ-4 symmetry-reduced families (diagonal-unitary patterns)
+
+- **Python side:** `routeb-general-scratch/xyz4-search.py`
+  + `xyz4-run.txt` (§A pre-registration written before
+  solving, 2026-10-30 20:02 EDT). Reduction: diagonal-
+  unitary invariance patterns (11 patterns, all closed).
+  8,872 exact verified tripotent survivors on the searched
+  slice; 7,260 triples fed at word depth ≤ 2; max score
+  4/12; 357 genuine `of_ternary` reaches (all
+  permutation-orbit mates of pool members); smGen 11
+  unreached in any form.
+- **Outcome: PARTIAL at full rank** — the searched slice
+  (17-value frame alphabet) exhausted; the reduced family
+  NOT exhausted (1/√2 frames outside the alphabet, named
+  in §A3). A K-XYZ-2-grade bound on a named slice only;
+  **the question `xyz_tripotents_exist` stays OPEN**;
+  failure to find is not a kill; XYZ-5 does not fire.
+  Dossier: `whitepaper/xyz4-landing-2026-10-30.md`.
+  NO CLAIM; dials 0/4.
