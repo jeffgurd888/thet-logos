@@ -457,4 +457,190 @@ theorem chargePumpH1_proved : chargePumpH1 := by
     have h := chargePumpFlux_zero_at_zero
     rwa [chargePumpFlux_zero_eq] at h
 
+/-! ## PUMP-2: full-cycle accounting — the verdict brick for H2
+
+The transported quantity throughout this section is the
+POPULATION OF THE CHOSEN RUNG LABEL `B = {2, 3}`, and nothing
+else. The four-step cycle of the external clock protocol is an
+externally driven redistribution: the turned weights return
+exactly after four turns, the net flux of the label's
+population over the full cycle is exactly zero, the directed
+crossing total is exactly one unit of total population winding
+the 4-ring per cycle, the per-step trace defect of the drive
+is exactly zero (each step permutes the weights, which still
+sum to `1`), and the per-step energy exchanges sum to zero
+over the cycle. The cycle's cost is paid in state distortion
+under the external drive, accounted by the landed clock-defect
+factors (`z4_clock_defect_factor`, cited below, not
+re-proved), not in trace. Net transported population per cycle
+is ZERO: no statement here asserts or implies any one-way
+transfer, and the drive is the external protocol throughout —
+the state alone, under its own flow, does nothing
+(`gibbsWeight_stationary`, cited at registration). The
+hypothesis `β > 0` is carried on the registered statement
+`chargePumpH2` exactly as registered and is never dropped from
+it. Conservation is a rail, never a result of this brick
+(K-PUMP-3): the weights sum to `1` (`z4Weight_sum_eq_one`,
+landed) and the drive permutes them. No field object appears
+anywhere. NO CLAIM; dials 0/4. -/
+
+/-- Four clock turns are the identity on `Fin 4`: the shift's
+fourth iterate sends every rung to itself. -/
+theorem chargePump_shift_four (k : Fin 4) :
+    z4Shift (z4Shift (z4Shift (z4Shift k))) = k := by
+  fin_cases k <;> decide
+
+/-- **(H2(i)) Exact return.** After four turns of the external
+clock protocol the weights are exactly the original weights:
+the four-times-turned weight function equals `z4Weight β` on
+the nose, in the registered nested-shift form. -/
+theorem chargePump_state_return (β : ℝ) :
+    (fun k => z4Weight β
+      (z4Shift (z4Shift (z4Shift (z4Shift k))))) = z4Weight β := by
+  funext k
+  rw [chargePump_shift_four]
+
+/-- **(H2(iv), trace rail.)** At every step `j` the turned
+weights still sum to `1`: the clock turn permutes the rungs
+(`Equiv.addRight j` is a bijection of `Fin 4`), so population
+is permuted, never created, and the per-step trace defect of
+the drive is exactly `0`. -/
+theorem chargePump_turned_sum_eq_one (β : ℝ) (j : Fin 4) :
+    ∑ k : Fin 4, chargePumpTurnedWeight β j k = 1 := by
+  have hsum : ∑ k : Fin 4, chargePumpTurnedWeight β j k
+      = ∑ k : Fin 4, z4Weight β k :=
+    Fintype.sum_equiv (Equiv.addRight j)
+      (fun k => chargePumpTurnedWeight β j k) (z4Weight β)
+      (fun k => rfl)
+  rw [hsum, z4Weight_sum_eq_one]
+
+/-- **(H2(iii)) Directed crossing total exactly `1`.** For
+every fixed directed rung-to-rung edge, read at rung `e`, the
+sum over the cycle of the turned weight at `e` is exactly `1`:
+as the step index winds the 4-ring, the turned weight at `e`
+runs through every rung's weight exactly once, and the total
+is `z4Weight_sum_eq_one`. One full unit of the label's total
+population crosses per cycle, gross, while the net flux is
+zero (proved below). -/
+theorem chargePump_crossing_eq_one (β : ℝ) (e : Fin 4) :
+    ∑ j : Fin 4, chargePumpTurnedWeight β j e = 1 := by
+  have hsum : ∑ j : Fin 4, chargePumpTurnedWeight β j e
+      = ∑ j : Fin 4, z4Weight β j :=
+    Fintype.sum_equiv (Equiv.addLeft e)
+      (fun j => chargePumpTurnedWeight β j e) (z4Weight β)
+      (fun j => rfl)
+  rw [hsum, z4Weight_sum_eq_one]
+
+/-- **(H2(ii), antiperiod.)** The per-step flux two steps later
+is the negative of the per-step flux: `Δⱼ₊₂ = −Δⱼ`, from the
+general-step formula of PUMP-1 (`chargePumpFlux_eq`) and
+`j + 2 + 2 = j` on `Fin 4`. -/
+theorem chargePumpFlux_add_two (β : ℝ) (j : Fin 4) :
+    chargePumpFlux β (j + 2) = -chargePumpFlux β j := by
+  have h22 : ∀ j : Fin 4, j + 2 + 2 = j := by
+    intro j; fin_cases j <;> decide
+  rw [chargePumpFlux_eq β (j + 2), chargePumpFlux_eq β j, h22 j]
+  ring
+
+/-- **(H2(ii), step `1`.)** `Δ₁ = z4Weight β 1 − z4Weight β 3`,
+from the general-step formula at `j = 1`. -/
+theorem chargePumpFlux_one_eq (β : ℝ) :
+    chargePumpFlux β 1 = z4Weight β 1 - z4Weight β 3 := by
+  have hidx : (1 : Fin 4) + 2 = 3 := by decide
+  rw [chargePumpFlux_eq β 1, hidx]
+
+/-- **(H2(ii)) Net flux zero.** The sum of the per-step fluxes
+of the chosen label's population over the full cycle is
+exactly `0`: steps `2` and `3` cancel steps `0` and `1`
+pairwise by the antiperiod identity. The net transported
+population per cycle is zero — an externally driven
+redistribution with exact return, never a one-way device. -/
+theorem chargePump_flux_cycle_sum_eq_zero (β : ℝ) :
+    ∑ j : Fin 4, chargePumpFlux β j = 0 := by
+  rw [Fin.sum_univ_four]
+  have h2 : chargePumpFlux β 2 = -chargePumpFlux β 0 := by
+    have h := chargePumpFlux_add_two β 0
+    have hidx : (0 : Fin 4) + 2 = 2 := by decide
+    rwa [hidx] at h
+  have h3 : chargePumpFlux β 3 = -chargePumpFlux β 1 := by
+    have h := chargePumpFlux_add_two β 1
+    have hidx : (1 : Fin 4) + 2 = 3 := by decide
+    rwa [hidx] at h
+  rw [h2, h3]
+  ring
+
+/-- The turned-weight column at a fixed rung is invariant
+under shifting the step index by one turn: as the step index
+winds the 4-ring, the same four turned weights recur. -/
+theorem chargePump_sum_turned_succ (β : ℝ) (k : Fin 4) :
+    ∑ j : Fin 4, chargePumpTurnedWeight β (j + 1) k
+      = ∑ j : Fin 4, chargePumpTurnedWeight β j k :=
+  Fintype.sum_equiv (Equiv.addRight 1)
+    (fun j => chargePumpTurnedWeight β (j + 1) k)
+    (fun j => chargePumpTurnedWeight β j k)
+    (fun _ => rfl)
+
+/-- **(H2(iv), energy ledger.)** The per-step energy exchanges
+of the external drive sum to exactly `0` over the full cycle:
+at every rung the turned weights gained over the cycle equal
+the turned weights lost, rung by rung, so each rung's energy
+contribution cancels and the total is `0`. The cycle returns
+its state exactly and yields no net energy exchange. -/
+theorem chargePump_energy_cycle_sum_eq_zero (β : ℝ) :
+    ∑ j : Fin 4, chargePumpEnergyExchange β j = 0 := by
+  have hinner : ∀ k : Fin 4,
+      ∑ j : Fin 4, (chargePumpTurnedWeight β (j + 1) k
+        - chargePumpTurnedWeight β j k) = 0 := by
+    intro k
+    rw [Finset.sum_sub_distrib, chargePump_sum_turned_succ,
+      sub_self]
+  simp only [chargePumpEnergyExchange]
+  rw [Finset.sum_comm]
+  apply Finset.sum_eq_zero
+  intro k _
+  rw [← Finset.mul_sum, hinner, mul_zero]
+
+/-- **(H2(iv), cost accounting, cited in registered form.)**
+The cycle's cost is the landed clock-defect factor: at every
+non-wrap step the turned weight is `Real.exp (−β / 4)` times
+the weight, and at the wrap it is `Real.exp (3 * β / 4)` times
+the weight at rung `3`. This is `z4_clock_defect_factor`
+itself, cited here in full, not re-proved: the cost of the
+cycle is paid in this state distortion under the external
+drive, not in trace (the trace defect is exactly `0`, by
+`chargePump_turned_sum_eq_one` above). -/
+theorem chargePump_clock_defect_cited (β : ℝ) :
+    (∀ k : Fin 4, k.val < 3 →
+        z4ShiftedWeight β k = Real.exp (-β / 4) * z4Weight β k)
+      ∧ z4ShiftedWeight β 3
+        = Real.exp (3 * β / 4) * z4Weight β 3 :=
+  z4_clock_defect_factor β
+
+/-- **H2 discharged in full (PUMP-2 headline; Card PUMP
+verdict).** The registered Prop `chargePumpH2` holds at every
+`β` with `0 < β` — the hypothesis is on the registered
+statement and is carried here exactly as registered: (i) the
+four-times-turned weights equal `z4Weight β` exactly; (ii) the
+per-step fluxes sum to `0` over the cycle, with
+`Δ₀ = z4Weight β 0 − z4Weight β 2`,
+`Δ₁ = z4Weight β 1 − z4Weight β 3`, and `Δⱼ₊₂ = −Δⱼ`;
+(iii) for every directed edge read at rung `e`, the sum over
+the cycle of the turned weight at `e` is exactly `1`; (iv) at
+every step the turned weights sum to `1` — the per-step trace
+defect of the drive is exactly `0` — and the per-step energy
+exchanges sum to `0` over the cycle. Together: an externally
+driven redistribution of the chosen label's population with
+exact return, gross directed crossing total one, and net
+transported population per cycle exactly zero. Tier T1. NO
+CLAIM; dials 0/4. -/
+theorem chargePumpH2_proved : chargePumpH2 := by
+  intro β _hβ
+  exact ⟨chargePump_state_return β,
+    ⟨chargePump_flux_cycle_sum_eq_zero β,
+      chargePumpFlux_zero_eq β, chargePumpFlux_one_eq β,
+      chargePumpFlux_add_two β⟩,
+    chargePump_crossing_eq_one β,
+    ⟨chargePump_turned_sum_eq_one β,
+      chargePump_energy_cycle_sum_eq_zero β⟩⟩
+
 end ThetLogos
