@@ -177,7 +177,7 @@ theorem reflSite_torusShift_zero_eq (hN : Even N) {x : Fin 4 → ZMod N}
 /-- At the **bottom layer** (base time `N - 1`), the mirrored
 site is the time-shifted site: the two layer-`0` readings of a
 bottom plaquette sit on one and the same link. -/
-theorem reflSite_eq_torusShift_zero (hN : Even N) {x : Fin 4 → ZMod N}
+theorem reflSite_eq_torusShift_zero_bot (hN : Even N) {x : Fin 4 → ZMod N}
     (hx : (x 0).val = N - 1) : reflSite x = torusShift N 0 x := by
   have h2x : 2 * x 0 = -2 := two_mul_timeCoord_eq hN x (Or.inr hx)
   funext j
@@ -453,7 +453,7 @@ theorem planeAssemble_bot_time_shift (hN : Even N) {x : Fin 4 → ZMod N}
 /-- **Bottom plaquette, spatial edge**: the assembly at `(x, ν)`
 reads the mirrored strict configuration `z'` at the layer-`0`
 link `(σ₀x, ν)` — the plaquette word's swapped orientation,
-through `reflSite_eq_torusShift_zero`. -/
+through `reflSite_eq_torusShift_zero_bot`. -/
 theorem planeAssemble_bot_spatial (hN : Even N) {x : Fin 4 → ZMod N}
     (hx : (x 0).val = N - 1) {ν : Fin 4} (hν : ν ≠ 0)
     (z z' : ↥(posLinks (N := N)) → G)
@@ -467,7 +467,7 @@ theorem planeAssemble_bot_spatial (hN : Even N) {x : Fin 4 → ZMod N}
   have hdir : (reflLink (x, ν)).2 ≠ 0 := by
     rw [reflLink_snd]; exact hν
   have hlink : reflLink (x, ν) = (torusShift N 0 x, ν) := by
-    rw [reflLink_of_ne hν, reflSite_eq_torusShift_zero hN hx]
+    rw [reflLink_of_ne hν, reflSite_eq_torusShift_zero_bot hN hx]
   rw [planeAssemble, splitSymm_apply_not_mem _ _ hcomp,
     joinNeg_apply_not_plane hN z' a' hnotp, if_neg hdir]
   congr 1
