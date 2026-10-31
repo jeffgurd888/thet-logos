@@ -18,6 +18,19 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-10-31 — PUMP-0: the driven pump, registered.**
+The spectral density matrix charge pump is pinned at
+the corpus's owned four-rung ladder: chosen sector
+labels, the Gibbs state, and the external clock drive —
+with the accounting stated honestly on the face
+(per-step flux, winding total one, net sector change
+exactly zero, trace defect zero, cost paid as state
+distortion). The drive's non-preservation of the
+sectors is proved at registration, so the transport
+headline is not vacuous (dossier
+`whitepaper/pump0-landing-2026-10-31.md`). NO CLAIM;
+dials 0/4.
+
 **2026-10-31 — SE-0: the Shadow Entropy pin.** The
 honest rebuild of the dropped thermo-shadow file opens
 with its registration: the Maxwell–Boltzmann density,
