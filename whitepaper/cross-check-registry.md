@@ -772,3 +772,37 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   never a statement. No K-GR-STAB flip: the degrees are as
   registered, no seat was narrowed. Dial 2 = 0. NO CLAIM;
   dials 0/4.
+
+## BR1-021 - CPEC-CC-1 cross-seat stress test (Majorana family at eta = UJ)
+
+- **Lean side:** `CpecJSeatTorsion.lean` - the sign seat's
+  Majorana family `torsionMajorana y s` read at the J-seat
+  (`eta = UJ`, a T2 stress test on the module's face, not this
+  seat's induced map): `j_majorana_defect_apply` - the defect
+  `defect UJ (torsionMajorana y s)` is supported exactly on
+  the diagonal partner-pair entries `(8,8)` and `(24,24)`,
+  with common value
+  `(y:ℂ)⁻¹ * (s + star s) + (y:ℂ)⁻¹ * (y:ℂ)⁻¹ * (s * star s)`;
+  `j_majorana_survival_iff` - flatness holds iff that value
+  is 0 (no `y ≠ 0` hypothesis needed). Named points:
+  `j_majorana_obstruction_point` (at `y = 1, s = 1` the
+  defect entry at `(8,8)` is exactly 3 - obstruction) and
+  `j_majorana_flat_point` (at `y = 1, s = -2` flatness holds
+  at a nonzero point - in sharp contrast with the sign seat,
+  where the same family is flat only at `s = 0`).
+- **Counterpart:** `routeb-general-scratch/cpeccc1-bridge1-check.py`
+  (run record `cpeccc1-bridge1-run.txt`, outside the repo) -
+  exact Gaussian-rational `Fraction` arithmetic, no floats,
+  5 cases: `(y,s) = (1,1)` -> defect 3; `(2,i)` -> 1/4;
+  `(1,-2)` -> 0 with empty support (the flat point);
+  `(3, 1/2 - 3i/4)` -> 61/144; `(-1, 2+i)` -> 1 - all match
+  the Lean closed form and its support exactly.
+- **Result:** ALL MATCH.
+- **Fence:** the seat's own verdict (the induced map
+  `torsionJ` is the zero map, by the invariance theorem
+  `fluctuatedDirac_j_compat`) is structural - invariance plus
+  a constant reading - and carries no BRIDGE-1 entry; this
+  entry covers only the entrywise stress test, as the CPEC
+  memo prescribed (BRIDGE-1 fires where the computation is
+  entrywise). The T2 identification is labeled on the
+  module's face. Dial 2 = 0. NO CLAIM; dials 0/4.
