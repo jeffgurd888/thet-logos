@@ -21,8 +21,6 @@
         --z-green: #43d97e;
         --paper: #f2efe6;
         --accent: #d8c58f;
-        --gold: #e8b34b;
-        --bad: #ff7a6b;
         --ice: #eef4f8;
       }
       * { box-sizing: border-box; }
@@ -34,149 +32,274 @@
         -webkit-font-smoothing: antialiased;
         line-height: 1.45;
       }
-      .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 20px 40px; }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 28px 20px 40px;
+      }
 
+      /* ---------- Header ---------- */
       header { margin-bottom: 22px; }
       .plate {
-        display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
-        border-bottom: 1px solid var(--line); padding-bottom: 16px;
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 16px;
       }
       h1 {
-        font-family: Georgia, "Times New Roman", serif; font-weight: 400;
-        font-size: clamp(29px, 5.2vw, 46px); letter-spacing: 0.01em; margin: 0; color: var(--paper);
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 400;
+        font-size: clamp(30px, 5.4vw, 48px);
+        letter-spacing: 0.01em;
+        margin: 0;
+        color: var(--paper);
       }
       .plate .no {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
-        color: var(--ink-faint); white-space: nowrap;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        white-space: nowrap;
       }
       .subtitle {
-        font-family: Georgia, "Times New Roman", serif; font-style: italic;
-        font-size: clamp(16px, 2.8vw, 21px); color: var(--ink-dim); margin: 12px 0 0; max-width: 76ch;
+        font-family: Georgia, "Times New Roman", serif;
+        font-style: italic;
+        font-size: clamp(16px, 2.8vw, 21px);
+        color: var(--ink-dim);
+        margin: 12px 0 0;
+        max-width: 74ch;
       }
       .subtitle b { color: var(--ink); font-style: normal; font-weight: 600; }
 
-      .stage { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; align-items: start; }
-      @media (max-width: 860px) { .stage { grid-template-columns: 1fr; } }
-      .card {
-        background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-        padding: 16px 18px; margin-bottom: 18px;
+      /* ---------- Layout ---------- */
+      .stage {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
       }
-      .card h2 {
+      @media (max-width: 860px) {
+        .stage { grid-template-columns: minmax(0, 1fr); }
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 16px;
+      }
+      .panel h2 {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
-        color: var(--ink-dim); margin: 0 0 12px; font-weight: 600;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin: 0 0 12px;
       }
-      .card p { margin: 0 0 10px; font-size: 14.5px; }
-      .card p:last-child { margin-bottom: 0; }
-      .dim { color: var(--ink-dim); } .faint { color: var(--ink-faint); } .small { font-size: 12.5px; }
-
-      #cv, #gc {
-        width: 100%; display: block; border-radius: 8px;
-        background: radial-gradient(120% 90% at 50% 38%, #141a20 0%, #0a0c0e 70%);
+      canvas.sim {
+        display: block;
+        width: 100%;
+        height: auto;
+        background: #0d1013;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        touch-action: none;
+        cursor: grab;
       }
-      #cv { height: 460px; cursor: grab; touch-action: none; }
-      #cv:active { cursor: grabbing; }
-      #gc { height: 300px; }
-      @media (max-width: 640px) { #cv { height: 340px; } #gc { height: 260px; } }
-      .hint { font-size: 12.5px; color: var(--ink-faint); margin-top: 8px; }
+      canvas.sim:active { cursor: grabbing; }
+      .hint { font-size: 12px; color: var(--ink-faint); margin: 8px 0 0; }
 
-      .state-line { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 4px; }
-      .chip {
+      /* ---------- Readouts ---------- */
+      .readouts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 14px;
+      }
+      @media (max-width: 560px) {
+        .readouts { grid-template-columns: repeat(2, 1fr); }
+      }
+      .readout {
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 10px 12px;
+        min-width: 0;
+      }
+      .readout .lab {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 12.5px; border: 1px solid var(--line); border-radius: 999px;
-        padding: 6px 12px; background: var(--panel-2); color: var(--ink-dim); white-space: nowrap;
+        font-size: 10px;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 4px;
+        line-height: 1.3;
       }
-      .chip b { color: var(--ink); font-weight: 600; }
-      .chip.state-stable b { color: var(--z-green); }
-      .chip.state-flip b { color: var(--bad); }
-      .chip.state-building b { color: var(--gold); }
+      .readout .val {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: clamp(16px, 2.8vw, 22px);
+        font-weight: 600;
+        line-height: 1.15;
+      }
+      .readout .sub {
+        font-size: 11.5px;
+        color: var(--ink-dim);
+        margin-top: 3px;
+        line-height: 1.35;
+      }
+      .val.gold { color: var(--accent); }
+      .val.ice { color: var(--ice); }
+      .val.green { color: var(--z-green); }
 
-      .controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+      /* ---------- Controls ---------- */
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+        align-items: center;
+      }
       button {
-        font: inherit; font-size: 14px; min-height: 44px; padding: 9px 16px;
-        border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2);
-        color: var(--ink); cursor: pointer;
+        appearance: none;
+        border: 1px solid var(--line);
+        background: var(--panel-2);
+        color: var(--ink);
+        font: inherit;
+        font-size: 14px;
+        padding: 9px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        min-height: 44px;
+        touch-action: manipulation;
       }
-      button:hover { border-color: var(--ink-faint); }
-      button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
-      button.primary { border-color: var(--accent); color: var(--accent); }
-      .btnrow-label {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-        color: var(--ink-faint); width: 100%; margin-top: 4px;
+      button:hover { border-color: #3a4249; background: #1c2126; }
+      button:active { transform: translateY(1px); }
+      button:disabled { opacity: 0.45; cursor: default; }
+      button:disabled:hover { background: var(--panel-2); border-color: var(--line); }
+      button.primary {
+        background: var(--paper);
+        color: #101315;
+        border-color: var(--paper);
+        font-weight: 600;
+        min-width: 112px;
       }
-      /* the melt-mode switch — the melt loop's joined modebox */
+      button.primary:hover { background: #ffffff; }
       .modebox {
-        display: flex; gap: 0; border: 1px solid var(--line); border-radius: 8px;
-        overflow: hidden; margin: 4px 0 12px;
+        display: flex;
+        gap: 0;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        overflow: hidden;
       }
       .modebox button {
-        flex: 1 1 0; border: 0; border-radius: 0; min-height: 52px;
-        font-size: 15px; letter-spacing: 0.02em; padding: 10px 8px;
+        border: 0;
+        border-radius: 0;
+        min-height: 44px;
       }
       .modebox button.on {
-        background: var(--accent); color: #101315; font-weight: 700;
+        background: var(--accent);
+        color: #101315;
+        font-weight: 700;
       }
-      .modebox button[aria-pressed="true"] { border-color: transparent; color: #101315; }
-      .modebox button:not(.on)[aria-pressed="true"] { color: var(--ink); }
-
-      .slider-block { margin: 14px 0; }
-      .slider-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-      .slider-head .name { font-size: 14.5px; }
-      .slider-head .val {
+      .speedbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 13px; color: var(--ink);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
       }
-      input[type="range"] { width: 100%; height: 44px; accent-color: var(--accent); }
-      .axisdot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; vertical-align: baseline; }
-      .dot-a { background: var(--x-red); } .dot-b { background: var(--y-blue); } .dot-c { background: var(--z-green); }
-      .rank { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; letter-spacing: 0.06em; }
-      .rank.smallest { color: var(--x-red); } .rank.intermediate { color: var(--gold); } .rank.largest { color: var(--z-green); }
-
-      .gauge-wrap { margin: 8px 0 4px; }
-      .gauge {
-        position: relative; height: 26px; border: 1px solid var(--line); border-radius: 6px;
-        background: linear-gradient(90deg, #3a1512 0%, #2c2313 45%, #14231a 100%);
-        overflow: visible;
+      input[type="range"] {
+        accent-color: var(--accent);
+        width: 110px;
+        min-height: 44px;
+        touch-action: pan-y;
       }
-      .gauge .needle {
-        position: absolute; top: -5px; width: 3px; height: 34px; background: var(--paper);
-        border-radius: 2px; transform: translateX(-50%); box-shadow: 0 0 6px rgba(0,0,0,0.7);
+      .scrubbox {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
       }
-      .gauge .todaymark {
-        position: absolute; top: -3px; width: 2px; height: 30px; background: var(--ice);
-        opacity: 0.65; transform: translateX(-50%);
-      }
-      .gauge-scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-faint); margin-top: 6px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-      .gauge-verdict { font-size: 14.5px; margin-top: 10px; }
-      .gauge-verdict b.flip { color: var(--bad); } .gauge-verdict b.safe { color: var(--z-green); } .gauge-verdict b.warn { color: var(--gold); }
-      .big-t {
+      .scrubbox label {
+        display: flex;
+        justify-content: space-between;
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: clamp(26px, 4.6vw, 38px); font-weight: 600; color: var(--paper); line-height: 1.1;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 2px;
       }
-      .big-t .unit { font-size: 0.5em; color: var(--ink-dim); font-weight: 400; }
+      .scrubbox input[type="range"] { width: 100%; }
 
-      .nums { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px; }
-      .nums .row { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px dashed var(--line); }
-      .nums .row:last-child { border-bottom: none; }
-      .nums .k { color: var(--ink-dim); } .nums .v { color: var(--ink); text-align: right; }
-
-      .fence {
-        font-size: 13.5px; color: var(--ink-dim); border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; margin-top: 12px;
+      /* ---------- Ring ---------- */
+      .ringwrap { display: flex; justify-content: center; }
+      svg.ring { width: 100%; max-width: 340px; height: auto; display: block; }
+      .ringcap {
+        text-align: center;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px;
+        color: var(--ink-dim);
+        margin-top: 6px;
       }
-      .fence b { color: var(--ink); }
-      .fence.danger { border-left-color: var(--bad); }
+      .ringcap b { color: var(--accent); font-weight: 700; }
 
+      /* ---------- Countdown ---------- */
+      .countdown .cd {
+        border-left: 3px solid var(--accent);
+        padding: 2px 0 2px 12px;
+        margin: 0 0 14px;
+      }
+      .countdown .cd:last-of-type { margin-bottom: 8px; }
+      .countdown .cd .tag {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 3px;
+      }
+      .countdown .cd p { margin: 0; font-size: 13.5px; color: var(--ink); }
+      .countdown .cd p b { color: var(--paper); }
+      .countdown .fineprint { font-size: 12px; color: var(--ink-faint); margin: 4px 0 0; }
+
+      /* ---------- Honest labeling ---------- */
+      .label-card {
+        margin-top: 18px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 18px 20px;
+      }
       .label-card .stamp {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        display: inline-block; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase;
-        border: 1px solid var(--accent); color: var(--accent); border-radius: 4px; padding: 4px 9px; margin: 0 0 12px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin: 0 0 8px;
       }
-      .label-card p { font-size: 13.5px; color: var(--ink-dim); }
-      .label-card p b { color: var(--ink); }
-      footer { color: var(--ink-faint); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 14px; margin-top: 6px; }
+      .label-card p { margin: 0 0 10px; font-size: 15px; color: var(--ink); max-width: 74ch; }
+      .label-card p:last-child { margin-bottom: 0; }
+      .label-card .fences { font-size: 12.5px; color: var(--ink-faint); max-width: 80ch; }
+      .label-card a { color: var(--y-blue); }
+      footer {
+        margin-top: 22px;
+        font-size: 12px;
+        color: var(--ink-faint);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+      }
+      footer a { color: var(--ink-dim); }
     </style>
   </head>
   <body>
@@ -187,1149 +310,1221 @@
           <span class="no">Exhibit · Two cycles, geared</span>
         </div>
         <p class="subtitle">
-          Two cycles, geared together. The <b>slow cycle</b> is a glacial clock: ice grows toward
-          the poles, then melts back, and as it breathes it walks Earth's three moments of
-          inertia along a fixed path. The <b>fast cycle</b> is the flip — Euler's equations
-          integrated live, exactly as in <i>The Flipping Point</i>, but fed the clock's
-          <b>current</b> moments at every step. The gear between them is one number: the gap
-          between the polar moment C and the middle moment B. On the clock's spending half the
-          gap closes and the flip's period <b>stretches toward the freeze</b>; on the restoring
-          half the gap reopens and the flips quicken. <b>The slow clock spends the fast cycle's
-          timing.</b> A switch chooses how the ice moves: <b>SINGLE POLE MELT</b> — one pole,
-          asymmetric, the gap is spent and the body flips — or <b>DUAL POLE MELT</b> — both
-          poles together, balanced, the gap is held and the spin stays steady. It opens on
-          single-pole melt, already tumbling. The fences are printed on the face — read them
-          before you read the dial: the amounts this clock moves are fenced as beyond any
-          physical melt, and Earth's real spin is not on the seat this exhibit forces.
+          Because the melt talks back. Earth's axis cones around once every
+          <b>25,772 years</b>; that precession paces the ice ages — and the melting ice,
+          in return, nudges the precession's tempo and drags the pole. This page gears a
+          second cycle into the loop: <b>the flip</b>. The melt cycle's own moments are fed
+          live into Euler's equations for a tumbling body, with the spin forced onto Earth's
+          middle axis — the one seat that cannot hold. In <b>MONO</b> melt the gear spends
+          the polar gap and the axis somersaults inside this picture; in <b>DUAL</b> melt the
+          load stays balanced and nothing flips. <b>Drag the Earth, scrub the cycle, flip
+          the melt between DUAL and MONO and watch what changes.</b> The fences are printed
+          on the face: the planet is not in danger from this exhibit — the seat is.
         </p>
       </header>
 
       <div class="stage">
-        <div>
-          <div class="card">
-            <h2>Melt mode — one pole or both poles</h2>
+        <!-- ============ MAIN PANEL: THE LOOP ============ -->
+        <section class="panel" aria-label="The precession loop">
+          <h2>The loop · Earth on its precession cone (tilt 23.4°) — with the flip riding it</h2>
+          <canvas class="sim" id="loopCanvas" width="640" height="540"
+            aria-label="Earth tilted at 23.4 degrees, its axis tracing the precession cone. Ice caps shrink in pulses as the cycle turns. Drag sideways to turn the cycle by hand."></canvas>
+          <p class="hint">👆 Drag the Earth sideways to turn the cycle by hand — or use the scrub bar below. The <b>gold</b> line is the figure axis through the caps; the <b>blue</b> line is the spin axis on its forced seat; the <b>red</b> line is the angular momentum L, which does not move. In MONO, watch the blue line somersault.</p>
+
+          <div class="readouts">
+            <div class="readout">
+              <div class="lab">Cycle year</div>
+              <div class="val ice" id="roYear">0</div>
+              <div class="sub">of 25,772 — <span id="roPhase">0.0%</span> around the cone</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Melt mode</div>
+              <div class="val gold" id="roMode">MONO</div>
+              <div class="sub" id="roModeSub">both poles melt — watch the tempo</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Caps remaining</div>
+              <div class="val ice" id="roCaps">100%</div>
+              <div class="sub" id="roCapsSub">the loop refills them every cycle</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Flips seen (this seat)</div>
+              <div class="val" id="roFlips">0</div>
+              <div class="sub" id="roFlipsSub">spin forced onto axis B — the intermediate seat</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Polar gap remaining (C − B)</div>
+              <div class="val gold" id="roGap">100%</div>
+              <div class="sub" id="roGapSub">the glacial clock spends this gap in MONO</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Flip period at this gap</div>
+              <div class="val" id="roPeriod">—</div>
+              <div class="sub" id="roPeriodSub">the slow clock sets the fast cycle's timing</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Pole drift</div>
+              <div class="val" id="roPole">near home</div>
+              <div class="sub" id="roPoleSub">symmetric melt tilts nothing</div>
+              <div class="sub" id="roPoleNote" style="display:none;color:var(--accent)">no return — the drift is one-way while the caps are gone</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Pole migration (toy scale)</div>
+              <div class="val gold" id="roMig">0.0°</div>
+              <div class="sub">real drift is ~1 cm/yr — magnified here so you can see it</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Axis separation (load vs figure)</div>
+              <div class="val" id="roSep">0.00°</div>
+              <div class="sub" id="roSepSub">in the loop the bulge rides with the load — nothing separates</div>
+            </div>
+            <div class="readout">
+              <div class="lab">The motion term — Coriolis-driven ocean</div>
+              <div class="val" id="roMotion">0</div>
+              <div class="sub" id="roMotionSub">the sea-ice lid stays on in the loop — this channel opens in one-way mode</div>
+              <div class="sub">the currents' angular momentum as a fraction of Earth's spin momentum — drawn visible; real size: a ten-millionth of the spin. It is in the equation. It does not move the seat.</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Precession tempo shift</div>
+              <div class="val green" id="roTempo">+0.000%</div>
+              <div class="sub">honest ceiling: +0.3%, and only for melting <i>all</i> modern ice</div>
+            </div>
+            <div class="readout">
+              <div class="lab">Melt term in the length of day</div>
+              <div class="val" id="roLod">+0.00 ms/cy</div>
+              <div class="sub" id="roLodSub">tidal braking is +2.3 ms/cy — the melt term is chasing it</div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="primary" id="btnPlay" type="button" aria-pressed="true">❚❚&nbsp; Pause</button>
+            <button id="btnReset" type="button">Reset</button>
             <div class="modebox" role="group" aria-label="Melt mode">
-              <button id="btnSingle" type="button" class="on" aria-pressed="true">SINGLE POLE MELT</button>
-              <button id="btnDual" type="button" aria-pressed="false">DUAL POLE MELT</button>
+              <button id="btnDual" type="button" aria-pressed="false">Dual melt</button>
+              <button id="btnMono" type="button" class="on" aria-pressed="true">Mono — Antarctic only</button>
             </div>
-            <p id="modeNote"><b>Single pole melt:</b> one pole's ice moves and the redistribution
-              is <b>asymmetric</b> — it spends the polar gap (C − B) while axis B keeps the middle
-              moment, the unstable seat. The intermediate-axis timing is spent, and <b>the body
-              flips</b>. The exhibit opens here, already tumbling.</p>
-            <div class="slider-block">
-              <div class="slider-head">
-                <span class="name">SPEED</span>
-                <span class="val" id="speedVal">2×</span>
-              </div>
-              <input type="range" id="speedRange" min="0.25" max="8" step="0.25" value="2" aria-label="Speed — animation and glacial clock" />
-              <p class="small dim" style="margin-top:2px;">One speed for both cycles — the flip's
-                integration and the glacial clock's turn. At 2× the clock's full turn takes
-                about a minute and the flip develops in seconds, not minutes.</p>
+            <div class="modebox" role="group" aria-label="Does the melt return">
+              <button id="btnRetLoop" type="button" class="on" aria-pressed="true">Melt returns (the loop)</button>
+              <button id="btnRetOne" type="button" aria-pressed="false">Melt does not return (one-way)</button>
             </div>
-            <p class="fence">Toy paths, labeled in the parent exhibits' qualitative terms:
-              <b>asymmetry between the equatorial moments destabilizes the intermediate seat;
-              symmetric redistribution preserves the balance.</b> Neither mode is a claim about
-              any real ice sheet. NO CLAIM.</p>
+            <div class="modebox" role="group" aria-label="One-way depletion pace">
+              <button id="btnPaceSlow" type="button" aria-pressed="false" disabled>Slow · ~6 cycles</button>
+              <button id="btnPaceStd" type="button" class="on" aria-pressed="true" disabled>Standard · ~3 cycles</button>
+              <button id="btnPaceFast" type="button" aria-pressed="false" disabled>Fast · ~½ cycle</button>
+            </div>
+            <div class="speedbox">
+              <label for="speed">Speed</label>
+              <input type="range" id="speed" min="0.25" max="4" step="0.25" value="1"
+                aria-label="How fast the cycle turns" />
+              <span id="speedVal">1×</span>
+            </div>
           </div>
 
-          <div class="card">
-            <h2>The flip — the melt loop's Earth, with the axis assembly drawn in</h2>
-            <canvas id="cv" aria-label="A schematic Earth with both polar caps and its pole marked, tumbling under Euler's equations, its moments driven live by the glacial clock"></canvas>
-            <div class="state-line">
-              <span class="chip" id="stateChip">STATE <b id="stateVal">—</b></span>
-              <span class="chip">Flips seen <b id="flipsVal">0</b></span>
-              <span class="chip">Period <b id="periodVal">—</b></span>
-              <span class="chip">Toy time <b id="timeVal">0</b></span>
-            </div>
-            <p class="hint">The Earth is drawn as in <i>Why Does Antarctic Polar Ice Melt
-              Matter?</i> — <b>both polar caps</b> on the globe, <b>the pole marked in red</b>,
-              the axis riding its <b>precession cone</b> (the dashed ring) — with <i>The
-              Flipping Point</i>'s axis assembly drawn through it: the <b>red line</b> is the
-              angular-momentum axis L, fixed in space; the faint <b>blue trace</b> is the tip of
-              the figure axis; the three colored lines are the body axes A, B, C. In
-              single-pole mode the whole assembly tumbles end-over-end and the caps make each
-              flip legible — watch the marked pole swing around L. In dual-pole mode it rides
-              its cone, steady. <b>Drag the Earth sideways</b> to turn the glacial clock by
-              hand. The spin is <b>forced onto axis B</b> — the intermediate axis in
-              single-pole mode, the unstable seat — so the timing can be seen; Earth's real
-              spin sits on C, the largest moment, and is stable. The seat, not the planet, is
-              the exposure.</p>
-            <div class="controls">
-              <button id="btnPlay" class="primary" aria-pressed="true">⏸ Pause the flip</button>
-              <button id="btnReset">Reset — back to the chosen spin</button>
-            </div>
-            <div class="controls">
-              <span class="btnrow-label">Spin it near which axis? (a ~10° tilt is built in, so the motion develops fast enough to watch)</span>
-              <button id="spinA" aria-pressed="false">Axis A — the red one</button>
-              <button id="spinB" aria-pressed="true">Axis B — the blue one</button>
-              <button id="spinC" aria-pressed="false">Axis C — the green one</button>
-            </div>
-            <p class="small dim" id="spinNote">Axis B currently carries the <b>intermediate</b> moment — the unstable seat. That is why it flips.</p>
-          </div>
+          <p class="hint" id="onewayHint" style="display:none">One-way mode: the small ring is the
+            <b>LOAD axis</b> — where the lost mass says the pole should be. The red dot is the
+            <b>FIGURE axis</b> — the bulge itself — chasing the load with a lag whose time constant
+            is ≈0.4 cycle, the toy stand-in for the real 10³–10⁴-year viscoelastic relaxation of
+            the mantle. Melt faster than the bulge can follow and the two axes separate.</p>
 
-          <div class="card">
-            <h2>The moments — the clock's hands, live</h2>
-            <p class="dim small">Principal moments of inertia, in units of 10³⁷ kg·m², set by the
-              glacial clock. In <b>single-pole</b> mode they follow the ring-model path (per
-              ocean mass moved pole-ward: ΔA = ΔB = +⅜·mR², ΔC = −¾·mR², R = 6.371×10⁶ m). In
-              <b>dual-pole</b> mode the equatorial pair moves as one — A ≡ B at every moment —
-              and C rides exactly one Earth-today gap above them, so the polar gap is held.
-              Their ranks are recomputed from the numbers themselves at every moment.</p>
-            <div class="nums">
-              <div class="row"><span class="k"><span class="axisdot dot-a"></span>Moment about axis A</span><span class="v"><span class="rank smallest" id="rankA">—</span> · <span id="valA">—</span></span></div>
-              <div class="row"><span class="k"><span class="axisdot dot-b"></span>Moment about axis B</span><span class="v"><span class="rank intermediate" id="rankB">—</span> · <span id="valB">—</span></span></div>
-              <div class="row"><span class="k"><span class="axisdot dot-c"></span>Moment about axis C</span><span class="v"><span class="rank largest" id="rankC">—</span> · <span id="valC">—</span></span></div>
-              <div class="row"><span class="k">Mass moved pole-ward (the clock's drive m)</span><span class="v" id="valM">0.00 ocean masses</span></div>
-              <div class="row"><span class="k">Melt path in force</span><span class="v" id="valModePath">—</span></div>
-              <div class="row"><span class="k">Earth's measured (C−A) guard gap</span><span class="v">2.64×10³⁵ kg·m² (H ≈ 1/305)</span></div>
-            </div>
-            <p class="fence"><b>Earth today sits at m = 0</b> — moments (8.01, 8.02, 8.04) ×10³⁷ kg·m²,
-              the far end of the gauge. Nothing in the real climate moves this needle measurably;
-              the clock below is a geared demonstration, and its full swing is fenced at the gauge.</p>
+          <div class="scrubbox">
+            <label for="scrub"><span>Scrub the cycle</span><span id="scrubVal">year 0</span></label>
+            <input type="range" id="scrub" min="0" max="25772" step="1" value="0"
+              aria-label="Drag to set the year in the precession cycle" />
           </div>
-        </div>
+        </section>
 
+        <!-- ============ SIDE COLUMN ============ -->
         <div>
-          <div class="card">
-            <h2>The coupling gauge — gap remaining</h2>
-            <p class="big-t"><span id="gapPct">100%</span> <span class="unit">of the polar gap remains</span></p>
-            <div class="gauge-wrap">
-              <div class="gauge">
-                <div class="todaymark" id="todayMark" style="left:100%"></div>
-                <div class="needle" id="gaugeNeedle" style="left:100%"></div>
-              </div>
-              <div class="gauge-scale"><span>AT EQUALITY — C = B, THE FLIPPING POINT</span><span>EARTH TODAY</span></div>
+          <section class="panel" aria-label="The feedback ring">
+            <h2>The feedback ring · four links</h2>
+            <div class="ringwrap">
+              <svg class="ring" viewBox="0 0 300 300" role="img"
+                aria-label="Feedback ring: precession drives insolation timing, insolation timing drives melt, melt changes the moments of inertia, and the moments feed back into precession. The Moon-locked ocean carries the timing in the middle.">
+                <circle cx="150" cy="150" r="104" fill="none" stroke="#262c31" stroke-width="1.5" stroke-dasharray="3 5" />
+                <!-- links (arcs between nodes) -->
+                <path id="link0" d="M 176 52 A 104 104 0 0 1 248 124" fill="none" stroke="#262c31" stroke-width="3" />
+                <path id="link1" d="M 248 176 A 104 104 0 0 1 176 248" fill="none" stroke="#262c31" stroke-width="3" />
+                <path id="link2" d="M 124 248 A 104 104 0 0 1 52 176" fill="none" stroke="#262c31" stroke-width="3" />
+                <path id="link3" d="M 52 124 A 104 104 0 0 1 124 52" fill="none" stroke="#262c31" stroke-width="3" />
+                <!-- arrowheads -->
+                <path d="M 248 118 l 4 12 l -11 -3 z" fill="#6b7176" />
+                <path d="M 182 248 l -12 4 l 3 -11 z" fill="#6b7176" />
+                <path d="M 52 182 l -4 -12 l 11 3 z" fill="#6b7176" />
+                <path d="M 118 52 l 12 -4 l -3 11 z" fill="#6b7176" />
+                <!-- nodes -->
+                <g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="10.5" fill="#e8e6e0" text-anchor="middle">
+                  <circle id="node0" cx="150" cy="46" r="17" fill="#171b1f" stroke="#262c31" stroke-width="1.5" />
+                  <text x="150" y="30" fill="#9aa0a3" font-size="9.5">1 · PRECESSION</text>
+                  <text x="150" y="50" font-size="13">🌀</text>
+                  <circle id="node1" cx="254" cy="150" r="17" fill="#171b1f" stroke="#262c31" stroke-width="1.5" />
+                  <text x="254" y="118" fill="#9aa0a3" font-size="9.5">2 · SUNLIGHT</text>
+                  <text x="254" y="134" fill="#9aa0a3" font-size="9.5">TIMING</text>
+                  <text x="254" y="154" font-size="13">☀️</text>
+                  <circle id="node2" cx="150" cy="254" r="17" fill="#171b1f" stroke="#262c31" stroke-width="1.5" />
+                  <text x="150" y="246" font-size="13">💧</text>
+                  <text x="150" y="282" fill="#9aa0a3" font-size="9.5">3 · MELT</text>
+                  <circle id="node3" cx="46" cy="150" r="17" fill="#171b1f" stroke="#262c31" stroke-width="1.5" />
+                  <text x="46" y="118" fill="#9aa0a3" font-size="9.5">4 · MOMENTS OF</text>
+                  <text x="46" y="134" fill="#9aa0a3" font-size="9.5">INERTIA</text>
+                  <text x="46" y="154" font-size="13">⚖️</text>
+                </g>
+                <text x="150" y="142" text-anchor="middle" font-size="17">🌙</text>
+                <text x="150" y="162" text-anchor="middle" fill="#9aa0a3" font-size="10"
+                  font-family="ui-monospace, Menlo, Consolas, monospace">the Moon-locked ocean</text>
+                <text x="150" y="176" text-anchor="middle" fill="#9aa0a3" font-size="10"
+                  font-family="ui-monospace, Menlo, Consolas, monospace">carries the timing</text>
+              </svg>
             </div>
-            <p class="gauge-verdict" id="gaugeVerdict">—</p>
-            <div class="nums" style="margin-top:10px;">
-              <div class="row"><span class="k">The polar gap (C − B)</span><span class="v" id="gapVal">—</span></div>
-              <div class="row"><span class="k">Flip period at this gap, T(gap)</span><span class="v" id="tGapVal">—</span></div>
-              <div class="row"><span class="k">T at Earth today (gap fully open)</span><span class="v" id="tTodayVal">—</span></div>
-              <div class="row"><span class="k">The stretch — T(gap) ÷ T(today)</span><span class="v" id="stretchVal">—</span></div>
-            </div>
-            <p class="small dim">This gauge is the thesis of the piece. The flip's period is not the
-              flip's own property — it is set by the gaps around the spin axis, and the glacial
-              clock spends one of those gaps. Drag the gap toward zero and the analytic period
-              stretches toward infinity — <b>the freeze</b>. At zero, C and B are equal, B's rank
-              changes, and past it B stops being the intermediate axis at all: there is no longer
-              an unstable seat for the spin to sit on. <b>The flipping point is not a place or a
-              date — it is the moment two moments become equal and the spin's axis changes rank.</b>
-              In dual-pole mode the needle never leaves the Earth-today mark: the gap is held,
-              and there is no flip period to print — a balanced seat has no timing to spend.</p>
-            <p class="fence danger"><b>Fenced at full strength:</b> the clock's full swing moves
-              ≈5×10²¹ kg — about 4 ocean masses, about 200× every glacier and ice sheet on
-              Earth — pole-ward. <b>That is beyond any physical melt.</b> And the direction matters:
-              real melt moves the needle the <i>other way</i> — melting everything raises C by
-              +7.9×10³² kg·m² and <i>widens</i> this gap (the TOTAL MELT preset in
-              <i>The Flipping Point</i>). The spending half of this clock is ice moving pole-ward,
-              which no melt does; it is drawn so the gear between the two cycles can be seen.</p>
-          </div>
+            <p class="ringcap">Now lighting: <b id="ringNow">precession → sunlight timing</b></p>
+            <p class="hint">Each link lights for its quarter of the cycle. Precession retimes the
+              seasons' sunlight; the sunlight times the melt; the melt rearranges Earth's mass —
+              its moments of inertia; and the moments are the very handle the Moon and Sun grip
+              to drive the precession. The loop closes.</p>
+          </section>
 
-          <div class="card">
-            <h2>The glacial clock — the slow cycle</h2>
-            <canvas id="gc" aria-label="The glacial clock dial: the pole seen from above, its ice cap growing and melting with the clock's phase"></canvas>
-            <div class="state-line">
-              <span class="chip">Glacial phase <b id="phaseVal">0%</b></span>
-              <span class="chip">Half <b id="halfVal">—</b></span>
-              <span class="chip">Clock cycles <b id="cyclesVal">0</b></span>
+          <section class="panel countdown" style="margin-top:18px" aria-label="Countdowns">
+            <h2>Our position · the countdowns</h2>
+            <div class="cd">
+              <div class="tag">Our position</div>
+              <p><b>11,700 years</b> into the Holocene interglacial. The natural next glacial
+                inception sits roughly <b>50,000 years</b> out — and human carbon has postponed
+                it <b>past 100,000</b>. We are early in the interglacial, not late.</p>
             </div>
-            <div class="controls">
-              <button id="btnClock" class="primary" aria-pressed="true">⏸ Pause the clock</button>
-              <button id="btnClockReset">Clock back to Earth today</button>
+            <div class="cd">
+              <div class="tag">Countdown A — the flip in who leads</div>
+              <p>Antarctica's loss rate overtakes Greenland's: <b>scenario window ~2040–2070</b>,
+                <i>if</i> differential acceleration persists. Assumption, printed: Antarctica's
+                loss keeps accelerating faster than Greenland's. If it doesn't, the window
+                moves — or never arrives.</p>
             </div>
-            <div class="slider-block">
-              <div class="slider-head">
-                <span class="name">Scrub the glacial cycle</span>
-                <span class="val" id="scrubVal">at Earth today</span>
-              </div>
-              <input type="range" id="clockRange" min="0" max="1000" step="1" value="0" aria-label="Scrub the glacial cycle" />
+            <div class="cd">
+              <div class="tag">Countdown B — the day itself</div>
+              <p>The melt's lengthening of the day overtakes tidal braking: <b>~2100</b> under
+                high emissions, when the melt term (~+2.6 ms/century) passes the tidal term
+                (+2.3 ms/century). Scrub this toy to a melt pulse peak and you can watch the
+                toy's melt term cross the tidal line.</p>
             </div>
-            <p class="small dim">One full turn of the clock: the ice grows pole-ward (m: 0 → 4 ocean
-              masses), the polar gap is <b>spent</b> to zero at m ≈ 3.13 and crossed beyond it;
-              then the ice melts back (m: 4 → 0) and the gap is <b>restored</b>. In dual-pole
-              mode the same turn runs balanced — A ≡ B throughout, and the gauge needle holds
-              at Earth today's mark. The clock's speed is the SPEED slider beside the melt-mode
-              switch — one speed gears both cycles. The real glacial cycle turns in ~10⁵ years
-              and moves a small fraction of one ocean mass — this clock is sped up by ~10¹⁰ and
-              overdriven by ~200×, so the gear can be watched. Both exaggerations are printed
-              here, on the face.</p>
-          </div>
-
-          <div class="card label-card">
-            <p class="stamp">Exhibit — live mathematics, honestly fenced · NO CLAIM</p>
-            <p><b>Labeled plainly: this is an exhibit — Euler's equations integrated live and a
-              glacial drive geared into them, which is mathematics you can check, wrapped around
-              a planet it does not threaten. It makes NO CLAIM about Earth's future.</b>
-              Earth's spin sits on its largest-moment axis; melting deepens that seat (see the
-              parent exhibits). The flip is real physics — for bodies spinning on their middle
-              axis: the space-station wingnut, and tumbling asteroids like Toutatis.</p>
-            <p><b>The Earth face, stated plainly:</b> the globe is the melt-loop exhibit's own
-              presentation — both polar caps drawn on the planet, the pole marked, the axis
-              riding its precession cone — with <i>The Flipping Point</i>'s axis assembly drawn
-              through it: the red angular-momentum line, the blue figure-axis trace, and the
-              three body axes. The flips happen in this picture. In single-pole mode the whole
-              assembly somersaults and the marked pole swings end-over-end around the red line;
-              in dual-pole mode the pole rides its cone, steady, the way the melt loop's Earth
-              rides it.</p>
-            <p><b>The two melt modes, labeled plainly:</b> toy paths in the parents' ring-model
-              units, described in their qualitative terms — asymmetry between the equatorial
-              moments destabilizes the intermediate seat; symmetric redistribution preserves
-              the balance. Single-pole melt is the asymmetric path: the (C − B) gap is spent
-              and the body flips. Dual-pole melt is the symmetric path: A and B stay equal, the
-              gap is held at Earth today's guard, and the spin stays steady. Neither mode is a
-              model of any real ice sheet, and neither says anything about Earth's future.</p>
-            <p><b>The forced seat, stated plainly:</b> to make the intermediate axis's timing
-              visible, this exhibit <b>forces</b> Earth's spin onto axis B. With Earth's real
-              spin on C, the same glacial arithmetic merely breathes the stable wobble's period
-              (the ~305-day Euler wobble at today's moments) — no flip is possible, and none is
-              shown here for the real configuration. <b>The seat, not the planet, is the
-              protection.</b> The built-in ~10° tilt is aimed along the direction the instability
-              itself amplifies — the generic nudge. (Aimed the other way, the same tilt first
-              <i>dies toward the axis</i> and the flip waits far longer: the saddle at the
-              intermediate seat has both faces, and both are real.)</p>
-            <p><b>Provenance of the numbers:</b> the moments, the ring-model path, the melt
-              ceiling (+7.9×10³² kg·m² on C), and the ≈5×10²¹ kg boundary figure are the parent
-              exhibits' own, reused unchanged — in <i>The Flipping Point</i>'s verification the
-              flip period stretched from 1,374 to 19,455 toy-time as the gap closed, and its
-              angular momentum held to ~10⁻¹² relative drift. This page's readouts are its own
-              live computations from the same formulas.</p>
-            <p>Rigid-body fences, stated plainly: the body in this toy is perfectly rigid and
-              torque-free. Earth is neither — it flows, its bulge follows its spin, and the Moon
-              and Sun hold torques on it. Every one of those differences makes the real planet
-              <i>more</i> settled in its seat, not less. The drawing is a schematic Earth (its
-              flattening exaggerated); the moments are the numbers the clock sets, and the
-              integration is exact for the body those numbers describe.</p>
-            <p>It runs right here in your browser. No account, no install, no tracking.</p>
-            <p><b>Free forever, for everyone — one common bond.</b></p>
-          </div>
+            <div class="cd">
+              <div class="tag">Countdown C — the threshold</div>
+              <p>West Antarctica is a <b>threshold, not a date</b>. Once committed, its collapse
+                would run for <b>centuries</b>. No year is registered for it, and none should be
+                read into this panel.</p>
+            </div>
+            <p class="fineprint">All three are <b>SCENARIO ARITHMETIC</b> from published rates
+              (IMBIE mass balance; Kiani Shahvandi et al. 2024) — not prophecy. The registered,
+              falsifiable versions are predictions P1–P5 in the idea paper.</p>
+          </section>
         </div>
       </div>
 
+      <!-- ============ HONEST LABELING ============ -->
+      <section class="label-card" aria-label="About this exhibit">
+        <p class="stamp">Exhibit — live mathematics, honestly fenced · NO CLAIM</p>
+        <p>
+          Labeled plainly: this is an exhibit of an <b>IDEA</b> — a picture of a hypothesis,
+          not a proof and not a forecast. The idea — glacial melt coupling back into the
+          precession that paces it — was published in advance on 2026-10-25, dated and
+          pre-registered with explicit kill conditions, so the data can grade it in the open:
+          <a href="https://github.com/jeffgurd888/thet-logos/blob/master/whitepaper/melt-precession-coupling-idea-2026-10-25.md">the
+          Melt–Precession Coupling idea paper</a>.
+        </p>
+        <p>
+          The flip drawn in the loop is the companion exhibit's machinery — <i>The Flipping
+          Point</i>'s Euler integration — geared into this page, and it does not contradict
+          the sentence above: the idea predicts no axis flip <i>for Earth</i>, whose spin
+          sits on its largest-moment axis, a seat melt only deepens. The flip appears here
+          because this exhibit <b>forces</b> the spin onto axis B, the intermediate seat —
+          the one seat a tumbling body cannot hold — so the instability's timing can be
+          watched against the melt cycle. <b>The seat, not the planet, is the protection.</b>
+          Two preparations are disclosed, not hidden: the initial tilt (~10°) is aimed along
+          the saddle's growing direction, so the flip develops promptly instead of after a
+          long die-down (the unaimed tilt lies almost on the saddle's decaying direction —
+          the parent exhibit's slow start, found in the previous build); and the exhibit
+          opens mid-tumble — the integration is pre-rolled to the developed swing, with the
+          flip counter starting at zero from there.
+        </p>
+        <p class="fences">
+          The fences, stated plainly: the toy's pole migration is <b>magnified thousands of
+          times</b> — the real drift is about a centimeter a year, invisible at this scale, so
+          the dot's walk is a diagram, not a measurement. The tempo shift is capped at the
+          paper's honest ceiling: <b>+0.3%</b>, and that only for melting <i>all</i> modern
+          ice. The flip's fences: the glacial drive in this exhibit moves up to
+          ≈5×10²¹ kg — about 4 ocean masses, about 200× every glacier and ice sheet on
+          Earth — pole-ward; <b>that is beyond any physical melt</b>. And the direction
+          matters: real melt moves the moments the <i>other</i> way — melting everything
+          raises C by +7.9×10³² kg·m² and <i>widens</i> the polar gap; it deepens the stable
+          seat, it does not spend it. The spending half of this clock is ice moving
+          pole-ward, which no melt does; it is drawn so the gear between the two cycles can
+          be seen. The clock is sped up by ~10¹⁰ and overdriven by ~200×; both
+          exaggerations are printed here, on the face. MONO versus DUAL is the asymmetry
+          lesson in the parents' terms: what destabilizes the intermediate seat is the
+          asymmetry the single pole's redistribution works on the moments — in DUAL the
+          equatorial pair is held exactly balanced and the polar gap at Earth today's
+          guard, so no intermediate seat ever forms and the spin rides steady. The body in
+          this toy is perfectly rigid and torque-free. Earth is neither — it flows, its
+          bulge follows its spin, and the Moon and Sun hold torques on it — and every one
+          of those differences settles the real planet further into its seat. One-way mode
+          is the no-return scenario: it breaks the loop on purpose; scrubbed to the end of
+          its drive, the MONO seat is spent past its crossing and the flip switches off
+          there too. Fast loss separates the axes only in the model. The Coriolis term is
+          real physics at a small address: it steers the ocean and stirs the length of day
+          at the sub-millisecond level; the mass term still owns the pole.
+        </p>
+        <p>It runs right here in your browser. No account, no install, no tracking.</p>
+        <p><b>Free forever, for everyone — one common bond.</b></p>
+      </section>
+
       <footer>
-        The Glacial Clock · an exhibit of Nexus Research · Euler's equations for torque-free rigid
-        rotation, integrated live (RK4), with the moments driven by a glacial cycle along the
-        ring-model path. Companion exhibits: The Flipping Point, and “Why Does Antarctic Polar
-        Ice Melt Matter?”
+        <span>thet-logos / ACMD — Jeffrey Michael Gurd, Nexus Research (independent).</span>
+        <span>Idea paper: “WATCH ME — The Melt–Precession Coupling” (2026-10-25) · predictions P1–P5 registered · 0 parts of any claim closed.</span>
+        <span>Key numbers: cycle 25,772 yr · H ≈ 1/305.4 · tempo ceiling +0.3% · tidal braking +2.3 ms/cy.</span>
       </footer>
     </div>
 
     <script>
-    "use strict";
-    /* ============================================================
-       THE GLACIAL CLOCK — two cycles, geared.
-       FAST CYCLE: RK4 integration of Euler's equations for
-       torque-free rigid rotation, carried over from The Flipping
-       Point (same DT, same spin magnitude, same flip classifier;
-       the built-in tilt is ~10 degrees so the instability develops
-       fast enough to watch). State: omega (body frame) +
-       quaternion q (body -> space).
-       SLOW CYCLE: a glacial phase drives the moments along one of
-       two melt paths:
-       - SINGLE POLE (asymmetric): the parents' ring-model path —
-         per ocean mass m moved pole-ward, dA = dB = +3/8 m R^2,
-         dC = -3/4 m R^2 — so (A,B,C) walk from Earth today
-         (8.01, 8.02, 8.04) and the polar gap (C-B) closes at
-         m ~ 3.13 ocean masses. Axis B keeps the middle moment:
-         the unstable seat. The gap is SPENT; the body flips.
-       - DUAL POLE (symmetric): both poles' ice moves together —
-         A and B stay BALANCED (A == B at every moment, the pair
-         being the mean of the single path's equatorial pair) and
-         C rides exactly one Earth-today gap above them, so the
-         polar gap is HELD, never spent. With A == B there is no
-         middle moment for B to hold: the seat is a smallest seat,
-         the spin is steady, and nothing flips.
-       THE GEAR: when the clock (or the mode switch) changes the
-       moments, omega is re-derived from the SAME body-frame
-       angular momentum (w_i = L_i / I_i), so L is conserved
-       exactly through the redistribution — internal mass movement
-       conserves angular momentum, not angular velocity. Energy is
-       not conserved across the drive (the redistribution does
-       work), which is the physics, and it is not hidden.
-       THE FACE: the Earth is drawn in the melt-loop exhibit's
-       presentation — both polar caps on the globe, the pole
-       marked, the axis riding its precession cone — with The
-       Flipping Point's axis assembly (red L line, blue figure-axis
-       trace, the three body axes) drawn through it, so the flips
-       happen inside the caps picture.
-       ============================================================ */
-    var DT = 0.004;              // fixed integration step (toy time)
-    var OMEGA0 = 1.5;            // spin magnitude at reset
-    var TILT = 10 * Math.PI / 180; // built-in off-axis tilt, ~10 degrees
-    var BASE_STEPS = 72;         // integration steps per frame at SPEED 1x
+      (function () {
+        "use strict";
 
-    function $(id) { return document.getElementById(id); }
+        // ---------- Constants (from the idea paper) ----------
+        var CYCLE = 25772;            // years, one full precession
+        var TILT = 23.4;              // degrees, axial tilt
+        var TEMPO_CEILING = 0.3;      // %, for melting ALL modern ice — never exceeded
+        var MONO_TEMPO_SHARE = 0.15;  // toy parameter: mono pulses are single-basin events
+        var MIG_MAX = 6.0;            // degrees of pole migration at full mono pulse (toy scale)
+        var LOD_AT_PEAK = 2.6;        // ms/cy, melt term at pulse peak (toy scale; 2100 projection)
+        var LOD_TIDAL = 2.3;          // ms/cy, tidal braking
+        var BASE_SECONDS = 90;        // seconds per full cycle at 1x speed
 
-    var EARTH_I = [8.01, 8.02, 8.04];  // x10^37 kg m^2, axes A,B,C
-    var GAP0_CB = EARTH_I[2] - EARTH_I[1]; // 0.02 x10^37 = 2.0e35 kg m^2
-
-    var toy = {
-      I: EARTH_I.slice(),      // moments (1e37 kg m^2), set by the clock + mode
-      spinAxis: 1,               // 0=A, 1=B, 2=C — FORCED onto B (fenced)
-      w: [0, 0, 0],              // omega, body frame
-      q: [1, 0, 0, 0],           // quaternion body -> space
-      t: 0,
-      playing: true,
-      speed: 2,                  // the unified SPEED (default 2x)
-      sHist: [],                 // spin-axis component history (unit)
-      flips: 0,
-      armedSign: 0,              // hysteresis arming for flip detection
-      lastFlipT: null,
-      flipInterval: null,
-      Lspace: [0, 0, 0],         // angular momentum in space (conserved)
-      trail: []                  // figure-axis tip trail (space frame)
-    };
-
-    /* ---------- the melt mode ----------
-       "single": one pole's ice moves — asymmetric path, gap spent.
-       "dual":   both poles together — A == B balanced, gap held. */
-    var MELT = { mode: "single" };
-
-    /* ---------- the glacial clock ----------
-       phase p in [0,1): m(p) = 2 - 2cos(2 pi p) ocean masses moved
-       pole-ward — m = 0 at Earth today, m = 4 at the half-turn,
-       back to 0 at the full turn. First half: ice grows, the gap
-       is SPENT (single mode). Second half: ice melts, the gap is
-       RESTORED. In dual mode the same turn runs with A == B and
-       the gap held throughout. */
-    var M_MAX = 4;               // ocean masses at the half-turn (the parents' boundary figure)
-    var CLOCK_LEN = 120;         // seconds per full cycle at speed 1
-    var GLA = {
-      phase: 0,
-      playing: true,
-      speed: 2,                  // mirrors the unified SPEED
-      cycles: 0,                 // completed full turns
-      m: 0
-    };
-    function mOfPhase(p) {
-      return M_MAX * (0.5 - 0.5 * Math.cos(2 * Math.PI * p));
-    }
-    /* The ring-model path, the parents' own (their seqMoments):
-       per ocean mass moved, dA = dB = +3/8 m R^2, dC = -3/4 m R^2
-       (R = 6.371e6 m, one ocean mass = 1.4e21 kg). */
-    var OCEAN_KG = 1.4e21, EARTH_R = 6.371e6;
-    var PER_OCEAN = OCEAN_KG * EARTH_R * EARTH_R / 1e37; // mR^2 in 1e37 units
-    function clockMoments(m) {
-      return [EARTH_I[0] + 0.375 * PER_OCEAN * m,
-              EARTH_I[1] + 0.375 * PER_OCEAN * m,
-              EARTH_I[2] - 0.75 * PER_OCEAN * m];
-    }
-    /* The dual-pole path: the equatorial pair is the mean of the
-       single path's pair (so A == B exactly, at every m), and C
-       sits exactly GAP0_CB above B — the polar gap is held at
-       Earth today's value through the whole cycle. */
-    function dualMoments(m) {
-      var s = clockMoments(m);
-      var pair = (s[0] + s[1]) / 2;
-      return [pair, pair, pair + GAP0_CB];
-    }
-    function momentsFor(m) {
-      return MELT.mode === "dual" ? dualMoments(m) : clockMoments(m);
-    }
-    /* Apply the clock's moments for the current phase and mode.
-       Angular momentum in the body frame is held EXACTLY: L_b is
-       computed under the old moments, the moments are replaced,
-       and omega is re-derived as L_b / I_new. At reset (w = 0) it
-       simply sets the moments. */
-    function applyClock() {
-      GLA.m = mOfPhase(GLA.phase);
-      var newI = momentsFor(GLA.m);
-      var Lb = [toy.I[0] * toy.w[0], toy.I[1] * toy.w[1], toy.I[2] * toy.w[2]];
-      toy.I = newI;
-      if (Lb[0] !== 0 || Lb[1] !== 0 || Lb[2] !== 0) {
-        toy.w = [Lb[0] / newI[0], Lb[1] / newI[1], Lb[2] / newI[2]];
-      }
-    }
-    function glaAdvance(dtSec) {
-      if (!GLA.playing) return;
-      var prev = GLA.phase;
-      GLA.phase += (dtSec / CLOCK_LEN) * GLA.speed;
-      if (GLA.phase >= 1) { GLA.cycles += Math.floor(GLA.phase); GLA.phase = GLA.phase % 1; }
-      if (GLA.phase !== prev) applyClock();
-    }
-
-    function effI() { return toy.I; }
-    function ranks() {
-      // rank label per axis: 0 smallest, 1 intermediate, 2 largest (ties share a rank)
-      var e = effI();
-      var order = [0, 1, 2].sort(function (a, b) { return e[a] - e[b]; });
-      var r = [0, 0, 0];
-      r[order[0]] = 0; r[order[1]] = 1; r[order[2]] = 2;
-      if (Math.abs(e[order[1]] - e[order[0]]) < 1e-9) r[order[1]] = r[order[0]];
-      if (Math.abs(e[order[2]] - e[order[1]]) < 1e-9) r[order[2]] = r[order[1]];
-      return r;
-    }
-    /* Is the spin axis strictly the intermediate moment right now?
-       A tie (dual mode's A == B) is NOT an intermediate seat. */
-    function spinIntermediate() {
-      var e = effI(), k = toy.spinAxis;
-      var oth = [0, 1, 2].filter(function (a) { return a !== k; });
-      var d1 = e[k] - e[oth[0]], d2 = e[k] - e[oth[1]];
-      return (d1 > 1e-9 && d2 < -1e-9) || (d1 < -1e-9 && d2 > 1e-9);
-    }
-    function spinS() {
-      var n = Math.hypot(toy.w[0], toy.w[1], toy.w[2]);
-      return n > 0 ? toy.w[toy.spinAxis] / n : 1;
-    }
-
-    /* ---------- quaternion helpers (the parents') ---------- */
-    function qMul(a, b) {
-      return [
-        a[0]*b[0] - a[1]*b[1] - a[2]*b[2] - a[3]*b[3],
-        a[0]*b[1] + a[1]*b[0] + a[2]*b[3] - a[3]*b[2],
-        a[0]*b[2] - a[1]*b[3] + a[2]*b[0] + a[3]*b[1],
-        a[0]*b[3] + a[1]*b[2] - a[2]*b[1] + a[3]*b[0]
-      ];
-    }
-    function qRot(q, v) {
-      var p = qMul(q, [0, v[0], v[1], v[2]]);
-      var qc = [q[0], -q[1], -q[2], -q[3]];
-      var r = qMul(p, qc);
-      return [r[1], r[2], r[3]];
-    }
-    function qNorm(q) {
-      var n = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
-      return [q[0]/n, q[1]/n, q[2]/n, q[3]/n];
-    }
-
-    /* ---------- dynamics (the parents' RK4, verbatim in form) ---------- */
-    function deriv(state) {
-      var e = effI();
-      var w1 = state[0], w2 = state[1], w3 = state[2];
-      var q = [state[3], state[4], state[5], state[6]];
-      var dw = [
-        (e[1] - e[2]) * w2 * w3 / e[0],
-        (e[2] - e[0]) * w3 * w1 / e[1],
-        (e[0] - e[1]) * w1 * w2 / e[2]
-      ];
-      var qd = qMul(q, [0, w1, w2, w3]);
-      return [dw[0], dw[1], dw[2], 0.5*qd[0], 0.5*qd[1], 0.5*qd[2], 0.5*qd[3]];
-    }
-    function stepOnce() {
-      var y = [toy.w[0], toy.w[1], toy.w[2], toy.q[0], toy.q[1], toy.q[2], toy.q[3]];
-      var k1 = deriv(y);
-      var y2 = y.map(function (v, i) { return v + 0.5 * DT * k1[i]; });
-      var k2 = deriv(y2);
-      var y3 = y.map(function (v, i) { return v + 0.5 * DT * k2[i]; });
-      var k3 = deriv(y3);
-      var y4 = y.map(function (v, i) { return v + DT * k3[i]; });
-      var k4 = deriv(y4);
-      for (var i = 0; i < 7; i++) y[i] += (DT / 6) * (k1[i] + 2*k2[i] + 2*k3[i] + k4[i]);
-      toy.w = [y[0], y[1], y[2]];
-      toy.q = qNorm([y[3], y[4], y[5], y[6]]);
-      toy.t += DT;
-      // classifier bookkeeping (the parents' flip detector)
-      var s = spinS();
-      toy.sHist.push(s);
-      if (toy.sHist.length > 20000) toy.sHist.shift();
-      if (s > 0.5) {
-        if (toy.armedSign < 0) registerFlip();
-        toy.armedSign = 1;
-      } else if (s < -0.5) {
-        if (toy.armedSign > 0) registerFlip();
-        toy.armedSign = -1;
-      }
-    }
-    function registerFlip() {
-      toy.flips++;
-      if (toy.lastFlipT !== null) toy.flipInterval = toy.t - toy.lastFlipT;
-      toy.lastFlipT = toy.t;
-    }
-    function stepN(n) { for (var i = 0; i < n; i++) stepOnce(); }
-
-    function resetSpin() {
-      var dir = [0, 0, 0];
-      var others = [0, 1, 2].filter(function (a) { return a !== toy.spinAxis; });
-      dir[toy.spinAxis] = Math.cos(TILT);
-      var sT = Math.sin(TILT);
-      /* The tilt's DIRECTION inside the off-axis plane decides when
-         the flip develops. The linearized instability at the
-         intermediate seat is a saddle: one off-axis direction is
-         amplified (the growing eigenvector, components of OPPOSITE
-         sign), the perpendicular one decays toward the axis first.
-         A same-sign tilt (the parents' 0.8 / 0.6 split) happens to
-         lie almost exactly on the decaying direction at Earth
-         moments — the wobble dies toward the axis and the flip
-         waits thousands of toy-time units for the residual growing
-         component. So when the seat is intermediate, the tilt is
-         aimed along the growing eigenvector, computed from the
-         current moments: the generic nudge, developing at the
-         instability's own rate. On a stable seat there is no
-         growing direction and the parents' split is kept. */
-      var aimed = false;
-      if (spinIntermediate()) {
-        var e0 = effI(), kk = toy.spinAxis, ii = others[0], jj = others[1];
-        var Ai = (e0[kk] - e0[jj]) * OMEGA0 / e0[ii];
-        var Aj = (e0[ii] - e0[kk]) * OMEGA0 / e0[jj];
-        if (Ai * Aj > 0) {
-          var lam = Math.sqrt(Ai * Aj);
-          var rj = lam / Ai; // signed w_j / w_i along the growing eigenvector
-          var nrm = Math.hypot(1, rj);
-          dir[ii] = sT / nrm;
-          dir[jj] = sT * rj / nrm;
-          aimed = true;
-        }
-      }
-      if (!aimed) {
-        dir[others[0]] = sT * 0.8;
-        dir[others[1]] = sT * 0.6;
-      }
-      toy.w = [dir[0] * OMEGA0, dir[1] * OMEGA0, dir[2] * OMEGA0];
-      toy.q = [1, 0, 0, 0];
-      toy.t = 0;
-      toy.sHist = []; toy.flips = 0; toy.armedSign = 0;
-      toy.lastFlipT = null; toy.flipInterval = null;
-      toy.trail = [];
-      var e = effI();
-      var Lb = [e[0]*toy.w[0], e[1]*toy.w[1], e[2]*toy.w[2]];
-      toy.Lspace = qRot(toy.q, Lb);
-      recordTrail(true);
-    }
-
-    /* Pre-roll the instability at frozen moments until the swing
-       is developed (the spin component has crossed zero once), so
-       the exhibit opens already tumbling and the first counted
-       flip lands within seconds. The flip counter and flip timing
-       are zeroed afterwards: the pre-roll is the wind-up, not a
-       flip seen. Bounded: at most PREROLL_MAX toy-time. On a seat
-       that is not intermediate there is nothing to develop. */
-    var PREROLL_MAX = 1200;
-    function prerollDevelop() {
-      if (!spinIntermediate()) return;
-      while (toy.t < PREROLL_MAX) {
-        stepN(250);
-        var crossed = false;
-        for (var i = Math.max(0, toy.sHist.length - 250); i < toy.sHist.length; i++) {
-          if (toy.sHist[i] < 0) { crossed = true; break; }
-        }
-        if (crossed) break;
-      }
-      toy.flips = 0;
-      toy.lastFlipT = null;
-      toy.flipInterval = null;
-      recordTrail(true);
-    }
-
-    /* ---------- mode switching ----------
-       Switching re-derives the moments on the newly chosen path at
-       the current glacial phase (L preserved by applyClock), then
-       re-seats the spin so each mode presents its own state:
-       dual = balanced and steady; single = re-developed tumble. */
-    var MODE_NOTES = {
-      single: "<b>Single pole melt:</b> one pole's ice moves and the redistribution " +
-        "is <b>asymmetric</b> — it spends the polar gap (C − B) while axis B keeps the middle " +
-        "moment, the unstable seat. The intermediate-axis timing is spent, and <b>the body " +
-        "flips</b>. The exhibit opens here, already tumbling.",
-      dual: "<b>Dual pole melt:</b> both poles' ice moves together and the redistribution " +
-        "is <b>symmetric</b> — the equatorial moments A and B stay <b>balanced (equal)</b> " +
-        "and the polar gap is <b>held</b> at Earth today's guard. With no middle moment for " +
-        "B to hold, the spin is steady and <b>nothing flips</b>."
-    };
-    function setMode(md) {
-      if (md !== "single" && md !== "dual") return;
-      MELT.mode = md;
-      applyClock();
-      resetSpin();
-      if (md === "single") prerollDevelop();
-      $("btnSingle").classList.toggle("on", md === "single");
-      $("btnDual").classList.toggle("on", md === "dual");
-      $("btnSingle").setAttribute("aria-pressed", md === "single" ? "true" : "false");
-      $("btnDual").setAttribute("aria-pressed", md === "dual" ? "true" : "false");
-      $("modeNote").innerHTML = MODE_NOTES[md];
-      refreshReadouts();
-    }
-
-    /* ---------- classification, analytic period, the gap ---------- */
-    function classify() {
-      if (spinIntermediate()) {
-        return toy.flips > 0 ? "flip" : "building";
-      }
-      return "stable";
-    }
-    function analyticPeriod() {
-      // the parents' frozen-coefficient polhode period for spin near the chosen axis
-      var e = effI();
-      var k = toy.spinAxis;
-      var oth = [0, 1, 2].filter(function (a) { return a !== k; });
-      var i = oth[0], j = oth[1];
-      var f = Math.abs((e[k] - e[i]) * (e[k] - e[j]));
-      var om = Math.abs(toy.w[k]);
-      if (om === 0 || f === 0) return Infinity;
-      var freq = om * Math.sqrt(f / (e[i] * e[j]));
-      return freq > 0 ? (2 * Math.PI) / freq : Infinity;
-    }
-    /* The polar gap the clock spends: C - B, in 1e37 units.
-       Signed: negative past the crossing. Held at GAP0_CB in dual. */
-    function gapCB() { var e = effI(); return e[2] - e[1]; }
-    /* Fraction of Earth today's polar gap still unspent. */
-    function gapRemaining() { return gapCB() / GAP0_CB; }
-
-
-    /* ---------- rendering: the Earth face ----------
-       The melt-loop exhibit's presentation, driven by the real
-       Euler state: the filled globe, BOTH polar caps drawn as
-       filled discs centered on the figure axis's ends, the pole
-       marked in red, the figure axis riding its precession cone
-       (the dashed ring the axis tip travels, drawn about L at the
-       tip's current cone angle) — with The Flipping Point's axis
-       assembly drawn through it: the red L line, the blue
-       figure-axis tip trace, and the three body axes. When the
-       body flips, the whole assembly somersaults in this picture
-       and the marked pole swings end-over-end around L. */
-    var cv = $("cv"), ctx = cv.getContext("2d");
-    var CW = 0, CH = 0;
-    function resizeOne(c) {
-      var r = c.getBoundingClientRect();
-      var dpr = window.devicePixelRatio || 1;
-      var w = Math.max(280, r.width), h = Math.max(240, r.height);
-      c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
-      var c2 = c.getContext("2d");
-      c2.setTransform(dpr, 0, 0, dpr, 0, 0);
-      return [w, h];
-    }
-    function resize() {
-      var s = resizeOne(cv); CW = s[0]; CH = s[1];
-      resizeOne(gc);
-    }
-    function view(v) {
-      // fixed camera: rotY then rotX, orthographic (the parents')
-      var cy = Math.cos(0.55), sy = Math.sin(0.55);
-      var cx = Math.cos(-0.45), sx = Math.sin(-0.45);
-      var x1 = cy * v[0] + sy * v[2];
-      var z1 = -sy * v[0] + cy * v[2];
-      var y2 = cx * v[1] - sx * z1;
-      var z2 = sx * v[1] + cx * z1;
-      return [x1, y2, z2];
-    }
-    function proj(v) {
-      var p = view(v);
-      var scale = Math.min(CW, CH) * 0.30;
-      return [CW / 2 + p[0] * scale, CH / 2 - p[1] * scale, p[2]];
-    }
-    function vCross(a, b) {
-      return [a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]];
-    }
-    function vUnit(v) {
-      var n = Math.hypot(v[0], v[1], v[2]) || 1;
-      return [v[0]/n, v[1]/n, v[2]/n];
-    }
-    function spherePoint(latDeg, lonDeg) {
-      var la = latDeg * Math.PI / 180, lo = lonDeg * Math.PI / 180;
-      return [Math.cos(la) * Math.cos(lo), Math.cos(la) * Math.sin(lo), Math.sin(la)];
-    }
-    var MERIDIANS = [], PARALLELS = [], EQUATOR = [];
-    (function buildGlobe() {
-      var lo, la, pts;
-      for (lo = 0; lo < 180; lo += 30) {
-        pts = [];
-        for (la = -84; la <= 84; la += 6) pts.push(spherePoint(la, lo));
-        MERIDIANS.push(pts);
-      }
-      for (la = -60; la <= 75; la += 15) {
-        pts = [];
-        for (lo = 0; lo <= 360; lo += 6) pts.push(spherePoint(la, lo));
-        PARALLELS.push(pts);
-      }
-      for (lo = 0; lo <= 360; lo += 4) EQUATOR.push(spherePoint(0, lo));
-    })();
-    // fixed starfield, the melt loop's (generated once — no flicker)
-    var STARS = [];
-    for (var si = 0; si < 90; si++) {
-      STARS.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.3 + 0.4, a: Math.random() * 0.5 + 0.15 });
-    }
-    function oblateness() {
-      // drawn polar-axis scale: <1 oblate, >1 prolate (the parents', schematic)
-      var e = effI();
-      var s = e[2] - (e[0] + e[1]) / 2;
-      return 1 - 0.35 * Math.tanh(s / 0.06);
-    }
-    function bodyToSpace(p) {
-      var f = oblateness();
-      return qRot(toy.q, [p[0], p[1], p[2] * f]);
-    }
-    function drawPolyline(pts, style, width) {
-      var prev = null, started = false;
-      ctx.strokeStyle = style; ctx.lineWidth = width;
-      ctx.beginPath();
-      for (var i = 0; i < pts.length; i++) {
-        var sp = bodyToSpace(pts[i]);
-        var pr = proj(sp);
-        var facing = pr[2];
-        if (prev !== null && facing < -0.25 && prev < -0.25) { started = false; prev = facing; continue; }
-        if (!started) { ctx.moveTo(pr[0], pr[1]); started = true; }
-        else ctx.lineTo(pr[0], pr[1]);
-        prev = facing;
-      }
-      ctx.stroke();
-    }
-    var AXIS_COLORS = ["#ff5a52", "#5b9dff", "#43d97e"];
-    var AXIS_NAMES = ["A", "B", "C"];
-    function recordTrail(force) {
-      var ax = [0, 0, 0]; ax[2] = 1.55;
-      var tip = qRot(toy.q, ax);
-      var last = toy.trail[toy.trail.length - 1];
-      if (force || !last || Math.hypot(tip[0]-last[0], tip[1]-last[1], tip[2]-last[2]) > 0.03) {
-        toy.trail.push(tip);
-        if (toy.trail.length > 260) toy.trail.shift();
-      }
-    }
-    /* One polar cap, melt-loop style: a filled ice disc centered
-       on the figure axis's end, clipped to the globe. Size follows
-       the clock's drive — in single-pole mode only the north cap
-       grows with m (the asymmetry is visible); in dual-pole mode
-       both caps move together. A cap on the far side is ghosted,
-       so the pole's swing stays trackable through the flip. */
-    function drawCapFace(sign, discCx, discCy, discR) {
-      var sp = bodyToSpace([0, 0, sign]);
-      var pr = proj(sp);
-      var facing = pr[2];
-      var mfrac = GLA.m / M_MAX;
-      var sizeF;
-      if (MELT.mode === "dual") sizeF = 0.55 + 0.45 * mfrac;
-      else sizeF = sign > 0 ? 0.55 + 0.75 * mfrac : 0.55;
-      var capR = Math.max(3, discR * 0.32 * sizeF);
-      var alpha = facing < -0.25 ? 0.16 : 0.95;
-      ctx.save();
-      ctx.beginPath(); ctx.arc(discCx, discCy, discR, 0, Math.PI * 2); ctx.clip();
-      ctx.globalAlpha = alpha;
-      ctx.fillStyle = "#eef4f8";
-      ctx.beginPath(); ctx.arc(pr[0], pr[1], capR, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = "rgba(91,157,255,0.35)"; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.arc(pr[0], pr[1], capR + 2.5, 0, Math.PI * 2); ctx.stroke();
-      ctx.restore();
-      return { x: pr[0], y: pr[1], r: capR, alpha: alpha };
-    }
-    function draw() {
-      ctx.clearRect(0, 0, CW, CH);
-      // stars (the melt loop's fixed field)
-      for (var i = 0; i < STARS.length; i++) {
-        ctx.globalAlpha = STARS[i].a;
-        ctx.fillStyle = "#e8e6e0";
-        ctx.beginPath();
-        ctx.arc(STARS[i].x * CW, STARS[i].y * CH, STARS[i].r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-      var cen = proj([0, 0, 0]);
-      var discR = Math.min(CW, CH) * 0.30 * 1.04;
-      // directions in space: L (fixed) and the figure axis C (rides the cone)
-      var Lu = vUnit(toy.Lspace);
-      var Cd = qRot(toy.q, [0, 0, 1]);
-      var cosA = Math.max(-1, Math.min(1, Cd[0]*Lu[0] + Cd[1]*Lu[1] + Cd[2]*Lu[2]));
-      var sinA = Math.sqrt(Math.max(0, 1 - cosA * cosA));
-      var ref = Math.abs(Lu[2]) < 0.9 ? [0, 0, 1] : [1, 0, 0];
-      var e1 = vUnit(vCross(Lu, ref));
-      var e2 = vCross(Lu, e1);
-      function rimDir(phi) {
-        var c = Math.cos(phi), s = Math.sin(phi);
-        return [
-          Lu[0]*cosA + (e1[0]*c + e2[0]*s)*sinA,
-          Lu[1]*cosA + (e1[1]*c + e2[1]*s)*sinA,
-          Lu[2]*cosA + (e1[2]*c + e2[2]*s)*sinA
+        var LINK_NAMES = [
+          "precession → sunlight timing",
+          "sunlight timing → melt",
+          "melt → moments of inertia",
+          "moments of inertia → precession"
         ];
-      }
-      var phiTip = Math.atan2(Cd[0]*e2[0] + Cd[1]*e2[1] + Cd[2]*e2[2],
-                              Cd[0]*e1[0] + Cd[1]*e1[1] + Cd[2]*e1[2]);
-      // the precession cone rim — the dashed ring the axis tip travels
-      ctx.strokeStyle = "rgba(216,197,143,0.5)"; ctx.lineWidth = 1.2;
-      ctx.setLineDash([5, 4]);
-      ctx.beginPath();
-      for (var ri = 0; ri <= 64; ri++) {
-        var rp = proj(rimDir(ri / 64 * Math.PI * 2).map(function (v) { return v * 1.55; }));
-        if (ri === 0) ctx.moveTo(rp[0], rp[1]); else ctx.lineTo(rp[0], rp[1]);
-      }
-      ctx.stroke();
-      ctx.setLineDash([]);
-      // cone generator lines (faint, center to rim at the tip and its antipode)
-      ctx.strokeStyle = "rgba(216,197,143,0.16)"; ctx.lineWidth = 1;
-      [phiTip, phiTip + Math.PI].forEach(function (phi) {
-        var gp = proj(rimDir(phi).map(function (v) { return v * 1.55; }));
-        ctx.beginPath(); ctx.moveTo(cen[0], cen[1]); ctx.lineTo(gp[0], gp[1]); ctx.stroke();
-      });
-      // the globe (the melt loop's disc)
-      var grad = ctx.createRadialGradient(cen[0] - discR * 0.35, cen[1] - discR * 0.35, discR * 0.15, cen[0], cen[1], discR);
-      grad.addColorStop(0, "#274b73"); grad.addColorStop(1, "#12283f");
-      ctx.fillStyle = grad;
-      ctx.beginPath(); ctx.arc(cen[0], cen[1], discR, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = "rgba(232,230,224,0.35)"; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.arc(cen[0], cen[1], discR, 0, Math.PI * 2); ctx.stroke();
-      MERIDIANS.forEach(function (pts) { drawPolyline(pts, "rgba(150,195,235,0.40)", 1.1); });
-      PARALLELS.forEach(function (pts) { drawPolyline(pts, "rgba(150,195,235,0.32)", 1.1); });
-      // both polar caps (the melt loop's signature)
-      var capS = drawCapFace(-1, cen[0], cen[1], discR);
-      var capN = drawCapFace(1, cen[0], cen[1], discR);
-      drawPolyline(EQUATOR, "rgba(232,230,224,0.85)", 2.0);
-      // faint BLUE trace: the figure-axis tip's road around L
-      if (toy.trail.length > 1) {
-        ctx.strokeStyle = "rgba(91,157,255,0.55)"; ctx.lineWidth = 1.4;
-        ctx.beginPath();
-        for (var ti = 0; ti < toy.trail.length; ti++) {
-          var tp = proj(toy.trail[ti]);
-          if (ti === 0) ctx.moveTo(tp[0], tp[1]); else ctx.lineTo(tp[0], tp[1]);
+
+        // ---------- State ----------
+        var phase = 0;                // 0..1 around the cone
+        var playing = true;
+        var speed = 1;
+        var mode = "mono";            // "dual" | "mono" — opens on the single-pole model (Jeff's setting)
+        var retMode = "loop";         // "loop" | "oneway" — does the melt come back?
+        var totalYears = 0;           // cumulative elapsed cycle-years (never wraps)
+        var paceCycles = 3;           // one-way depletion pace: full loss over ~N cycles
+        var paceName = "STANDARD";
+        var figMig = 0, figVel = 0;   // figure-axis migration (deg) and its rate (deg/yr)
+        var acc = 0, lastTs = null;
+
+        var el = function (id) { return document.getElementById(id); };
+
+        // ---------- The toy's physics (pure functions of state) ----------
+        // Melt pulses: two raised-cosine deglaciation pulses per cycle.
+        function bump(p, c, w) {
+          var d = Math.abs(p - c);
+          d = Math.min(d, 1 - d);     // wrap around the cycle
+          if (d >= w) return 0;
+          return 0.5 + 0.5 * Math.cos(Math.PI * d / w);
         }
-        ctx.stroke();
-        var lastTp = proj(toy.trail[toy.trail.length - 1]);
-        ctx.fillStyle = "rgba(140,190,255,0.95)";
-        ctx.beginPath(); ctx.arc(lastTp[0], lastTp[1], 2.6, 0, Math.PI * 2); ctx.fill();
-      }
-      // the RED LINE: the angular-momentum axis, fixed in space
-      var Lp = proj([Lu[0]*2.35, Lu[1]*2.35, Lu[2]*2.35]);
-      var Lm = proj([Lu[0]*-2.35, Lu[1]*-2.35, Lu[2]*-2.35]);
-      ctx.strokeStyle = "rgba(255,42,42,0.9)"; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(Lm[0], Lm[1]); ctx.lineTo(Lp[0], Lp[1]); ctx.stroke();
-      ctx.fillStyle = "#ff2a2a";
-      ctx.font = "12px ui-monospace, Menlo, monospace";
-      ctx.fillText("L — fixed in space", Lp[0] + 8, Lp[1] + 4);
-      // body axes (the assembly that tumbles)
-      var fAx = oblateness();
-      var axisTips = [];
-      for (var ax = 0; ax < 3; ax++) {
-        var dir = [0, 0, 0]; dir[ax] = 1;
-        var axLen = ax === 2 ? 1.5 * fAx : 1.5;
-        var tipB = [dir[0] * axLen, dir[1] * axLen, dir[2] * axLen];
-        var tailB = [dir[0] * -axLen, dir[1] * -axLen, dir[2] * -axLen];
-        var pt = proj(qRot(toy.q, tipB)), pb = proj(qRot(toy.q, tailB));
-        axisTips.push(pt);
-        ctx.strokeStyle = AXIS_COLORS[ax]; ctx.lineWidth = ax === toy.spinAxis ? 3 : 1.6;
-        ctx.beginPath(); ctx.moveTo(pb[0], pb[1]); ctx.lineTo(pt[0], pt[1]); ctx.stroke();
-        ctx.fillStyle = AXIS_COLORS[ax];
-        ctx.beginPath(); ctx.arc(pt[0], pt[1], 4, 0, Math.PI * 2); ctx.fill();
-        ctx.font = "bold 13px ui-monospace, Menlo, monospace";
-        ctx.fillText(AXIS_NAMES[ax], pt[0] + 8, pt[1] - 6);
-      }
-      // labels (the melt loop's)
-      ctx.font = "600 11px ui-monospace, Menlo, Consolas, monospace";
-      ctx.fillStyle = "#9aa0a3";
-      var spinTip = axisTips[toy.spinAxis];
-      ctx.fillText("spin axis", spinTip[0] + 10, spinTip[1] + 18);
-      var conePt = proj(rimDir(phiTip + 0.85).map(function (v) { return v * 1.55; }));
-      ctx.fillText("precession cone", conePt[0] + 8, conePt[1] + 3);
-      ctx.globalAlpha = capN.alpha;
-      ctx.fillStyle = "#eef4f8";
-      ctx.fillText("Arctic cap", capN.x + 12, capN.y - 6);
-      ctx.globalAlpha = capS.alpha;
-      ctx.fillText("Antarctic cap", capS.x + 12, capS.y + 14);
-      ctx.globalAlpha = 1;
-      // the pole, marked (the melt loop's red dot)
-      var poleSp = bodyToSpace([0, 0, 1.06]);
-      var polePr = proj(poleSp);
-      ctx.globalAlpha = polePr[2] < -0.25 ? 0.35 : 1;
-      ctx.fillStyle = "#ff5a52";
-      ctx.beginPath(); ctx.arc(polePr[0], polePr[1], 5, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = "rgba(10,12,14,0.85)"; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.arc(polePr[0], polePr[1], 5, 0, Math.PI * 2); ctx.stroke();
-      ctx.fillText("the pole", polePr[0] + 9, polePr[1] + 3);
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = "#6b7176";
-      ctx.fillText("drag to turn the clock →", 12, CH - 12);
-    }
-
-    /* ---------- rendering: the glacial clock dial ----------
-       The pole seen from above. The white disc is the polar cap:
-       its radius grows with m (mass arrived pole-ward). The hand
-       sweeps the phase; the right half of the dial is the spending
-       half (growth), the left half the restoring half (melt). */
-    var gc = $("gc"), gtx = gc.getContext("2d");
-    function drawClock() {
-      var w = gc.clientWidth || 600, h = gc.clientHeight || 300;
-      var cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.36;
-      gtx.clearRect(0, 0, w, h);
-      // dial face
-      gtx.beginPath(); gtx.arc(cx, cy, R, 0, Math.PI * 2);
-      gtx.fillStyle = "#10151b"; gtx.fill();
-      gtx.strokeStyle = "rgba(216,197,143,0.55)"; gtx.lineWidth = 1.5; gtx.stroke();
-      // half shading: spending (right) vs restoring (left)
-      gtx.beginPath(); gtx.arc(cx, cy, R, -Math.PI / 2, Math.PI / 2);
-      gtx.fillStyle = "rgba(232,179,75,0.07)"; gtx.fill();
-      gtx.beginPath(); gtx.arc(cx, cy, R, Math.PI / 2, 3 * Math.PI / 2);
-      gtx.fillStyle = "rgba(91,157,255,0.07)"; gtx.fill();
-      // tick at the crossing point of the phase (where m = 3.13, gap = 0)
-      var crossP = Math.acos(1 - 2 * (3.128 / M_MAX)) / (2 * Math.PI); // phase of gap zero, spending side
-      [crossP, 1 - crossP].forEach(function (p) {
-        var a = -Math.PI / 2 + p * 2 * Math.PI;
-        gtx.strokeStyle = "rgba(255,122,107,0.8)"; gtx.lineWidth = 2;
-        gtx.beginPath();
-        gtx.moveTo(cx + Math.cos(a) * (R - 9), cy + Math.sin(a) * (R - 9));
-        gtx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
-        gtx.stroke();
-      });
-      // the polar cap: radius follows m
-      var capR = R * (0.16 + 0.62 * (GLA.m / M_MAX));
-      var cg = gtx.createRadialGradient(cx - capR * 0.3, cy - capR * 0.3, capR * 0.1, cx, cy, capR);
-      cg.addColorStop(0, "#ffffff"); cg.addColorStop(1, "#b9cfdd");
-      gtx.beginPath(); gtx.arc(cx, cy, capR, 0, Math.PI * 2);
-      gtx.fillStyle = cg; gtx.fill();
-      gtx.strokeStyle = "rgba(238,244,248,0.5)"; gtx.lineWidth = 1; gtx.stroke();
-      // the hand
-      var ha = -Math.PI / 2 + GLA.phase * 2 * Math.PI;
-      gtx.strokeStyle = "#d8c58f"; gtx.lineWidth = 2.5;
-      gtx.beginPath(); gtx.moveTo(cx, cy);
-      gtx.lineTo(cx + Math.cos(ha) * R * 0.94, cy + Math.sin(ha) * R * 0.94); gtx.stroke();
-      gtx.fillStyle = "#d8c58f";
-      gtx.beginPath(); gtx.arc(cx, cy, 3.5, 0, Math.PI * 2); gtx.fill();
-      // labels
-      gtx.font = "600 11px ui-monospace, Menlo, Consolas, monospace";
-      gtx.fillStyle = "#9aa0a3";
-      gtx.fillText("EARTH TODAY · m = 0", cx - 52, cy - R - 10);
-      gtx.fillStyle = "#e8b34b";
-      gtx.fillText("ICE GROWS — GAP SPENDING", cx + R * 0.32, cy + 4);
-      gtx.fillStyle = "#5b9dff";
-      gtx.fillText("ICE MELTS — GAP RESTORING", cx - R - 118, cy + 4);
-      gtx.fillStyle = "#ff7a6b";
-      gtx.fillText("red ticks: the gap hits zero (m ≈ 3.13)", cx - 104, cy + R + 20);
-      gtx.fillStyle = "#6b7176";
-      gtx.fillText("the pole, from above — cap size follows the clock's drive m", cx - 148, cy + R + 38);
-    }
-
-    /* ---------- readouts ---------- */
-    function fmtPeriod(T) {
-      if (!isFinite(T)) return "∞ — frozen at equality";
-      if (T >= 100) return T.toFixed(0) + " toy-time";
-      if (T >= 10) return T.toFixed(1) + " toy-time";
-      return T.toFixed(2) + " toy-time";
-    }
-    var RANK_TXT = ["smallest", "intermediate", "largest"];
-    var T_TODAY = null; // analytic period at Earth today, spin on B — set at init
-    function refreshReadouts() {
-      var e = effI(), r = ranks();
-      var ids = ["A", "B", "C"];
-      for (var a = 0; a < 3; a++) {
-        $("val" + ids[a]).textContent = e[a].toFixed(3);
-        var rk = $("rank" + ids[a]);
-        rk.textContent = RANK_TXT[r[a]].toUpperCase();
-        rk.className = "rank " + RANK_TXT[r[a]];
-      }
-      $("valM").textContent = GLA.m.toFixed(2) + " ocean masses";
-      $("valModePath").textContent = MELT.mode === "dual"
-        ? "DUAL POLE — balanced (A ≡ B, gap held)"
-        : "SINGLE POLE — asymmetric (ring path, gap spent)";
-      // spin note
-      var balanced = Math.abs(e[0] - e[1]) < 1e-9;
-      if (balanced) {
-        $("spinNote").innerHTML = "Axes A and B currently carry <b>equal</b> moments — there is " +
-          "no intermediate axis for B to be. The seat is balanced, and balanced seats do not flip.";
-      } else if (spinIntermediate()) {
-        $("spinNote").innerHTML = "Axis " + AXIS_NAMES[toy.spinAxis] + " currently carries the <b>intermediate</b> moment — the unstable seat. That is why it flips.";
-      } else {
-        var spinRank = r[toy.spinAxis];
-        $("spinNote").innerHTML = "Axis " + AXIS_NAMES[toy.spinAxis] + " currently carries the <b>" + RANK_TXT[spinRank] + "</b> moment — a stable seat. It will wobble, and only wobble.";
-      }
-      ["spinA", "spinB", "spinC"].forEach(function (id, i) {
-        $(id).setAttribute("aria-pressed", i === toy.spinAxis ? "true" : "false");
-      });
-      // the coupling gauge
-      var g = gapCB();               // 1e37 units, signed
-      var frac = gapRemaining();     // 1 at Earth today, 0 at equality, <0 past
-      var gapKg = Math.abs(g) * 1e37;
-      var pos = 100 * (Math.log10(Math.max(gapKg, 1e33)) - 33) / (37.3 - 33);
-      pos = Math.min(100, Math.max(0, pos));
-      if (g <= 0) pos = 0;
-      $("gaugeNeedle").style.left = pos.toFixed(1) + "%";
-      // Earth-today mark on the same log scale: gap = GAP0_CB
-      var todayPos = 100 * (Math.log10(GAP0_CB * 1e37) - 33) / (37.3 - 33);
-      $("todayMark").style.left = Math.min(100, Math.max(0, todayPos)).toFixed(1) + "%";
-      var T = analyticPeriod();
-      var verdict = $("gaugeVerdict");
-      if (MELT.mode === "dual") {
-        $("gapPct").textContent = "100% — held";
-        $("gapVal").textContent = (GAP0_CB * 100).toFixed(2) + "×10³⁵ kg·m² — held";
-        $("tGapVal").textContent = "no flip period — balanced seat";
-        if (T_TODAY !== null) $("tTodayVal").textContent = fmtPeriod(T_TODAY);
-        $("stretchVal").textContent = "— (the gap is held)";
-        verdict.innerHTML = "Polar gap: <b class=\"safe\">HELD at Earth today's guard</b> — dual-pole " +
-          "melt moves A and B as one (A ≡ B), so C − B never changes. Axis B ties A for the " +
-          "smallest moment: there is no intermediate seat, no flip timing to spend, and the " +
-          "spin rides its cone steady.";
-      } else {
-        $("gapPct").textContent = g > 0 ? Math.round(frac * 100) + "%" : "0% — spent and crossed";
-        $("gapVal").textContent = (g >= 0 ? "" : "−") + (Math.abs(g) * 100).toFixed(2) + "×10³⁵ kg·m²" + (g < 0 ? " (C below B)" : "");
-        $("tGapVal").textContent = fmtPeriod(T);
-        if (T_TODAY !== null) {
-          $("tTodayVal").textContent = fmtPeriod(T_TODAY);
-          $("stretchVal").textContent = isFinite(T) ? "× " + (T / T_TODAY).toFixed(2) : "∞ — the freeze";
+        function meltLevel(p) {
+          return Math.max(bump(p, 0.25, 0.13), bump(p, 0.72, 0.13));
         }
-        if (g <= 0) {
-          verdict.innerHTML = "The gap is <b class=\"flip\">SPENT — C has crossed B</b>. B is no longer the " +
-            "intermediate axis: the unstable seat the spin was forced onto has changed rank under it, " +
-            "and the flip has switched off. The clock's restoring half will reopen the gap and switch it back on.";
-        } else if (frac < 0.15) {
-          verdict.innerHTML = "Polar gap: <b class=\"warn\">a hair from equality</b> — the period is stretched " +
-            "deep into the freeze. The wobble can barely decide; the flip is coming at geological patience.";
-        } else if (frac < 0.6) {
-          verdict.innerHTML = "Polar gap: <b class=\"warn\">well spent</b> — the clock has closed more than " +
-            "a third of Earth today's guard. The flip's timing is visibly stretched.";
-        } else {
-          verdict.innerHTML = "Polar gap: <b class=\"safe\">standing open</b> — near Earth today's guard. " +
-            "The flip runs at its unstretched timing.";
+        function tempoShiftPct(p, md) {
+          var v = TEMPO_CEILING * meltLevel(p) * (md === "mono" ? MONO_TEMPO_SHARE : 1);
+          return Math.min(TEMPO_CEILING, v);   // the cap is structural, not cosmetic
         }
-      }
-      // state chips
-      var cls = classify();
-      var chip = $("stateChip");
-      chip.className = "chip " + (cls === "flip" ? "state-flip" : cls === "building" ? "state-building" : "state-stable");
-      $("stateVal").textContent = cls === "flip" ? "FLIPPING"
-        : cls === "building" ? "UNSTABLE SEAT — FLIP BUILDING"
-        : balanced ? "STEADY — BALANCED SEAT" : "STABLE WOBBLE";
-      $("flipsVal").textContent = toy.flips;
-      if (balanced) {
-        $("periodVal").textContent = "no flip — balanced seat";
-      } else if (cls === "flip" && toy.flipInterval) {
-        $("periodVal").textContent = "flip every " + fmtPeriod(toy.flipInterval);
-      } else if (cls === "building") {
-        $("periodVal").textContent = "building… (growth is exponential, then the flip)";
-      } else {
-        $("periodVal").textContent = fmtPeriod(T);
-      }
-      $("timeVal").textContent = toy.t.toFixed(0);
-      // clock readouts
-      $("phaseVal").textContent = Math.round(GLA.phase * 100) + "%";
-      var growing = Math.sin(2 * Math.PI * GLA.phase) > 0; // dm/dp ∝ sin(2πp): spending on the first half
-      $("halfVal").textContent = MELT.mode === "dual"
-        ? (growing ? "BALANCED (ice grows, both poles)" : "BALANCED (ice melts, both poles)")
-        : (growing ? "SPENDING (ice grows)" : "RESTORING (ice melts)");
-      $("cyclesVal").textContent = GLA.cycles;
-      $("scrubVal").textContent = GLA.m <= 0.01 ? "at Earth today" :
-        "at m = " + GLA.m.toFixed(2) + " ocean masses pole-ward";
-      if (document.activeElement !== $("clockRange")) {
-        $("clockRange").value = Math.round(GLA.phase * 1000);
-      }
-    }
+        function migrationDeg(p, md) {
+          return md === "mono" ? MIG_MAX * meltLevel(p) : 0;
+        }
+        function lodTerm(p) { return LOD_AT_PEAK * meltLevel(p); }
+        function activeLink(p) { return Math.floor(((p % 1) + 1) % 1 * 4) % 4; }
 
-    /* ---------- events ---------- */
-    $("btnSingle").addEventListener("click", function () { setMode("single"); });
-    $("btnDual").addEventListener("click", function () { setMode("dual"); });
-    $("speedRange").addEventListener("input", function () {
-      var v = parseFloat(this.value);
-      toy.speed = v; GLA.speed = v;
-      $("speedVal").textContent = v + "×";
-    });
-    [["spinA", 0], ["spinB", 1], ["spinC", 2]].forEach(function (pair) {
-      $(pair[0]).addEventListener("click", function () {
-        toy.spinAxis = pair[1]; resetSpin();
-        if (MELT.mode === "single" && pair[1] === 1) prerollDevelop();
-        refreshReadouts();
-      });
-    });
-    $("btnPlay").addEventListener("click", function () {
-      toy.playing = !toy.playing;
-      this.textContent = toy.playing ? "⏸ Pause the flip" : "▶ Play the flip";
-      this.setAttribute("aria-pressed", toy.playing ? "true" : "false");
-    });
-    $("btnReset").addEventListener("click", function () {
-      resetSpin();
-      if (MELT.mode === "single" && toy.spinAxis === 1) prerollDevelop();
-      refreshReadouts();
-    });
-    $("btnClock").addEventListener("click", function () {
-      GLA.playing = !GLA.playing;
-      this.textContent = GLA.playing ? "⏸ Pause the clock" : "▶ Play the clock";
-      this.setAttribute("aria-pressed", GLA.playing ? "true" : "false");
-    });
-    $("btnClockReset").addEventListener("click", function () {
-      GLA.phase = 0; GLA.cycles = 0; applyClock(); resetSpin();
-      if (MELT.mode === "single" && toy.spinAxis === 1) prerollDevelop();
-      refreshReadouts();
-    });
-    $("clockRange").addEventListener("input", function () {
-      GLA.phase = parseFloat(this.value) / 1000;
-      applyClock(); resetSpin(); refreshReadouts();
-    });
-    // Drag the Earth sideways to turn the glacial clock by hand
-    // (the melt loop's drag, ported: it scrubs the slow cycle; the
-    // gear re-derives omega from the conserved L, so the tumble
-    // is not reset by dragging).
-    var dragging = false, dragLastX = 0;
-    cv.addEventListener("pointerdown", function (ev) {
-      dragging = true;
-      dragLastX = ev.clientX;
-      if (cv.setPointerCapture) {
-        try { cv.setPointerCapture(ev.pointerId); } catch (e) { /* no-op */ }
-      }
-      if (ev.preventDefault) ev.preventDefault();
-    });
-    cv.addEventListener("pointermove", function (ev) {
-      if (!dragging) return;
-      var w = cv.clientWidth || 1;
-      var dp = (ev.clientX - dragLastX) / w * 0.25;
-      dragLastX = ev.clientX;
-      GLA.phase = ((GLA.phase + dp) % 1 + 1) % 1;
-      applyClock();
-      refreshReadouts();
-    });
-    function endDrag() { dragging = false; }
-    cv.addEventListener("pointerup", endDrag);
-    cv.addEventListener("pointercancel", endDrag);
-    window.addEventListener("resize", resize);
+        // ---------- One-way (no-return) mode ----------
+        // The melt state is a pure function of cumulative elapsed years, so
+        // scrubbing backward restores the caps deterministically — the state
+        // never resets at a cycle wrap.
+        // THERMAL-FENCE FEEDBACK: while the ice stands, the Antarctic
+        // Circumpolar Current thermally fences the continent. Past ~50%
+        // loss the sea-ice lid is gone, warmer water reaches the shelf, and
+        // the melt quickens: the depletion rate is multiplied by
+        // 1 + 0.5 * iceFreeFrac (up to +50% at full depletion). The closed
+        // form below is that ODE integrated exactly, so the state stays a
+        // pure function of totalYears: linear to 50%, then exponential
+        // (rate ∝ frac + 0.5), reaching 1 at (0.5 + ln 1.5) ≈ 0.905 of the
+        // nominal pace span instead of 1.0.
+        function depletionFrac() {
+          var T = paceCycles * CYCLE;
+          if (totalYears <= 0.5 * T) return totalYears / T;
+          return Math.min(1, Math.exp((totalYears - 0.5 * T) / T) - 0.5);
+        }
+        // How open the Southern Ocean is: 0 while the lid holds (frac ≤ 50%),
+        // 1 at full depletion.
+        function iceFreeFrac() {
+          if (retMode !== "oneway") return 0;
+          return Math.min(1, Math.max(0, (depletionFrac() - 0.5) / 0.5));
+        }
+        // The live melt-rate multiplier from the ocean feedback (1.0 → 1.5).
+        function meltRateBoost() {
+          var f = depletionFrac();
+          return f <= 0.5 ? 1 : f + 0.5;   // = 1 + 0.5 * iceFreeFrac
+        }
+        // The LOAD axis: where the lost mass says the pole should be. It
+        // follows the cumulative melt instantly.
+        function loadMigrationDeg() {
+          if (retMode === "oneway") return mode === "mono" ? MIG_MAX * depletionFrac() : 0;
+          return migrationDeg(phase, mode);
+        }
+        function tempoNow() {
+          if (retMode === "oneway") {
+            // The one-way drain is the whole inventory, not a single-basin
+            // pulse — so no MONO share factor here; tempo climbs with the
+            // cumulative melt fraction to the ceiling and holds.
+            return Math.min(TEMPO_CEILING, TEMPO_CEILING * depletionFrac());
+          }
+          return tempoShiftPct(phase, mode);
+        }
+        // The MOTION term: the rotation equation is excited by currents as
+        // well as by mass. Ocean-current relative angular momentum is
+        // ~10^25–10^26 kg·m²/s against Earth's 5.86×10^33 — a fraction of
+        // ~10^-8, reached here as the Southern Ocean opens. Its honest
+        // effect at that scale: a sub-millisecond stir of the length of
+        // day (amplitude ~0.1 ms, scaled by ice-free fraction).
+        var MOTION_LOD_AMP = 0.1;         // ms — labeled real amplitude, never exceeded
+        var SHIMMER_DEG = 0.15;           // toy-scale shimmer of the figure-axis chase
+        var SHIMMER_PERIOD_YEARS = 0.05 * CYCLE;
+        function motionFrac() { return 1e-8 * iceFreeFrac(); }
+        function lodNow() {
+          if (retMode !== "oneway") return lodTerm(phase);
+          var osc = MOTION_LOD_AMP * iceFreeFrac() * Math.sin(phase * Math.PI * 2 * 3);
+          return LOD_AT_PEAK * depletionFrac() + osc;
+        }
+        function capsRemainingPct() {
+          return 100 * (1 - (retMode === "oneway" ? depletionFrac() : meltLevel(phase)));
+        }
+        // The FIGURE axis (the bulge itself) chases the LOAD axis: a damped
+        // second-order chase whose natural period is ~0.4 cycle — the toy
+        // stand-in for the real 10^3–10^4 yr viscoelastic relaxation of the
+        // mantle. Driven slowly it tracks quasi-statically (separation ~0);
+        // driven fast it lags, overshoots when the load stops, and rings
+        // down onto the load axis.
+        var FIG_PERIOD_YEARS = 0.4 * CYCLE;
+        var FIG_ZETA = 0.25;
+        function stepFigure(dtYears) {
+          if (retMode !== "oneway") { figMig = loadMigrationDeg(); figVel = 0; return; }
+          var w0 = 2 * Math.PI / FIG_PERIOD_YEARS;
+          var load = loadMigrationDeg();
+          var n = Math.max(1, Math.ceil(dtYears / 150));
+          var h = dtYears / n;
+          for (var i = 0; i < n; i++) {
+            var accF = w0 * w0 * (load - figMig) - 2 * FIG_ZETA * w0 * figVel;
+            figVel += accF * h;
+            figMig += figVel * h;
+          }
+        }
+        function snapFigure() { figMig = loadMigrationDeg(); figVel = 0; }
 
-    /* ---------- main loop ---------- */
-    var frame = 0, lastTs = null;
-    function loop(ts) {
-      var dtSec = 1 / 60;
-      if (typeof ts === "number") {
-        if (lastTs !== null) dtSec = Math.min(0.1, Math.max(0.001, (ts - lastTs) / 1000));
-        lastTs = ts;
-      }
-      glaAdvance(dtSec);
-      if (toy.playing) {
-        stepN(Math.max(1, Math.round(BASE_STEPS * toy.speed)));
-        recordTrail(false);
-      }
-      draw();
-      drawClock();
-      frame++;
-      if (frame % 6 === 0) refreshReadouts();
-      if (typeof requestAnimationFrame === "function") requestAnimationFrame(loop);
-    }
+        // ---------- The flip: Euler's equations geared to the melt ----------
+        // Ported from The Flipping Point: RK4 integration of Euler's
+        // equations for torque-free rigid rotation (same DT, same spin
+        // magnitude, same flip classifier), fed the melt cycle's current
+        // moments. The spin is FORCED onto axis B — Earth's intermediate
+        // moment, the one seat a tumbling body cannot hold.
+        var DT = 0.004;              // fixed integration step (toy time)
+        var OMEGA0 = 1.5;            // spin magnitude at reset (the parents')
+        var EARTH_I = [8.01, 8.02, 8.04];   // x10^37 kg m^2, axes A, B, C
+        var GAP0_CB = EARTH_I[2] - EARTH_I[1];   // 0.02 — Earth today's polar gap (C-B)
+        var OCEAN_KG = 1.4e21, EARTH_R = 6.371e6;
+        var PER_OCEAN = OCEAN_KG * EARTH_R * EARTH_R / 1e37;  // mR^2 in 1e37 units
+        var M_MAX = 4;               // ocean masses at full drive (the parents' boundary figure)
+        // L's rest direction in the display's space frame: tilted 23.4°
+        // from vertical; the projection below mirrors it to the LEFT rim
+        // point (Jeff's tilt ruling — the base's axis tipped right).
+        var L_DIR = (function () { var t = TILT * Math.PI / 180; return [Math.sin(t), 0, Math.cos(t)]; })();
 
-    /* ---------- init ---------- */
-    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      toy.playing = false; GLA.playing = false;
-      $("btnPlay").textContent = "▶ Play the flip";
-      $("btnPlay").setAttribute("aria-pressed", "false");
-      $("btnClock").textContent = "▶ Play the clock";
-      $("btnClock").setAttribute("aria-pressed", "false");
-    }
-    resize();
-    applyClock();          // single-pole path at Earth today (phase 0)
-    resetSpin();           // spin forced onto B, ~10 degree tilt
-    T_TODAY = analyticPeriod(); // at Earth today (m = 0), spin on B, fresh reset
-    prerollDevelop();      // open already tumbling: first counted flip lands in seconds
-    refreshReadouts();
-    if (typeof requestAnimationFrame === "function") requestAnimationFrame(loop);
+        // The ring-model path (the parents' seqMoments): per ocean mass
+        // moved pole-ward, dA = dB = +3/8 mR^2, dC = -3/4 mR^2.
+        function clockMoments(m) {
+          return [EARTH_I[0] + 0.375 * PER_OCEAN * m,
+                  EARTH_I[1] + 0.375 * PER_OCEAN * m,
+                  EARTH_I[2] - 0.75 * PER_OCEAN * m];
+        }
+        // DUAL: the equatorial pair balanced exactly — A = B = the mean
+        // of the single-pole path's pair at the same drive, and C rides
+        // the pair + Earth today's gap, so the gap is HELD, never spent.
+        function dualMoments(m) {
+          var s = clockMoments(m);
+          var pair = (s[0] + s[1]) / 2;
+          return [pair, pair, pair + GAP0_CB];
+        }
+        var driveFreeze = null;      // headless-verification override only
+        function driveM() {
+          if (driveFreeze !== null) return driveFreeze;
+          return M_MAX * (retMode === "oneway" ? depletionFrac() : meltLevel(phase));
+        }
+        function currentMoments() {
+          var m = driveM();
+          return mode === "dual" ? dualMoments(m) : clockMoments(m);
+        }
 
-    /* hooks for headless verification */
-    window.__clock = {
-      toy: toy, gla: GLA, melt: MELT,
-      effI: effI, ranks: ranks, classify: classify,
-      analyticPeriod: analyticPeriod,
-      gapCB: gapCB, gapRemaining: gapRemaining,
-      stepN: stepN, resetSpin: resetSpin,
-      mOfPhase: mOfPhase, clockMoments: clockMoments,
-      dualMoments: dualMoments, momentsFor: momentsFor,
-      applyClock: applyClock, glaAdvance: glaAdvance,
-      mode: function () { return MELT.mode; },
-      setMode: setMode,
-      speed: function () { return toy.speed; },
-      stepsPerFrame: function () { return Math.max(1, Math.round(BASE_STEPS * toy.speed)); },
-      poleSpace: function () { return qRot(toy.q, [0, 0, 1]); },
-      bAxisSpace: function () { return qRot(toy.q, [0, 1, 0]); },
-      setPhase: function (p) { GLA.phase = p; applyClock(); },
-      setM: function (m) {
-        // set the drive directly (finds the spending-side phase for m in [0, M_MAX])
-        var c = 1 - 2 * (m / M_MAX);
-        GLA.phase = Math.acos(Math.max(-1, Math.min(1, c))) / (2 * Math.PI);
-        applyClock();
-        return GLA.m;
-      },
-      setSpinAxis: function (a) { toy.spinAxis = a; resetSpin(); },
-      LNow: function () {
-        var e = effI();
-        return qRot(toy.q, [e[0]*toy.w[0], e[1]*toy.w[1], e[2]*toy.w[2]]);
-      },
-      LBody: function () {
-        var e = effI();
-        return [e[0]*toy.w[0], e[1]*toy.w[1], e[2]*toy.w[2]];
-      }
-    };
+        var toy = {
+          I: EARTH_I.slice(),
+          spinAxis: 1,               // the spin is FORCED onto B — the intermediate axis
+          w: [0, 0, 0],              // omega, body frame
+          q: [1, 0, 0, 0],           // quaternion body -> space
+          t: 0,
+          flips: 0,
+          armedSign: 0,              // hysteresis arming for flip detection (the parents')
+          lastFlipT: null,
+          flipInterval: null,
+          Lspace: [0, 0, 1],         // angular momentum in space (conserved)
+          trail: []                  // figure-axis tip trail (screen points)
+        };
+        var T_TODAY = null;          // analytic flip period at Earth today's moments
+
+        /* ---------- quaternion helpers (the parents', verbatim) ---------- */
+        function qMul(a, b) {
+          return [
+            a[0]*b[0] - a[1]*b[1] - a[2]*b[2] - a[3]*b[3],
+            a[0]*b[1] + a[1]*b[0] + a[2]*b[3] - a[3]*b[2],
+            a[0]*b[2] - a[1]*b[3] + a[2]*b[0] + a[3]*b[1],
+            a[0]*b[3] + a[1]*b[2] - a[2]*b[1] + a[3]*b[0]
+          ];
+        }
+        function qRot(q, v) {
+          var p = qMul(q, [0, v[0], v[1], v[2]]);
+          var qc = [q[0], -q[1], -q[2], -q[3]];
+          var r = qMul(p, qc);
+          return [r[1], r[2], r[3]];
+        }
+        function qNorm(q) {
+          var n = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
+          return [q[0]/n, q[1]/n, q[2]/n, q[3]/n];
+        }
+
+        function ranks() {
+          var e = toy.I;
+          var order = [0, 1, 2].sort(function (a, b) { return e[a] - e[b]; });
+          var r = [0, 0, 0];
+          r[order[0]] = 0; r[order[1]] = 1; r[order[2]] = 2;
+          return r;
+        }
+        function spinS() {
+          var n = Math.hypot(toy.w[0], toy.w[1], toy.w[2]);
+          return n > 0 ? toy.w[toy.spinAxis] / n : 1;
+        }
+
+        /* ---------- dynamics (the parents' RK4, verbatim in form) ---------- */
+        function deriv(state) {
+          var e = toy.I;
+          var w1 = state[0], w2 = state[1], w3 = state[2];
+          var q = [state[3], state[4], state[5], state[6]];
+          var dw = [
+            (e[1] - e[2]) * w2 * w3 / e[0],
+            (e[2] - e[0]) * w3 * w1 / e[1],
+            (e[0] - e[1]) * w1 * w2 / e[2]
+          ];
+          var qd = qMul(q, [0, w1, w2, w3]);
+          return [dw[0], dw[1], dw[2], 0.5*qd[0], 0.5*qd[1], 0.5*qd[2], 0.5*qd[3]];
+        }
+        function stepOnce() {
+          var y = [toy.w[0], toy.w[1], toy.w[2], toy.q[0], toy.q[1], toy.q[2], toy.q[3]];
+          var k1 = deriv(y);
+          var y2 = y.map(function (v, i) { return v + 0.5 * DT * k1[i]; });
+          var k2 = deriv(y2);
+          var y3 = y.map(function (v, i) { return v + 0.5 * DT * k2[i]; });
+          var k3 = deriv(y3);
+          var y4 = y.map(function (v, i) { return v + DT * k3[i]; });
+          var k4 = deriv(y4);
+          for (var i = 0; i < 7; i++) y[i] += (DT / 6) * (k1[i] + 2*k2[i] + 2*k3[i] + k4[i]);
+          toy.w = [y[0], y[1], y[2]];
+          toy.q = qNorm([y[3], y[4], y[5], y[6]]);
+          toy.t += DT;
+          // the parents' flip classifier: hysteresis on the spin component
+          var s = spinS();
+          if (s > 0.5) {
+            if (toy.armedSign < 0) registerFlip();
+            toy.armedSign = 1;
+          } else if (s < -0.5) {
+            if (toy.armedSign > 0) registerFlip();
+            toy.armedSign = -1;
+          }
+        }
+        function registerFlip() {
+          toy.flips++;
+          if (toy.lastFlipT !== null) toy.flipInterval = toy.t - toy.lastFlipT;
+          toy.lastFlipT = toy.t;
+        }
+        function stepN(n) { for (var i = 0; i < n; i++) stepOnce(); }
+
+        /* ---------- classification, analytic period, the gap ---------- */
+        function analyticPeriod() {
+          // the parents' frozen-coefficient polhode period, spin on B
+          var e = toy.I;
+          var k = toy.spinAxis;
+          var oth = [0, 1, 2].filter(function (a) { return a !== k; });
+          var i = oth[0], j = oth[1];
+          var f = Math.abs((e[k] - e[i]) * (e[k] - e[j]));
+          var om = Math.abs(toy.w[k]);
+          if (om === 0 || f === 0) return Infinity;
+          var freq = om * Math.sqrt(f / (e[i] * e[j]));
+          return freq > 0 ? (2 * Math.PI) / freq : Infinity;
+        }
+        function gapCB() { return toy.I[2] - toy.I[1]; }
+        function gapRemaining() { return gapCB() / GAP0_CB; }
+        function fmtPeriod(T) {
+          if (!isFinite(T)) return "∞ — frozen at equality";
+          if (T >= 100) return T.toFixed(0) + " toy-time";
+          if (T >= 10) return T.toFixed(1) + " toy-time";
+          return T.toFixed(2) + " toy-time";
+        }
+        function flipStateText() {
+          if (mode === "dual") return "DUAL — balanced seat: the spin rides steady and no flip can form";
+          if (gapCB() <= 0) return "the seat has changed rank — C has crossed B, and the flip has switched off";
+          if (toy.flips > 0) return "FLIPPING — the seat cannot hold, at the period the gap allows";
+          return "unstable seat — the flip is building (growth is exponential, then the somersault)";
+        }
+
+        /* ---------- the gear ----------
+           When the melt cycle changes the moments, omega is re-derived
+           from the SAME body-frame angular momentum (w_i = L_i / I_i):
+           internal mass movement conserves angular momentum, not
+           angular velocity. Energy is not conserved across the drive
+           (the redistribution does work) — the physics, not hidden. */
+        var lastDriveKey = null;
+        function applyDrive() {
+          var key = mode + "|" + (driveFreeze !== null ? "F" + driveFreeze
+            : (retMode === "oneway" ? depletionFrac() : meltLevel(phase)));
+          if (key === lastDriveKey) return;
+          lastDriveKey = key;
+          var newI = currentMoments();
+          var Lb = [toy.I[0] * toy.w[0], toy.I[1] * toy.w[1], toy.I[2] * toy.w[2]];
+          toy.I = newI;
+          if (Lb[0] !== 0 || Lb[1] !== 0 || Lb[2] !== 0) {
+            toy.w = [Lb[0] / newI[0], Lb[1] / newI[1], Lb[2] / newI[2]];
+          }
+        }
+
+        /* ---------- spin preparation ----------
+           On the intermediate seat the ~10° tilt is AIMED along the
+           saddle's growing eigenvector (opposite-sign components, ratio
+           -lambda*A/((C-B)*Omega)) so the flip develops promptly; the
+           parents' own tilt (4°, 0.8/0.6 same-sign split) lies almost on
+           the DECAYING eigenvector at Earth moments, which is why the
+           parent exhibit's flip is slow to develop from a fresh reset.
+           On any other seat the parents' tilt is used unchanged.
+           Both preparations are disclosed on the face. */
+        function aimedOmega() {
+          var e = toy.I, A = e[0], B = e[1], C = e[2];
+          var w = [0, 0, 0];
+          if (ranks()[1] === 1 && C > B && B > A) {
+            var tilt = 10 * Math.PI / 180;
+            var lam = OMEGA0 * Math.sqrt((C - B) * (B - A) / (A * C));
+            var ratio = -lam * A / ((C - B) * OMEGA0);
+            var nx = 1 / Math.sqrt(1 + ratio * ratio);
+            w[0] = Math.sin(tilt) * nx * OMEGA0;
+            w[2] = Math.sin(tilt) * (ratio * nx) * OMEGA0;
+            w[1] = Math.cos(tilt) * OMEGA0;
+          } else {
+            var t4 = 4 * Math.PI / 180;
+            w[1] = Math.cos(t4) * OMEGA0;
+            w[0] = Math.sin(t4) * 0.8 * OMEGA0;
+            w[2] = Math.sin(t4) * 0.6 * OMEGA0;
+          }
+          return w;
+        }
+        function quatFromUnitVectors(a, b) {
+          var d = a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+          if (d < -0.999999) return [0, 1, 0, 0];
+          var ax = [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];
+          return qNorm([1 + d, ax[0], ax[1], ax[2]]);
+        }
+        function resetSpin() {
+          toy.w = aimedOmega();
+          var e = toy.I;
+          var Lb = [e[0]*toy.w[0], e[1]*toy.w[1], e[2]*toy.w[2]];
+          var Lm = Math.hypot(Lb[0], Lb[1], Lb[2]) || 1;
+          var lb = [Lb[0]/Lm, Lb[1]/Lm, Lb[2]/Lm];
+          var q1 = quatFromUnitVectors(lb, L_DIR);
+          // twist about L so the figure axis rides as high on its cone as it can
+          var c = qRot(q1, [0, 0, 1]);
+          function perp(v) {
+            var d = v[0]*L_DIR[0] + v[1]*L_DIR[1] + v[2]*L_DIR[2];
+            return [v[0]-d*L_DIR[0], v[1]-d*L_DIR[1], v[2]-d*L_DIR[2]];
+          }
+          var cp = perp(c), up2 = perp([0, 0, 1]);
+          var cm = Math.hypot(cp[0], cp[1], cp[2]), um = Math.hypot(up2[0], up2[1], up2[2]);
+          if (cm > 1e-9 && um > 1e-9) {
+            var cu = [cp[0]/cm, cp[1]/cm, cp[2]/cm], uu = [up2[0]/um, up2[1]/um, up2[2]/um];
+            var cosA = Math.max(-1, Math.min(1, cu[0]*uu[0] + cu[1]*uu[1] + cu[2]*uu[2]));
+            var cr = [cu[1]*uu[2]-cu[2]*uu[1], cu[2]*uu[0]-cu[0]*uu[2], cu[0]*uu[1]-cu[1]*uu[0]];
+            var sinA = cr[0]*L_DIR[0] + cr[1]*L_DIR[1] + cr[2]*L_DIR[2];
+            var half = Math.atan2(sinA, cosA) / 2, sh = Math.sin(half);
+            var qt = [Math.cos(half), L_DIR[0]*sh, L_DIR[1]*sh, L_DIR[2]*sh];
+            toy.q = qNorm(qMul(qt, q1));
+          } else {
+            toy.q = q1;
+          }
+          toy.t = 0; toy.flips = 0; toy.armedSign = 0;
+          toy.lastFlipT = null; toy.flipInterval = null; toy.trail = [];
+          toy.Lspace = qRot(toy.q, Lb);
+        }
+        function aimSpin() {
+          // re-aim in place (switching to MONO): keep the orientation,
+          // put the spin back on the seat along the growing direction
+          toy.w = aimedOmega();
+          var e = toy.I;
+          toy.Lspace = qRot(toy.q, [e[0]*toy.w[0], e[1]*toy.w[1], e[2]*toy.w[2]]);
+          toy.flips = 0; toy.armedSign = 0; toy.lastFlipT = null; toy.flipInterval = null; toy.trail = [];
+        }
+        function reseatSteady() {
+          // DUAL: the parents' own tilt near B — with A = B exactly the
+          // seat is degenerate and the spin simply rides its cone
+          var e = toy.I;
+          var t4 = 4 * Math.PI / 180;
+          toy.w = [Math.sin(t4) * 0.8 * OMEGA0, Math.cos(t4) * OMEGA0, Math.sin(t4) * 0.6 * OMEGA0];
+          toy.Lspace = qRot(toy.q, [e[0]*toy.w[0], e[1]*toy.w[1], e[2]*toy.w[2]]);
+          toy.flips = 0; toy.armedSign = 0; toy.lastFlipT = null; toy.flipInterval = null;
+          toy.trail = [];
+        }
+        function preRoll() {
+          // Fast-forward with the moments frozen until the swing is
+          // developed — s, armed positive, falls below 0.05 — so the
+          // exhibit opens mid-tumble. Counters reset afterwards.
+          if (ranks()[toy.spinAxis] !== 1) return;
+          var guard = 0;
+          while (guard < 400000) {
+            stepOnce();
+            guard++;
+            if (toy.armedSign > 0 && spinS() < 0.05) break;
+          }
+          toy.flips = 0; toy.lastFlipT = null; toy.flipInterval = null; toy.t = 0;
+        }
+
+        // ---------- Canvas ----------
+        var canvas = el("loopCanvas");
+        var g = canvas.getContext("2d");
+
+        // Fixed starfield (generated once — no flicker)
+        var stars = [];
+        for (var si = 0; si < 90; si++) {
+          stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.3 + 0.4, a: Math.random() * 0.5 + 0.15 });
+        }
+
+        function fitCanvas(c) {
+          var dpr = window.devicePixelRatio || 1;
+          var w = c.clientWidth, h = c.clientHeight;
+          if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) {
+            c.width = Math.round(w * dpr);
+            c.height = Math.round(h * dpr);
+          }
+          var ctx2 = c.getContext("2d");
+          ctx2.setTransform(dpr, 0, 0, dpr, 0, 0);
+          return { w: w, h: h };
+        }
+
+        function drawLoop() {
+          var s = fitCanvas(canvas);
+          var W = s.w, H = s.h;
+          g.clearRect(0, 0, W, H);
+
+          var cx = W / 2, cy = H / 2 + 16;
+          var R = Math.min(W, H) * 0.30;
+          var tiltR = TILT * Math.PI / 180;
+          var m = meltLevel(phase);
+
+          // Stars
+          for (var i = 0; i < stars.length; i++) {
+            g.globalAlpha = stars[i].a;
+            g.fillStyle = "#e8e6e0";
+            g.beginPath();
+            g.arc(stars[i].x * W, stars[i].y * H, stars[i].r, 0, Math.PI * 2);
+            g.fill();
+          }
+          g.globalAlpha = 1;
+
+          // Reference vertical (the cone's axis)
+          g.strokeStyle = "rgba(232,230,224,0.18)";
+          g.lineWidth = 1;
+          g.setLineDash([3, 5]);
+          g.beginPath();
+          g.moveTo(cx, cy - R * 1.55); g.lineTo(cx, cy + R * 1.55);
+          g.stroke();
+          g.setLineDash([]);
+
+          // Cone rim — the dashed ellipse the axis tip travels
+          var axisLen = R * 1.32;
+          var rimCy = cy - axisLen * Math.cos(tiltR);
+          var rimRx = axisLen * Math.sin(tiltR);
+          var rimRy = rimRx * 0.36;
+          g.strokeStyle = "rgba(216,197,143,0.5)";
+          g.setLineDash([5, 4]);
+          g.beginPath();
+          g.ellipse(cx, rimCy, rimRx, rimRy, 0, 0, Math.PI * 2);
+          g.stroke();
+          g.setLineDash([]);
+          // Cone edges (faint, from rim to globe center)
+          g.strokeStyle = "rgba(216,197,143,0.16)";
+          g.beginPath();
+          g.moveTo(cx - rimRx, rimCy); g.lineTo(cx, cy);
+          g.moveTo(cx + rimRx, rimCy); g.lineTo(cx, cy);
+          g.stroke();
+
+          // The integrated axes, from the live Euler state: the figure
+          // axis C (through the caps), the spin axis B (the forced seat),
+          // and L. The projection is the base's cone geometry with the
+          // lean MIRRORED (Jeff's ruling): screen dx = -v.x, so the axis
+          // top tips LEFT where the base's tipped right.
+          var cB = qRot(toy.q, [0, 1, 0]);
+          var cC = qRot(toy.q, [0, 0, 1]);
+          var Lv = qRot(toy.q, [toy.I[0] * toy.w[0], toy.I[1] * toy.w[1], toy.I[2] * toy.w[2]]);
+          var Llen = Math.hypot(Lv[0], Lv[1], Lv[2]) || 1;
+          var lU = [Lv[0] / Llen, Lv[1] / Llen, Lv[2] / Llen];
+          function projV(v, len) {
+            return [cx - v[0] * len, cy + (-v[2] + 0.36 * v[1]) * len];
+          }
+          var tipP = projV(cC, axisLen);
+          var tipX = tipP[0], tipY = tipP[1];
+          // Unit vector along the figure axis (center -> tip), in screen space
+          var ax = tipX - cx, ay = tipY - cy;
+          var alen = Math.sqrt(ax * ax + ay * ay) || 1;
+          var ux = ax / alen, uy = ay / alen;
+          // Figure-axis tip trail (the parents' trace language)
+          var lastTr = toy.trail[toy.trail.length - 1];
+          if (!lastTr || Math.hypot(tipX - lastTr[0], tipY - lastTr[1]) > 3) {
+            toy.trail.push([tipX, tipY]);
+            if (toy.trail.length > 260) toy.trail.shift();
+          }
+
+          // Earth body
+          var grad = g.createRadialGradient(cx - R * 0.35, cy - R * 0.35, R * 0.15, cx, cy, R);
+          grad.addColorStop(0, "#274b73");
+          grad.addColorStop(1, "#12283f");
+          g.fillStyle = grad;
+          g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.fill();
+          g.strokeStyle = "rgba(232,230,224,0.35)";
+          g.lineWidth = 1;
+          g.stroke();
+          // Latitude shading lines (clipped)
+          g.save();
+          g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.clip();
+          g.strokeStyle = "rgba(232,230,224,0.10)";
+          for (var li = -2; li <= 2; li++) {
+            g.beginPath();
+            g.ellipse(cx, cy + li * R * 0.36, R * Math.sqrt(Math.max(0.05, 1 - (li * 0.36) * (li * 0.36))), R * 0.13, 0, 0, Math.PI * 2);
+            g.stroke();
+          }
+          // Terminator shade
+          g.fillStyle = "rgba(0,0,0,0.18)";
+          g.fillRect(cx + R * 0.25, cy - R, R, R * 2);
+          g.restore();
+
+          // Ice caps (clipped to the globe)
+          var meltN, meltS;
+          if (retMode === "oneway") {
+            var frac = depletionFrac();           // drains monotonically, never refills
+            meltS = frac;                         // Antarctica drains in both modes
+            meltN = mode === "dual" ? frac : 0;   // mono leaves the Arctic cap alone
+          } else {
+            meltN = mode === "dual" ? m : 0;
+            meltS = m;                            // Antarctica melts in both modes
+          }
+          function cap(poleSign, meltFrac) {
+            var px = cx + ux * R * poleSign, py = cy + uy * R * poleSign;
+            var capR = R * 0.46 * (1 - 0.78 * meltFrac);
+            g.save();
+            g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.clip();
+            g.fillStyle = "#eef4f8";
+            g.beginPath(); g.arc(px, py, Math.max(2.5, capR), 0, Math.PI * 2); g.fill();
+            g.fillStyle = "rgba(91,157,255,0.25)";
+            g.beginPath(); g.arc(px, py, Math.max(2.5, capR) + 2.5, 0, Math.PI * 2); g.stroke();
+            g.restore();
+            return { x: px, y: py };
+          }
+          var nPole = cap(1, meltN);
+          cap(-1, meltS);
+
+          // Ice-free Southern Ocean (one-way, past ~50% Antarctic loss): the
+          // sea-ice lid is gone and the Antarctic Circumpolar Current runs —
+          // a rotating dashed ring around the continent, eastward, growing
+          // stronger as the ocean opens.
+          var iceFree = iceFreeFrac();
+          if (iceFree > 0) {
+            var sPoleX = cx - ux * R, sPoleY = cy - uy * R;
+            g.save();
+            g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.clip();
+            g.strokeStyle = "rgba(91,157,255," + (0.25 + 0.55 * iceFree).toFixed(3) + ")";
+            g.lineWidth = 1 + 2 * iceFree;
+            g.setLineDash([7, 5]);
+            g.lineDashOffset = -((totalYears * 0.004) % 12);
+            g.beginPath(); g.arc(sPoleX, sPoleY, R * 0.52, 0, Math.PI * 2); g.stroke();
+            g.setLineDash([]);
+            g.lineDashOffset = 0;
+            g.restore();
+            g.font = "600 11px ui-monospace, Menlo, Consolas, monospace";
+            g.fillStyle = "rgba(91,157,255,0.9)";
+            g.fillText("Antarctic Circumpolar Current", cx - R * 0.98, cy + R * 0.64);
+          }
+
+          // L — the angular momentum axis (red): fixed in space. Its
+          // tip rides the cone rim at the mirrored (left) point.
+          var lTip = projV(lU, axisLen * 1.08), lTail = projV(lU, -R * 1.3);
+          g.strokeStyle = "rgba(255,42,42,0.9)";
+          g.lineWidth = 2;
+          g.beginPath(); g.moveTo(lTail[0], lTail[1]); g.lineTo(lTip[0], lTip[1]); g.stroke();
+          g.fillStyle = "#ff2a2a";
+          g.beginPath(); g.arc(lTip[0], lTip[1], 3, 0, Math.PI * 2); g.fill();
+          // The figure-axis tip trace (faint blue) — where the pole has been
+          if (toy.trail.length > 1) {
+            g.strokeStyle = "rgba(91,157,255,0.5)";
+            g.lineWidth = 1.4;
+            g.beginPath();
+            for (var ti = 0; ti < toy.trail.length; ti++) {
+              if (ti === 0) g.moveTo(toy.trail[ti][0], toy.trail[ti][1]);
+              else g.lineTo(toy.trail[ti][0], toy.trail[ti][1]);
+            }
+            g.stroke();
+          }
+          // The spin axis (axis B — the forced seat, blue): the line
+          // that somersaults end-over-end at each flip.
+          var bTip = projV(cB, R * 1.22), bTail = projV(cB, -R * 1.22);
+          g.strokeStyle = "#5b9dff";
+          g.lineWidth = 2;
+          g.beginPath(); g.moveTo(bTail[0], bTail[1]); g.lineTo(bTip[0], bTip[1]); g.stroke();
+          g.fillStyle = "#5b9dff";
+          g.beginPath(); g.arc(bTip[0], bTip[1], 3.5, 0, Math.PI * 2); g.fill();
+          // The figure axis line (gold, through the caps, past both poles)
+          g.strokeStyle = "#d8c58f";
+          g.lineWidth = 2;
+          g.beginPath();
+          g.moveTo(cx - ux * R * 1.08, cy - uy * R * 1.08);
+          g.lineTo(tipX, tipY);
+          g.stroke();
+          // Axis tip dot
+          g.fillStyle = "#d8c58f";
+          g.beginPath(); g.arc(tipX, tipY, 3.5, 0, Math.PI * 2); g.fill();
+
+          // The rotation pole dot — this is the FIGURE axis. In one-way mode
+          // the LOAD axis (where the lost mass says the pole should be) is
+          // drawn as a small ring, and the figure axis chases it with the
+          // bulge's lag; in the loop the two ride together.
+          var loadMig = loadMigrationDeg();
+          var mig = retMode === "oneway" ? figMig : loadMig;
+          // The motion term's visible trace: a toy-scale shimmer on the
+          // figure-axis chase once the ocean opens (real effect ~0.1 ms on
+          // the day — magnified here, fenced on the motion-term card).
+          var migDraw = mig + (retMode === "oneway"
+            ? SHIMMER_DEG * iceFreeFrac() * Math.sin(totalYears * 2 * Math.PI / SHIMMER_PERIOD_YEARS)
+            : 0);
+          var migPx = (migDraw / MIG_MAX) * R * 0.42;
+          var dotX = nPole.x - migPx, dotY = nPole.y + migPx * 0.22;   // x-offset mirrored with the lean
+          var loadX = null, loadY = null;
+          if (retMode === "oneway" && mode === "mono") {
+            var loadPx = (loadMig / MIG_MAX) * R * 0.42;
+            loadX = nPole.x - loadPx; loadY = nPole.y + loadPx * 0.22;   // mirrored with the lean
+            if (Math.abs(loadMig - mig) > 0.02) {
+              g.strokeStyle = "rgba(238,244,248,0.55)";
+              g.lineWidth = 1.5;
+              g.setLineDash([3, 3]);
+              g.beginPath(); g.moveTo(loadX, loadY); g.lineTo(dotX, dotY); g.stroke();
+              g.setLineDash([]);
+            }
+            g.strokeStyle = "#eef4f8";
+            g.lineWidth = 2;
+            g.beginPath(); g.arc(loadX, loadY, 4.5, 0, Math.PI * 2); g.stroke();
+          }
+          if (mig > 0.01) {
+            g.strokeStyle = "rgba(255,90,82,0.65)";
+            g.lineWidth = 1.5;
+            g.setLineDash([3, 3]);
+            g.beginPath(); g.moveTo(nPole.x, nPole.y); g.lineTo(dotX, dotY); g.stroke();
+            g.setLineDash([]);
+          }
+          g.fillStyle = "#ff5a52";
+          g.beginPath(); g.arc(dotX, dotY, 5, 0, Math.PI * 2); g.fill();
+          g.strokeStyle = "rgba(10,12,14,0.85)";
+          g.lineWidth = 1.5;
+          g.stroke();
+
+          // Labels
+          g.font = "600 11px ui-monospace, Menlo, Consolas, monospace";
+          g.fillStyle = "#9aa0a3";
+          g.fillText("precession cone", cx + rimRx + 8, rimCy + 3);
+          g.fillText("figure axis", tipX + 9, tipY - 6);
+          g.fillStyle = "#ff5a52";
+          g.fillText("L — fixed in space", Math.max(8, lTip[0] - 128), lTip[1] - 8);
+          g.fillStyle = "#5b9dff";
+          g.fillText("spin axis · seat B", bTip[0] + 9, bTip[1] + 14);
+          g.fillStyle = "#9aa0a3";
+          g.fillStyle = "#eef4f8";
+          g.fillText("Arctic cap", cx + R * 0.52, cy - R * 0.72);
+          g.fillText("Antarctic cap", cx - R * 0.98, cy + R * 0.86);
+          g.fillStyle = "#ff5a52";
+          g.fillText("the pole", dotX + 9, dotY + 3);
+          if (loadX !== null) {
+            g.fillStyle = "#eef4f8";
+            g.fillText("load axis", loadX + 9, loadY - 7);
+          }
+          g.fillStyle = "#6b7176";
+          g.fillText("drag to turn →", 12, H - 12);
+
+          // Phase progress ring (bottom right)
+          var pr = 20, pcx = W - pr - 14, pcy = H - pr - 14;
+          g.strokeStyle = "rgba(232,230,224,0.15)";
+          g.lineWidth = 3;
+          g.beginPath(); g.arc(pcx, pcy, pr, 0, Math.PI * 2); g.stroke();
+          g.strokeStyle = "#d8c58f";
+          g.beginPath(); g.arc(pcx, pcy, pr, -Math.PI / 2, -Math.PI / 2 + phase * Math.PI * 2); g.stroke();
+        }
+
+        // ---------- Ring ----------
+        var ringLinks = [el("link0"), el("link1"), el("link2"), el("link3")];
+        var ringNodes = [el("node0"), el("node1"), el("node2"), el("node3")];
+        function drawRing() {
+          var a = activeLink(phase);
+          for (var i = 0; i < 4; i++) {
+            ringLinks[i].setAttribute("stroke", i === a ? "#d8c58f" : "#262c31");
+            ringLinks[i].setAttribute("stroke-width", i === a ? "5" : "3");
+            ringNodes[i].setAttribute("stroke", i === a || i === (a + 1) % 4 ? "#d8c58f" : "#262c31");
+          }
+          el("ringNow").textContent = LINK_NAMES[a];
+        }
+
+        // ---------- Readouts ----------
+        function fmt(n) { return n.toLocaleString("en-US"); }
+        function updateReadouts() {
+          var year = Math.floor(phase * CYCLE);
+          var oneway = retMode === "oneway";
+          var loadMig = loadMigrationDeg();
+          var mig = oneway ? figMig : loadMig;
+          var sep = oneway ? Math.abs(loadMig - figMig) : 0;
+          var tempo = tempoNow();
+          var lod = lodNow();
+          el("roYear").textContent = fmt(year);
+          el("roPhase").textContent = (phase * 100).toFixed(1) + "%";
+          el("roMode").textContent = mode === "dual" ? "DUAL" : "MONO";
+          el("roModeSub").textContent = mode === "dual"
+            ? "both poles melt — watch the tempo"
+            : "Antarctic only — watch the pole, not the tempo";
+          el("roCaps").textContent = Math.round(capsRemainingPct()) + "%";
+          el("roCapsSub").textContent = oneway
+            ? "draining one-way at the " + paceName + " pace — no refill, ever"
+            : "the loop refills them every cycle";
+          el("roPole").textContent = mode === "dual"
+            ? "near home"
+            : (mig > 0.05 ? "migrating" : "near home");
+          el("roPoleSub").textContent = mode === "dual"
+            ? (oneway
+              ? "symmetric melt tilts nothing — but the caps still do not come back"
+              : "symmetric melt tilts nothing")
+            : (oneway
+              ? "dragged toward the Amundsen sector — and it stays dragged"
+              : "dragged toward the Amundsen sector — Jeff's mono signature");
+          el("roPoleNote").style.display = oneway ? "" : "none";
+          el("roMig").textContent = mig.toFixed(1) + "°";
+          el("roSep").textContent = sep.toFixed(2) + "°";
+          el("roSepSub").textContent = !oneway
+            ? "in the loop the bulge rides with the load — nothing separates"
+            : (sep > 0.2
+              ? "the bulge hasn't caught up — the spin axis is chasing the load"
+              : "axes locked — the bulge is keeping up");
+          var iceF = iceFreeFrac();
+          el("roMotion").textContent = !oneway
+            ? "0"
+            : (iceF <= 0 ? "0 — lid on" : (iceF * 10).toFixed(1) + "×10⁻⁹");
+          el("roMotionSub").textContent = !oneway
+            ? "the sea-ice lid stays on in the loop — this channel opens in one-way mode"
+            : (iceF <= 0
+              ? "sea-ice lid still on — this channel opens past ~50% Antarctic loss"
+              : "ice-free Southern Ocean: the ACC runs (wind + Coriolis, no ice lid) — ocean feedback: +"
+                + Math.round((meltRateBoost() - 1) * 100) + "% melt rate");
+          el("roTempo").textContent = "+" + tempo.toFixed(3) + "%";
+          el("roLod").textContent = "+" + lod.toFixed(2) + " ms/cy";
+          el("roLodSub").textContent = lod >= LOD_TIDAL
+            ? "past the tidal +2.3 — countdown B, reached inside this toy"
+            : "tidal braking is +2.3 ms/cy — the melt term is chasing it";
+          // The flip readouts
+          el("roFlips").textContent = toy.flips;
+          el("roFlipsSub").textContent = flipStateText();
+          var gr = gapRemaining();
+          el("roGap").textContent = gr <= 0 ? "0% — spent & crossed" : Math.round(gr * 100) + "%";
+          el("roGapSub").textContent = mode === "dual"
+            ? "DUAL holds the gap at Earth today's guard — there is nothing to spend"
+            : "MONO spends it — (C − B) = " + (gapCB() * 100).toFixed(2) + "×10³⁵ kg·m² now";
+          var Tp = analyticPeriod();
+          el("roPeriod").textContent = fmtPeriod(Tp);
+          el("roPeriodSub").textContent = T_TODAY
+            ? "at Earth today T = " + fmtPeriod(T_TODAY) + " — the stretch from there: ×" + (isFinite(Tp) ? (Tp / T_TODAY).toFixed(2) : "∞")
+            : "the slow clock sets the fast cycle's timing";
+          el("scrubVal").textContent = "year " + fmt(year);
+          var sc = el("scrub");
+          if (document.activeElement !== sc) sc.value = year;
+        }
+
+        function drawAll() { drawLoop(); drawRing(); updateReadouts(); }
+
+        // ---------- Main loop ----------
+        function frame(ts) {
+          if (lastTs === null) lastTs = ts;
+          var dt = (ts - lastTs) / 1000;
+          lastTs = ts;
+          if (playing) {
+            var dYears = dt * speed * (CYCLE / BASE_SECONDS);
+            totalYears = Math.max(0, totalYears + dYears);
+            phase = (totalYears / CYCLE) % 1;
+            stepFigure(dYears);
+            applyDrive();
+            stepN(Math.max(1, Math.round(60 * speed)));
+            drawAll();
+          }
+          requestAnimationFrame(frame);
+        }
+
+        // ---------- Controls ----------
+        var btnPlay = el("btnPlay");
+        function setPlaying(p) {
+          playing = p;
+          btnPlay.innerHTML = playing ? "❚❚&nbsp; Pause" : "▶&nbsp; Play";
+          btnPlay.setAttribute("aria-pressed", playing ? "true" : "false");
+        }
+        btnPlay.addEventListener("click", function () { setPlaying(!playing); });
+        el("btnReset").addEventListener("click", function () {
+          phase = 0;
+          totalYears = 0;
+          figMig = 0;
+          figVel = 0;
+          lastDriveKey = null;
+          applyDrive();
+          resetSpin();
+          if (mode === "mono") preRoll();
+          drawAll();
+        });
+
+        function setMode(md) {
+          mode = md;
+          el("btnDual").classList.toggle("on", md === "dual");
+          el("btnMono").classList.toggle("on", md === "mono");
+          el("btnDual").setAttribute("aria-pressed", md === "dual" ? "true" : "false");
+          el("btnMono").setAttribute("aria-pressed", md === "mono" ? "true" : "false");
+          lastDriveKey = null;
+          applyDrive();
+          if (md === "dual") reseatSteady(); else { aimSpin(); preRoll(); }
+          drawAll();
+        }
+        el("btnDual").addEventListener("click", function () { setMode("dual"); });
+        el("btnMono").addEventListener("click", function () { setMode("mono"); });
+
+        function setReturn(rm) {
+          retMode = rm;
+          el("btnRetLoop").classList.toggle("on", rm === "loop");
+          el("btnRetOne").classList.toggle("on", rm === "oneway");
+          el("btnRetLoop").setAttribute("aria-pressed", rm === "loop" ? "true" : "false");
+          el("btnRetOne").setAttribute("aria-pressed", rm === "oneway" ? "true" : "false");
+          var paceBtns = [el("btnPaceSlow"), el("btnPaceStd"), el("btnPaceFast")];
+          for (var i = 0; i < paceBtns.length; i++) paceBtns[i].disabled = rm !== "oneway";
+          el("onewayHint").style.display = rm === "oneway" ? "" : "none";
+          if (rm === "loop") snapFigure();
+          applyDrive();
+          drawAll();
+        }
+        el("btnRetLoop").addEventListener("click", function () { setReturn("loop"); });
+        el("btnRetOne").addEventListener("click", function () { setReturn("oneway"); });
+
+        function setPace(cycles, name, btn) {
+          paceCycles = cycles;
+          paceName = name;
+          var bs = [el("btnPaceSlow"), el("btnPaceStd"), el("btnPaceFast")];
+          for (var i = 0; i < bs.length; i++) {
+            bs[i].classList.toggle("on", bs[i] === btn);
+            bs[i].setAttribute("aria-pressed", bs[i] === btn ? "true" : "false");
+          }
+          drawAll();
+        }
+        el("btnPaceSlow").addEventListener("click", function () { setPace(6, "SLOW", this); });
+        el("btnPaceStd").addEventListener("click", function () { setPace(3, "STANDARD", this); });
+        el("btnPaceFast").addEventListener("click", function () { setPace(0.5, "FAST", this); });
+
+        el("speed").addEventListener("input", function () {
+          speed = parseFloat(this.value) || 1;
+          el("speedVal").textContent = speed + "×";
+        });
+        el("scrub").addEventListener("input", function () {
+          var yr = parseInt(this.value, 10);
+          if (isFinite(yr)) {
+            yr = Math.min(CYCLE - 1, Math.max(0, yr));
+            // Scrub within the current cycle of the cumulative timeline:
+            // the one-way melt state follows from totalYears, so scrubbing
+            // backward restores the caps deterministically. The figure axis
+            // snaps to equilibrium (its transient re-develops in play).
+            totalYears = Math.floor(totalYears / CYCLE) * CYCLE + yr;
+            phase = yr / CYCLE;
+            snapFigure();
+            applyDrive();
+          }
+          drawAll();
+        });
+
+        // Drag the Earth to turn the cycle
+        var dragging = false, lastX = 0;
+        canvas.addEventListener("pointerdown", function (ev) {
+          dragging = true;
+          lastX = ev.clientX;
+          if (canvas.setPointerCapture) {
+            try { canvas.setPointerCapture(ev.pointerId); } catch (e) { /* no-op */ }
+          }
+          ev.preventDefault();
+        });
+        canvas.addEventListener("pointermove", function (ev) {
+          if (!dragging) return;
+          var w = canvas.clientWidth || 1;
+          totalYears = Math.max(0, totalYears + (ev.clientX - lastX) / w * 0.2 * CYCLE);
+          phase = (totalYears / CYCLE) % 1;
+          snapFigure();
+          applyDrive();
+          lastX = ev.clientX;
+          drawAll();
+        });
+        function endDrag() { dragging = false; }
+        canvas.addEventListener("pointerup", endDrag);
+        canvas.addEventListener("pointercancel", endDrag);
+
+        window.addEventListener("resize", drawAll);
+
+        // The flip's init: moments from the melt state (Earth today at
+        // phase 0), spin forced onto B, aimed, pre-rolled mid-tumble.
+        toy.I = currentMoments();
+        resetSpin();
+        T_TODAY = analyticPeriod();
+        preRoll();
+
+        drawAll();
+        setPlaying(true);
+        requestAnimationFrame(frame);
+
+        /* hooks for headless verification */
+        window.__clock = {
+          toy: toy,
+          qRot: qRot, stepN: stepN, resetSpin: resetSpin, preRoll: preRoll,
+          applyDrive: applyDrive, currentMoments: currentMoments,
+          clockMoments: clockMoments, dualMoments: dualMoments,
+          gapCB: gapCB, gapRemaining: gapRemaining, analyticPeriod: analyticPeriod,
+          spinS: spinS, ranks: ranks, driveM: driveM,
+          LNow: function () {
+            var e = toy.I;
+            return qRot(toy.q, [e[0] * toy.w[0], e[1] * toy.w[1], e[2] * toy.w[2]]);
+          },
+          axesSpace: function () {
+            return { A: qRot(toy.q, [1, 0, 0]), B: qRot(toy.q, [0, 1, 0]), C: qRot(toy.q, [0, 0, 1]) };
+          },
+          leanAtRest: function () {
+            var L = this.LNow();
+            var n = Math.hypot(L[0], L[1], L[2]) || 1;
+            return { dxPerUnit: -L[0] / n, dyPerUnit: -L[2] / n + 0.36 * (L[1] / n) };
+          },
+          setMode: function (md) { setMode(md); },
+          getMode: function () { return mode; },
+          setPhase: function (p) { totalYears = p * CYCLE; phase = p; snapFigure(); applyDrive(); },
+          freeze: function (m) { driveFreeze = m; lastDriveKey = null; applyDrive(); },
+          unfreeze: function () { driveFreeze = null; lastDriveKey = null; applyDrive(); }
+        };
+      })();
     </script>
   </body>
 </html>
