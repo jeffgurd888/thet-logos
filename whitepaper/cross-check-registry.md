@@ -876,3 +876,38 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   check (exploratory, outside the filed record) finds the
   coarsening target false at N = 3 and N = 4 as well, first
   true at N = 5. NO CLAIM; dials 0/4.
+
+## BR1-024 - GR-GEO-2 Green-kernel seat values (N = 2, m = 1)
+
+- **Lean side:** `LayerCubeGreenKernel.lean` - `greenKernel`
+  for named `m > 0` (invertibility of `maxwellOp N + m^2`
+  proved from MAX-2's M1, never assumed), symmetric with
+  nonnegative diagonal. At the named seat (N = 2, m = 1),
+  the kernel's values are proved as per-class value sets
+  by linkGeoDist class r: r = 0: {293/585, 11/117};
+  r = 1: {22/117, -8/65, -11/117, 2/117}; r = 2: {8/65,
+  4/117, 11/117, -2/117}; r = 3: {32/585, 2/117}; every
+  diagonal entry is 293/585 (`greenKernel_seat_cases`,
+  `greenKernel_seat_diag`). The pin's shadow-predicate
+  instance at the supplied C = 1/2 holds at this seat
+  (`poseObjFShadow_seat`) - a seat fact, recorded here as
+  computed, not a falloff-law verdict.
+- **Counterpart:** `routeb-general-scratch/geo2-bridge1-check.py`
+  (run record `geo2-bridge1-run.txt`, outside the repo) -
+  independent exact-rational reimplementation from the pin
+  definitions: the 24x24 maxwellOp built from the
+  plaquette enumeration, (A + I) inverted exactly
+  (verified (A+I)K = I), linkGeoDist computed by BFS on
+  the cube graph (independent of the landed l1 formula).
+  19/19 checks: every Lean seat value, the symmetry, the
+  diagonal, and the C = 1/2 shadow bound reproduced. The
+  finer intra-class pattern split (which direction is the
+  displacement axis) is confirmed by this computation but
+  is not itself a Lean theorem - disclosed on the landing
+  dossier.
+- **Result:** PASS (19/19).
+- **Fence:** seat values at the smallest seat testify
+  about that seat. The falloff law beyond the smallest
+  seat is a future candidate brick's burden (its prior is
+  death by finite-size/torus effects). Dial 2 = 0.
+  NO CLAIM; dials 0/4.
