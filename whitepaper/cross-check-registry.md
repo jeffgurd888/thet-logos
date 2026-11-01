@@ -702,3 +702,33 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   vocabulary; the discrete value is named coarse on the face of the
   landing dossier, never spent as spatial r. Seats no gravity
   object; Dial 2 stays 0. NO CLAIM; dials 0/4.
+
+## BR1-019 - REM-1 seat decisions at N = 4 (excitation value; naive-closure kill)
+
+- **Lean side:** `LayerCubeRemainderSeat.lean` - at the frozen seat
+  (Even N, N = 4): `remSeat_excitation_angle : plaqAngle
+  remSeatPlaq (singlePlaqExcitation remSeatPlaq t) = t` (the
+  single-plaquette excitation's angle is exactly its own value,
+  via the landed `plaqEdge*_ne_B` distinctness lemmas); the
+  constant direction field is flat at every plaquette
+  (`constDirField_flat_four`) with direction-1 wrap holonomy
+  exactly 4 at every base site
+  (`wrapHolonomy1_constDirField`), while every gradient's wrap
+  holonomy telescopes to 0 (`wrapHolonomy_gaugeAngle`) - hence
+  `remNaiveClosure_four_not : not RemNaiveClosure 4`, the
+  theorem-grade kill of the pin's naive closure Prop.
+- **Counterpart:** `routeb-general-scratch/rem1-bridge1.py` (run
+  record `rem1-bridge1-run.txt`, outside the repo) - exact
+  `Fraction` arithmetic, no floats: the seat plaquette's four
+  edges are pairwise distinct as link data; the excitation angle
+  equals t exactly at t in {0, 1, -3/2, 7/3}; the constant
+  direction field is flat at all 192 enumerated plaquettes
+  (64 sites x 3 ordered direction pairs); its direction-1 wrap
+  sum is 4 at every base site; gradient wrap sums telescope to
+  exactly 0 at all base sites in all three directions.
+- **Result:** ALL PASS.
+- **Fence:** finite seat values testify about the finite seat
+  (K-GR-LAUNDER). The kill is a K-GR-STAB finding: flatness does
+  not imply pure gauge on this base - the base carries a global
+  remainder no plaquette can see. Dial 2 = 0, Dial 3 = 0.
+  NO CLAIM; dials 0/4.
