@@ -911,3 +911,36 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   seat is a future candidate brick's burden (its prior is
   death by finite-size/torus effects). Dial 2 = 0.
   NO CLAIM; dials 0/4.
+
+## BR1-025 - GR-PROP-3 frequency-shadow seat decision (longitudinal seat, N = 2)
+
+- **Lean side:** `WaveFreqShadowDecision.lean` - the GR-PROP-0
+  registered predicate `PoseObjBFreqShadow` DECIDED at the named
+  seat: N = 2, plaquette `seatPlaq` (base zero layer site,
+  directions 1, 2), mode `seatMode = gaugeAngle seatPhi`
+  (the longitudinal / pure-gauge mode of GR-PROP-2's stationary
+  gauge sector; `seatPhi` = the site's coordinate-1 value),
+  frequencies omega = omega' = 0, stated shift 0. Verdict:
+  HOLDS at the seat (`freqShadow_holds_at_seat`). The defect's
+  rank-one term vanishes on this mode because its plaquette
+  angle at `seatPlaq` telescopes to 0 (MAX-2's M3); the
+  unperturbed and perturbed frequencies are both exactly 0 and
+  the computed `FreqShift` is 0. A seat fact about one named
+  mode: no transverse-mode defect shift is asserted, and
+  GR-PROP-2's completeness seam and MAX-3 clause 4 were not
+  consumed.
+- **Counterpart:** `routeb-general-scratch/prop3-bridge1-check.py`
+  (run record `prop3-bridge1-run.txt`, outside the repo) -
+  independent exact-rational reimplementation from the pin
+  definitions: the 24-link gauge mode at N = 2 built from the
+  site potential, all 24 plaquette angles checked exactly 0,
+  `maxwellOp` and the one-plaquette rank-one defect at
+  `seatPlaq` applied exactly. 12/12 checks: nonvanishing and
+  the value 1 at the named link, both eigen-equations at
+  frequency 0, and `FreqShift = 0 - 0 = 0 = statedShift`
+  reproduced.
+- **Result:** PASS (12/12).
+- **Fence:** the longitudinal sector's stationarity read
+  through the named defect - finite eigenvalue arithmetic at
+  one named seat, named as such. Not gravity, not
+  propagation-as-physics. Dial 2 = 0. NO CLAIM; dials 0/4.
