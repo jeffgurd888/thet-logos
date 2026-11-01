@@ -661,3 +661,44 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   pose - a theorem about how the finite action's numbers move under
   finite fluctuation. It seats no gravity object; Dial 2 stays 0.
   NO CLAIM; dials 0/4.
+
+## BR1-018 - GR-DIST-2 cycle-seat Connes distance (formula/obstruction grade)
+
+- **Lean side:** `ConnesDistanceCycle.lean` - at the Fin 4 cycle seat
+  (`cycleDirac` = the unrescaled symmetric shift sum, adjacency
+  entries exactly 1): finiteness at every pair
+  (`connesDist_cycleDirac_lt_top`, via DIST-1's criterion iff),
+  definiteness (`connesDistDefiniteConditional_cycleDirac`, via
+  explicit arc-indicator witnesses), and the exact value
+  `connesDist_cycleDirac_eq : connesDist cycleDirac i j = if i = j
+  then 0 else 1` - the DISCRETE metric; the proportional form
+  (constant x cyclic distance) is disproved at this seat
+  (`not_exists_const_mul_cycDist4`: adjacent pairs force the
+  constant to 1, opposite pairs to 1/2), with two-sided comparability
+  bounds (1/2 . cycDist4 <= d <= 1 . cycDist4) proved alongside.
+- **Counterpart:** `routeb-general-scratch/grdist2-bridge1-crosscheck.py`
+  (run record `grdist2-bridge1-run.txt`, outside the repo) - the
+  corpus's T4 Python Connes distance is `engine13_rsd.connes_distance`
+  (density states over the 32-dim triple); the SEATS DIFFER, so this
+  entry is at FORMULA/OBSTRUCTION grade and no same-seat numeric
+  equality with engine13's 32-dim values is claimed. (a) Formula
+  grade: an independent Python evaluation of the same supremum
+  formula at the Fin 4 cycle seat (engine13's method pattern: SVD
+  kernel-quotient diagnostic, multi-start SLSQP, exact-boundary
+  random-direction cross-check) reproduces the Lean values on all
+  16 pairs - 0 on the diagonal, 1 at every distinct pair, including
+  opposite pairs at cyclic distance 2 (independently confirming the
+  discrete value and the non-proportionality). (b) Obstruction
+  grade: the small seat with D = 0 at pair (0,1) returns inf, and
+  engine13's own seat with its real D_F at the dead-sector pair
+  ket(20) vs ket(0) returns inf - both matching DIST-1's proved
+  criterion (distance = top iff commutant obstruction). Disclosed:
+  an engine13 D = 0 instance was tried first and returned 0.0
+  through a degenerate SVD-cutoff path (zero matrix makes its
+  kernel split empty); the designed kernel-separated pair was used
+  instead.
+- **Result:** PASS (formula grade + obstruction grade).
+- **Fence:** a computed finite state-space distance at one seat -
+  vocabulary; the discrete value is named coarse on the face of the
+  landing dossier, never spent as spatial r. Seats no gravity
+  object; Dial 2 stays 0. NO CLAIM; dials 0/4.
