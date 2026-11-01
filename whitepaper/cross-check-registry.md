@@ -732,3 +732,43 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   not imply pure gauge on this base - the base carries a global
   remainder no plaquette can see. Dial 2 = 0, Dial 3 = 0.
   NO CLAIM; dials 0/4.
+
+## BR1-020 - CPEC-EC-1 shadow decision (slot degree 2, defect degree 1)
+
+- **Lean side:** `CpecEcDecision.lean` - the CPEC-0 pin's
+  registered shadow predicate is decided in the affirmative,
+  exactly as registered: `cpecW6Shadow_decided (y : ℝ) (s : ℂ) :
+  CpecW6Shadow y s`, assembled from `sa_finite_a2_yukawa` at
+  `yNu = yE = yU = yD = (y:ℂ)`, `yR = s`, plus the landed
+  `defect_entry`. The assembled slot is
+  `cpecEcSlot y s = Matrix.trace ((smDirac (y:ℂ) (y:ℂ) (y:ℂ)
+  (y:ℂ) s) ^ 2)` with `cpecEcSlot_eq_registered` giving
+  `4 * (normSq y + normSq y + 3*normSq y + 3*normSq y) +
+  2 * Complex.normSq s`; the s-part is pinned at degree exactly
+  2 (`cpecEcSDep_homogeneous`: scales by `Complex.normSq t`
+  under `s ↦ t * s`; `cpecEcSDep_one`: value 2 at `s = 1`;
+  `cpecEcSlot_sub_zero`: the whole deviation from the
+  survival-point value is the single `2 * Complex.normSq s`
+  term). The defect entry is degree exactly 1
+  (`cpecEcDefectEntry_eq`: entry `= (y:ℂ)⁻¹ * star s`;
+  `cpecEcDefectEntry_linear_star`: scales by `star t`).
+  Boundaries as registered: at `s = 0` the slot is exactly its
+  s-free part and the defect entry is 0
+  (`cpecEc_survival_point_consistent`); `y = 0` is never
+  admitted (the landed fence `hy : y ≠ 0`).
+- **Counterpart:** `routeb-general-scratch/cpecec1-bridge1.py`
+  (run record `cpecec1-bridge1-run.txt`, outside the repo) -
+  parametric exact-rational arithmetic in `(y, s)` over 294
+  cases: slot `= 32y² + 2·normSq s` with the s-part scaling by
+  `normSq t` (degree 2; doubling gives ×4 ≠ ×2), defect
+  `= (y:ℂ)⁻¹ * star s` scaling by `star t` (degree 1; doubling
+  gives ×2 ≠ ×4), `s = 0` consistent (both parts 0), `y = 0`
+  not evaluated (outside the seat). Spot values: slot(2, 3−2i)
+  = 154; defect(2, 3−2i) = (3/2, 1).
+- **Result:** ALL PASS.
+- **Fence:** the decision is finite arithmetic about two
+  landed objects; the ECSK reading of the degree pattern is a
+  T4 rhyme printed on the landing dossier's face as a rhyme,
+  never a statement. No K-GR-STAB flip: the degrees are as
+  registered, no seat was narrowed. Dial 2 = 0. NO CLAIM;
+  dials 0/4.
