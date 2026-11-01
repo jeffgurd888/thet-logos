@@ -951,3 +951,56 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
 - **Results:** collCount3 = 15360 by (a3) with exactly three carrying triples — (0,0,0)↦13312, (±4,0,∓4)↦1024 each; genuinely ternary 0. resCount 1 1 = 15360, resCount 2 1 = 0, resCount 3 2 = 0 (zero-fenced; zero-tone multiplicity 0). Octave census: 14 classes, one value per class, longest OctChain 0. Forcing: floor 434, proved excess 434, difference 0 — K-RES-1 fires at this seat (see the RES-4 landing dossier).
 - **Cross-check:** every number above is also proved in Lean in `ThetLogos/SumResonanceSeat.lean` (RES-4), axioms exactly [propext, Classical.choice, Quot.sound].
 - **Fence:** chosen factor inputs (Q7CR-2's named choices); seat resonances are properties of the choices; no Dial-1 entry is made by this line. NO CLAIM.
+
+## BR1-027 - VL-4 Step-0 probe: the gamma-split multiplicity table of D_F(y0)^2 and the full-space locus dimension, Python side
+
+- **Python side:** `routeb-general-scratch/vl4-probe.py`
+  (run record `vl4-probe-out.txt`, outside the repo) -
+  exact arithmetic throughout (Q via fractions.Fraction;
+  the irrational eigenvalues carried symbolically in
+  Q(sqrt(2597)) as exact pairs; no floats in any computed
+  or registered number). Parent rerun: run record
+  byte-identical.
+- **Lean side:** the table LANDED 2026-11-01 in
+  `ThetLogos/VortexLocusFullTable.lean` (VL-4a, FULL -
+  totals and splits all proved; see
+  `vl4a-landing-2026-11-01.md`). The count
+  (d_full = 156) is VL-4b, fired. Gate note, corrected:
+  the memo's Jeff's-word gate on VL-4 was RELEASED by
+  Jeff 2026-11-01 16:26 and the brick fired under the
+  full send.
+- **Proposition checked:** at the registered Seat B,
+  y0 = (yNu, yE, yU, yD, yR) = (1, 2, 3, 5, 7), the
+  eigenvalues of D_F(y0)^2 on I32 with multiplicities
+  split by the gammaF sectors, by two independent routes:
+  (A) structural derivation from the landed block form;
+  (B) direct exact computation (characteristic polynomial
+  factored over Q, split multiplicities as exact
+  eigenspace nullities, trace identities tr(D^2) = 526
+  and tr(D^4) = 13734). Routes agree on every entry.
+- **Result: the gamma-split table is mu = 4: (m+, m-) =
+  (2, 2); mu = 9: (6, 6); mu = 25: (6, 6); mu =
+  (51 - sqrt(2597))/2: (1, 1); mu = (51 + sqrt(2597))/2:
+  (1, 1)** - charpoly(D_F(y0)^2) = (x-4)^4 (x-9)^12
+  (x-25)^12 (x^2-51x+1)^2 over Q. Two eigenvalues are
+  irrational (charpoly mu^2 - 51 mu + 1, discriminant
+  2597, not a perfect square); Lean statements carry
+  them as roots of that polynomial, not as rationals.
+  **Predicted full-space locus dimension d_full =
+  sum_mu 2*m+*m- = 8 + 72 + 72 + 2 + 2 = 156** (VL-4b's
+  target). Fences: sum_mu (m+ + m-) = 32 PASS; d0 = 10
+  (VL-0, landed VL-2) <= d_full = 156 PASS - the W22 pin
+  locus is a proper subspace of the full locus, no
+  contradiction with landed T1; d_full <= 512 PASS.
+- **Optional (not part of the pin):** every mu-sector
+  carries part of the W22 locus (exact spectral
+  projectors, kernel re-verified): mu = 4 the E
+  directions and the exotic EREbarR direction (rank 4),
+  mu = 9 the U directions (rank 2), mu = 25 the D
+  directions (rank 2), the irrational pair the (nu, R)
+  kernel directions, coupled across mu+ and mu-.
+- **Fence:** a finite spectral count at one named seat
+  (T2 chosen input, on the face). The locus is the odd
+  part of the commutant of D_F(y0)^2 - the silent sector
+  at the thermal K, not a flow or stability result.
+  NO CLAIM; dials 0/4.
