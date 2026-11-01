@@ -107,6 +107,59 @@ pin form as every other registered statement in the corpus. Any
 future proof of one of them is a new entry under its own name and
 ceremony, per the relabeling rule.
 
+## Addendum — the owed direct axiom sweeps (2026-11-01)
+
+The original landing (§3 of the scoping record) swept **268/270
+modules directly, BAD = 0**; the two leaf modules `EdgeSignature`
+and `DiracTorsionMap` rested on the import-closure argument, with
+direct own-module sweeps owed. The CPEC bridge program (scoped
+2026-10-31, ratified 2026-11-01) made those sweeps HARD gates —
+EdgeSignature's sweep gates CPEC-CC-1; DiracTorsionMap's gates
+CPEC-EC-1 and CPEC-CC-2 — and they ran as that line's opening
+work.
+
+**EdgeSignature — direct sweep COMPLETE 2026-11-01 (~06:03 UTC),
+BAD = 0.** All 21 declarations of the module, checked by
+`#print axioms` in the module's own environment
+(`sweep-edgesig.lean`, 3600 s budget, exit 0), depend on exactly
+`[propext, Classical.choice, Quot.sound]` — the standard three,
+no `sorryAx`, nothing else: `edgePlus_idem`, `edgeMinus_idem`,
+`edge_orth_lr`, `edge_orth_rl`, `edge_compl`, `edge_recover`,
+`edgePair_of_symm`, `symm_of_edgePair`, `edgePlusPair_flip`,
+`edgeMinusPair_flip`, `edgePlusPair_diag_flip`,
+`edgeMinusPair_diag_flip`, `torsion_defect`, `torsion_flat_iff`,
+`edgePlus_torsion_defect`, `sigA_sq`, `sigB_sq`, `edgeMinus_sigA`,
+`edgeMinus_sigB_snd`, `edgeMinus_sigB_ne`, and
+`signature_not_determined`. The import-closure asterisk on this
+module is RETIRED at direct-sweep grade. (Run record:
+`~/workspace/routeb-general-scratch/sweep-edgesig-out.log`.)
+
+**DiracTorsionMap — direct sweep COMPLETE 2026-11-01
+(~07:14 UTC), BAD = 0.** All 18 declarations of the module,
+checked by `#print axioms` in the module's own environment
+(`sweep-dtm.lean`, 3600 s budget, exit 0): seventeen depend on
+exactly `[propext, Classical.choice, Quot.sound]`, and
+`sigmaIdx_involutive` on the subset `[propext, Quot.sound]`
+(no `Classical.choice` — cleaner than the standard three, and
+BAD counts only `sorryAx` or any non-standard axiom). The
+declarations: `dirac_torsion_flat_iff`, `edgePlus_gammaF_apply`,
+`buildDirac_edge_odd`, `gammaF_UJ_anticomm`,
+`oppositeOneForm_gamma_odd`, `fluctuatedDirac_gamma_odd`,
+`grading_seat_survival`, `sigmaIdx_involutive`,
+`smDirac_flat_support`, `smDirac_flat_value`, `smDirac_flat_sq`,
+`smDirac_zero_eq_oneGen`, `etaSign_sq`, `etaSign_row0`,
+`deltaDirac_eq`, `torsionMajorana_apply_8_24`, `defect_entry`,
+and `majorana_survival_iff`. The import-closure asterisk on
+this module is RETIRED at direct-sweep grade. (Run record:
+`~/workspace/routeb-general-scratch/sweep-dtm-out.log`.)
+
+**Both owed sweeps are now discharged: the corpus's
+certification seam named in this dossier is CLOSED — every
+module's zero-`sorryAx` standing now rests on a direct sweep or
+on the original 268/270 direct count plus these two.** The
+CPEC gates the sweeps guarded are cleared: CC-1 (EdgeSignature)
+and EC-1 / CC-2 (DiracTorsionMap) may build on the CPEC-0 pin.
+
 ## Backers since last landing
 
 The backer roll (`BACKERS.md`) is unchanged since the last landing;
