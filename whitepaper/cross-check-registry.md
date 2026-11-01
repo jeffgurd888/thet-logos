@@ -944,3 +944,10 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   through the named defect - finite eigenvalue arithmetic at
   one named seat, named as such. Not gravity, not
   propagation-as-physics. Dial 2 = 0. NO CLAIM; dials 0/4.
+
+## BR1-026 — RES-4, the resonance seat computation at the Q7CR composite (landed 2026-11-01)
+- **Script:** `routeb-general-scratch/res4-seat.py`; run record `res4-run.txt`. Exact `Fraction` arithmetic only, no floats.
+- **Seat:** delivered Q7CR-2 factor spectra over ℚ (s7: {9,4,1,0}×{4,4,4,2}; s4: {9/64,1/64}×{4,4}; sR: {0,4}×{2,2}); 448 sum tones, K_seat = 14 distinct values, M1 = 2723, M2 = 1518111/64 (agrees BR1-012).
+- **Results:** collCount3 = 15360 by (a3) with exactly three carrying triples — (0,0,0)↦13312, (±4,0,∓4)↦1024 each; genuinely ternary 0. resCount 1 1 = 15360, resCount 2 1 = 0, resCount 3 2 = 0 (zero-fenced; zero-tone multiplicity 0). Octave census: 14 classes, one value per class, longest OctChain 0. Forcing: floor 434, proved excess 434, difference 0 — K-RES-1 fires at this seat (see the RES-4 landing dossier).
+- **Cross-check:** every number above is also proved in Lean in `ThetLogos/SumResonanceSeat.lean` (RES-4), axioms exactly [propext, Classical.choice, Quot.sound].
+- **Fence:** chosen factor inputs (Q7CR-2's named choices); seat resonances are properties of the choices; no Dial-1 entry is made by this line. NO CLAIM.
