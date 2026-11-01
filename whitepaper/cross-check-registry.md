@@ -806,3 +806,34 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   memo prescribed (BRIDGE-1 fires where the computation is
   entrywise). The T2 identification is labeled on the
   module's face. Dial 2 = 0. NO CLAIM; dials 0/4.
+
+## BR1-022 - CPEC-CC-2 triplication transport (the 96-seat defect)
+
+- **Lean side:** `CpecUnityBrick.lean` - the triplication is
+  the explicit Kronecker structure
+  `trip M = M ⊗ₖ (1 : Matrix (Fin 3) (Fin 3) ℂ)`
+  (`trip_eq_kronecker`; `smDirac3diag_eq_trip`), and the
+  torsion defect transports through it exactly:
+  `defect3_trip : defect3 (trip η) (trip T) = trip (defect η T)`,
+  entrywise `defect3_trip_apply`. The sign-seat entry at the
+  96-seat: `defect3_majorana_entry` - at `((0,g),(24,g))` the
+  value is `(y:ℂ)⁻¹ * star s`, and off the generation
+  diagonal it is 0. Survival transports verbatim:
+  `majorana_survival3_iff` - flatness at the 96-seat holds
+  iff `s = 0` (no new flat point). CC-1's J-seat closed form
+  transports the same way (`j_seat_defect3_entry`).
+- **Counterpart:** `routeb-general-scratch/cpeccc2-bridge1-check.py`
+  (run record `cpeccc2-bridge1-run.txt`, outside the repo) -
+  exact Gaussian-rational `Fraction` arithmetic, no floats,
+  6 `(y, s)` cases: the 96-seat defect computed directly
+  equals the triplication of the 32-seat defect at all
+  96×96 entries; the witness diagonal `((0,g),(24,g))`
+  equals `(y)⁻¹ * conj(s)` for every generation `g`;
+  off-generation entries are 0.
+- **Result:** ALL MATCH.
+- **Fence:** transport is not derivation - the generation
+  factor is carried as explicit data in every definition,
+  no theorem in the module derives why three, Q3 stays
+  OPEN, flavour stays an input. Jeff's name for the brick
+  ("the unity brick") is recorded as his coinage, never
+  spent as a claim. Dial 2 = 0. NO CLAIM; dials 0/4.
