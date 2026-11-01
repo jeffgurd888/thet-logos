@@ -837,3 +837,42 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   OPEN, flavour stays an input. Jeff's name for the brick
   ("the unity brick") is recorded as his coinage, never
   spent as a claim. Dial 2 = 0. NO CLAIM; dials 0/4.
+
+## BR1-023 - TOY-1 seat N = 2 exhaustive decision (K-TOY-VAC evidence)
+
+- **Lean side:** NONE - no module was built. The TOY-0 pin
+  (`LayerCubeTriangulationPost.lean`) registered
+  `BearingCoarseningTarget 2` as the watch's stated form and
+  `ToyComparison 2` as the pre-registered comparison; the
+  exhaustive check below shows the coarsening target is
+  FALSE at this seat, so under the pin's own pre-registered
+  kill (K-TOY-VAC) the comparison is void by construction
+  and no Lean brick was fired. This entry is the kill's
+  evidence, filed at full rank like a landing's.
+- **Counterpart:** `routeb-general-scratch/toy1-bridge1-seat2.py`
+  (run record `toy1-bridge1-seat2-run.txt`, outside the
+  repo) - exact integer arithmetic; the full geoDist matrix
+  at N = 2 from the landed l1 formula (the Hamming matrix
+  on the 3 spatial coordinates); exhaustive search over all
+  2^8 landmark subsets. Results: **beta_dist = 3** (witness
+  {(0,0,0,0), (0,0,0,1), (0,0,1,0)}; no set of size at most
+  2 resolves - agreeing numeral-for-numeral with the T4
+  expectation, OEIS A303735 beta(Q3) = 3); **beta_joint = 1**
+  (witness the singleton {(0,0,0,0)}); sign collapse at
+  N = 2 TRUE; **the bearing pattern is injective in x for
+  every fixed landmark** (the pattern is exactly the
+  differ-pattern: it determines the displacement and the
+  distance); **BearingCoarseningTarget 2: distance clause
+  FALSE, displacement clause FALSE**.
+- **Result:** K-TOY-VAC FIRES. The singleton's joint "win"
+  is bought entirely by a too-strong channel - the bearing
+  analogue alone, with no distance data, already identifies
+  every site from one landmark. The comparison (1 < 3) is
+  formally true in direction and void as a result.
+- **Fence:** beta_dist = 3 stands as a BRIDGE-1-verified
+  finite fact (T4-grade until a Lean decision brick lands
+  it). The flaw is in the pin's channel definition at small
+  seats, not in this seat's arithmetic; the same grouping
+  check (exploratory, outside the filed record) finds the
+  coarsening target false at N = 3 and N = 4 as well, first
+  true at N = 5. NO CLAIM; dials 0/4.
