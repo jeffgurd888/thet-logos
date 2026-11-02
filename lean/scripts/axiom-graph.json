@@ -1,0 +1,3616 @@
+{
+ "schema": "thet-logos/axiom-graph@1",
+ "scope": {
+  "module_layer": "all 460 .lean files under lean/ThetLogos/ (direct import edges + transitive closure sizes)",
+  "declaration_layer": "the axiom-fence registry only (scripts/axiom-fence.txt) \u2014 a named subset, not the whole corpus",
+  "fence": [
+   "propext",
+   "Classical.choice",
+   "Quot.sound"
+  ]
+ },
+ "declarations": {
+  "ThetLogos.dcHelicity_eq_neg_half": {
+   "module": "ThetLogos.DualCurrentRing",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.dcHelicity_nonpos": {
+   "module": "ThetLogos.DualCurrentRing",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.dcHelicity_eq_zero_iff": {
+   "module": "ThetLogos.DualCurrentRing",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.dcEnergy_add": {
+   "module": "ThetLogos.DualCurrentRing",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.leedskalnin_net_eq_zero": {
+   "module": "ThetLogos.DualCurrentLeedskalnin",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.leedskalnin_churn_eq_energy": {
+   "module": "ThetLogos.DualCurrentLeedskalnin",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.dcProject_eq_self_iff": {
+   "module": "ThetLogos.DualCurrentLeedskalnin",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.dcMix_dcEnergy_net": {
+   "module": "ThetLogos.DualCurrentMixing",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.dcMix_churn_counterexample": {
+   "module": "ThetLogos.DualCurrentMixing",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.e3TorsionCard_of_nagellLutzR": {
+   "module": "ThetLogos.BSDTorsionE3Sweep",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.e3_mem_torsion_iff": {
+   "module": "ThetLogos.BSDTorsionE3Sweep",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.E3_tolerance_iff_sha_eq_one": {
+   "module": "ThetLogos.BSDRefinedE3Assembly",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.BSDRefinedE3R_assembly": {
+   "module": "ThetLogos.BSDRefinedE3Assembly",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.DialOneSwapOrbitGroupLaw.orbit_group_action": {
+   "module": "ThetLogos.DialOneSwapOrbitGroupLaw",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.DialOneSwapOrbitGroupLaw.toggleMap_bitsAdd": {
+   "module": "ThetLogos.DialOneSwapOrbitGroupLaw",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.DialOneAntiparticleBase.dialOneBase_piAnti": {
+   "module": "ThetLogos.DialOneAntiparticleBase",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.DialOneAntiparticleBase.piAnti_eq_pi1_colourTwist": {
+   "module": "ThetLogos.DialOneAntiparticleBase",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.shelf7bDiscInterior_proved": {
+   "module": "ThetLogos.DiscSpectralMappingFull",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.discFactorisationHyp'_proved": {
+   "module": "ThetLogos.DiscSpectralMappingFull",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.maxwellM1_proved": {
+   "module": "ThetLogos.MaxwellQuadAssembly",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  },
+  "ThetLogos.maxwellQuad_nonneg": {
+   "module": "ThetLogos.MaxwellQuadAssembly",
+   "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+   ]
+  }
+ },
+ "modules": {
+  "ThetLogos.ActiveFlux": {
+   "imports": [],
+   "external_import_count": 3,
+   "transitive_imports": 0
+  },
+  "ThetLogos.AnalyticSemigroup": {
+   "imports": [
+    "ThetLogos.SemigroupCore",
+    "ThetLogos.SemigroupGeneration"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 2
+  },
+  "ThetLogos.AnalyticTriple": {
+   "imports": [
+    "ThetLogos.ProductTriple"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 1
+  },
+  "ThetLogos.AveragingProjection": {
+   "imports": [],
+   "external_import_count": 4,
+   "transitive_imports": 0
+  },
+  "ThetLogos.Axioms": {
+   "imports": [],
+   "external_import_count": 2,
+   "transitive_imports": 0
+  },
+  "ThetLogos.BRSTFinite": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.BSDCanonicalHeight": {
+   "imports": [
+    "ThetLogos.BSDRankPin"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 1
+  },
+  "ThetLogos.BSDIntervalPack": {
+   "imports": [
+    "ThetLogos.BSDCanonicalHeight",
+    "ThetLogos.BSDLeadingCoeff",
+    "ThetLogos.BSDPeriod"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 5
+  },
+  "ThetLogos.BSDLeadingCoeff": {
+   "imports": [
+    "ThetLogos.BSDRefinedPin"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 2
+  },
+  "ThetLogos.BSDPeriod": {
+   "imports": [],
+   "external_import_count": 3,
+   "transitive_imports": 0
+  },
+  "ThetLogos.BSDRankPin": {
+   "imports": [],
+   "external_import_count": 6,
+   "transitive_imports": 0
+  },
+  "ThetLogos.BSDRefinedAssembly": {
+   "imports": [
+    "ThetLogos.BSDCanonicalHeight",
+    "ThetLogos.BSDIntervalPack",
+    "ThetLogos.BSDLeadingCoeff",
+    "ThetLogos.BSDPeriod",
+    "ThetLogos.BSDRefinedPin"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 6
+  },
+  "ThetLogos.BSDRefinedE1Assembly": {
+   "imports": [
+    "ThetLogos.BSDRefinedAssembly",
+    "ThetLogos.BSDTorsionE1Sweep"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 8
+  },
+  "ThetLogos.BSDRefinedE3Assembly": {
+   "imports": [
+    "ThetLogos.BSDRefinedE3Repin",
+    "ThetLogos.BSDTorsionE3Sweep"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 10
+  },
+  "ThetLogos.BSDRefinedE3Pin": {
+   "imports": [
+    "ThetLogos.BSDRefinedAssembly"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 7
+  },
+  "ThetLogos.BSDRefinedE3Repin": {
+   "imports": [
+    "ThetLogos.BSDRefinedE3Pin"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 8
+  },
+  "ThetLogos.BSDRefinedPin": {
+   "imports": [
+    "ThetLogos.BSDRankPin"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 1
+  },
+  "ThetLogos.BSDTorsionE1Sweep": {
+   "imports": [
+    "ThetLogos.BSDRefinedAssembly"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 7
+  },
+  "ThetLogos.BSDTorsionE3Sweep": {
+   "imports": [
+    "ThetLogos.BSDRefinedE3Repin"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 9
+  },
+  "ThetLogos.BlockedQuestions": {
+   "imports": [
+    "ThetLogos.ModularTime",
+    "ThetLogos.ThermalKMS"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 3
+  },
+  "ThetLogos.BlockingProjection": {
+   "imports": [
+    "ThetLogos.LatticeBlockingFlow"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 8
+  },
+  "ThetLogos.BlockingProjectionDeriv": {
+   "imports": [
+    "ThetLogos.BlockingProjectionNonab"
+   ],
+   "external_import_count": 5,
+   "transitive_imports": 10
+  },
+  "ThetLogos.BlockingProjectionNonab": {
+   "imports": [
+    "ThetLogos.BlockingProjection"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 9
+  },
+  "ThetLogos.BosonicAssembly": {
+   "imports": [
+    "ThetLogos.BosonicFock"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 1
+  },
+  "ThetLogos.BosonicESA": {
+   "imports": [
+    "ThetLogos.BosonicInteraction"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 5
+  },
+  "ThetLogos.BosonicESABeta": {
+   "imports": [
+    "ThetLogos.BosonicESA"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 6
+  },
+  "ThetLogos.BosonicFock": {
+   "imports": [],
+   "external_import_count": 5,
+   "transitive_imports": 0
+  },
+  "ThetLogos.BosonicGamma": {
+   "imports": [
+    "ThetLogos.BosonicSecondQuant"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 3
+  },
+  "ThetLogos.BosonicGammaFunctor": {
+   "imports": [
+    "ThetLogos.BosonicGamma"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 4
+  },
+  "ThetLogos.BosonicInteraction": {
+   "imports": [
+    "ThetLogos.BosonicSecondQuant",
+    "ThetLogos.FockLimit"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 4
+  },
+  "ThetLogos.BosonicLimit": {
+   "imports": [
+    "ThetLogos.BosonicAssembly",
+    "ThetLogos.FockLimit"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 3
+  },
+  "ThetLogos.BosonicLimitOps": {
+   "imports": [
+    "ThetLogos.BosonicGamma",
+    "ThetLogos.BosonicGammaFunctor",
+    "ThetLogos.BosonicLimit",
+    "ThetLogos.BosonicSecondQuant"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 7
+  },
+  "ThetLogos.BosonicSecondQuant": {
+   "imports": [
+    "ThetLogos.BosonicAssembly"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 2
+  },
+  "ThetLogos.BoundedTriple": {
+   "imports": [
+    "ThetLogos.AnalyticTriple",
+    "ThetLogos.ProductTriple"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 2
+  },
+  "ThetLogos.BridgeCompletion": {
+   "imports": [
+    "ThetLogos.BridgeLaplacian"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 1
+  },
+  "ThetLogos.BridgeLaplacian": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.BridgeMagnetic": {
+   "imports": [
+    "ThetLogos.BridgeCompletion"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 2
+  },
+  "ThetLogos.BridgeMagneticCycle": {
+   "imports": [
+    "ThetLogos.BridgeMagneticFlux"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 19
+  },
+  "ThetLogos.BridgeMagneticFlux": {
+   "imports": [
+    "ThetLogos.BridgeCompletion",
+    "ThetLogos.BridgeMagneticHeat"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 18
+  },
+  "ThetLogos.BridgeMagneticGauge": {
+   "imports": [
+    "ThetLogos.BridgeMagnetic"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 3
+  },
+  "ThetLogos.BridgeMagneticHeat": {
+   "imports": [
+    "ThetLogos.BridgeMagneticGauge",
+    "ThetLogos.HermitianReduction"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 17
+  },
+  "ThetLogos.BridgeMagneticWeld": {
+   "imports": [
+    "ThetLogos.BridgeCompletion",
+    "ThetLogos.BridgeMagneticHeat"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 18
+  },
+  "ThetLogos.CCMAlgebraClassification": {
+   "imports": [
+    "ThetLogos.CFKernel",
+    "ThetLogos.CFKernelClassification"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 7
+  },
+  "ThetLogos.CFKernel": {
+   "imports": [
+    "ThetLogos.CFKernelBase",
+    "ThetLogos.MartinettiRep",
+    "ThetLogos.OrderOne",
+    "ThetLogos.Scaffold32"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 5
+  },
+  "ThetLogos.CFKernel22": {
+   "imports": [
+    "ThetLogos.CFKernel",
+    "ThetLogos.CFKernelRetarget"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 9
+  },
+  "ThetLogos.CFKernel22Dim": {
+   "imports": [
+    "ThetLogos.CFKernelRetarget"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 9
+  },
+  "ThetLogos.CFKernelBase": {
+   "imports": [
+    "ThetLogos.OrderOne",
+    "ThetLogos.Scaffold32"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 4
+  },
+  "ThetLogos.CFKernelClassification": {
+   "imports": [
+    "ThetLogos.CFKernel",
+    "ThetLogos.CFKernelBase",
+    "ThetLogos.MartinettiRep",
+    "ThetLogos.OrderOne"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 6
+  },
+  "ThetLogos.CFKernelRetarget": {
+   "imports": [
+    "ThetLogos.CFKernelBase",
+    "ThetLogos.InnerFluctuations",
+    "ThetLogos.MartinettiRep",
+    "ThetLogos.OrderOne",
+    "ThetLogos.Scaffold32"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.CausalProduct": {
+   "imports": [
+    "ThetLogos.TwistedTriple"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 3
+  },
+  "ThetLogos.Census96": {
+   "imports": [
+    "ThetLogos.OrderOne",
+    "ThetLogos.ThreeGen"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 9
+  },
+  "ThetLogos.Census96Assembly": {
+   "imports": [
+    "ThetLogos.Census96FortySixBound",
+    "ThetLogos.Census96PairBound"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 22
+  },
+  "ThetLogos.Census96Decoupling": {
+   "imports": [
+    "ThetLogos.Census96"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 10
+  },
+  "ThetLogos.Census96EightyEight": {
+   "imports": [
+    "ThetLogos.Census96PairSupplement"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 18
+  },
+  "ThetLogos.Census96FortySixBound": {
+   "imports": [
+    "ThetLogos.Census96FortySixDirections",
+    "ThetLogos.Census96PairBound"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 21
+  },
+  "ThetLogos.Census96FortySixDirections": {
+   "imports": [
+    "ThetLogos.CFKernel22",
+    "ThetLogos.Census96",
+    "ThetLogos.Census96Decoupling"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 13
+  },
+  "ThetLogos.Census96GeneratorBridge": {
+   "imports": [
+    "ThetLogos.Census96Decoupling"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 11
+  },
+  "ThetLogos.Census96PairBound": {
+   "imports": [
+    "ThetLogos.Census96EightyEight"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 19
+  },
+  "ThetLogos.Census96PairDirections": {
+   "imports": [
+    "ThetLogos.Census96GeneratorBridge",
+    "ThetLogos.Census96PairSpace"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 15
+  },
+  "ThetLogos.Census96PairExotic": {
+   "imports": [
+    "ThetLogos.Census96PairDirections",
+    "ThetLogos.Census96PairSpace"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 16
+  },
+  "ThetLogos.Census96PairSpace": {
+   "imports": [
+    "ThetLogos.CFKernel22",
+    "ThetLogos.Census96Decoupling"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 13
+  },
+  "ThetLogos.Census96PairSupplement": {
+   "imports": [
+    "ThetLogos.Census96PairExotic"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 17
+  },
+  "ThetLogos.ChargePumpPost": {
+   "imports": [
+    "ThetLogos.KMSBridge",
+    "ThetLogos.ThermalZ4ClockDefect",
+    "ThetLogos.ThermalZ4KMS",
+    "ThetLogos.ThermalZ4Ladder"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 6
+  },
+  "ThetLogos.ChargeSeparationPost": {
+   "imports": [
+    "ThetLogos.ChargePumpPost"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 7
+  },
+  "ThetLogos.CharpolyFactor": {
+   "imports": [
+    "ThetLogos.MartinettiRep"
+   ],
+   "external_import_count": 6,
+   "transitive_imports": 3
+  },
+  "ThetLogos.Chromatic": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.ClassicalYangMills": {
+   "imports": [
+    "ThetLogos.InnerFluctuations"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 8
+  },
+  "ThetLogos.ClayStatement": {
+   "imports": [],
+   "external_import_count": 2,
+   "transitive_imports": 0
+  },
+  "ThetLogos.ConcreteBoundedTriple": {
+   "imports": [
+    "ThetLogos.BoundedTriple",
+    "ThetLogos.ConcreteFiniteModel"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 5
+  },
+  "ThetLogos.ConcreteFiniteModel": {
+   "imports": [
+    "ThetLogos.AnalyticTriple",
+    "ThetLogos.FactorOrderOne",
+    "ThetLogos.ProductTriple"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 3
+  },
+  "ThetLogos.ConcreteHilbertRep": {
+   "imports": [
+    "ThetLogos.ConcreteStar"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 5
+  },
+  "ThetLogos.ConcreteStar": {
+   "imports": [
+    "ThetLogos.ConcreteFiniteModel"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 4
+  },
+  "ThetLogos.ConnesDistanceCycle": {
+   "imports": [
+    "ThetLogos.ConnesDistanceTheory",
+    "ThetLogos.Q7C4R4LinkC4",
+    "ThetLogos.Q7C4R4SecondLeg"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 34
+  },
+  "ThetLogos.ConnesDistancePost": {
+   "imports": [
+    "ThetLogos.ChargePumpPost"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 7
+  },
+  "ThetLogos.ConnesDistanceSeparation": {
+   "imports": [
+    "ThetLogos.ConnesDistanceCycle",
+    "ThetLogos.ConnesDistancePost"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 35
+  },
+  "ThetLogos.ConnesDistanceTheory": {
+   "imports": [
+    "ThetLogos.ConnesDistancePost"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 8
+  },
+  "ThetLogos.CpecBridgePost": {
+   "imports": [
+    "ThetLogos.DiracTorsionMap",
+    "ThetLogos.GravityPoseDecision",
+    "ThetLogos.GravityPoseResponse",
+    "ThetLogos.SpectralActionBridge"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 35
+  },
+  "ThetLogos.CpecEcDecision": {
+   "imports": [
+    "ThetLogos.CpecBridgePost"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 36
+  },
+  "ThetLogos.CpecJSeatTorsion": {
+   "imports": [
+    "ThetLogos.CpecBridgePost",
+    "ThetLogos.DiracTorsionMap"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 36
+  },
+  "ThetLogos.CpecUnityBrick": {
+   "imports": [
+    "ThetLogos.CpecJSeatTorsion",
+    "ThetLogos.DiracTorsionMap",
+    "ThetLogos.ThreeGen"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 38
+  },
+  "ThetLogos.DecoherenceToy": {
+   "imports": [
+    "ThetLogos.FlowKernel"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 2
+  },
+  "ThetLogos.DialOneAntiparticleBase": {
+   "imports": [
+    "ThetLogos.DialOneAntiparticleChapter",
+    "ThetLogos.DialOneShapeBIdentification",
+    "ThetLogos.DialOneSwapOrbitBase"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 30
+  },
+  "ThetLogos.DialOneAntiparticleChapter": {
+   "imports": [
+    "ThetLogos.DialOneClassificationPin",
+    "ThetLogos.DialOneLeptonChapter",
+    "ThetLogos.DialOneSwapOrbit",
+    "ThetLogos.Track1Closure"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 25
+  },
+  "ThetLogos.DialOneClassificationPin": {
+   "imports": [
+    "ThetLogos.DialOneGammaFamilyChecks",
+    "ThetLogos.DialOneGammaFamilyPin"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 22
+  },
+  "ThetLogos.DialOneConjugationCounterexample": {
+   "imports": [
+    "ThetLogos.DialOneCrossSign",
+    "ThetLogos.DialOneExtraction",
+    "ThetLogos.DialOneShapeBIdentification"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 31
+  },
+  "ThetLogos.DialOneCrossSign": {
+   "imports": [
+    "ThetLogos.DialOneExtraction"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 24
+  },
+  "ThetLogos.DialOneDoubleFlipChecks": {
+   "imports": [
+    "ThetLogos.DialOneDoubleFlipPin",
+    "ThetLogos.DialOneGammaTraceChecks"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 19
+  },
+  "ThetLogos.DialOneDoubleFlipPin": {
+   "imports": [
+    "ThetLogos.DialOneGammaTracePin",
+    "ThetLogos.DialOneSeatTiePin",
+    "ThetLogos.HyperchargeForcing"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 17
+  },
+  "ThetLogos.DialOneExtraction": {
+   "imports": [
+    "ThetLogos.DialOneClassificationPin"
+   ],
+   "external_import_count": 6,
+   "transitive_imports": 23
+  },
+  "ThetLogos.DialOneGammaFamilyChecks": {
+   "imports": [
+    "ThetLogos.DialOneDoubleFlipChecks",
+    "ThetLogos.DialOneGammaFamilyPin",
+    "ThetLogos.DialOneGammaTraceChecks"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 21
+  },
+  "ThetLogos.DialOneGammaFamilyPin": {
+   "imports": [
+    "ThetLogos.DialOneDoubleFlipPin",
+    "ThetLogos.DialOneGammaTracePin",
+    "ThetLogos.DialOneSeatTiePin",
+    "ThetLogos.HyperchargeForcing"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 18
+  },
+  "ThetLogos.DialOneGammaTraceChecks": {
+   "imports": [
+    "ThetLogos.DialOneGammaTracePin"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 17
+  },
+  "ThetLogos.DialOneGammaTracePin": {
+   "imports": [
+    "ThetLogos.DialOneSeatTiePin",
+    "ThetLogos.HyperchargeForcing"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 16
+  },
+  "ThetLogos.DialOneLeptonChapter": {
+   "imports": [
+    "ThetLogos.DialOneGammaFamilyChecks"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 22
+  },
+  "ThetLogos.DialOneSeatTieChecks": {
+   "imports": [
+    "ThetLogos.DialOneSeatTiePin",
+    "ThetLogos.HyperchargeForcing"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 16
+  },
+  "ThetLogos.DialOneSeatTiePin": {
+   "imports": [
+    "ThetLogos.HyperchargeForcing",
+    "ThetLogos.SMFermions",
+    "ThetLogos.ThreeGen"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 15
+  },
+  "ThetLogos.DialOneShapeBCoordinates": {
+   "imports": [
+    "ThetLogos.DialOneLeptonChapter",
+    "ThetLogos.DialOneSwapColourChapter"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 27
+  },
+  "ThetLogos.DialOneShapeBIdentification": {
+   "imports": [
+    "ThetLogos.DialOneShapeBCoordinates",
+    "ThetLogos.DialOneSwapOrbitBase"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 28
+  },
+  "ThetLogos.DialOneSwapColourChapter": {
+   "imports": [
+    "ThetLogos.DialOneSwapOrbitBase"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 25
+  },
+  "ThetLogos.DialOneSwapOrbit": {
+   "imports": [
+    "ThetLogos.DialOneClassificationPin",
+    "ThetLogos.DialOneGammaFamilyChecks"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 23
+  },
+  "ThetLogos.DialOneSwapOrbitBase": {
+   "imports": [
+    "ThetLogos.DialOneSwapOrbit"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 24
+  },
+  "ThetLogos.DialOneSwapOrbitGroupLaw": {
+   "imports": [
+    "ThetLogos.DialOneSwapOrbit"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 24
+  },
+  "ThetLogos.DiffEntropy": {
+   "imports": [
+    "ThetLogos.ShadowEntropyPost"
+   ],
+   "external_import_count": 10,
+   "transitive_imports": 1
+  },
+  "ThetLogos.DiffusionDefect": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.DiracTorsionMap": {
+   "imports": [
+    "ThetLogos.EdgeSignature",
+    "ThetLogos.FiniteSpectralTriple",
+    "ThetLogos.InnerFluctuations",
+    "ThetLogos.MartinettiRep"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 9
+  },
+  "ThetLogos.DiscCoeffProduct": {
+   "imports": [
+    "ThetLogos.HfcDiscForward"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 5
+  },
+  "ThetLogos.DiscFactorisationTail": {
+   "imports": [
+    "ThetLogos.DiscCoeffProduct",
+    "ThetLogos.DiscZeroFiniteness"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 7
+  },
+  "ThetLogos.DiscSpectralMappingFull": {
+   "imports": [
+    "ThetLogos.DiscFactorisationTail",
+    "ThetLogos.DiscZeroFreeUnit",
+    "ThetLogos.HfcDiscFactorisationRepair"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 11
+  },
+  "ThetLogos.DiscZeroFiniteness": {
+   "imports": [
+    "ThetLogos.Shelf7bPin"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 2
+  },
+  "ThetLogos.DiscZeroFreeUnit": {
+   "imports": [
+    "ThetLogos.DiscCoeffProduct",
+    "ThetLogos.HfcDiscSpectralMapping"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 7
+  },
+  "ThetLogos.DiscreteLangevin": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.DixmierTrace": {
+   "imports": [],
+   "external_import_count": 3,
+   "transitive_imports": 0
+  },
+  "ThetLogos.DoeblinGap": {
+   "imports": [
+    "ThetLogos.LatticeTransferCompact",
+    "ThetLogos.LatticeUniformGap",
+    "ThetLogos.UniformityDensityBound"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 21
+  },
+  "ThetLogos.DualCurrentLeedskalnin": {
+   "imports": [
+    "ThetLogos.DualCurrentRing"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 1
+  },
+  "ThetLogos.DualCurrentMixing": {
+   "imports": [
+    "ThetLogos.DualCurrentLeedskalnin",
+    "ThetLogos.DualCurrentRing"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 2
+  },
+  "ThetLogos.DualCurrentRing": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.EdgeSignature": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.ExoticSectors": {
+   "imports": [
+    "ThetLogos.CFKernelRetarget"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 9
+  },
+  "ThetLogos.FactorOrderOne": {
+   "imports": [
+    "ThetLogos.ProductTriple"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 1
+  },
+  "ThetLogos.FermionicFock": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.FermionicInteraction": {
+   "imports": [
+    "ThetLogos.SecondQuantDGamma"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 2
+  },
+  "ThetLogos.FermionicLimit": {
+   "imports": [
+    "ThetLogos.FermionicFock",
+    "ThetLogos.FockLimit"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 2
+  },
+  "ThetLogos.FermionicLimitOps": {
+   "imports": [
+    "ThetLogos.FermionicLimit",
+    "ThetLogos.SecondQuantDGamma",
+    "ThetLogos.SecondQuantGamma"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 5
+  },
+  "ThetLogos.FibonacciReturn": {
+   "imports": [
+    "ThetLogos.FluxTwist"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 1
+  },
+  "ThetLogos.FieldOperators": {
+   "imports": [
+    "ThetLogos.FreeField"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 2
+  },
+  "ThetLogos.FiniteEntropy": {
+   "imports": [
+    "ThetLogos.ThermalZ4Ladder"
+   ],
+   "external_import_count": 13,
+   "transitive_imports": 1
+  },
+  "ThetLogos.FiniteSpectralTriple": {
+   "imports": [
+    "ThetLogos.Scaffold32"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 1
+  },
+  "ThetLogos.FixedZeroPost": {
+   "imports": [
+    "ThetLogos.DoeblinGap",
+    "ThetLogos.LatticeUniformGap",
+    "ThetLogos.LatticeVacuumSimple"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 22
+  },
+  "ThetLogos.FlowKernel": {
+   "imports": [
+    "ThetLogos.ModularTime"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.FluxClassification": {
+   "imports": [
+    "ThetLogos.HermitianReduction",
+    "ThetLogos.ModularFlux",
+    "ThetLogos.ModularTime"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 13
+  },
+  "ThetLogos.FluxTwist": {
+   "imports": [],
+   "external_import_count": 7,
+   "transitive_imports": 0
+  },
+  "ThetLogos.FockCoImport": {
+   "imports": [
+    "ThetLogos.BosonicAssembly",
+    "ThetLogos.BosonicFock",
+    "ThetLogos.BosonicInteraction",
+    "ThetLogos.BosonicLimitOps",
+    "ThetLogos.BosonicSecondQuant",
+    "ThetLogos.FermionicFock",
+    "ThetLogos.FermionicInteraction",
+    "ThetLogos.FermionicLimit",
+    "ThetLogos.FermionicLimitOps",
+    "ThetLogos.FockPackagingBos",
+    "ThetLogos.FockPackagingFerm",
+    "ThetLogos.SecondQuantDGamma",
+    "ThetLogos.SecondQuantGamma"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 23
+  },
+  "ThetLogos.FockLimit": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.FockLorentzBos": {
+   "imports": [
+    "ThetLogos.FockPackagingBos",
+    "ThetLogos.LorentzContinuity"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 16
+  },
+  "ThetLogos.FockLorentzFerm": {
+   "imports": [
+    "ThetLogos.FockPackagingFerm",
+    "ThetLogos.LorentzContinuity"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 14
+  },
+  "ThetLogos.FockPackaging": {
+   "imports": [
+    "ThetLogos.MassShellBoost",
+    "ThetLogos.MassShellMeasure",
+    "ThetLogos.TranslationContinuity"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 5
+  },
+  "ThetLogos.FockPackagingBos": {
+   "imports": [
+    "ThetLogos.BosonicLimitOps",
+    "ThetLogos.FockPackaging"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 14
+  },
+  "ThetLogos.FockPackagingFerm": {
+   "imports": [
+    "ThetLogos.FermionicLimitOps",
+    "ThetLogos.FockPackaging"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 12
+  },
+  "ThetLogos.FreeField": {
+   "imports": [
+    "ThetLogos.WightmanAxioms"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.FriedrichsExtension": {
+   "imports": [],
+   "external_import_count": 8,
+   "transitive_imports": 0
+  },
+  "ThetLogos.FuzzyBallShadow": {
+   "imports": [],
+   "external_import_count": 2,
+   "transitive_imports": 0
+  },
+  "ThetLogos.GibbsSpan": {
+   "imports": [
+    "ThetLogos.HermitianReduction",
+    "ThetLogos.ThermalClock"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 13
+  },
+  "ThetLogos.GramAssembly": {
+   "imports": [
+    "ThetLogos.AveragingProjection",
+    "ThetLogos.GramWordTensor",
+    "ThetLogos.LatticeGramSeries",
+    "ThetLogos.LatticePositivity"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 7
+  },
+  "ThetLogos.GramAssemblyOcc": {
+   "imports": [
+    "ThetLogos.GramAssembly"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.GramDominance": {
+   "imports": [
+    "ThetLogos.PhiAssembly",
+    "ThetLogos.PlaneCrossingBeta6Assembly"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 28
+  },
+  "ThetLogos.GramDominanceOrderFive": {
+   "imports": [
+    "ThetLogos.SepDoubledQuad",
+    "ThetLogos.TripleTwirl"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 31
+  },
+  "ThetLogos.GramDominanceProbeF21": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.GramDominanceProbeSL23": {
+   "imports": [
+    "ThetLogos.GramDominanceProbeF21"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 1
+  },
+  "ThetLogos.GramMirror": {
+   "imports": [
+    "ThetLogos.GramAssembly"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.GramMirrorOcc": {
+   "imports": [
+    "ThetLogos.GramAssemblyOcc",
+    "ThetLogos.GramMirror"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.GramWordTensor": {
+   "imports": [
+    "ThetLogos.AveragingProjection",
+    "ThetLogos.LatticeGauge"
+   ],
+   "external_import_count": 5,
+   "transitive_imports": 2
+  },
+  "ThetLogos.GravityPoseDecision": {
+   "imports": [
+    "ThetLogos.GravityPosePost"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 31
+  },
+  "ThetLogos.GravityPosePost": {
+   "imports": [
+    "ThetLogos.InnerFluctuations",
+    "ThetLogos.MaxwellQuadPost",
+    "ThetLogos.SpectralActionA2"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 30
+  },
+  "ThetLogos.GravityPoseResponse": {
+   "imports": [
+    "ThetLogos.GravityPosePost"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 31
+  },
+  "ThetLogos.GreenKubo": {
+   "imports": [
+    "ThetLogos.DiscreteLangevin"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.HaagKastler": {
+   "imports": [
+    "ThetLogos.WightmanAxioms"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.HaagKastlerFree": {
+   "imports": [
+    "ThetLogos.FieldOperators",
+    "ThetLogos.HaagKastler",
+    "ThetLogos.PoincareAction"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 5
+  },
+  "ThetLogos.HaarAvgKernelReceipt": {
+   "imports": [
+    "ThetLogos.PlaneAvgKernel",
+    "ThetLogos.PlaneAvgKernelCircle"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 9
+  },
+  "ThetLogos.HermitianReduction": {
+   "imports": [
+    "ThetLogos.SpectralClock",
+    "ThetLogos.ThermalKernel"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 12
+  },
+  "ThetLogos.HfcDiscFactorisationRepair": {
+   "imports": [
+    "ThetLogos.HfcDiscSpectralMapping"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 6
+  },
+  "ThetLogos.HfcDiscForward": {
+   "imports": [
+    "ThetLogos.Shelf7bPin2"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 4
+  },
+  "ThetLogos.HfcDiscSharp": {
+   "imports": [
+    "ThetLogos.Shelf7bPin"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 2
+  },
+  "ThetLogos.HfcDiscSpectralMapping": {
+   "imports": [
+    "ThetLogos.HfcDiscForward"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 5
+  },
+  "ThetLogos.HilbertSchmidt": {
+   "imports": [],
+   "external_import_count": 5,
+   "transitive_imports": 0
+  },
+  "ThetLogos.HolomorphicFunctionalCalculus": {
+   "imports": [],
+   "external_import_count": 4,
+   "transitive_imports": 0
+  },
+  "ThetLogos.HyperchargeForcing": {
+   "imports": [
+    "ThetLogos.Track1RouteB"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 14
+  },
+  "ThetLogos.IcosidodecaBoundary": {
+   "imports": [
+    "ThetLogos.IcosidodecaChain"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 1
+  },
+  "ThetLogos.IcosidodecaCensus": {
+   "imports": [
+    "ThetLogos.IcosidodecaBoundary",
+    "ThetLogos.IcosidodecaChain",
+    "ThetLogos.IcosidodecaFaceSplit"
+   ],
+   "external_import_count": 9,
+   "transitive_imports": 3
+  },
+  "ThetLogos.IcosidodecaChain": {
+   "imports": [],
+   "external_import_count": 5,
+   "transitive_imports": 0
+  },
+  "ThetLogos.IcosidodecaFaceSplit": {
+   "imports": [
+    "ThetLogos.IcosidodecaChain"
+   ],
+   "external_import_count": 6,
+   "transitive_imports": 1
+  },
+  "ThetLogos.InnerFluctuations": {
+   "imports": [
+    "ThetLogos.CFKernelBase",
+    "ThetLogos.CFKernelClassification",
+    "ThetLogos.MartinettiRep",
+    "ThetLogos.OrderOne"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 7
+  },
+  "ThetLogos.IntegralKernelHS": {
+   "imports": [
+    "ThetLogos.HilbertSchmidt",
+    "ThetLogos.LatticeTransferCompact"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 11
+  },
+  "ThetLogos.IntegralKernelSchur": {
+   "imports": [
+    "ThetLogos.IntegralKernelHS"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 12
+  },
+  "ThetLogos.KMSBridge": {
+   "imports": [
+    "ThetLogos.ModularFlux"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 2
+  },
+  "ThetLogos.LatticeAnalyticity": {
+   "imports": [
+    "ThetLogos.LatticeCorrelations"
+   ],
+   "external_import_count": 5,
+   "transitive_imports": 2
+  },
+  "ThetLogos.LatticeBlocking": {
+   "imports": [
+    "ThetLogos.LatticeTransfer"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 6
+  },
+  "ThetLogos.LatticeBlockingFlow": {
+   "imports": [
+    "ThetLogos.LatticeBlocking"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 7
+  },
+  "ThetLogos.LatticeBoundaryExpansion": {
+   "imports": [
+    "ThetLogos.LatticeBoundaryOp",
+    "ThetLogos.LatticeGramSeries"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 7
+  },
+  "ThetLogos.LatticeBoundaryOp": {
+   "imports": [
+    "ThetLogos.LatticeLayerFactor"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 5
+  },
+  "ThetLogos.LatticeContainment": {
+   "imports": [
+    "ThetLogos.LatticeBoundaryOp",
+    "ThetLogos.NullStart"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 24
+  },
+  "ThetLogos.LatticeContr": {
+   "imports": [
+    "ThetLogos.LatticeMomentCalc"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 5
+  },
+  "ThetLogos.LatticeContrDoubledLink": {
+   "imports": [
+    "ThetLogos.LatticeContr"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 6
+  },
+  "ThetLogos.LatticeCorrelations": {
+   "imports": [
+    "ThetLogos.LatticeGauge"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.LatticeGauge": {
+   "imports": [],
+   "external_import_count": 11,
+   "transitive_imports": 0
+  },
+  "ThetLogos.LatticeGramAssembly": {
+   "imports": [
+    "ThetLogos.LatticeGramWord",
+    "ThetLogos.LatticeLayerFactor"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 9
+  },
+  "ThetLogos.LatticeGramSeries": {
+   "imports": [
+    "ThetLogos.LatticePositivity"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 4
+  },
+  "ThetLogos.LatticeGramWord": {
+   "imports": [
+    "ThetLogos.GramWordTensor",
+    "ThetLogos.LatticeGramSeries"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 7
+  },
+  "ThetLogos.LatticeHdenSeat": {
+   "imports": [
+    "ThetLogos.LatticeVacuumSimple"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 19
+  },
+  "ThetLogos.LatticeKappaAssembly": {
+   "imports": [
+    "ThetLogos.LatticeContr"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 6
+  },
+  "ThetLogos.LatticeLayerFactor": {
+   "imports": [
+    "ThetLogos.LatticePositivity"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 4
+  },
+  "ThetLogos.LatticeMomentCalc": {
+   "imports": [
+    "ThetLogos.LatticeTwirl"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 4
+  },
+  "ThetLogos.LatticeOSMarginal": {
+   "imports": [
+    "ThetLogos.LatticeOSSpace"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 5
+  },
+  "ThetLogos.LatticeOSSpace": {
+   "imports": [
+    "ThetLogos.LatticePositivity"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 4
+  },
+  "ThetLogos.LatticePositivity": {
+   "imports": [
+    "ThetLogos.LatticeReflection"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 3
+  },
+  "ThetLogos.LatticeReconZero": {
+   "imports": [
+    "ThetLogos.LatticeBoundaryOp",
+    "ThetLogos.LatticeGramSeries",
+    "ThetLogos.LatticeTransferIdent"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 11
+  },
+  "ThetLogos.LatticeReflection": {
+   "imports": [
+    "ThetLogos.LatticeCorrelations"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 2
+  },
+  "ThetLogos.LatticeSliceCfc": {
+   "imports": [
+    "ThetLogos.LatticeSliceCircle",
+    "ThetLogos.LatticeSliceFriedrichs",
+    "ThetLogos.LatticeSliceRegression"
+   ],
+   "external_import_count": 5,
+   "transitive_imports": 22
+  },
+  "ThetLogos.LatticeSliceCircle": {
+   "imports": [
+    "ThetLogos.LatticeGramSeries",
+    "ThetLogos.LatticeSliceEngine"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 15
+  },
+  "ThetLogos.LatticeSliceDescent": {
+   "imports": [
+    "ThetLogos.LatticeSlicePairing"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 13
+  },
+  "ThetLogos.LatticeSliceEngine": {
+   "imports": [
+    "ThetLogos.LatticeSliceDescent"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 14
+  },
+  "ThetLogos.LatticeSliceFormClosed": {
+   "imports": [
+    "ThetLogos.LatticeSliceOperator",
+    "ThetLogos.LatticeSliceWeld"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 20
+  },
+  "ThetLogos.LatticeSliceFriedrichs": {
+   "imports": [
+    "ThetLogos.LatticeSliceFormClosed"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 21
+  },
+  "ThetLogos.LatticeSliceHamiltonian": {
+   "imports": [
+    "ThetLogos.LatticeSliceCircle",
+    "ThetLogos.LatticeSliceRegression"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 17
+  },
+  "ThetLogos.LatticeSliceIdentify": {
+   "imports": [
+    "ThetLogos.LatticeSliceCfc",
+    "ThetLogos.LatticeSliceYosida",
+    "ThetLogos.SliceBattery"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 29
+  },
+  "ThetLogos.LatticeSliceOperator": {
+   "imports": [
+    "ThetLogos.LatticeSliceWeld"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 19
+  },
+  "ThetLogos.LatticeSlicePairing": {
+   "imports": [
+    "ThetLogos.LatticeReconZero",
+    "ThetLogos.LatticeTransferIdent"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 12
+  },
+  "ThetLogos.LatticeSliceRegression": {
+   "imports": [
+    "ThetLogos.LatticeReconZero",
+    "ThetLogos.LatticeSliceEngine"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 15
+  },
+  "ThetLogos.LatticeSliceResolvent": {
+   "imports": [
+    "ThetLogos.LatticeSliceCfc"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 23
+  },
+  "ThetLogos.LatticeSliceWeld": {
+   "imports": [
+    "ThetLogos.LatticeSliceEngine",
+    "ThetLogos.LatticeSliceHamiltonian",
+    "ThetLogos.LatticeSlicePairing",
+    "ThetLogos.LatticeTransferID"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 18
+  },
+  "ThetLogos.LatticeSliceYosida": {
+   "imports": [
+    "ThetLogos.LatticeSliceResolvent"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 24
+  },
+  "ThetLogos.LatticeTransfer": {
+   "imports": [
+    "ThetLogos.LatticeOSSpace"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 5
+  },
+  "ThetLogos.LatticeTransferCompact": {
+   "imports": [
+    "ThetLogos.LatticeTransferIdent"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 9
+  },
+  "ThetLogos.LatticeTransferID": {
+   "imports": [
+    "ThetLogos.LatticeTransfer"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 6
+  },
+  "ThetLogos.LatticeTransferIdent": {
+   "imports": [
+    "ThetLogos.LatticeLayerFactor",
+    "ThetLogos.LatticeTransferID"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.LatticeTransferPointwise": {
+   "imports": [
+    "ThetLogos.LatticeTransfer"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 6
+  },
+  "ThetLogos.LatticeTwirl": {
+   "imports": [
+    "ThetLogos.LatticeAnalyticity"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 3
+  },
+  "ThetLogos.LatticeUniformGap": {
+   "imports": [
+    "ThetLogos.LatticeSliceCircle",
+    "ThetLogos.LatticeTransferCompact"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 17
+  },
+  "ThetLogos.LatticeVacuumSimple": {
+   "imports": [
+    "ThetLogos.LatticeUniformGap"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 18
+  },
+  "ThetLogos.LayerCubeDistance": {
+   "imports": [
+    "ThetLogos.LatticeReflection",
+    "ThetLogos.LayerCubeDistancePost"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 20
+  },
+  "ThetLogos.LayerCubeDistancePost": {
+   "imports": [
+    "ThetLogos.MaxwellQuadPost"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 19
+  },
+  "ThetLogos.LayerCubeGreenKernel": {
+   "imports": [
+    "ThetLogos.LayerCubeDistance",
+    "ThetLogos.MaxwellQuadAssembly"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 23
+  },
+  "ThetLogos.LayerCubeRemainderClosure": {
+   "imports": [
+    "ThetLogos.LayerCubeDistance",
+    "ThetLogos.LayerCubeRemainderSeat",
+    "ThetLogos.MaxwellQuadAssembly"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 25
+  },
+  "ThetLogos.LayerCubeRemainderPost": {
+   "imports": [
+    "ThetLogos.MaxwellQuadPost"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 19
+  },
+  "ThetLogos.LayerCubeRemainderSeat": {
+   "imports": [
+    "ThetLogos.LayerCubeRemainderPost"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 20
+  },
+  "ThetLogos.LayerCubeTriangulationPost": {
+   "imports": [
+    "ThetLogos.LayerCubeDistance"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 21
+  },
+  "ThetLogos.LayerKernelPos": {
+   "imports": [
+    "ThetLogos.PlaneCrossingCube",
+    "ThetLogos.PlaneCrossingSymm"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.LorentzContinuity": {
+   "imports": [
+    "ThetLogos.FockPackaging"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 6
+  },
+  "ThetLogos.MartinettiRep": {
+   "imports": [
+    "ThetLogos.FiniteSpectralTriple",
+    "ThetLogos.Scaffold32"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 2
+  },
+  "ThetLogos.MassGapDossier": {
+   "imports": [
+    "ThetLogos.ClayStatement"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.MassShellBoost": {
+   "imports": [
+    "ThetLogos.MassShellMeasure"
+   ],
+   "external_import_count": 6,
+   "transitive_imports": 3
+  },
+  "ThetLogos.MassShellMeasure": {
+   "imports": [
+    "ThetLogos.PoincareAction"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 2
+  },
+  "ThetLogos.MaxwellPoincare": {
+   "imports": [
+    "ThetLogos.MaxwellQuadSpectrum"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 22
+  },
+  "ThetLogos.MaxwellQuadAssembly": {
+   "imports": [
+    "ThetLogos.MaxwellQuadWeld"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 20
+  },
+  "ThetLogos.MaxwellQuadPost": {
+   "imports": [
+    "ThetLogos.PlaquetteTelescoping"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 18
+  },
+  "ThetLogos.MaxwellQuadSpectrum": {
+   "imports": [
+    "ThetLogos.MaxwellQuadAssembly"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 21
+  },
+  "ThetLogos.MaxwellQuadWeld": {
+   "imports": [
+    "ThetLogos.MaxwellQuadPost"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 19
+  },
+  "ThetLogos.MeasuredClockAnswer": {
+   "imports": [
+    "ThetLogos.MeasuredClockSpectrum"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 5
+  },
+  "ThetLogos.MeasuredClockAnswer8": {
+   "imports": [
+    "ThetLogos.MeasuredClockAnswer"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 6
+  },
+  "ThetLogos.MeasuredClockCollapse": {
+   "imports": [
+    "ThetLogos.MeasuredClockAnswer"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 6
+  },
+  "ThetLogos.MeasuredClockDecision7": {
+   "imports": [
+    "ThetLogos.MeasuredClockAnswer8",
+    "ThetLogos.MeasuredClockQuestion2"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 9
+  },
+  "ThetLogos.MeasuredClockQuestion2": {
+   "imports": [
+    "ThetLogos.MeasuredClockCollapse"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 7
+  },
+  "ThetLogos.MeasuredClockSpectrum": {
+   "imports": [
+    "ThetLogos.BlockedQuestions"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 4
+  },
+  "ThetLogos.Mod9Triad": {
+   "imports": [],
+   "external_import_count": 2,
+   "transitive_imports": 0
+  },
+  "ThetLogos.ModularFlux": {
+   "imports": [
+    "ThetLogos.ModularTime"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 1
+  },
+  "ThetLogos.ModularTime": {
+   "imports": [],
+   "external_import_count": 4,
+   "transitive_imports": 0
+  },
+  "ThetLogos.ModularVariance": {
+   "imports": [
+    "ThetLogos.GibbsSpan",
+    "ThetLogos.NullStart",
+    "ThetLogos.TeslaVortexMultiSector"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 18
+  },
+  "ThetLogos.N0Uniqueness": {
+   "imports": [
+    "ThetLogos.CFKernelBase"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 5
+  },
+  "ThetLogos.NavierStokesDefs": {
+   "imports": [],
+   "external_import_count": 6,
+   "transitive_imports": 0
+  },
+  "ThetLogos.NavierStokesStatement": {
+   "imports": [
+    "ThetLogos.NavierStokesDefs"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 1
+  },
+  "ThetLogos.NoCloning": {
+   "imports": [],
+   "external_import_count": 7,
+   "transitive_imports": 0
+  },
+  "ThetLogos.NullStart": {
+   "imports": [
+    "ThetLogos.FluxClassification",
+    "ThetLogos.TeslaVortexMultiSector"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 17
+  },
+  "ThetLogos.OSRepin": {
+   "imports": [
+    "ThetLogos.LatticeTransfer",
+    "ThetLogos.OsterwalderSchrader"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 8
+  },
+  "ThetLogos.OneModeFermion": {
+   "imports": [
+    "ThetLogos.ConcreteFiniteModel",
+    "ThetLogos.ConcreteStar"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 5
+  },
+  "ThetLogos.OnePhotonPost": {
+   "imports": [
+    "ThetLogos.SMHiggsBreaking"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.OperatorWick": {
+   "imports": [
+    "ThetLogos.ConcreteStar",
+    "ThetLogos.WickSigns"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 6
+  },
+  "ThetLogos.OrderFiveSelection": {
+   "imports": [
+    "ThetLogos.PrimitiveQuadPatterns"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 16
+  },
+  "ThetLogos.OrderOne": {
+   "imports": [
+    "ThetLogos.FiniteSpectralTriple",
+    "ThetLogos.MartinettiRep"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 3
+  },
+  "ThetLogos.OrderOneFull": {
+   "imports": [
+    "ThetLogos.MartinettiRep",
+    "ThetLogos.OrderOne"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 4
+  },
+  "ThetLogos.OrderSevenSelection": {
+   "imports": [
+    "ThetLogos.OrderSixSelection"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 18
+  },
+  "ThetLogos.OrderSixSelection": {
+   "imports": [
+    "ThetLogos.OrderFiveSelection"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 17
+  },
+  "ThetLogos.OsterwalderSchrader": {
+   "imports": [
+    "ThetLogos.WightmanAxioms"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.PartialTrace": {
+   "imports": [],
+   "external_import_count": 3,
+   "transitive_imports": 0
+  },
+  "ThetLogos.PerronFrobenius": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.PhaseWinding": {
+   "imports": [
+    "ThetLogos.FluxTwist"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 1
+  },
+  "ThetLogos.PhiAssembly": {
+   "imports": [
+    "ThetLogos.PrimitiveQuadPatterns",
+    "ThetLogos.QuadReMomentTelescope",
+    "ThetLogos.RepTensorTwirl"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 21
+  },
+  "ThetLogos.PhotonUniqueMassless": {
+   "imports": [
+    "ThetLogos.SMHiggsBreaking"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.PlaneAvgKernel": {
+   "imports": [
+    "ThetLogos.LatticeBoundaryOp",
+    "ThetLogos.LatticePositivity"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 6
+  },
+  "ThetLogos.PlaneAvgKernelCircle": {
+   "imports": [
+    "ThetLogos.LatticeGramSeries",
+    "ThetLogos.PlaneAvgKernel"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.PlaneCrossingBeta2": {
+   "imports": [
+    "ThetLogos.PlaneCrossingColumn",
+    "ThetLogos.PlaneCrossingCube"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 11
+  },
+  "ThetLogos.PlaneCrossingBeta3": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta2",
+    "ThetLogos.PolymerActivity"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 13
+  },
+  "ThetLogos.PlaneCrossingBeta4": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta3",
+    "ThetLogos.PolymerActivity"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 14
+  },
+  "ThetLogos.PlaneCrossingBeta5": {
+   "imports": [
+    "ThetLogos.OrderFiveSelection",
+    "ThetLogos.PlaneCrossingBeta4"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 17
+  },
+  "ThetLogos.PlaneCrossingBeta5Assembly": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta5"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 18
+  },
+  "ThetLogos.PlaneCrossingBeta5Probe": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta5",
+    "ThetLogos.PlaneCrossingKappa4Probe"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 19
+  },
+  "ThetLogos.PlaneCrossingBeta6": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta5"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 18
+  },
+  "ThetLogos.PlaneCrossingBeta6Assembly": {
+   "imports": [
+    "ThetLogos.OrderSixSelection",
+    "ThetLogos.PlaneCrossingBeta5Assembly",
+    "ThetLogos.PlaneCrossingBeta6"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 21
+  },
+  "ThetLogos.PlaneCrossingBeta6Probe": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta5Probe",
+    "ThetLogos.PlaneCrossingBeta6"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 21
+  },
+  "ThetLogos.PlaneCrossingBeta7": {
+   "imports": [
+    "ThetLogos.OrderSevenSelection",
+    "ThetLogos.PlaneCrossingBeta6"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 21
+  },
+  "ThetLogos.PlaneCrossingBeta7Assembly": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta6Assembly",
+    "ThetLogos.PlaneCrossingBeta7"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 24
+  },
+  "ThetLogos.PlaneCrossingBeta7Close": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta7Fibers",
+    "ThetLogos.PlaneCrossingBeta7Probe"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 30
+  },
+  "ThetLogos.PlaneCrossingBeta7Fibers": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta7Assembly",
+    "ThetLogos.PrimitiveQuadPatterns"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 25
+  },
+  "ThetLogos.PlaneCrossingBeta7Probe": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta6Probe",
+    "ThetLogos.PlaneCrossingBeta7"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 25
+  },
+  "ThetLogos.PlaneCrossingColumn": {
+   "imports": [
+    "ThetLogos.PlaneCrossingCube"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.PlaneCrossingCube": {
+   "imports": [
+    "ThetLogos.PlaneCrossingFactor"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 9
+  },
+  "ThetLogos.PlaneCrossingFactor": {
+   "imports": [
+    "ThetLogos.PlaneAvgKernel",
+    "ThetLogos.PlaneCrossingSymm"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.PlaneCrossingKappa4Probe": {
+   "imports": [],
+   "external_import_count": 1,
+   "transitive_imports": 0
+  },
+  "ThetLogos.PlaneCrossingSeparate": {
+   "imports": [
+    "ThetLogos.PlaneCrossingSymm"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.PlaneCrossingSymm": {
+   "imports": [
+    "ThetLogos.LatticeGauge",
+    "ThetLogos.LatticeReflection",
+    "ThetLogos.PlaneAvgKernel"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 7
+  },
+  "ThetLogos.PlaqBlockAssembly": {
+   "imports": [
+    "ThetLogos.PlaqBlockContraction",
+    "ThetLogos.PlaqBlockReductions"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 24
+  },
+  "ThetLogos.PlaqBlockContraction": {
+   "imports": [
+    "ThetLogos.PlaqBlockReductions",
+    "ThetLogos.QuadReMomentTelescope",
+    "ThetLogos.RepTensorTwirl"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 23
+  },
+  "ThetLogos.PlaqBlockLimit": {
+   "imports": [
+    "ThetLogos.PlaqBlockAssembly"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 25
+  },
+  "ThetLogos.PlaqBlockReductions": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta2",
+    "ThetLogos.PlaquetteTelescoping"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 18
+  },
+  "ThetLogos.PlaquetteFactorPD": {
+   "imports": [
+    "ThetLogos.PlaneCrossingColumn",
+    "ThetLogos.RepTensorTwirl"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 16
+  },
+  "ThetLogos.PlaquetteTelescoping": {
+   "imports": [
+    "ThetLogos.PlaquetteFactorPD"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 17
+  },
+  "ThetLogos.PoincareAction": {
+   "imports": [
+    "ThetLogos.WightmanAxioms"
+   ],
+   "external_import_count": 5,
+   "transitive_imports": 1
+  },
+  "ThetLogos.PolymerActivity": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta2"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 12
+  },
+  "ThetLogos.PolymerConvergence": {
+   "imports": [
+    "ThetLogos.PolymerActivity"
+   ],
+   "external_import_count": 6,
+   "transitive_imports": 13
+  },
+  "ThetLogos.PolymerPartition": {
+   "imports": [
+    "ThetLogos.PolymerConvergence"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 14
+  },
+  "ThetLogos.PreCompensation": {
+   "imports": [
+    "ThetLogos.DecoherenceToy"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 3
+  },
+  "ThetLogos.PreOptionARepresentation": {
+   "imports": [
+    "ThetLogos.FiniteSpectralTriple",
+    "ThetLogos.SMFermions",
+    "ThetLogos.SMGaugeAlgebra"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 11
+  },
+  "ThetLogos.PrimitiveQuadPatterns": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta4"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 15
+  },
+  "ThetLogos.ProductTriple": {
+   "imports": [],
+   "external_import_count": 5,
+   "transitive_imports": 0
+  },
+  "ThetLogos.PvsNPDefs": {
+   "imports": [],
+   "external_import_count": 2,
+   "transitive_imports": 0
+  },
+  "ThetLogos.PvsNPStatement": {
+   "imports": [
+    "ThetLogos.PvsNPDefs"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 1
+  },
+  "ThetLogos.PvsNPWitness": {
+   "imports": [
+    "ThetLogos.PvsNPDefs"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 1
+  },
+  "ThetLogos.Q7C4R4Assembly": {
+   "imports": [
+    "ThetLogos.Q7C4R4Realify"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 3
+  },
+  "ThetLogos.Q7C4R4Charge": {
+   "imports": [
+    "ThetLogos.Q7C4R4Spectrum"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 6
+  },
+  "ThetLogos.Q7C4R4Dynamics": {
+   "imports": [
+    "ThetLogos.Q7C4R4Assembly",
+    "ThetLogos.Q7C4R4Charge",
+    "ThetLogos.Q7C4R4Spectrum",
+    "ThetLogos.SpectralActionQ7CR"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 8
+  },
+  "ThetLogos.Q7C4R4EnergySplit": {
+   "imports": [
+    "ThetLogos.Q7C4R4Dynamics",
+    "ThetLogos.Q7C4R4Trifecta"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 27
+  },
+  "ThetLogos.Q7C4R4FirstLeg": {
+   "imports": [
+    "ThetLogos.FiniteEntropy",
+    "ThetLogos.Q7C4R4Trifecta"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 22
+  },
+  "ThetLogos.Q7C4R4Fluctuate": {
+   "imports": [
+    "ThetLogos.Q7C4R4Charge"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 7
+  },
+  "ThetLogos.Q7C4R4LinkC4": {
+   "imports": [
+    "ThetLogos.Q7C4R4Charge",
+    "ThetLogos.Q7C4R4Linker"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 9
+  },
+  "ThetLogos.Q7C4R4LinkCov": {
+   "imports": [
+    "ThetLogos.Q7C4R4Charge",
+    "ThetLogos.Q7C4R4Linker",
+    "ThetLogos.Q7C4R4Spectrum"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 9
+  },
+  "ThetLogos.Q7C4R4Linker": {
+   "imports": [
+    "ThetLogos.FluxTwist",
+    "ThetLogos.Q7C4R4Realify"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 4
+  },
+  "ThetLogos.Q7C4R4LoopExchange": {
+   "imports": [
+    "ThetLogos.Q7C4R4EnergySplit",
+    "ThetLogos.Q7C4R4LoopProtocol"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 33
+  },
+  "ThetLogos.Q7C4R4LoopNoGo": {
+   "imports": [
+    "ThetLogos.Q7C4R4LoopPost"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 29
+  },
+  "ThetLogos.Q7C4R4LoopPost": {
+   "imports": [
+    "ThetLogos.FiniteEntropy",
+    "ThetLogos.Q7C4R4Dynamics",
+    "ThetLogos.ThermalZ4ClockDefect",
+    "ThetLogos.ViscousLine"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 28
+  },
+  "ThetLogos.Q7C4R4LoopProtocol": {
+   "imports": [
+    "ThetLogos.Q7C4R4LoopNoGo"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 30
+  },
+  "ThetLogos.Q7C4R4Post": {
+   "imports": [
+    "ThetLogos.WightmanAxioms"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 1
+  },
+  "ThetLogos.Q7C4R4Realify": {
+   "imports": [
+    "ThetLogos.Q7C4R4Post"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 2
+  },
+  "ThetLogos.Q7C4R4SecondArrow": {
+   "imports": [
+    "ThetLogos.Q7C4R4Dynamics",
+    "ThetLogos.Q7C4R4EnergySplit",
+    "ThetLogos.Q7C4R4LinkC4",
+    "ThetLogos.Q7C4R4Trifecta"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 31
+  },
+  "ThetLogos.Q7C4R4SecondLeg": {
+   "imports": [
+    "ThetLogos.ModularTime",
+    "ThetLogos.Q7C4R4Spectrum",
+    "ThetLogos.Q7C4R4Trifecta",
+    "ThetLogos.ThermalZ4ClockDefect",
+    "ThetLogos.ThermalZ4KMS"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 26
+  },
+  "ThetLogos.Q7C4R4Spectrum": {
+   "imports": [
+    "ThetLogos.Q7C4R4Assembly",
+    "ThetLogos.ThermalZ4Ladder"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 5
+  },
+  "ThetLogos.Q7C4R4ThirdLeg": {
+   "imports": [
+    "ThetLogos.FiniteEntropy",
+    "ThetLogos.Q7C4R4Spectrum",
+    "ThetLogos.Q7C4R4Trifecta"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 25
+  },
+  "ThetLogos.Q7C4R4Trifecta": {
+   "imports": [
+    "ThetLogos.KMSBridge",
+    "ThetLogos.Q7C4R4Post",
+    "ThetLogos.ViscousLine"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 19
+  },
+  "ThetLogos.Q7C4R4ZerothLeg": {
+   "imports": [
+    "ThetLogos.Q7C4R4Trifecta"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 20
+  },
+  "ThetLogos.Q7DFTPost": {
+   "imports": [
+    "ThetLogos.LatticeOSSpace"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 5
+  },
+  "ThetLogos.QuadReMomentTelescope": {
+   "imports": [
+    "ThetLogos.PlaneCrossingBeta4",
+    "ThetLogos.RepOrthogonality"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 18
+  },
+  "ThetLogos.RationalPivot": {
+   "imports": [],
+   "external_import_count": 3,
+   "transitive_imports": 0
+  },
+  "ThetLogos.Renormalization": {
+   "imports": [],
+   "external_import_count": 5,
+   "transitive_imports": 0
+  },
+  "ThetLogos.RepOrthogonality": {
+   "imports": [
+    "ThetLogos.LatticeTwirl",
+    "ThetLogos.PlaneCrossingBeta2"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 14
+  },
+  "ThetLogos.RepTensorTwirl": {
+   "imports": [
+    "ThetLogos.RepOrthogonality"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 15
+  },
+  "ThetLogos.ResonanceSpectrum": {
+   "imports": [
+    "ThetLogos.PreCompensation",
+    "ThetLogos.ThermalClock"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 9
+  },
+  "ThetLogos.RiemannHypothesisPin": {
+   "imports": [],
+   "external_import_count": 2,
+   "transitive_imports": 0
+  },
+  "ThetLogos.RieszComplementary": {
+   "imports": [
+    "ThetLogos.RieszGate",
+    "ThetLogos.RieszGateIdem"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 2
+  },
+  "ThetLogos.RieszGate": {
+   "imports": [],
+   "external_import_count": 4,
+   "transitive_imports": 0
+  },
+  "ThetLogos.RieszGateIdem": {
+   "imports": [
+    "ThetLogos.RieszGate"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.RieszOrthogonality": {
+   "imports": [
+    "ThetLogos.RieszGateIdem"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 2
+  },
+  "ThetLogos.RootWeightsDecision": {
+   "imports": [
+    "ThetLogos.RootWeightsPost"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 12
+  },
+  "ThetLogos.RootWeightsPost": {
+   "imports": [
+    "ThetLogos.ThermalClock",
+    "ThetLogos.ThermalKernel"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 11
+  },
+  "ThetLogos.Rung5W1": {
+   "imports": [
+    "ThetLogos.OneModeFermion",
+    "ThetLogos.WightmanTargets"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.Rung5W2": {
+   "imports": [
+    "ThetLogos.OneModeFermion",
+    "ThetLogos.WightmanTargets"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.Rung5W3": {
+   "imports": [
+    "ThetLogos.OneModeFermion",
+    "ThetLogos.WightmanAxioms",
+    "ThetLogos.WightmanTargets"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.Rung5W4": {
+   "imports": [
+    "ThetLogos.OneModeFermion",
+    "ThetLogos.WightmanTargets"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.Rung5W5": {
+   "imports": [
+    "ThetLogos.OneModeFermion",
+    "ThetLogos.WightmanTargets"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.Rung5W6": {
+   "imports": [
+    "ThetLogos.OneModeFermion",
+    "ThetLogos.WightmanTargets"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.SMFermions": {
+   "imports": [
+    "ThetLogos.FiniteSpectralTriple",
+    "ThetLogos.Scaffold32",
+    "ThetLogos.ThreeGen"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 9
+  },
+  "ThetLogos.SMGaugeAlgebra": {
+   "imports": [
+    "ThetLogos.FiniteSpectralTriple"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 2
+  },
+  "ThetLogos.SMHiggsBreaking": {
+   "imports": [
+    "ThetLogos.ClassicalYangMills"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 9
+  },
+  "ThetLogos.SMLagrangian": {
+   "imports": [
+    "ThetLogos.ClassicalYangMills"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 9
+  },
+  "ThetLogos.Scaffold32": {
+   "imports": [],
+   "external_import_count": 3,
+   "transitive_imports": 0
+  },
+  "ThetLogos.SchrodingerDynamics": {
+   "imports": [
+    "ThetLogos.FermionicInteraction"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 3
+  },
+  "ThetLogos.SchrodingerSmalls": {
+   "imports": [
+    "ThetLogos.SchrodingerDynamics"
+   ],
+   "external_import_count": 6,
+   "transitive_imports": 4
+  },
+  "ThetLogos.SchwartzComplete": {
+   "imports": [
+    "ThetLogos.SchwartzSpace"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 4
+  },
+  "ThetLogos.SchwartzSpace": {
+   "imports": [
+    "ThetLogos.FieldOperators"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 3
+  },
+  "ThetLogos.SecondQuantDGamma": {
+   "imports": [
+    "ThetLogos.FermionicFock"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.SecondQuantGamma": {
+   "imports": [
+    "ThetLogos.FermionicFock",
+    "ThetLogos.SecondQuantDGamma"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 2
+  },
+  "ThetLogos.SelfAdjointCriteria": {
+   "imports": [
+    "ThetLogos.BridgeCompletion",
+    "ThetLogos.FriedrichsExtension"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 3
+  },
+  "ThetLogos.SemigroupConvergence": {
+   "imports": [
+    "ThetLogos.SemigroupGeneration"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 2
+  },
+  "ThetLogos.SemigroupCore": {
+   "imports": [],
+   "external_import_count": 3,
+   "transitive_imports": 0
+  },
+  "ThetLogos.SemigroupDuality": {
+   "imports": [
+    "ThetLogos.PerronFrobenius",
+    "ThetLogos.SemigroupGeneration"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 3
+  },
+  "ThetLogos.SemigroupGeneration": {
+   "imports": [
+    "ThetLogos.SemigroupCore"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 1
+  },
+  "ThetLogos.SepDoubledQuad": {
+   "imports": [
+    "ThetLogos.GramDominance"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 29
+  },
+  "ThetLogos.SexagesimalClock": {
+   "imports": [
+    "ThetLogos.TritGrading"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 1
+  },
+  "ThetLogos.ShadowEntropyPost": {
+   "imports": [],
+   "external_import_count": 6,
+   "transitive_imports": 0
+  },
+  "ThetLogos.ShadowEntropySeat": {
+   "imports": [
+    "ThetLogos.DiffEntropy",
+    "ThetLogos.ShadowMBSeat",
+    "ThetLogos.ShadowWeightIdentity"
+   ],
+   "external_import_count": 10,
+   "transitive_imports": 4
+  },
+  "ThetLogos.ShadowEntropyVerdict": {
+   "imports": [
+    "ThetLogos.ShadowEntropySeat"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 5
+  },
+  "ThetLogos.ShadowMBSeat": {
+   "imports": [
+    "ThetLogos.DiffEntropy"
+   ],
+   "external_import_count": 11,
+   "transitive_imports": 2
+  },
+  "ThetLogos.ShadowWeightIdentity": {
+   "imports": [
+    "ThetLogos.DiffEntropy"
+   ],
+   "external_import_count": 6,
+   "transitive_imports": 2
+  },
+  "ThetLogos.Shelf7bPin": {
+   "imports": [
+    "ThetLogos.HolomorphicFunctionalCalculus"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 1
+  },
+  "ThetLogos.Shelf7bPin2": {
+   "imports": [
+    "ThetLogos.HfcDiscSharp"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 3
+  },
+  "ThetLogos.SliceBattery": {
+   "imports": [
+    "ThetLogos.LatticeSliceCfc",
+    "ThetLogos.LatticeSliceCircle",
+    "ThetLogos.LatticeSliceResolvent",
+    "ThetLogos.LatticeVacuumSimple"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 27
+  },
+  "ThetLogos.SliceTransport": {
+   "imports": [
+    "ThetLogos.LatticeSliceIdentify",
+    "ThetLogos.LatticeSliceWeld",
+    "ThetLogos.LatticeUniformGap",
+    "ThetLogos.SliceBattery"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 30
+  },
+  "ThetLogos.SliceTransportA": {
+   "imports": [
+    "ThetLogos.LatticeHdenSeat",
+    "ThetLogos.LatticeTransferCompact",
+    "ThetLogos.LatticeVacuumSimple",
+    "ThetLogos.SliceTransport"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 32
+  },
+  "ThetLogos.SolidBody": {
+   "imports": [],
+   "external_import_count": 5,
+   "transitive_imports": 0
+  },
+  "ThetLogos.SolidBodyMinAxis": {
+   "imports": [
+    "ThetLogos.SolidBody",
+    "ThetLogos.SolidBodyPeriod"
+   ],
+   "external_import_count": 5,
+   "transitive_imports": 2
+  },
+  "ThetLogos.SolidBodyOcean": {
+   "imports": [
+    "ThetLogos.SolidBody"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 1
+  },
+  "ThetLogos.SolidBodyPeriod": {
+   "imports": [
+    "ThetLogos.SolidBody"
+   ],
+   "external_import_count": 5,
+   "transitive_imports": 1
+  },
+  "ThetLogos.SolidBodyPeriodDiv": {
+   "imports": [
+    "ThetLogos.SolidBodyPeriodQuad"
+   ],
+   "external_import_count": 6,
+   "transitive_imports": 5
+  },
+  "ThetLogos.SolidBodyPeriodQuad": {
+   "imports": [
+    "ThetLogos.SolidBodyPolhode",
+    "ThetLogos.SolidBodyPortrait"
+   ],
+   "external_import_count": 5,
+   "transitive_imports": 4
+  },
+  "ThetLogos.SolidBodyPeriodTheta": {
+   "imports": [
+    "ThetLogos.SolidBodyPeriodDiv"
+   ],
+   "external_import_count": 6,
+   "transitive_imports": 6
+  },
+  "ThetLogos.SolidBodyPolhode": {
+   "imports": [
+    "ThetLogos.SolidBody"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 1
+  },
+  "ThetLogos.SolidBodyPortrait": {
+   "imports": [
+    "ThetLogos.SolidBodyPolhode",
+    "ThetLogos.SolidBodyRankSwitch"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 3
+  },
+  "ThetLogos.SolidBodyRankSwitch": {
+   "imports": [
+    "ThetLogos.SolidBody"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.SolidBodyVarMoments": {
+   "imports": [
+    "ThetLogos.SolidBody"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.Span3A0AssemblyPost": {
+   "imports": [
+    "ThetLogos.PlaneCrossingSeparate",
+    "ThetLogos.Span3FactLayerKernelPos"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 25
+  },
+  "ThetLogos.Span3DeltaOutput": {
+   "imports": [
+    "ThetLogos.Span3ScalingLimit"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 14
+  },
+  "ThetLogos.Span3FactLayerKernelPos": {
+   "imports": [
+    "ThetLogos.LayerKernelPos",
+    "ThetLogos.Span3MarginPin"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 23
+  },
+  "ThetLogos.Span3GapPins": {
+   "imports": [
+    "ThetLogos.LatticeGauge",
+    "ThetLogos.LatticeTransferCompact"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.Span3GapPinsU1": {
+   "imports": [
+    "ThetLogos.LatticeUniformGap",
+    "ThetLogos.Span3GapPins"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 19
+  },
+  "ThetLogos.Span3MarginPin": {
+   "imports": [
+    "ThetLogos.PolymerPartition",
+    "ThetLogos.Span3GapPins"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 21
+  },
+  "ThetLogos.Span3ReconstructionRepair": {
+   "imports": [
+    "ThetLogos.LatticeTransferCompact",
+    "ThetLogos.OSRepin"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 13
+  },
+  "ThetLogos.Span3ScalingLimit": {
+   "imports": [
+    "ThetLogos.LatticeCorrelations",
+    "ThetLogos.OsterwalderSchrader",
+    "ThetLogos.Span3GapPins"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 13
+  },
+  "ThetLogos.Span3SeatSchur": {
+   "imports": [
+    "ThetLogos.Span3A0AssemblyPost"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 26
+  },
+  "ThetLogos.Span3SeatSchurGateFiber": {
+   "imports": [
+    "ThetLogos.LatticeBlockingFlow",
+    "ThetLogos.Span3SeatSchurGatePost"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 30
+  },
+  "ThetLogos.Span3SeatSchurGatePost": {
+   "imports": [
+    "ThetLogos.Span3SeatSchur"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 27
+  },
+  "ThetLogos.Span3WallIdentity": {
+   "imports": [
+    "ThetLogos.Span3MarginPin"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 22
+  },
+  "ThetLogos.SpectralAction": {
+   "imports": [
+    "ThetLogos.ProductTriple"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 1
+  },
+  "ThetLogos.SpectralActionA2": {
+   "imports": [
+    "ThetLogos.SpectralActionBridge"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 10
+  },
+  "ThetLogos.SpectralActionBridge": {
+   "imports": [
+    "ThetLogos.SpectralActionFinite"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 9
+  },
+  "ThetLogos.SpectralActionFinite": {
+   "imports": [
+    "ThetLogos.InnerFluctuations"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.SpectralActionQ7CR": {
+   "imports": [
+    "ThetLogos.Q7C4R4Assembly",
+    "ThetLogos.Q7C4R4Spectrum"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 6
+  },
+  "ThetLogos.SpectralClock": {
+   "imports": [
+    "ThetLogos.ResonanceSpectrum"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 10
+  },
+  "ThetLogos.SpectralFrontier": {
+   "imports": [
+    "ThetLogos.StoneFiniteDim"
+   ],
+   "external_import_count": 5,
+   "transitive_imports": 1
+  },
+  "ThetLogos.SpectralMapping": {
+   "imports": [
+    "ThetLogos.TRO"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 2
+  },
+  "ThetLogos.StoneFiniteDim": {
+   "imports": [],
+   "external_import_count": 8,
+   "transitive_imports": 0
+  },
+  "ThetLogos.StoneFiniteDim2": {
+   "imports": [
+    "ThetLogos.StoneFiniteDim"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 1
+  },
+  "ThetLogos.SumResonance": {
+   "imports": [],
+   "external_import_count": 2,
+   "transitive_imports": 0
+  },
+  "ThetLogos.SumResonanceCore": {
+   "imports": [
+    "ThetLogos.SumResonance"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 1
+  },
+  "ThetLogos.SumResonanceForcing": {
+   "imports": [
+    "ThetLogos.SumResonance",
+    "ThetLogos.SumResonanceCore"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 2
+  },
+  "ThetLogos.SumResonancePerturbation": {
+   "imports": [
+    "ThetLogos.SumResonanceCore"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 2
+  },
+  "ThetLogos.SumResonanceRatios": {
+   "imports": [
+    "ThetLogos.SumResonance",
+    "ThetLogos.SumResonanceCore",
+    "ThetLogos.SumResonanceForcing"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 3
+  },
+  "ThetLogos.SumResonanceSeat": {
+   "imports": [
+    "ThetLogos.Q7C4R4Spectrum",
+    "ThetLogos.SumResonance",
+    "ThetLogos.SumResonanceCore",
+    "ThetLogos.SumResonanceForcing"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 9
+  },
+  "ThetLogos.TRO": {
+   "imports": [
+    "ThetLogos.Axioms"
+   ],
+   "external_import_count": 7,
+   "transitive_imports": 1
+  },
+  "ThetLogos.TensorCrossNorm": {
+   "imports": [
+    "ThetLogos.ProductTriple"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 1
+  },
+  "ThetLogos.TernaryThermalDynamics": {
+   "imports": [
+    "ThetLogos.TRO",
+    "ThetLogos.ThermalClock",
+    "ThetLogos.ThermalKernel"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 13
+  },
+  "ThetLogos.TernaryThermalNormalized": {
+   "imports": [
+    "ThetLogos.TernaryThermalDynamics"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 14
+  },
+  "ThetLogos.TeslaVortexMultiSector": {
+   "imports": [
+    "ThetLogos.FluxClassification",
+    "ThetLogos.TeslaVortexSeparation"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 16
+  },
+  "ThetLogos.TeslaVortexSeparation": {
+   "imports": [
+    "ThetLogos.FluxClassification",
+    "ThetLogos.GibbsSpan"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 15
+  },
+  "ThetLogos.ThermalClock": {
+   "imports": [
+    "ThetLogos.KMSBridge",
+    "ThetLogos.ModularTime",
+    "ThetLogos.ThermalKMS"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 5
+  },
+  "ThetLogos.ThermalKMS": {
+   "imports": [
+    "ThetLogos.Scaffold32"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 1
+  },
+  "ThetLogos.ThermalKernel": {
+   "imports": [
+    "ThetLogos.ResonanceSpectrum"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 10
+  },
+  "ThetLogos.ThermalPreCompensation": {
+   "imports": [
+    "ThetLogos.PreCompensation",
+    "ThetLogos.ResonanceSpectrum",
+    "ThetLogos.SpectralClock",
+    "ThetLogos.ThermalClock"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 11
+  },
+  "ThetLogos.ThermalZ4ClockDefect": {
+   "imports": [
+    "ThetLogos.ThermalZ4Ladder"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 1
+  },
+  "ThetLogos.ThermalZ4KMS": {
+   "imports": [
+    "ThetLogos.KMSBridge",
+    "ThetLogos.ThermalZ4Ladder"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 4
+  },
+  "ThetLogos.ThermalZ4Ladder": {
+   "imports": [],
+   "external_import_count": 2,
+   "transitive_imports": 0
+  },
+  "ThetLogos.ThreeGen": {
+   "imports": [
+    "ThetLogos.FiniteSpectralTriple",
+    "ThetLogos.InnerFluctuations",
+    "ThetLogos.MartinettiRep",
+    "ThetLogos.Scaffold32"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 8
+  },
+  "ThetLogos.TraceClassStock": {
+   "imports": [
+    "ThetLogos.HilbertSchmidt"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 1
+  },
+  "ThetLogos.Track1Closure": {
+   "imports": [
+    "ThetLogos.PreOptionARepresentation"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 12
+  },
+  "ThetLogos.Track1RouteB": {
+   "imports": [
+    "ThetLogos.Track1Closure"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 13
+  },
+  "ThetLogos.TranslationContinuity": {
+   "imports": [
+    "ThetLogos.MassShellMeasure"
+   ],
+   "external_import_count": 6,
+   "transitive_imports": 3
+  },
+  "ThetLogos.TriadicPin": {
+   "imports": [
+    "ThetLogos.XYZTripotents"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.TriadicScreening": {
+   "imports": [
+    "ThetLogos.TriadicPin"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 9
+  },
+  "ThetLogos.TripleTwirl": {
+   "imports": [
+    "ThetLogos.LatticeTwirl"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 4
+  },
+  "ThetLogos.TritGrading": {
+   "imports": [],
+   "external_import_count": 9,
+   "transitive_imports": 0
+  },
+  "ThetLogos.TwistedTriple": {
+   "imports": [
+    "ThetLogos.FlowKernel"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 2
+  },
+  "ThetLogos.TwoDirections": {
+   "imports": [
+    "ThetLogos.ThermalKernel"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 11
+  },
+  "ThetLogos.UltimateReduction": {
+   "imports": [
+    "ThetLogos.ModularFlux"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 2
+  },
+  "ThetLogos.UniformityDensityBound": {
+   "imports": [
+    "ThetLogos.LatticeHdenSeat"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 20
+  },
+  "ThetLogos.ViscousLine": {
+   "imports": [
+    "ThetLogos.HermitianReduction",
+    "ThetLogos.TernaryThermalDynamics"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 16
+  },
+  "ThetLogos.VortexLocusFullCount": {
+   "imports": [
+    "ThetLogos.Census96Decoupling",
+    "ThetLogos.VortexLocusFullTable"
+   ],
+   "external_import_count": 2,
+   "transitive_imports": 16
+  },
+  "ThetLogos.VortexLocusFullTable": {
+   "imports": [
+    "ThetLogos.VortexLocusPin"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 12
+  },
+  "ThetLogos.VortexLocusPin": {
+   "imports": [
+    "ThetLogos.CFKernel22",
+    "ThetLogos.SpectralActionFinite"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 11
+  },
+  "ThetLogos.VortexLocusSeatA": {
+   "imports": [
+    "ThetLogos.Census96Decoupling",
+    "ThetLogos.FluxClassification"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 24
+  },
+  "ThetLogos.VortexLocusStructure": {
+   "imports": [
+    "ThetLogos.ModularFlux",
+    "ThetLogos.VortexLocusPin"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 14
+  },
+  "ThetLogos.WaveFamilyPost": {
+   "imports": [
+    "ThetLogos.LayerCubeDistancePost",
+    "ThetLogos.SchrodingerDynamics"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 24
+  },
+  "ThetLogos.WaveFamilyWeld": {
+   "imports": [
+    "ThetLogos.MaxwellQuadAssembly",
+    "ThetLogos.WaveFamilyPost"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 27
+  },
+  "ThetLogos.WaveFreqShadowDecision": {
+   "imports": [
+    "ThetLogos.WaveModeIdentification"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 30
+  },
+  "ThetLogos.WaveModeIdentification": {
+   "imports": [
+    "ThetLogos.MaxwellQuadSpectrum",
+    "ThetLogos.WaveFamilyWeld"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 29
+  },
+  "ThetLogos.WavePathShadowDecision": {
+   "imports": [
+    "ThetLogos.LayerCubeDistance",
+    "ThetLogos.WaveFamilyPost"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 26
+  },
+  "ThetLogos.WeldDuality": {
+   "imports": [],
+   "external_import_count": 6,
+   "transitive_imports": 0
+  },
+  "ThetLogos.WickSigns": {
+   "imports": [],
+   "external_import_count": 5,
+   "transitive_imports": 0
+  },
+  "ThetLogos.WightmanAxioms": {
+   "imports": [],
+   "external_import_count": 4,
+   "transitive_imports": 0
+  },
+  "ThetLogos.WightmanRepin": {
+   "imports": [
+    "ThetLogos.OSRepin",
+    "ThetLogos.Rung5W1",
+    "ThetLogos.Rung5W2",
+    "ThetLogos.Rung5W3",
+    "ThetLogos.Rung5W4",
+    "ThetLogos.Rung5W5",
+    "ThetLogos.Rung5W6"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 24
+  },
+  "ThetLogos.WightmanTargets": {
+   "imports": [
+    "ThetLogos.FieldOperators",
+    "ThetLogos.WightmanAxioms"
+   ],
+   "external_import_count": 1,
+   "transitive_imports": 3
+  },
+  "ThetLogos.WindingRing": {
+   "imports": [],
+   "external_import_count": 6,
+   "transitive_imports": 0
+  },
+  "ThetLogos.XYZBoundaryMarker": {
+   "imports": [
+    "ThetLogos.XYZTripotents"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.XYZPoolKill": {
+   "imports": [
+    "ThetLogos.XYZTripotents"
+   ],
+   "external_import_count": 0,
+   "transitive_imports": 8
+  },
+  "ThetLogos.XYZTripotents": {
+   "imports": [
+    "ThetLogos.CFKernelBase",
+    "ThetLogos.MartinettiRep",
+    "ThetLogos.TRO"
+   ],
+   "external_import_count": 4,
+   "transitive_imports": 7
+  },
+  "ThetLogos.YukawaInteraction": {
+   "imports": [
+    "ThetLogos.BosonicFock",
+    "ThetLogos.FermionicFock",
+    "ThetLogos.FermionicInteraction",
+    "ThetLogos.FockLimit"
+   ],
+   "external_import_count": 3,
+   "transitive_imports": 5
+  }
+ },
+ "summary": {
+  "module_nodes": 460,
+  "module_edges": 711,
+  "declarations_checked": 21,
+  "declarations_unreported": [],
+  "axiom_universe": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ }
+}
