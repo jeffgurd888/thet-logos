@@ -1052,3 +1052,18 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   deflection law; "bending" appears only inside this
   fence. It seats NO gravity object; Dial 2 = 0.
   NO CLAIM; dials 0/4.
+
+- **BR1-029** — K-CLS-1a conjugation-route probe (Dial-1 lane;
+  entry written with the firing's landing, 2026-11-02; BR1-030
+  above already notes this reservation): commutant of
+  {gammaF, D_nu, D_e, D_u, D_d, J-intertwining} computed
+  EXACTLY (Gaussian rationals, no floats) at generic Yukawa
+  values — dimension 80 (40 with J adjoined); the named pair
+  (8,9) NOT mixable (channel separation); route LIVE via the
+  rational orthogonal U mixing 2<->28 (weights 1 vs 4),
+  lifted entry (12/25)(1-i) != 0 at t = pi/2. Verdict: ROUTE
+  LIVE, and the follow-on Lean brick CLS-1a-FIRE has now
+  LANDED the firing at T1 (DialOneConjugationCounterexample
+  .lean; probe and proof agree on all values). Memo:
+  whitepaper/scoping-br1-029-conjugation-probe-2026-11-02.md.
+  NO CLAIM; Dial 1: 0.
