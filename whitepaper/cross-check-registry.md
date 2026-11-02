@@ -1006,3 +1006,49 @@ dials (0/4) and assert nothing physical. Span 3 of the bridge
   NO CLAIM; dials 0/4.
 
 - **BR1-028** — GATE-1 falsity probe for the F2-W3 gate (2026-11-01): the faithful finite class (Z/2 prism seats, layer ring C_n, n = 3, 4): pairing = 0-minimum over 265 exact cases, three independent exact evaluators agreeing. Mechanism: the fibre average of the twirled observable is invariant under the layer gauge action applied to each copy separately (site-supported gauge functions + in-place fibre permutation), so self-pairing >= 0 from LayerKernelPos alone - the Schur product never enters for the UNDRESSED pairing. K-GATE-1 does NOT fire; impossibility proved for the faithful finite class. Controls prove the detector works: tying the top/bottom gauge values (NOT the corpus action) gives pairings -1/64 (n = 3), -1/256 (n = 4); violating LayerKernelPos falsity gives -1/64. Fence: does NOT prove the concrete SeatSchurTarget; dressed pairings (GATE-2/G2c territory) remain the live fork; non-abelian G, complex kernels, continuum identifications untested. Script `f2gate1-probe.py`, record `f2gate1-probe-out.txt` (rerun byte-identical).
+
+## BR1-030 - GR-PROP-4 path-shadow seat decision (weighted cube graph, N = 2)
+
+- **Numbering note:** BR1-029 is reserved in flight for the
+  CLS-1 conjugation probe (`pack-br1-029-probe.md`); this
+  entry takes the next free number, BR1-030.
+- **Lean side:** `WavePathShadowDecision.lean` - the
+  GR-PROP-0 frozen predicate `PoseObjBPathShadow` DECIDED
+  at the named seat: N = 2 layer cube, sites `seatX`
+  (zero layer site) and `seatY` (its direction-1 shift),
+  perturbed distance function `pertDist` (the infimum
+  over cube-graph walks of the perturbed walk cost),
+  stated length 2 named in advance. The named
+  site-perturbation (`pertStepCost`): the single edge
+  {seatX, seatY} has its weight changed from 1 to 2, an
+  increase of exactly the rational 1; every other step
+  keeps weight 1. Verdict: HOLDS at the seat
+  (`pathShadow_holds_at_seat`): unperturbed
+  `geoDist 2 seatX seatY = 1` (GR-GEO-1's l1 formula),
+  perturbed `pertDist seatX seatY = 2` - LENGTHENED by
+  exactly 1 (`pertDist_lengthens_seat`). The same
+  predicate at the unperturbed length 1 is refuted at
+  full rank (`pathShadow_fails_at_unperturbed_length`):
+  its first clause would read 1 = pertDist = 2. The
+  stated length was not re-chosen after any failure.
+  All headlines on exactly [propext, Classical.choice,
+  Quot.sound]; strict 21, defs 6.
+- **Counterpart:** `routeb-general-scratch/prop4-bridge1-check.py`
+  (run record `prop4-bridge1-run.txt`, outside the repo) -
+  independent exact-rational computation: the 8-site
+  N = 2 cube (12 edges, every site degree 3), Dijkstra
+  over `Fraction` weights with the same named
+  perturbation, plus an independent unweighted BFS.
+  13/13 checks: BFS and unweighted Dijkstra agree at
+  every site; geoDist(X, Y) = 1; Dp(X, Y) = 2; effect
+  +1; the best route avoiding the perturbed edge costs
+  3, so the perturbed minimum is the direct edge at 2;
+  the predicate holds at stated length 2 and fails at
+  stated length 1.
+- **Result:** PASS (13/13).
+- **Fence:** graph bookkeeping only - shortest
+  cube-graph paths under a named perturbation, decided
+  at a named seat. No continuous path, no angle, no
+  deflection law; "bending" appears only inside this
+  fence. It seats NO gravity object; Dial 2 = 0.
+  NO CLAIM; dials 0/4.
