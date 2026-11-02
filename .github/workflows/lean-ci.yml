@@ -1,0 +1,67 @@
+name: lean-ci
+
+# INSTALLED 2026-11-02 under Jeff's fire order (vector 1 of the audited
+# upgrade list). Purpose: make the house ceremony's two hard gates
+# automatic on every push —
+#   (1) zero `sorry` in code position anywhere in the Lean sources;
+#   (2) every registered headline declaration carries only the fenced
+#       axioms {propext, Classical.choice, Quot.sound}.
+# Coverage, stated honestly: gate (1) scans ALL sources; gate (2)
+# compiles the registry modules (scripts/axiom-fence.txt) and checks
+# the registered headlines. A from-scratch compile of every one of the
+# ~460 modules is priced in hours and is NOT run here — it remains a
+# local-ceremony gate. The parent ceremony (independent census,
+# dossier, README verification, BR1 checks) is not replaced by this file.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'lean/**'
+      - '.github/workflows/lean-ci.yml'
+  pull_request:
+    paths:
+      - 'lean/**'
+
+jobs:
+  build-and-fence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan (pinned toolchain from lean-toolchain)
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Cache Mathlib build
+        uses: actions/cache@v4
+        with:
+          path: |
+            lean/.lake/packages
+            lean/.lake/build
+          key: lake-${{ runner.os }}-${{ hashFiles('lean/lakefile*', 'lean/lean-toolchain') }}
+
+      - name: Get Mathlib cache
+        working-directory: lean
+        run: lake exe cache get || true
+
+      - name: Build root library
+        working-directory: lean
+        run: lake build
+
+      - name: Zero-sorry gate (all sources, code position only)
+        working-directory: lean
+        run: python3 scripts/check_no_sorry.py ThetLogos
+
+      - name: Build registry modules
+        working-directory: lean
+        run: |
+          mods=$(grep '^import ' scripts/axiom-fence.txt | awk '{print $2}')
+          echo "Registry modules: $mods"
+          lake build $mods
+
+      - name: Axiom fence (registered headlines)
+        working-directory: lean
+        run: python3 scripts/run_axiom_fence.py

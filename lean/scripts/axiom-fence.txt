@@ -1,0 +1,55 @@
+# Axiom-fence registry — the corpus's registered headline declarations.
+#
+# Format: `import ThetLogos.<Module>` lines name the module that owns the
+# declarations listed under it; bare declaration lines are checked with
+# `#print axioms`. The CI workflow (.github/workflows/lean-ci.yml) and the
+# local runner (scripts/run_axiom_fence.py) assemble a check file from this
+# registry: imports copied verbatim, each declaration emitted as a
+# `#print axioms` command. A declaration PASSES the fence iff its axiom set
+# is a subset of {propext, Classical.choice, Quot.sound} — sorryAx or any
+# other axiom fails the build.
+#
+# Admission rule: a declaration is listed ONLY after it has been verified
+# locally to (a) exist in the named module and (b) pass the fence.
+# Seeded 2026-11-02 with the successor-run headlines (Dual-Current F1–F3,
+# BSD3-2R sweep + assembly, CLS-2G, CLS-3c-A) and two standing landmarks
+# (disc spectral mapping, finite Maxwell M1).
+
+import ThetLogos.DualCurrentRing
+ThetLogos.dcHelicity_eq_neg_half
+ThetLogos.dcHelicity_nonpos
+ThetLogos.dcHelicity_eq_zero_iff
+ThetLogos.dcEnergy_add
+
+import ThetLogos.DualCurrentLeedskalnin
+ThetLogos.leedskalnin_net_eq_zero
+ThetLogos.leedskalnin_churn_eq_energy
+ThetLogos.dcProject_eq_self_iff
+
+import ThetLogos.DualCurrentMixing
+ThetLogos.dcMix_dcEnergy_net
+ThetLogos.dcMix_churn_counterexample
+
+import ThetLogos.BSDTorsionE3Sweep
+ThetLogos.e3TorsionCard_of_nagellLutzR
+ThetLogos.e3_mem_torsion_iff
+
+import ThetLogos.BSDRefinedE3Assembly
+ThetLogos.E3_tolerance_iff_sha_eq_one
+ThetLogos.BSDRefinedE3R_assembly
+
+import ThetLogos.DialOneSwapOrbitGroupLaw
+ThetLogos.DialOneSwapOrbitGroupLaw.orbit_group_action
+ThetLogos.DialOneSwapOrbitGroupLaw.toggleMap_bitsAdd
+
+import ThetLogos.DialOneAntiparticleBase
+ThetLogos.DialOneAntiparticleBase.dialOneBase_piAnti
+ThetLogos.DialOneAntiparticleBase.piAnti_eq_pi1_colourTwist
+
+import ThetLogos.DiscSpectralMappingFull
+ThetLogos.shelf7bDiscInterior_proved
+ThetLogos.discFactorisationHyp'_proved
+
+import ThetLogos.MaxwellQuadAssembly
+ThetLogos.maxwellM1_proved
+ThetLogos.maxwellQuad_nonneg
