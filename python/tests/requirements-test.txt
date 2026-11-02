@@ -1,0 +1,5 @@
+# Test-only dependencies for python/tests/ (runtime deps stay in
+# ../requirements.txt). Property tests are T2 numerics: they harden the
+# simulator and verify nothing about the Lean theorems.
+pytest>=8
+hypothesis>=6
