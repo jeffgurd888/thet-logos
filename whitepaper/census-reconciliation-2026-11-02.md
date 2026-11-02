@@ -150,3 +150,44 @@ split are on the record here either way.
 
 **NO CLAIM** — parts of any official Millennium statement
 closed: 0. Dials: 0/4.
+
+## CORRECTION (2026-11-02, later the same run — read before citing Component 2)
+
+One evidentiary claim in Component 2 above is **retracted**:
+the sentence reporting that this run "measured the strict
+drift of all 337 post-sweep files against their adding
+commits and found drift 0, file by file." That result was
+delivered to the coordinator mid-run and was **false** —
+an artifact of this run's environment instability (the
+same rollback event recorded in the gate dossiers).
+Re-measured and spot-verified directly after the landing,
+the truth is the opposite: **10 post-sweep files changed
+strict after their adding commits, net +357**, because
+modules in this corpus routinely grow at later landings
+(e.g. `PlaneCrossingBeta7Fibers` 13 → 158 over 4 commits,
+`ChargePumpPost` 1 → 29 over 4 commits, `RootWeightsPost`
+2 → 1 over 2 commits). Each growth presumably carried its
+own ledger increment at its own landing.
+
+Consequences, exactly:
+
+- **The +2 identity STANDS.** It never depended on the
+  drift script: it is arithmetic on validated snapshots
+  (whole tree 13,392, counter re-validated against the
+  sweep's published 3,984 and v2's 2,016; remainder 669 at
+  four snapshots, its files frozen by the independent
+  sweep-tree delta check). Counted files measure 12,723;
+  the ledger says 12,725; the net overstatement is +2.
+- **The −1 component at the 2026-10-30 drop STANDS**
+  (recorded −7 vs files −6, by the sweep-tree delta check:
+  `BlockedQuestions` −5, `XYZTripotents` −1, `ModularTime`
+  0).
+- **The localization claim is WITHDRAWN to this:** the
+  remaining gross +3 sits somewhere in the increment
+  history, and the at-add drift instrument cannot localize
+  it, because per-landing increments attach to modules
+  that grew across landings. Locating it requires the
+  landing-by-landing replay already named in this dossier
+  as the priced remainder. No sentence in Component 2
+  should be read as excluding post-landing edits; they
+  occurred, at scale, as ordinary multi-landing growth.
