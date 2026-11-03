@@ -86,3 +86,20 @@ ThetLogos.involution_fixed_unique
 import ThetLogos.MirrorTwentyOneAlgebra
 ThetLogos.thetaHat_fixed_iff
 ThetLogos.fixedEquivReps_bijective
+
+import ThetLogos.MirrorTwentyOneOrthogonal
+ThetLogos.thetaHat₁_thetaHat₂
+ThetLogos.jointlyFixedEquivReps_bijective
+
+import ThetLogos.MirrorTwentyOneOrthogonalSpectral
+ThetLogos.lapSum_eq_zero_iff
+
+import ThetLogos.AxiomTet
+ThetLogos.breakEnergy_eq_zero_iff_constant
+ThetLogos.constant_of_adj_eq
+ThetLogos.cycle_breakEnergy_eq_zero_iff_constant
+
+import ThetLogos.AxiomTetPartner
+ThetLogos.supercharge_sq
+ThetLogos.vertex_energy
+ThetLogos.index_eq
