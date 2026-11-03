@@ -103,3 +103,13 @@ import ThetLogos.AxiomTetPartner
 ThetLogos.supercharge_sq
 ThetLogos.vertex_energy
 ThetLogos.index_eq
+
+import ThetLogos.MirrorTwentyOneTriplets
+ThetLogos.resonant_center_iff
+ThetLogos.card_resonant_21
+ThetLogos.card_mirror_pairs
+ThetLogos.mirror_organization_21
+ThetLogos.card_within_family
+ThetLogos.card_mixing
+ThetLogos.card_withinProd
+ThetLogos.resTriplesCrtEquiv
