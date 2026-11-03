@@ -191,3 +191,56 @@ Consequences, exactly:
   as the priced remainder. No sentence in Component 2
   should be read as excluding post-landing edits; they
   occurred, at scale, as ordinary multi-landing growth.
+
+## RESTATEMENT (2026-11-03) — the headline census now reads files-true
+
+**Decision:** Jeff delegated this call to BONES on 2026-11-03
+("you can make the call"), under the public-face stewardship
+(every public number reproducible, nothing unverified shipped).
+BONES' call: **restate.** As of this note, the public headline
+census is the measured files-true figure, not the shipped
+increment chain.
+
+**Measurement (this run, method of record):** the whole-tree
+recount — `^(theorem|lemma)\s` at column 0 on comment-stripped
+source (nesting-aware block-comment stripping, string-aware),
+the counter family of the 2026-10-18 double-check sweep —
+measures **13,609 strict over the 484 files** under
+`lean/ThetLogos/`. The counter was re-validated in-run: it
+reproduces the Triplets ceremony's whole-tree figure plus the
+two landed increments since (13,574 + 15 + 20 = 13,609) and the
+documented per-module counts (TritGrading 27, Triplets 32,
+Item-6 module 15, OneKernel 20). Minus the frozen pre-ledger
+remainder (**669 strict / 15 files**, Component 1 above,
+unchanged), the counted set's actual content is:
+
+**12,940 strict / 469 counted modules** — exactly the shipped
+chain (12,942) minus this dossier's documented **+2** ledger
+overstatement (Component 2: −1 located at the 2026-10-30 census
+drop, +3 gross unlocated in the increment history).
+
+**What changed:** the README prose census and the README
+shields badge (which had read 12,725, stale across three
+ceremonies) now read **12,940**. Past dossiers and landing
+records keep their historical shipped figures untouched —
+only the current headline restates. The +2 history above and
+the priced full-replay remainder stand on this record
+unchanged: history is preserved, not airbrushed.
+
+**The "total" figure:** the README carries no total; the
+chain total (13,468 at the U-1 ceremony) is, per this
+dossier's own finding, an increment-accumulated figure under
+mixed historical conventions and is **not** reproducible from
+the tree under a single stated rule. This run's whole-tree
+attribute-inclusive recount under the one stated rule
+(strict + same-line `@[…]`-prefixed declarations) measures
+13,701 tree-wide; the counted set's share is not exactly
+separable from the frozen remainder's under that rule from
+surviving records. Accordingly **no total is restated as a
+measured figure here**; the chain total's disposition —
+recompute under one stated rule or retire, per the tightened
+rule proposed above — remains the open parent/Jeff decision
+it was. The strict figure is the census.
+
+**NO CLAIM** — parts of any official Millennium statement
+closed: 0. Dials: 0/4.
