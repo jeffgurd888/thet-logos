@@ -79,3 +79,10 @@ ThetLogos.seatPairing_pullTop_tendsto_of_kernel_approx
 
 import ThetLogos.Span3SeatSchurGate4CProof
 ThetLogos.seatSchurTarget_of_approxProductStep_gate4c_proved
+
+import ThetLogos.MirrorTwentyOne
+ThetLogos.involution_fixed_unique
+
+import ThetLogos.MirrorTwentyOneAlgebra
+ThetLogos.thetaHat_fixed_iff
+ThetLogos.fixedEquivReps_bijective
