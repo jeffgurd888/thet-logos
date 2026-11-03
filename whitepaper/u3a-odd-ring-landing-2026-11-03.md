@@ -86,7 +86,7 @@ definitions. The statements are the scoping's U-3a forms at general `n`.
 
 Module and this dossier copied byte-identical from u3a-lane `516954c`
 (diff-verified) into the main tree on HEAD `4e35329` (item-5 ceremony
-commit). Targeted main-tree build of `ThetLogos.OddRing` green (3155
+commit). Targeted main-tree build of `ThetLogos.OddRing` green (3152
 jobs), zero errors, zero warnings attributable to the module, zero
 sorrys. Independent strict recount: module **15 strict + 7 defs** —
 exact match with the lane. Fence admissions: the 16 checked headlines
