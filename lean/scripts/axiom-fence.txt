@@ -177,3 +177,12 @@ ThetLogos.card_mirror_pairs_odd
 ThetLogos.mirror_organization_odd
 ThetLogos.mirror_organization_odd_add
 ThetLogos.card_mirror_pairsN_21
+
+import ThetLogos.AxiomTetPartnerIso
+ThetLogos.sp5_charpoly_identity
+ThetLogos.sp5_charpoly_identity_edgeFinset
+ThetLogos.finrank_eigenspace_eq
+ThetLogos.toMatrix'_wAdjDiff_eq_transpose
+ThetLogos.eigenspaceEquiv
+ThetLogos.toMatrix'_mulEdgeLin
+ThetLogos.charpoly_vertexHam
