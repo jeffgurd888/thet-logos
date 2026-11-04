@@ -470,3 +470,21 @@ ThetLogos.thermalFlow_eq_of_meanSub_eq
 ThetLogos.thermalPotential_unique_mod_const
 ThetLogos.thermalSource_apply
 ThetLogos.thermalSource_eq_profWeight_mul
+
+import ThetLogos.PrimordialsExhibit
+ThetLogos.eq_of_evalAt_eq
+ThetLogos.evalAt_apply
+ThetLogos.evalAt_numAction
+ThetLogos.gibbsWeight_act_energy
+ThetLogos.lapAction_add_apply
+ThetLogos.lapAction_mul_apply
+ThetLogos.numAction_add
+ThetLogos.numAction_apply
+ThetLogos.numAction_apply_apply
+ThetLogos.numAction_comm_lap
+ThetLogos.numAction_injective
+ThetLogos.numAction_mul
+ThetLogos.numAction_one
+ThetLogos.numAction_zero
+ThetLogos.weightFunctional_apply
+ThetLogos.weightFunctional_gibbsProb
