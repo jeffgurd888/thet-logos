@@ -223,3 +223,6 @@ ThetLogos.measuredClockQuestion2_add
 ThetLogos.measuredClockQuestion2_of_le
 ThetLogos.measuredClockQuestion2_iff_eight_le
 ThetLogos.measuredClockQuestion2_not_of_lt
+
+import ThetLogos.Span3SeatSchurGateW3InvFold
+ThetLogos.fiberAvgTop_gaugeInvariant_of_folded_twirled_mul_pullback_proved
