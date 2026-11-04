@@ -488,3 +488,22 @@ ThetLogos.numAction_one
 ThetLogos.numAction_zero
 ThetLogos.weightFunctional_apply
 ThetLogos.weightFunctional_gibbsProb
+
+import ThetLogos.GreenOperator
+ThetLogos.eq_greenOp_of
+ThetLogos.greenOp_add
+ThetLogos.greenOp_const
+ThetLogos.greenOp_eq_meanSub_poissonPotential
+ThetLogos.greenOp_eq_zero_iff
+ThetLogos.greenOp_laplacianOp
+ThetLogos.greenOp_laplacianOp_meanSub
+ThetLogos.greenOp_meanSub
+ThetLogos.greenOp_smul
+ThetLogos.lapEquiv_apply
+ThetLogos.lapEquiv_symm_apply
+ThetLogos.laplacianOp_greenOp
+ThetLogos.laplacianOp_meanSub
+ThetLogos.meanSub_add
+ThetLogos.meanSub_smul
+ThetLogos.sum_greenOp
+ThetLogos.sum_mul_greenOp_comm
