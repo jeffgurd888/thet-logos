@@ -507,3 +507,20 @@ ThetLogos.meanSub_add
 ThetLogos.meanSub_smul
 ThetLogos.sum_greenOp
 ThetLogos.sum_mul_greenOp_comm
+
+import ThetLogos.MeaningBridge
+ThetLogos.MeaningAlign.align_iff_denotation
+ThetLogos.MeaningAlign.conflation_iff_not_functional
+ThetLogos.MeaningAlign.denotation_injective_iff
+ThetLogos.MeaningAlign.denotation_surjective_iff
+ThetLogos.MeaningAlign.denotationOf_spec
+ThetLogos.MeaningAlign.exists_unique_denotation
+ThetLogos.MeaningAlign.functional_total_iff
+ThetLogos.SameMeaning.equivalence
+ThetLogos.actAlign_apply
+ThetLogos.exists_functional_unionAlign_not_functional
+ThetLogos.graphAlign_apply
+ThetLogos.graphAlign_functional_total
+ThetLogos.unionAlign_apply
+ThetLogos.unionAlign_functional_iff
+ThetLogos.unionAlign_total_of_left
