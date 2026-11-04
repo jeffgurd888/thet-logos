@@ -226,3 +226,10 @@ ThetLogos.measuredClockQuestion2_not_of_lt
 
 import ThetLogos.Span3SeatSchurGateW3InvFold
 ThetLogos.fiberAvgTop_gaugeInvariant_of_folded_twirled_mul_pullback_proved
+
+import ThetLogos.Span3SeatSchurGateMarg
+ThetLogos.fiberAvgTop_marginal_of_integrable
+ThetLogos.fiberAvgTop_eq_integral_compl
+ThetLogos.spliceTop_eq_assembleTop
+ThetLogos.assembleTop_restrict_self
+ThetLogos.restrictTop_comp_embEquiv
