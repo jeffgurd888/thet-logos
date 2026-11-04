@@ -259,3 +259,20 @@ ThetLogos.gaugeMirrorPos_eq_gaugePosFun_reflComp
 ThetLogos.measurePreserving_gaugeReflPrecompEquiv
 ThetLogos.posGaugeAvg_eq_mirrorGaugeAvg
 ThetLogos.fiberAvgTop_twirled_mul_pullback_cross_proved
+
+import ThetLogos.DuctGap
+ThetLogos.fiedler_attained
+ThetLogos.fiedler_pos
+ThetLogos.path_eq_zero_of_laplacian_eq_zero
+ThetLogos.dirichlet_minimizer_exists
+ThetLogos.path_dirichlet_floor_exists
+ThetLogos.ductFloor_pos
+ThetLogos.ductFloor_le_energy
+ThetLogos.prodLap_tensor_eig
+ThetLogos.prodLap_energy_tensor
+ThetLogos.prodLap_eig_floor
+ThetLogos.prodLap_floor_at_zero_momentum
+ThetLogos.energyForm_continuous
+ThetLogos.lapFst_tensor
+ThetLogos.lapSnd_tensor
+ThetLogos.path_eq_start_of_energy_eq_zero

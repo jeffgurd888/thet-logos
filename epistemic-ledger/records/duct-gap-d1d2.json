@@ -1,0 +1,16 @@
+{
+  "census_at_landing": {
+    "modules": 481,
+    "strict": 13147,
+    "total": null
+  },
+  "claim": "DUCT-GAP D1 + D2 LANDED FULL 2026-11-04. Module DuctGap (strict 30 theorems + 11 defs, zero sorrys, warning-clean), integrated from duct-lane fixed commit e988ced (module + dossier byte-identical, md5-verified; lane base 8eaf57d IS main-tree HEAD at integration). D1 finite duct floor: fiedler_pos (0 < fiedler w at symmetric nonneg weights with every off-diagonal weight strictly positive) via fiedler_attained, which PAYS BridgeLaplacian's standing attainment debt (the Fiedler infimum is attained by a mean-zero unit potential); ductFloor_pos / ductFloor_le_energy give ductFloor > 0 in Rayleigh form for the Dirichlet path at every n >= 1, attained by an actual mode for n >= 3 (dirichlet_minimizer_exists), with trivial kernel on the Dirichlet subspace (path_eq_zero_of_laplacian_eq_zero). D2 finite dispersion split: prodLap_tensor_eig (L(u x v) = (lam + mu)(u x v) pointwise on the product grid) with energy form prodLap_energy_tensor and floor corollaries consuming D1 (prodLap_eig_floor: ductFloor <= lam + mu; prodLap_floor_at_zero_momentum: the mu = 0 case). INTEGRATION HISTORY ON THE RECORD: the first parent integration STOPPED at Step 1 (name collisions: DuctGap fiedlerAdmissible vs BridgeCompletion.lean:201 and laplacianOp_smul vs BridgeCompletion.lean:117; main tree untouched); the lane fixed them by rename only (fiedlerAdmissible -> ductFiedlerAdmissible, laplacianOp_smul -> laplacianOp_smul_duct, all internal references and dossier mentions updated, AMENDMENT block appended to the dossier, statements/proofs/counts unchanged), and this restarted integration re-ran the declaration-level scan for ALL 41 DuctGap names against the main tree and found ZERO collisions. K-DUCT-1 DID NOT FIRE (hypotheses exactly as scoped; the bare forall-form over arbitrary nonnegative weights remains false and unattempted). K-DUCT-2 DID NOT FIRE (the product separates exactly; no re-pin). Finite graph model of a duct cross-section ONLY; no real-duct claim; NO mapping to the Yang-Mills mass gap Delta (the floor is handed to the model by its graph; Delta is handed its scale by nobody). INTEGRATION: main-tree targeted build green (3118 jobs, matching the lane), zero sorrys, module warning-clean (every build warning names the pre-existing dependency BridgeLaplacian); independent recount 30 strict + 11 defs exact (whole-tree 13,816 strict / 496 files, minus frozen remainder 669/15); fence admissions (the 15 dossier-named headlines) WITH import line in this same commit as the module - FENCE PASS 190/190, every new headline on exactly {propext, Classical.choice, Quot.sound}, no sorryAx. Census (FILES-TRUE, method of record) 13,117/480 -> 13,147 strict / 481 modules; README prose census and badge both updated to 13,147 / 481 (kept equal). NO CLAIM; dials 0/4.",
+  "date": "2026-11-04",
+  "dossier": "whitepaper/duct-gap-landing-2026-11-04.md",
+  "evidence": "Lean proof (finite duct floor via Fiedler attainment, plus product-grid dispersion split with floor corollary consuming D1)",
+  "id": "duct-gap-d1d2",
+  "kill_id": null,
+  "module": "lean/ThetLogos/DuctGap.lean",
+  "status": "standing",
+  "tier": "T3"
+}
