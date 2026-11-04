@@ -296,6 +296,13 @@ ThetLogos.GibbsClock.expectation_flow
 ThetLogos.GibbsClock.flow_generator_add_smul_one
 ThetLogos.GibbsClock.thermal_time_bridge
 
+import ThetLogos.ThermalTimeBridgeDeriv
+ThetLogos.modularFlow_exp_arg_pos
+ThetLogos.modularFlow_exp_arg_neg
+ThetLogos.modularFlow_hasDerivAt_zero
+ThetLogos.GibbsClock.flow_hasDerivAt_zero
+ThetLogos.GibbsClock.thermal_time_bridge_complete
+
 import ThetLogos.Span3SeatSchurGateW3Assembly
 ThetLogos.seatPairing_pullTop_eq_layerPairing₂_fiberAvg_factor
 ThetLogos.seatPairing_dressed_marginal_nonneg_factor
