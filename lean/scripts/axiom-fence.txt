@@ -720,3 +720,7 @@ ThetLogos.stratumMonoAux₃_eq
 ThetLogos.prod_branchFactor₃
 ThetLogos.patternDiv₃_eq_zero_iff
 ThetLogos.layerLinkOf_bijective
+
+import ThetLogos.LayerKernelPosTernaryGram
+ThetLogos.layerKernelPos_ternary_seat
+ThetLogos.ternary_pairing_gram
