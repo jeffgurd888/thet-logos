@@ -59,17 +59,17 @@ open Filter
 
 /-- Basis vector of the finite-particle domain at a configuration: the
 domain element whose underlying Fock vector is `boseE d c`. -/
-noncomputable def basisVec (d : ℕ) (c : Config d) : Dom d :=
+noncomputable def basisVec (d : ℕ) (c : BosonicConfig d) : Dom d :=
   ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
 
 /-- Fourier coefficient of a Fock vector at a configuration:
 `coefB d y c = ⟪e_c, y⟫`. -/
-noncomputable def coefB (d : ℕ) (y : BosonicFock d) (c : Config d) : ℂ :=
+noncomputable def coefB (d : ℕ) (y : BosonicFock d) (c : BosonicConfig d) : ℂ :=
   ⟪boseE d c, y⟫_ℂ
 
 /-- The coefficient is the plain `ℓ²` coordinate of the vector:
 `⟪e_c, y⟫ = y c`. -/
-theorem coefB_eq_apply (d : ℕ) (y : BosonicFock d) (c : Config d) :
+theorem coefB_eq_apply (d : ℕ) (y : BosonicFock d) (c : BosonicConfig d) :
     coefB d y c = y c := by
   show ⟪boseE d c, y⟫_ℂ = y c
   rw [boseE, lp.inner_single_left]
@@ -77,7 +77,7 @@ theorem coefB_eq_apply (d : ℕ) (y : BosonicFock d) (c : Config d) :
 
 /-- Coefficients of a finite-particle vector are its `boseRepr`
 coordinates. -/
-theorem coefB_repr (d : ℕ) (x : Dom d) (c : Config d) :
+theorem coefB_repr (d : ℕ) (x : Dom d) (c : BosonicConfig d) :
     coefB d (x : BosonicFock d) c = (boseRepr d x) c := by
   have e0 : ((x : Dom d) : BosonicFock d)
       = ((∑ γ ∈ (boseRepr d x).support, ((boseRepr d x) γ) •
@@ -113,20 +113,20 @@ theorem dom_coe_expand (d : ℕ) (x : Dom d) :
 basis. -/
 theorem hasSum_coefB (d : ℕ) (y : BosonicFock d) :
     HasSum (fun c => coefB d y c • boseE d c) y := by
-  have h := lp.hasSum_single (E := fun _ : Config d => ℂ) ENNReal.ofNat_ne_top y
-  have e : ∀ c : Config d, coefB d y c • boseE d c
-      = lp.single (E := fun _ : Config d => ℂ) 2 c (y c) := by
+  have h := lp.hasSum_single (E := fun _ : BosonicConfig d => ℂ) ENNReal.ofNat_ne_top y
+  have e : ∀ c : BosonicConfig d, coefB d y c • boseE d c
+      = lp.single (E := fun _ : BosonicConfig d => ℂ) 2 c (y c) := by
     intro c
     rw [coefB_eq_apply]
-    show (y c) • lp.single 2 c (1 : ℂ) = lp.single (E := fun _ : Config d => ℂ) 2 c (y c)
+    show (y c) • lp.single 2 c (1 : ℂ) = lp.single (E := fun _ : BosonicConfig d => ℂ) 2 c (y c)
     rw [← lp.single_smul, smul_eq_mul, mul_one]
   exact h.congr_fun (fun c => e c)
 
 /-- The finset of configurations of total occupation at most `N`. -/
-noncomputable def totLeFinset (d : ℕ) (N : ℕ) : Finset (Config d) :=
+noncomputable def totLeFinset (d : ℕ) (N : ℕ) : Finset (BosonicConfig d) :=
   (Finset.range (N + 1)).biUnion (sectorFinset d)
 
-theorem mem_totLeFinset {d : ℕ} {N : ℕ} {c : Config d} :
+theorem mem_totLeFinset {d : ℕ} {N : ℕ} {c : BosonicConfig d} :
     c ∈ totLeFinset d N ↔ tot c ≤ N := by
   simp only [totLeFinset, Finset.mem_biUnion, Finset.mem_range, mem_sectorFinset]
   constructor
@@ -154,18 +154,18 @@ domain vector. -/
 noncomputable def truncVec (d : ℕ) (y : BosonicFock d) (N : ℕ) : Dom d :=
   ∑ c ∈ totLeFinset d N, coefB d y c • basisVec d c
 
-theorem basisVec_mem_domSector (d : ℕ) (c : Config d) :
+theorem basisVec_mem_domSector (d : ℕ) (c : BosonicConfig d) :
     basisVec d c ∈ domSector d (tot c) :=
   Submodule.subset_span ⟨c, rfl, rfl⟩
 
-theorem boseRepr_basisVec (d : ℕ) (c : Config d) :
+theorem boseRepr_basisVec (d : ℕ) (c : BosonicConfig d) :
     boseRepr d (basisVec d c) = Finsupp.single c 1 :=
   boseRepr_basis d c
 
 /-- Linearity of `boseRepr` on basis sums, evaluated at a configuration:
 coordinates of a linearly mapped basis sum. -/
-theorem repr_linear_sum (d : ℕ) (F : Dom d →ₗ[ℂ] Dom d) (s : Finset (Config d))
-    (w : Config d → ℂ) (c₀ : Config d) :
+theorem repr_linear_sum (d : ℕ) (F : Dom d →ₗ[ℂ] Dom d) (s : Finset (BosonicConfig d))
+    (w : BosonicConfig d → ℂ) (c₀ : BosonicConfig d) :
     (boseRepr d (F (∑ c ∈ s, w c • basisVec d c))) c₀
       = ∑ c ∈ s, w c * (boseRepr d (F (basisVec d c))) c₀ := by
   rw [map_sum, map_sum, Finsupp.finsetSum_apply]
@@ -175,8 +175,8 @@ theorem repr_linear_sum (d : ℕ) (F : Dom d →ₗ[ℂ] Dom d) (s : Finset (Con
 /-- Coordinates of a basis sum: the coordinate at `c₀` picks out the
 coefficient of `c₀` if `c₀` is in the index finset, and vanishes
 otherwise. -/
-theorem repr_basis_sum_apply (d : ℕ) (s : Finset (Config d)) (w : Config d → ℂ)
-    (c₀ : Config d) :
+theorem repr_basis_sum_apply (d : ℕ) (s : Finset (BosonicConfig d)) (w : BosonicConfig d → ℂ)
+    (c₀ : BosonicConfig d) :
     (boseRepr d (∑ c ∈ s, w c • basisVec d c)) c₀
       = if c₀ ∈ s then w c₀ else 0 := by
   rw [map_sum, Finsupp.finsetSum_apply]
@@ -192,7 +192,7 @@ theorem coe_truncVec (d : ℕ) (y : BosonicFock d) (N : ℕ) :
   exact Finset.sum_congr rfl (fun γ _ => Submodule.coe_smul _ _)
 
 /-- Partial basis sums of a Fock vector over a finset of configurations. -/
-noncomputable def partialSum (d : ℕ) (y : BosonicFock d) (s : Finset (Config d)) :
+noncomputable def partialSum (d : ℕ) (y : BosonicFock d) (s : Finset (BosonicConfig d)) :
     BosonicFock d :=
   ∑ c ∈ s, coefB d y c • boseE d c
 
@@ -221,9 +221,9 @@ Only exact sector preservation (`hamIntBos_mem_domSector`) and symmetry of
 `H` on the finite-particle domain (`hamIntBos_isSymmetric`) enter. -/
 theorem coefB_adjoint_sector (d : ℕ) (lam : Fin d → ℝ)
     (W : Fin d → Fin d → Fin d → Fin d → ℂ) (g : ℝ) (y z : BosonicFock d)
-    (hyz : ∀ c : Config d, ⟪z, (basisVec d c : BosonicFock d)⟫_ℂ
+    (hyz : ∀ c : BosonicConfig d, ⟪z, (basisVec d c : BosonicFock d)⟫_ℂ
       = ⟪y, ((hamIntBos d lam W g (basisVec d c) : Dom d) : BosonicFock d)⟫_ℂ)
-    (c₀ : Config d) :
+    (c₀ : BosonicConfig d) :
     coefB d z c₀
       = (boseRepr d (hamIntBos d lam W g (truncSector d y (tot c₀)))) c₀ := by
   set n := tot c₀ with hn
@@ -236,7 +236,7 @@ theorem coefB_adjoint_sector (d : ℕ) (lam : Fin d → ℝ)
     rw [hyz c₀]
   have hHmem : hamIntBos d lam W g (basisVec d c₀) ∈ domSector d n :=
     hamIntBos_mem_domSector d lam W g (basisVec d c₀) (hn ▸ basisVec_mem_domSector d c₀)
-  have hvan : ∀ γ : Config d, tot γ ≠ n →
+  have hvan : ∀ γ : BosonicConfig d, tot γ ≠ n →
       (boseRepr d (hamIntBos d lam W g (basisVec d c₀))) γ = 0 :=
     fun γ hγ => boseRepr_apply_eq_zero_of_tot_ne d hHmem hγ
   have step3 : ⟪y, ((hamIntBos d lam W g (basisVec d c₀) : Dom d) : BosonicFock d)⟫_ℂ
@@ -244,7 +244,7 @@ theorem coefB_adjoint_sector (d : ℕ) (lam : Fin d → ℝ)
           ((boseRepr d (hamIntBos d lam W g (basisVec d c₀))) γ)
             * starRingEnd ℂ (coefB d y γ) := by
     rw [dom_coe_expand, inner_sum]
-    have hterm : ∀ γ : Config d,
+    have hterm : ∀ γ : BosonicConfig d,
         ⟪y, ((boseRepr d (hamIntBos d lam W g (basisVec d c₀))) γ)
             • boseE d γ⟫_ℂ
           = ((boseRepr d (hamIntBos d lam W g (basisVec d c₀))) γ)
@@ -269,7 +269,7 @@ theorem coefB_adjoint_sector (d : ℕ) (lam : Fin d → ℝ)
       rw [hvan γ (fun h => hγ ((mem_sectorFinset d).mpr h)), zero_mul]
     rw [Finset.sum_subset Finset.subset_union_left hz1,
       ← Finset.sum_subset Finset.subset_union_right hz2]
-  have hswap : ∀ γ : Config d,
+  have hswap : ∀ γ : BosonicConfig d,
       (boseRepr d (hamIntBos d lam W g (basisVec d γ))) c₀
         = starRingEnd ℂ ((boseRepr d (hamIntBos d lam W g (basisVec d c₀))) γ) := by
     intro γ
@@ -311,7 +311,7 @@ adjoint relation. Sectorwise this is β1; the coordinate at `c₀` with
 `tot c₀ > N` vanishes on both sides by exact sector preservation. -/
 theorem hamIntBos_truncVec (d : ℕ) (lam : Fin d → ℝ)
     (W : Fin d → Fin d → Fin d → Fin d → ℂ) (g : ℝ) (y z : BosonicFock d)
-    (hyz : ∀ c : Config d, ⟪z, (basisVec d c : BosonicFock d)⟫_ℂ
+    (hyz : ∀ c : BosonicConfig d, ⟪z, (basisVec d c : BosonicFock d)⟫_ℂ
       = ⟪y, ((hamIntBos d lam W g (basisVec d c) : Dom d) : BosonicFock d)⟫_ℂ)
     (N : ℕ) :
     hamIntBos d lam W g (truncVec d y N) = truncVec d z N := by
@@ -362,7 +362,7 @@ theorem adjoint_le_closure (d : ℕ) (lam : Fin d → ℝ)
   intro p hp
   rw [LinearPMap.mem_graph_iff] at hp
   obtain ⟨a, ha1, ha2⟩ := hp
-  have hyz : ∀ c : Config d,
+  have hyz : ∀ c : BosonicConfig d,
       ⟪(hamPMap d lam W g)† a, (basisVec d c : BosonicFock d)⟫_ℂ
         = ⟪(a : BosonicFock d),
             ((hamIntBos d lam W g (basisVec d c) : Dom d) : BosonicFock d)⟫_ℂ :=

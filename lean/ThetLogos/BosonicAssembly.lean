@@ -14,7 +14,7 @@ double induction principle `Dom_induction₂`.
   `annBos i` and `adagBos i` on all of `Dom d`, assembled from `adjoint_basis`
   by `Dom_induction₂` (the Rung 8 priced gap).
 - CCR on `Dom d` (mixed commutator, annBos/annBos and adagBos/adagBos commutativity),
-  transported from coefficient-space identities on `Config d →₀ ℂ`.
+  transported from coefficient-space identities on `BosonicConfig d →₀ ℂ`.
 - `numberOpBos` — the number operator `∑ i, adagBos i ∘ₗ annBos i` on `Dom d`,
   with basis eigenvalue the total occupation count, vacuum eigenvalue 0.
 - Vacuum annihilation and sector orthogonality for distinct total
@@ -78,29 +78,29 @@ theorem adjoint_relation_adag (d : ℕ) (i : Fin d) (x y : Dom d) :
 /-! ## 2. CCR — coefficient-space identities -/
 
 /-- A scalar multiple of the unit single is the single of the scalar. -/
-theorem single_smul_one (c : Config d) (a : ℂ) :
+theorem single_smul_one (c : BosonicConfig d) (a : ℂ) :
     a • Finsupp.single c (1 : ℂ) = Finsupp.single c a := by
   ext k
   simp only [Finsupp.smul_apply, Finsupp.single_apply]
   by_cases h : c = k <;> simp [h, smul_eq_mul]
 
 /-- Evaluating an added single at a different index. -/
-theorem config_add_single_apply_ne (c : Config d) (i j : Fin d) (hij : j ≠ i) :
+theorem config_add_single_apply_ne (c : BosonicConfig d) (i j : Fin d) (hij : j ≠ i) :
     (c + Finsupp.single j (1 : ℕ)) i = c i := by
   simp [Finsupp.add_apply, Finsupp.single_apply, hij]
 
 /-- Evaluating an added single at its own index. -/
-theorem config_add_single_apply_self (c : Config d) (i : Fin d) :
+theorem config_add_single_apply_self (c : BosonicConfig d) (i : Fin d) :
     (c + Finsupp.single i (1 : ℕ)) i = c i + 1 := by
   simp [Finsupp.add_apply, Finsupp.single_apply]
 
 /-- Evaluating a subtracted single at a different index. -/
-theorem config_sub_single_apply_ne (c : Config d) (i j : Fin d) (hij : i ≠ j) :
+theorem config_sub_single_apply_ne (c : BosonicConfig d) (i j : Fin d) (hij : i ≠ j) :
     (c - Finsupp.single i (1 : ℕ)) j = c j := by
   simp [Finsupp.tsub_apply, Finsupp.single_apply, hij]
 
 /-- Evaluating a subtracted single at its own index, then adding one back. -/
-theorem config_sub_single_apply_self (c : Config d) (i : Fin d) (h : c i ≠ 0) :
+theorem config_sub_single_apply_self (c : BosonicConfig d) (i : Fin d) (h : c i ≠ 0) :
     (c - Finsupp.single i (1 : ℕ)) i + 1 = c i := by
   have h1 : 1 ≤ c i := Nat.one_le_iff_ne_zero.mpr h
   have h2 : (c - Finsupp.single i (1 : ℕ)) i = c i - 1 := by simp
@@ -108,7 +108,7 @@ theorem config_sub_single_apply_self (c : Config d) (i : Fin d) (h : c i ≠ 0) 
   omega
 
 /-- Subtracting singles at two indices commutes. -/
-theorem config_sub_sub_comm (c : Config d) (i j : Fin d) :
+theorem config_sub_sub_comm (c : BosonicConfig d) (i j : Fin d) :
     (c - Finsupp.single i (1 : ℕ)) - Finsupp.single j (1 : ℕ)
       = (c - Finsupp.single j (1 : ℕ)) - Finsupp.single i (1 : ℕ) := by
   ext k
@@ -116,17 +116,17 @@ theorem config_sub_sub_comm (c : Config d) (i j : Fin d) :
   by_cases hi : i = k <;> by_cases hj : j = k <;> simp [hi, hj] <;> omega
 
 /-- Adding singles at two indices commutes (as a total configuration). -/
-theorem config_add_add_comm (c : Config d) (i j : Fin d) :
+theorem config_add_add_comm (c : BosonicConfig d) (i j : Fin d) :
     (c + Finsupp.single i (1 : ℕ)) + Finsupp.single j (1 : ℕ)
       = (c + Finsupp.single j (1 : ℕ)) + Finsupp.single i (1 : ℕ) := by
   rw [add_assoc, add_comm (Finsupp.single i (1 : ℕ)) (Finsupp.single j (1 : ℕ)), ← add_assoc]
 
-/-- **Coefficient CCR, mixed (T1):** on `Config d →₀ ℂ`,
+/-- **Coefficient CCR, mixed (T1):** on `BosonicConfig d →₀ ℂ`,
 `annC i ∘ adagC j - adagC j ∘ annC i = δ i j • id`. Checked on singles
 via `Finsupp.lhom_ext`; the scalar content is `sqrtNat_mul_self`. -/
 theorem ccr_coeff_mixed (d : ℕ) (i j : Fin d) :
     (annC d i) ∘ₗ (adagC d j) - (adagC d j) ∘ₗ (annC d i)
-      = if i = j then (1 : Module.End ℂ (Config d →₀ ℂ)) else 0 := by
+      = if i = j then (1 : Module.End ℂ (BosonicConfig d →₀ ℂ)) else 0 := by
   apply Finsupp.lhom_ext
   intro c a
   by_cases hij : i = j
@@ -173,7 +173,7 @@ theorem ccr_coeff_mixed (d : ℕ) (i j : Fin d) :
           = a * sqrtNat (c i) * sqrtNat (c j + 1) from by ring, sub_self]
 
 /-- **Coefficient CCR, annBos/annBos (T1):** annihilation operators commute on
-`Config d →₀ ℂ`. -/
+`BosonicConfig d →₀ ℂ`. -/
 theorem ccr_coeff_ann_ann (d : ℕ) (i j : Fin d) :
     (annC d i) ∘ₗ (annC d j) = (annC d j) ∘ₗ (annC d i) := by
   by_cases hij : i = j
@@ -200,7 +200,7 @@ theorem ccr_coeff_ann_ann (d : ℕ) (i j : Fin d) :
           = (a * sqrtNat (c i)) * sqrtNat (c j) from by ring]
 
 /-- **Coefficient CCR, adagBos/adagBos (T1):** creation operators commute on
-`Config d →₀ ℂ`. -/
+`BosonicConfig d →₀ ℂ`. -/
 theorem ccr_coeff_adag_adag (d : ℕ) (i j : Fin d) :
     (adagC d i) ∘ₗ (adagC d j) = (adagC d j) ∘ₗ (adagC d i) := by
   by_cases hij : i = j
@@ -299,7 +299,7 @@ noncomputable def numberOpBos (d : ℕ) : Dom d →ₗ[ℂ] Dom d :=
 
 /-- One mode's contribution to `numberOpBos` on a basis vector, in
 coefficient form: mode `i` contributes the scalar `c i`. -/
-theorem repr_numberOp_mode (d : ℕ) (i : Fin d) (c : Config d) :
+theorem repr_numberOp_mode (d : ℕ) (i : Fin d) (c : BosonicConfig d) :
     boseRepr d (((adagBos d i) ∘ₗ (annBos d i))
       ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
       = (c i : ℂ) • Finsupp.single c 1 := by
@@ -313,7 +313,7 @@ theorem repr_numberOp_mode (d : ℕ) (i : Fin d) (c : Config d) :
 /-- **Number operator eigenvalue (T1):** `numberOpBos` acts on the basis
 vector `e_c` as multiplication by the total occupation count
 `∑ i, c i`. -/
-theorem numberOpBos_basis (d : ℕ) (c : Config d) :
+theorem numberOpBos_basis (d : ℕ) (c : BosonicConfig d) :
     numberOpBos d ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (∑ i, (c i : ℂ)) • ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ := by
   apply (boseRepr d).injective
@@ -325,27 +325,27 @@ theorem numberOpBos_basis (d : ℕ) (c : Config d) :
 
 /-- The vacuum as an element of the dense domain. -/
 noncomputable def vacDom (d : ℕ) : Dom d :=
-  ⟨boseE d 0, Submodule.subset_span (Set.mem_range_self (0 : Config d))⟩
+  ⟨boseE d 0, Submodule.subset_span (Set.mem_range_self (0 : BosonicConfig d))⟩
 
 /-- **Vacuum annihilation (T1):** `annBos i` kills the vacuum. -/
 theorem ann_vacuum (d : ℕ) (i : Fin d) : annBos d i (vacDom d) = 0 := by
   apply (boseRepr d).injective
   rw [map_zero]
   show boseRepr d (annBos d i ⟨boseE d 0, Submodule.subset_span
-    (Set.mem_range_self (0 : Config d))⟩) = 0
+    (Set.mem_range_self (0 : BosonicConfig d))⟩) = 0
   rw [annBos_basis]
   simp
 
 /-- **Vacuum eigenvalue (T1):** the number operator kills the vacuum
-(eigenvalue `0 = ∑ i, (0 : Config d) i`). -/
+(eigenvalue `0 = ∑ i, (0 : BosonicConfig d) i`). -/
 theorem numberOp_vacuum (d : ℕ) : numberOpBos d (vacDom d) = 0 := by
   show numberOpBos d ⟨boseE d 0, Submodule.subset_span
-    (Set.mem_range_self (0 : Config d))⟩ = 0
+    (Set.mem_range_self (0 : BosonicConfig d))⟩ = 0
   rw [numberOpBos_basis]
   simp
 
 /-- Total occupation count of a configuration. -/
-def tot (c : Config d) : ℕ := ∑ i, c i
+def tot (c : BosonicConfig d) : ℕ := ∑ i, c i
 
 /-- The `n`-particle sector: span (in `BosonicFock d`) of the basis
 vectors whose total occupation count is `n`. -/
@@ -391,7 +391,7 @@ theorem sqrtNat_ne_zero {n : ℕ} (hn : n ≠ 0) : sqrtNat n ≠ 0 := by
 /-- The number operator's one-mode eigenvalue computation, at the level
 of `Dom d` (not just coefficients): `adagBos i` raises the configuration
 `c` to `c + δi` with scalar `sqrtNat (c i + 1)`. -/
-theorem adag_basis_dom (d : ℕ) (i : Fin d) (c : Config d) :
+theorem adag_basis_dom (d : ℕ) (i : Fin d) (c : BosonicConfig d) :
     adagBos d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = sqrtNat (c i + 1) • ⟨boseE d (c + Finsupp.single i 1),
           Submodule.subset_span (Set.mem_range_self _)⟩ := by
@@ -427,7 +427,7 @@ theorem adag_mem_cycSub (d : ℕ) (i : Fin d) {y : Dom d} (hy : y ∈ cycSub d) 
       exact Submodule.smul_mem _ _ hu
 
 /-- Adding one particle at mode `i` raises the total count by one. -/
-theorem tot_add_single (c : Config d) (i : Fin d) :
+theorem tot_add_single (c : BosonicConfig d) (i : Fin d) :
     tot (c + Finsupp.single i (1 : ℕ)) = tot c + 1 := by
   have hsum : ∑ j, (Finsupp.single i (1 : ℕ)) j = 1 := by
     rw [Finset.sum_eq_single i]
@@ -442,7 +442,7 @@ theorem tot_add_single (c : Config d) (i : Fin d) :
 on the total occupation count: peel one particle off with `annBos`-inverse
 reasoning — `e_c` is a nonzero scalar multiple of `adagBos i e_{c - δi}`. -/
 theorem basis_mem_cycSub (d : ℕ) :
-    ∀ (n : ℕ) (c : Config d), tot c = n →
+    ∀ (n : ℕ) (c : BosonicConfig d), tot c = n →
       ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ ∈ cycSub d := by
   intro n
   induction n with
@@ -498,7 +498,7 @@ from the vacuum by the creation operators is all of `Dom d`. -/
 theorem cycSub_eq_top (d : ℕ) : cycSub d = ⊤ := by
   rw [eq_top_iff]
   intro x _
-  have key : ∀ l : Config d →₀ ℂ, boseEquiv d l ∈ cycSub d := by
+  have key : ∀ l : BosonicConfig d →₀ ℂ, boseEquiv d l ∈ cycSub d := by
     intro l
     induction l using Finsupp.induction with
     | zero =>

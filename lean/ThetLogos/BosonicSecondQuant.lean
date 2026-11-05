@@ -50,7 +50,7 @@ open scoped Matrix
 
 /-- The annihilation operator's action on a basis vector, at the level
 of `Dom d` (companion to `adag_basis_dom` from Rung 8B). -/
-theorem ann_basis_dom (d : ℕ) (i : Fin d) (c : Config d) :
+theorem ann_basis_dom (d : ℕ) (i : Fin d) (c : BosonicConfig d) :
     annBos d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = if c i = 0 then 0
         else sqrtNat (c i) • ⟨boseE d (c - Finsupp.single i 1),
@@ -66,7 +66,7 @@ theorem ann_basis_dom (d : ℕ) (i : Fin d) (c : Config d) :
 
 /-- One mode's number contribution at the level of `Dom d`:
 `(adagBos i ∘ₗ annBos i) e_c = (c i) • e_c`. -/
-theorem numberOp_mode_dom (d : ℕ) (i : Fin d) (c : Config d) :
+theorem numberOp_mode_dom (d : ℕ) (i : Fin d) (c : BosonicConfig d) :
     ((adagBos d i) ∘ₗ (annBos d i)) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (c i : ℂ) • ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ := by
   apply (boseRepr d).injective
@@ -128,7 +128,7 @@ theorem dgammaBos_one (d : ℕ) :
 `dΓ(diag λ) e_c = (∑ i, λ i * (c i)) • e_c` — on the `n`-particle
 sector, `dΓ` of a diagonal one-particle operator is the occupation-
 weighted sum of its eigenvalues. -/
-theorem dgammaBos_basis_diag (d : ℕ) (lam : Fin d → ℂ) (c : Config d) :
+theorem dgammaBos_basis_diag (d : ℕ) (lam : Fin d → ℂ) (c : BosonicConfig d) :
     dgammaBos d (Matrix.diagonal lam)
         ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (∑ i, lam i * (c i : ℂ)) •
@@ -166,15 +166,15 @@ theorem dgammaBos_basis_diag (d : ℕ) (lam : Fin d → ℂ) (c : Config d) :
 /-- The `n`-particle sector inside the dense domain: the span in
 `Dom d` of the basis vectors of total occupation count `n`. -/
 noncomputable def domSector (d : ℕ) (n : ℕ) : Submodule ℂ (Dom d) :=
-  Submodule.span ℂ {x : Dom d | ∃ c : Config d, tot c = n ∧
+  Submodule.span ℂ {x : Dom d | ∃ c : BosonicConfig d, tot c = n ∧
     x = ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩}
 
 /-- A dΓ monomial, at the level of `Dom d`: `adagBos i ∘ₗ annBos j` sends
 `e_c` to a scalar multiple of `e_{c - δj + δi}` (or to `0`). -/
-theorem dgammaBos_term_dom (d : ℕ) (i j : Fin d) (c : Config d) :
+theorem dgammaBos_term_dom (d : ℕ) (i j : Fin d) (c : BosonicConfig d) :
     ((adagBos d i) ∘ₗ (annBos d j)) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = if c j = 0 then 0
-        else (sqrtNat (c j) * sqrtNat ((c - Finsupp.single j 1 : Config d) i + 1)) •
+        else (sqrtNat (c j) * sqrtNat ((c - Finsupp.single j 1 : BosonicConfig d) i + 1)) •
           ⟨boseE d (c - Finsupp.single j 1 + Finsupp.single i 1),
             Submodule.subset_span (Set.mem_range_self _)⟩ := by
   rw [LinearMap.comp_apply, ann_basis_dom]
@@ -185,7 +185,7 @@ theorem dgammaBos_term_dom (d : ℕ) (i j : Fin d) (c : Config d) :
 /-- Every dΓ monomial term (with its matrix coefficient) maps a basis
 vector into its own sector. -/
 theorem dgammaBos_term_mem_domSector (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ)
-    (i j : Fin d) (c : Config d) :
+    (i j : Fin d) (c : BosonicConfig d) :
     (M i j) • (((adagBos d i) ∘ₗ (annBos d j))
         ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
       ∈ domSector d (tot c) := by
@@ -255,10 +255,10 @@ Everything in this section is the **free** bosonic theory at **finite
 modes** (`Fin d`), on the dense domain `Dom d`. The gap is *derived*
 for `H = dΓ(diag λ)` — it is not the interacting Yang–Mills gap. -/
 
-/-- The coefficient-space dΓ lift (on `Config d →₀ ℂ`), the transport
+/-- The coefficient-space dΓ lift (on `BosonicConfig d →₀ ℂ`), the transport
 of `dgammaBos` along `boseRepr`. -/
 noncomputable def dgammaC (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ) :
-    (Config d →₀ ℂ) →ₗ[ℂ] (Config d →₀ ℂ) :=
+    (BosonicConfig d →₀ ℂ) →ₗ[ℂ] (BosonicConfig d →₀ ℂ) :=
   ∑ i : Fin d, ∑ j : Fin d, (M i j) • ((adagC d i) ∘ₗ (annC d j))
 
 /-- `dgammaBos` transported to coefficient space is `dgammaC` (T1). -/
@@ -269,7 +269,7 @@ theorem repr_dgammaBos (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ) (x : Dom d) :
 
 /-- One coefficient-space number mode:
 `(adagC i ∘ₗ annC i) (single c a) = (a * (c i)) • single c 1` (T1). -/
-theorem dgammaC_number_mode (d : ℕ) (i : Fin d) (c : Config d) (a : ℂ) :
+theorem dgammaC_number_mode (d : ℕ) (i : Fin d) (c : BosonicConfig d) (a : ℂ) :
     ((adagC d i) ∘ₗ (annC d i)) (Finsupp.single c a)
       = (a * (c i : ℂ)) • Finsupp.single c 1 := by
   have h1 : ((adagC d i) ∘ₗ (annC d i)) (Finsupp.single c 1)
@@ -286,7 +286,7 @@ theorem dgammaC_number_mode (d : ℕ) (i : Fin d) (c : Config d) (a : ℂ) :
 
 /-- The coefficient-space diagonal action on a single basis
 coefficient (T1). -/
-theorem dgammaC_diag_single (d : ℕ) (lam : Fin d → ℂ) (c : Config d) (a : ℂ) :
+theorem dgammaC_diag_single (d : ℕ) (lam : Fin d → ℂ) (c : BosonicConfig d) (a : ℂ) :
     dgammaC d (Matrix.diagonal lam) (Finsupp.single c a)
       = (a * (∑ i, lam i * (c i : ℂ))) • Finsupp.single c 1 := by
   have step : ∀ i : Fin d,
@@ -316,8 +316,8 @@ theorem dgammaC_diag_single (d : ℕ) (lam : Fin d → ℂ) (c : Config d) (a : 
 
 /-- **The coefficient formula for `dΓ(diag λ)` (T1):** extracting the
 `c`-th coefficient multiplies by the eigenvalue `∑ i, λ i * (c i)`. -/
-theorem dgammaC_diag_apply (d : ℕ) (lam : Fin d → ℂ) (l : Config d →₀ ℂ)
-    (c : Config d) :
+theorem dgammaC_diag_apply (d : ℕ) (lam : Fin d → ℂ) (l : BosonicConfig d →₀ ℂ)
+    (c : BosonicConfig d) :
     (dgammaC d (Matrix.diagonal lam) l) c = (∑ i, lam i * (c i : ℂ)) * l c := by
   induction l using Finsupp.induction with
   | zero => simp
@@ -344,7 +344,7 @@ noncomputable def freeHamiltonianBos (d : ℕ) (lam : Fin d → ℝ) :
 
 /-- **Free-Hamiltonian basis action (T1, free theory, finite modes):**
 `H e_c = ((∑ i, λ i · (c i) : ℝ) : ℂ) • e_c`. -/
-theorem freeHamiltonianBos_basis (d : ℕ) (lam : Fin d → ℝ) (c : Config d) :
+theorem freeHamiltonianBos_basis (d : ℕ) (lam : Fin d → ℝ) (c : BosonicConfig d) :
     freeHamiltonianBos d lam ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = ((∑ i, lam i * (c i : ℝ) : ℝ) : ℂ) •
           ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ := by
@@ -358,7 +358,7 @@ theorem freeHamiltonianBos_basis (d : ℕ) (lam : Fin d → ℝ) (c : Config d) 
 modes):** the `c`-th coefficient of `H x`, extracted through
 `boseRepr`, is the eigenvalue `∑ i, λ i · (c i)` times that of `x`. -/
 theorem freeHamiltonianBos_coord (d : ℕ) (lam : Fin d → ℝ) (x : Dom d)
-    (c : Config d) :
+    (c : BosonicConfig d) :
     (boseRepr d (freeHamiltonianBos d lam x)) c
       = ((∑ i, lam i * (c i : ℝ) : ℝ) : ℂ) * (boseRepr d x) c := by
   have h1 : (boseRepr d (freeHamiltonianBos d lam x)) c
@@ -407,7 +407,7 @@ theorem freeHamiltonianBos_selfadjoint (d : ℕ) (lam : Fin d → ℝ) (x y : Do
 every basis eigenvalue `∑ i, λ i · (c i)` of the free Hamiltonian is
 `0` or `≥ Δ`, whenever each `λ i = 0 ∨ Δ ≤ λ i`. -/
 theorem free_gap_dichotomy_bos (d : ℕ) (lam : Fin d → ℝ) (Δ : ℝ)
-    (hlam : ∀ i, 0 ≤ lam i) (hgap : ∀ i, lam i = 0 ∨ Δ ≤ lam i) (c : Config d) :
+    (hlam : ∀ i, 0 ≤ lam i) (hgap : ∀ i, lam i = 0 ∨ Δ ≤ lam i) (c : BosonicConfig d) :
     (∑ i, lam i * (c i : ℝ)) = 0 ∨ Δ ≤ ∑ i, lam i * (c i : ℝ) := by
   by_cases h : ∀ i, lam i * (c i : ℝ) = 0
   · exact Or.inl (Finset.sum_eq_zero (fun i _ => h i))
@@ -435,7 +435,7 @@ theorem freeHamiltonianBos_eigenvalue_gap (d : ℕ) (lam : Fin d → ℝ) (Δ : 
     (hlam : ∀ i, 0 ≤ lam i) (hgap : ∀ i, lam i = 0 ∨ Δ ≤ lam i)
     (ψ : Dom d) (hψ : ψ ≠ 0) (μ : ℂ)
     (hμ : freeHamiltonianBos d lam ψ = μ • ψ) :
-    ∃ c : Config d, μ = ((∑ i, lam i * (c i : ℝ) : ℝ) : ℂ)
+    ∃ c : BosonicConfig d, μ = ((∑ i, lam i * (c i : ℝ) : ℝ) : ℂ)
       ∧ ((∑ i, lam i * (c i : ℝ)) = 0 ∨ Δ ≤ ∑ i, lam i * (c i : ℝ)) := by
   obtain ⟨c, hc⟩ : ∃ c, (boseRepr d ψ) c ≠ 0 := by
     by_contra h
@@ -470,7 +470,7 @@ theorem dom_expand (d : ℕ) (x : Dom d) :
 /-- Auxiliary expectation computation over a general coefficient
 vector `l` (T1, free theory, finite modes). -/
 theorem freeHamiltonianBos_expectation_aux (d : ℕ) (lam : Fin d → ℝ)
-    (l : Config d →₀ ℂ) :
+    (l : BosonicConfig d →₀ ℂ) :
     ⟪(((boseEquiv d l) : Dom d) : BosonicFock d),
         (((freeHamiltonianBos d lam (boseEquiv d l)) : Dom d) : BosonicFock d)⟫_ℂ
       = ((∑ c ∈ l.support, Complex.normSq (l c) *

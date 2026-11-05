@@ -14,8 +14,8 @@ configuration set `ConfigLim := ℕ →₀ ℕ`); no abstract
 ## Contents (all T1)
 
 **Task 0 — the tower at the index level.**
-- `configEmb (h : d ≤ e) : Config d ↪ Config e`, by
-  `Finsupp.embDomain (Fin.castLEEmb h)`; `configEmbLim d : Config d ↪
+- `configEmb (h : d ≤ e) : BosonicConfig d ↪ BosonicConfig e`, by
+  `Finsupp.embDomain (Fin.castLEEmb h)`; `configEmbLim d : BosonicConfig d ↪
   ConfigLim` by `Finsupp.embDomain Fin.valEmbedding`. (One technical
   helper is proved first: `Finsupp.embDomain` composition,
   `embDomain_trans` — Mathlib has the simp-normal forms of `embDomain`
@@ -104,34 +104,34 @@ theorem embDomain_trans {α β γ M : Type*} [Zero M] (e₁ : α ↪ β) (e₂ :
     · rw [dite_eq_right hb₂]
 
 /-- **Task 0 (bosons):** the mode-inclusion of occupation
-configurations, `Config d ↪ Config e` along `d ≤ e`, by
+configurations, `BosonicConfig d ↪ BosonicConfig e` along `d ≤ e`, by
 `Finsupp.embDomain (Fin.castLEEmb h)`. -/
-noncomputable def configEmb {d e : ℕ} (h : d ≤ e) : Config d ↪ Config e :=
+noncomputable def configEmb {d e : ℕ} (h : d ≤ e) : BosonicConfig d ↪ BosonicConfig e :=
   ⟨Finsupp.embDomain (Fin.castLEEmb h), Finsupp.embDomain_injective _⟩
 
 /-- **Task 0 (bosons):** the inclusion of finite-level configurations
 into the limit index set `ConfigLim`, by `Finsupp.embDomain
 Fin.valEmbedding`. -/
-noncomputable def configEmbLim (d : ℕ) : Config d ↪ ConfigLim :=
+noncomputable def configEmbLim (d : ℕ) : BosonicConfig d ↪ ConfigLim :=
   ⟨Finsupp.embDomain Fin.valEmbedding, Finsupp.embDomain_injective _⟩
 
-@[simp] theorem configEmb_apply {d e : ℕ} (h : d ≤ e) (c : Config d) :
+@[simp] theorem configEmb_apply {d e : ℕ} (h : d ≤ e) (c : BosonicConfig d) :
     configEmb h c = Finsupp.embDomain (Fin.castLEEmb h) c := rfl
 
-@[simp] theorem configEmbLim_apply (d : ℕ) (c : Config d) :
+@[simp] theorem configEmbLim_apply (d : ℕ) (c : BosonicConfig d) :
     configEmbLim d c = Finsupp.embDomain Fin.valEmbedding c := rfl
 
 theorem configEmb_zero {d e : ℕ} (h : d ≤ e) :
-    configEmb h (0 : Config d) = 0 := by
+    configEmb h (0 : BosonicConfig d) = 0 := by
   simp only [configEmb_apply, Finsupp.embDomain_zero]
 
 theorem configEmbLim_zero (d : ℕ) :
-    configEmbLim d (0 : Config d) = 0 := by
+    configEmbLim d (0 : BosonicConfig d) = 0 := by
   simp only [configEmbLim_apply, Finsupp.embDomain_zero]
 
 /-- The tower map reads off the original occupation at embedded modes:
 `(configEmb h c) (castLE h i) = c i`. -/
-theorem configEmb_apply_castLE {d e : ℕ} (h : d ≤ e) (c : Config d) (i : Fin d) :
+theorem configEmb_apply_castLE {d e : ℕ} (h : d ≤ e) (c : BosonicConfig d) (i : Fin d) :
     configEmb h c (Fin.castLE h i) = c i := by
   show Finsupp.embDomain (Fin.castLEEmb h) c (Fin.castLE h i) = c i
   exact embDomain_apply_of_eq _ rfl
@@ -139,7 +139,7 @@ theorem configEmb_apply_castLE {d e : ℕ} (h : d ≤ e) (c : Config d) (i : Fin
 /-- **Task 0 coherence, general form (T1):** the tower maps compose,
 for all `d ≤ e ≤ f` at once (stronger than the successive-step chain
 named as the acceptable partial in the scoping). -/
-theorem configEmb_trans {d e f : ℕ} (h₁ : d ≤ e) (h₂ : e ≤ f) (c : Config d) :
+theorem configEmb_trans {d e f : ℕ} (h₁ : d ≤ e) (h₂ : e ≤ f) (c : BosonicConfig d) :
     configEmb h₂ (configEmb h₁ c) = configEmb (h₁.trans h₂) c := by
   show Finsupp.embDomain (Fin.castLEEmb h₂) (Finsupp.embDomain (Fin.castLEEmb h₁) c)
     = Finsupp.embDomain (Fin.castLEEmb (h₁.trans h₂)) c
@@ -150,7 +150,7 @@ theorem configEmb_trans {d e f : ℕ} (h₁ : d ≤ e) (h₂ : e ≤ f) (c : Con
 /-- **Task 0 cocycle against the limit (T1):** embedding a level-`d`
 configuration first to level `e` and then into the limit is the same as
 embedding it into the limit directly. -/
-theorem configEmbLim_comp {d e : ℕ} (h : d ≤ e) (c : Config d) :
+theorem configEmbLim_comp {d e : ℕ} (h : d ≤ e) (c : BosonicConfig d) :
     configEmbLim e (configEmb h c) = configEmbLim d c := by
   show Finsupp.embDomain Fin.valEmbedding (Finsupp.embDomain (Fin.castLEEmb h) c)
     = Finsupp.embDomain Fin.valEmbedding c
@@ -159,11 +159,11 @@ theorem configEmbLim_comp {d e : ℕ} (h : d ≤ e) (c : Config d) :
 
 /-- **Task 0 limit factorization (T1):** every limit configuration
 `c : ℕ →₀ ℕ` factors through some finite level: there is a `d` and a
-`c₀ : Config d` with `configEmbLim d c₀ = c`. The restriction is built
+`c₀ : BosonicConfig d` with `configEmbLim d c₀ = c`. The restriction is built
 with `Finsupp.onFinset` over `Finset.attachFin` of the support; the
 level `c.support.sup id + 1` is a strict bound for the support. -/
 theorem config_factor (c : ConfigLim) :
-    ∃ d, ∃ c₀ : Config d, configEmbLim d c₀ = c := by
+    ∃ d, ∃ c₀ : BosonicConfig d, configEmbLim d c₀ = c := by
   classical
   refine ⟨c.support.sup id + 1,
     Finsupp.onFinset (c.support.attachFin (fun m hm => ?_)) (fun i => c i.val)
@@ -241,7 +241,7 @@ theorem boseELim_mem_sector {c : ConfigLim} {n : ℕ} (hc : totLim c = n) :
 input for `boseHilbertBasis`; the shared `lp` density lemma applied to
 `Dom d`). -/
 theorem Dom_topologicalClosure (d : ℕ) : (Dom d).topologicalClosure = ⊤ :=
-  lp_single_span_topologicalClosure (Config d)
+  lp_single_span_topologicalClosure (BosonicConfig d)
 
 -- ============================================================================
 -- Task 2 — the Fock embeddings (bosons)
@@ -250,7 +250,7 @@ theorem Dom_topologicalClosure (d : ℕ) : (Dom d).topologicalClosure = ⊤ :=
 /-- The finite-level bosonic basis repackaged as a `HilbertBasis` (via
 `HilbertBasis.mk` and the density of `Dom d`), the input the `onbEmb`
 machine consumes. -/
-noncomputable def boseHilbertBasis (d : ℕ) : HilbertBasis (Config d) ℂ (BosonicFock d) :=
+noncomputable def boseHilbertBasis (d : ℕ) : HilbertBasis (BosonicConfig d) ℂ (BosonicFock d) :=
   HilbertBasis.mk (boseE_orthonormal d) (top_le_iff.mpr (Dom_topologicalClosure d))
 
 theorem boseHilbertBasis_coe (d : ℕ) : ⇑(boseHilbertBasis d) = boseE d :=
@@ -258,7 +258,7 @@ theorem boseHilbertBasis_coe (d : ℕ) : ⇑(boseHilbertBasis d) = boseE d :=
 
 /-- Total occupation is preserved by `embDomain` over any embedding of
 mode sets (the arithmetic core of sector preservation). -/
-theorem embDomain_sum_tot {d : ℕ} {β : Type*} (e : Fin d ↪ β) (c : Config d) :
+theorem embDomain_sum_tot {d : ℕ} {β : Type*} (e : Fin d ↪ β) (c : BosonicConfig d) :
     (Finsupp.embDomain e c).sum (fun _ n => n) = c.sum (fun _ n => n) := by
   classical
   show (∑ b ∈ (Finsupp.embDomain e c).support, (Finsupp.embDomain e c) b)
@@ -267,19 +267,19 @@ theorem embDomain_sum_tot {d : ℕ} {β : Type*} (e : Fin d ↪ β) (c : Config 
   simp only [Finsupp.embDomain_apply_self]
 
 /-- The finite total occupation, as a `Finsupp.sum`. -/
-theorem tot_eq_sum (c : Config d) : tot c = c.sum (fun _ n => n) := by
+theorem tot_eq_sum (c : BosonicConfig d) : tot c = c.sum (fun _ n => n) := by
   show (∑ i, c i) = c.sum (fun _ n => n)
   rw [Finsupp.sum_fintype _ _ (fun i => rfl)]
 
 /-- **Sector preservation, index level (limit):** `totLim (configEmbLim d c) = tot c`. -/
-theorem totLim_configEmbLim (d : ℕ) (c : Config d) :
+theorem totLim_configEmbLim (d : ℕ) (c : BosonicConfig d) :
     totLim (configEmbLim d c) = tot c := by
   show (Finsupp.embDomain Fin.valEmbedding c).sum (fun _ n => n) = tot c
   rw [tot_eq_sum, embDomain_sum_tot]
 
 /-- **Sector preservation, index level (finite-to-finite):**
 `tot (configEmb h c) = tot c`. -/
-theorem tot_configEmb {d e : ℕ} (h : d ≤ e) (c : Config d) :
+theorem tot_configEmb {d e : ℕ} (h : d ≤ e) (c : BosonicConfig d) :
     tot (configEmb h c) = tot c := by
   rw [tot_eq_sum, tot_eq_sum, configEmb_apply, embDomain_sum_tot]
 
@@ -298,7 +298,7 @@ noncomputable def fockEmbBosLim (d : ℕ) : BosonicFock d →ₗᵢ[ℂ] Bosonic
     (boseELim_comp_orthonormal d)
 
 /-- **Task 2 basis action (T1):** `fockEmbBosLim d (e c) = eLim (embLim c)`. -/
-theorem fockEmbBosLim_basis (d : ℕ) (c : Config d) :
+theorem fockEmbBosLim_basis (d : ℕ) (c : BosonicConfig d) :
     fockEmbBosLim d (boseE d c) = boseELim (configEmbLim d c) := by
   have h := onbEmb_apply (boseHilbertBasis d) (boseELim ∘ ⇑(configEmbLim d))
     (boseELim_comp_orthonormal d) c
@@ -331,7 +331,7 @@ theorem fockEmbBosLim_sector (d n : ℕ) (x : BosonicFock d) (hx : x ∈ sectorS
     fockEmbBosLim d x ∈ sectorSubLim n := by
   show onbEmb (boseHilbertBasis d) (boseELim ∘ ⇑(configEmbLim d))
     (boseELim_comp_orthonormal d) x ∈ sectorSubLim n
-  refine onbEmb_mem _ _ _ (s := {c : Config d | tot c = n}) (t := sectorSubLim n) ?_ ?_
+  refine onbEmb_mem _ _ _ (s := {c : BosonicConfig d | tot c = n}) (t := sectorSubLim n) ?_ ?_
   · intro c hc
     show boseELim (configEmbLim d c) ∈ sectorSubLim n
     exact boseELim_mem_sector (by rw [totLim_configEmbLim]; exact hc)
@@ -351,7 +351,7 @@ noncomputable def fockEmbBos {d e : ℕ} (h : d ≤ e) :
     (boseE_comp_orthonormal h)
 
 /-- **Task 2 basis action, finite-to-finite (T1).** -/
-theorem fockEmbBos_basis {d e : ℕ} (h : d ≤ e) (c : Config d) :
+theorem fockEmbBos_basis {d e : ℕ} (h : d ≤ e) (c : BosonicConfig d) :
     fockEmbBos h (boseE d c) = boseE e (configEmb h c) := by
   have h' := onbEmb_apply (boseHilbertBasis d) (boseE e ∘ ⇑(configEmb h))
     (boseE_comp_orthonormal h) c

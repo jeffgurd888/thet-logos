@@ -14,12 +14,12 @@ Occupation-number construction of the bosonic Fock space, directly as
 
 ## Construction
 - Modes: `Fin d`. Configurations: `Finsupp (Fin d) ℕ` (occupation numbers).
-- `BosonicFock d := lp (fun _ : Config d => ℂ) 2` with Mathlib's ℓ² inner product.
+- `BosonicFock d := lp (fun _ : BosonicConfig d => ℂ) 2` with Mathlib's ℓ² inner product.
 - Basis `boseE d c := lp.single 2 c 1`; vacuum `vac := boseE d 0`.
 - Dense domain `Dom d := Submodule.span ℂ (Set.range (boseE d))`.
 - Creation `adagBos d i` / annihilation `annBos d i` as linear maps `Dom d →ₗ[ℂ] Dom d`,
   defined by transport from coefficient operators `adagC`/`annC` on
-  `Config d →₀ ℂ` via the linear equivalence `boseEquiv`.
+  `BosonicConfig d →₀ ℂ` via the linear equivalence `boseEquiv`.
   (These are unbounded on the full space; the dense-domain formulation
   is the honest, standard formalization.)
 
@@ -55,11 +55,11 @@ namespace ThetLogos
 
 open scoped InnerProductSpace
 
-abbrev Config (d : ℕ) := Finsupp (Fin d) ℕ
-noncomputable abbrev BosonicFock (d : ℕ) := lp (fun _ : Config d => ℂ) 2
-noncomputable def boseE (d : ℕ) (c : Config d) : BosonicFock d := lp.single 2 c 1
+abbrev BosonicConfig (d : ℕ) := Finsupp (Fin d) ℕ
+noncomputable abbrev BosonicFock (d : ℕ) := lp (fun _ : BosonicConfig d => ℂ) 2
+noncomputable def boseE (d : ℕ) (c : BosonicConfig d) : BosonicFock d := lp.single 2 c 1
 
-theorem boseE_inner (d : ℕ) (c c' : Config d) :
+theorem boseE_inner (d : ℕ) (c c' : BosonicConfig d) :
     ⟪boseE d c, boseE d c'⟫_ℂ = if c = c' then 1 else 0 := by
   unfold boseE
   rw [lp.inner_single_left, lp.single_apply]
@@ -75,18 +75,18 @@ noncomputable def Dom (d : ℕ) : Submodule ℂ (BosonicFock d) :=
 theorem boseLinIndep (d : ℕ) : LinearIndependent ℂ (boseE d) :=
   (boseE_orthonormal d).linearIndependent
 
-noncomputable def boseEquiv (d : ℕ) : (Config d →₀ ℂ) ≃ₗ[ℂ] Dom d :=
+noncomputable def boseEquiv (d : ℕ) : (BosonicConfig d →₀ ℂ) ≃ₗ[ℂ] Dom d :=
   (boseLinIndep d).linearCombinationEquiv
 
-theorem boseEquiv_coe (d : ℕ) (l : Config d →₀ ℂ) :
+theorem boseEquiv_coe (d : ℕ) (l : BosonicConfig d →₀ ℂ) :
     (((boseEquiv d l : Dom d)) : BosonicFock d) = Finsupp.linearCombination ℂ (boseE d) l :=
   LinearIndependent.linearCombinationEquiv_apply_coe _ _
 
 /-- Representation: domain ≃ coefficients (the inverse direction). -/
-noncomputable def boseRepr (d : ℕ) : Dom d ≃ₗ[ℂ] (Config d →₀ ℂ) :=
+noncomputable def boseRepr (d : ℕ) : Dom d ≃ₗ[ℂ] (BosonicConfig d →₀ ℂ) :=
   (boseEquiv d).symm
 
-theorem boseEquiv_basis (d : ℕ) (c : Config d) :
+theorem boseEquiv_basis (d : ℕ) (c : BosonicConfig d) :
     boseEquiv d (Finsupp.single c 1)
       = ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ := by
   have h : (boseLinIndep d).repr ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
@@ -99,7 +99,7 @@ theorem boseEquiv_basis (d : ℕ) (c : Config d) :
   rw [h] at h2
   exact h2
 
-theorem boseRepr_basis (d : ℕ) (c : Config d) :
+theorem boseRepr_basis (d : ℕ) (c : BosonicConfig d) :
     boseRepr d ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = Finsupp.single c 1 := by
   rw [boseRepr, LinearEquiv.symm_apply_eq]
@@ -120,20 +120,20 @@ theorem sqrtNat_star (n : ℕ) : star (sqrtNat n) = sqrtNat n := by
 theorem sqrtNat_starRingEnd (n : ℕ) : (starRingEnd ℂ) (sqrtNat n) = sqrtNat n := by
   simp [sqrtNat]
 
-noncomputable def adagC (d : ℕ) (i : Fin d) : (Config d →₀ ℂ) →ₗ[ℂ] (Config d →₀ ℂ) :=
-  Finsupp.linearCombination ℂ fun c : Config d =>
+noncomputable def adagC (d : ℕ) (i : Fin d) : (BosonicConfig d →₀ ℂ) →ₗ[ℂ] (BosonicConfig d →₀ ℂ) :=
+  Finsupp.linearCombination ℂ fun c : BosonicConfig d =>
     sqrtNat (c i + 1) • Finsupp.single (c + Finsupp.single i 1) 1
 
-noncomputable def annC (d : ℕ) (i : Fin d) : (Config d →₀ ℂ) →ₗ[ℂ] (Config d →₀ ℂ) :=
-  Finsupp.linearCombination ℂ fun c : Config d =>
+noncomputable def annC (d : ℕ) (i : Fin d) : (BosonicConfig d →₀ ℂ) →ₗ[ℂ] (BosonicConfig d →₀ ℂ) :=
+  Finsupp.linearCombination ℂ fun c : BosonicConfig d =>
     if c i = 0 then 0 else sqrtNat (c i) • Finsupp.single (c - Finsupp.single i 1) 1
 
-theorem adagC_single (d : ℕ) (i : Fin d) (c : Config d) (a : ℂ) :
+theorem adagC_single (d : ℕ) (i : Fin d) (c : BosonicConfig d) (a : ℂ) :
     adagC d i (Finsupp.single c a)
       = (a * sqrtNat (c i + 1)) • Finsupp.single (c + Finsupp.single i 1) 1 := by
   simp only [adagC, Finsupp.linearCombination_single, ← mul_smul]
 
-theorem annC_single (d : ℕ) (i : Fin d) (c : Config d) (a : ℂ) :
+theorem annC_single (d : ℕ) (i : Fin d) (c : BosonicConfig d) (a : ℂ) :
     annC d i (Finsupp.single c a)
       = if c i = 0 then 0 else (a * sqrtNat (c i)) • Finsupp.single (c - Finsupp.single i 1) 1 := by
   by_cases h : c i = 0
@@ -142,7 +142,7 @@ theorem annC_single (d : ℕ) (i : Fin d) (c : Config d) (a : ℂ) :
 
 /-! ## Finsupp arithmetic helpers -/
 
-theorem config_add_single_sub_single (d : ℕ) (c : Config d) (i : Fin d) :
+theorem config_add_single_sub_single (d : ℕ) (c : BosonicConfig d) (i : Fin d) :
     (c + Finsupp.single i 1) - Finsupp.single i 1 = c := by
   ext j
   simp only [Finsupp.tsub_apply, Finsupp.add_apply, Finsupp.single_apply]
@@ -150,7 +150,7 @@ theorem config_add_single_sub_single (d : ℕ) (c : Config d) (i : Fin d) :
   · simp [h]
   · simp [h]
 
-theorem config_sub_single_add_single (d : ℕ) (c : Config d) (i : Fin d) (h : c i ≠ 0) :
+theorem config_sub_single_add_single (d : ℕ) (c : BosonicConfig d) (i : Fin d) (h : c i ≠ 0) :
     (c - Finsupp.single i 1) + Finsupp.single i 1 = c := by
   have h1 : 1 ≤ c i := Nat.one_le_iff_ne_zero.mpr h
   ext j
@@ -159,7 +159,7 @@ theorem config_sub_single_add_single (d : ℕ) (c : Config d) (i : Fin d) (h : c
   · subst hj; simp; omega
   · simp [hj]
 
-theorem config_sub_single_eq_iff (d : ℕ) (c c' : Config d) (i : Fin d) (h : c i ≠ 0) :
+theorem config_sub_single_eq_iff (d : ℕ) (c c' : BosonicConfig d) (i : Fin d) (h : c i ≠ 0) :
     (c - Finsupp.single i 1 = c') ↔ (c = c' + Finsupp.single i 1) := by
   constructor
   · intro heq
@@ -168,7 +168,7 @@ theorem config_sub_single_eq_iff (d : ℕ) (c c' : Config d) (i : Fin d) (h : c 
     rw [heq]
     exact config_add_single_sub_single d c' i
 
-theorem config_add_sub_comm (d : ℕ) (c : Config d) (i j : Fin d) (hij : i ≠ j) :
+theorem config_add_sub_comm (d : ℕ) (c : BosonicConfig d) (i j : Fin d) (hij : i ≠ j) :
     (c + Finsupp.single j 1) - Finsupp.single i 1
       = (c - Finsupp.single i 1) + Finsupp.single j 1 := by
   ext k
@@ -202,7 +202,7 @@ theorem ann_transport (d : ℕ) (i : Fin d) (x : Dom d) :
 
 /-- Transport for composed operators. -/
 theorem transport_comp (d : ℕ) (F G : Dom d →ₗ[ℂ] Dom d)
-    (f g : (Config d →₀ ℂ) →ₗ[ℂ] (Config d →₀ ℂ))
+    (f g : (BosonicConfig d →₀ ℂ) →ₗ[ℂ] (BosonicConfig d →₀ ℂ))
     (hF : ∀ z, boseRepr d (F z) = f (boseRepr d z))
     (hG : ∀ z, boseRepr d (G z) = g (boseRepr d z)) (x : Dom d) :
     boseRepr d ((F ∘ₗ G) x) = (f ∘ₗ g) (boseRepr d x) := by
@@ -210,7 +210,7 @@ theorem transport_comp (d : ℕ) (F G : Dom d →ₗ[ℂ] Dom d)
 
 /-- Extensionality via transport: to prove `F = G` on `Dom`, transport both sides. -/
 theorem Dom_ext_transport (d : ℕ) {F G : Dom d →ₗ[ℂ] Dom d}
-    {f g : (Config d →₀ ℂ) →ₗ[ℂ] (Config d →₀ ℂ)}
+    {f g : (BosonicConfig d →₀ ℂ) →ₗ[ℂ] (BosonicConfig d →₀ ℂ)}
     (hF : ∀ z, boseRepr d (F z) = f (boseRepr d z))
     (hG : ∀ z, boseRepr d (G z) = g (boseRepr d z))
     (h : f = g) : F = G := by
@@ -219,18 +219,18 @@ theorem Dom_ext_transport (d : ℕ) {F G : Dom d →ₗ[ℂ] Dom d}
   apply (boseRepr d).injective
   rw [hF, hG, h]
 
-theorem adagBos_basis (d : ℕ) (i : Fin d) (c : Config d) :
+theorem adagBos_basis (d : ℕ) (i : Fin d) (c : BosonicConfig d) :
     boseRepr d (adagBos d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
       = sqrtNat (c i + 1) • Finsupp.single (c + Finsupp.single i 1) 1 := by
   rw [adag_transport, boseRepr_basis, adagC_single, one_mul]
 
-theorem annBos_basis (d : ℕ) (i : Fin d) (c : Config d) :
+theorem annBos_basis (d : ℕ) (i : Fin d) (c : BosonicConfig d) :
     boseRepr d (annBos d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
       = if c i = 0 then 0
         else sqrtNat (c i) • Finsupp.single (c - Finsupp.single i 1) 1 := by
   rw [ann_transport, boseRepr_basis, annC_single, one_mul]
 
-theorem adag_basis_coe (d : ℕ) (i : Fin d) (c : Config d) :
+theorem adag_basis_coe (d : ℕ) (i : Fin d) (c : BosonicConfig d) :
     (((adagBos d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ : Dom d) : BosonicFock d)
       = sqrtNat (c i + 1) • boseE d (c + Finsupp.single i 1) := by
   have h := adagBos_basis d i c
@@ -241,7 +241,7 @@ theorem adag_basis_coe (d : ℕ) (i : Fin d) (c : Config d) :
   rw [h2, map_smul, boseEquiv_basis]
   rfl
 
-theorem ann_basis_coe (d : ℕ) (i : Fin d) (c : Config d) :
+theorem ann_basis_coe (d : ℕ) (i : Fin d) (c : BosonicConfig d) :
     (((annBos d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ : Dom d) : BosonicFock d)
       = if c i = 0 then 0 else sqrtNat (c i) • boseE d (c - Finsupp.single i 1) := by
   have h := annBos_basis d i c
@@ -252,7 +252,7 @@ theorem ann_basis_coe (d : ℕ) (i : Fin d) (c : Config d) :
       simpa [boseRepr] using h
     rw [h2]
     simp [hc]
-  · have h' : (if c i = 0 then (0 : Config d →₀ ℂ)
+  · have h' : (if c i = 0 then (0 : BosonicConfig d →₀ ℂ)
         else sqrtNat (c i) • Finsupp.single (c - Finsupp.single i 1) 1)
         = sqrtNat (c i) • Finsupp.single (c - Finsupp.single i 1) 1 := by
       rw [if_neg hc]
@@ -309,7 +309,7 @@ theorem Dom_induction₂ (d : ℕ) {P : Dom d → Dom d → Prop}
     exact smul₂ _ _ _ ih
 
 /-- Basis computation for the adjoint relation. -/
-theorem adjoint_basis (d : ℕ) (i : Fin d) (c c' : Config d) :
+theorem adjoint_basis (d : ℕ) (i : Fin d) (c c' : BosonicConfig d) :
     ⟪(((annBos d i) ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩ : Dom d) : BosonicFock d),
       boseE d c'⟫_ℂ
     = ⟪boseE d c,

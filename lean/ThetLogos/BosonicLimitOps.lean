@@ -73,7 +73,7 @@ theorem embDomain_sum_transport {α β M N : Type*} [Zero M] [AddCommMonoid N]
 `M : Matrix (Fin e) (Fin d) ℂ` between a source configuration `c` and a
 target configuration `c'`.  For square `M` this is `perMinor` verbatim. -/
 noncomputable def perMinorRect {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
-    (c' : Config e) (c : Config d) : ℂ :=
+    (c' : BosonicConfig e) (c : BosonicConfig d) : ℂ :=
   if h : tot c' = tot c then
     Matrix.permanent (fun a b : Fin (tot c) =>
       M (configEnum e c' (finCongr h.symm a)) (configEnum d c b))
@@ -82,7 +82,7 @@ noncomputable def perMinorRect {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
 /-- The rectangular permanent minor restricts to Rung 10's `perMinor` on
 square matrices. -/
 theorem perMinorRect_eq_perMinor {d : ℕ} (M : Matrix (Fin d) (Fin d) ℂ)
-    (c' c : Config d) : perMinorRect M c' c = perMinor d M c' c := rfl
+    (c' c : BosonicConfig d) : perMinorRect M c' c = perMinor d M c' c := rfl
 
 /-- The padded-inclusion matrix: `Fin d` sits inside `Fin e` via
 `Fin.castLE h`, padded by zeros outside the image. -/
@@ -91,7 +91,7 @@ noncomputable def padMatrixBos {d e : ℕ} (h : d ≤ e) : Matrix (Fin e) (Fin d
 
 /-- The fiber count of the padded position map `Fin.castLE h ∘ configEnum`
 is exactly the embedded configuration. -/
-theorem fiberCount_castLE_configEnum {d e : ℕ} (h : d ≤ e) (c : Config d)
+theorem fiberCount_castLE_configEnum {d e : ℕ} (h : d ≤ e) (c : BosonicConfig d)
     (i : Fin e) :
     fiberCount (fun b : Fin (tot c) => Fin.castLE h (configEnum d c b)) i
       = configEmb h c i := by
@@ -140,7 +140,7 @@ theorem fiberCount_castLE_configEnum {d e : ℕ} (h : d ≤ e) (c : Config d)
 
 /-- Factorial products are invariant under a configuration embedding, for
 any weight `F` with `F 0 = 1` (instantiated at `ℕ`, `ℝ`, `ℂ`). -/
-theorem prod_factorial_configEmb {d e : ℕ} (h : d ≤ e) (c : Config d)
+theorem prod_factorial_configEmb {d e : ℕ} (h : d ≤ e) (c : BosonicConfig d)
     {R : Type*} [CommSemiring R] (F : ℕ → R) (hF : F 0 = 1) :
     ∏ i : Fin e, F (configEmb h c i) = ∏ j : Fin d, F (c j) := by
   have step1 : ∏ i : Fin e, F (configEmb h c i)
@@ -158,7 +158,7 @@ theorem prod_factorial_configEmb {d e : ℕ} (h : d ≤ e) (c : Config d)
 
 /-- The padded-inclusion permanent minor: on the embedded configuration
 it is the total multiplicity factorial; elsewhere it vanishes. -/
-theorem perMinorRect_pad {d e : ℕ} (h : d ≤ e) (c' : Config e) (c : Config d) :
+theorem perMinorRect_pad {d e : ℕ} (h : d ≤ e) (c' : BosonicConfig e) (c : BosonicConfig d) :
     perMinorRect (padMatrixBos h) c' c
       = if c' = configEmb h c then ((∏ j, Nat.factorial (c j) : ℕ) : ℂ)
         else 0 := by
@@ -226,13 +226,13 @@ theorem perMinorRect_pad {d e : ℕ} (h : d ≤ e) (c' : Config e) (c : Config d
 factors — Rung 10's `gammaKernel` widened to rectangular matrices (the
 source configuration's factor is at level `d`, the target's at `e`). -/
 noncomputable def gammaKernelRect {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
-    (c' : Config e) (c : Config d) : ℂ :=
+    (c' : BosonicConfig e) (c : BosonicConfig d) : ℂ :=
   perMinorRect M c' c / ((normFactor d c * normFactor e c' : ℝ) : ℂ)
 
 /-- The rectangular kernel is nonzero only at matching total particle
 number. -/
 theorem gammaKernelRect_ne_zero {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
-    {c' : Config e} {c : Config d} (h : gammaKernelRect M c' c ≠ 0) :
+    {c' : BosonicConfig e} {c : BosonicConfig d} (h : gammaKernelRect M c' c ≠ 0) :
     tot c' = tot c := by
   by_contra ht
   apply h
@@ -241,20 +241,20 @@ theorem gammaKernelRect_ne_zero {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
 /-- The rectangular kernel packaged as a finitely supported function of
 the target configuration. -/
 noncomputable def gammaKernelFinsuppRect {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
-    (c : Config d) : Config e →₀ ℂ :=
+    (c : BosonicConfig d) : BosonicConfig e →₀ ℂ :=
   Finsupp.ofSupportFinite (fun c' => gammaKernelRect M c' c)
     (Set.Finite.subset (configsOfTot e (tot c)).finite_toSet fun c' hc' =>
       (mem_configsOfTot e (tot c) c').mpr (gammaKernelRect_ne_zero M hc'))
 
 theorem gammaKernelFinsuppRect_apply {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
-    (c : Config d) (c' : Config e) :
+    (c : BosonicConfig d) (c' : BosonicConfig e) :
     (gammaKernelFinsuppRect M c) c' = gammaKernelRect M c' c := by
   unfold gammaKernelFinsuppRect
   exact congrFun Finsupp.ofSupportFinite_coe c'
 
 /-- The rectangular kernel of the padded inclusion is the indicator of
 the embedded configuration. -/
-theorem gammaKernelRect_pad {d e : ℕ} (h : d ≤ e) (c' : Config e) (c : Config d) :
+theorem gammaKernelRect_pad {d e : ℕ} (h : d ≤ e) (c' : BosonicConfig e) (c : BosonicConfig d) :
     gammaKernelRect (padMatrixBos h) c' c
       = if c' = configEmb h c then 1 else 0 := by
   by_cases hEq : c' = configEmb h c
@@ -281,7 +281,7 @@ theorem gammaKernelRect_pad {d e : ℕ} (h : d ≤ e) (c' : Config e) (c : Confi
 /-- The rectangular coefficient operator: the widened form of Rung 10's
 `gammaC`. -/
 noncomputable def gammaCRect {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ) :
-    (Config d →₀ ℂ) →ₗ[ℂ] (Config e →₀ ℂ) :=
+    (BosonicConfig d →₀ ℂ) →ₗ[ℂ] (BosonicConfig e →₀ ℂ) :=
   Finsupp.linearCombination ℂ (gammaKernelFinsuppRect M)
 
 /-- Rectangular Γ on bosonic Fock space, by conjugation with the
@@ -294,7 +294,7 @@ theorem gammaBosRect_apply {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ) (x : Dom
     gammaBosRect M x = boseEquiv e (gammaCRect M (boseRepr d x)) := rfl
 
 theorem gammaBosRect_apply_basis {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
-    (c : Config d) :
+    (c : BosonicConfig d) :
     gammaBosRect M ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = boseEquiv e (gammaKernelFinsuppRect M c) := by
   rw [gammaBosRect_apply, boseRepr_basis, gammaCRect,
@@ -302,7 +302,7 @@ theorem gammaBosRect_apply_basis {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
 
 /-- The padded kernel, as a finitely supported function, is the unit
 single at the embedded configuration. -/
-theorem gammaKernelFinsuppRect_pad {d e : ℕ} (h : d ≤ e) (c : Config d) :
+theorem gammaKernelFinsuppRect_pad {d e : ℕ} (h : d ≤ e) (c : BosonicConfig d) :
     gammaKernelFinsuppRect (padMatrixBos h) c
       = Finsupp.single (configEmb h c) 1 := by
   ext c'
@@ -334,7 +334,7 @@ theorem fockEmbBosDom_apply {d e : ℕ} (h : d ≤ e) (x : Dom d) :
 
 /-- Coefficient transport at finite levels: the coefficients of the
 embedded vector are the embedded coefficients. -/
-theorem boseEquiv_embDomain {d e : ℕ} (h : d ≤ e) (l : Config d →₀ ℂ) :
+theorem boseEquiv_embDomain {d e : ℕ} (h : d ≤ e) (l : BosonicConfig d →₀ ℂ) :
     boseEquiv e (Finsupp.embDomain (configEmb h) l)
       = fockEmbBosDom h (boseEquiv d l) := by
   apply Subtype.ext
@@ -356,8 +356,8 @@ theorem boseEquiv_embDomain {d e : ℕ} (h : d ≤ e) (l : Config d →₀ ℂ) 
 
 /-- Coefficient computation of the padded rectangular Γ: it is exactly
 coefficient transport along the configuration embedding. -/
-theorem gammaCRect_pad_apply {d e : ℕ} (h : d ≤ e) (l : Config d →₀ ℂ)
-    (c' : Config e) :
+theorem gammaCRect_pad_apply {d e : ℕ} (h : d ≤ e) (l : BosonicConfig d →₀ ℂ)
+    (c' : BosonicConfig e) :
     (gammaCRect (padMatrixBos h) l) c'
       = (Finsupp.embDomain (configEmb h) l) c' := by
   rw [gammaCRect, Finsupp.linearCombination_apply, Finsupp.sum_apply]
@@ -425,7 +425,7 @@ theorem gammaBosRect_pad {d e : ℕ} (h : d ≤ e) :
 
 /-- Basis form of Task 3a (bosons): the padded Γ sends basis vector to
 basis vector exactly as the level embedding does. -/
-theorem gammaBosRect_pad_basis {d e : ℕ} (h : d ≤ e) (c : Config d) :
+theorem gammaBosRect_pad_basis {d e : ℕ} (h : d ≤ e) (c : BosonicConfig d) :
     gammaBosRect (padMatrixBos h)
         ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = ⟨boseE e (configEmb h c),
@@ -661,7 +661,7 @@ theorem bosDomMap_apply (d : ℕ) (x : Dom d) :
 
 /-- Coefficient transport to the limit: the coefficients of the embedded
 domain vector are the embedded coefficients. -/
-theorem bosEquivLim_embDomain (d : ℕ) (l : Config d →₀ ℂ) :
+theorem bosEquivLim_embDomain (d : ℕ) (l : BosonicConfig d →₀ ℂ) :
     bosEquivLim (Finsupp.embDomain (configEmbLim d) l)
       = bosDomMap d (boseEquiv d l) := by
   apply Subtype.ext
@@ -700,7 +700,7 @@ theorem bosReprLim_bosDomMap (d : ℕ) (x : Dom d) :
 
 /-- The eigenvalue transports along the embedding: the `a`-weighted total
 of the embedded configuration is the finite-level `a`-weighted sum. -/
-theorem bosEigLim_configEmbLim (a : ℕ → ℂ) (d : ℕ) (c : Config d) :
+theorem bosEigLim_configEmbLim (a : ℕ → ℂ) (d : ℕ) (c : BosonicConfig d) :
     bosEigLim a (configEmbLim d c)
       = ∑ j : Fin d, a (j : ℕ) * ((c j : ℕ) : ℂ) := by
   rw [bosEigLim, configEmbLim_apply, embDomain_sum_transport]
@@ -711,14 +711,14 @@ at the embedded configuration the eigenvalue is the finite one
 (`bosEigLim_configEmbLim` against `dgammaC_diag_apply`); off the range
 both sides vanish. -/
 theorem diagFinsuppBos_embDomain_apply (a : ℕ → ℂ) (d : ℕ)
-    (l : Config d →₀ ℂ) (c' : ConfigLim) :
+    (l : BosonicConfig d →₀ ℂ) (c' : ConfigLim) :
     (diagFinsuppBos a (Finsupp.embDomain (configEmbLim d) l)) c'
       = (Finsupp.embDomain (configEmbLim d)
           (dgammaC d (diagABos d a) l)) c' := by
   rw [diagFinsuppBos_apply]
   by_cases hex : ∃ c₀, configEmbLim d c₀ = c'
   · obtain ⟨c₀, hc₀⟩ := hex
-    have hR : ∀ f : Config d →₀ ℂ,
+    have hR : ∀ f : BosonicConfig d →₀ ℂ,
         (Finsupp.embDomain (configEmbLim d) f) c' = f c₀ := by
       intro f
       have hex' : ∃ a_1, (configEmbLim d) a_1 = c' := ⟨c₀, hc₀⟩
@@ -730,7 +730,7 @@ theorem diagFinsuppBos_embDomain_apply (a : ℕ → ℂ) (d : ℕ)
       exact congrArg f hinj
     rw [hR l, hR (dgammaC d (diagABos d a) l), diagABos,
       dgammaC_diag_apply, ← hc₀, bosEigLim_configEmbLim]
-  · have hz : ∀ f : Config d →₀ ℂ,
+  · have hz : ∀ f : BosonicConfig d →₀ ℂ,
         (Finsupp.embDomain (configEmbLim d) f) c' = 0 := by
       intro f
       rw [Finsupp.embDomain_apply, dif_neg hex]

@@ -320,7 +320,7 @@ theorem permanent_congr {n : ℕ} {M N : Matrix (Fin n) (Fin n) ℂ}
 
 /-- The multiset of an embedded configuration is the map of the
 original multiset (T1). -/
-theorem toMultiset_configEmbLim (d : ℕ) (c₀ : Config d) :
+theorem toMultiset_configEmbLim (d : ℕ) (c₀ : BosonicConfig d) :
     Finsupp.toMultiset (configEmbLim d c₀)
       = (Finsupp.toMultiset c₀).map Fin.valEmbedding := by
   induction c₀ using Finsupp.induction with
@@ -333,13 +333,13 @@ theorem toMultiset_configEmbLim (d : ℕ) (c₀ : Config d) :
       exact (map_nsmul_singleton (⇑Fin.valEmbedding) m a).symm
 
 /-- The cast of a finite enumeration list to a list of naturals. -/
-noncomputable def enumListCast (d : ℕ) (c₀ : Config d) : List ℕ :=
+noncomputable def enumListCast (d : ℕ) (c₀ : BosonicConfig d) : List ℕ :=
   (enumList d c₀).map (fun i : Fin d => (i : ℕ))
 
 /-- The enumeration list of an embedded configuration is the cast of
 the finite enumeration list (T1): sorting commutes with the monotone
 embedding `Fin.val`. -/
-theorem enumLimList_configEmbLim (d : ℕ) (c₀ : Config d) :
+theorem enumLimList_configEmbLim (d : ℕ) (c₀ : BosonicConfig d) :
     enumLimList (configEmbLim d c₀) = enumListCast d c₀ := by
   have hmap : Multiset.map (⇑Fin.valEmbedding) (Finsupp.toMultiset c₀)
       = Multiset.map (fun i : Fin d => (i : ℕ)) (Finsupp.toMultiset c₀) := by
@@ -356,7 +356,7 @@ theorem enumLimList_configEmbLim (d : ℕ) (c₀ : Config d) :
 
 /-- The limit enumeration of an embedded configuration is the finite
 enumeration, cast to `ℕ` (T1). -/
-theorem enumLim_configEmbLim (d : ℕ) (c₀ : Config d) (k : Fin (tot c₀)) :
+theorem enumLim_configEmbLim (d : ℕ) (c₀ : BosonicConfig d) (k : Fin (tot c₀)) :
     enumLim (configEmbLim d c₀) (finCongr (totLim_configEmbLim d c₀).symm k)
       = ((configEnum d c₀ k : Fin d) : ℕ) := by
   have s1 : enumLim (configEmbLim d c₀)
@@ -385,7 +385,7 @@ theorem enumLim_configEmbLim (d : ℕ) (c₀ : Config d) (k : Fin (tot c₀)) :
 
 /-- The limit normalization factor of an embedded configuration is
 the finite normalization factor (T1). -/
-theorem normFactorLim_configEmbLim (d : ℕ) (c₀ : Config d) :
+theorem normFactorLim_configEmbLim (d : ℕ) (c₀ : BosonicConfig d) :
     normFactorLim (configEmbLim d c₀) = normFactor d c₀ := by
   unfold normFactorLim normFactor
   congr 1
@@ -398,7 +398,7 @@ embedded from finite levels `e` and `d`, the limit permanent minor of
 `A` is the corpus's rectangular permanent minor of the compressed
 matrix. -/
 theorem perMinorLimOf_configEmbLim (A : ℕ → ℕ → ℂ) (e d : ℕ)
-    (c'₀ : Config e) (c₀ : Config d) :
+    (c'₀ : BosonicConfig e) (c₀ : BosonicConfig d) :
     perMinorLimOf A (configEmbLim e c'₀) (configEmbLim d c₀)
       = perMinorRect (fun i j => A (i : ℕ) (j : ℕ)) c'₀ c₀ := by
   by_cases h : tot c'₀ = tot c₀
@@ -442,7 +442,7 @@ theorem perMinorLimOf_configEmbLim (A : ℕ → ℕ → ℂ) (e d : ℕ)
 the limit kernel is the corpus's rectangular kernel of the compressed
 matrix. -/
 theorem gammaKernelLimOf_configEmbLim (A : ℕ → ℕ → ℂ) (e d : ℕ)
-    (c'₀ : Config e) (c₀ : Config d) :
+    (c'₀ : BosonicConfig e) (c₀ : BosonicConfig d) :
     gammaKernelLimOf A (configEmbLim e c'₀) (configEmbLim d c₀)
       = gammaKernelRect (fun i j => A (i : ℕ) (j : ℕ)) c'₀ c₀ := by
   unfold gammaKernelLimOf gammaKernelRect
@@ -464,14 +464,14 @@ a generic intermediate level. -/
 /-- Rectangular permanent minors vanish between different total
 counts (T1). -/
 theorem perMinorRect_of_tot_ne {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
-    (c' : Config e) (c : Config d) (h : tot c' ≠ tot c) :
+    (c' : BosonicConfig e) (c : BosonicConfig d) (h : tot c' ≠ tot c) :
     perMinorRect M c' c = 0 :=
   dif_neg h
 
 /-- **Rectangular conjugate-transpose of permanent minors (T1):**
 port of `perMinor_conjTranspose`. -/
 theorem perMinorRect_conjTranspose {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
-    (c' : Config e) (c : Config d) :
+    (c' : BosonicConfig e) (c : BosonicConfig d) :
     perMinorRect Mᴴ c c' = star (perMinorRect M c' c) := by
   by_cases htot : tot c' = tot c
   · have e1 : perMinorRect Mᴴ c c' = Matrix.permanent
@@ -508,7 +508,7 @@ theorem perMinorRect_conjTranspose {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
 /-- **Rectangular conjugate-transpose of the kernel (T1):** port of
 `gammaKernel_conjTranspose`. -/
 theorem gammaKernelRect_conjTranspose {d e : ℕ} (M : Matrix (Fin e) (Fin d) ℂ)
-    (c' : Config e) (c : Config d) :
+    (c' : BosonicConfig e) (c : BosonicConfig d) :
     gammaKernelRect Mᴴ c c' = star (gammaKernelRect M c' c) := by
   unfold gammaKernelRect
   rw [perMinorRect_conjTranspose, star_div₀]
@@ -522,7 +522,7 @@ theorem gammaKernelRect_conjTranspose {d e : ℕ} (M : Matrix (Fin e) (Fin d) �
 configuration at level `e`, with the same `1 / ∏ i, (c' i)!`
 multiplicity weights. -/
 theorem perMinorRect_mul {d e g : ℕ} (M : Matrix (Fin g) (Fin e) ℂ)
-    (N : Matrix (Fin e) (Fin d) ℂ) (c'' : Config g) (c : Config d) :
+    (N : Matrix (Fin e) (Fin d) ℂ) (c'' : BosonicConfig g) (c : BosonicConfig d) :
     perMinorRect (M * N) c'' c
       = ∑ c' ∈ configsOfTot e (tot c), perMinorRect M c'' c'
           * perMinorRect N c' c
@@ -689,11 +689,11 @@ theorem perMinorRect_mul {d e g : ℕ} (M : Matrix (Fin g) (Fin e) ℂ)
 kernels over the intermediate sector; the `perMinorRect_mul` weights
 cancel exactly against the normalizations. -/
 theorem gammaKernelRect_mul {d e g : ℕ} (M : Matrix (Fin g) (Fin e) ℂ)
-    (N : Matrix (Fin e) (Fin d) ℂ) (c'' : Config g) (c : Config d) :
+    (N : Matrix (Fin e) (Fin d) ℂ) (c'' : BosonicConfig g) (c : BosonicConfig d) :
     gammaKernelRect (M * N) c'' c
       = ∑ c' ∈ configsOfTot e (tot c), gammaKernelRect M c'' c'
           * gammaKernelRect N c' c := by
-  have key : ∀ c' : Config e,
+  have key : ∀ c' : BosonicConfig e,
         ((normFactor e c' * normFactor g c'' : ℝ) : ℂ)
           * ((normFactor d c * normFactor e c' : ℝ) : ℂ)
         = (∏ i, ((Nat.factorial (c' i) : ℕ) : ℂ))
@@ -724,7 +724,7 @@ theorem gammaKernelRect_mul {d e g : ℕ} (M : Matrix (Fin g) (Fin e) ℂ)
 
 /-- **The kernel of the identity (T1):** the finite-level diagonal —
 the value that both limit arguments land on. -/
-theorem gammaKernel_one (d : ℕ) (c' c : Config d) :
+theorem gammaKernel_one (d : ℕ) (c' c : BosonicConfig d) :
     gammaKernel d 1 c' c = if c' = c then 1 else 0 := by
   unfold gammaKernel
   rw [perMinor_one]
@@ -739,7 +739,7 @@ theorem gammaKernel_one (d : ℕ) (c' c : Config d) :
 /-- **Level coherence of the limit embedding (T1):** embedding a
 configuration first along the finite tower and then into the limit is
 embedding it into the limit directly. -/
-theorem configEmbLim_configEmb {d e : ℕ} (h : d ≤ e) (c : Config d) :
+theorem configEmbLim_configEmb {d e : ℕ} (h : d ≤ e) (c : BosonicConfig d) :
     configEmbLim e (configEmb h c) = configEmbLim d c := by
   induction c using Finsupp.induction with
   | zero => rw [configEmb_zero, configEmbLim_zero, configEmbLim_zero]
@@ -865,7 +865,7 @@ theorem ofReal_norm_sqBos (z : ℂ) : ((‖z‖ ^ 2 : ℝ) : ℂ) = star z * z :
   simpa using (RCLike.conj_mul z).symm
 
 /-- The squared normalization factor, as a real identity (T1). -/
-theorem normFactor_sq_real (d : ℕ) (c : Config d) :
+theorem normFactor_sq_real (d : ℕ) (c : BosonicConfig d) :
     (normFactor d c) ^ 2 = ∏ i, ((Nat.factorial (c i) : ℕ) : ℝ) := by
   have hP : (0 : ℝ) ≤ ∏ i, ((Nat.factorial (c i) : ℕ) : ℝ) :=
     Finset.prod_nonneg (fun i _ => Nat.cast_nonneg _)
@@ -915,7 +915,7 @@ theorem norm_UmatGram_le (m : ℝ) (hm : 0 < m)
 `(tot c₀)!` in norm — every column has Bessel norm at most `1`, and
 there are `(tot c₀)!` permutations. -/
 theorem permanent_gram_le (m : ℝ) (hm : 0 < m)
-    (W : shellLp m hm ≃ₗᵢ[ℂ] shellLp m hm) (E d : ℕ) (c₀ : Config d)
+    (W : shellLp m hm ≃ₗᵢ[ℂ] shellLp m hm) (E d : ℕ) (c₀ : BosonicConfig d)
     (ι κ : Fin (tot c₀) → Fin d)
     (hι : ∀ i, fiberCount ι i = c₀ i) (hκ : ∀ i, fiberCount κ i = c₀ i) :
     ‖Matrix.permanent (fun a b => ((UmatRect m hm W E d)ᴴ
@@ -1020,7 +1020,7 @@ theorem gammaKernelLim_col_sum_le (m : ℝ) (hm : 0 < m)
     Finset.sum_le_sum_of_subset_of_nonneg hTU
       (fun c' _ _ => by positivity)
   -- Step 3: unwind the embedding — the sum is a finite rectangular sum.
-  have hterm : ∀ c'₁ : Config E,
+  have hterm : ∀ c'₁ : BosonicConfig E,
       gammaKernelLim m hm W (configEmbLim E c'₁) c
         = gammaKernelRect (UmatRect m hm W E d) c'₁ c₀ := by
     intro c'₁
@@ -1181,7 +1181,7 @@ values — the kernel is a fixed finite polynomial in the entries. -/
 theorem gammaKernelRect_tendsto_of_tendsto {e' d' : ℕ}
     (X : ℕ → Matrix (Fin e') (Fin d') ℂ) (Y : Matrix (Fin e') (Fin d') ℂ)
     (hXY : ∀ i j, Tendsto (fun e => X e i j) atTop (𝓝 (Y i j)))
-    (c'₀ : Config e') (c₀ : Config d') :
+    (c'₀ : BosonicConfig e') (c₀ : BosonicConfig d') :
     Tendsto (fun e => gammaKernelRect (X e) c'₀ c₀) atTop
       (𝓝 (gammaKernelRect Y c'₀ c₀)) := by
   by_cases htot : tot c'₀ = tot c₀
@@ -1219,7 +1219,7 @@ theorem gammaKernelRect_tendsto_of_tendsto {e' d' : ℕ}
 /-- Rectangular kernels at equal levels are the square kernels
 (T1). -/
 theorem gammaKernelRect_eq (d : ℕ) (X : Matrix (Fin d) (Fin d) ℂ)
-    (c' c : Config d) :
+    (c' c : BosonicConfig d) :
     gammaKernelRect X c' c = gammaKernel d X c' c := by
   unfold gammaKernelRect gammaKernel
   rw [perMinorRect_eq_perMinor]
@@ -1421,8 +1421,8 @@ theorem gammaKernelLim_column_orthonormal (m : ℝ) (hm : 0 < m)
     obtain ⟨d₁, c₁₀, hc₁₀⟩ := config_factor c₁
     obtain ⟨d₂, c₂₀, hc₂₀⟩ := config_factor c₂
     set D := max d₁ d₂ with hD
-    set c₁₁ : Config D := configEmb (le_max_left d₁ d₂) c₁₀ with hc₁₁def
-    set c₂₁ : Config D := configEmb (le_max_right d₁ d₂) c₂₀ with hc₂₁def
+    set c₁₁ : BosonicConfig D := configEmb (le_max_left d₁ d₂) c₁₀ with hc₁₁def
+    set c₂₁ : BosonicConfig D := configEmb (le_max_right d₁ d₂) c₂₀ with hc₂₁def
     have hc₁ : configEmbLim D c₁₁ = c₁ :=
       (configEmbLim_configEmb _ c₁₀).trans hc₁₀
     have hc₂ : configEmbLim D c₂₁ = c₂ :=
@@ -1471,7 +1471,7 @@ theorem gammaKernelLim_column_orthonormal (m : ℝ) (hm : 0 < m)
         = gammaKernelRect ((UmatRect m hm W e D)ᴴ * UmatRect m hm W e D)
             c₁₁ c₂₁ := by
       intro e
-      have hterm : ∀ a₁ : Config e, f (configEmbLim e a₁)
+      have hterm : ∀ a₁ : BosonicConfig e, f (configEmbLim e a₁)
           = gammaKernelRect ((UmatRect m hm W e D)ᴴ) c₁₁ a₁
             * gammaKernelRect (UmatRect m hm W e D) a₁ c₂₁ := by
         intro a₁
@@ -1639,7 +1639,7 @@ theorem gammaKernelLim_comp (m : ℝ) (hm : 0 < m)
         = gammaKernelRect (UmatRect m hm W₂ d' e * UmatRect m hm W₁ e d)
             c'₀ c₀ := by
       intro e
-      have hterm : ∀ a₁ : Config e, f (configEmbLim e a₁)
+      have hterm : ∀ a₁ : BosonicConfig e, f (configEmbLim e a₁)
           = gammaKernelRect (UmatRect m hm W₂ d' e) c'₀ a₁
             * gammaKernelRect (UmatRect m hm W₁ e d) a₁ c₀ := by
         intro a₁
@@ -2150,12 +2150,12 @@ theorem gammaKernelLim_zero_config (m : ℝ) (hm : 0 < m)
   by_cases hc : c' = 0
   · subst hc
     rw [if_pos rfl]
-    have h00 : configEmbLim 0 (0 : Config 0) = (0 : ConfigLim) := by
+    have h00 : configEmbLim 0 (0 : BosonicConfig 0) = (0 : ConfigLim) := by
       ext i
       simp [configEmbLim]
     rw [← h00]
-    show gammaKernelLimOf (Umat m hm W) (configEmbLim 0 (0 : Config 0))
-      (configEmbLim 0 (0 : Config 0)) = 1
+    show gammaKernelLimOf (Umat m hm W) (configEmbLim 0 (0 : BosonicConfig 0))
+      (configEmbLim 0 (0 : BosonicConfig 0)) = 1
     rw [gammaKernelLimOf_configEmbLim]
     simp [gammaKernelRect, perMinorRect, normFactor, Matrix.permanent]
     show (∑ x : Equiv.Perm (Fin 0), ∏ x_1 : Fin 0,
@@ -2343,7 +2343,7 @@ theorem gammaKernelRect_tendsto_of_tendsto_filter {ι : Type*}
     {l : Filter ι} {e' d' : ℕ} (X : ι → Matrix (Fin e') (Fin d') ℂ)
     (Y : Matrix (Fin e') (Fin d') ℂ)
     (hXY : ∀ i j, Tendsto (fun t => X t i j) l (𝓝 (Y i j)))
-    (c'₀ : Config e') (c₀ : Config d') :
+    (c'₀ : BosonicConfig e') (c₀ : BosonicConfig d') :
     Tendsto (fun t => gammaKernelRect (X t) c'₀ c₀) l
       (𝓝 (gammaKernelRect Y c'₀ c₀)) := by
   by_cases htot : tot c'₀ = tot c₀

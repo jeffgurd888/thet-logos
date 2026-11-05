@@ -19,7 +19,7 @@ fermionic creation/annihilation operators `adag`/`ann` of
 `adagBos` + `annBos` of `BosonicFock`), on the product finite-particle
 domain. The joint Hilbert space is NOT a completed tensor product: it is
 the `lp` space over the product configuration type
-`Finset (Fin df) × Config db`, exactly as both parent campaigns build
+`Finset (Fin df) × BosonicConfig db`, exactly as both parent campaigns build
 their spaces, so the two factors share one orthonormal basis and the
 cross-factor operators commute ON THE NOSE (proved, §1).
 
@@ -100,7 +100,7 @@ open scoped InnerProductSpace
 
 /-- Product configuration type: a fermionic occupation set and a bosonic
 occupation function. -/
-abbrev JointConfig (df db : ℕ) : Type := Finset (Fin df) × Config db
+abbrev JointConfig (df db : ℕ) : Type := Finset (Fin df) × BosonicConfig db
 
 /-- The joint Hilbert space: `ℓ²` over product configurations. -/
 noncomputable abbrev JointSpace (df db : ℕ) : Type :=
@@ -272,13 +272,13 @@ noncomputable def bAnnC (df db : ℕ) (k : Fin db) :
     (if q.2 k = 0 then 0 else sqrtNat (q.2 k))
       • Finsupp.single (q.1, q.2 - Finsupp.single k 1) 1
 
-theorem fDagC_single (df db : ℕ) (i : Fin df) (S : Finset (Fin df)) (c : Config db)
+theorem fDagC_single (df db : ℕ) (i : Fin df) (S : Finset (Fin df)) (c : BosonicConfig db)
     (a : ℂ) :
     fDagC df db i (Finsupp.single (S, c) a)
       = (a * (if i ∈ S then 0 else sgn df i S)) • Finsupp.single (insert i S, c) 1 := by
   simp only [fDagC, Finsupp.linearCombination_single, ← mul_smul]
 
-theorem fAnnC_single (df db : ℕ) (i : Fin df) (S : Finset (Fin df)) (c : Config db)
+theorem fAnnC_single (df db : ℕ) (i : Fin df) (S : Finset (Fin df)) (c : BosonicConfig db)
     (a : ℂ) :
     fAnnC df db i (Finsupp.single (S, c) a)
       = if i ∉ S then 0 else (a * sgn df i S) • Finsupp.single (S.erase i, c) 1 := by
@@ -286,13 +286,13 @@ theorem fAnnC_single (df db : ℕ) (i : Fin df) (S : Finset (Fin df)) (c : Confi
   · simp [fAnnC, Finsupp.linearCombination_single, h]
   · simp [fAnnC, Finsupp.linearCombination_single, h]
 
-theorem bDagC_single (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : Config db)
+theorem bDagC_single (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : BosonicConfig db)
     (a : ℂ) :
     bDagC df db k (Finsupp.single (S, c) a)
       = (a * sqrtNat (c k + 1)) • Finsupp.single (S, c + Finsupp.single k 1) 1 := by
   simp only [bDagC, Finsupp.linearCombination_single, ← mul_smul]
 
-theorem bAnnC_single (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : Config db)
+theorem bAnnC_single (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : BosonicConfig db)
     (a : ℂ) :
     bAnnC df db k (Finsupp.single (S, c) a)
       = (a * (if c k = 0 then 0 else sqrtNat (c k)))
@@ -429,7 +429,7 @@ noncomputable def densC (df db : ℕ) (i j : Fin df) :
     (JointConfig df db →₀ ℂ) →ₗ[ℂ] (JointConfig df db →₀ ℂ) :=
   fDagC df db i ∘ₗ fAnnC df db j
 
-theorem densC_single (df db : ℕ) (i j : Fin df) (S : Finset (Fin df)) (c : Config db)
+theorem densC_single (df db : ℕ) (i j : Fin df) (S : Finset (Fin df)) (c : BosonicConfig db)
     (a : ℂ) :
     densC df db i j (Finsupp.single (S, c) a)
       = (a * densCoef df i j S) • Finsupp.single (densPhi df i j S, c) 1 := by
@@ -453,7 +453,7 @@ noncomputable def fieldC (df db : ℕ) (k : Fin db) :
     (JointConfig df db →₀ ℂ) →ₗ[ℂ] (JointConfig df db →₀ ℂ) :=
   bDagC df db k + bAnnC df db k
 
-theorem fieldC_single (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : Config db)
+theorem fieldC_single (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : BosonicConfig db)
     (a : ℂ) :
     fieldC df db k (Finsupp.single (S, c) a)
       = (a * sqrtNat (c k + 1)) • Finsupp.single (S, c + Finsupp.single k 1) 1
@@ -468,7 +468,7 @@ noncomputable def yukMonoC (df db : ℕ) (i j : Fin df) (k : Fin db) :
   densC df db i j ∘ₗ fieldC df db k
 
 theorem yukMonoC_single (df db : ℕ) (i j : Fin df) (k : Fin db)
-    (S : Finset (Fin df)) (c : Config db) (a : ℂ) :
+    (S : Finset (Fin df)) (c : BosonicConfig db) (a : ℂ) :
     yukMonoC df db i j k (Finsupp.single (S, c) a)
       = (a * densCoef df i j S * sqrtNat (c k + 1))
           • Finsupp.single (densPhi df i j S, c + Finsupp.single k 1) 1
@@ -490,7 +490,7 @@ theorem yukMonoC_single (df db : ℕ) (i j : Fin df) (k : Fin db)
 agree because the factors commute (the four commutation theorems above
 are the operator-level input; this is the composite computation). -/
 theorem fieldC_densC_single (df db : ℕ) (i j : Fin df) (k : Fin db)
-    (S : Finset (Fin df)) (c : Config db) (a : ℂ) :
+    (S : Finset (Fin df)) (c : BosonicConfig db) (a : ℂ) :
     fieldC df db k (densC df db i j (Finsupp.single (S, c) a))
       = (a * densCoef df i j S * sqrtNat (c k + 1))
           • Finsupp.single (densPhi df i j S, c + Finsupp.single k 1) 1
@@ -519,9 +519,9 @@ coefficient is hermitian in the joint indices (the adjoint identity
 that will give symmetry on the domain in §4). -/
 
 /-- Total boson number of a bosonic configuration. -/
-def bTot (db : ℕ) (c : Config db) : ℕ := ∑ k, c k
+def bTot (db : ℕ) (c : BosonicConfig db) : ℕ := ∑ k, c k
 
-theorem bTot_add_single (db : ℕ) (c : Config db) (k : Fin db) :
+theorem bTot_add_single (db : ℕ) (c : BosonicConfig db) (k : Fin db) :
     bTot db (c + Finsupp.single k 1) = bTot db c + 1 := by
   have h : ∀ j : Fin db, (c + Finsupp.single k (1 : ℕ)) j
       = c j + (if j = k then 1 else 0) := by
@@ -534,7 +534,7 @@ theorem bTot_add_single (db : ℕ) (c : Config db) (k : Fin db) :
     Finset.sum_ite_eq' Finset.univ k (fun _ => (1 : ℕ)), if_pos (Finset.mem_univ k),
     bTot]
 
-theorem bTot_sub_single_le (db : ℕ) (c : Config db) (k : Fin db) :
+theorem bTot_sub_single_le (db : ℕ) (c : BosonicConfig db) (k : Fin db) :
     bTot db (c - Finsupp.single k 1) ≤ bTot db c := by
   show (∑ j, (c - Finsupp.single k (1 : ℕ)) j) ≤ ∑ j, c j
   apply Finset.sum_le_sum
@@ -542,32 +542,32 @@ theorem bTot_sub_single_le (db : ℕ) (c : Config db) (k : Fin db) :
   rw [Finsupp.tsub_apply]
   exact Nat.sub_le _ _
 
-theorem config_le_bTot (db : ℕ) (c : Config db) (k : Fin db) : c k ≤ bTot db c :=
+theorem config_le_bTot (db : ℕ) (c : BosonicConfig db) (k : Fin db) : c k ≤ bTot db c :=
   Finset.single_le_sum (fun i _ => Nat.zero_le (c i)) (Finset.mem_univ k)
 
-theorem coord_add_single (db : ℕ) (c : Config db) (k : Fin db) :
+theorem coord_add_single (db : ℕ) (c : BosonicConfig db) (k : Fin db) :
     (c + Finsupp.single k (1 : ℕ)) k = c k + 1 := by
   simp [Finsupp.add_apply]
 
-theorem coord_sub_single (db : ℕ) (c : Config db) (k : Fin db) :
+theorem coord_sub_single (db : ℕ) (c : BosonicConfig db) (k : Fin db) :
     (c - Finsupp.single k (1 : ℕ)) k = c k - 1 := by
   simp [Finsupp.tsub_apply]
 
-theorem config_add_ne_sub (db : ℕ) (c : Config db) (k : Fin db) :
+theorem config_add_ne_sub (db : ℕ) (c : BosonicConfig db) (k : Fin db) :
     c + Finsupp.single k 1 ≠ c - Finsupp.single k 1 := by
   intro h
-  have h2 := congrArg (fun f : Config db => f k) h
+  have h2 := congrArg (fun f : BosonicConfig db => f k) h
   rw [coord_add_single, coord_sub_single] at h2
   omega
 
-theorem config_add_single_ne_self (db : ℕ) (c : Config db) (k : Fin db) :
+theorem config_add_single_ne_self (db : ℕ) (c : BosonicConfig db) (k : Fin db) :
     c + Finsupp.single k 1 ≠ c := by
   intro h
-  have h2 := congrArg (fun f : Config db => f k) h
+  have h2 := congrArg (fun f : BosonicConfig db => f k) h
   rw [coord_add_single] at h2
   omega
 
-theorem config_sub_single_eq_self (db : ℕ) (c : Config db) (k : Fin db)
+theorem config_sub_single_eq_self (db : ℕ) (c : BosonicConfig db) (k : Fin db)
     (h : c k = 0) : c - Finsupp.single k 1 = c := by
   ext j
   simp only [Finsupp.tsub_apply, Finsupp.single_apply]
@@ -691,12 +691,12 @@ theorem densMat_adjoint (df : ℕ) (i j : Fin df) (S' S : Finset (Fin df)) :
 
 /-- The field matrix element in the bosonic basis:
 `(fieldC k)` sends basis `c` to `fieldMat c' c` at basis `c'`. -/
-noncomputable def fieldMat (db : ℕ) (k : Fin db) (c' c : Config db) : ℂ :=
+noncomputable def fieldMat (db : ℕ) (k : Fin db) (c' c : BosonicConfig db) : ℂ :=
   (if c' = c + Finsupp.single k 1 then sqrtNat (c k + 1) else 0)
     + (if c' = c - Finsupp.single k 1
         then (if c k = 0 then 0 else sqrtNat (c k)) else 0)
 
-theorem fieldMat_eq_zero_of (db : ℕ) (k : Fin db) {c' c : Config db}
+theorem fieldMat_eq_zero_of (db : ℕ) (k : Fin db) {c' c : BosonicConfig db}
     (h1 : c' ≠ c + Finsupp.single k 1)
     (h2 : c' ≠ c - Finsupp.single k 1 ∨ c k = 0) :
     fieldMat db k c' c = 0 := by
@@ -708,7 +708,7 @@ theorem fieldMat_eq_zero_of (db : ℕ) (k : Fin db) {c' c : Config db}
     · rw [if_neg h3, add_zero]
 
 /-- The field matrix element is hermitian in its two indices. -/
-theorem fieldMat_adjoint (db : ℕ) (k : Fin db) (c' c : Config db) :
+theorem fieldMat_adjoint (db : ℕ) (k : Fin db) (c' c : BosonicConfig db) :
     (starRingEnd ℂ) (fieldMat db k c' c) = fieldMat db k c c' := by
   simp only [fieldMat, map_add, apply_ite, map_zero, sqrtNat_starRingEnd]
   by_cases h1 : c' = c + Finsupp.single k 1
@@ -720,7 +720,7 @@ theorem fieldMat_adjoint (db : ℕ) (k : Fin db) (c' c : Config db) :
       rw [h1]; exact coord_add_single db c k
     have h4 : ¬ (c = c' + Finsupp.single k 1) := by
       intro hh
-      have h5 := congrArg (fun f : Config db => f k) hh
+      have h5 := congrArg (fun f : BosonicConfig db => f k) hh
       rw [coord_add_single] at h5
       omega
     have h8 : c' k ≠ 0 := by omega
@@ -740,7 +740,7 @@ theorem fieldMat_adjoint (db : ℕ) (k : Fin db) (c' c : Config db) :
           rw [h2]; exact (config_sub_single_add_single db c k hk).symm
         have h4 : ¬ (c = c' - Finsupp.single k 1) := by
           intro hh
-          have h5 := congrArg (fun f : Config db => f k) hh
+          have h5 := congrArg (fun f : BosonicConfig db => f k) hh
           rw [coord_sub_single] at h5
           have h6 : c' k = c k - 1 := by
             rw [h2]; exact coord_sub_single db c k
@@ -772,7 +772,7 @@ theorem fieldMat_adjoint (db : ℕ) (k : Fin db) (c' c : Config db) :
 /-- **Field coefficient bound (CF2).** The field matrix element out of
 any configuration is at most `sqrt (tot c' + 1)`, measured at the
 OUTPUT configuration. -/
-theorem norm_fieldMat_le (db : ℕ) (k : Fin db) (c' c : Config db) :
+theorem norm_fieldMat_le (db : ℕ) (k : Fin db) (c' c : BosonicConfig db) :
     ‖fieldMat db k c' c‖ ≤ Real.sqrt (bTot db c' + 1) := by
   by_cases hcre : c' = c + Finsupp.single k 1
   · have hsub : ¬ (c' = c - Finsupp.single k 1) := by
@@ -811,7 +811,7 @@ theorem norm_fieldMat_le (db : ℕ) (k : Fin db) (c' c : Config db) :
 matrix element of the Yukawa monomial factors:
 fermionic density matrix element × bosonic field matrix element. -/
 theorem yukMonoC_coeff (df db : ℕ) (i j : Fin df) (k : Fin db)
-    (S' : Finset (Fin df)) (c' : Config db) (S : Finset (Fin df)) (c : Config db) :
+    (S' : Finset (Fin df)) (c' : BosonicConfig db) (S : Finset (Fin df)) (c : BosonicConfig db) :
     (yukMonoC df db i j k (Finsupp.single (S, c) 1)) (S', c')
       = densMat df i j S' S * fieldMat db k c' c := by
   rw [yukMonoC_single, Finsupp.add_apply, Finsupp.smul_apply, Finsupp.smul_apply]
@@ -906,7 +906,7 @@ noncomputable def yukawaIntC (df db : ℕ) (Y : Fin df → Fin df → Fin db →
 
 /-- The total coefficient of the symmetrized interaction. -/
 noncomputable def yukCoefTot (df db : ℕ) (Y : Fin df → Fin df → Fin db → ℂ)
-    (S' : Finset (Fin df)) (c' : Config db) (S : Finset (Fin df)) (c : Config db) :
+    (S' : Finset (Fin df)) (c' : BosonicConfig db) (S : Finset (Fin df)) (c : BosonicConfig db) :
     ℂ :=
   ∑ i, ∑ j, ∑ k, (Y i j k + adjY df db Y i j k)
     * (densMat df i j S' S * fieldMat db k c' c)
@@ -914,7 +914,7 @@ noncomputable def yukCoefTot (df db : ℕ) (Y : Fin df → Fin df → Fin db →
 /-- **Total coefficient formula.** The symmetrized interaction's joint
 matrix element is the total coefficient. -/
 theorem yukawaIntC_coeff (df db : ℕ) (Y : Fin df → Fin df → Fin db → ℂ)
-    (S' : Finset (Fin df)) (c' : Config db) (S : Finset (Fin df)) (c : Config db) :
+    (S' : Finset (Fin df)) (c' : BosonicConfig db) (S : Finset (Fin df)) (c : BosonicConfig db) :
     (yukawaIntC df db Y (Finsupp.single (S, c) 1)) (S', c')
       = yukCoefTot df db Y S' c' S c := by
   have hexpand : ∀ Z : Fin df → Fin df → Fin db → ℂ,
@@ -940,7 +940,7 @@ theorem yukawaIntC_coeff (df db : ℕ) (Y : Fin df → Fin df → Fin db → ℂ
 of the symmetrized interaction is hermitian in the joint indices —
 the algebraic heart of symmetry on the product domain. -/
 theorem yukCoefTot_adjoint (df db : ℕ) (Y : Fin df → Fin df → Fin db → ℂ)
-    (S' : Finset (Fin df)) (c' : Config db) (S : Finset (Fin df)) (c : Config db) :
+    (S' : Finset (Fin df)) (c' : BosonicConfig db) (S : Finset (Fin df)) (c : BosonicConfig db) :
     (starRingEnd ℂ) (yukCoefTot df db Y S' c' S c)
       = yukCoefTot df db Y S c S' c' := by
   have per : ∀ i j : Fin df, ∀ k : Fin db,
@@ -978,7 +978,7 @@ theorem jfinsupp_eq_sum_single (df db : ℕ) (f : JointConfig df db →₀ ℂ)
 /-- The interaction applied to a general coefficient vector, as a
 finite sum of total coefficients over the support. -/
 theorem yukawaIntC_apply (df db : ℕ) (Y : Fin df → Fin df → Fin db → ℂ)
-    (f : JointConfig df db →₀ ℂ) (S' : Finset (Fin df)) (c' : Config db) :
+    (f : JointConfig df db →₀ ℂ) (S' : Finset (Fin df)) (c' : BosonicConfig db) :
     (yukawaIntC df db Y f) (S', c')
       = ∑ q ∈ f.support, f q * yukCoefTot df db Y S' c' q.1 q.2 := by
   conv_lhs => rw [jfinsupp_eq_sum_single df db f f.support
@@ -1095,12 +1095,12 @@ noncomputable def yukawaIntJ (df db : ℕ) (Y : Fin df → Fin df → Fin db →
     JDom df db →ₗ[ℂ] JDom df db :=
   jTransport df db (yukawaIntC df db Y)
 
-theorem fDagJ_basis (df db : ℕ) (i : Fin df) (S : Finset (Fin df)) (c : Config db) :
+theorem fDagJ_basis (df db : ℕ) (i : Fin df) (S : Finset (Fin df)) (c : BosonicConfig db) :
     fDagJ df db i (jVec df db (S, c))
       = (if i ∈ S then 0 else sgn df i S) • jVec df db (insert i S, c) := by
   rw [fDagJ, jTransport_basis, fDagC_single, one_mul, map_smul, jEquiv_basis]
 
-theorem fAnnJ_basis (df db : ℕ) (i : Fin df) (S : Finset (Fin df)) (c : Config db) :
+theorem fAnnJ_basis (df db : ℕ) (i : Fin df) (S : Finset (Fin df)) (c : BosonicConfig db) :
     fAnnJ df db i (jVec df db (S, c))
       = if i ∉ S then 0 else sgn df i S • jVec df db (S.erase i, c) := by
   by_cases h : i ∈ S
@@ -1110,23 +1110,23 @@ theorem fAnnJ_basis (df db : ℕ) (i : Fin df) (S : Finset (Fin df)) (c : Config
   · have h2 : i ∉ S := h
     rw [fAnnJ, jTransport_basis, fAnnC_single, if_pos h2, if_pos h2, map_zero]
 
-theorem bDagJ_basis (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : Config db) :
+theorem bDagJ_basis (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : BosonicConfig db) :
     bDagJ df db k (jVec df db (S, c))
       = sqrtNat (c k + 1) • jVec df db (S, c + Finsupp.single k 1) := by
   rw [bDagJ, jTransport_basis, bDagC_single, one_mul, map_smul, jEquiv_basis]
 
-theorem bAnnJ_basis (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : Config db) :
+theorem bAnnJ_basis (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : BosonicConfig db) :
     bAnnJ df db k (jVec df db (S, c))
       = (if c k = 0 then 0 else sqrtNat (c k))
           • jVec df db (S, c - Finsupp.single k 1) := by
   rw [bAnnJ, jTransport_basis, bAnnC_single, one_mul, map_smul, jEquiv_basis]
 
-theorem densJ_basis (df db : ℕ) (i j : Fin df) (S : Finset (Fin df)) (c : Config db) :
+theorem densJ_basis (df db : ℕ) (i j : Fin df) (S : Finset (Fin df)) (c : BosonicConfig db) :
     densJ df db i j (jVec df db (S, c))
       = densCoef df i j S • jVec df db (densPhi df i j S, c) := by
   rw [densJ, jTransport_basis, densC_single, one_mul, map_smul, jEquiv_basis]
 
-theorem fieldJ_basis (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : Config db) :
+theorem fieldJ_basis (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : BosonicConfig db) :
     fieldJ df db k (jVec df db (S, c))
       = sqrtNat (c k + 1) • jVec df db (S, c + Finsupp.single k 1)
         + (if c k = 0 then 0 else sqrtNat (c k))
@@ -1137,7 +1137,7 @@ theorem fieldJ_basis (df db : ℕ) (k : Fin db) (S : Finset (Fin df)) (c : Confi
 /-- The interaction's joint matrix element, read off by pairing with a
 basis vector: it is the total coefficient of §2. -/
 theorem yukawaIntJ_coord (df db : ℕ) (Y : Fin df → Fin df → Fin db → ℂ)
-    (S : Finset (Fin df)) (c : Config db) (S' : Finset (Fin df)) (c' : Config db) :
+    (S : Finset (Fin df)) (c : BosonicConfig db) (S' : Finset (Fin df)) (c' : BosonicConfig db) :
     ⟪jE df db (S', c'), ((yukawaIntJ df db Y (jVec df db (S, c)) : JDom df db)
       : JointSpace df db)⟫_ℂ
       = yukCoefTot df db Y S' c' S c := by
@@ -1179,7 +1179,7 @@ theorem diagC_apply (df db : ℕ) (r : JointConfig df db → ℂ)
   · rw [if_neg hq, Finsupp.notMem_support_iff.mp hq, mul_zero]
 
 /-- The bosonic free eigenvalue: number-weighted mode energies. -/
-noncomputable def boseEig (db : ℕ) (omB : Fin db → ℝ) (c : Config db) : ℝ :=
+noncomputable def boseEig (db : ℕ) (omB : Fin db → ℝ) (c : BosonicConfig db) : ℝ :=
   ∑ k, omB k * (c k : ℝ)
 
 /-- The joint free eigenvalue on a product configuration: the fermionic
@@ -1198,7 +1198,7 @@ theorem jointEigR_fst (df db : ℕ) (lamF : Fin df → ℝ) (omB : Fin db → �
 /-- On the fermionic vacuum the joint eigenvalue is the bosonic free
 eigenvalue. -/
 theorem jointEigR_snd (df db : ℕ) (lamF : Fin df → ℝ) (omB : Fin db → ℝ)
-    (c : Config db) :
+    (c : BosonicConfig db) :
     jointEigR df db lamF omB (∅, c) = boseEig db omB c := by
   simp [jointEigR, freeEig]
 
@@ -1237,7 +1237,7 @@ theorem hamYuk_zero (df db : ℕ) (lamF : Fin df → ℝ) (omB : Fin db → ℝ)
 on the diagonal plus `g` times the total Yukawa coefficient. -/
 theorem hamYuk_coord (df db : ℕ) (lamF : Fin df → ℝ) (omB : Fin db → ℝ)
     (Y : Fin df → Fin df → Fin db → ℂ) (g : ℝ)
-    (S : Finset (Fin df)) (c : Config db) (S' : Finset (Fin df)) (c' : Config db) :
+    (S : Finset (Fin df)) (c : BosonicConfig db) (S' : Finset (Fin df)) (c' : BosonicConfig db) :
     ⟪jE df db (S', c'), ((hamYuk df db lamF omB Y g (jVec df db (S, c)) : JDom df db)
       : JointSpace df db)⟫_ℂ
       = (if (S', c') = (S, c)
@@ -1526,7 +1526,7 @@ theorem hamFreeJ_mem_jBand (df db : ℕ) (lamF : Fin df → ℝ) (omB : Fin db �
 
 /-- A nonzero field matrix element raises the total boson number by
 at most one. -/
-theorem bTot_le_of_fieldMat_ne (db : ℕ) (k : Fin db) {c' c : Config db}
+theorem bTot_le_of_fieldMat_ne (db : ℕ) (k : Fin db) {c' c : BosonicConfig db}
     (h : fieldMat db k c' c ≠ 0) : bTot db c' ≤ bTot db c + 1 := by
   by_contra hcon
   push_neg at hcon
@@ -1764,7 +1764,7 @@ theorem yukMass_adjY (df db : ℕ) (Y : Fin df → Fin df → Fin db → ℂ) :
 
 /-- A nonzero field matrix element has exactly two possible input
 configurations for a given output: `c' ∓ single k 1`. -/
-theorem fieldMat_ne_cases (db : ℕ) (k : Fin db) {c' c : Config db}
+theorem fieldMat_ne_cases (db : ℕ) (k : Fin db) {c' c : BosonicConfig db}
     (h : fieldMat db k c' c ≠ 0) :
     c = c' - Finsupp.single k 1 ∨ c = c' + Finsupp.single k 1 := by
   by_contra hcon
@@ -1785,7 +1785,7 @@ theorem fieldMat_ne_cases (db : ℕ) (k : Fin db) {c' c : Config db}
 /-- The coupled monomial applied to a general coefficient vector, as a
 finite sum over the support. -/
 theorem yukMonoC_apply (df db : ℕ) (i j : Fin df) (k : Fin db)
-    (f : JointConfig df db →₀ ℂ) (S' : Finset (Fin df)) (c' : Config db) :
+    (f : JointConfig df db →₀ ℂ) (S' : Finset (Fin df)) (c' : BosonicConfig db) :
     (yukMonoC df db i j k f) (S', c')
       = ∑ q ∈ f.support, f q * (densMat df i j S' q.1 * fieldMat db k c' q.2) := by
   conv_lhs => rw [jfinsupp_eq_sum_single df db f f.support
@@ -1873,7 +1873,7 @@ theorem yukMonoC_apply_norm_le (df db : ℕ) (i j : Fin df) (k : Fin db)
 /-- The unsymmetrized Yukawa sum applied to a general coefficient
 vector, expanded over the coupling indices. -/
 theorem yukawaSumC_apply (df db : ℕ) (Z : Fin df → Fin df → Fin db → ℂ)
-    (f : JointConfig df db →₀ ℂ) (S' : Finset (Fin df)) (c' : Config db) :
+    (f : JointConfig df db →₀ ℂ) (S' : Finset (Fin df)) (c' : BosonicConfig db) :
     (yukawaSumC df db Z f) (S', c')
       = ∑ i, ∑ j, ∑ k, Z i j k * (yukMonoC df db i j k f) (S', c') := by
   simp only [yukawaSumC, LinearMap.sum_apply, Finsupp.finset_sum_apply]
@@ -2064,7 +2064,7 @@ at least `Δ` (a nonzero occupation of a gapped mode already
 contributes `≥ Δ`). -/
 theorem boseEig_dichotomy (db : ℕ) (omB : Fin db → ℝ) (Δ : ℝ)
     (hom : ∀ k, 0 ≤ omB k) (hgap : ∀ k, omB k = 0 ∨ Δ ≤ omB k)
-    (c : Config db) :
+    (c : BosonicConfig db) :
     boseEig db omB c = 0 ∨ Δ ≤ boseEig db omB c := by
   by_cases h : ∀ k, omB k * (c k : ℝ) = 0
   · left
@@ -2252,11 +2252,11 @@ theorem densMat_singleton_ne (df : ℕ) {a b i : Fin df}
 one-boson configuration at the same mode is `1`. -/
 theorem fieldMat_single_zero (db : ℕ) (k : Fin db) :
     fieldMat db k (Finsupp.single k 1) 0 = 1 := by
-  have h1 : (Finsupp.single k (1 : ℕ)) = (0 : Config db) + Finsupp.single k 1 := by
+  have h1 : (Finsupp.single k (1 : ℕ)) = (0 : BosonicConfig db) + Finsupp.single k 1 := by
     simp
-  have h2 : (Finsupp.single k (1 : ℕ)) ≠ (0 : Config db) - Finsupp.single k 1 := by
+  have h2 : (Finsupp.single k (1 : ℕ)) ≠ (0 : BosonicConfig db) - Finsupp.single k 1 := by
     intro h
-    have h3 := congrArg (fun f : Config db => f k) (h1.symm.trans h)
+    have h3 := congrArg (fun f : BosonicConfig db => f k) (h1.symm.trans h)
     simp [Finsupp.add_apply, Finsupp.tsub_apply, Finsupp.single_apply] at h3
   rw [fieldMat, if_pos h1, if_neg h2, add_zero]
   simp [sqrtNat]
@@ -2267,7 +2267,7 @@ theorem fieldMat_single_zero_of_ne (db : ℕ) {k κ : Fin db} (h : κ ≠ k) :
     fieldMat db κ (Finsupp.single k 1) 0 = 0 := by
   apply fieldMat_eq_zero_of db κ
   · intro he
-    have h3 := congrArg (fun f : Config db => f κ) he
+    have h3 := congrArg (fun f : BosonicConfig db => f κ) he
     simp [Finsupp.add_apply, Finsupp.single_apply, h, Ne.symm h] at h3
   · right
     simp
@@ -2329,12 +2329,12 @@ theorem yukawaIntJ_not_diagonal (df db : ℕ) (Y : Fin df → Fin df → Fin db 
   have hR : ⟪jE df db ({i}, Finsupp.single k 1),
       ((jTransport df db (diagC df db r) (jVec df db ({i}, 0)) : JDom df db)
         : JointSpace df db)⟫_ℂ = 0 := by
-    have hne : (({i}, (0 : Config db)) : JointConfig df db)
+    have hne : (({i}, (0 : BosonicConfig db)) : JointConfig df db)
         ≠ ({i}, Finsupp.single k 1) := by
       intro hpair
-      have h2 : (0 : Config db) = Finsupp.single k 1 := congrArg Prod.snd hpair
-      have h3 : ((0 : Config db) k) = (Finsupp.single k (1 : ℕ)) k :=
-        congrArg (fun f : Config db => f k) h2
+      have h2 : (0 : BosonicConfig db) = Finsupp.single k 1 := congrArg Prod.snd hpair
+      have h3 : ((0 : BosonicConfig db) k) = (Finsupp.single k (1 : ℕ)) k :=
+        congrArg (fun f : BosonicConfig db => f k) h2
       simp at h3
     rw [jTransport_basis, jcoord, jRepr_jEquiv, diagC_apply, Finsupp.single_apply,
       if_neg hne, mul_zero]

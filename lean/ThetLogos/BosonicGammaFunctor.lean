@@ -54,11 +54,11 @@ fiber cardinalities of the enumeration: mode `i` occupies exactly
 `c i` positions. -/
 
 /-- The sorted list of occupied positions underlying `configEnum`. -/
-noncomputable def enumList (d : ℕ) (c : Config d) : List (Fin d) :=
+noncomputable def enumList (d : ℕ) (c : BosonicConfig d) : List (Fin d) :=
   (Finsupp.toMultiset c).sort (· ≤ ·)
 
 /-- The enumeration list has length `tot c` (T1). -/
-theorem enumList_length (d : ℕ) (c : Config d) :
+theorem enumList_length (d : ℕ) (c : BosonicConfig d) :
     (enumList d c).length = tot c := by
   have hcard : Multiset.card (Finsupp.toMultiset c) = c.sum (fun _ => id) :=
     Finsupp.card_toMultiset c
@@ -68,7 +68,7 @@ theorem enumList_length (d : ℕ) (c : Config d) :
   exact hcard.trans hsum
 
 /-- `configEnum` is the `get` of `enumList` (T1, definitional). -/
-theorem configEnum_apply (d : ℕ) (c : Config d) (k : Fin (tot c)) :
+theorem configEnum_apply (d : ℕ) (c : BosonicConfig d) (k : Fin (tot c)) :
     configEnum d c k
       = (enumList d c).get ⟨k.val, by rw [enumList_length]; exact k.isLt⟩ :=
   rfl
@@ -101,7 +101,7 @@ theorem positions_count (d : ℕ) (l : List (Fin d)) (i : Fin d) :
 
 /-- **Fiber cardinality of the enumeration (T1):** mode `i` occupies
 exactly `c i` positions among the `tot c` positions of `configEnum`. -/
-theorem configEnum_fiber_card (d : ℕ) (c : Config d) (i : Fin d) :
+theorem configEnum_fiber_card (d : ℕ) (c : BosonicConfig d) (i : Fin d) :
     (Finset.univ.filter (fun k : Fin (tot c) => configEnum d c k = i)).card
       = c i := by
   have hstep : (Finset.univ.filter (fun k : Fin (tot c) => configEnum d c k = i)).card
@@ -122,7 +122,7 @@ theorem configEnum_fiber_card (d : ℕ) (c : Config d) (i : Fin d) :
 /-- **Product over the enumeration (T1):**
 `∏ b, g (configEnum c b) = ∏ i, g i ^ (c i)` — grouping the positions
 by their mode fibers. -/
-theorem prod_configEnum (d : ℕ) (c : Config d) (g : Fin d → ℂ) :
+theorem prod_configEnum (d : ℕ) (c : BosonicConfig d) (g : Fin d → ℂ) :
     ∏ b : Fin (tot c), g (configEnum d c b) = ∏ i, g i ^ (c i) := by
   rw [← Finset.prod_fiberwise_of_maps_to
     (s := (Finset.univ : Finset (Fin (tot c)))) (t := (Finset.univ : Finset (Fin d)))
@@ -411,7 +411,7 @@ theorem fiberCount_comp_equiv {n m : ℕ} (e : Fin m ≃ Fin n)
 
 /-- Fiber cardinality of the enumeration transported along
 `finCongr` (T1): still `c' i`. -/
-theorem fiberCount_configEnum_finCongr (d : ℕ) {c' : Config d} {m : ℕ}
+theorem fiberCount_configEnum_finCongr (d : ℕ) {c' : BosonicConfig d} {m : ℕ}
     (h : m = tot c') (i : Fin d) :
     fiberCount (fun a : Fin m => configEnum d c' (finCongr h a)) i = c' i := by
   rw [show (fun a : Fin m => configEnum d c' (finCongr h a))
@@ -422,7 +422,7 @@ theorem fiberCount_configEnum_finCongr (d : ℕ) {c' : Config d} {m : ℕ}
 /-- **Fiber-permanent counting lemma (T1) — campaign Task 1:** the
 permanent of the fiber-indicator matrix of a configuration
 enumeration is `∏ i, (c i)!`. -/
-theorem permanent_fiberIndicator_configEnum (d : ℕ) (c : Config d) :
+theorem permanent_fiberIndicator_configEnum (d : ℕ) (c : BosonicConfig d) :
     Matrix.permanent (fun a b : Fin (tot c) =>
       if configEnum d c a = configEnum d c b then (1 : ℂ) else 0)
       = ∏ i, ((Nat.factorial (c i) : ℕ) : ℂ) := by
@@ -439,7 +439,7 @@ theorem permanent_fiberIndicator_configEnum (d : ℕ) (c : Config d) :
 /-- **`perMinor` of the identity (T1):** the permanent minor of `1`
 between two configurations is the factorial weight when they agree
 and zero otherwise. -/
-theorem perMinor_one (d : ℕ) (c' c : Config d) :
+theorem perMinor_one (d : ℕ) (c' c : BosonicConfig d) :
     perMinor d (1 : Matrix (Fin d) (Fin d) ℂ) c' c
       = if c' = c then ∏ i, ((Nat.factorial (c i) : ℕ) : ℂ) else 0 := by
   rcases eq_or_ne c' c with rfl | hne
@@ -486,7 +486,7 @@ theorem perMinor_one (d : ℕ) (c' c : Config d) :
 /-- **`perMinor` of a diagonal (T1):** the permanent minor of
 `diagonal lam` is the factorial weight times the occupation monomial
 on the diagonal, zero off it. -/
-theorem perMinor_diagonal (d : ℕ) (lam : Fin d → ℂ) (c' c : Config d) :
+theorem perMinor_diagonal (d : ℕ) (lam : Fin d → ℂ) (c' c : BosonicConfig d) :
     perMinor d (Matrix.diagonal lam) c' c
       = if c' = c then (∏ i, ((Nat.factorial (c i) : ℕ) : ℂ))
           * ∏ i, lam i ^ (c i) else 0 := by
@@ -593,7 +593,7 @@ theorem permanent_submatrix_equiv {n m : ℕ} (e : Fin n ≃ Fin m)
 /-- The occupation configuration of an index function (T1): the
 configuration whose occupation at mode `i` is the fiber cardinality
 of `f` at `i`. -/
-noncomputable def configOf {n : ℕ} (f : Fin n → Fin d) : Config d :=
+noncomputable def configOf {n : ℕ} (f : Fin n → Fin d) : BosonicConfig d :=
   Finsupp.equivFunOnFinite.symm (fun i => fiberCount f i)
 
 /-- `configOf f` has occupation `fiberCount f i` at `i` (T1). -/
@@ -614,7 +614,7 @@ Task 4:** composition of permanent minors over an intermediate
 configuration, with the exact `1 / ∏ i, (c' i)!` multiplicity weights
 that the `gammaBos` normalization requires. -/
 theorem perMinor_mul (d : ℕ) (M N : Matrix (Fin d) (Fin d) ℂ)
-    (c'' c : Config d) :
+    (c'' c : BosonicConfig d) :
     perMinor d (M * N) c'' c
       = ∑ c' ∈ configsOfTot d (tot c), perMinor d M c'' c' * perMinor d N c' c
           / ∏ i, ((Nat.factorial (c' i) : ℕ) : ℂ) := by
@@ -784,7 +784,7 @@ intermediate normalization. Transported through `gammaC` and
 diagonal action. -/
 
 /-- The normalization factor is positive (T1). -/
-theorem normFactor_pos (d : ℕ) (c : Config d) : 0 < normFactor d c := by
+theorem normFactor_pos (d : ℕ) (c : BosonicConfig d) : 0 < normFactor d c := by
   unfold normFactor
   apply Real.sqrt_pos_of_pos
   apply Finset.prod_pos
@@ -793,7 +793,7 @@ theorem normFactor_pos (d : ℕ) (c : Config d) : 0 < normFactor d c := by
 
 /-- The squared normalization is the factorial weight (T1):
 `(√(∏ i, (c i)!))² = ∏ i, (c i)!` in `ℂ`. -/
-theorem normFactor_sq (d : ℕ) (c : Config d) :
+theorem normFactor_sq (d : ℕ) (c : BosonicConfig d) :
     ((normFactor d c : ℂ)) ^ 2 = ∏ i, ((Nat.factorial (c i) : ℕ) : ℂ) := by
   have hP : (0 : ℝ) ≤ ∏ i, (Nat.factorial (c i) : ℝ) :=
     Finset.prod_nonneg (fun i _ => Nat.cast_nonneg _)
@@ -806,11 +806,11 @@ theorem normFactor_sq (d : ℕ) (c : Config d) :
 convolution of the kernels over the intermediate sector — the
 `perMinor_mul` weights cancel exactly against the normalizations. -/
 theorem gammaKernel_mul (d : ℕ) (M N : Matrix (Fin d) (Fin d) ℂ)
-    (c'' c : Config d) :
+    (c'' c : BosonicConfig d) :
     gammaKernel d (M * N) c'' c
       = ∑ c' ∈ configsOfTot d (tot c), gammaKernel d M c'' c'
           * gammaKernel d N c' c := by
-  have key : ∀ c' : Config d,
+  have key : ∀ c' : BosonicConfig d,
         ((normFactor d c' * normFactor d c'' : ℝ) : ℂ)
           * ((normFactor d c * normFactor d c' : ℝ) : ℂ)
         = (∏ i, ((Nat.factorial (c' i) : ℕ) : ℂ))
@@ -841,7 +841,7 @@ theorem gammaKernel_mul (d : ℕ) (M N : Matrix (Fin d) (Fin d) ℂ)
 
 /-- Coefficients of the kernel finsupp (T1). -/
 theorem gammaKernelFinsupp_apply (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ)
-    (c c' : Config d) :
+    (c c' : BosonicConfig d) :
     (gammaKernelFinsupp d M c) c' = gammaKernel d M c' c := by
   unfold gammaKernelFinsupp
   rw [Finsupp.finset_sum_apply]
@@ -867,7 +867,7 @@ theorem gammaKernelFinsupp_apply (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ)
 
 /-- `gammaC` on a basis vector (T1). -/
 theorem gammaC_single_one (d : ℕ) (P : Matrix (Fin d) (Fin d) ℂ)
-    (c : Config d) :
+    (c : BosonicConfig d) :
     gammaC d P (Finsupp.single c (1 : ℂ)) = gammaKernelFinsupp d P c := by
   unfold gammaC
   rw [Finsupp.linearCombination_apply,
@@ -954,7 +954,7 @@ theorem gammaBos_one (d : ℕ) : gammaBos d 1 = LinearMap.id := by
 
 /-- **Diagonal action (T1) — campaign Task 3:**
 `Γ(diag λ) e_c = (∏ i, λ i ^ (c i)) • e_c`. -/
-theorem gammaBos_diagonal_basis (d : ℕ) (lam : Fin d → ℂ) (c : Config d) :
+theorem gammaBos_diagonal_basis (d : ℕ) (lam : Fin d → ℂ) (c : BosonicConfig d) :
     gammaBos d (Matrix.diagonal lam)
         ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (∏ i, lam i ^ (c i))
@@ -999,7 +999,7 @@ theorem permanent_star {n : ℕ} (P : Matrix (Fin n) (Fin n) ℂ) :
 `perMinor Mᴴ c' c = conj (perMinor M c c')` — the permanent analogue
 of the fermionic `minorDet_conjTranspose`. -/
 theorem perMinor_conjTranspose (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ)
-    (c' c : Config d) :
+    (c' c : BosonicConfig d) :
     perMinor d Mᴴ c' c = star (perMinor d M c c') := by
   by_cases htot : tot c' = tot c
   · have e1 : perMinor d Mᴴ c' c = Matrix.permanent
@@ -1033,7 +1033,7 @@ theorem perMinor_conjTranspose (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ)
 
 /-- **Conjugate-transpose of the kernel (T1).** -/
 theorem gammaKernel_conjTranspose (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ)
-    (c' c : Config d) :
+    (c' c : BosonicConfig d) :
     gammaKernel d Mᴴ c' c = star (gammaKernel d M c c') := by
   unfold gammaKernel
   rw [perMinor_conjTranspose, star_div₀]
@@ -1045,7 +1045,7 @@ theorem gammaKernel_conjTranspose (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ)
 /-- **Adjoint identity on basis pairs (T1):** the `Dom d` inner
 product of `Γ(M) e_c` against `e_{c'}` is the conjugate kernel. -/
 theorem gammaBos_adjoint_basis (d : ℕ) (M : Matrix (Fin d) (Fin d) ℂ)
-    (c c' : Config d) :
+    (c c' : BosonicConfig d) :
     ⟪(((gammaBos d M ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
         : Dom d) : BosonicFock d),
       ((⟨boseE d c', Submodule.subset_span (Set.mem_range_self c')⟩

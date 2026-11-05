@@ -105,7 +105,7 @@ example (d : ℕ) :
 the fermionic number operator acts on the occupation basis by the
 eigenvalue `S.card`, and the bosonic number operator acts on the
 occupation basis by the total occupation count `∑ i, c i`. -/
-example (d : ℕ) (S : Finset (Fin d)) (c : ThetLogos.Config d) :
+example (d : ℕ) (S : Finset (Fin d)) (c : ThetLogos.BosonicConfig d) :
     ThetLogos.numberOp d (ThetLogos.fockBasis d S)
       = (S.card : ℂ) • ThetLogos.fockBasis d S ∧
     ThetLogos.numberOpBos d

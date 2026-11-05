@@ -76,7 +76,7 @@ variable (d : ℕ)
 -- ============================================================================
 
 /-- Removing one particle at an occupied mode lowers the total count by one. -/
-theorem tot_sub_single (c : Config d) (i : Fin d) (h : c i ≠ 0) :
+theorem tot_sub_single (c : BosonicConfig d) (i : Fin d) (h : c i ≠ 0) :
     tot (c - Finsupp.single i (1 : ℕ)) = tot c - 1 := by
   have h1 : tot c = tot (c - Finsupp.single i (1 : ℕ)) + 1 := by
     conv_lhs => rw [← config_sub_single_add_single d c i h]
@@ -84,7 +84,7 @@ theorem tot_sub_single (c : Config d) (i : Fin d) (h : c i ≠ 0) :
   omega
 
 /-- Removing one particle at an empty mode changes nothing. -/
-theorem config_sub_single_eq_self (c : Config d) (i : Fin d) (h : c i = 0) :
+theorem config_sub_single_eq_self (c : BosonicConfig d) (i : Fin d) (h : c i = 0) :
     c - Finsupp.single i (1 : ℕ) = c := by
   ext j
   rw [Finsupp.tsub_apply, Finsupp.single_apply]
@@ -95,7 +95,7 @@ theorem config_sub_single_eq_self (c : Config d) (i : Fin d) (h : c i = 0) :
   · rw [if_neg hj, Nat.sub_zero]
 
 /-- Removing one particle never raises the total count. -/
-theorem tot_sub_single_le (c : Config d) (i : Fin d) :
+theorem tot_sub_single_le (c : BosonicConfig d) (i : Fin d) :
     tot (c - Finsupp.single i (1 : ℕ)) ≤ tot c := by
   by_cases h : c i = 0
   · rw [config_sub_single_eq_self d c i h]
@@ -103,14 +103,14 @@ theorem tot_sub_single_le (c : Config d) (i : Fin d) :
     exact Nat.sub_le _ _
 
 /-- A mode's occupation is at most the total count. -/
-theorem config_le_tot (c : Config d) (i : Fin d) : c i ≤ tot c :=
+theorem config_le_tot (c : BosonicConfig d) (i : Fin d) : c i ≤ tot c :=
   Finset.single_le_sum (fun j _ => Nat.zero_le (c j)) (Finset.mem_univ i)
 
 /-- The set of configurations of a fixed total count is finite: such a
 configuration is determined by its values, each `< n + 1`. -/
-theorem finite_setOf_tot_eq (n : ℕ) : Set.Finite {c : Config d | tot c = n} := by
+theorem finite_setOf_tot_eq (n : ℕ) : Set.Finite {c : BosonicConfig d | tot c = n} := by
   have hinj : Function.Injective
-      (fun c : {c : Config d // tot c = n} =>
+      (fun c : {c : BosonicConfig d // tot c = n} =>
         (fun i => ⟨c.1 i, Nat.lt_succ_iff.mpr
           ((config_le_tot d c.1 i).trans (le_of_eq c.2))⟩ : Fin d → Fin (n + 1))) := by
     intro c₁ c₂ h
@@ -118,21 +118,21 @@ theorem finite_setOf_tot_eq (n : ℕ) : Set.Finite {c : Config d | tot c = n} :=
     ext i
     have h2 := congrFun h i
     simpa using h2
-  haveI : Finite {c : Config d // tot c = n} := Finite.of_injective _ hinj
+  haveI : Finite {c : BosonicConfig d // tot c = n} := Finite.of_injective _ hinj
   exact Set.finite_coe_iff.mpr this
 
 /-- The configurations of total count `n`, as a finset. -/
-noncomputable def sectorFinset (n : ℕ) : Finset (Config d) :=
+noncomputable def sectorFinset (n : ℕ) : Finset (BosonicConfig d) :=
   (finite_setOf_tot_eq d n).toFinset
 
-theorem mem_sectorFinset {n : ℕ} {c : Config d} :
+theorem mem_sectorFinset {n : ℕ} {c : BosonicConfig d} :
     c ∈ sectorFinset d n ↔ tot c = n :=
   Set.Finite.mem_toFinset _
 
 /-- Coordinates of a vector in the `n`-particle sector vanish at every
 configuration of a different total count. -/
 theorem boseRepr_apply_eq_zero_of_tot_ne {n : ℕ} {x : Dom d}
-    (hx : x ∈ domSector d n) {c : Config d} (hc : tot c ≠ n) :
+    (hx : x ∈ domSector d n) {c : BosonicConfig d} (hc : tot c ≠ n) :
     (boseRepr d x) c = 0 := by
   induction hx using Submodule.span_induction with
   | mem z hz =>
@@ -148,10 +148,10 @@ theorem boseRepr_apply_eq_zero_of_tot_ne {n : ℕ} {x : Dom d}
   | smul a u _ hu => rw [map_smul, Finsupp.smul_apply, hu, smul_eq_mul, mul_zero]
 
 /-- Coordinate formula for an operator diagonal in the configuration basis. -/
-theorem diagOpBos_coord {T : Module.End ℂ (Dom d)} {r : Config d → ℝ}
+theorem diagOpBos_coord {T : Module.End ℂ (Dom d)} {r : BosonicConfig d → ℝ}
     (hT : ∀ c, T ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (r c : ℂ) • ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
-    (x : Dom d) (c : Config d) :
+    (x : Dom d) (c : BosonicConfig d) :
     (boseRepr d (T x)) c = (r c : ℂ) * (boseRepr d x) c := by
   have e1 : boseEquiv d (boseRepr d x)
       = ∑ γ ∈ (boseRepr d x).support, ((boseRepr d x) γ) •
@@ -185,7 +185,7 @@ theorem diagOpBos_coord {T : Module.End ℂ (Dom d)} {r : Config d → ℝ}
     · rw [if_neg hγc, mul_zero]
 
 /-- A basis-diagonal operator with real eigenvalues is symmetric on `Dom d`. -/
-theorem diagOpBos_isSymmetric {T : Module.End ℂ (Dom d)} {r : Config d → ℝ}
+theorem diagOpBos_isSymmetric {T : Module.End ℂ (Dom d)} {r : BosonicConfig d → ℝ}
     (hT : ∀ c, T ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (r c : ℂ) • ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
     (x y : Dom d) :
@@ -219,7 +219,7 @@ theorem diagOpBos_isSymmetric {T : Module.End ℂ (Dom d)} {r : Config d → ℝ
 
 /-- Eigenvalue extraction for a diagonal operator on `Dom d`
 (Rungs 9–10 dialect, bosonic form). -/
-theorem diagOpBos_eigenvalue {T : Module.End ℂ (Dom d)} {r : Config d → ℝ}
+theorem diagOpBos_eigenvalue {T : Module.End ℂ (Dom d)} {r : BosonicConfig d → ℝ}
     (hT : ∀ c, T ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (r c : ℂ) • ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩)
     {ψ : Dom d} (hψ : ψ ≠ 0) {μ : ℂ} (hμ : T ψ = μ • ψ) :
@@ -247,7 +247,7 @@ theorem diagOpBos_eigenvalue {T : Module.End ℂ (Dom d)} {r : Config d → ℝ}
 
 /-- The configuration reached from `γ` by one quartic monomial
 `a†ᵢ a†ⱼ aₖ aₗ` (annihilations act first: `l`, then `k`). -/
-noncomputable def monoPhi (i j k l : Fin d) (γ : Config d) : Config d :=
+noncomputable def monoPhi (i j k l : Fin d) (γ : BosonicConfig d) : BosonicConfig d :=
   ((γ - Finsupp.single l (1 : ℕ)) - Finsupp.single k (1 : ℕ)) + Finsupp.single j (1 : ℕ)
     + Finsupp.single i (1 : ℕ)
 
@@ -255,7 +255,7 @@ noncomputable def monoPhi (i j k l : Fin d) (γ : Config d) : Config d :=
 configuration basis: `√(γ l)` for the first annihilation (zero if the mode
 is empty, killing the term), `√((γ - eₗ) k)` for the second, and
 `√(· j + 1)`, `√(· i + 1)` for the creations. -/
-noncomputable def monoCoef (i j k l : Fin d) (γ : Config d) : ℂ :=
+noncomputable def monoCoef (i j k l : Fin d) (γ : BosonicConfig d) : ℂ :=
   ((if γ l = 0 then 0 else sqrtNat (γ l))
     * (if (γ - Finsupp.single l (1 : ℕ)) k = 0 then 0
         else sqrtNat ((γ - Finsupp.single l (1 : ℕ)) k))
@@ -266,11 +266,11 @@ noncomputable def monoCoef (i j k l : Fin d) (γ : Config d) : ℂ :=
 
 /-- One quartic monomial at the coefficient level. -/
 noncomputable def monoC (i j k l : Fin d) :
-    (Config d →₀ ℂ) →ₗ[ℂ] (Config d →₀ ℂ) :=
+    (BosonicConfig d →₀ ℂ) →ₗ[ℂ] (BosonicConfig d →₀ ℂ) :=
   (adagC d i) ∘ₗ ((adagC d j) ∘ₗ ((annC d k) ∘ₗ (annC d l)))
 
 /-- **Monomial action on the configuration basis (B1 core).** -/
-theorem monoC_single (i j k l : Fin d) (γ : Config d) (a : ℂ) :
+theorem monoC_single (i j k l : Fin d) (γ : BosonicConfig d) (a : ℂ) :
     monoC d i j k l (Finsupp.single γ a)
       = (a * monoCoef d i j k l γ) • Finsupp.single (monoPhi d i j k l γ) 1 := by
   by_cases h1 : γ l = 0
@@ -325,7 +325,7 @@ theorem monoC_single (i j k l : Fin d) (γ : Config d) (a : ℂ) :
 
 /-- A monomial with nonzero coefficient preserves the total count: it
 annihilates two particles and creates two. -/
-theorem monoCoef_ne_zero_tot {i j k l : Fin d} {γ : Config d}
+theorem monoCoef_ne_zero_tot {i j k l : Fin d} {γ : BosonicConfig d}
     (h : monoCoef d i j k l γ ≠ 0) : tot (monoPhi d i j k l γ) = tot γ := by
   have hl : γ l ≠ 0 := by
     by_contra hzero
@@ -359,7 +359,7 @@ theorem monoCoef_ne_zero_tot {i j k l : Fin d} {γ : Config d}
 /-- The configuration map of a monomial is invertible on the support of its
 coefficient: from `monoPhi γ` one recovers `γ` by removing the created
 particles and restoring the annihilated ones. -/
-theorem monoPhi_sub_add {i j k l : Fin d} {γ : Config d}
+theorem monoPhi_sub_add {i j k l : Fin d} {γ : BosonicConfig d}
     (h : monoCoef d i j k l γ ≠ 0) :
     ((monoPhi d i j k l γ - Finsupp.single i (1 : ℕ)) - Finsupp.single j (1 : ℕ))
       + Finsupp.single k (1 : ℕ) + Finsupp.single l (1 : ℕ) = γ := by
@@ -393,7 +393,7 @@ theorem monoPhi_sub_add {i j k l : Fin d} {γ : Config d}
 
 /-- Injectivity of the monomial configuration map on the coefficient
 support — the combinatorial heart of the column bound. -/
-theorem monoPhi_inj_on_support {i j k l : Fin d} {γ γ' : Config d}
+theorem monoPhi_inj_on_support {i j k l : Fin d} {γ γ' : BosonicConfig d}
     (hγ : monoCoef d i j k l γ ≠ 0) (hγ' : monoCoef d i j k l γ' ≠ 0)
     (h : monoPhi d i j k l γ = monoPhi d i j k l γ') : γ = γ' := by
   have eγ := monoPhi_sub_add d hγ
@@ -411,7 +411,7 @@ annihilation factors contribute `√n` each, two creation factors `√(n+2)`
 each. This is the bosonic substitute for Campaign 1's norm bound `‖a‖ ≤ 1`
 — the bosonic `a`, `a†` are unbounded, and every bound in this campaign is
 relative to the sector. -/
-theorem monoCoef_norm_le {i j k l : Fin d} {γ : Config d} {n : ℕ}
+theorem monoCoef_norm_le {i j k l : Fin d} {γ : BosonicConfig d} {n : ℕ}
     (hγ : tot γ = n) : ‖monoCoef d i j k l γ‖ ≤ ((n : ℝ) + 2) ^ 2 := by
   have hsqrt : ∀ m : ℕ, (m : ℝ) ≤ (n : ℝ) + 2 →
       ‖sqrtNat m‖ ≤ Real.sqrt ((n : ℝ) + 2) := by
@@ -565,7 +565,7 @@ noncomputable def intBoundBos (W : Fin d → Fin d → Fin d → Fin d → ℂ) 
 
 /-- The general bosonic quartic at the coefficient level. -/
 noncomputable def quarticC (W : Fin d → Fin d → Fin d → Fin d → ℂ) :
-    (Config d →₀ ℂ) →ₗ[ℂ] (Config d →₀ ℂ) :=
+    (BosonicConfig d →₀ ℂ) →ₗ[ℂ] (BosonicConfig d →₀ ℂ) :=
   ∑ i, ∑ j, ∑ k, ∑ l, (W i j k l) • monoC d i j k l
 
 /-- The general bosonic quartic on the domain: a finite sum of quartic
@@ -604,7 +604,7 @@ theorem wickQuarticBos_mem_domSector (W : Fin d → Fin d → Fin d → Fin d �
 the quartic out of the `n`-particle sector is at most the coupling mass
 times `(n + 2)²`. -/
 theorem quarticC_coeff_bound (W : Fin d → Fin d → Fin d → Fin d → ℂ)
-    {n : ℕ} {γ : Config d} (hγ : tot γ = n) (c : Config d) :
+    {n : ℕ} {γ : BosonicConfig d} (hγ : tot γ = n) (c : BosonicConfig d) :
     ‖(quarticC d W (Finsupp.single γ 1)) c‖
       ≤ couplingMassBos d W * ((n : ℝ) + 2) ^ 2 := by
   have hterm : ∀ i j k l : Fin d,
@@ -655,10 +655,10 @@ coupling mass times `(n + 2)²`: for fixed output `c`, at most one input
 configuration in the sector contributes to each monomial (injectivity of
 `monoPhi` on the coefficient support). -/
 theorem quarticC_col_sum_le (W : Fin d → Fin d → Fin d → Fin d → ℂ)
-    (n : ℕ) (c : Config d) :
+    (n : ℕ) (c : BosonicConfig d) :
     ∑ γ ∈ sectorFinset d n, ‖(quarticC d W (Finsupp.single γ 1)) c‖
       ≤ couplingMassBos d W * ((n : ℝ) + 2) ^ 2 := by
-  have hexpand : ∀ γ : Config d, (quarticC d W (Finsupp.single γ 1)) c
+  have hexpand : ∀ γ : BosonicConfig d, (quarticC d W (Finsupp.single γ 1)) c
       = ∑ i, ∑ j, ∑ k, ∑ l,
         (W i j k l) * ((monoC d i j k l (Finsupp.single γ 1)) c) := by
     intro γ
@@ -671,7 +671,7 @@ theorem quarticC_col_sum_le (W : Fin d → Fin d → Fin d → Fin d → ℂ)
     rw [LinearMap.sum_apply, Finsupp.finsetSum_apply]
     refine Finset.sum_congr rfl (fun l _ => ?_)
     rw [LinearMap.smul_apply, Finsupp.smul_apply, smul_eq_mul]
-  have hval : ∀ (i j k l : Fin d) (γ : Config d),
+  have hval : ∀ (i j k l : Fin d) (γ : BosonicConfig d),
       ‖(W i j k l) * ((monoC d i j k l (Finsupp.single γ 1)) c)‖
         = ‖W i j k l‖ *
           (if monoPhi d i j k l γ = c then ‖monoCoef d i j k l γ‖ else 0) := by
@@ -714,7 +714,7 @@ theorem quarticC_col_sum_le (W : Fin d → Fin d → Fin d → Fin d → ℂ)
           · exact absurd ⟨γ, hγS, h1, h2⟩ hex
         · rw [if_neg h1]
       · exact sq_nonneg _
-  have hswap : ∀ (F : Fin d → Fin d → Fin d → Fin d → Config d → ℝ),
+  have hswap : ∀ (F : Fin d → Fin d → Fin d → Fin d → BosonicConfig d → ℝ),
       (∑ γ ∈ sectorFinset d n, ∑ i, ∑ j, ∑ k, ∑ l, F i j k l γ)
         = ∑ i, ∑ j, ∑ k, ∑ l, ∑ γ ∈ sectorFinset d n, F i j k l γ := by
     intro F
@@ -810,7 +810,7 @@ theorem couplingMassBos_adjCouplBos (W : Fin d → Fin d → Fin d → Fin d →
 
 /-- The symmetrized interaction at the coefficient level. -/
 noncomputable def intOpC (W : Fin d → Fin d → Fin d → Fin d → ℂ) :
-    (Config d →₀ ℂ) →ₗ[ℂ] (Config d →₀ ℂ) :=
+    (BosonicConfig d →₀ ℂ) →ₗ[ℂ] (BosonicConfig d →₀ ℂ) :=
   quarticC d W + quarticC d (adjCouplBos d W)
 
 /-- The symmetrized bosonic interaction on the domain (B1 headline):
@@ -827,7 +827,7 @@ theorem repr_intOpBos (W : Fin d → Fin d → Fin d → Fin d → ℂ) (x : Dom
 
 /-- Coefficient bound for the symmetrized interaction. -/
 theorem intOpC_coeff_bound (W : Fin d → Fin d → Fin d → Fin d → ℂ)
-    {n : ℕ} {γ : Config d} (hγ : tot γ = n) (c : Config d) :
+    {n : ℕ} {γ : BosonicConfig d} (hγ : tot γ = n) (c : BosonicConfig d) :
     ‖(intOpC d W (Finsupp.single γ 1)) c‖
       ≤ intBoundBos d W * ((n : ℝ) + 2) ^ 2 := by
   have e : (intOpC d W (Finsupp.single γ 1)) c
@@ -844,10 +844,10 @@ theorem intOpC_coeff_bound (W : Fin d → Fin d → Fin d → Fin d → ℂ)
 
 /-- Column bound for the symmetrized interaction. -/
 theorem intOpC_col_sum_le (W : Fin d → Fin d → Fin d → Fin d → ℂ)
-    (n : ℕ) (c : Config d) :
+    (n : ℕ) (c : BosonicConfig d) :
     ∑ γ ∈ sectorFinset d n, ‖(intOpC d W (Finsupp.single γ 1)) c‖
       ≤ intBoundBos d W * ((n : ℝ) + 2) ^ 2 := by
-  have e : ∀ γ : Config d, (intOpC d W (Finsupp.single γ 1)) c
+  have e : ∀ γ : BosonicConfig d, (intOpC d W (Finsupp.single γ 1)) c
       = (quarticC d W (Finsupp.single γ 1)) c
         + (quarticC d (adjCouplBos d W) (Finsupp.single γ 1)) c := by
     intro γ
@@ -1008,9 +1008,9 @@ theorem hamIntBos_mem_domSector (lam : Fin d → ℝ)
 finitely many configurations of that total count. -/
 theorem domSector_finiteDimensional (n : ℕ) :
     FiniteDimensional ℂ (domSector d n) := by
-  have hset : {x : Dom d | ∃ c : Config d, tot c = n ∧
+  have hset : {x : Dom d | ∃ c : BosonicConfig d, tot c = n ∧
         x = ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩}
-      = (fun c : {c : Config d // tot c = n} =>
+      = (fun c : {c : BosonicConfig d // tot c = n} =>
           (⟨boseE d c.1, Submodule.subset_span
             (Set.mem_range_self c.1)⟩ : Dom d)) '' Set.univ := by
     ext x
@@ -1021,12 +1021,12 @@ theorem domSector_finiteDimensional (n : ℕ) :
     · rintro ⟨⟨c, hc⟩, rfl⟩
       exact ⟨c, hc, rfl⟩
   have hfin : Set.Finite
-      (Set.range fun c : {c : Config d // tot c = n} =>
+      (Set.range fun c : {c : BosonicConfig d // tot c = n} =>
         (⟨boseE d c.1, Submodule.subset_span
           (Set.mem_range_self c.1)⟩ : Dom d)) := by
-    haveI : Finite {c : Config d // tot c = n} :=
+    haveI : Finite {c : BosonicConfig d // tot c = n} :=
       Finite.of_injective
-        (fun c : {c : Config d // tot c = n} =>
+        (fun c : {c : BosonicConfig d // tot c = n} =>
           (fun i => ⟨c.1 i, Nat.lt_succ_iff.mpr
             ((config_le_tot d c.1 i).trans (le_of_eq c.2))⟩ :
             Fin d → Fin (n + 1)))
@@ -1038,7 +1038,7 @@ theorem domSector_finiteDimensional (n : ℕ) :
           simpa using h2)
     exact Set.finite_range _
   show FiniteDimensional ℂ (Submodule.span ℂ
-    {x : Dom d | ∃ c : Config d, tot c = n ∧
+    {x : Dom d | ∃ c : BosonicConfig d, tot c = n ∧
       x = ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩})
   rw [hset]
   exact FiniteDimensional.span_of_finite ℂ (by rwa [Set.image_univ])
@@ -1085,7 +1085,7 @@ theorem hamIntBosSector_spectral (lam : Fin d → ℝ)
 /-- The finite-particle domain is dense in the bosonic Fock space. -/
 theorem dom_topologicalClosure :
     (Dom d).topologicalClosure = ⊤ := by
-  have h := lp_single_span_topologicalClosure (Config d)
+  have h := lp_single_span_topologicalClosure (BosonicConfig d)
   exact h
 
 /-- The finite-particle domain is dense (set form). -/
@@ -1124,7 +1124,7 @@ theorem hamPMap_le_adjoint (lam : Fin d → ℝ)
 noncomputable def numModeBos (i : Fin d) : Module.End ℂ (Dom d) :=
   (adagBos d i) ∘ₗ (annBos d i)
 
-theorem numModeBos_basis (i : Fin d) (c : Config d) :
+theorem numModeBos_basis (i : Fin d) (c : BosonicConfig d) :
     numModeBos d i ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (c i : ℂ) • ⟨boseE d c, Submodule.subset_span
           (Set.mem_range_self c)⟩ :=
@@ -1132,7 +1132,7 @@ theorem numModeBos_basis (i : Fin d) (c : Config d) :
 
 /-- The eigenvalue function of the density exhibit: the pairwise density
 coupling evaluated on a configuration. -/
-noncomputable def densEigBos (U : Fin d → Fin d → ℝ) (c : Config d) : ℝ :=
+noncomputable def densEigBos (U : Fin d → Fin d → ℝ) (c : BosonicConfig d) : ℝ :=
   ∑ i, ∑ j, if i < j then U i j * (c i : ℝ) * (c j : ℝ) else 0
 
 /-- **The density-type interaction (B3 exhibit).** A quartic interaction
@@ -1145,7 +1145,7 @@ noncomputable def densityIntBos (U : Fin d → Fin d → ℝ) :
 
 /-- The density interaction is diagonal in the configuration basis, with
 explicit eigenvalues. -/
-theorem densityIntBos_basis (U : Fin d → Fin d → ℝ) (c : Config d) :
+theorem densityIntBos_basis (U : Fin d → Fin d → ℝ) (c : BosonicConfig d) :
     densityIntBos d U ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (densEigBos d U c : ℂ) • ⟨boseE d c,
           Submodule.subset_span (Set.mem_range_self c)⟩ := by
@@ -1196,13 +1196,13 @@ theorem densityIntBos_isSymmetric (U : Fin d → Fin d → ℝ) (x y : Dom d) :
   diagOpBos_isSymmetric d (densityIntBos_basis d U) x y
 
 /-- The free eigenvalue of a configuration. -/
-noncomputable def freeEigBos (lam : Fin d → ℝ) (c : Config d) : ℝ :=
+noncomputable def freeEigBos (lam : Fin d → ℝ) (c : BosonicConfig d) : ℝ :=
   ∑ i, lam i * (c i : ℝ)
 
 /-- The eigenvalue of the diagonal interacting Hamiltonian on a
 configuration: free part plus coupling times density part. -/
 noncomputable def densHamEigBos (lam : Fin d → ℝ) (U : Fin d → Fin d → ℝ)
-    (g : ℝ) (c : Config d) : ℝ :=
+    (g : ℝ) (c : BosonicConfig d) : ℝ :=
   freeEigBos d lam c + g * densEigBos d U c
 
 /-- The diagonal interacting Hamiltonian: free Hamiltonian plus the
@@ -1213,7 +1213,7 @@ noncomputable def hamiltonianDensBos (lam : Fin d → ℝ)
   freeHamiltonianBos d lam + (g : ℂ) • densityIntBos d U
 
 theorem hamiltonianDensBos_basis (lam : Fin d → ℝ) (U : Fin d → Fin d → ℝ)
-    (g : ℝ) (c : Config d) :
+    (g : ℝ) (c : BosonicConfig d) :
     hamiltonianDensBos d lam U g
         ⟨boseE d c, Submodule.subset_span (Set.mem_range_self c)⟩
       = (densHamEigBos d lam U g c : ℂ) • ⟨boseE d c,
@@ -1247,7 +1247,7 @@ theorem hamiltonianDensBos_zero (lam : Fin d → ℝ) (U : Fin d → Fin d → �
 /-- With nonnegative density coupling and nonnegative coupling constant,
 the density eigenvalue is nonnegative term by term. -/
 theorem densEigBos_nonneg {U : Fin d → Fin d → ℝ}
-    (hU : ∀ i j, 0 ≤ U i j) (c : Config d) : 0 ≤ densEigBos d U c := by
+    (hU : ∀ i j, 0 ≤ U i j) (c : BosonicConfig d) : 0 ≤ densEigBos d U c := by
   rw [densEigBos]
   refine Finset.sum_nonneg (fun i _ => Finset.sum_nonneg (fun j _ => ?_))
   by_cases h : i < j
@@ -1259,7 +1259,7 @@ theorem densEigBos_nonneg {U : Fin d → Fin d → ℝ}
 /-- Under nonnegative coupling the interaction only raises eigenvalues. -/
 theorem densHamEigBos_ge_freeEigBos {lam : Fin d → ℝ}
     {U : Fin d → Fin d → ℝ} (hg : 0 ≤ g) (hU : ∀ i j, 0 ≤ U i j)
-    (c : Config d) :
+    (c : BosonicConfig d) :
     freeEigBos d lam c ≤ densHamEigBos d lam U g c := by
   rw [densHamEigBos]
   have := densEigBos_nonneg d hU c
@@ -1268,7 +1268,7 @@ theorem densHamEigBos_ge_freeEigBos {lam : Fin d → ℝ}
 /-- With nonnegative one-particle energies the free eigenvalue of every
 configuration is nonnegative. -/
 theorem freeEigBos_nonneg {lam : Fin d → ℝ} (hlam : ∀ i, 0 ≤ lam i)
-    (c : Config d) : 0 ≤ freeEigBos d lam c := by
+    (c : BosonicConfig d) : 0 ≤ freeEigBos d lam c := by
   rw [freeEigBos]
   exact Finset.sum_nonneg (fun i _ =>
     mul_nonneg (hlam i) (Nat.cast_nonneg _))
@@ -1342,7 +1342,7 @@ theorem hamiltonianDensBos_gap_exact (lam : Fin d → ℝ)
 /-- The diagonal coefficient of a one-particle lift `dΓ(M)` on a basis
 vector: only the diagonal entries of `M` contribute, weighted by the
 occupations. The computational heart of the not-a-dΓ certificate. -/
-theorem dgammaC_diag_coeff (M : Matrix (Fin d) (Fin d) ℂ) (γ : Config d)
+theorem dgammaC_diag_coeff (M : Matrix (Fin d) (Fin d) ℂ) (γ : BosonicConfig d)
     (a : ℂ) :
     (dgammaC d M (Finsupp.single γ a)) γ
       = a * ∑ i, M i i * (γ i : ℂ) := by
@@ -1410,7 +1410,7 @@ theorem dgammaC_diag_coeff (M : Matrix (Fin d) (Fin d) ℂ) (γ : Config d)
 configurations: it vanishes (a single particle has no pair). -/
 theorem densEigBos_single (U : Fin d → Fin d → ℝ) (a : Fin d) :
     densEigBos d U (Finsupp.single a 1) = 0 := by
-  have hc : ∀ k : Fin d, ((Finsupp.single a 1 : Config d) k : ℝ)
+  have hc : ∀ k : Fin d, ((Finsupp.single a 1 : BosonicConfig d) k : ℝ)
       = if k = a then 1 else 0 := by
     intro k
     by_cases hk : k = a
@@ -1440,23 +1440,23 @@ configuration `{a, b}` with `a < b`: exactly `U a b`. -/
 theorem densEigBos_pair (U : Fin d → Fin d → ℝ) {a b : Fin d} (hab : a < b) :
     densEigBos d U (Finsupp.single a 1 + Finsupp.single b 1) = U a b := by
   have hne : a ≠ b := ne_of_lt hab
-  have hca : ((Finsupp.single a 1 + Finsupp.single b 1 : Config d) a : ℝ)
+  have hca : ((Finsupp.single a 1 + Finsupp.single b 1 : BosonicConfig d) a : ℝ)
       = 1 := by
     rw [Finsupp.add_apply, Finsupp.single_apply, Finsupp.single_apply]
     simp [hne.symm]
-  have hcb : ((Finsupp.single a 1 + Finsupp.single b 1 : Config d) b : ℝ)
+  have hcb : ((Finsupp.single a 1 + Finsupp.single b 1 : BosonicConfig d) b : ℝ)
       = 1 := by
     rw [Finsupp.add_apply, Finsupp.single_apply, Finsupp.single_apply]
     simp [hne]
   have hcz : ∀ k : Fin d, k ≠ a → k ≠ b →
-      ((Finsupp.single a 1 + Finsupp.single b 1 : Config d) k : ℝ) = 0 := by
+      ((Finsupp.single a 1 + Finsupp.single b 1 : BosonicConfig d) k : ℝ) = 0 := by
     intro k hka hkb
     rw [Finsupp.add_apply, Finsupp.single_apply, Finsupp.single_apply]
     simp [Ne.symm hka, Ne.symm hkb]
   have hterm : ∀ i j : Fin d,
       (if i < j then U i j
-          * ((Finsupp.single a 1 + Finsupp.single b 1 : Config d) i : ℝ)
-          * ((Finsupp.single a 1 + Finsupp.single b 1 : Config d) j : ℝ)
+          * ((Finsupp.single a 1 + Finsupp.single b 1 : BosonicConfig d) i : ℝ)
+          * ((Finsupp.single a 1 + Finsupp.single b 1 : BosonicConfig d) j : ℝ)
         else 0)
         = if (i = a ∧ j = b) then U a b else 0 := by
     intro i j
@@ -1506,7 +1506,7 @@ theorem densEigBos_pair (U : Fin d → Fin d → ℝ) {a b : Fin d} (hab : a < b
 /-- The diagonal `dΓ` coefficient at the one-particle configurations:
 exactly the corresponding diagonal entry of `M`. -/
 theorem diagCoeff_single (M : Matrix (Fin d) (Fin d) ℂ) (a : Fin d) :
-    ∑ i, M i i * ((Finsupp.single a 1 : Config d) i : ℂ) = M a a := by
+    ∑ i, M i i * ((Finsupp.single a 1 : BosonicConfig d) i : ℂ) = M a a := by
   rw [Finset.sum_eq_single a (fun i _ hi => ?_) (fun h => absurd
     (Finset.mem_univ a) h)]
   · rw [Finsupp.single_apply]
@@ -1520,7 +1520,7 @@ density interaction provably lacks). -/
 theorem diagCoeff_pair (M : Matrix (Fin d) (Fin d) ℂ) {a b : Fin d}
     (hab : a ≠ b) :
     ∑ i, M i i * (((Finsupp.single a 1 + Finsupp.single b 1 :
-      Config d) i) : ℂ) = M a a + M b b := by
+      BosonicConfig d) i) : ℂ) = M a a + M b b := by
   have hsub : ({a, b} : Finset (Fin d)) ⊆ Finset.univ := Finset.subset_univ _
   rw [← Finset.sum_subset hsub (fun i _ hi => ?_)]
   · rw [Finset.sum_pair hab]
@@ -1547,7 +1547,7 @@ theorem densityIntBos_not_dgamma (U : Fin d → Fin d → ℝ) {a b : Fin d}
     (hab : a < b) (hU : U a b ≠ 0) (M : Matrix (Fin d) (Fin d) ℂ) :
     densityIntBos d U ≠ dgammaBos d M := by
   intro hcon
-  have key : ∀ c : Config d, (densEigBos d U c : ℂ)
+  have key : ∀ c : BosonicConfig d, (densEigBos d U c : ℂ)
       = ∑ i, M i i * (c i : ℂ) := by
     intro c
     have h1 : (boseRepr d (densityIntBos d U
@@ -1588,7 +1588,7 @@ theorem freeEigBos_pair (lam : Fin d → ℝ) {a b : Fin d} (hab : a ≠ b)
       = (lam a + lam b) * (n : ℝ) := by
   have hsub : ({a, b} : Finset (Fin d)) ⊆ Finset.univ := Finset.subset_univ _
   have hval : ∀ k : Fin d,
-      ((Finsupp.single a n + Finsupp.single b n : Config d) k : ℝ)
+      ((Finsupp.single a n + Finsupp.single b n : BosonicConfig d) k : ℝ)
         = (if k = a then (n : ℝ) else 0) + (if k = b then (n : ℝ) else 0) := by
     intro k
     rw [Finsupp.add_apply, Finsupp.single_apply, Finsupp.single_apply,
@@ -1614,7 +1614,7 @@ theorem freeEigBos_pair (lam : Fin d → ℝ) {a b : Fin d} (hab : a ≠ b)
 (`-1` at one pair `a < b`, zero elsewhere): exactly minus the product
 of the two occupations — the quadratic term that defeats every linear
 free gap at large occupation. -/
-theorem densEigBos_neg_pair (c : Config d) {a b : Fin d} (hab : a < b) :
+theorem densEigBos_neg_pair (c : BosonicConfig d) {a b : Fin d} (hab : a < b) :
     densEigBos d (fun i j => if i = a ∧ j = b then (-1 : ℝ) else 0) c
       = -((c a : ℝ) * (c b : ℝ)) := by
   have hterm : ∀ i j : Fin d,
@@ -1652,18 +1652,18 @@ interactions exists to be proved — the windowed form of §4 is the
 strongest true statement, exactly as scoped. -/
 theorem densHamEigBos_unbounded_below (lam : Fin d → ℝ) {a b : Fin d}
     (hab : a < b) (B : ℝ) :
-    ∃ c : Config d, densHamEigBos d lam
+    ∃ c : BosonicConfig d, densHamEigBos d lam
       (fun i j => if i = a ∧ j = b then (-1 : ℝ) else 0) 1 c < B := by
   obtain ⟨n, hn⟩ := exists_nat_gt (|lam a + lam b| + |B| + 1)
   refine ⟨Finsupp.single a n + Finsupp.single b n, ?_⟩
   have hfree := freeEigBos_pair d lam (ne_of_lt hab) n
   have heig := densEigBos_neg_pair d
     (Finsupp.single a n + Finsupp.single b n) hab
-  have hca : ((Finsupp.single a n + Finsupp.single b n : Config d) a : ℝ)
+  have hca : ((Finsupp.single a n + Finsupp.single b n : BosonicConfig d) a : ℝ)
       = (n : ℝ) := by
     rw [Finsupp.add_apply, Finsupp.single_apply, Finsupp.single_apply]
     simp [(ne_of_lt hab).symm]
-  have hcb : ((Finsupp.single a n + Finsupp.single b n : Config d) b : ℝ)
+  have hcb : ((Finsupp.single a n + Finsupp.single b n : BosonicConfig d) b : ℝ)
       = (n : ℝ) := by
     rw [Finsupp.add_apply, Finsupp.single_apply, Finsupp.single_apply]
     simp [ne_of_lt hab]
@@ -1724,7 +1724,7 @@ theorem densHamEigBos_unbounded_below (lam : Fin d → ℝ) {a b : Fin d}
 
 /-- A finitely supported coefficient function is the sum of its
 single-configuration pieces over any finset covering its support. -/
-theorem finsupp_eq_sum_single (f : Config d →₀ ℂ) (S : Finset (Config d))
+theorem finsupp_eq_sum_single (f : BosonicConfig d →₀ ℂ) (S : Finset (BosonicConfig d))
     (hS : ∀ γ, f γ ≠ 0 → γ ∈ S) :
     f = ∑ γ ∈ S, (f γ) • Finsupp.single γ 1 := by
   ext δ
@@ -1754,8 +1754,8 @@ vector: the maximal-coordinate (Gershgorin-type) step of the windowed
 persistence proof, with the column-sum bound `intOpC_col_sum_le` doing
 the work. -/
 theorem intOpC_coord_le (W : Fin d → Fin d → Fin d → Fin d → ℂ)
-    (n : ℕ) (f : Config d →₀ ℂ) (hf : ∀ γ, f γ ≠ 0 → tot γ = n)
-    (c₀ γ₀ : Config d) (hγ₀ : tot γ₀ = n)
+    (n : ℕ) (f : BosonicConfig d →₀ ℂ) (hf : ∀ γ, f γ ≠ 0 → tot γ = n)
+    (c₀ γ₀ : BosonicConfig d) (hγ₀ : tot γ₀ = n)
     (hmax : ∀ γ, tot γ = n → ‖f γ‖ ≤ ‖f γ₀‖) :
     ‖(intOpC d W f) c₀‖ ≤ intBoundBos d W * ((n : ℝ) + 2) ^ 2 * ‖f γ₀‖ := by
   have hexp : f = ∑ γ ∈ sectorFinset d n, (f γ) • Finsupp.single γ 1 :=
@@ -1795,7 +1795,7 @@ free eigenvalue times coordinate, plus coupling times interaction
 coordinate. -/
 theorem hamIntBos_coord (lam : Fin d → ℝ)
     (W : Fin d → Fin d → Fin d → Fin d → ℂ) (g : ℝ) (ψ : Dom d)
-    (c : Config d) :
+    (c : BosonicConfig d) :
     (boseRepr d (hamIntBos d lam W g ψ)) c
       = ((freeEigBos d lam c : ℝ) : ℂ) * (boseRepr d ψ) c
         + (g : ℂ) * (intOpC d W (boseRepr d ψ)) c := by
@@ -1848,7 +1848,7 @@ theorem hamIntBos_eigenvalue_transport_sector (lam : Fin d → ℝ)
     (W : Fin d → Fin d → Fin d → Fin d → ℂ) (g : ℝ)
     {n : ℕ} {ψ : Dom d} (hψsec : ψ ∈ domSector d n) (hψ : ψ ≠ 0) {μ : ℂ}
     (hμ : hamIntBos d lam W g ψ = μ • ψ) :
-    ∃ c₀ : Config d, tot c₀ = n ∧ (boseRepr d ψ) c₀ ≠ 0 ∧
+    ∃ c₀ : BosonicConfig d, tot c₀ = n ∧ (boseRepr d ψ) c₀ ≠ 0 ∧
       ‖μ - ((freeEigBos d lam c₀ : ℝ) : ℂ)‖
         ≤ ‖(g : ℂ)‖ * (intBoundBos d W * ((n : ℝ) + 2) ^ 2) := by
   obtain ⟨c₀, hc₀n, hc₀ne, hc₀max⟩ : ∃ c₀, tot c₀ = n
