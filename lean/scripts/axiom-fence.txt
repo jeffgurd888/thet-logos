@@ -700,3 +700,15 @@ ThetLogos.plaquetteDensity_layerConfig_one
 ThetLogos.layerKernel_one
 ThetLogos.layerKernelPos_one
 ThetLogos.layerKernelPos_abelian_family
+
+import ThetLogos.LayerKernelPosTernarySeat
+ThetLogos.charFn_seat₃
+ThetLogos.colDensC_seat₃
+ThetLogos.exp_colDensC₃
+ThetLogos.exp_colDensC₃_re
+ThetLogos.seat_colZ₃
+ThetLogos.seat_zPolymer₃
+ThetLogos.seatChar₃_pow_sum
+ThetLogos.sum_seatChar₃_colWord
+ThetLogos.seatIntegralPi₃
+ThetLogos.seatChar₃_star
