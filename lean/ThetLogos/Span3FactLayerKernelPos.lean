@@ -101,14 +101,23 @@ surviving blocker is the one named above: no landed
 integral-kernel Schur/product theorem composes the two
 `𝒜`-pairings into positivity of the `K̄` pairing.
 
-**Buy, stated in the gate's substance:** a FACT landing
-would now machine-discharge `LayerKernelPos` with no prose
-link; discharging clause (a) from there still waits on the
-named missing weld above, so the "no prose link in the
-chain" buy for clause (a) is NOT yet achieved. FACT itself
-remains unproved; `LayerKernelPos` (the `𝒜 ⪰ 0` core at
-general `(G, ρ)`) is NOT proved by this brick — this is an
-implication BETWEEN open statements, both ends open.
+**Buy, stated in the gate's substance (corrected
+2026-11-04, WB-1b):** FACT is REFUTED as stated —
+K-FACT-SEAT fired (LK-P0, integrated at 798c680, ledger
+`lk-p0-seat-probe`): at the smallest seat
+`StratumColumnFactorization` is false for every `β > 0`
+(`seat_not_stratumColumnFactorization`), so no FACT
+landing is possible, and the weld above survives only
+as a vacuous implication. `LayerKernelPos`'s proved
+supports are `layerKernelPos_zero` (`β = 0`, at general
+`(G, ρ)`) and `layerKernelPos_seat` (the smallest seat,
+`β ≥ 0`); in general it remains OPEN, with no proved
+sufficient route. Discharging clause (a) still waits on
+the named missing weld above, so the "no prose link in
+the chain" buy for clause (a) is NOT yet achieved.
+`LayerKernelPos` (the `𝒜 ⪰ 0` core at general `(G, ρ)`)
+is NOT proved by this brick — the implication's
+antecedent end is refuted, its consequent end open.
 
 **Fences.** Pier block: proof-grade distance toward the
 continuum ZERO; uniformity arrows untouched. NO CLAIM,
