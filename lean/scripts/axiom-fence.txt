@@ -603,3 +603,8 @@ ThetLogos.seatCol0_ne
 ThetLogos.seatEven_pair
 ThetLogos.seat_not_stratumColumnFactorization
 ThetLogos.layerKernelPos_seat
+
+import ThetLogos.Span3A0WeldDirect
+ThetLogos.a0WeldDirect_iff
+ThetLogos.a0WeldDirect_apply
+ThetLogos.a0AssemblyTarget_of_a0WeldDirect
