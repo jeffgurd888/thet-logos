@@ -127,9 +127,9 @@ theorem seatX_coord_one : seatX.1 (1 : Fin 4) = 0 := rfl
 
 /-- The `1`-coordinate of `seatY` is `1`: the shift gains
 exactly `1` at its own coordinate (GR-GEO-1's
-`layerShift_coord_self`), on top of `seatX`'s `0`. -/
+`layerShift_coord_self_dist`), on top of `seatX`'s `0`. -/
 theorem seatY_coord_one : seatY.1 (1 : Fin 4) = 1 := by
-  have h := layerShift_coord_self (N := 2) seatDir_ne_zero seatX
+  have h := layerShift_coord_self_dist (N := 2) seatDir_ne_zero seatX
   rw [seatX_coord_one] at h
   exact h
 
@@ -188,7 +188,7 @@ theorem coordDistSum_seat : coordDistSum 2 seatX seatY = 1 := by
     · rw [if_neg hi]
       show cycDist 2 (seatX.1 i)
           ((layerShift (1 : Fin 4) seatDir_ne_zero seatX).1 i) = 0
-      rw [layerShift_coord_of_ne (N := 2) seatDir_ne_zero seatX hi]
+      rw [layerShift_coord_of_ne_dist (N := 2) seatDir_ne_zero seatX hi]
       exact cycDist_self ..
   unfold coordDistSum
   rw [Finset.sum_congr rfl (fun i _ => hcoord i)]

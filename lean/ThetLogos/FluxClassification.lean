@@ -352,7 +352,7 @@ theorem flux_eq_zero_preserves_eigenspace {K : Matrix (Fin N) (Fin N) ℂ}
 
 /-- **Star-conjugation of a product** (Tier T1 target): for `U`
 with `U * star U = 1`, star-conjugation distributes over products
-in the mirrored pattern of `HermitianReduction.conj_mul_conj`:
+in the mirrored pattern of `HermitianReduction.conj_mul_conj_herm`:
 `(star U * X * U) * (star U * Y * U) = star U * (X * Y) * U`.
 Pure associativity plus the unitary identity. -/
 theorem starConj_mul (U X Y : Matrix (Fin N) (Fin N) ℂ)

@@ -273,13 +273,13 @@ theorem layerShift_coord {ν : Fin 4} (hν : ν ≠ 0) (c : LayerSite N)
   torusShift_apply_coord ν j c.1
 
 /-- The shifted coordinate of a layer shift. -/
-theorem layerShift_coord_self {ν : Fin 4} (hν : ν ≠ 0)
+theorem layerShift_coord_self_dist {ν : Fin 4} (hν : ν ≠ 0)
     (c : LayerSite N) :
     (layerShift ν hν c).1 ν = c.1 ν + 1 := by
   rw [layerShift_coord, Pi.single_eq_same, add_comm]
 
 /-- The unshifted coordinates of a layer shift. -/
-theorem layerShift_coord_of_ne {ν : Fin 4} (hν : ν ≠ 0)
+theorem layerShift_coord_of_ne_dist {ν : Fin 4} (hν : ν ≠ 0)
     (c : LayerSite N) {j : Fin 4} (hj : j ≠ ν) :
     (layerShift ν hν c).1 j = c.1 j := by
   rw [layerShift_coord, Pi.single_eq_of_ne hj, zero_add]
@@ -433,7 +433,7 @@ theorem exists_adj_coordDistSum {x y : LayerSite N}
         have e1 : (linkTail (layerLinkOf x i hi0)).1 i
             = x.1 i := rfl
         have e2 : (linkHead (layerLinkOf x i hi0)).1 i
-            = x.1 i + 1 := layerShift_coord_self hi0 x
+            = x.1 i + 1 := layerShift_coord_self_dist hi0 x
         rw [e1, e2] at e
         exact zmod_add_one_ne_of_ne hi e.symm
       exact cubeGraph_adj_of_link _ hne
@@ -446,10 +446,10 @@ theorem exists_adj_coordDistSum {x y : LayerSite N}
         apply Finset.sum_congr rfl
         intro j hj
         have hjν : j ≠ i := (Finset.mem_erase.mp hj).1
-        rw [layerShift_coord_of_ne hi0 x hjν]
+        rw [layerShift_coord_of_ne_dist hi0 x hjν]
       have hν : cycDist N ((layerShift i hi0 x).1 i) (y.1 i) + 1
           = cycDist N (x.1 i) (y.1 i) := by
-        rw [layerShift_coord_self hi0 x]
+        rw [layerShift_coord_self_dist hi0 x]
         exact cycDist_add_one_eq_of_le hd1 hcase
       omega
   · -- backward step: move coordinate `i` down

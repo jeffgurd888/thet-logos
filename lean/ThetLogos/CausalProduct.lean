@@ -36,7 +36,7 @@ the product it is the manifold fact that rescues spanning.
 
 **Carried pylons (no Lorentzian claims without them).** The Krein structure
 (Span 3, `swapR`) and reality prescription (Span 4) stand on the finite
-factor; the product adds the manifold Krein factor `ηprod` and the
+factor; the product adds the manifold Krein factor `ηprodCausal` and the
 Clifford relation `prod_clifford_hermitian` — the exact relation the
 finite transplant lacked (Span-5 numerics: `‖M + M†‖ ≡ 0` identically, so
 the J-form was not even statable there). Here the J-form
@@ -52,8 +52,8 @@ Tier ledger for this module:
   `IsProdDynamicallyCompatible`, `IsProdLorentzCompatible`, `ProdCausalLE`,
   `HasFiniteTraceCollapse`.
 - T2/T5 axioms: `Hprod`, `M`, `ProdOp` (+ ring/scaling interface),
-  `prodForm`, `prodSmul` (+ comp/one/zero laws), `Dprod` (+ self-adjoint,
-  non-central), `ηprod` (+ fundamental symmetry), `Cprod`,
+  `prodForm`, `prodSmul` (+ comp/one/zero laws), `DprodCausal` (+ self-adjoint,
+  non-central), `ηprodCausal` (+ fundamental symmetry), `Cprod`,
   `prod_coord_in_cone`, `prod_clifford_hermitian`,
   `prod_nonzero_causal_commutator`, `GloballyHyperbolicM` (PIN).
 - T1 theorems: `trace_collapse_hypothesis_fails` (the verdict),
@@ -103,23 +103,23 @@ def IsOpPSD (A : ProdOp) : Prop :=
   prodStar A = A ∧ ∀ ψ : Hprod, 0 ≤ (prodForm ψ A ψ).re
 
 /-- T5: the product Dirac `D_prod = D_M ⊗ 1 + γ₅ ⊗ D_F` (axiomatized). -/
-axiom Dprod : ProdOp
+axiom DprodCausal : ProdOp
 
 /-- T2: `D_prod` is self-adjoint (manifold + finite parts both are). -/
-axiom dprod_selfadj : prodStar Dprod = Dprod
+axiom dprod_selfadj : prodStar DprodCausal = DprodCausal
 
 /-- T2: `D_prod` is non-central on self-adjoints (inherited from both
     factors: `D_M` does not commute with multiplication operators, `D_F`
     has Yukawa structure). -/
 axiom dprod_noncentral :
-    ∃ a : ProdOp, prodStar a = a ∧ Dprod * a - a * Dprod ≠ 0
+    ∃ a : ProdOp, prodStar a = a ∧ DprodCausal * a - a * DprodCausal ≠ 0
 
 /-- T2: the product fundamental symmetry (Krein structure carried over:
     Span 3's `swapR` on the finite factor tensored with the manifold
     Krein factor). `η² = 1`, `ηᴴ = η`. -/
-axiom ηprod : ProdOp
-axiom ηprod_sq : ηprod * ηprod = 1
-axiom ηprod_selfadj : prodStar ηprod = ηprod
+axiom ηprodCausal : ProdOp
+axiom ηprodCausal_sq : ηprodCausal * ηprodCausal = 1
+axiom ηprodCausal_selfadj : prodStar ηprodCausal = ηprodCausal
 
 /-- T5: the causal cone on the product (axiomatized membership): the
     `i[D_prod, f]`-positive cone for `f ∈ C^∞(M)` — manifold coordinate
@@ -140,8 +140,8 @@ axiom prod_coord_in_cone :
     what make `J[D,f]` self-adjoint). On the product the J-form
     (`IsProdLorentzCompatible`) is statable. -/
 axiom prod_clifford_hermitian : ∀ f : ProdOp, f ∈ Cprod → prodStar f = f →
-    prodStar (ηprod * (Dprod * f - f * Dprod))
-      = ηprod * (Dprod * f - f * Dprod)
+    prodStar (ηprodCausal * (DprodCausal * f - f * DprodCausal))
+      = ηprodCausal * (DprodCausal * f - f * DprodCausal)
 
 /-- **Manifold admission price, part 3 (T2 axiom) — the trace-rescue
     exhibit.** There is a cone function `f` with `i[D_prod, f]`
@@ -155,8 +155,8 @@ axiom prod_clifford_hermitian : ∀ f : ProdOp, f ∈ Cprod → prodStar f = f �
     truncation). -/
 axiom prod_nonzero_causal_commutator :
     ∃ f : ProdOp, f ∈ Cprod ∧ prodStar f = f ∧
-      IsOpPSD (prodSmul Complex.I (Dprod * f - f * Dprod)) ∧
-      (Dprod * f - f * Dprod) ≠ 0
+      IsOpPSD (prodSmul Complex.I (DprodCausal * f - f * DprodCausal)) ∧
+      (DprodCausal * f - f * DprodCausal) ≠ 0
 
 /-! ## §2. Causal cone axioms on the product (T2 defs) -/
 
@@ -182,7 +182,7 @@ def IsProdDynamicallyCompatible (D : ProdOp) (C : Set ProdOp) : Prop :=
 /-- The Lorentzian dynamical axiom on the product (T2 — definition, NO
     verdict on joint satisfiability): mirror of `IsLorentzCompatible`
     (§10) — the form version of Franco's (F6) `⟨φ, J[D,a]φ⟩ ≤ 0` with the
-    carried-over fundamental symmetry `ηprod`. Unlike §10, this IS
+    carried-over fundamental symmetry `ηprodCausal`. Unlike §10, this IS
     statable here: `prod_clifford_hermitian` makes the form's operator
     Hermitian for cone functions. -/
 def IsProdLorentzCompatible (η D : ProdOp) (C : Set ProdOp) : Prop :=
@@ -201,7 +201,7 @@ def ProdCausalLE (C : Set ProdOp) (f g : ProdOp) : Prop :=
     `posSemidef_trace_eq_zero` (PSD + trace 0 ⟹ zero). `dyn_comm_eq_zero`
     is exactly "every trace-collapse functional forces `[D,f] = 0`". -/
 def HasFiniteTraceCollapse (τ : ProdOp → ℂ) : Prop :=
-  (∀ f : ProdOp, τ (prodSmul Complex.I (Dprod * f - f * Dprod)) = 0) ∧
+  (∀ f : ProdOp, τ (prodSmul Complex.I (DprodCausal * f - f * DprodCausal)) = 0) ∧
   (∀ A : ProdOp, IsOpPSD A → τ A = 0 → A = 0)
 
 /-- **The verdict (T1 — proved): the trace-collapse hypothesis fails on
@@ -221,11 +221,11 @@ theorem trace_collapse_hypothesis_fails :
     ¬ ∃ τ : ProdOp → ℂ, HasFiniteTraceCollapse τ := by
   rintro ⟨τ, hvanish, hcollapse⟩
   obtain ⟨f, hfC, hfsa, hpsd, hne⟩ := prod_nonzero_causal_commutator
-  have h0 : prodSmul Complex.I (Dprod * f - f * Dprod) = 0 :=
+  have h0 : prodSmul Complex.I (DprodCausal * f - f * DprodCausal) = 0 :=
     hcollapse _ hpsd (hvanish f)
-  have key : Dprod * f - f * Dprod = 0 := by
-    have e : prodSmul (-Complex.I) (prodSmul Complex.I (Dprod * f - f * Dprod))
-        = Dprod * f - f * Dprod := by
+  have key : DprodCausal * f - f * DprodCausal = 0 := by
+    have e : prodSmul (-Complex.I) (prodSmul Complex.I (DprodCausal * f - f * DprodCausal))
+        = DprodCausal * f - f * DprodCausal := by
       rw [prodSmul_comp]
       have hII : (-Complex.I) * Complex.I = 1 := by
         rw [neg_mul, Complex.I_mul_I, neg_neg]
@@ -240,7 +240,7 @@ theorem trace_collapse_hypothesis_fails :
     false — the manifold factor keeps `D_prod` non-central even on the
     cone. Hence `causalCone_obstruction` does not carry over. -/
 theorem product_not_forced_central :
-    ¬ ∀ a : ProdOp, prodStar a = a → Dprod * a - a * Dprod = 0 := by
+    ¬ ∀ a : ProdOp, prodStar a = a → DprodCausal * a - a * DprodCausal = 0 := by
   intro h
   obtain ⟨f, hfC, hfsa, hpsd, hne⟩ := prod_nonzero_causal_commutator
   exact hne (h f hfsa)

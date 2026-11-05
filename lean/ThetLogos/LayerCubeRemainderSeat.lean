@@ -272,14 +272,14 @@ theorem layerShift_iterate_N {N : ℕ} [NeZero N]
   simp
 
 /-- The tail of the layer link over a site is the site. -/
-theorem linkTail_layerLinkOf {N : ℕ} [NeZero N]
+theorem linkTail_layerLinkOf_seat {N : ℕ} [NeZero N]
     (s : LayerSite N) (ν : Fin 4) (hν : ν ≠ 0) :
     linkTail (layerLinkOf s ν hν) = s :=
   rfl
 
 /-- The head of the layer link over a site is the site shifted
 in the link's direction. -/
-theorem linkHead_layerLinkOf {N : ℕ} [NeZero N]
+theorem linkHead_layerLinkOf_seat {N : ℕ} [NeZero N]
     (s : LayerSite N) (ν : Fin 4) (hν : ν ≠ 0) :
     linkHead (layerLinkOf s ν hν) = layerShift ν hν s :=
   rfl
@@ -296,7 +296,7 @@ theorem gaugeAngle_wrap_link {N : ℕ} [NeZero N]
   show φ (linkHead (layerLinkOf ((layerShift ν hν)^[k] c) ν hν))
       - φ (linkTail (layerLinkOf ((layerShift ν hν)^[k] c) ν hν))
     = _
-  rw [linkHead_layerLinkOf, linkTail_layerLinkOf,
+  rw [linkHead_layerLinkOf_seat, linkTail_layerLinkOf_seat,
     Function.iterate_succ_apply']
 
 /-- **Telescoping of successive potential differences** along

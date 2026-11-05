@@ -411,7 +411,7 @@ theorem hermitianDiagKernel_single_sandwich (d : ι → ℝ) (t : ℝ)
     Route: self-adjointness of the kernel
     (`heatKernelGen_isHermitian`), the conjugation formula
     (`heatKernelGen_eq_conj`), cancellation of the middle
-    unitary pair (`conj_mul_conj`), and the diagonal-kernel
+    unitary pair (`conj_mul_conj_herm`), and the diagonal-kernel
     unit computation above. -/
 theorem stepGen_eigenbasis {K : Matrix ι ι ℂ} (hK : K.IsHermitian)
     (t : ℝ) (i j : ι) :
@@ -427,7 +427,7 @@ theorem stepGen_eigenbasis {K : Matrix ι ι ℂ} (hK : K.IsHermitian)
     Unitary.coe_star_mul_self _
   unfold stepGen
   rw [heatKernelGen_isHermitian hK, heatKernelGen_eq_conj hK,
-    conj_mul_conj _ _ _ hU, conj_mul_conj _ _ _ hU,
+    conj_mul_conj_herm _ _ _ hU, conj_mul_conj_herm _ _ _ hU,
     hermitianDiagKernel_single_sandwich, mul_smul_comm, smul_mul_assoc]
 
 /-- **The eigenbasis multiplier lies in `(0, 1]`** (Tier T1 —
@@ -608,7 +608,7 @@ theorem stepGen_eq_conj_sandwich {K : Matrix ι ι ℂ}
               * (hK.eigenvectorUnitary : Matrix ι ι ℂ))
             * hermitianDiagKernel hK.eigenvalues t)
           * star (hK.eigenvectorUnitary : Matrix ι ι ℂ) := by
-        rw [conj_mul_conj _ _ _ hU, conj_mul_conj _ _ _ hU]
+        rw [conj_mul_conj_herm _ _ _ hU, conj_mul_conj_herm _ _ _ hU]
 
 /-- **The generator transports by conjugation** (Tier T1 —
     proved): `U * genTransported Λ Y * star U
@@ -653,7 +653,7 @@ theorem genTransported_conj {K : Matrix ι ι ℂ} (hK : K.IsHermitian)
               * (star (hK.eigenvectorUnitary : Matrix ι ι ℂ) * X
                 * (hK.eigenvectorUnitary : Matrix ι ι ℂ)))
             * star (hK.eigenvectorUnitary : Matrix ι ι ℂ) :=
-          conj_mul_conj _ _ _ hU
+          conj_mul_conj_herm _ _ _ hU
   have e2 : X * K = (hK.eigenvectorUnitary : Matrix ι ι ℂ)
       * ((star (hK.eigenvectorUnitary : Matrix ι ι ℂ) * X
           * (hK.eigenvectorUnitary : Matrix ι ι ℂ))
@@ -673,7 +673,7 @@ theorem genTransported_conj {K : Matrix ι ι ℂ} (hK : K.IsHermitian)
                 * (hK.eigenvectorUnitary : Matrix ι ι ℂ))
               * Matrix.diagonal (fun i => ((hK.eigenvalues i : ℂ))))
             * star (hK.eigenvectorUnitary : Matrix ι ι ℂ) :=
-          conj_mul_conj _ _ _ hU
+          conj_mul_conj_herm _ _ _ hU
   unfold genTransported
   rw [e1, e2]
   noncomm_ring
@@ -838,7 +838,7 @@ theorem genTransported_diagonal_dissipative (d : ι → ℝ)
     `tr (Xᴴ * genTransported K X)
       = tr (Yᴴ * genTransported Λ Y)`
     — by `genTransported_conj`, the unitary cancellation
-    `conj_mul_conj`, and cyclicity of the trace. -/
+    `conj_mul_conj_herm`, and cyclicity of the trace. -/
 theorem trace_genTransported_conj {K : Matrix ι ι ℂ}
     (hK : K.IsHermitian) (X : Matrix ι ι ℂ) (hX : X.IsHermitian) :
     Matrix.trace (Xᴴ * genTransported K X)
@@ -871,7 +871,7 @@ theorem trace_genTransported_conj {K : Matrix ι ι ℂ}
     _ = Matrix.trace ((U * Y * star U) * (U * G * star U)) := by
         rw [← hGconj, hXform]
     _ = Matrix.trace (U * (Y * G) * star U) := by
-        rw [conj_mul_conj _ _ _ hU]
+        rw [conj_mul_conj_herm _ _ _ hU]
     _ = Matrix.trace (Y * G) := by
         rw [Matrix.trace_mul_cycle, hU, Matrix.one_mul]
     _ = Matrix.trace (Yᴴ * G) := by

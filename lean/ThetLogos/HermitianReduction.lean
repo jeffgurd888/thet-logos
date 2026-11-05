@@ -159,7 +159,7 @@ theorem exp_conj_star (U A : Matrix ι ι ℂ) (hU : star U * U = 1)
 
 /-- Conjugate of a product of conjugates (Tier T1 target): the
 middle unitary pair cancels. Pure associativity plus `hU`. -/
-theorem conj_mul_conj (U X Y : Matrix ι ι ℂ) (hU : star U * U = 1) :
+theorem conj_mul_conj_herm (U X Y : Matrix ι ι ℂ) (hU : star U * U = 1) :
     (U * X * star U) * (U * Y * star U) = U * (X * Y) * star U := by
   have h : (U * X * star U) * (U * Y * star U)
       = U * (X * (star U * U) * Y) * star U := by
@@ -288,7 +288,7 @@ directly — split the scalar, the two multiples of `K` commute,
 `Matrix.exp_add_of_commute` — so Hermiticity is not needed and
 the statement is recorded without it: the law holds for every
 matrix. (The drafted proof transported via the diagonal
-schedules and `conj_mul_conj`; that route could not elaborate,
+schedules and `conj_mul_conj_herm`; that route could not elaborate,
 because this statement never puts `hK` in scope. The direct
 proof is stronger and shorter; the swap is recorded here and
 in the dossier, in the open.) -/
