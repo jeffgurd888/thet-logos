@@ -608,3 +608,16 @@ import ThetLogos.Span3A0WeldDirect
 ThetLogos.a0WeldDirect_iff
 ThetLogos.a0WeldDirect_apply
 ThetLogos.a0AssemblyTarget_of_a0WeldDirect
+
+import ThetLogos.SurfaceTensionSeat
+ThetLogos.tensionCount_comp
+ThetLogos.tensionCount_even
+ThetLogos.const_of_tensionCount_eq_zero
+ThetLogos.two_le_tensionCount_of_nonconstant
+ThetLogos.tensionCount_singleSite
+ThetLogos.tensionCount_twoSite
+ThetLogos.labelMass_singleSite
+ThetLogos.labelMass_twoSite
+ThetLogos.tensionCount_does_not_determine_mass
+ThetLogos.tensionEnergy_comp
+ThetLogos.tensionEnergy_nonneg
