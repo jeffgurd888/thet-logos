@@ -73,7 +73,8 @@ landed statement of that composition. The assembly
 therefore cannot be formed from landed components, and it
 is not papered over here.
 
-**Seam note (the tree defect, checked for this brick).**
+**Seam note (the tree defect, checked for this brick;
+corrected 2026-11-04, WB-1).**
 This module's imports (`Span3MarginPin`, `LayerKernelPos`)
 sit on the `PlaneCrossingFactor` side of the duplicate
 declaration `ThetLogos.reflSite_eq_torusShift_zero`
@@ -81,17 +82,24 @@ declaration `ThetLogos.reflSite_eq_torusShift_zero`
 `LatticeTransferCompact` chain reached through
 `Span3GapPins` is seam-neutral, so theorem (1) and the
 clause-(a) registration above build in one environment.
-The transport chain on the other side of the weld
-(`LatticeSliceDescent`, via `LatticeReconZero`) pulls in
-`LatticeGramSeries` — the other side of the seam — so that
-chain cannot be co-imported with this module's
-`LayerKernelPos` chain in any case: verified empirically
-for this brick, a probe module importing both chains fails
-at import with "environment already contains
+At this brick's landing the transport chain on the other
+side of the weld (`LatticeSliceDescent`, via
+`LatticeReconZero`) pulled in `LatticeGramSeries` — the
+other side of the seam — and could not be co-imported
+with this module's `LayerKernelPos` chain: verified
+empirically then, a probe module importing both chains
+failed at import with "environment already contains
 'ThetLogos.reflSite_eq_torusShift_zero' from
-ThetLogos.PlaneCrossingFactor" (the probe was deleted after
-the check; it is not part of this landing). No landed file
-was edited to work around the seam.
+ThetLogos.PlaneCrossingFactor" (the probe was deleted
+after the check; it is not part of this landing).
+**That seam is CLOSED:** F2-W1 (2026-10-31) renamed the
+`PlaneCrossingFactor` copy
+(`reflSite_eq_torusShift_zero_bot`), the co-import probe
+passed, and the two chains co-import today — the weld's
+direct form is statable in this environment. The
+surviving blocker is the one named above: no landed
+integral-kernel Schur/product theorem composes the two
+`𝒜`-pairings into positivity of the `K̄` pairing.
 
 **Buy, stated in the gate's substance:** a FACT landing
 would now machine-discharge `LayerKernelPos` with no prose
@@ -287,12 +295,15 @@ positivity of the `K̄` / `osForm` pairing, and no landed
 theorem derives `SliceHPosOne` (the only landed route to
 clause (a) on all of `osSpace`, via
 `inner_transferOp_self_re_nonneg_of_sliceHPosOne`) from
-`LayerKernelPos`. That route's chain (`LatticeSliceDescent`)
-also sits on the `LatticeGramSeries` side of the
-`reflSite_eq_torusShift_zero` duplicate seam and cannot be
-co-imported with this module's `LayerKernelPos` chain, so
-the weld cannot even be stated in this environment. The
-assembly stays dossier-grade until that component lands. -/
+`LayerKernelPos`. (Correction, 2026-11-04, WB-1: the
+`reflSite_eq_torusShift_zero` duplicate seam that once
+kept that route's chain (`LatticeSliceDescent`)
+un-co-importable with this module's `LayerKernelPos`
+chain closed on 2026-10-31 (F2-W1); the weld IS statable
+in this environment today, and its direct form is pinned
+by WB-2. The missing component named above is the only
+surviving blocker.) The assembly stays dossier-grade
+until that component lands. -/
 def A0AssemblyTarget (hN2 : 2 ≤ N)
     (hρcont : Continuous fun g => repMatrix ρ g) (_hd : 0 < d) :
     Prop :=

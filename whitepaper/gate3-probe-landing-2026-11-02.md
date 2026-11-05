@@ -258,3 +258,22 @@ README verified in HEAD at these figures).
 
 BR1-031 added by this landing (the §4 probe). No
 Lean/Python interface changed.
+
+---
+
+## ERRATUM ADDENDUM (2026-11-04, WB-1) — §3's FACT framing is superseded
+
+§3 above states that "the corpus's only route to
+`LayerKernelPos` anywhere is from `FACT`" and that "FACT
+itself is open". Both clauses are superseded as of
+2026-11-04: **K-FACT-SEAT fired** (LK-P0, integrated at
+main-tree commit `798c680`, census 13,441 strict / 500
+modules, ledger record `lk-p0-seat-probe`) — FACT is
+*refuted as stated* at the smallest seat for every β > 0,
+not open; and `LayerKernelPos` has two proved supports
+that do not come from FACT: at β = 0 for general (G, ρ)
+(`layerKernelPos_zero`) and at the N = 2 / ZMod 2 / sign
+seat for every β ≥ 0 (`layerKernelPos_seat`). §3's text
+stands as written (dated record); this addendum is the
+correction of record. The squeeze itself — why this probe
+could not fire K-GATE-3 — is unaffected.

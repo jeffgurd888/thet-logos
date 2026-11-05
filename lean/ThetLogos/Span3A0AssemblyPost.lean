@@ -43,15 +43,16 @@ landed transport
 `inner_transferOp_self_re_nonneg_of_sliceHPosOne` in
 `ThetLogos.LatticeSliceDescent`.
 
-**Import reality - on the face.** Those two chains sit on
-opposite sides of the `reflSite_eq_torusShift_zero`
+**Import reality - on the face (corrected 2026-11-04,
+WB-1).** At this pin's registration those two chains sat
+on opposite sides of the `reflSite_eq_torusShift_zero`
 duplicate seam (memo section 3): the `LayerKernelPos` chain
 sits on the `PlaneCrossingFactor` side; the
 `LatticeSliceDescent` chain (via `LatticeReconZero`) pulls
 `LatticeGramSeries`, the other side. The two declarations
 of that name are two DIFFERENT statements (memo section 3),
-and no single Lean environment can import both chains
-today. This module therefore does NOT import
+and at registration no single Lean environment could import
+both chains. This module therefore does NOT import
 `LatticeSliceDescent`, edits NOTHING outside itself, and
 registers target (1) in the house parameterized pin style:
 the slice endpoint is carried as an explicit parameter
@@ -66,10 +67,15 @@ named here, not imported - is
     `= SliceHPosOne muG rho hN2 h-rho-cont beta`.
 
 **The direct statement of target (1), with `SliceHPosOne`
-named in the code itself, becomes formable only after
-F2-W1** (the duplicate rename, memo section 3 / section 5:
+named in the code itself, became formable after F2-W1**
+(the duplicate rename, memo section 3 / section 5:
 three edit sites in `PlaneCrossingFactor.lean` only). That
-rename is NOT done by this module.
+rename was NOT done by this module — but it HAS since
+landed (F2-W1, 2026-10-31): the seam is closed, both
+chains co-import today, and the parameterization above is
+a historical artifact of the closed seam; the direct form
+is pinned by WB-2 (correction recorded 2026-11-04,
+WB-1).
 
 ## Target (2): the seat Schur, stated exactly
 
