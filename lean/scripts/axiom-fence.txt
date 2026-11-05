@@ -712,3 +712,11 @@ ThetLogos.seatChar₃_pow_sum
 ThetLogos.sum_seatChar₃_colWord
 ThetLogos.seatIntegralPi₃
 ThetLogos.seatChar₃_star
+
+import ThetLogos.LayerKernelPosTernaryFilter
+ThetLogos.layerKernel_ternary_closed
+ThetLogos.stratum_average₃
+ThetLogos.stratumMonoAux₃_eq
+ThetLogos.prod_branchFactor₃
+ThetLogos.patternDiv₃_eq_zero_iff
+ThetLogos.layerLinkOf_bijective
