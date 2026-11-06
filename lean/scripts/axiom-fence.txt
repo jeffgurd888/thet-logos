@@ -932,3 +932,17 @@ import ThetLogos.WritingDirectionCompass
 ThetLogos.compassAxis_card
 ThetLogos.compassFaceDir_card
 ThetLogos.compass_counts
+import ThetLogos.WritingDirectionCensus
+ThetLogos.readingOf_eq_self_or_reverse
+ThetLogos.wordAlignUndirected_iff
+ThetLogos.undirected_fiber_of_denote
+ThetLogos.undirected_functional_at_iff
+ThetLogos.wordAlignDirected_functional
+ThetLogos.directed_ayin_pe_fibers
+ThetLogos.undirected_ayin_pe_fiber
+ThetLogos.wordAlignUndirected_not_functional
+ThetLogos.undirected_functional_at_ayin_ayin
+ThetLogos.wordAlignDirected_not_injective
+ThetLogos.seedRead_range
+ThetLogos.wordDenote_range
+ThetLogos.directed_gap_DO
