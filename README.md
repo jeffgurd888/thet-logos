@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v4 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23648050.svg)](https://doi.org/10.5281/zenodo.23648050)
-![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-13%2C798-blue)
+![Theorem declarations](https://img.shields.io/badge/theorem%20declarations-13%2C848-blue)
 ![Lean](https://img.shields.io/badge/Lean%204%20%2B%20Mathlib-formal%20proofs-purple)
 
 > "If we don't stop worrying about the Almighty dollar, we're not
