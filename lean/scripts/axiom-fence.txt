@@ -768,3 +768,22 @@ ThetLogos.pathSeat4_localExpr_at_one
 ThetLogos.pathSeat4_localExpr_at_three
 ThetLogos.pathSeat4_restSucc_delta_one
 ThetLogos.pathSeat4_const_stationary_not_all_succ
+
+import ThetLogos.LayerKernelGramCert
+ThetLogos.gramColWeight_nonneg
+ThetLogos.gram_pairing_eq
+ThetLogos.gram_pairing_re_nonneg
+ThetLogos.LayerKernelSOSCert.gram_form
+ThetLogos.LayerKernelSOSCert.layerKernelPos
+ThetLogos.LayerKernelSOSCert.layerKernel_const_of_features_constant
+
+import ThetLogos.LayerKernelGramCertInstances
+ThetLogos.gramSeatCoeff_nonneg
+ThetLogos.gram_sum_univ_two
+ThetLogos.gramSeat_expansion
+ThetLogos.gramWeight_ite
+ThetLogos.seatSOSCert_features_not_constant
+ThetLogos.gramTernaryCoeff_nonneg
+ThetLogos.gram_sum_univ_three
+ThetLogos.gramTernary_expansion
+ThetLogos.gramWeight_pattern
