@@ -724,3 +724,10 @@ ThetLogos.layerLinkOf_bijective
 import ThetLogos.LayerKernelPosTernaryGram
 ThetLogos.layerKernelPos_ternary_seat
 ThetLogos.ternary_pairing_gram
+
+import ThetLogos.LayerKernelPosTernaryFact
+ThetLogos.seat_not_stratumColumnFactorization₃
+ThetLogos.seat_stratumColumnFactorization₃_zero
+ThetLogos.fact_implies_layerKernelPos_ternary_seat
+ThetLogos.patternSurvives₃_seatPair₃
+ThetLogos.patternWeight₃_seatPair₃
