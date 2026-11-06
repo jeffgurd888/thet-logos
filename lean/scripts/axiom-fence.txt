@@ -731,3 +731,16 @@ ThetLogos.seat_stratumColumnFactorization₃_zero
 ThetLogos.fact_implies_layerKernelPos_ternary_seat
 ThetLogos.patternSurvives₃_seatPair₃
 ThetLogos.patternWeight₃_seatPair₃
+
+import ThetLogos.RLP1PhiLayer
+ThetLogos.rlp1Phi_linear
+ThetLogos.rlp1RowSum_ge_one
+ThetLogos.rlp1RowSum_eq_one_iff
+ThetLogos.rlp1Phi_add_const
+ThetLogos.rlp1Phi_add_const_ne
+ThetLogos.rlp1Phi_not_factor_meanSub
+ThetLogos.rlp1_const_eq
+ThetLogos.rlp1Phi_bounds
+ThetLogos.pathSeat8_rowSum_table
+ThetLogos.pathSeat8_phi_single_table
+ThetLogos.torusSeat44_rowSum
