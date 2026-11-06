@@ -906,3 +906,12 @@ ThetLogos.layerGaugeAction_center
 ThetLogos.gaugeInvariant_center_comp
 ThetLogos.pairing_center_eq
 ThetLogos.layerKernelPos_center_seat
+
+import ThetLogos.TernarySeatFlank
+ThetLogos.ternaryFlank_iff
+ThetLogos.ternaryFlank_two_eq_neg_one
+ThetLogos.ternaryFlank_fragment_sum
+ThetLogos.ternaryFlank_neg_exchanges
+ThetLogos.ternaryFlank_neg_fixed_iff
+ThetLogos.ternaryFlank_char_shadow
+ThetLogos.ternaryFlank_regrouped
