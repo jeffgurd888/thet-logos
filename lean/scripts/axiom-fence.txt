@@ -915,3 +915,20 @@ ThetLogos.ternaryFlank_neg_exchanges
 ThetLogos.ternaryFlank_neg_fixed_iff
 ThetLogos.ternaryFlank_char_shadow
 ThetLogos.ternaryFlank_regrouped
+
+import ThetLogos.WritingDirection
+ThetLogos.MeaningAlign.transport_functional
+ThetLogos.MeaningAlign.transport_total
+ThetLogos.MeaningAlign.transport_injective
+ThetLogos.MeaningAlign.transport_surjective
+ThetLogos.wordDenote_reverse_of_length_le_one
+ThetLogos.seedRead_faithful
+ThetLogos.wordDenote_reverse
+ThetLogos.wordDenote_ayin_pe
+ThetLogos.wordDenote_ayin_pe_rtl
+ThetLogos.reading_direction_is_content
+
+import ThetLogos.WritingDirectionCompass
+ThetLogos.compassAxis_card
+ThetLogos.compassFaceDir_card
+ThetLogos.compass_counts
