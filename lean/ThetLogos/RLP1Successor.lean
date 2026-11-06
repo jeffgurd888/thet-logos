@@ -83,8 +83,9 @@ armed.
   of the Gate 4 exhibit, `stationarity_exhibit.py`) — and the
   successor set at `s = 1` on that seat, computed exactly:
   `{0, 1, 2}`. Site `3` is excluded, with the exact margin
-  `1/4` (the local expression at `w = 3` exceeds the minimum at
-  `w = 1` by `1/4`).
+  `1/2` (the local expression at `w = 2` exceeds the minimum
+  by `1/2`; witness corrected at integration — the lane brief's
+  w = 3 / margin 1/4 table was proved wrong during the build).
 
 NOT here: target (a) in any form (see above); any shadow or
 dictionary object (that was the audit's comparison standard,
