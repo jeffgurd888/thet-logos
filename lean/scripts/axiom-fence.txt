@@ -744,3 +744,16 @@ ThetLogos.rlp1Phi_bounds
 ThetLogos.pathSeat8_rowSum_table
 ThetLogos.pathSeat8_phi_single_table
 ThetLogos.torusSeat44_rowSum
+
+import ThetLogos.RLP1Stationarity
+ThetLogos.rlp1Action_update
+ThetLogos.rlp1StationaryAt_iff
+ThetLogos.rlp1Stationary_m_indep
+ThetLogos.rlp1Stationary_exists
+ThetLogos.rlp1_midpoint_value_lower
+ThetLogos.rlp1_exists_midpoint
+ThetLogos.rlp1_attains_midpoint_iff
+ThetLogos.rlp1StationaryAt_free_iff
+ThetLogos.rlp1StationaryAt_balance
+ThetLogos.rlp1StationaryAt_const_iff
+ThetLogos.rlp1Stationary_const_iff
