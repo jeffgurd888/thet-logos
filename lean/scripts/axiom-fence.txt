@@ -1145,3 +1145,26 @@ ThetLogos.tolman_lambda_zero
 ThetLogos.tolman_regimes
 ThetLogos.tolman_witnesses
 ThetLogos.tolman_te_fence
+
+import ThetLogos.SolidBodyAction
+ThetLogos.sbCross_zero
+ThetLogos.sbCross_apply_zero
+ThetLogos.sbCross_apply_one
+ThetLogos.sbCross_apply_two
+ThetLogos.sb_firstVar_ibp
+ThetLogos.sbBump_nonneg
+ThetLogos.sbBump_differentiable
+ThetLogos.sbTestField_differentiable
+ThetLogos.sbBump_eq_zero_of_le
+ThetLogos.sbBump_eq_zero_of_ge
+ThetLogos.sbBump_mid
+ThetLogos.sb_integral_eq_zero_imp
+ThetLogos.sb_update_differentiable
+ThetLogos.sb_update_eq_zero
+ThetLogos.sb_firstVar_update
+ThetLogos.sb_weak_deriv_eq
+ThetLogos.sb_stationary_iff_euler
+ThetLogos.sb_bulk_vanishes
+ThetLogos.sb_const_stationary_iff
+ThetLogos.sb_stationary_rotEnergy_const
+ThetLogos.sb_stationary_angMomSq_const
