@@ -230,7 +230,7 @@ theorem nsNotC_not_entails_A :
       ¬ nsCShape Sol Init Force ∧ ¬ nsAShape Sol Init Zero := by
   refine ⟨fun ν _ _ => ν = 1, fun _ => True, fun _ => True, fun _ => True,
     cmEqOne_not_breakdown _ _, ?_⟩
-  exact cmEqOne_not_existence _ _ _ trivial _ trivial
+  exact cmEqOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
 
 /-- **¬A does NOT entail C** (as composed — see the header's
 CT-3 fence): the `ν ≠ 1` assignment makes ¬(A-shape) true and
@@ -242,7 +242,7 @@ theorem nsNotA_not_entails_C :
       ¬ nsAShape Sol Init Zero ∧ ¬ nsCShape Sol Init Force := by
   refine ⟨fun ν _ _ => ν ≠ 1, fun _ => True, fun _ => True, fun _ => True,
     ?_, cmNeOne_not_breakdown _ _⟩
-  exact cmNeOne_not_existence _ _ _ trivial _ trivial
+  exact cmNeOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
 
 /-- **¬D does NOT entail B** (torus mirror of the headline
 step): the `ν = 1` assignment. -/
@@ -252,7 +252,7 @@ theorem nsNotD_not_entails_B :
       ¬ nsCShape Sol Init Force ∧ ¬ nsAShape Sol Init Zero := by
   refine ⟨fun ν _ _ => ν = 1, fun _ => True, fun _ => True, fun _ => True,
     cmEqOne_not_breakdown _ _, ?_⟩
-  exact cmEqOne_not_existence _ _ _ trivial _ trivial
+  exact cmEqOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
 
 /-- **¬B does NOT entail D** (torus mirror): the `ν ≠ 1`
 assignment. -/
@@ -262,7 +262,7 @@ theorem nsNotB_not_entails_D :
       ¬ nsAShape Sol Init Zero ∧ ¬ nsCShape Sol Init Force := by
   refine ⟨fun ν _ _ => ν ≠ 1, fun _ => True, fun _ => True, fun _ => True,
     ?_, cmNeOne_not_breakdown _ _⟩
-  exact cmNeOne_not_existence _ _ _ trivial _ trivial
+  exact cmNeOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
 
 /-- **¬C does NOT entail B** (cross-domain): the `ν = 1`
 assignment blocks it on ν already; domain blocks it at every
@@ -274,7 +274,7 @@ theorem nsNotC_not_entails_B :
       ¬ nsCShape Sol InitR ForceR ∧ ¬ nsAShape Sol InitT ZeroT := by
   refine ⟨fun ν _ _ => ν = 1, fun _ => True, fun _ => True, fun _ => True,
     fun _ => True, cmEqOne_not_breakdown _ _, ?_⟩
-  exact cmEqOne_not_existence _ _ _ trivial _ trivial
+  exact cmEqOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
 
 /-- **¬D does NOT entail A** (cross-domain): the `ν = 1`
 assignment. -/
@@ -285,7 +285,7 @@ theorem nsNotD_not_entails_A :
       ¬ nsCShape Sol InitT ForceT ∧ ¬ nsAShape Sol InitR ZeroR := by
   refine ⟨fun ν _ _ => ν = 1, fun _ => True, fun _ => True, fun _ => True,
     fun _ => True, cmEqOne_not_breakdown _ _, ?_⟩
-  exact cmEqOne_not_existence _ _ _ trivial _ trivial
+  exact cmEqOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
 
 /-- **¬A does NOT entail B** (cross-domain, existence to
 existence): the `ν ≠ 1` assignment. -/
@@ -296,8 +296,8 @@ theorem nsNotA_not_entails_B :
       ¬ nsAShape Sol InitR ZeroR ∧ ¬ nsAShape Sol InitT ZeroT := by
   refine ⟨fun ν _ _ => ν ≠ 1, fun _ => True, fun _ => True, fun _ => True,
     fun _ => True, ?_, ?_⟩
-  · exact cmNeOne_not_existence _ _ _ trivial _ trivial
-  · exact cmNeOne_not_existence _ _ _ trivial _ trivial
+  · exact cmNeOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
+  · exact cmNeOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
 
 /-- **¬B does NOT entail A** (cross-domain, existence to
 existence): the `ν ≠ 1` assignment. -/
@@ -308,8 +308,8 @@ theorem nsNotB_not_entails_A :
       ¬ nsAShape Sol InitT ZeroT ∧ ¬ nsAShape Sol InitR ZeroR := by
   refine ⟨fun ν _ _ => ν ≠ 1, fun _ => True, fun _ => True, fun _ => True,
     fun _ => True, ?_, ?_⟩
-  · exact cmNeOne_not_existence _ _ _ trivial _ trivial
-  · exact cmNeOne_not_existence _ _ _ trivial _ trivial
+  · exact cmNeOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
+  · exact cmNeOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
 
 /-- **¬A does NOT entail D** (cross-domain): the `ν ≠ 1`
 assignment. -/
@@ -320,7 +320,7 @@ theorem nsNotA_not_entails_D :
       ¬ nsAShape Sol InitR ZeroR ∧ ¬ nsCShape Sol InitT ForceT := by
   refine ⟨fun ν _ _ => ν ≠ 1, fun _ => True, fun _ => True, fun _ => True,
     fun _ => True, ?_, cmNeOne_not_breakdown _ _⟩
-  exact cmNeOne_not_existence _ _ _ trivial _ trivial
+  exact cmNeOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
 
 /-- **¬B does NOT entail C** (cross-domain): the `ν ≠ 1`
 assignment. -/
@@ -331,7 +331,7 @@ theorem nsNotB_not_entails_C :
       ¬ nsAShape Sol InitT ZeroT ∧ ¬ nsCShape Sol InitR ForceR := by
   refine ⟨fun ν _ _ => ν ≠ 1, fun _ => True, fun _ => True, fun _ => True,
     fun _ => True, ?_, cmNeOne_not_breakdown _ _⟩
-  exact cmNeOne_not_existence _ _ _ trivial _ trivial
+  exact cmNeOne_not_existence (fun _ => True) (fun _ => True) (fun _ => 0) trivial (fun _ _ => 0) trivial
 
 /-- **¬C does NOT entail D** (cross-domain, breakdown to
 breakdown): the `ν = 1` assignment. -/

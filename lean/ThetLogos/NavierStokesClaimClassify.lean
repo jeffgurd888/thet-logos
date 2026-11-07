@@ -130,7 +130,12 @@ theorem nsClassify_fixedGlobal (s : NSClaimShape)
           unfold nsShapeMismatches
           simp only [hs, hp]
           split <;> simp_all
-        exact List.mem_of_head?_eq_some h1
+        cases h2 : nsShapeMismatches s with
+        | nil => simp [h2] at h1
+        | cons y ys =>
+            rw [h2] at h1
+            simp only [List.head?_cons, Option.some.injEq] at h1
+            exact h1 ▸ List.mem_cons_self
       rw [hm] at hmem
       exact hmem
 
