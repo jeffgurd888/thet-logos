@@ -1127,3 +1127,21 @@ ThetLogos.fa4b_pin
 import ThetLogos.FiniteArrowMagnetic
 ThetLogos.magHeat_quadraticForm_antitoneOn
 ThetLogos.fa7_pin
+
+import ThetLogos.TolmanExhibit
+ThetLogos.hasDerivAt_occEnt
+ThetLogos.occSlope_eq_zero_iff
+ThetLogos.occSlope_pos_iff
+ThetLogos.occSlope_neg_iff
+ThetLogos.occEnt_tangent_identity
+ThetLogos.occEnt_le_tangent
+ThetLogos.occEnt_lt_tangent
+ThetLogos.hasDerivAt_occEnt_transfer
+ThetLogos.exists_slope_condition_of_equilibrium
+ThetLogos.equilibrium_of_slope_condition
+ThetLogos.tolman_characterization
+ThetLogos.tolman_product
+ThetLogos.tolman_lambda_zero
+ThetLogos.tolman_regimes
+ThetLogos.tolman_witnesses
+ThetLogos.tolman_te_fence
