@@ -125,10 +125,12 @@ theorem nsClassify_fixedGlobal (s : NSClaimShape)
   | cons x xs =>
       refine ⟨x :: xs, rfl, ?_⟩
       have hmem : NSMismatch.wrongNu ∈ nsShapeMismatches s := by
-        unfold nsShapeMismatches
         have hp : (nsPinShape s.alt).nu = .quantifiedInside := nsPinShape_nu s.alt
-        rw [hs, hp]
-        simp
+        have h1 : (nsShapeMismatches s).head? = some .wrongNu := by
+          unfold nsShapeMismatches
+          simp only [hs, hp]
+          split <;> simp_all
+        exact List.mem_of_head?_eq_some h1
       rw [hm] at hmem
       exact hmem
 
