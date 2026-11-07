@@ -1029,3 +1029,25 @@ ThetLogos.memLp_gramKernel_mul
 ThetLogos.posKernel_gram_mul
 ThetLogos.memLp_gramKernel_mul'
 ThetLogos.posKernel_gram_mul'
+import ThetLogos.DeRhamLadderHodgeSeat
+ThetLogos.DeRhamLadder.lad_adjoint_identity₁
+ThetLogos.DeRhamLadder.lad_adjoint_identity₂
+ThetLogos.DeRhamLadder.lad_dsq_zero
+ThetLogos.DeRhamLadder.ladLap1_eq
+import ThetLogos.DeRhamLadderSupercharge
+ThetLogos.DeRhamLadder.ladQMat_sq
+ThetLogos.DeRhamLadder.ladQ_sq
+ThetLogos.DeRhamLadder.lad_energy₀
+ThetLogos.DeRhamLadder.lad_energy₁
+ThetLogos.DeRhamLadder.lad_energy₂
+ThetLogos.DeRhamLadder.lad_ker_lap1
+ThetLogos.DeRhamLadder.lad_ker_d1_eq_range_d2
+ThetLogos.DeRhamLadder.lad_harmonic_census
+import ThetLogos.DeRhamLadderIndex
+ThetLogos.DeRhamLadder.lad_chi_cohomology
+ThetLogos.DeRhamLadder.lad_chi_both_ways
+import ThetLogos.DeRhamLadderPairing
+ThetLogos.DeRhamLadder.lad_intertwine01
+ThetLogos.DeRhamLadder.lad_intertwine12
+ThetLogos.DeRhamLadder.lad_finrank_eigenspace01
+ThetLogos.DeRhamLadder.lad_finrank_eigenspace12
