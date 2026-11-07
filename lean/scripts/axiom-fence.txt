@@ -1168,3 +1168,18 @@ ThetLogos.sb_bulk_vanishes
 ThetLogos.sb_const_stationary_iff
 ThetLogos.sb_stationary_rotEnergy_const
 ThetLogos.sb_stationary_angMomSq_const
+
+import ThetLogos.FiniteOccupationEntropy
+ThetLogos.occEntropy_nonneg
+ThetLogos.occEntropy_le_middle
+ThetLogos.occEntropy_succ_sub
+ThetLogos.occEntropy_succ_sub_pos
+ThetLogos.occEntropy_succ_sub_neg
+ThetLogos.occEntropy_succ_sub_eq_zero
+ThetLogos.occEntropy_zero_right
+ThetLogos.occEntropy_self
+ThetLogos.occEntropy_eq_entropyW_uniform
+ThetLogos.occEntropy_max_at_half
+ThetLogos.occEntropy_step
+ThetLogos.occEntropy_step_signs
+ThetLogos.occEntropy_bridge
