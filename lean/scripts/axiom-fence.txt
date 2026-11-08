@@ -1337,3 +1337,17 @@ ThetLogos.layerKernel_d4_eq_sum
 ThetLogos.pairing_d4_eq
 ThetLogos.layerKernelPos_of_d4KernelEqGap
 ThetLogos.layerKernelPosD4Std_of_gaps
+
+import ThetLogos.SpectralMagnetism
+ThetLogos.occEnt_eq_log_exp_slope
+ThetLogos.occEnt_pos
+ThetLogos.spectralWeight_pos
+ThetLogos.occEnt_half
+ThetLogos.spectralWeight_const_half
+ThetLogos.occEnt_le_log_two
+ThetLogos.spectralWeight_le
+ThetLogos.spectral_characterization
+ThetLogos.spectral_equilibrium_closed_form
+ThetLogos.spectralWeight_eq_of_same_totals
+ThetLogos.spectralWeight_swap
+ThetLogos.spectral_nonvacuity
