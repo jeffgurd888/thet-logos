@@ -1452,3 +1452,9 @@ ThetLogos.DialOneA42Vary.no_constant_normRatio
 import ThetLogos.DialOneRConjFormB
 ThetLogos.DialOneRConjFormB.formB_headline
 ThetLogos.DialOneRConjFormB.allSwap_not_placed
+
+import ThetLogos.DialOneOrbitKill
+ThetLogos.DialOneOrbitKill.piAnti_not_in_real_orbit
+ThetLogos.DialOneOrbitKill.not_piAntiOrbitQReal
+ThetLogos.DialOneOrbitKill.not_piAntiOrbitQ
+ThetLogos.DialOneOrbitKill.pi1_not_in_real_orbit_of_piAnti
