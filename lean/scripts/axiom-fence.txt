@@ -1448,3 +1448,7 @@ ThetLogos.exists_isProjectiveLimit
 import ThetLogos.DialOneA42Vary
 ThetLogos.DialOneA42Vary.no_constant_ratio
 ThetLogos.DialOneA42Vary.no_constant_normRatio
+
+import ThetLogos.DialOneRConjFormB
+ThetLogos.DialOneRConjFormB.formB_headline
+ThetLogos.DialOneRConjFormB.allSwap_not_placed
