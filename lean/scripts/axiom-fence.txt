@@ -1351,3 +1351,17 @@ ThetLogos.spectral_equilibrium_closed_form
 ThetLogos.spectralWeight_eq_of_same_totals
 ThetLogos.spectralWeight_swap
 ThetLogos.spectral_nonvacuity
+
+import ThetLogos.SubsetMarginals
+ThetLogos.margWeightSet_apply
+ThetLogos.margWeightSet_nonneg
+ThetLogos.sum_margWeightSet
+ThetLogos.isProbWeight_margWeightSet
+ThetLogos.le_margWeightSet_self
+ThetLogos.sum_margWeightSet_mul_log
+ThetLogos.regionEntropy_nonneg
+ThetLogos.regionEntropy_le_log_card
+ThetLogos.margWeightSet_singleton
+ThetLogos.regionEntropy_singleton
+ThetLogos.margWeightSet_prob_form
+ThetLogos.regionEntropy_bounds_form
