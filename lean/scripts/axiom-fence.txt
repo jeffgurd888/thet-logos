@@ -1316,3 +1316,24 @@ ThetLogos.DialOneOperatorReality.UJ_isRealMat
 ThetLogos.DialOneOperatorReality.yukawaDiagVec_star
 ThetLogos.DialOneOperatorReality.diagonal_star_fixed
 ThetLogos.DialOneOperatorReality.DF_oneGen_isRealMat
+
+import ThetLogos.LayerKernelPosD4Probe
+ThetLogos.sum_D4Type
+ThetLogos.d4Coeff_nonneg
+ThetLogos.charFn_nbRep_r_zero
+ThetLogos.charFn_nbRep_r_one
+ThetLogos.charFn_nbRep_r_two
+ThetLogos.charFn_nbRep_r_three
+ThetLogos.nbRotZ_zero_mul_nbRefl
+ThetLogos.nbRotZ_one_mul_nbRefl
+ThetLogos.nbRotZ_two_mul_nbRefl
+ThetLogos.nbRotZ_three_mul_nbRefl
+ThetLogos.charFn_nbRep_sr
+ThetLogos.gramDens_nbRep_r_zero
+ThetLogos.gramDens_nbRep_r_two
+ThetLogos.gramDens_nbRep_of_ne
+ThetLogos.d4_expansion
+ThetLogos.layerKernel_d4_eq_sum
+ThetLogos.pairing_d4_eq
+ThetLogos.layerKernelPos_of_d4KernelEqGap
+ThetLogos.layerKernelPosD4Std_of_gaps
