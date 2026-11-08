@@ -18,6 +18,8 @@ time. Every theorem is verified by the Lean kernel. Every claim is
 labeled by its evidence tier, and every killed claim is published next
 to the proofs, with the kill on record.
 
+**2026-11-07 — current state.** Census 14,130 theorem declarations / 545 modules (chain count; declaration-true recount 14,128 — the two-point gap is two located header comment lines, disclosed on their ledger records). Zero sorrys across 560 files. Axiom fence 992 / 992. Epistemic ledger: 78 records. Paper v4: DOI 10.5281/zenodo.23648050. Recent shipments: the De Rham ladder (LAD-0..4), Finite Arrow (FA-0..7), the Tolman equilibrium exhibit (the literal reading refuted in-brick; the surviving form derived), UA-3 (stationarity of the solid-body action ⟺ the Euler equations, derived), AB-7 (occupation entropy peaks at half occupation). Also on the record at full rank: the FiniteTripleInstance brick STOPPED — the corpus's two spectral-triple frameworks stay unjoined at the algebra seam (the seat's representations are *-representations of a real *-algebra; the generic framework expects a ℂ-algebra map); the stop record is in the tree. NO CLAIM on any Millennium statement; dials 0/4.
+
 **2026-10-31 — SEP-0: the imbalance observable,
 registered.** The separation line (survived scoping in
 reduced form) opens: Qsep, the sector-imbalance
@@ -1362,3 +1364,9 @@ and never a toll — the work is free for everyone, forever:
 - **Cash App:** [$Gurd888](https://cash.app/$Gurd888)
 
 — Jeffrey Michael Gurd, Nexus Research
+
+## Clone it — and bring an idea
+
+The repo is public and free to clone, forever: github.com/jeffgurd888/thet-logos. And the door opens both ways — if you have an idea you believe belongs in this system, bring it: in the comments, an issue, a pull request. It gets the same treatment our own ideas get: stated precisely, tiered honestly, tested against the kernel. What survives is a theorem; what doesn't is a published kill — and here, a kill is a result, not a rejection. Tested and trued, in the open, either way.
+
+On GitHub, the doors are an Issue (state the idea as precisely as you can) or a Pull Request (state it in Lean, against a pin). Either way the verdict lands in the open: the epistemic ledger in this repo is where landings and kills are recorded.
