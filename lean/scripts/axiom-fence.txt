@@ -1438,3 +1438,6 @@ ThetLogos.regionEntropy_mono
 ThetLogos.condEntropy_chain_form
 ThetLogos.condEntropy_nonneg_form
 ThetLogos.regionEntropy_mono_form
+
+import ThetLogos.LayerKernelPosD4Separation
+ThetLogos.layerKernelPosD4Std_holds
