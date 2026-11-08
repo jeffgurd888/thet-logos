@@ -1441,3 +1441,6 @@ ThetLogos.regionEntropy_mono_form
 
 import ThetLogos.LayerKernelPosD4Separation
 ThetLogos.layerKernelPosD4Std_holds
+
+import ThetLogos.KolmogorovExtension
+ThetLogos.exists_isProjectiveLimit
