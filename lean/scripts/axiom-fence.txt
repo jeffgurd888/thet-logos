@@ -1444,3 +1444,7 @@ ThetLogos.layerKernelPosD4Std_holds
 
 import ThetLogos.KolmogorovExtension
 ThetLogos.exists_isProjectiveLimit
+
+import ThetLogos.DialOneA42Vary
+ThetLogos.DialOneA42Vary.no_constant_ratio
+ThetLogos.DialOneA42Vary.no_constant_normRatio

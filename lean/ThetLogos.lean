@@ -14,3 +14,4 @@ import ThetLogos.ThreeGen
 import ThetLogos.Mod9Triad
 import ThetLogos.TritGrading
 import ThetLogos.KolmogorovExtension
+import ThetLogos.DialOneA42Vary
