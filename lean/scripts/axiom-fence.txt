@@ -1428,3 +1428,13 @@ ThetLogos.RealTripleInstance.one_color
 ThetLogos.RealTripleInstance.zero_u1
 ThetLogos.RealTripleInstance.zero_q
 ThetLogos.RealTripleInstance.zero_color
+
+import ThetLogos.ConditionalEntropy
+ThetLogos.margWeightSet_union_le
+ThetLogos.condEntropy_eq_sum
+ThetLogos.condEntropy_chain
+ThetLogos.condEntropy_nonneg
+ThetLogos.regionEntropy_mono
+ThetLogos.condEntropy_chain_form
+ThetLogos.condEntropy_nonneg_form
+ThetLogos.regionEntropy_mono_form
