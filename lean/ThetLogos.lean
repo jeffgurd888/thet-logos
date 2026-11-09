@@ -22,3 +22,5 @@ import ThetLogos.SpectralMagnetismSource
 import ThetLogos.LayerKernelGramSeriesUncond
 import ThetLogos.PoleUnityPin
 import ThetLogos.AutoContinuity
+import ThetLogos.LayerKernelContractionAPI
+import ThetLogos.LayerKernelGramCertFinite
