@@ -1458,3 +1458,9 @@ ThetLogos.DialOneOrbitKill.piAnti_not_in_real_orbit
 ThetLogos.DialOneOrbitKill.not_piAntiOrbitQReal
 ThetLogos.DialOneOrbitKill.not_piAntiOrbitQ
 ThetLogos.DialOneOrbitKill.pi1_not_in_real_orbit_of_piAnti
+
+import ThetLogos.DialOnePresSweep
+ThetLogos.DialOnePresSweep.strengthened_conjRep_allSwap
+ThetLogos.DialOnePresSweep.strengthened_conjRep_piU
+ThetLogos.DialOnePresSweep.strengthened_conjRep_conjRep_piAnti
+ThetLogos.DialOnePresSweep.presSweep_package
