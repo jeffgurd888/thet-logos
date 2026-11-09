@@ -19,3 +19,4 @@ import ThetLogos.DialOneRConjFormB
 import ThetLogos.DialOneOrbitKill
 import ThetLogos.DialOnePresSweep
 import ThetLogos.SpectralMagnetismSource
+import ThetLogos.LayerKernelGramSeriesUncond
