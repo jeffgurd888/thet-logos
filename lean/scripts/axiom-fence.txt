@@ -1496,3 +1496,10 @@ ThetLogos.channel_split
 import ThetLogos.LayerKernelGramCertFinite
 ThetLogos.layerKernel_eq_contracted
 ThetLogos.layerKernelPos_of_deltaGramGap
+
+import ThetLogos.ProjectiveGibbsFamily
+ThetLogos.exists_isProjectiveLimit_windowGibbs_zero
+ThetLogos.exists_isProjectiveLimit_windowGibbs
+ThetLogos.isProjectiveMeasureFamily_windowGibbs_zero
+ThetLogos.isProbabilityMeasure_windowGibbs
+ThetLogos.windowGibbs_zero

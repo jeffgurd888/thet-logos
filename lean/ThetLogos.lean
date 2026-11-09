@@ -24,3 +24,4 @@ import ThetLogos.PoleUnityPin
 import ThetLogos.AutoContinuity
 import ThetLogos.LayerKernelContractionAPI
 import ThetLogos.LayerKernelGramCertFinite
+import ThetLogos.ProjectiveGibbsFamily
