@@ -1481,3 +1481,9 @@ ThetLogos.PoleUnityDesign.nothing_eq_infinity
 ThetLogos.compl_empty_anchor
 ThetLogos.compl_univ_anchor
 ThetLogos.onePoint_zero_ne_infty_anchor
+
+import ThetLogos.AutoContinuity
+ThetLogos.AutoContinuity.MonoidHom.continuous_of_measurable
+ThetLogos.AutoContinuity.MonoidHom.continuous_of_ae_eq_measurable
+ThetLogos.AutoContinuity.MonoidHom.measurable_of_ae_eq_measurable
+ThetLogos.AutoContinuity.MonoidHom.continuous_of_aestronglyMeasurable
