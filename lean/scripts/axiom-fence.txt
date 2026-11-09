@@ -1503,3 +1503,9 @@ ThetLogos.exists_isProjectiveLimit_windowGibbs
 ThetLogos.isProjectiveMeasureFamily_windowGibbs_zero
 ThetLogos.isProbabilityMeasure_windowGibbs
 ThetLogos.windowGibbs_zero
+
+import ThetLogos.ProjectivePositivityTransport
+ThetLogos.limitOSForm_zero_nonneg
+ThetLogos.limitOSForm_eq_windowOSForm_of_projective
+ThetLogos.limitOSForm_eq_windowOSForm
+ThetLogos.windowOSForm_zero_eq
