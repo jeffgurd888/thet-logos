@@ -1475,3 +1475,9 @@ ThetLogos.spectralSource_grounded_witness
 import ThetLogos.LayerKernelGramSeriesUncond
 ThetLogos.LayerGramSeriesCert.gramSeriesObs_eq_zero_of_not_integrable
 ThetLogos.LayerGramSeriesCert.gram_term_eq_zero_of_not_integrable
+
+import ThetLogos.PoleUnityPin
+ThetLogos.PoleUnityDesign.nothing_eq_infinity
+ThetLogos.compl_empty_anchor
+ThetLogos.compl_univ_anchor
+ThetLogos.onePoint_zero_ne_infty_anchor
