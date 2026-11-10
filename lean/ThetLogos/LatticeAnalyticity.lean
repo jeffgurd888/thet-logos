@@ -108,10 +108,10 @@ theorem wilsonAction_eq (β : ℝ) (U : Config Λ G) :
 
 /-- Stage 0's explicit action bound `2 · (16 · |Λ|)`, named once at the
 density level. -/
-noncomputable def actionBound : ℝ := 2 * (16 * (Fintype.card Λ : ℝ))
+noncomputable def actionDensityBound : ℝ := 2 * (16 * (Fintype.card Λ : ℝ))
 
-theorem actionBound_nonneg : 0 ≤ actionBound (Λ := Λ) := by
-  unfold actionBound
+theorem actionBound_nonneg : 0 ≤ actionDensityBound (Λ := Λ) := by
+  unfold actionDensityBound
   positivity
 
 /-- The density sum is nonnegative (for `0 < d`). -/
@@ -120,10 +120,10 @@ theorem actionDensity_nonneg (hd : 0 < d) (U : Config Λ G) :
   have h := wilsonAction_nonneg σ ρ hd zero_le_one U
   rwa [wilsonAction_eq σ ρ (1 : ℝ) U, one_mul] at h
 
-/-- The density sum is bounded by `actionBound`, from Stage 0's
+/-- The density sum is bounded by `actionDensityBound`, from Stage 0's
 `wilsonAction_abs_le` at `β = 1`. -/
 theorem actionDensity_abs_le (hd : 0 < d) (U : Config Λ G) :
-    |actionDensity σ ρ U| ≤ actionBound (Λ := Λ) := by
+    |actionDensity σ ρ U| ≤ actionDensityBound (Λ := Λ) := by
   have h := wilsonAction_abs_le σ ρ hd (1 : ℝ) U
   rwa [wilsonAction_eq σ ρ (1 : ℝ) U, one_mul, abs_one, one_mul] at h
 
@@ -169,7 +169,7 @@ theorem integrable_mul_actionDensity_pow
   have hA : Measurable fun U : Config Λ G => (actionDensity σ ρ U : ℂ) :=
     Complex.measurable_ofReal.comp (measurable_actionDensity σ ρ hρcont)
   refine integrable_of_bounded μG (hF.mul (hA.pow_const k))
-    (C := B * actionBound (Λ := Λ) ^ k) fun U => ?_
+    (C := B * actionDensityBound (Λ := Λ) ^ k) fun U => ?_
   rw [norm_mul, norm_pow, Complex.norm_real]
   exact mul_le_mul (hFB U) (pow_le_pow_left₀ (abs_nonneg _)
     (actionDensity_abs_le σ ρ hd U) k) (pow_nonneg (abs_nonneg _) k)
@@ -180,12 +180,12 @@ theorem integrable_mul_actionDensity_pow
 noncomputable def gibbsMoment (F : Config Λ G → ℂ) (k : ℕ) : ℂ :=
   ∫ U, F U * (actionDensity σ ρ U : ℂ) ^ k ∂(configMeasure μG)
 
-/-- Moment bound: `‖∫ F A^k‖ ≤ B · actionBound^k`. -/
+/-- Moment bound: `‖∫ F A^k‖ ≤ B · actionDensityBound^k`. -/
 theorem norm_gibbsMoment_le
     (hρcont : Continuous fun g : G => repMatrix ρ g) (hd : 0 < d)
     {F : Config Λ G → ℂ} (hF : Measurable F) {B : ℝ}
     (hFB : ∀ U, ‖F U‖ ≤ B) (k : ℕ) :
-    ‖gibbsMoment σ μG ρ F k‖ ≤ B * actionBound (Λ := Λ) ^ k := by
+    ‖gibbsMoment σ μG ρ F k‖ ≤ B * actionDensityBound (Λ := Λ) ^ k := by
   refine norm_integral_le_of_forall_bound μG
     (integrable_mul_actionDensity_pow σ μG ρ hρcont hd hF hFB k) fun U => ?_
   rw [norm_mul, norm_pow, Complex.norm_real]
@@ -213,14 +213,14 @@ theorem actionMean_nonneg
 
 theorem actionMean_le
     (hρcont : Continuous fun g : G => repMatrix ρ g) (hd : 0 < d) :
-    actionMean σ μG ρ ≤ actionBound (Λ := Λ) := by
+    actionMean σ μG ρ ≤ actionDensityBound (Λ := Λ) := by
   calc actionMean σ μG ρ = ∫ U, actionDensity σ ρ U ∂(configMeasure μG) := rfl
-    _ ≤ ∫ _U : Config Λ G, actionBound (Λ := Λ) ∂(configMeasure μG) :=
+    _ ≤ ∫ _U : Config Λ G, actionDensityBound (Λ := Λ) ∂(configMeasure μG) :=
         integral_mono_ae (integrable_actionDensity σ μG ρ hρcont hd)
           (integrable_const _)
           (ae_of_all _ fun U => le_trans (le_abs_self _)
             (actionDensity_abs_le σ ρ hd U))
-    _ = actionBound (Λ := Λ) := by simp
+    _ = actionDensityBound (Λ := Λ) := by simp
 
 end Setup
 
@@ -393,27 +393,27 @@ theorem covZero_actionDensity (F : Config Λ G → ℂ)
     gibbsExpect_zero_actionDensityC σ μG ρ hρcont hd]
 
 /-- Norm bound on the covariance against `A`:
-`‖Cov₀(F, A)‖ ≤ 2·B·actionBound`. -/
+`‖Cov₀(F, A)‖ ≤ 2·B·actionDensityBound`. -/
 theorem norm_covZero_actionDensity_le
     (hρcont : Continuous fun g : G => repMatrix ρ g) (hd : 0 < d)
     {F : Config Λ G → ℂ} (hF : Measurable F) {B : ℝ}
     (hFB : ∀ U, ‖F U‖ ≤ B) :
     ‖covZero σ μG ρ F (fun U => (actionDensity σ ρ U : ℂ))‖
-      ≤ 2 * B * actionBound (Λ := Λ) := by
+      ≤ 2 * B * actionDensityBound (Λ := Λ) := by
   have hB : 0 ≤ B := le_trans (norm_nonneg _) (hFB (fun _ => 1))
   have hm0 : ‖gibbsMoment σ μG ρ F 0‖ ≤ B := by
     have h := norm_gibbsMoment_le σ μG ρ hρcont hd hF hFB 0
     simpa using h
-  have hm1 : ‖gibbsMoment σ μG ρ F 1‖ ≤ B * actionBound (Λ := Λ) := by
+  have hm1 : ‖gibbsMoment σ μG ρ F 1‖ ≤ B * actionDensityBound (Λ := Λ) := by
     have h := norm_gibbsMoment_le σ μG ρ hρcont hd hF hFB 1
     simpa using h
   rw [covZero_actionDensity σ μG ρ F hρcont hd]
   refine le_trans (norm_sub_le _ _) ?_
   rw [Complex.norm_mul, Complex.norm_real, Real.norm_eq_abs,
     abs_of_nonneg (actionMean_nonneg σ μG ρ hρcont hd)]
-  have h1 : ‖gibbsMoment σ μG ρ F 1‖ ≤ B * actionBound (Λ := Λ) := hm1
+  have h1 : ‖gibbsMoment σ μG ρ F 1‖ ≤ B * actionDensityBound (Λ := Λ) := hm1
   have h2 : ‖gibbsMoment σ μG ρ F 0‖ * actionMean σ μG ρ
-      ≤ B * actionBound (Λ := Λ) :=
+      ≤ B * actionDensityBound (Λ := Λ) :=
     mul_le_mul hm0 (actionMean_le σ μG ρ hρcont hd)
       (actionMean_nonneg σ μG ρ hρcont hd) hB
   linarith [h1, h2]
@@ -447,48 +447,48 @@ theorem integrable_gibbsNum_integrand
     Complex.measurable_ofReal.comp
       (Real.measurable_exp.comp ((measurable_actionDensity σ ρ hρcont).const_mul β).neg)
   refine integrable_of_bounded μG (hexp.mul hF)
-    (C := Real.exp (|β| * actionBound (Λ := Λ)) * B) fun U => ?_
+    (C := Real.exp (|β| * actionDensityBound (Λ := Λ)) * B) fun U => ?_
   rw [norm_mul, Complex.norm_real, Real.norm_of_nonneg (Real.exp_nonneg _)]
   refine mul_le_mul ?_ (hFB U) (norm_nonneg _)
     (Real.exp_nonneg _)
   refine Real.exp_le_exp.mpr ?_
   have hAU : 0 ≤ actionDensity σ ρ U := actionDensity_nonneg σ ρ hd U
-  have hAle : actionDensity σ ρ U ≤ actionBound (Λ := Λ) :=
+  have hAle : actionDensity σ ρ U ≤ actionDensityBound (Λ := Λ) :=
     le_trans (le_abs_self _) (actionDensity_abs_le σ ρ hd U)
   calc -(β * actionDensity σ ρ U) ≤ |β * actionDensity σ ρ U| := neg_le_abs _
     _ = |β| * actionDensity σ ρ U := by rw [abs_mul, abs_of_nonneg hAU]
-    _ ≤ |β| * actionBound (Λ := Λ) :=
+    _ ≤ |β| * actionDensityBound (Λ := Λ) :=
         mul_le_mul_of_nonneg_left hAle (abs_nonneg β)
 
 /-- The pointwise Taylor bound, in the form the expansion consumes:
 for `|β| ≤ 1`, the exponential's first-order defect at `A U` is at
-most `(actionBound²/2)·e^{actionBound}·β²`. -/
+most `(actionDensityBound²/2)·e^{actionDensityBound}·β²`. -/
 theorem exp_defect_bound
     (hd : 0 < d) {β : ℝ} (hβ : |β| ≤ 1) (U : Config Λ G) :
     |Real.exp (-(β * actionDensity σ ρ U)) - (1 - β * actionDensity σ ρ U)|
-      ≤ (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ))) * β ^ 2 := by
+      ≤ (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ))) * β ^ 2 := by
   have hAU : 0 ≤ actionDensity σ ρ U := actionDensity_nonneg σ ρ hd U
-  have hAle : actionDensity σ ρ U ≤ actionBound (Λ := Λ) :=
+  have hAle : actionDensity σ ρ U ≤ actionDensityBound (Λ := Λ) :=
     le_trans (le_abs_self _) (actionDensity_abs_le σ ρ hd U)
-  have hA : 0 ≤ actionBound (Λ := Λ) := actionBound_nonneg
+  have hA : 0 ≤ actionDensityBound (Λ := Λ) := actionBound_nonneg
   have h1 : (β * actionDensity σ ρ U) ^ 2 / 2 * Real.exp |β * actionDensity σ ρ U|
-      ≤ (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ))) * β ^ 2 := by
+      ≤ (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ))) * β ^ 2 := by
     have hsq : (β * actionDensity σ ρ U) ^ 2
-        ≤ actionBound (Λ := Λ) ^ 2 * β ^ 2 := by
+        ≤ actionDensityBound (Λ := Λ) ^ 2 * β ^ 2 := by
       rw [mul_comm β (actionDensity σ ρ U), mul_pow]
       exact mul_le_mul (pow_le_pow_left₀ hAU hAle 2) (le_refl _)
         (sq_nonneg β) (pow_nonneg hA 2)
     have hexp : Real.exp |β * actionDensity σ ρ U|
-        ≤ Real.exp (actionBound (Λ := Λ)) := by
+        ≤ Real.exp (actionDensityBound (Λ := Λ)) := by
       refine Real.exp_le_exp.mpr ?_
       rw [abs_mul, abs_of_nonneg hAU]
       exact le_trans (mul_le_mul_of_nonneg_right hβ hAU) (by
         rw [one_mul]; exact hAle)
     have hnn : (0:ℝ) ≤ (β * actionDensity σ ρ U) ^ 2 / 2 := by positivity
     calc (β * actionDensity σ ρ U) ^ 2 / 2 * Real.exp |β * actionDensity σ ρ U|
-        ≤ (actionBound (Λ := Λ) ^ 2 * β ^ 2 / 2) * Real.exp (actionBound (Λ := Λ)) :=
+        ≤ (actionDensityBound (Λ := Λ) ^ 2 * β ^ 2 / 2) * Real.exp (actionDensityBound (Λ := Λ)) :=
           mul_le_mul (by linarith [hsq]) hexp (Real.exp_nonneg _) (by positivity)
-      _ = (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ))) * β ^ 2 := by
+      _ = (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ))) * β ^ 2 := by
           ring
   exact le_trans (exp_neg_sub_linear_bound (β * actionDensity σ ρ U)) h1
 
@@ -501,7 +501,7 @@ theorem gibbsNum_firstOrder
     (hFB : ∀ U, ‖F U‖ ≤ B) {β : ℝ} (hβ : |β| ≤ 1) :
     ‖gibbsNum σ μG ρ F β
         - (gibbsMoment σ μG ρ F 0 - (β : ℂ) * gibbsMoment σ μG ρ F 1)‖
-      ≤ B * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ))) * β ^ 2 := by
+      ≤ B * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ))) * β ^ 2 := by
   have hA : Measurable fun U : Config Λ G => (actionDensity σ ρ U : ℂ) :=
     Complex.measurable_ofReal.comp (measurable_actionDensity σ ρ hρcont)
   have hIntD : Integrable
@@ -516,37 +516,37 @@ theorem gibbsNum_firstOrder
         (1 : ℂ) - (β : ℂ) * (actionDensity σ ρ U : ℂ) :=
       measurable_const.sub (measurable_const.mul hA)
     refine integrable_of_bounded μG ((hexp.sub hlin).mul hF)
-      (C := (Real.exp (actionBound (Λ := Λ)) + (1 + actionBound (Λ := Λ)))
+      (C := (Real.exp (actionDensityBound (Λ := Λ)) + (1 + actionDensityBound (Λ := Λ)))
         * B) fun U => ?_
     rw [norm_mul]
     refine mul_le_mul ?_ (hFB U) (norm_nonneg _) ?_
     · refine le_trans (norm_sub_le _ _) ?_
       rw [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (Real.exp_nonneg _)]
       have h1 : Real.exp (-(β * actionDensity σ ρ U))
-          ≤ Real.exp (actionBound (Λ := Λ)) := by
+          ≤ Real.exp (actionDensityBound (Λ := Λ)) := by
         refine Real.exp_le_exp.mpr ?_
         have hAU : 0 ≤ actionDensity σ ρ U := actionDensity_nonneg σ ρ hd U
-        have hAle : actionDensity σ ρ U ≤ actionBound (Λ := Λ) :=
+        have hAle : actionDensity σ ρ U ≤ actionDensityBound (Λ := Λ) :=
           le_trans (le_abs_self _) (actionDensity_abs_le σ ρ hd U)
         calc -(β * actionDensity σ ρ U) ≤ |β * actionDensity σ ρ U| := neg_le_abs _
           _ = |β| * actionDensity σ ρ U := by rw [abs_mul, abs_of_nonneg hAU]
-          _ ≤ actionBound (Λ := Λ) :=
+          _ ≤ actionDensityBound (Λ := Λ) :=
               le_trans (mul_le_mul_of_nonneg_right hβ hAU) (by rwa [one_mul])
       have h2 : ‖(1 : ℂ) - (β : ℂ) * (actionDensity σ ρ U : ℂ)‖
-          ≤ 1 + actionBound (Λ := Λ) := by
+          ≤ 1 + actionDensityBound (Λ := Λ) := by
         refine le_trans (norm_sub_le _ _) ?_
         rw [norm_one, norm_mul]
         simp only [Complex.norm_real, Real.norm_eq_abs]
         have hAU : 0 ≤ actionDensity σ ρ U := actionDensity_nonneg σ ρ hd U
-        have hAle : actionDensity σ ρ U ≤ actionBound (Λ := Λ) :=
+        have hAle : actionDensity σ ρ U ≤ actionDensityBound (Λ := Λ) :=
           le_trans (le_abs_self _) (actionDensity_abs_le σ ρ hd U)
-        have : |β| * |actionDensity σ ρ U| ≤ actionBound (Λ := Λ) :=
+        have : |β| * |actionDensity σ ρ U| ≤ actionDensityBound (Λ := Λ) :=
           le_trans (mul_le_mul_of_nonneg_right hβ
             (abs_nonneg (actionDensity σ ρ U))) (by
             rwa [one_mul, abs_of_nonneg hAU])
         linarith [this]
       linarith [h1, h2]
-    · have hA : 0 ≤ actionBound (Λ := Λ) := actionBound_nonneg
+    · have hA : 0 ≤ actionDensityBound (Λ := Λ) := actionBound_nonneg
       positivity
   have hInt1 : Integrable (fun U => (Real.exp (-(β * actionDensity σ ρ U)) : ℂ) * F U)
       (configMeasure μG) :=
@@ -558,7 +558,7 @@ theorem gibbsNum_firstOrder
         (1 : ℂ) - (β : ℂ) * (actionDensity σ ρ U : ℂ) :=
       measurable_const.sub (measurable_const.mul hA)
     refine integrable_of_bounded μG (hlin.mul hF)
-      (C := (1 + actionBound (Λ := Λ)) * B) fun U => ?_
+      (C := (1 + actionDensityBound (Λ := Λ)) * B) fun U => ?_
     rw [norm_mul]
     refine mul_le_mul ?_ (hFB U) (norm_nonneg _)
       (add_nonneg zero_le_one actionBound_nonneg)
@@ -566,9 +566,9 @@ theorem gibbsNum_firstOrder
     rw [norm_one, norm_mul]
     simp only [Complex.norm_real, Real.norm_eq_abs]
     have hAU : 0 ≤ actionDensity σ ρ U := actionDensity_nonneg σ ρ hd U
-    have hAle : actionDensity σ ρ U ≤ actionBound (Λ := Λ) :=
+    have hAle : actionDensity σ ρ U ≤ actionDensityBound (Λ := Λ) :=
       le_trans (le_abs_self _) (actionDensity_abs_le σ ρ hd U)
-    have h3 : |β| * |actionDensity σ ρ U| ≤ actionBound (Λ := Λ) :=
+    have h3 : |β| * |actionDensity σ ρ U| ≤ actionDensityBound (Λ := Λ) :=
       le_trans (mul_le_mul_of_nonneg_right hβ (abs_nonneg _)) (by
         rwa [one_mul, abs_of_nonneg hAU])
     linarith [h3]
@@ -621,15 +621,15 @@ theorem integrable_exp_neg_actionDensity
       Real.exp (-(β * actionDensity σ ρ U)) :=
     Real.measurable_exp.comp ((measurable_actionDensity σ ρ hρcont).const_mul β).neg
   refine Integrable.of_bound hmeas.aestronglyMeasurable
-    (Real.exp (|β| * actionBound (Λ := Λ))) (ae_of_all _ fun U => ?_)
+    (Real.exp (|β| * actionDensityBound (Λ := Λ))) (ae_of_all _ fun U => ?_)
   rw [Real.norm_eq_abs, abs_of_nonneg (Real.exp_nonneg _)]
   refine Real.exp_le_exp.mpr ?_
   have hAU : 0 ≤ actionDensity σ ρ U := actionDensity_nonneg σ ρ hd U
-  have hAle : actionDensity σ ρ U ≤ actionBound (Λ := Λ) :=
+  have hAle : actionDensity σ ρ U ≤ actionDensityBound (Λ := Λ) :=
     le_trans (le_abs_self _) (actionDensity_abs_le σ ρ hd U)
   calc -(β * actionDensity σ ρ U) ≤ |β * actionDensity σ ρ U| := neg_le_abs _
     _ = |β| * actionDensity σ ρ U := by rw [abs_mul, abs_of_nonneg hAU]
-    _ ≤ |β| * actionBound (Λ := Λ) :=
+    _ ≤ |β| * actionDensityBound (Λ := Λ) :=
         mul_le_mul_of_nonneg_left hAle (abs_nonneg β)
 
 /-- **Partition expansion.** For `|β| ≤ 1`, the partition function
@@ -638,7 +638,7 @@ theorem gibbsPartition_firstOrder
     (hρcont : Continuous fun g : G => repMatrix ρ g) (hd : 0 < d)
     {β : ℝ} (hβ : |β| ≤ 1) :
     |gibbsPartition σ μG ρ β - (1 - β * actionMean σ μG ρ)|
-      ≤ (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ))) * β ^ 2 := by
+      ≤ (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ))) * β ^ 2 := by
   have hIntE : Integrable (fun U => Real.exp (-(β * actionDensity σ ρ U)))
       (configMeasure μG) :=
     integrable_exp_neg_actionDensity σ μG ρ hρcont hd β
@@ -671,26 +671,26 @@ theorem gibbsPartition_firstOrder
           - (1 - β * actionDensity σ ρ U)‖ ∂(configMeasure μG) :=
         norm_integral_le_integral_norm _
     _ ≤ ∫ _U : Config Λ G,
-          (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ))) * β ^ 2
+          (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ))) * β ^ 2
           ∂(configMeasure μG) :=
         integral_mono_ae ((hIntE.sub hIntL).norm) (integrable_const _)
           (ae_of_all _ fun U => by
             show ‖Real.exp (-(β * actionDensity σ ρ U))
                 - (1 - β * actionDensity σ ρ U)‖
-              ≤ (actionBound (Λ := Λ) ^ 2 / 2
-                * Real.exp (actionBound (Λ := Λ))) * β ^ 2
+              ≤ (actionDensityBound (Λ := Λ) ^ 2 / 2
+                * Real.exp (actionDensityBound (Λ := Λ))) * β ^ 2
             rw [Real.norm_eq_abs]
             exact exp_defect_bound σ ρ hd hβ U)
-    _ = (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ))) * β ^ 2 := by
+    _ = (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ))) * β ^ 2 := by
         simp
 
 
 /-- The partition function is bounded below by the exponential of
-the worst-case action: `Z_β ≥ exp(−|β|·actionBound)` (Stage 1a's
+the worst-case action: `Z_β ≥ exp(−|β|·actionDensityBound)` (Stage 1a's
 positivity, quantified). -/
 theorem gibbsPartition_lower
     (hρcont : Continuous fun g : G => repMatrix ρ g) (hd : 0 < d) (β : ℝ) :
-    Real.exp (-(|β| * actionBound (Λ := Λ))) ≤ gibbsPartition σ μG ρ β := by
+    Real.exp (-(|β| * actionDensityBound (Λ := Λ))) ≤ gibbsPartition σ μG ρ β := by
   have hIntE : Integrable (fun U => Real.exp (-(β * actionDensity σ ρ U)))
       (configMeasure μG) :=
     integrable_exp_neg_actionDensity σ μG ρ hρcont hd β
@@ -701,32 +701,32 @@ theorem gibbsPartition_lower
     show Real.exp (-wilsonAction σ ρ β U) = Real.exp (-(β * actionDensity σ ρ U))
     rw [wilsonAction_eq σ ρ β U]
   rw [h1]
-  calc Real.exp (-(|β| * actionBound (Λ := Λ)))
-      = ∫ _U : Config Λ G, Real.exp (-(|β| * actionBound (Λ := Λ)))
+  calc Real.exp (-(|β| * actionDensityBound (Λ := Λ)))
+      = ∫ _U : Config Λ G, Real.exp (-(|β| * actionDensityBound (Λ := Λ)))
           ∂(configMeasure μG) := by simp
     _ ≤ ∫ U, Real.exp (-(β * actionDensity σ ρ U)) ∂(configMeasure μG) :=
         integral_mono_ae (integrable_const _) hIntE (ae_of_all _ fun U => by
           refine Real.exp_le_exp.mpr ?_
           have hAU : 0 ≤ actionDensity σ ρ U := actionDensity_nonneg σ ρ hd U
-          have hAle : actionDensity σ ρ U ≤ actionBound (Λ := Λ) :=
+          have hAle : actionDensity σ ρ U ≤ actionDensityBound (Λ := Λ) :=
             le_trans (le_abs_self _) (actionDensity_abs_le σ ρ hd U)
           refine neg_le_neg ?_
           calc β * actionDensity σ ρ U ≤ |β * actionDensity σ ρ U| := le_abs_self _
             _ = |β| * actionDensity σ ρ U := by rw [abs_mul, abs_of_nonneg hAU]
-            _ ≤ |β| * actionBound (Λ := Λ) :=
+            _ ≤ |β| * actionDensityBound (Λ := Λ) :=
                 mul_le_mul_of_nonneg_left hAle (abs_nonneg β))
 
 /-- **The explicit first-order remainder constant**, built only from
 the observable's bound `B` and Stage 0's action bound: the numerator
 defect, the covariance-size term, and the denominator-defect term,
 all divided by the partition function's lower bound
-`exp(−actionBound)`. -/
+`exp(−actionDensityBound)`. -/
 noncomputable def firstOrderConst (B : ℝ) : ℝ :=
-  Real.exp (actionBound (Λ := Λ))
-    * (B * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ)))
-      + 2 * B * actionBound (Λ := Λ) ^ 2
-      + (B + 2 * B * actionBound (Λ := Λ))
-        * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ))))
+  Real.exp (actionDensityBound (Λ := Λ))
+    * (B * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ)))
+      + 2 * B * actionDensityBound (Λ := Λ) ^ 2
+      + (B + 2 * B * actionDensityBound (Λ := Λ))
+        * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ))))
 
 /-- **The first-order expansion of a Gibbs expectation, with
 explicit remainder.** For every bounded measurable observable `F`
@@ -739,7 +739,7 @@ theorem gibbsExpect_firstOrder
     ‖gibbsExpect σ μG ρ β F - (gibbsMoment σ μG ρ F 0
         - β • covZero σ μG ρ F (fun U => (actionDensity σ ρ U : ℂ)))‖
       ≤ firstOrderConst (Λ := Λ) B * β ^ 2 := by
-  have hA : 0 ≤ actionBound (Λ := Λ) := actionBound_nonneg
+  have hA : 0 ≤ actionDensityBound (Λ := Λ) := actionBound_nonneg
   have hB : 0 ≤ B := le_trans (norm_nonneg _) (hFB (fun _ => 1))
   have hN := gibbsNum_firstOrder σ μG ρ hρcont hd hF hFB hβ
   have hD := gibbsPartition_firstOrder σ μG ρ hρcont hd hβ
@@ -747,26 +747,26 @@ theorem gibbsExpect_firstOrder
   have hDpos : 0 < gibbsPartition σ μG ρ β := (Real.exp_pos _).trans_le hlow
   have hDne : (gibbsPartition σ μG ρ β : ℂ) ≠ 0 := by
     exact_mod_cast hDpos.ne'
-  have hDge : Real.exp (-(actionBound (Λ := Λ))) ≤ gibbsPartition σ μG ρ β :=
+  have hDge : Real.exp (-(actionDensityBound (Λ := Λ))) ≤ gibbsPartition σ μG ρ β :=
     le_trans (Real.exp_le_exp.mpr (neg_le_neg (by
-      calc |β| * actionBound (Λ := Λ) ≤ 1 * actionBound (Λ := Λ) :=
+      calc |β| * actionDensityBound (Λ := Λ) ≤ 1 * actionDensityBound (Λ := Λ) :=
             mul_le_mul_of_nonneg_right hβ hA
-        _ = actionBound (Λ := Λ) := one_mul _))) hlow
+        _ = actionDensityBound (Λ := Λ) := one_mul _))) hlow
   have hcov := norm_covZero_actionDensity_le σ μG ρ hρcont hd hF hFB
   have hm0 : ‖gibbsMoment σ μG ρ F 0‖ ≤ B := by
     have h := norm_gibbsMoment_le σ μG ρ hρcont hd hF hFB 0
     simpa using h
   have hT : ‖gibbsMoment σ μG ρ F 0
       - β • covZero σ μG ρ F (fun U => (actionDensity σ ρ U : ℂ))‖
-      ≤ B + 2 * B * actionBound (Λ := Λ) := by
+      ≤ B + 2 * B * actionDensityBound (Λ := Λ) := by
     refine le_trans (norm_sub_le _ _) (add_le_add hm0 ?_)
     rw [norm_smul, Real.norm_eq_abs]
     refine le_trans (mul_le_mul_of_nonneg_left hcov (abs_nonneg β)) ?_
-    calc |β| * (2 * B * actionBound (Λ := Λ))
-        ≤ 1 * (2 * B * actionBound (Λ := Λ)) :=
+    calc |β| * (2 * B * actionDensityBound (Λ := Λ))
+        ≤ 1 * (2 * B * actionDensityBound (Λ := Λ)) :=
           mul_le_mul_of_nonneg_right hβ
             (mul_nonneg (mul_nonneg (by norm_num) hB) hA)
-      _ = 2 * B * actionBound (Λ := Λ) := one_mul _
+      _ = 2 * B * actionDensityBound (Λ := Λ) := one_mul _
   have key : gibbsNum σ μG ρ F β
         - (gibbsMoment σ μG ρ F 0
           - β • covZero σ μG ρ F (fun U => (actionDensity σ ρ U : ℂ)))
@@ -786,7 +786,7 @@ theorem gibbsExpect_firstOrder
   have hY : ‖(β : ℂ) ^ 2
         * covZero σ μG ρ F (fun U => (actionDensity σ ρ U : ℂ))
         * (actionMean σ μG ρ : ℂ)‖
-      ≤ (2 * B * actionBound (Λ := Λ) ^ 2) * β ^ 2 := by
+      ≤ (2 * B * actionDensityBound (Λ := Λ) ^ 2) * β ^ 2 := by
     have hnorm : ‖(β : ℂ) ^ 2
           * covZero σ μG ρ F (fun U => (actionDensity σ ρ U : ℂ))
           * (actionMean σ μG ρ : ℂ)‖
@@ -800,18 +800,18 @@ theorem gibbsExpect_firstOrder
           * actionMean σ μG ρ
         = β ^ 2 * (‖covZero σ μG ρ F (fun U => (actionDensity σ ρ U : ℂ))‖
             * actionMean σ μG ρ) := by ring
-      _ ≤ β ^ 2 * ((2 * B * actionBound (Λ := Λ)) * actionBound (Λ := Λ)) :=
+      _ ≤ β ^ 2 * ((2 * B * actionDensityBound (Λ := Λ)) * actionDensityBound (Λ := Λ)) :=
           mul_le_mul_of_nonneg_left
             (mul_le_mul hcov (actionMean_le σ μG ρ hρcont hd)
               (actionMean_nonneg σ μG ρ hρcont hd)
               (mul_nonneg (mul_nonneg (by norm_num) hB) hA))
             (sq_nonneg β)
-      _ = (2 * B * actionBound (Λ := Λ) ^ 2) * β ^ 2 := by ring
+      _ = (2 * B * actionDensityBound (Λ := Λ) ^ 2) * β ^ 2 := by ring
   have hZ : ‖(gibbsMoment σ μG ρ F 0
         - β • covZero σ μG ρ F (fun U => (actionDensity σ ρ U : ℂ)))
         * ((gibbsPartition σ μG ρ β - (1 - β * actionMean σ μG ρ) : ℝ) : ℂ)‖
-      ≤ ((B + 2 * B * actionBound (Λ := Λ))
-        * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ)))) * β ^ 2 := by
+      ≤ ((B + 2 * B * actionDensityBound (Λ := Λ))
+        * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ)))) * β ^ 2 := by
     rw [norm_mul, Complex.norm_real, Real.norm_eq_abs]
     refine le_trans (mul_le_mul hT hD (abs_nonneg _)
       (add_nonneg hB (mul_nonneg (mul_nonneg (by norm_num) hB) hA)))
@@ -820,10 +820,10 @@ theorem gibbsExpect_firstOrder
         - (gibbsMoment σ μG ρ F 0
           - β • covZero σ μG ρ F (fun U => (actionDensity σ ρ U : ℂ)))
           * (gibbsPartition σ μG ρ β : ℂ)‖
-      ≤ (B * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ)))
-        + 2 * B * actionBound (Λ := Λ) ^ 2
-        + (B + 2 * B * actionBound (Λ := Λ))
-          * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ)))) * β ^ 2 := by
+      ≤ (B * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ)))
+        + 2 * B * actionDensityBound (Λ := Λ) ^ 2
+        + (B + 2 * B * actionDensityBound (Λ := Λ))
+          * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ)))) * β ^ 2 := by
     rw [key]
     refine le_trans (norm_sub_le _ _) ?_
     refine le_trans (add_le_add (norm_sub_le _ _) hZ) ?_
@@ -836,25 +836,25 @@ theorem gibbsExpect_firstOrder
           * (gibbsPartition σ μG ρ β : ℂ)) / (gibbsPartition σ μG ρ β : ℂ) := by
     rw [gibbsExpect_eq_num_div]
     field_simp
-  have hE : Real.exp (actionBound (Λ := Λ)) * Real.exp (-(actionBound (Λ := Λ))) = 1 := by
+  have hE : Real.exp (actionDensityBound (Λ := Λ)) * Real.exp (-(actionDensityBound (Λ := Λ))) = 1 := by
     rw [← Real.exp_add, add_neg_cancel, Real.exp_zero]
-  have hfin : (B * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ)))
-        + 2 * B * actionBound (Λ := Λ) ^ 2
-        + (B + 2 * B * actionBound (Λ := Λ))
-          * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ)))) * β ^ 2 / Real.exp (-(actionBound (Λ := Λ)))
+  have hfin : (B * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ)))
+        + 2 * B * actionDensityBound (Λ := Λ) ^ 2
+        + (B + 2 * B * actionDensityBound (Λ := Λ))
+          * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ)))) * β ^ 2 / Real.exp (-(actionDensityBound (Λ := Λ)))
       = firstOrderConst (Λ := Λ) B * β ^ 2 := by
     unfold firstOrderConst
     rw [div_eq_iff (Real.exp_pos _).ne',
-      show (Real.exp (actionBound (Λ := Λ)) * (B * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ)))
-        + 2 * B * actionBound (Λ := Λ) ^ 2
-        + (B + 2 * B * actionBound (Λ := Λ))
-          * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ))))) * β ^ 2
-          * Real.exp (-(actionBound (Λ := Λ)))
-        = (Real.exp (actionBound (Λ := Λ)) * Real.exp (-(actionBound (Λ := Λ))))
-          * ((B * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ)))
-        + 2 * B * actionBound (Λ := Λ) ^ 2
-        + (B + 2 * B * actionBound (Λ := Λ))
-          * (actionBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionBound (Λ := Λ)))) * β ^ 2) by ring,
+      show (Real.exp (actionDensityBound (Λ := Λ)) * (B * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ)))
+        + 2 * B * actionDensityBound (Λ := Λ) ^ 2
+        + (B + 2 * B * actionDensityBound (Λ := Λ))
+          * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ))))) * β ^ 2
+          * Real.exp (-(actionDensityBound (Λ := Λ)))
+        = (Real.exp (actionDensityBound (Λ := Λ)) * Real.exp (-(actionDensityBound (Λ := Λ))))
+          * ((B * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ)))
+        + 2 * B * actionDensityBound (Λ := Λ) ^ 2
+        + (B + 2 * B * actionDensityBound (Λ := Λ))
+          * (actionDensityBound (Λ := Λ) ^ 2 / 2 * Real.exp (actionDensityBound (Λ := Λ)))) * β ^ 2) by ring,
       hE, one_mul]
   rw [hEq, norm_div, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hDpos,
     ← hfin]
@@ -878,7 +878,7 @@ theorem hasDerivAt_gibbsExpect_zero
   have hC : (0:ℝ) ≤ firstOrderConst (Λ := Λ) B := by
     rw [firstOrderConst]
     refine mul_nonneg (Real.exp_nonneg _) ?_
-    have hA : 0 ≤ actionBound (Λ := Λ) := actionBound_nonneg
+    have hA : 0 ≤ actionDensityBound (Λ := Λ) := actionBound_nonneg
     have hB : 0 ≤ B := le_trans (norm_nonneg _) (hFB (fun _ => 1))
     refine add_nonneg (add_nonneg ?_ ?_) ?_
     · exact mul_nonneg hB (mul_nonneg (div_nonneg (pow_nonneg hA 2) (by norm_num))
@@ -975,7 +975,7 @@ theorem gibbsNumeratorC_eq_tsum
       ∫ U, ‖((-z) ^ k / (Nat.factorial k : ℂ))
         * (F U * (actionDensity σ ρ U : ℂ) ^ k)‖ ∂(configMeasure μG)) := by
     refine Summable.of_norm_bounded
-      (g := fun k : ℕ => B * ((‖z‖ * actionBound (Λ := Λ)) ^ k
+      (g := fun k : ℕ => B * ((‖z‖ * actionDensityBound (Λ := Λ)) ^ k
         / (Nat.factorial k : ℝ)))
       ((Real.summable_pow_div_factorial _).mul_left B) fun k => ?_
     calc ‖∫ U, ‖((-z) ^ k / (Nat.factorial k : ℂ))
@@ -991,12 +991,12 @@ theorem gibbsNumeratorC_eq_tsum
               = ‖((-z) ^ k / (Nat.factorial k : ℂ))
                 * (F U * (actionDensity σ ρ U : ℂ) ^ k)‖
             rw [Real.norm_eq_abs, abs_of_nonneg (norm_nonneg _)])
-      _ ≤ ∫ _U : Config Λ G, B * ((‖z‖ * actionBound (Λ := Λ)) ^ k
+      _ ≤ ∫ _U : Config Λ G, B * ((‖z‖ * actionDensityBound (Λ := Λ)) ^ k
             / (Nat.factorial k : ℝ)) ∂(configMeasure μG) :=
           integral_mono_ae (hterm k).norm (integrable_const _) (ae_of_all _ fun U => by
             show ‖((-z) ^ k / (Nat.factorial k : ℂ))
                 * (F U * (actionDensity σ ρ U : ℂ) ^ k)‖
-              ≤ B * ((‖z‖ * actionBound (Λ := Λ)) ^ k / (Nat.factorial k : ℝ))
+              ≤ B * ((‖z‖ * actionDensityBound (Λ := Λ)) ^ k / (Nat.factorial k : ℝ))
             rw [norm_mul, norm_mul, norm_div, norm_pow, norm_neg,
               Complex.norm_natCast, norm_pow, Complex.norm_real]
             refine le_trans (mul_le_mul_of_nonneg_left
@@ -1010,7 +1010,7 @@ theorem gibbsNumeratorC_eq_tsum
               Nat.cast_ne_zero.mpr (Nat.factorial_pos k).ne'
             field_simp [hkf]
             exact le_of_eq (by ring))
-      _ = B * ((‖z‖ * actionBound (Λ := Λ)) ^ k / (Nat.factorial k : ℝ)) := by
+      _ = B * ((‖z‖ * actionDensityBound (Λ := Λ)) ^ k / (Nat.factorial k : ℝ)) := by
           simp
   have hHas := hasSum_integral_of_summable_integral_norm hterm hsum
   have hpt : ∀ U : Config Λ G,
@@ -1039,29 +1039,29 @@ noncomputable def gibbsSeries (F : Config Λ G → ℂ) :
     (fun k => (-1 : ℂ) ^ k / (Nat.factorial k : ℂ) * gibbsMoment σ μG ρ F k)
 
 /-- The numerator has the Gibbs series as a power series on a ball
-of explicit radius `(2·max(actionBound, 1))⁻¹` around `0`. -/
+of explicit radius `(2·max(actionDensityBound, 1))⁻¹` around `0`. -/
 theorem hasFPowerSeriesOnBall_gibbsNumeratorC
     (hρcont : Continuous fun g : G => repMatrix ρ g) (hd : 0 < d)
     {F : Config Λ G → ℂ} (hF : Measurable F) {B : ℝ}
     (hFB : ∀ U, ‖F U‖ ≤ B) :
     HasFPowerSeriesOnBall (gibbsNumeratorC σ μG ρ F) (gibbsSeries σ μG ρ F) 0
-      (ENNReal.ofNNReal ⟨(2 * max (actionBound (Λ := Λ)) 1)⁻¹,
+      (ENNReal.ofNNReal ⟨(2 * max (actionDensityBound (Λ := Λ)) 1)⁻¹,
         inv_nonneg.mpr (mul_nonneg (by norm_num)
           (le_trans zero_le_one (le_max_right _ _)))⟩) := by
   have hB : 0 ≤ B := le_trans (norm_nonneg _) (hFB (fun _ => 1))
-  have hA : 0 ≤ actionBound (Λ := Λ) := actionBound_nonneg
-  have hM1 : (1:ℝ) ≤ max (actionBound (Λ := Λ)) 1 := le_max_right _ _
-  have hAM : actionBound (Λ := Λ) ≤ max (actionBound (Λ := Λ)) 1 := le_max_left _ _
-  have h2M : (0:ℝ) < 2 * max (actionBound (Λ := Λ)) 1 := by linarith [hM1]
+  have hA : 0 ≤ actionDensityBound (Λ := Λ) := actionBound_nonneg
+  have hM1 : (1:ℝ) ≤ max (actionDensityBound (Λ := Λ)) 1 := le_max_right _ _
+  have hAM : actionDensityBound (Λ := Λ) ≤ max (actionDensityBound (Λ := Λ)) 1 := le_max_left _ _
+  have h2M : (0:ℝ) < 2 * max (actionDensityBound (Λ := Λ)) 1 := by linarith [hM1]
   refine ⟨?_, ?_, ?_⟩
   · refine FormalMultilinearSeries.le_radius_of_bound _ B
-      (r := ⟨(2 * max (actionBound (Λ := Λ)) 1)⁻¹,
+      (r := ⟨(2 * max (actionDensityBound (Λ := Λ)) 1)⁻¹,
         inv_nonneg.mpr (mul_nonneg (by norm_num)
           (le_trans zero_le_one (le_max_right _ _)))⟩) fun n => ?_
     show ‖gibbsSeries σ μG ρ F n‖
-        * ((2 * max (actionBound (Λ := Λ)) 1)⁻¹) ^ n ≤ B
+        * ((2 * max (actionDensityBound (Λ := Λ)) 1)⁻¹) ^ n ≤ B
     have hcoef : ‖gibbsSeries σ μG ρ F n‖
-        ≤ B * actionBound (Λ := Λ) ^ n / (Nat.factorial n : ℝ) := by
+        ≤ B * actionDensityBound (Λ := Λ) ^ n / (Nat.factorial n : ℝ) := by
       unfold gibbsSeries
       rw [FormalMultilinearSeries.ofScalars_norm, norm_mul, norm_div,
         norm_pow, norm_neg, norm_one, one_pow, Complex.norm_natCast,
@@ -1071,18 +1071,18 @@ theorem hasFPowerSeriesOnBall_gibbsNumeratorC
         (inv_nonneg.mpr (Nat.cast_nonneg _))
     refine le_trans (mul_le_mul_of_nonneg_right hcoef
       (pow_nonneg (inv_nonneg.mpr h2M.le) n)) ?_
-    have hr : actionBound (Λ := Λ) * (2 * max (actionBound (Λ := Λ)) 1)⁻¹
+    have hr : actionDensityBound (Λ := Λ) * (2 * max (actionDensityBound (Λ := Λ)) 1)⁻¹
         ≤ 1 / 2 := by
-      calc actionBound (Λ := Λ) * (2 * max (actionBound (Λ := Λ)) 1)⁻¹
-          ≤ max (actionBound (Λ := Λ)) 1 * (2 * max (actionBound (Λ := Λ)) 1)⁻¹ :=
+      calc actionDensityBound (Λ := Λ) * (2 * max (actionDensityBound (Λ := Λ)) 1)⁻¹
+          ≤ max (actionDensityBound (Λ := Λ)) 1 * (2 * max (actionDensityBound (Λ := Λ)) 1)⁻¹ :=
             mul_le_mul_of_nonneg_right hAM (inv_nonneg.mpr h2M.le)
         _ = 1 / 2 := by
             field_simp
     have hkf : (Nat.factorial n : ℝ) ≠ 0 :=
       Nat.cast_ne_zero.mpr (Nat.factorial_pos n).ne'
-    calc (B * actionBound (Λ := Λ) ^ n / (Nat.factorial n : ℝ))
-          * ((2 * max (actionBound (Λ := Λ)) 1)⁻¹) ^ n
-        = B * ((actionBound (Λ := Λ) * (2 * max (actionBound (Λ := Λ)) 1)⁻¹) ^ n
+    calc (B * actionDensityBound (Λ := Λ) ^ n / (Nat.factorial n : ℝ))
+          * ((2 * max (actionDensityBound (Λ := Λ)) 1)⁻¹) ^ n
+        = B * ((actionDensityBound (Λ := Λ) * (2 * max (actionDensityBound (Λ := Λ)) 1)⁻¹) ^ n
             / (Nat.factorial n : ℝ)) := by
           rw [mul_pow]
           field_simp
@@ -1102,7 +1102,7 @@ theorem hasFPowerSeriesOnBall_gibbsNumeratorC
     have hsumm : Summable (fun k : ℕ =>
         ((-y) ^ k / (Nat.factorial k : ℂ)) * gibbsMoment σ μG ρ F k) := by
       refine Summable.of_norm_bounded
-        (g := fun k : ℕ => B * ((‖y‖ * actionBound (Λ := Λ)) ^ k
+        (g := fun k : ℕ => B * ((‖y‖ * actionDensityBound (Λ := Λ)) ^ k
           / (Nat.factorial k : ℝ)))
         ((Real.summable_pow_div_factorial _).mul_left B) fun k => ?_
       rw [norm_mul, norm_div, norm_pow, Complex.norm_natCast]
