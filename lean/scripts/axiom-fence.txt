@@ -1542,3 +1542,14 @@ ThetLogos.MizarTranche1.length_map
 ThetLogos.MizarTranche1.map_singleton
 ThetLogos.MizarTranche1.getElem_replicate_const
 ThetLogos.MizarTranche1.length_zipWith
+
+import ThetLogos.CircleSeatConvergence
+ThetLogos.correlationsConvergePointwise_trajFloorU1
+ThetLogos.gibbsExpect_zero_famObs_eq_limitSystem
+ThetLogos.occLinkN_eventually
+ThetLogos.near_far_bound
+
+import ThetLogos.CircleSeatScalingAssembly
+ThetLogos.unconditionalInstance_trajFloorU1
+ThetLogos.limitGapClustering_limitSystemMQ35
+ThetLogos.limitSystemIsOSSchwingerData_limitSystemMQ35

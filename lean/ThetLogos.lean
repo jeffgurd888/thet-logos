@@ -28,3 +28,5 @@ import ThetLogos.ProjectiveGibbsFamily
 import ThetLogos.ProjectivePositivityTransport
 import ThetLogos.TrajectoryFloorU1
 import ThetLogos.MizarTranche1
+import ThetLogos.CircleSeatConvergence
+import ThetLogos.CircleSeatScalingAssembly
