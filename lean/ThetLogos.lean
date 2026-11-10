@@ -27,3 +27,4 @@ import ThetLogos.LayerKernelGramCertFinite
 import ThetLogos.ProjectiveGibbsFamily
 import ThetLogos.ProjectivePositivityTransport
 import ThetLogos.TrajectoryFloorU1
+import ThetLogos.MizarTranche1
