@@ -36,6 +36,14 @@ import ThetLogos.MizarPilot1.B5
 import ThetLogos.MizarPilot1.B6
 import ThetLogos.MizarPilot1.B7
 import ThetLogos.MizarPilot1.B8
+import ThetLogos.MizarPilot2.B1
+import ThetLogos.MizarPilot2.B2
+import ThetLogos.MizarPilot2.B3
+import ThetLogos.MizarPilot2.B4
+import ThetLogos.MizarPilot2.B5
+import ThetLogos.MizarPilot2.B6
+import ThetLogos.MizarPilot2.B7
+import ThetLogos.MizarPilot2.B8
 import ThetLogos.CircleSeatConvergence
 import ThetLogos.CircleSeatScalingAssembly
 import ThetLogos.TolmanContinuum
