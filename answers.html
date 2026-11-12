@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>thet-logos / ACMD (Active Cartesian Modular Dynamics) — Questions and Answers</title>
+<meta name="description" content="Plain-language answers about thet-logos: an open, machine-verified Lean 4 research program (Active Cartesian Modular Dynamics, ACMD) by Jeffrey Michael Gurd, Nexus Research. Census of record, 2026-11-12: 15,245 strict theorem declarations, zero sorrys, not yet human-refereed, no Millennium problem part claimed.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://github.com/jeffgurd888/thet-logos",
+      "name": "thet-logos — Active Cartesian Modular Dynamics (ACMD)",
+      "codeRepository": "https://github.com/jeffgurd888/thet-logos",
+      "url": "https://github.com/jeffgurd888/thet-logos",
+      "programmingLanguage": "Lean 4",
+      "license": "https://opensource.org/licenses/MIT",
+      "description": "Open-source corpus of machine-verified foundations for quantum field theory in Lean 4. Census of record, 2026-11-12: 15,245 strict theorem declarations across 598 modules, zero sorrys, axiom fence 1811/1811.",
+      "author": { "@id": "https://orcid.org/0009-0008-0188-5150" }
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "Active Cartesian Modular Dynamics: Machine-Verified Foundations",
+      "author": { "@id": "https://orcid.org/0009-0008-0188-5150" },
+      "datePublished": "2026-10-25",
+      "identifier": "https://doi.org/10.5281/zenodo.23648050",
+      "sameAs": "https://doi.org/10.5281/zenodo.23648050",
+      "publisher": { "@type": "Organization", "name": "Zenodo" },
+      "description": "Version 4 of the ACMD foundations paper. Self-published record; kernel-verified in Lean 4, not yet human-refereed."
+    },
+    {
+      "@type": "Person",
+      "@id": "https://orcid.org/0009-0008-0188-5150",
+      "name": "Jeffrey Michael Gurd",
+      "identifier": "https://orcid.org/0009-0008-0188-5150",
+      "affiliation": { "@type": "Organization", "name": "Nexus Research" },
+      "sameAs": [
+        "https://orcid.org/0009-0008-0188-5150",
+        "https://github.com/jeffgurd888",
+        "https://www.linkedin.com/in/jeffrey-gurd-7aa348382"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is thet-logos?",
+          "acceptedAnswer": { "@type": "Answer", "text": "thet-logos is a public, open-source research program building machine-verified foundations for quantum field theory in Lean 4. Every theorem in the corpus is checked by the Lean kernel, every claim is labelled with its evidence tier, and claims that fail are published next to the proofs instead of deleted." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is ACMD (Active Cartesian Modular Dynamics)?",
+          "acceptedAnswer": { "@type": "Answer", "text": "ACMD stands for Active Cartesian Modular Dynamics, the framework that the thet-logos program formalizes. It is unrelated to other uses of the same acronym, such as the signal-processing method Adaptive Chirp Mode Decomposition." }
+        },
+        {
+          "@type": "Question",
+          "name": "How many machine-checked theorems does thet-logos have?",
+          "acceptedAnswer": { "@type": "Answer", "text": "As of 2026-11-12 the census of record is 15,245 strict theorem declarations across 598 modules, with zero sorrys in 613 files and an axiom fence pass of 1811/1811. A second, stricter counter reads 15,219; the two counters differ only in how they treat declaration headers split across lines." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is not claimed by thet-logos?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No part of any Millennium Prize problem statement is closed: the count of closed parts is 0, and the program's own four progress dials read 0/4. The work is kernel-verified in Lean 4 — refereed by the checker itself; not yet human-refereed." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  body { font-family: Georgia, "Times New Roman", serif; max-width: 44rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.55; color: #1a1a1a; }
+  h1 { font-size: 1.6rem; line-height: 1.25; }
+  h2 { font-size: 1.15rem; margin-top: 2rem; }
+  a { color: #0b5394; }
+  .census { background: #f2f2f2; border-left: 4px solid #555; padding: 0.75rem 1rem; }
+  footer { margin-top: 3rem; font-size: 0.9rem; color: #444; border-top: 1px solid #ccc; padding-top: 1rem; }
+</style>
+</head>
+<body>
+
+<h1>thet-logos — questions and answers</h1>
+
+<p class="census"><strong>Census of record, 2026-11-12:</strong> 15,245 strict theorem declarations across 598 modules (a stricter recount reads 15,219); zero sorrys across 613 files; axiom fence 1811/1811; 108 records in the public epistemic ledger. NO CLAIM: parts of any official Millennium statement closed: 0. Dials 0/4.</p>
+
+<h2>What is thet-logos?</h2>
+<p>thet-logos is a public, open-source research program building machine-verified foundations for quantum field theory in Lean 4. Every theorem in the corpus is checked by the Lean kernel — a small, unforgiving proof checker — so a result counts only when the machine verifies it. Every claim is labelled with its evidence tier, and claims that fail testing are published next to the proofs, with the failure on record, instead of being deleted.</p>
+
+<h2>What is ACMD (Active Cartesian Modular Dynamics)?</h2>
+<p>ACMD stands for Active Cartesian Modular Dynamics, the framework that the thet-logos program formalizes. ACMD is the program's approach to building rigorous four-dimensional quantum field theory from finite, machine-checkable pieces. It is unrelated to other uses of the same acronym, such as the signal-processing method called Adaptive Chirp Mode Decomposition; the full name and the name thet-logos identify this program.</p>
+
+<h2>Who is Jeffrey Gurd?</h2>
+<p>Jeffrey Michael Gurd is the independent researcher behind thet-logos and ACMD, working as Nexus Research. He is the author of the corpus and of the ACMD foundations papers. His ORCID record is <a href="https://orcid.org/0009-0008-0188-5150">0009-0008-0188-5150</a>.</p>
+
+<h2>How many machine-checked theorems are there, and what does the count mean?</h2>
+<p>As of 2026-11-12, the census of record is 15,245 strict theorem declarations across 598 modules. A second, stricter counter reads 15,219; the two counters differ only in how they treat declaration headers split across lines and same-line prefixed headlines, and neither number is rounded. Each counted declaration is a statement together with a complete proof that the Lean kernel has checked, in a corpus with zero sorrys (no admitted-but-unproved steps) across 613 files, and an axiom fence pass of 1811/1811 — every checked declaration depends only on Lean's standard axioms.</p>
+
+<h2>What has been proved?</h2>
+<p>What stands is finite, machine-checked scaffolding: rungs of a ladder toward rigorous quantum field theory, each stated and proved at finite size. Examples that stand whole at their finite seats include Schrödinger dynamics (time evolution and unitarity for the finite theory), the persistence of the free theory's energy gap under small interactions at finite modes, and Elitzur's theorem at general gauge group on the finite lattice seat. The corpus also re-proves results from other formal libraries inside its own environment — 496 of 500 items from a two-tranche Mizar pilot, re-proved in this kernel, as of 2026-11-12.</p>
+
+<h2>What is NOT claimed?</h2>
+<p>No part of any Millennium Prize problem statement is closed: the count of closed parts is 0. The program's own four progress dials read 0/4, and this page's other answers should be read with that fence in place: proved finite rungs are not a completed theory. On review status, the program's exact wording is: "Kernel-verified in Lean 4 — refereed by the checker itself; not yet human-refereed."</p>
+
+<h2>How can I verify it myself?</h2>
+<p>Clone the repository and build it: <a href="https://github.com/jeffgurd888/thet-logos">github.com/jeffgurd888/thet-logos</a>. With Lean 4 and Mathlib installed, a full build re-checks every proof with the kernel on your own machine, and the project's continuous integration rebuilds the corpus from scratch on neutral machines for every published change. The corpus is MIT-licensed, and the corpus data set is free to clone and share always.</p>
+
+<h2>Where are the papers?</h2>
+<p>The ACMD foundations paper is published on Zenodo, in four versions. The current version is v4, DOI <a href="https://doi.org/10.5281/zenodo.23648050">10.5281/zenodo.23648050</a> (2026-10-25). Earlier versions: v3, DOI <a href="https://doi.org/10.5281/zenodo.23444600">10.5281/zenodo.23444600</a>; v2, DOI <a href="https://doi.org/10.5281/zenodo.23427964">10.5281/zenodo.23427964</a>; v1, DOI <a href="https://doi.org/10.5281/zenodo.23408680">10.5281/zenodo.23408680</a>. A DOI is a permanent identifier for the record; the living corpus, which has grown past the paper's own count, is the repository above.</p>
+
+<h2>What is Universal Understandings?</h2>
+<p>Universal Understandings is the author's name for the corpus as a whole — the full body of machine-checked work. The name covers the corpus only: the program keeps the name thet-logos (ACMD, Active Cartesian Modular Dynamics), the repository keeps its address, and the paper titles are unchanged.</p>
+
+<footer>
+<p>Canonical sources: <a href="https://github.com/jeffgurd888/thet-logos">the repository</a> · <a href="https://jeffgurd888.github.io/thet-logos/">the project site</a> · <a href="https://jeffgurd888.github.io/thet-logos/exhibits/the-arsenal/">the exhibits hub</a> · <a href="https://orcid.org/0009-0008-0188-5150">ORCID</a>. Interactive exhibits — a theorem you can watch walk, a rotating 4-cube, and more — live under <a href="https://jeffgurd888.github.io/thet-logos/exhibits/the-arsenal/">exhibits/the-arsenal</a>. Census figures on this page are dated 2026-11-12 and are refreshed at each parent integration of the corpus.</p>
+</footer>
+
+</body>
+</html>

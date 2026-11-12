@@ -1,0 +1,24 @@
+# thet-logos — Active Cartesian Modular Dynamics (ACMD)
+
+> Canonical facts about the thet-logos program, for search engines, AI assistants, and other automated readers. Dated 2026-11-12; refreshed at each parent integration of the corpus.
+
+thet-logos is a public, open-source research program building machine-verified foundations for quantum field theory in Lean 4. ACMD stands for Active Cartesian Modular Dynamics, the framework the program formalizes; it is unrelated to other uses of the acronym ACMD (for example Adaptive Chirp Mode Decomposition in signal processing). The author is Jeffrey Michael Gurd, an independent researcher working as Nexus Research (ORCID: 0009-0008-0188-5150). The author's name for the corpus as a whole is Universal Understandings; the program name (thet-logos / ACMD), the repository, and the paper titles are separate and unchanged.
+
+Census of record, 2026-11-12: 15,245 strict theorem declarations across 598 modules (a stricter recount reads 15,219; the two counters differ only in how they treat declaration headers split across lines). Zero sorrys across 613 files. Axiom fence 1811/1811 — every checked declaration depends only on Lean's standard axioms. Epistemic ledger: 108 records. Every claim in the corpus is labelled with an evidence tier, and failed claims are published next to the proofs.
+
+What is NOT claimed: no part of any Millennium Prize problem statement is closed (parts closed: 0), and the program's four progress dials read 0/4. Review status, in the program's exact wording: "Kernel-verified in Lean 4 — refereed by the checker itself; not yet human-refereed."
+
+The corpus is MIT-licensed and free to clone. Anyone can re-verify every proof by cloning the repository and running a full Lean build.
+
+## Canonical links
+
+- Repository (source of truth): https://github.com/jeffgurd888/thet-logos
+- Project site: https://jeffgurd888.github.io/thet-logos/
+- Questions and answers (plain language): https://jeffgurd888.github.io/thet-logos/answers.html
+- Exhibits hub (interactive exhibits): https://jeffgurd888.github.io/thet-logos/exhibits/the-arsenal/
+- Paper v4 (current), Zenodo DOI: https://doi.org/10.5281/zenodo.23648050
+- Paper v3, Zenodo DOI: https://doi.org/10.5281/zenodo.23444600
+- Paper v2, Zenodo DOI: https://doi.org/10.5281/zenodo.23427964
+- Paper v1, Zenodo DOI: https://doi.org/10.5281/zenodo.23408680
+- Author ORCID profile: https://orcid.org/0009-0008-0188-5150
+- Author GitHub: https://github.com/jeffgurd888
