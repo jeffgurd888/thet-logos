@@ -47,3 +47,6 @@ import ThetLogos.MizarPilot2.B8
 import ThetLogos.CircleSeatConvergence
 import ThetLogos.CircleSeatScalingAssembly
 import ThetLogos.TolmanContinuum
+import ThetLogos.FiniteArrowCycle
+import ThetLogos.RepeatingSqrtPin
+import ThetLogos.NavierStokesGalerkinEnergy

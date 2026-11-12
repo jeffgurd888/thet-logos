@@ -2092,3 +2092,17 @@ ThetLogos.MizarPilot2.B8.xor_imp_iff_nand
 ThetLogos.MizarPilot2.B8.inter_inter_distrib
 ThetLogos.MizarPilot2.B8.mem_Ioc_cases
 ThetLogos.MizarPilot2.B8.inner_zero_both
+import ThetLogos.FiniteArrowCycle
+ThetLogos.cycleW_props
+ThetLogos.cycle_entropyW_monotoneOn
+ThetLogos.cycle_devEnergy_antitoneOn
+ThetLogos.cycle_sum_arrowFlow
+ThetLogos.cycle_laplacianOp_eq_zero_iff
+ThetLogos.cycle_arrowFlow_tendsto_const
+import ThetLogos.RepeatingSqrtPin
+ThetLogos.repeating_four_ninths
+ThetLogos.problem_value
+ThetLogos.competition_sqrt
+import ThetLogos.NavierStokesGalerkinEnergy
+ThetLogos.nsGalerkin_energy_pairing
+ThetLogos.nsGalerkin_energy_deriv
