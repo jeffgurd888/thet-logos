@@ -2106,3 +2106,15 @@ ThetLogos.competition_sqrt
 import ThetLogos.NavierStokesGalerkinEnergy
 ThetLogos.nsGalerkin_energy_pairing
 ThetLogos.nsGalerkin_energy_deriv
+import ThetLogos.GibbsGapFloor
+ThetLogos.gibbsGapFloor_min
+ThetLogos.gibbsGapFloor_unnorm
+ThetLogos.gibbsGapFloor_partition_ge_one
+ThetLogos.gibbsGapFloor_prob
+import ThetLogos.MetaDSeatB
+ThetLogos.metaDExhibit_partitionSum
+ThetLogos.metaDExhibit_gibbsSum
+ThetLogos.metaDExhibit_response
+ThetLogos.metaDExhibit_responseNull
+ThetLogos.metaDExhibit_exhibitsResponse
+ThetLogos.metaDSeparable_response_eq_responseNull

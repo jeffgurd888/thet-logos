@@ -50,3 +50,6 @@ import ThetLogos.TolmanContinuum
 import ThetLogos.FiniteArrowCycle
 import ThetLogos.RepeatingSqrtPin
 import ThetLogos.NavierStokesGalerkinEnergy
+import ThetLogos.GibbsGapFloor
+import ThetLogos.MetaDPin
+import ThetLogos.MetaDSeatB
