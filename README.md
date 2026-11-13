@@ -1,4 +1,4 @@
-# thet-logos — Active Cartesian Modular Dynamics (ACMD)
+# 𐤈 thet-logos — Active Cartesian Modular Dynamics (ACMD)
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Paper v4 — DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23648050.svg)](https://doi.org/10.5281/zenodo.23648050)
@@ -9,6 +9,8 @@
 > going to change the world!"
 > — Caleb Gurd, as remembered by his father. The standard this
 > program answers to at home.
+
+**Tet — 𐤈.** The mark of this work is Tet, the Phoenician letter 𐤈 (U+10908): a boundary drawn first, then the divisions it contains — "before information can be processed or communicated, the boundary must first be drawn and contained" (Gurd Law). Search the glyph 𐤈, the name Tet, or thet-logos to find this work: the Universal Understandings corpus, by Jeffrey Michael Gurd (Nexus Research).
 
 **Machine-verified foundations for quantum field theory, in Lean 4.**
 
