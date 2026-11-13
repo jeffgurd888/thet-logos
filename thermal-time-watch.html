@@ -30,7 +30,7 @@
       }
       .face-wrap svg{ display:block; width:100%; height:100%; }
       .face-label{
-        position:absolute; left:0; right:0; bottom:16.5%; text-align:center; pointer-events:none;
+        position:absolute; left:0; right:0; bottom:23%; text-align:center; pointer-events:none;
         color:#aeb9c6; text-shadow:0 1px 6px rgba(0,0,0,.75);
       }
       .face-label .l1{
@@ -52,7 +52,7 @@
         font-size:12px; letter-spacing:.08em; color:var(--muted);
       }
       .center-readout{
-        position:absolute; left:50%; top:60%; transform:translate(-50%,-50%);
+        position:absolute; left:50%; top:56%; transform:translate(-50%,-50%);
         text-align:center; pointer-events:none; min-width:62%;
         background:rgba(8,11,16,.58); border:1px solid rgba(255,255,255,.07);
         border-radius:14px; padding:8px 14px 9px;
@@ -75,6 +75,25 @@
         letter-spacing:.02em;
       }
       .center-readout .named[hidden]{ display:none; }
+      .center-readout .zline{
+        margin-top:3px; font-size:clamp(10.5px, 3vw, 12.5px); color:#cfe3d8; white-space:nowrap;
+        letter-spacing:.02em;
+      }
+      .center-readout .zline .zg{ color:#ffd97a; }
+      .equation{
+        text-align:center; margin:12px auto 0; max-width:520px;
+        background:var(--card); border:1px solid var(--gold); border-radius:12px;
+        padding:10px 14px 11px; font-size:14px; line-height:1.55; font-variant-numeric: tabular-nums;
+      }
+      .equation .eq-head{
+        display:block; font-size:10.5px; font-weight:800; letter-spacing:.18em; text-indent:.18em;
+        color:var(--muted); text-transform:uppercase; margin-bottom:2px;
+      }
+      .equation strong{ color:var(--gold); }
+      .zodiac-fence{
+        text-align:center; margin:10px auto 0; max-width:480px;
+        font-size:12px; color:var(--muted); font-style:italic;
+      }
       .center-readout.boundary .mod{ color:#ff9d85; letter-spacing:.08em; }
       .center-readout.boundary .addr{ color:#e8ebef; }
       .civil-line{
@@ -198,20 +217,22 @@
           <defs id="faceDefs"></defs>
           <circle cx="200" cy="200" r="197" fill="#05070a"/>
           <circle cx="200" cy="200" r="193" fill="#0d1117"/>
-          <circle cx="200" cy="200" r="149" fill="#11161f"/>
-          <circle cx="200" cy="200" r="149" fill="none" stroke="#2a3242" stroke-width="1"/>
+          <circle cx="200" cy="200" r="120" fill="#11161f"/>
+          <circle cx="200" cy="200" r="120" fill="none" stroke="#2a3242" stroke-width="1"/>
+          <g id="zodiacG"></g>
           <g id="ringG"></g>
+          <g id="termsG"></g>
           <g id="seamG"></g>
           <g id="handsG">
             <g id="yearHand">
-              <line x1="200" y1="218" x2="200" y2="58" stroke="#d9a441" stroke-width="3.5" stroke-linecap="round"/>
-              <path d="M200 44 L194 62 L206 62 Z" fill="#d9a441"/>
+              <line x1="200" y1="218" x2="200" y2="22" stroke="#d9a441" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M200 9 L193 29 L207 29 Z" fill="#d9a441"/>
             </g>
-            <line id="hourHand" x1="200" y1="200" x2="200" y2="126" stroke="#e8edf5" stroke-width="7" stroke-linecap="round"/>
-            <line id="minHand" x1="200" y1="200" x2="200" y2="94" stroke="#e8edf5" stroke-width="4.5" stroke-linecap="round"/>
+            <line id="hourHand" x1="200" y1="200" x2="200" y2="140" stroke="#e8edf5" stroke-width="7" stroke-linecap="round"/>
+            <line id="minHand" x1="200" y1="200" x2="200" y2="112" stroke="#e8edf5" stroke-width="4.5" stroke-linecap="round"/>
             <g id="secHand">
-              <line x1="200" y1="222" x2="200" y2="76" stroke="#e5484d" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="200" cy="222" r="4" fill="#e5484d"/>
+              <line x1="200" y1="220" x2="200" y2="86" stroke="#e5484d" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="200" cy="220" r="4" fill="#e5484d"/>
             </g>
             <circle cx="200" cy="200" r="6.5" fill="#0d1117" stroke="#d9a441" stroke-width="2.5"/>
           </g>
@@ -225,14 +246,18 @@
           <div class="mod" id="crMod">—</div>
           <div class="addr" id="crAddr">—</div>
           <div class="named" id="crNamed" hidden>also named: Thermal Equilibrium Day</div>
+          <div class="zline" id="crZodiac">—</div>
           <div class="tsub" id="crSub">—</div>
         </div>
       </div>
       <p class="civil-line" id="civilLine">—</p>
       <p class="solar-line" id="solarLine">—</p>
 
+      <p class="equation" id="equationLine"><span class="eq-head">Today’s equation</span>—</p>
+
       <p class="guc-label">Global Unified Calendar</p>
       <p class="guc-sub">Modular Thermal Equilibrium Calendar · Watch No. 1</p>
+      <p class="zodiac-fence">Zodiac layers: partitions of the sun’s road and the year, shown for correlation — design study, NO CLAIM.</p>
 
       <p class="doctrine">“We don’t have time zones — we have solar thermal lag.”</p>
 
@@ -274,6 +299,9 @@
           <div class="cell"><div class="k">The count</div><div class="v" id="dCount">—</div><div class="s">Counted year opens April 2 · 364 counted days</div></div>
           <div class="cell"><div class="k">Thermal clock drift today</div><div class="v" id="dDrift">—</div><div class="s">thermal elapsed vs solar elapsed at this longitude, since solar midnight there</div></div>
           <div class="cell"><div class="k">This module’s span</div><div class="v" id="dSpan">—</div><div class="s" id="dSpanSub">—</div></div>
+          <div class="cell"><div class="k">Western zodiac — sign of λ</div><div class="v" id="dZodiac">—</div><div class="s" id="dZodiacSub">—</div></div>
+          <div class="cell"><div class="k">Solar term 节气</div><div class="v" id="dTerm">—</div><div class="s" id="dTermSub">—</div></div>
+          <div class="cell"><div class="k">Chinese animal year</div><div class="v" id="dAnimal">—</div><div class="s" id="dAnimalSub">—</div></div>
         </div>
       </section>
 
@@ -285,12 +313,40 @@
         </table>
       </section>
 
+      <section aria-label="The western zodiac">
+        <h2>The zodiac — twelve signs of λ</h2>
+        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">The tropical zodiac is the same road cut geometrically: twelve equal 30° sectors of solar longitude, standardized here with Aries ♈ first, opening at the March equinox — the same line where Sol opens. The gold year hand reads sign and module off the one angle.</p>
+        <table class="modules">
+          <thead><tr><th>Sign</th><th>λ from</th><th>λ to</th></tr></thead>
+          <tbody id="zodBody"></tbody>
+        </table>
+      </section>
+
+      <section aria-label="The twenty-four solar terms">
+        <h2>The 24 solar terms 节气 — China’s partition of λ</h2>
+        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">The Chinese calendar divides the same longitude into twenty-four 15° terms, anchored at the same equinox — 春分 at λ 0°. Each term begins the moment the sun reaches its λ, so the terms track the sun exactly as the modules track the heat.</p>
+        <table class="modules">
+          <thead><tr><th>λ</th><th>Term</th><th>Pinyin</th><th>Meaning</th></tr></thead>
+          <tbody id="termBody"></tbody>
+        </table>
+      </section>
+
+      <section aria-label="The Chinese animal years">
+        <h2>The animal years — counted from Chinese New Year</h2>
+        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">The animal year is a year-count overlay, not a λ partition: it turns at Chinese New Year (the second new moon after the winter solstice), never at January 1. A date belongs to the animal year of the most recent Chinese New Year on or before it.</p>
+        <table class="modules">
+          <thead><tr><th>Chinese New Year</th><th>Animal year</th><th></th></tr></thead>
+          <tbody id="animalBody"></tbody>
+        </table>
+      </section>
+
       <section class="how" aria-label="How thermal time works">
         <h2>How this watch keeps time</h2>
         <p>The dial is arc: solar longitude λ runs 0° at the March equinox to 360° around the year. Riding on the arc is the equilibrium track T_eq(λ) — the temperature the Sun’s geometry is asking of Schoolcraft, Michigan. Thermal phase Θ accumulates at a rate proportional to that temperature, dΘ/dt = T_eq / T̄, and the thirteen modules are equal steps of Θ — so winter modules stretch over more days and more arc, and summer modules compress.</p>
         <p>The thin red hand is the thermal seconds hand. It sweeps at today’s rate r = T_eq / T̄: one thermal minute takes 60/r civil seconds. Deep January runs about 5% slow; July runs about 4.7% fast. The gold hand is the year hand — it points at today’s place on the module ring. The white hands read thermal time of day.</p>
         <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: the origin of the count, standing outside the 364 counted days. The counted year opens April 2, inside Sol (module 13), the seam span that holds Zero.zero. Its solar address is Sol, week 13.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim. It is the great reset day of equilibrium: Auld Lang Syne is sung, the Lord's Prayer is prayed — forgive, and ask forgiveness — and Psalm 51:10 is read, “Create in me a clean heart, O God”: a brand new heart, every year.</p>
         <p><strong>Longitude carries the track around the planet.</strong> Slide the longitude and the same day is re-read from a new arc position: solar time there shifts continuously — four minutes per degree, no zones and no steps. The day’s equilibrium track is the pinned Schoolcraft table carried around unchanged; what longitude changes is where that place sits in its day. Its temperature swing peaks three hours after its solar noon — the surface-inertia lag — so at any one instant, different longitudes carry different instantaneous temperatures, and the thermal hand runs at each longitude’s own rate r. One planet, one track, a continuous lag field.</p>
+        <p><strong>Two more partitions ride the same road.</strong> The outer ring is the tropical zodiac — twelve equal 30° sectors of λ, Aries ♈ standardized first at the equinox. The inner green band is the Chinese calendar’s own partition: the 24 solar terms 节气, fifteen degrees each, anchored at the same equinox — so the summer solstice (λ 90°, the gate of Cancer) stands inside Puff, and Zero.zero sits some twelve degrees into Aries, inside Sol. The two boundary sets interleave against the thirteen thermal modules, and the sliding between the geometric partitions and the heat-equal modules is the year’s thermal lag drawn as rings. The animal year rides above them all as a year-count: it turns at Chinese New Year, not at January 1 and not by λ. Zodiac layers: partitions of the sun’s road and the year, shown for correlation — design study, NO CLAIM; no astrological meaning is claimed for them.</p>
         <p class="pair">Every hand is a relation between a pair: arc ↔ thermal, forcing ↔ lagged response, equilibrium ↔ gradient. A place is not a time zone; it is an arc position plus its own solar thermal lag.</p>
       </section>
 
@@ -421,6 +477,80 @@
       }
       function rateAt(date){ return (tempC(date) + 273.15) / TBAR; }
 
+      // ---------- Zodiac layers: partitions of λ and of the year (design layer, T5) ----------
+      // Layer 1 — Western zodiac: 12 equal 30° sectors of λ, Aries first at the equinox (Zero's standard, 2026-11-12).
+      var ZODIAC = [
+        { name:"Aries", glyph:"♈" }, { name:"Taurus", glyph:"♉" }, { name:"Gemini", glyph:"♊" },
+        { name:"Cancer", glyph:"♋" }, { name:"Leo", glyph:"♌" }, { name:"Virgo", glyph:"♍" },
+        { name:"Libra", glyph:"♎" }, { name:"Scorpio", glyph:"♏" }, { name:"Sagittarius", glyph:"♐" },
+        { name:"Capricorn", glyph:"♑" }, { name:"Aquarius", glyph:"♒" }, { name:"Pisces", glyph:"♓" }
+      ];
+      function zodiacFor(lam){
+        var idx = Math.min(11, Math.floor(((lam % 360) + 360) % 360 / 30));
+        var degIn = ((lam % 360) + 360) % 360 - idx * 30;
+        return { idx:idx, name:ZODIAC[idx].name, glyph:ZODIAC[idx].glyph, start:idx * 30, degIn:degIn };
+      }
+      // Layer 2 — The 24 solar terms: 15° sectors of the same λ, same equinox anchor.
+      var TERMS = [
+        { lam:0,   hanzi:"春分", pinyin:"Chūnfēn",    en:"Spring Equinox" },
+        { lam:15,  hanzi:"清明", pinyin:"Qīngmíng",   en:"Pure Brightness" },
+        { lam:30,  hanzi:"谷雨", pinyin:"Gǔyǔ",       en:"Grain Rain" },
+        { lam:45,  hanzi:"立夏", pinyin:"Lìxià",      en:"Start of Summer" },
+        { lam:60,  hanzi:"小满", pinyin:"Xiǎomǎn",    en:"Grain Buds" },
+        { lam:75,  hanzi:"芒种", pinyin:"Mángzhòng",  en:"Grain in Ear" },
+        { lam:90,  hanzi:"夏至", pinyin:"Xiàzhì",     en:"Summer Solstice" },
+        { lam:105, hanzi:"小暑", pinyin:"Xiǎoshǔ",    en:"Minor Heat" },
+        { lam:120, hanzi:"大暑", pinyin:"Dàshǔ",      en:"Major Heat" },
+        { lam:135, hanzi:"立秋", pinyin:"Lìqiū",      en:"Start of Autumn" },
+        { lam:150, hanzi:"处暑", pinyin:"Chǔshǔ",     en:"End of Heat" },
+        { lam:165, hanzi:"白露", pinyin:"Báilù",      en:"White Dew" },
+        { lam:180, hanzi:"秋分", pinyin:"Qiūfēn",     en:"Autumn Equinox" },
+        { lam:195, hanzi:"寒露", pinyin:"Hánlù",      en:"Cold Dew" },
+        { lam:210, hanzi:"霜降", pinyin:"Shuāngjiàng", en:"Frost’s Descent" },
+        { lam:225, hanzi:"立冬", pinyin:"Lìdōng",     en:"Start of Winter" },
+        { lam:240, hanzi:"小雪", pinyin:"Xiǎoxuě",    en:"Minor Snow" },
+        { lam:255, hanzi:"大雪", pinyin:"Dàxuě",      en:"Major Snow" },
+        { lam:270, hanzi:"冬至", pinyin:"Dōngzhì",    en:"Winter Solstice" },
+        { lam:285, hanzi:"小寒", pinyin:"Xiǎohán",    en:"Minor Cold" },
+        { lam:300, hanzi:"大寒", pinyin:"Dàhán",      en:"Major Cold" },
+        { lam:315, hanzi:"立春", pinyin:"Lìchūn",     en:"Start of Spring" },
+        { lam:330, hanzi:"雨水", pinyin:"Yǔshuǐ",     en:"Rain Water" },
+        { lam:345, hanzi:"惊蛰", pinyin:"Jīngzhé",    en:"Awakening of Insects" }
+      ];
+      function termFor(lam){
+        var L = ((lam % 360) + 360) % 360;
+        var idx = Math.min(23, Math.floor(L / 15));
+        var t = TERMS[idx];
+        return { idx:idx, hanzi:t.hanzi, pinyin:t.pinyin, en:t.en, start:t.lam, degIn:L - t.lam };
+      }
+      // Layer 3 — The animal year: a year-count overlay turning at Chinese New Year.
+      var ANIMAL_HANZI = { Rat:"鼠", Ox:"牛", Tiger:"虎", Rabbit:"兔", Dragon:"龙", Snake:"蛇",
+                           Horse:"马", Goat:"羊", Monkey:"猴", Rooster:"鸡", Dog:"狗", Pig:"猪" };
+      var ELEMENT_HANZI = { Wood:"木", Fire:"火", Earth:"土", Metal:"金", Water:"水" };
+      // CNY table: [date key, animal, element] — the year begins on that date.
+      var CNY = [
+        ["2024-02-10","Dragon","Wood"], ["2025-01-29","Snake","Wood"],
+        ["2026-02-17","Horse","Fire"],  ["2027-02-06","Goat","Fire"],
+        ["2028-01-26","Monkey","Earth"],["2029-02-13","Rooster","Earth"],
+        ["2030-02-03","Dog","Metal"],   ["2031-01-23","Pig","Metal"]
+      ];
+      function animalFor(date){
+        var k = keyOf(date.getFullYear(), date.getMonth(), date.getDate());
+        var cur = { animal:"Rabbit", element:"Water", since:null, sinceLabel:"before Feb 10, 2024", next:CNY[0] };
+        for(var i=0;i<CNY.length;i++){
+          if(k >= CNY[i][0]){ cur = { animal:CNY[i][1], element:CNY[i][2], since:CNY[i][0], sinceLabel:CNY[i][0], next:(CNY[i+1] || null) }; }
+          else break;
+        }
+        cur.hanzi = ELEMENT_HANZI[cur.element] + ANIMAL_HANZI[cur.animal];
+        cur.label = "Year of the " + cur.element + " " + cur.animal;
+        return cur;
+      }
+      function fmtCnyDate(key){
+        var p = key.split("-");
+        var M = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        return M[+p[1]-1] + " " + (+p[2]) + ", " + p[0];
+      }
+
       // ---------- Longitude: the track carried around the planet ----------
       // Doctrine: no time zones — a continuous solar thermal lag field.
       // Each degree of longitude shifts local solar time by exactly 4 minutes.
@@ -502,30 +632,30 @@
           sp = cyc.spans[i];
           var fill = (i === curModule) ? "#7a5a17" : (i % 2 ? "#1c2431" : "#232d3f");
           var stroke = (i === curModule) ? "#d9a441" : "#39445a";
-          s += '<path d="'+sectorPath(sp.a0+0.35, sp.a1-0.35, 152, 190)+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+(i===curModule?1.6:0.8)+'"/>';
-          d += '<path id="arc'+i+'" d="'+arcPath(sp.a0+1.2, sp.a1-1.2, 171)+'" fill="none" stroke="none"/>';
+          s += '<path d="'+sectorPath(sp.a0+0.35, sp.a1-0.35, 144, 168)+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+(i===curModule?1.6:0.8)+'"/>';
+          d += '<path id="arc'+i+'" d="'+arcPath(sp.a0+1.2, sp.a1-1.2, 156)+'" fill="none" stroke="none"/>';
           // boundary tick
-          var t1 = pt(200,200,148,sp.a0), t2 = pt(200,200,152,sp.a0);
+          var t1 = pt(200,200,140,sp.a0), t2 = pt(200,200,144,sp.a0);
           s += '<line x1="'+t1[0].toFixed(1)+'" y1="'+t1[1].toFixed(1)+'" x2="'+t2[0].toFixed(1)+'" y2="'+t2[1].toFixed(1)+'" stroke="#4a566b" stroke-width="1.4"/>';
         }
         for(i=0;i<13;i++){
           sp = cyc.spans[i];
           var cur = (i === curModule);
-          s += '<text font-size="12" font-weight="'+(cur?700:600)+'" letter-spacing="1" fill="'+(cur?"#ffd97a":"#c3cedd")+'">'+
+          s += '<text font-size="10.5" font-weight="'+(cur?700:600)+'" letter-spacing="0.8" fill="'+(cur?"#ffd97a":"#c3cedd")+'">'+
                '<textPath href="#arc'+i+'" startOffset="50%" text-anchor="middle">'+sp.name.toUpperCase()+'</textPath></text>';
         }
         // quarter gates (absolute λ = 90 / 180 / 270)
         [90,180,270].forEach(function(gate){
           var a = ((gate - cyc.lambda0) % 360 + 360) % 360;
-          var t1 = pt(200,200,143,a), t2 = pt(200,200,152,a);
+          var t1 = pt(200,200,118,a), t2 = pt(200,200,144,a);
           s += '<line x1="'+t1[0].toFixed(1)+'" y1="'+t1[1].toFixed(1)+'" x2="'+t2[0].toFixed(1)+'" y2="'+t2[1].toFixed(1)+'" stroke="#6b7a90" stroke-width="2"/>';
         });
         ringG.innerHTML = s;
         defs.innerHTML = d;
         // Seam marker at April 1
         var sa = cyc.seamAngle;
-        var dp = pt(200,200,140,sa);
-        var g1 = pt(200,200,138,sa), g2 = pt(200,200,192,sa);
+        var dp = pt(200,200,156,sa);
+        var g1 = pt(200,200,116,sa), g2 = pt(200,200,194,sa);
         var hot = seamHot ? ' stroke-width="2.6"' : ' stroke-width="1.6"';
         var sg = '<line x1="'+g1[0].toFixed(1)+'" y1="'+g1[1].toFixed(1)+'" x2="'+g2[0].toFixed(1)+'" y2="'+g2[1].toFixed(1)+'" stroke="#ff7a59"'+hot+' stroke-dasharray="3 2.4"/>';
         sg += '<g transform="translate('+dp[0].toFixed(1)+' '+dp[1].toFixed(1)+') rotate('+sa.toFixed(1)+')">'+
@@ -536,6 +666,86 @@
         sg += '<text x="205" y="115" font-size="7" font-weight="600" letter-spacing="0.9" fill="#c9573f" text-anchor="middle">ZERO.ZERO · APRIL 1 · AT 0.0</text>';
         sg += '<text x="205" y="127" font-size="6.5" font-weight="700" letter-spacing="0.7" fill="#d9a441" text-anchor="middle">THE GREAT RESET DAY OF EQUILIBRIUM</text>';
         seamG.innerHTML = sg;
+      }
+
+      // ---------- Zodiac & solar-term rings (partitions of absolute λ, drawn in dial coords) ----------
+      var zodiacG = document.getElementById("zodiacG");
+      var termsG = document.getElementById("termsG");
+      var renderedZodiacKey = "";
+      function relA(cyc, absLam){ return ((absLam - cyc.lambda0) % 360 + 360) % 360; }
+      function renderZodiacRings(cyc, curSign, curTerm){
+        var key = cyc.year + "|" + curSign + "|" + curTerm;
+        if(key === renderedZodiacKey) return;
+        renderedZodiacKey = key;
+        var s = "", d = "", i, a0, a1;
+        // Western zodiac: outer ring, r 170–192, glyph + name along the arc
+        for(i=0;i<12;i++){
+          a0 = relA(cyc, i*30); a1 = a0 + 30;
+          var curZ = (i === curSign);
+          var zfill = curZ ? "#7a5a17" : (i % 2 ? "#1c2431" : "#232d3f");
+          var zstroke = curZ ? "#d9a441" : "#39445a";
+          s += '<path d="'+sectorPath(a0+0.3, a1-0.3, 170, 192)+'" fill="'+zfill+'" stroke="'+zstroke+'" stroke-width="'+(curZ?1.6:0.8)+'"/>';
+          d += '<path id="zarc'+i+'" d="'+arcPath(a0+1.2, a1-1.2, 181)+'" fill="none" stroke="none"/>';
+          var b1 = pt(200,200,168,a0), b2 = pt(200,200,170,a0);
+          s += '<line x1="'+b1[0].toFixed(1)+'" y1="'+b1[1].toFixed(1)+'" x2="'+b2[0].toFixed(1)+'" y2="'+b2[1].toFixed(1)+'" stroke="#4a566b" stroke-width="1.2"/>';
+        }
+        for(i=0;i<12;i++){
+          a0 = relA(cyc, i*30);
+          var curZ2 = (i === curSign);
+          s += '<text font-size="10" font-weight="'+(curZ2?700:600)+'" letter-spacing="0.6" fill="'+(curZ2?"#ffd97a":"#d5dde8")+'">'+
+               '<textPath href="#zarc'+i+'" startOffset="50%" text-anchor="middle">'+ZODIAC[i].glyph+" "+ZODIAC[i].name.toUpperCase()+'</textPath></text>';
+        }
+        zodiacG.innerHTML = s + "<defs>" + d + "</defs>";
+        // Solar terms: inner band, r 122–142, hanzi along the arc
+        var ts = "", td = "";
+        for(i=0;i<24;i++){
+          a0 = relA(cyc, i*15); a1 = a0 + 15;
+          var curT = (i === curTerm);
+          var tfill = curT ? "#2e5d43" : (i % 2 ? "#182620" : "#1d2f27");
+          var tstroke = curT ? "#7fc8a9" : "#33503f";
+          ts += '<path d="'+sectorPath(a0+0.25, a1-0.25, 122, 142)+'" fill="'+tfill+'" stroke="'+tstroke+'" stroke-width="'+(curT?1.5:0.7)+'"/>';
+          td += '<path id="tarc'+i+'" d="'+arcPath(a0+0.8, a1-0.8, 132)+'" fill="none" stroke="none"/>';
+        }
+        for(i=0;i<24;i++){
+          var curT2 = (i === curTerm);
+          ts += '<text font-size="9.5" font-weight="'+(curT2?700:500)+'" fill="'+(curT2?"#d9f5e6":"#a9c8b8")+'">'+
+                '<textPath href="#tarc'+i+'" startOffset="50%" text-anchor="middle">'+TERMS[i].hanzi+'</textPath></text>';
+        }
+        termsG.innerHTML = ts + "<defs>" + td + "</defs>";
+      }
+
+      // ---------- Zodiac / terms / animal tables ----------
+      var zodBody = document.getElementById("zodBody");
+      var termBody = document.getElementById("termBody");
+      var animalBody = document.getElementById("animalBody");
+      var zodTableKey = "", termTableKey = "", animalTableKey = "";
+      function renderZodiacTables(curSign, curTerm, animal){
+        if(zodTableKey !== String(curSign)){
+          zodTableKey = String(curSign);
+          var zh = "";
+          ZODIAC.forEach(function(z, i){
+            zh += '<tr'+(i===curSign?' class="cur"':'')+'><td>'+z.glyph+" "+z.name+'</td><td>'+(i*30)+'°</td><td>'+(((i+1)*30)%360)+'°</td></tr>';
+          });
+          zodBody.innerHTML = zh;
+        }
+        if(termTableKey !== String(curTerm)){
+          termTableKey = String(curTerm);
+          var th = "";
+          TERMS.forEach(function(t, i){
+            th += '<tr'+(i===curTerm?' class="cur"':'')+'><td>'+t.lam+'°</td><td>'+t.hanzi+'</td><td>'+t.pinyin+'</td><td>'+t.en+'</td></tr>';
+          });
+          termBody.innerHTML = th;
+        }
+        var akey = animal.animal + "|" + animal.element;
+        if(animalTableKey !== akey){
+          animalTableKey = akey;
+          var ah = '<tr'+(animal.since===null?' class="cur"':'')+'><td>before Feb 10, 2024</td><td>Year of the Water Rabbit</td><td>水兔</td></tr>';
+          CNY.forEach(function(row){
+            var isCur = (animal.since === row[0]);
+            ah += '<tr'+(isCur?' class="cur"':'')+'><td>'+fmtCnyDate(row[0])+'</td><td>Year of the '+row[2]+" "+row[1]+'</td><td>'+ELEMENT_HANZI[row[2]]+ANIMAL_HANZI[row[1]]+'</td></tr>';
+          });
+          animalBody.innerHTML = ah;
+        }
       }
 
       // ---------- Modules table ----------
@@ -596,6 +806,9 @@
         var r = lr.rInst;
         var lam = solarLon(eff);
         var lamRel = ((lam - cyc.lambda0) % 360 + 360) % 360;
+        var zod = zodiacFor(lam);
+        var term = termFor(lam);
+        var animal = animalFor(eff);
 
         // Hands — thermal time of day at the chosen longitude:
         // solar elapsed there, accumulated at that longitude's own rate.
@@ -609,8 +822,10 @@
 
         renderRing(cyc, addr.module, boundary);
         renderTable(cyc, addr.module);
+        renderZodiacRings(cyc, zod.idx, term.idx);
+        renderZodiacTables(zod.idx, term.idx, animal);
 
-        var addrKey = cyc.year+"|"+addr.mw+"|"+addr.day+"|"+boundary+"|"+(viewDate?1:0)+"|"+eff.getDate()+"|"+currentLon.toFixed(1);
+        var addrKey = cyc.year+"|"+addr.mw+"|"+addr.day+"|"+boundary+"|"+(viewDate?1:0)+"|"+eff.getDate()+"|"+currentLon.toFixed(1)+"|"+zod.idx+"|"+term.idx+"|"+animal.animal;
         if(addrKey !== lastAddrKey){
           lastAddrKey = addrKey;
           if(boundary){
@@ -652,6 +867,23 @@
           var sp = cyc.spans[addr.module];
           el("dSpan").textContent = fmtDateShort(sp.first) + " – " + fmtDateShort(sp.after);
           el("dSpanSub").textContent = sp.days + " civil days · " + sp.arc.toFixed(1) + "° of arc for 1/13 of Θ";
+          // Zodiac layers
+          el("crZodiac").innerHTML = '<span class="zg">' + zod.name + " " + zod.glyph + "</span> · " + term.hanzi + " " + term.pinyin + " · " + animal.label + " " + animal.hanzi;
+          el("dZodiac").textContent = zod.name + " " + zod.glyph;
+          el("dZodiacSub").textContent = "λ " + lam.toFixed(1) + "° · " + zod.degIn.toFixed(1) + "° into " + zod.name + " · sector " + zod.start + "°–" + ((zod.start + 30) % 360) + "° · Aries ♈ at the equinox";
+          el("dTerm").textContent = term.hanzi + " " + term.pinyin;
+          el("dTermSub").textContent = term.en + " · term begins at λ " + term.start + "° · " + term.degIn.toFixed(1) + "° into the term";
+          el("dAnimal").textContent = animal.label + " " + animal.hanzi;
+          el("dAnimalSub").textContent = (animal.since ? "since Chinese New Year, " + fmtCnyDate(animal.since) : "the year running before Feb 10, 2024") +
+            (animal.next ? " · turns " + animal.next[2] + " " + animal.next[1] + " " + ELEMENT_HANZI[animal.next[2]] + ANIMAL_HANZI[animal.next[1]] + " on " + fmtCnyDate(animal.next[0]) : " · last year in the pinned CNY table");
+          // The full equation: the Gregorian day, equated across every layer at once.
+          var greg = DOW[eff.getDay()] + ", " + MON[eff.getMonth()] + " " + eff.getDate() + ", " + eff.getFullYear();
+          var thermalPart = boundary
+            ? "ZERO.ZERO — Zero Day, the Clean Residual Day, outside the count (solar address " + addr.name + " " + addr.mw + ", day " + addr.day + ")"
+            : "<strong>" + addr.name + " " + addr.mw + "</strong>, day " + addr.day + " (counted day " + cd + ")";
+          el("equationLine").innerHTML = '<span class="eq-head">The equation — one day, every count</span>' +
+            greg + " = " + thermalPart + " · <strong>" + zod.name + " " + zod.glyph + "</strong> (λ " + lam.toFixed(1) + "°) · " +
+            "<strong>" + term.hanzi + " " + term.pinyin + "</strong> (" + term.en + ") · <strong>" + animal.label + " " + animal.hanzi + "</strong>";
           faceSvg.setAttribute("aria-label", "Thermal time watch — Global Unified Calendar. " + (boundary ? "ZERO DAY — ZERO.ZERO, Clean Residual Day, New Year Day, the day of reflection, reassessment, realignment, also named Thermal Equilibrium Day by declaration. Solar address " + solarAddr + "." : "Address " + solarAddr + ".") + " Read at longitude " + fmtLon(currentLon) + ". Rate factor " + r.toFixed(3) + ".");
           viewingLine.innerHTML = viewDate
             ? "Viewing <strong>" + DOW[eff.getDay()] + ", " + fmtDate(eff) + "</strong> — hands run at that day’s rate."
@@ -726,6 +958,17 @@
           return { lon:(lon === undefined ? currentLon : lon), rate:+lr2.rInst.toFixed(4),
                    meanRate:+lr2.rMean.toFixed(4), tInstC:+lr2.tInstC.toFixed(2),
                    tMeanC:+lr2.tMeanC.toFixed(2), solarHour:+lr2.solarHour.toFixed(2) };
+        },
+        zodiacFor: function(dateStr){
+          var p = dateStr.split("-");
+          var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
+          var lam2 = solarLon(d), z = zodiacFor(lam2), t = termFor(lam2), a = animalFor(d);
+          var th2 = thetaAt(d), ad2 = addressFromTheta(th2.thetaAddr);
+          return { gregorian: fmtDate(d), lambda:+lam2.toFixed(1),
+                   module: ad2.name, mw: ad2.mw, day: ad2.day, countDay: countDay(d), boundary: isBoundaryDay(d),
+                   sign: z.name, glyph: z.glyph, degInSign:+z.degIn.toFixed(1),
+                   termHanzi: t.hanzi, termPinyin: t.pinyin, termEn: t.en, termStart: t.start,
+                   animalYear: a.label, animalHanzi: a.hanzi, animalSince: a.since };
         },
         spansFor: function(cy){
           return buildCycle(cy).spans.map(function(s, i){
