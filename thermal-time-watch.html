@@ -352,8 +352,8 @@
       var MC = [-5.7,-4.3,1.1,7.8,13.9,19.2,21.4,20.3,16.1,9.7,3.1,-2.8];
       var TK = MC.map(function(c){ return c + 273.15; });
       var TBAR = TK.reduce(function(a,b){ return a+b; }, 0) / 12; // ≈ 281.47 K
-      var NAMES = ["March","April","May","June","Sol","July","August","September","October","November","December","Puff","February"];
-      // Display numbers (Zero's ruling 2026-11-12): seam span March = 13, then April = 1 … February = 12; solstice span Sol = 4, January span Puff = 11.
+      var NAMES = ["March","April","May","June","Sol","July","August","September","October","November","December","January","February"];
+      // Display numbers (Zero's ruling 2026-11-12, updated 2026-11-13): seam span March = 13, then April = 1 … February = 12; solstice span Sol = 4, January span = 11.
       // Array order stays solar order from the equinox (index 0 = seam span).
       function moduleNumber(idx){ return idx === 0 ? 13 : idx; }
       var DAYMS = 86400000;
