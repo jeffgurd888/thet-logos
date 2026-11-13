@@ -11,12 +11,12 @@
       * { box-sizing: border-box; }
       :root{
         --bg:#eef0ee; --ink:#16181d; --muted:#5a6068; --card:#ffffff; --line:#d8dcd8;
-        --gold:#b07d1e; --seam:#c7432b; --teal:#0d9488;
+        --gold:#b07d1e; --seam:#c7432b; --teal:#0d9488; --blue:#1d4ed8;
         --face-bg:#0d1117;
       }
       @media (prefers-color-scheme: dark){
         :root{ --bg:#0a0c10; --ink:#e8ebef; --muted:#9aa3ad; --card:#14181f; --line:#262c36;
-               --gold:#d9a441; --seam:#ff7a59; --teal:#2dd4bf; }
+               --gold:#d9a441; --seam:#ff7a59; --teal:#2dd4bf; --blue:#7fb0ff; }
       }
       html{ -webkit-text-size-adjust:100%; }
       body{
@@ -157,6 +157,8 @@
       .hands-legend .sw-gold{ background:#d9a441; }
       .hands-legend .sw-teal{ background:#14d8c4; }
       .hands-legend .lg-teal{ color:var(--teal); }
+      .hands-legend .sw-blue{ background:#2f7bff; }
+      .hands-legend .lg-blue{ color:var(--blue); }
       .hands-legend .sw-white{ background:#f4f7fb; border:1px solid var(--muted); }
       .viewing{
         text-align:center; margin-top:10px; font-size:13.5px; color:var(--muted); min-height:1.3em;
@@ -212,6 +214,8 @@
           <g id="termsG"></g>
           <g id="countedG"></g>
           <g id="thermalG"></g>
+          <g id="lunarG"></g>
+          <g id="phaseG"></g>
           <g id="seamG"></g>
           <g id="handsG">
             <g id="yearHand">
@@ -227,6 +231,11 @@
               <line x1="200" y1="210" x2="200" y2="166" stroke="#16e0c8" stroke-width="3" stroke-linecap="round"/>
               <path d="M200 154 L195.5 166 L204.5 166 Z" fill="#16e0c8" stroke="#0d1117" stroke-width="0.8"/>
               <circle cx="200" cy="209" r="2.8" fill="none" stroke="#16e0c8" stroke-width="1.8"/>
+            </g>
+            <g id="lunarHand">
+              <line x1="200" y1="209" x2="200" y2="177" stroke="#2f7bff" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M200 169.5 L196 177 L204 177 Z" fill="#2f7bff" stroke="#0d1117" stroke-width="0.7"/>
+              <circle cx="200" cy="207.5" r="2.4" fill="none" stroke="#2f7bff" stroke-width="1.5"/>
             </g>
             <line id="hourHand" x1="200" y1="200" x2="200" y2="140" stroke="#e8edf5" stroke-width="7" stroke-linecap="round"/>
             <line id="minHand" x1="200" y1="200" x2="200" y2="112" stroke="#e8edf5" stroke-width="4.5" stroke-linecap="round"/>
@@ -246,7 +255,7 @@
       <p class="date-line" id="dateLine">—</p>
       <p class="civil-line" id="civilLine">—</p>
       <p class="solar-line" id="solarLine">—</p>
-      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 1–13 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 13, 1–12 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 13.2, while TODAY parks at the seam).</p>
+      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 1–13 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 13, 1–12 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 13.2, while TODAY parks at the seam) · <span class="swatch sw-blue"></span><strong class="lg-blue">Blue LUNAR hand</strong> — the lunar month date, read on the <strong>LUNAR</strong> ring just inside the THERMAL ring (12.368266 lunations per tropical year — twelve full sectors plus a closing partial sector, numbered 1–13 from the same origin; lunation 1 is the lunation already running at the March equinox) · <span class="swatch sw-blue"></span><strong class="lg-blue">Phase ring</strong> — inside the LUNAR ring, one whole lunation drawn as a circle (NEW at the top, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, WAXING from new to full, WANING from full back to new); a small blue moon travels it at the day’s lunar age, dark at new, half-lit at the quarters, fully lit at full.</p>
 
       <p class="equation" id="equationLine"><span class="eq-head">Today’s equation</span>—</p>
 
@@ -292,6 +301,7 @@
           <div class="cell"><div class="k">Thermal phase Θ</div><div class="v" id="dTheta">—</div><div class="s" id="dThetaSub">—</div></div>
           <div class="cell"><div class="k">Solar longitude λ</div><div class="v" id="dLambda">—</div><div class="s" id="dLambdaSub">—</div></div>
           <div class="cell"><div class="k">The count</div><div class="v" id="dCount">—</div><div class="s">Count states from 0 · April 2 = counted 0 · labels 0–363 · April 1 outside at Zero.zero 0.0</div></div>
+          <div class="cell"><div class="k">Lunar month date</div><div class="v" id="dLunar">—</div><div class="s" id="dLunarSub">—</div></div>
           <div class="cell"><div class="k">Thermal clock drift today</div><div class="v" id="dDrift">—</div><div class="s">thermal elapsed vs solar elapsed at this longitude, since solar midnight there</div></div>
           <div class="cell"><div class="k">This module’s span</div><div class="v" id="dSpan">—</div><div class="s" id="dSpanSub">—</div></div>
           <div class="cell"><div class="k">Western zodiac — sign of λ</div><div class="v" id="dZodiac">—</div><div class="s" id="dZodiacSub">—</div></div>
@@ -342,6 +352,7 @@
         <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: standing outside the 364 counted days at address 0.0 — it is not counted 0. The count states from 0: the counted year opens April 2 as counted 0, and the labels run 0–363, inside March (module 13), the seam span that holds Zero.zero. Counted module 1 spans counted 0–27. The counted ring’s “0.0” engraving at the origin marks Zero.zero the address; counted 0 is the first counted day, April 2 — the two zeros are neighbours, never the same day. Its solar address is March, week 13.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim. It is the great reset day of equilibrium: Auld Lang Syne is sung, the Lord's Prayer is prayed — forgive, and ask forgiveness — and Psalm 51:10 is read, “Create in me a clean heart, O God”: a brand new heart, every year.</p>
         <p><strong>Longitude carries the track around the planet.</strong> Slide the longitude and the same day is re-read from a new arc position: solar time there shifts continuously — four minutes per degree, no zones and no steps. The day’s equilibrium track is the pinned Schoolcraft table carried around unchanged; what longitude changes is where that place sits in its day. Its temperature swing peaks three hours after its solar noon — the surface-inertia lag — so at any one instant, different longitudes carry different instantaneous temperatures, and the thermal hand runs at each longitude’s own rate r. One planet, one track, a continuous lag field.</p>
         <p><strong>Two more partitions ride the same road.</strong> The outer ring is the tropical zodiac — twelve equal 30° sectors of λ, Aries ♈ standardized first at the equinox. The inner green band is the Chinese calendar’s own partition: the 24 solar terms 节气, fifteen degrees each, anchored at the same equinox — so the solstice instant (λ 90°, the gate of Cancer) falls in June’s last days, and Sol is the high-summer span that opens on the solstice’s far side — the sun’s long reign at the top of the year — and Zero.zero sits some twelve degrees into Aries, inside March. The two boundary sets interleave against the thirteen thermal modules, and the sliding between the geometric partitions and the heat-equal modules is the year’s thermal lag drawn as rings. The animal year rides above them all as a year-count: it turns at Chinese New Year, not at January 1 and not by λ. Zodiac layers: partitions of the sun’s road and the year, shown for correlation — design study, NO CLAIM; no astrological meaning is claimed for them.</p>
+        <p><strong>The moon keeps two more counts.</strong> The slim blue LUNAR ring just inside the THERMAL ring carries the year’s lunations: 12.368266 per tropical year, drawn as twelve full sectors and a closing partial sector (0.368266 of a sector), numbered 1–13 from the same equinox origin, engraved LUNAR · 12.368. Lunations count from the March equinox — lunation 1 is the lunation already running at the equinox (in 2026 it opened with the new moon of Mar 19) — and the blue LUNAR hand’s angle is the fractional lunations elapsed since the equinox, mapped over the ring’s 12.368266: that is, the days since the equinox plus the age the containing lunation had already reached at the equinox, all divided by the synodic month. Inside the LUNAR ring, the phase ring draws a single lunation as one full circle — NEW at the top on the shared origin line, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, the arc from new through full labelled WAXING and the arc from full back to new labelled WANING — and a small blue moon travels it at the day’s lunar age, its lit part growing through waxing and shrinking through waning. Lunar age is the days since the last new moon, 0 at new moon; the phase words are centred on their stations — New at the new moon, Waxing about the first quarter, Full at the full moon, Waning about the last quarter. New moons here are a design-study model, stated as such: counted from one pinned anchor new moon — Feb 17, 2026, Chinese New Year, the CNY table’s own date — at a pinned synodic month of 29.530589 days.</p>
         <p class="pair">Every hand is a relation between a pair: arc ↔ thermal, forcing ↔ lagged response, equilibrium ↔ gradient. A place is not a time zone; it is an arc position plus its own solar thermal lag.</p>
       </section>
 
@@ -476,6 +487,41 @@
         return Math.round((cur - origin) / DAYMS);
       }
       function rateAt(date){ return (tempC(date) + 273.15) / TBAR; }
+
+      // ---------- Lunar layer: the lunar month date + the phase of the day ----------
+      // Design-study model (stated as such on the face): new moons are counted from
+      // ONE pinned anchor new moon — Feb 17, 2026, 12:00 UTC, Chinese New Year (the
+      // CNY table's own date) — at a pinned synodic month of 29.530589 days. Lunar
+      // age = days since the most recent model new moon (0 at new moon).
+      // Lunations of the year count from the March equinox (the shared origin: the
+      // cycle's first day, Mar 20, at its canonical noon): lunation 1 is the lunation
+      // already running at the equinox, so the fractional lunations elapsed at an
+      // instant = (days since the equinox + the containing lunation's age at the
+      // equinox) / synodic month. The LUNAR hand maps that count over the ring's
+      // 12.368266 lunations per tropical year (12.368266 × 29.530589 ≈ 365.2422 d).
+      var SYNODIC = 29.530589;
+      var LUN_PER_YEAR = 12.368266;
+      var NM_ANCHOR = Date.UTC(2026, 1, 17, 12, 0, 0);
+      function equinoxInstant(date){
+        var cyc = buildCycle(cycleYearOf(date));
+        var f = cyc.days[0].date; // Mar 20 of the cycle year
+        return new Date(f.getFullYear(), f.getMonth(), f.getDate(), 12, 0, 0);
+      }
+      function lunarFor(date){
+        var age = (((date.getTime() - NM_ANCHOR) / DAYMS) % SYNODIC + SYNODIC) % SYNODIC;
+        var eq = equinoxInstant(date);
+        var eqAge = (((eq.getTime() - NM_ANCHOR) / DAYMS) % SYNODIC + SYNODIC) % SYNODIC;
+        var lunElapsed = ((date.getTime() - eq.getTime()) / DAYMS + eqAge) / SYNODIC;
+        var lunFrac = ((lunElapsed % LUN_PER_YEAR) + LUN_PER_YEAR) % LUN_PER_YEAR;
+        var q = age / SYNODIC;
+        // Phase words centred on their stations (each spans ±1/8 of the cycle):
+        // New at the new moon, Waxing about the first quarter, Full at the full
+        // moon, Waning about the last quarter.
+        var phase = (q < 0.125 || q >= 0.875) ? "New" : q < 0.375 ? "Waxing" : q < 0.625 ? "Full" : "Waning";
+        return { ageDays:age, eqAge:eqAge, lunElapsed:lunElapsed, lunFrac:lunFrac,
+                 angle:lunFrac / LUN_PER_YEAR * 360, number:Math.floor(lunFrac) + 1,
+                 phase:phase, phaseFrac:q };
+      }
 
       // ---------- Zodiac layers: partitions of λ and of the year (design layer, T5) ----------
       // Layer 1 — Western zodiac: 12 equal 30° sectors of λ, Aries first at the equinox (Zero's standard, 2026-11-12).
@@ -655,24 +701,36 @@
         // block (r 71–122) and stops clear of the counted ring's 0.0 label (r < 52).
         // It runs along the Pisces|Aries, February|March and 惊蛰|春分 boundaries and
         // along the counted ring's zero (counted module 13 closes, then 0.0 — Zero.zero
-        // the address — then counted 0 opening counted module 1).
-        var og1 = pt(200,200,25,0), og2 = pt(200,200,71,0), og3 = pt(200,200,122,0), og4 = pt(200,200,196,0);
+        // the address — then counted 0 opening counted module 1). The inner run now
+        // starts at r 19, just outside the phase ring, with a stub inside it (r 7.5–
+        // 11.5), so the origin stays continuous across the LUNAR and phase rings too —
+        // the phase ring's NEW station sits on this line.
+        var og1 = pt(200,200,19,0), og2 = pt(200,200,71,0), og3 = pt(200,200,122,0), og4 = pt(200,200,196,0);
+        var og5 = pt(200,200,7.5,0), og6 = pt(200,200,11.5,0);
         var sg = '<line x1="'+og1[0].toFixed(1)+'" y1="'+og1[1].toFixed(1)+'" x2="'+og2[0].toFixed(1)+'" y2="'+og2[1].toFixed(1)+'" stroke="#cfd8e3" stroke-width="1.3" opacity="0.85"/>';
+        sg += '<line x1="'+og5[0].toFixed(1)+'" y1="'+og5[1].toFixed(1)+'" x2="'+og6[0].toFixed(1)+'" y2="'+og6[1].toFixed(1)+'" stroke="#cfd8e3" stroke-width="1.3" opacity="0.85"/>';
         sg += '<line x1="'+og3[0].toFixed(1)+'" y1="'+og3[1].toFixed(1)+'" x2="'+og4[0].toFixed(1)+'" y2="'+og4[1].toFixed(1)+'" stroke="#cfd8e3" stroke-width="1.3" opacity="0.85"/>';
         // Seam marker at April 1 — Zero.zero at its true solar position (λ ≈ 12°,
         // inside March), NOT on the origin line. Dashed seam line in segments that
         // gap the label bands (terms hanzi r 122–142, MARCH lettering r 150–162,
         // zodiac lettering r 176+), and a diamond seated on the module ring's outer
         // edge (r 168) — clear of the MARCH text path at r 156, so MARCH reads whole.
+        // RENDER COINCIDENCE (Zero's correction, 2026-11-13): the marker is drawn
+        // EXACTLY as the gold hand is drawn — its geometry sits on the upward axis
+        // inside a rotate(angle 200 200) group, the hand's own transform form — not
+        // through pt() coordinates, the separate path it used before. The angle is
+        // the gold hand's λ evaluated at April 1's canonical noon (cyc.seamAngle);
+        // while April 1 itself is being viewed, tick() re-seats this group at the
+        // gold hand's own live angle (lamRel, the identical value), so on Zero Day
+        // the gold hand lies along the seam line and through the diamond, exactly.
         var sa = cyc.seamAngle;
-        var dp = pt(200,200,168,sa);
         var hot = seamHot ? ' stroke-width="2.6"' : ' stroke-width="1.6"';
+        sg += '<g id="seamMark" transform="rotate('+sa.toFixed(2)+' 200 200)">';
         [[114,121],[143,149],[163,174]].forEach(function(seg){
-          var s1 = pt(200,200,seg[0],sa), s2 = pt(200,200,seg[1],sa);
-          sg += '<line x1="'+s1[0].toFixed(1)+'" y1="'+s1[1].toFixed(1)+'" x2="'+s2[0].toFixed(1)+'" y2="'+s2[1].toFixed(1)+'" stroke="#ff7a59"'+hot+' stroke-dasharray="3 2.4"/>';
+          sg += '<line x1="200" y1="'+(200-seg[1])+'" x2="200" y2="'+(200-seg[0])+'" stroke="#ff7a59"'+hot+' stroke-dasharray="3 2.4"/>';
         });
-        sg += '<g transform="translate('+dp[0].toFixed(1)+' '+dp[1].toFixed(1)+') rotate('+sa.toFixed(1)+')">'+
-              '<polygon points="0,-5.5 4,0 0,5.5 -4,0" fill="#ff7a59" stroke="#0d1117" stroke-width="0.8"/></g>';
+        sg += '<polygon points="200,26.5 204,32 200,37.5 196,32" fill="#ff7a59" stroke="#0d1117" stroke-width="0.8"/>';
+        sg += '</g>';
         // seam label: ZERO DAY in the dial's open top, clear of the marker
         sg += '<text x="205" y="90" font-size="11" font-weight="800" letter-spacing="1.6" fill="#ff9d85" text-anchor="middle">ZERO DAY</text>';
         sg += '<text x="205" y="103" font-size="7" font-weight="600" letter-spacing="0.5" fill="#e0705c" text-anchor="middle">REFLECTION · REASSESSMENT · REALIGNMENT</text>';
@@ -841,10 +899,81 @@
           p = pt(200,200,37.5,mid);
           s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="7.5" font-weight="700" fill="#d9f6f0" text-anchor="middle" dominant-baseline="central">'+moduleNumber(i)+'</text>';
         }
-        s += '<text x="200" y="227" font-size="6.5" font-weight="700" letter-spacing="1.1" fill="#6fc7bb" text-anchor="middle">THERMAL · 13 × 4 WEEKS</text>';
+        // The THERMAL engraving moves to the open annulus below the COUNTED ring
+        // (y 276): its old seat inside the THERMAL ring is now the LUNAR ring.
+        s += '<text x="200" y="276" font-size="6.5" font-weight="700" letter-spacing="1.1" fill="#6fc7bb" text-anchor="middle">THERMAL · 13 × 4 WEEKS</text>';
         thermalG.innerHTML = s;
       }
       renderThermalRing();
+
+      // ---------- Lunar ring: the year's lunations (12.368266 per tropical year) ----------
+      // Slim ring just inside the THERMAL ring (r 24–30), on the same origin: sector
+      // k opens at (k−1) × 360/12.368266 degrees from the equinox line. Twelve full
+      // equal sectors plus the closing partial sector (0.368266 of a sector, filled
+      // distinctly and stroked brighter), numbered 1–13. Its engraving sits just
+      // inside the ring at the south, in the gap the THERMAL engraving vacated.
+      var lunarG = document.getElementById("lunarG");
+      var LUN_SECTOR = 360 / LUN_PER_YEAR;
+      function renderLunarRing(){
+        var s = "", i, a0, a1, mid, p;
+        for(i=0;i<12;i++){
+          a0 = i * LUN_SECTOR; a1 = a0 + LUN_SECTOR;
+          s += '<path d="'+sectorPath(a0+0.4, a1-0.4, 24, 30)+'" fill="'+(i % 2 ? "#182a47" : "#121e33")+'" stroke="#3a5a8c" stroke-width="0.7"/>';
+        }
+        a0 = 12 * LUN_SECTOR;
+        s += '<path d="'+sectorPath(a0+0.4, 359.6, 24, 30)+'" fill="#2c4f8a" stroke="#7fb0ff" stroke-width="0.9"/>';
+        for(i=0;i<13;i++){
+          mid = (i < 12) ? (i + 0.5) * LUN_SECTOR : a0 + (360 - a0) / 2;
+          p = pt(200,200,27,mid);
+          s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="'+(i<12?"5.5":"5")+'" font-weight="700" fill="#cfe2ff" text-anchor="middle" dominant-baseline="central">'+(i+1)+'</text>';
+        }
+        s += '<text x="200" y="221.5" font-size="5.2" font-weight="700" letter-spacing="0.9" fill="#7fb0ff" text-anchor="middle" dominant-baseline="central">LUNAR · 12.368</text>';
+        lunarG.innerHTML = s;
+      }
+      renderLunarRing();
+
+      // ---------- Phase ring: one whole lunation as a circle ----------
+      // Inside the LUNAR ring (band r 12.5–18.5, stations at r 15.5), its zero —
+      // NEW — on the shared origin line at the top, so every zero on the dial
+      // points the same way. One synodic cycle (29.530589 d) runs the full 360°:
+      // NEW 0°, FIRST QUARTER 90°, FULL 180°, LAST QUARTER 270°; WAXING labels the
+      // arc from new through full, WANING the arc from full back to new. Station
+      // discs show the lit part at their phase; a small blue-ringed moon travels
+      // the ring at the day's lunar age, its own shading following the phase.
+      var phaseG = document.getElementById("phaseG");
+      // Lit region of a moon disc at phase angle phi (0 = new, 180 = full):
+      // the lit limb (right side while waxing, left while waning) plus the
+      // elliptical terminator — the standard two-arc phase disc.
+      function moonLitPath(cx, cy, r, phiDeg){
+        var phi = ((phiDeg % 360) + 360) % 360;
+        var c = Math.cos(phi * Math.PI/180);
+        var rx = Math.max(0.01, Math.abs(c) * r);
+        var waxing = phi < 180;
+        var limbSweep = waxing ? 1 : 0;
+        var termSweep = ((c > 0) === waxing) ? 0 : 1;
+        return "M"+cx+" "+(cy-r)+
+               " A"+r+" "+r+" 0 0 "+limbSweep+" "+cx+" "+(cy+r)+
+               " A"+rx.toFixed(2)+" "+r+" 0 0 "+termSweep+" "+cx+" "+(cy-r)+" Z";
+      }
+      function renderPhaseRing(){
+        var s = "";
+        s += '<circle cx="200" cy="200" r="18.5" fill="#131c2c" stroke="#33507e" stroke-width="0.8"/>';
+        s += '<circle cx="200" cy="200" r="12.5" fill="#11161f" stroke="#33507e" stroke-width="0.8"/>';
+        [0, 90, 180, 270].forEach(function(ang){
+          var p = pt(200,200,15.5,ang);
+          s += '<g transform="translate('+p[0].toFixed(1)+' '+p[1].toFixed(1)+')">'+
+               '<circle r="2.7" fill="#0a0e14" stroke="#8fb4e8" stroke-width="0.5"/>'+
+               '<path d="'+moonLitPath(0,0,2.7,ang)+'" fill="#eaf2ff"/></g>';
+        });
+        s += '<defs><path id="waxArc" d="'+arcPath(30,60,15.5)+'" fill="none" stroke="none"/>'+
+             '<path id="waneArc" d="'+arcPath(300,330,15.5)+'" fill="none" stroke="none"/></defs>';
+        s += '<text font-size="4.3" font-weight="700" letter-spacing="0.3" fill="#9db8dd"><textPath href="#waxArc" startOffset="50%" text-anchor="middle">WAXING</textPath></text>';
+        s += '<text font-size="4.3" font-weight="700" letter-spacing="0.3" fill="#9db8dd"><textPath href="#waneArc" startOffset="50%" text-anchor="middle">WANING</textPath></text>';
+        s += '<g id="phaseMoon"><circle r="3.7" fill="none" stroke="#2f7bff" stroke-width="1.1"/>'+
+             '<circle r="3.1" fill="#0a0e14"/><path id="phaseMoonLit" d="" fill="#eaf2ff"/></g>';
+        phaseG.innerHTML = s;
+      }
+      renderPhaseRing();
 
       // ---------- State & main loop ----------
       var viewDate = null; // null = live
@@ -885,6 +1014,7 @@
         var zod = zodiacFor(lam);
         var term = termFor(lam);
         var animal = animalFor(eff);
+        var lun = lunarFor(eff);
 
         // Hands — thermal time of day at the chosen longitude:
         // solar elapsed there, accumulated at that longitude's own rate.
@@ -911,13 +1041,36 @@
         var monthFrac = ((addr.week - 1) + (addr.day - 1 + th.frac) / 7) / 4;
         var monthAngle = ((addr.module + monthFrac) / 13) * 360;
         el("monthHand").setAttribute("transform", "rotate("+monthAngle.toFixed(2)+" 200 200)");
+        // Blue LUNAR hand — the lunar month date on the LUNAR ring, from the same
+        // origin: fractional lunations elapsed since the March equinox (see
+        // lunarFor), mapped over the ring's 12.368266 lunations. It never parks:
+        // the moon's count runs straight through Zero Day.
+        el("lunarHand").setAttribute("transform", "rotate("+lun.angle.toFixed(2)+" 200 200)");
+        // Phase moon — travels the phase ring at the day's lunar age:
+        // angle = age / synodic month × 360°, its lit part following the phase.
+        var phaseDeg = lun.phaseFrac * 360;
+        var phaseMoonEl = el("phaseMoon");
+        if(phaseMoonEl){
+          var pp = pt(200,200,15.5,phaseDeg);
+          phaseMoonEl.setAttribute("transform", "translate("+pp[0].toFixed(1)+" "+pp[1].toFixed(1)+")");
+          el("phaseMoonLit").setAttribute("d", moonLitPath(0,0,3.1,phaseDeg));
+        }
 
         renderRing(cyc, addr.module, boundary);
         renderTable(cyc, addr.module);
         renderZodiacRings(cyc, zod.idx, term.idx);
         renderZodiacTables(zod.idx, term.idx, animal);
+        // Seam coincidence: while April 1 itself is in view, the seam marker takes
+        // the gold hand's own live angle — lamRel, the identical value in the
+        // identical rotate() form — so the rendered gold hand lies exactly along
+        // the dashed seam line and through the diamond. On all other days the
+        // marker stands at April 1's canonical noon λ (renderRing's seat).
+        if(boundary){
+          var seamMarkEl = document.getElementById("seamMark");
+          if(seamMarkEl) seamMarkEl.setAttribute("transform", "rotate("+lamRel.toFixed(2)+" 200 200)");
+        }
 
-        var addrKey = cyc.year+"|"+addr.mw+"|"+addr.day+"|"+boundary+"|"+(viewDate?1:0)+"|"+eff.getDate()+"|"+currentLon.toFixed(1)+"|"+zod.idx+"|"+term.idx+"|"+animal.animal;
+        var addrKey = cyc.year+"|"+addr.mw+"|"+addr.day+"|"+boundary+"|"+(viewDate?1:0)+"|"+eff.getDate()+"|"+currentLon.toFixed(1)+"|"+zod.idx+"|"+term.idx+"|"+animal.animal+"|"+lun.number+"|"+Math.floor(lun.ageDays*10);
         if(addrKey !== lastAddrKey){
           lastAddrKey = addrKey;
           rateLine.innerHTML = rateSentence(r);
@@ -945,6 +1098,8 @@
           el("dLambdaSub").textContent = gate + " · 0° = March equinox";
           var cd = countDay(eff);
           el("dCount").textContent = boundary ? "Outside the count — Zero.zero 0.0" : "Counted " + cd + " · of 0–363";
+          el("dLunar").textContent = "Lunation " + lun.number + " · day " + lun.ageDays.toFixed(1);
+          el("dLunarSub").textContent = lun.phase + " · lunar age " + lun.ageDays.toFixed(1) + " d of 29.530589 · LUNAR hand " + lun.angle.toFixed(1) + "° on the LUNAR ring · phase moon " + phaseDeg.toFixed(0) + "° around its ring";
           var sp = cyc.spans[addr.module];
           el("dSpan").textContent = fmtDateShort(sp.first) + " – " + fmtDateShort(sp.after);
           el("dSpanSub").textContent = sp.days + " civil days · " + sp.arc.toFixed(1) + "° of arc for 1/13 of Θ";
@@ -963,7 +1118,8 @@
             : "<strong>" + addr.name + " " + addr.mw + "</strong>, day " + addr.day + " (counted " + cd + ")";
           el("equationLine").innerHTML = '<span class="eq-head">The equation — one day, every count</span>' +
             greg + " = " + thermalPart + " · <strong>" + zod.name + " " + zod.glyph + "</strong> (λ " + lam.toFixed(1) + "°) · " +
-            "<strong>" + term.hanzi + " " + term.pinyin + "</strong> (" + term.en + ") · <strong>" + animal.label + " " + animal.hanzi + "</strong>";
+            "<strong>" + term.hanzi + " " + term.pinyin + "</strong> (" + term.en + ") · <strong>" + animal.label + " " + animal.hanzi + "</strong>" +
+            " · <strong><span style='color:#4da3ff'>Lunation " + lun.number + " · lunar day " + lun.ageDays.toFixed(1) + " · " + lun.phase + "</span></strong>";
           faceSvg.setAttribute("aria-label", "Thermal time watch — Global Unified Calendar. " + (boundary ? "ZERO DAY — ZERO.ZERO, Clean Residual Day, New Year Day, the day of reflection, reassessment, realignment, also named Thermal Equilibrium Day by declaration. Solar address " + solarAddr + "." : "Address " + solarAddr + ".") + " Read at longitude " + fmtLon(currentLon) + ". Rate factor " + r.toFixed(3) + ".");
           viewingLine.innerHTML = viewDate
             ? "Viewing <strong>" + DOW[eff.getDay()] + ", " + fmtDate(eff) + "</strong> — hands run at that day’s rate."
@@ -1053,6 +1209,28 @@
                    angle:+angM(0).toFixed(2), angleStart:+angM(0).toFixed(2), angleNoon:+angM(0.5).toFixed(2),
                    todayAngle:+todayAng(0).toFixed(2), todayAngleStart:+todayAng(0).toFixed(2), todayAngleNoon:+todayAng(0.5).toFixed(2),
                    goldLambda:+lamM.toFixed(1), goldAngle:+lamM.toFixed(2) };
+        },
+        lunarFor: function(dateStr){
+          var parts = dateStr.split("T");
+          var dp = parts[0].split("-");
+          var tp = parts[1] ? parts[1].split(":") : [12, 0];
+          var d = new Date(+dp[0], +dp[1] - 1, +dp[2], +tp[0], +(tp[1] || 0), 0);
+          var L = lunarFor(d);
+          return { lunation:L.number, ageDays:+L.ageDays.toFixed(2), phase:L.phase,
+                   angle:+L.angle.toFixed(2), phaseAngle:+(L.phaseFrac * 360).toFixed(2),
+                   phaseFrac:+L.phaseFrac.toFixed(4), lunElapsed:+L.lunElapsed.toFixed(4),
+                   equinoxAge:+L.eqAge.toFixed(2), goldAngle:+solarLon(d).toFixed(2) };
+        },
+        seamFor: function(dateStr){
+          var p = dateStr.split("-");
+          var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
+          var cycS = buildCycle(cycleYearOf(d));
+          var bS = isBoundaryDay(d);
+          // markerAngle = the angle the seam marker is rendered at while this date
+          // is in view: on April 1 it is the gold hand's own angle at that instant;
+          // on any other day it stands at April 1's canonical noon λ (seamAngle).
+          return { seamAngle:+cycS.seamAngle.toFixed(2), goldAngle:+solarLon(d).toFixed(2),
+                   boundary:bS, markerAngle:+(bS ? solarLon(d) : cycS.seamAngle).toFixed(2) };
         },
         HOME_LON: HOME_LON,
         getLongitude: function(){ return currentLon; },
