@@ -201,6 +201,50 @@
         text-align:center; margin-top:10px; font-size:13.5px; color:var(--muted); min-height:1.3em;
       }
       .viewing .live-dot{ color:#3d9e63; font-weight:700; }
+      .ss-control{
+        margin:18px auto 0; max-width:480px; text-align:center;
+      }
+      .ss-btn{
+        font:inherit; font-size:15px; font-weight:800; letter-spacing:.06em; cursor:pointer;
+        padding:10px 22px; border-radius:10px; border:1px solid var(--gold);
+        background:var(--card); color:var(--gold);
+      }
+      .ss-btn:active{ transform:translateY(1px); }
+      .ss-note{ margin:7px 0 0; font-size:12.5px; color:var(--muted); line-height:1.5; }
+      /* ---------- Screensaver / ambient mode ---------- */
+      #screensaver{
+        position:fixed; inset:0; z-index:999; background:#000;
+        display:flex; align-items:center; justify-content:center;
+        overflow:hidden; cursor:pointer;
+      }
+      #screensaver[hidden]{ display:none; }
+      body.ss-on{ overflow:hidden; }
+      #ssInner{
+        display:flex; flex-direction:column; align-items:center; justify-content:center;
+        width:100%; max-height:100dvh; padding:10px 12px; will-change:transform;
+      }
+      #ssFaceSlot{ display:flex; justify-content:center; width:100%; }
+      #screensaver .face-wrap{
+        width:min(88vw, 54vh, 520px); margin:0 auto 60px; flex:none;
+        filter:brightness(.38) saturate(.9);
+      }
+      .ss-readout{ text-align:center; color:#aeb9c6; pointer-events:none; }
+      .ss-time{
+        font-size:clamp(44px, 13vw, 76px); font-weight:700; line-height:1.05;
+        letter-spacing:.02em; font-variant-numeric:tabular-nums; color:#cdd6e1;
+      }
+      .ss-time .ss-sec{ font-size:.42em; font-weight:600; color:#77828f; margin-left:4px; }
+      .ss-date{
+        margin-top:4px; font-size:clamp(14px, 4vw, 19px); font-weight:600; color:#8d99a8;
+        font-variant-numeric:tabular-nums;
+      }
+      .ss-count{
+        margin:8px auto 0; max-width:560px;
+        font-size:clamp(12.5px, 3.6vw, 15.5px); font-weight:600; line-height:1.5; color:#77828f;
+        font-variant-numeric:tabular-nums;
+      }
+      .ss-count.ss-zero{ color:#c97a63; }
+      .ss-hint{ margin-top:14px; font-size:11px; letter-spacing:.14em; color:#4d5764; }
       section{ margin-top:26px; }
       h2{
         font-family: Georgia, "Iowan Old Style", serif; font-weight:600; font-size:19px; margin:0 0 10px;
@@ -399,6 +443,11 @@
       </div>
       <p class="viewing" id="viewingLine"></p>
 
+      <div class="ss-control">
+        <button type="button" class="ss-btn" id="btnScreensaver">Screensaver</button>
+        <p class="ss-note">The live face, dimmed — an ambient clock for a phone propped or docked with this page open. It also starts on its own after 90 seconds without interaction. Any tap, key, or movement brings the full clock back.</p>
+      </div>
+
       <section aria-label="Readings">
         <h2>Readings</h2>
         <div class="grid">
@@ -532,6 +581,7 @@
         <p><strong>The moon keeps two more counts.</strong> The slim blue LUNAR ring just inside the THERMAL ring carries the year’s lunations: 12.368266 per tropical year, drawn as twelve full sectors and a closing partial sector (0.368266 of a sector), numbered 1–13 from the same equinox origin, engraved LUNAR · 12.368. Lunations count from the March equinox — lunation 1 is the lunation already running at the equinox (in 2026 it opened with the new moon of Mar 19) — and the blue LUNAR hand’s angle is the fractional lunations elapsed since the equinox, mapped over the ring’s 12.368266: that is, the days since the equinox plus the age the containing lunation had already reached at the equinox, all divided by the synodic month. Inside the LUNAR ring, the phase ring draws a single lunation as one full circle — NEW at the top on the shared origin line, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, the arc from new through full labelled WAXING and the arc from full back to new labelled WANING — and a small blue moon travels it at the day’s lunar age, its lit part growing through waxing and shrinking through waning. Lunar age is the days since the last new moon, 0 at new moon; the phase words are centred on their stations — New at the new moon, Waxing about the first quarter, Full at the full moon, Waning about the last quarter. New moons here are a design-study model, stated as such: counted from one pinned anchor new moon — Feb 17, 2026, Chinese New Year, the CNY table’s own date — at a pinned synodic month of 29.530589 days.</p>
         <p><strong>The sky around the watch.</strong> The disc surrounding the dial is a planisphere-style star chart — the first brick of the Archimedes Universal Clock: digital, and local to the observer. The dial sits at its centre as the Earth. The chart projects the sky dome from the zenith (stereographic, so shapes hold their form): the centre is directly overhead, the radius grows as altitude falls, and the outer edge is the horizon, marked N · E · S · W. It carries a naked-eye bright-star set — the brightest stars, with the standard stick figures of the major constellations, each labelled at its figure — computed for the observer's latitude and longitude above, and it turns live at the sidereal rate as local sidereal time advances, so the sky wheels around the pole through the night. Stars below the horizon are not drawn. And the drift is shown, not hidden: the chart is the real, sidereal sky, standing some 24° of precession away from the dial's zodiac ring.</p>
         <p><strong>The Earth, the Moon, and the tide — and the rest of the tourbillon.</strong> Brick two frames the dial with a blue/green Earth ring; the Moon rides an orbit band around it at its modelled longitude, and a fitted blue equilibrium-tide curve wraps the ring with its axis locked to the Moon — two bulges on the Earth→Moon line, breathing between springs and neaps by the stated solar factor, exaggerated and labelled as theory, its lag 0°. Brick three completes the surround: the gold ecliptic crosses the chart with the Sun riding it (dimmed at the rim below the horizon), the five naked-eye planets stand at their Keplerian places, and the quasar frame — 3C 273 and its five companions — rides as crosshair markers: the fixed frame every turning angle on the chart is ultimately measured against.</p>
+        <p><strong>Screensaver and the lock screen.</strong> The Screensaver button puts this clock into an in-app screensaver mode: the live face, dimmed, with the time and the 0.0 count, drifting slowly against burn-in and holding the screen awake while it runs — the clock’s ambient face for a phone propped or docked with the app open. Android does not let a web app replace the system lock screen or the system Daydream screensaver service, so this page cannot take those over; a true lock-screen or Daydream version would be a small native companion app.</p>
         <p class="pair">Every hand is a relation between a pair: arc ↔ thermal, forcing ↔ lagged response, equilibrium ↔ gradient. A place is not a time zone; it is an arc position plus its own solar thermal lag.</p>
       </section>
 
@@ -542,6 +592,18 @@
         <p>13 thermal modules are not 13 moons: a year holds 12.368 lunations.</p>
       </footer>
     </main>
+
+    <div id="screensaver" hidden role="dialog" aria-label="Screensaver — ambient clock">
+      <div id="ssInner">
+        <div id="ssFaceSlot"></div>
+        <div class="ss-readout">
+          <div class="ss-time"><span id="ssTimeMain">--:--</span><span class="ss-sec" id="ssTimeSec"></span></div>
+          <div class="ss-date" id="ssDate">—</div>
+          <div class="ss-count" id="ssCount">—</div>
+          <div class="ss-hint">TAP TO RETURN</div>
+        </div>
+      </div>
+    </div>
 
     <script>
     (function(){
@@ -2213,6 +2275,156 @@
       };
 
       requestAnimationFrame(tick);
+    })();
+    </script>
+
+    <script>
+    (function(){
+      "use strict";
+      // ---------- Screensaver / ambient mode ----------
+      // The live face itself is moved into the overlay while the mode runs, so
+      // every hand — gold sun, green weekday, red thermal seconds — keeps its
+      // real rate from the main engine; nothing is re-drawn or faked here.
+      var IDLE_MS = 90000;
+      var MOVE_THRESHOLD = 14; // px of pointer travel from the entry point before exit
+      var GRACE_MS = 750;      // ignore exit gestures in the first moments after engaging
+      var overlay = document.getElementById("screensaver");
+      var inner = document.getElementById("ssInner");
+      var slot = document.getElementById("ssFaceSlot");
+      var faceWrap = document.querySelector(".sky-stage .face-wrap");
+      var ssTimeMain = document.getElementById("ssTimeMain");
+      var ssTimeSec = document.getElementById("ssTimeSec");
+      var ssDate = document.getElementById("ssDate");
+      var ssCount = document.getElementById("ssCount");
+      var btn = document.getElementById("btnScreensaver");
+      if(!overlay || !faceWrap) return;
+      var placeholder = document.createComment("face-wrap home");
+      faceWrap.parentNode.insertBefore(placeholder, faceWrap);
+
+      var active = false, engagedAt = 0, entryPoint = null;
+      var wakeLock = null, rafId = null, idleTimer = null, lastSec = -1;
+
+      function pad2(n){ return (n < 10 ? "0" : "") + n; }
+
+      function requestWakeLock(){
+        if(!("wakeLock" in navigator) || !navigator.wakeLock) return;
+        try {
+          var p = navigator.wakeLock.request("screen");
+          if(p && p.then) p.then(function(lock){
+            wakeLock = lock;
+            if(lock && lock.addEventListener) lock.addEventListener("release", function(){ if(wakeLock === lock) wakeLock = null; });
+          }, function(){ /* unavailable or refused — the mode still works */ });
+        } catch(e){ /* no wake lock — the mode still works */ }
+      }
+      function releaseWakeLock(){
+        if(wakeLock){ try { wakeLock.release(); } catch(e){} wakeLock = null; }
+      }
+      document.addEventListener("visibilitychange", function(){
+        if(active && document.visibilityState === "visible" && !wakeLock) requestWakeLock();
+      });
+
+      function updateReadout(now){
+        var h = now.getHours(), ampm = h >= 12 ? "PM" : "AM", h12 = h % 12 || 12;
+        ssTimeMain.textContent = h12 + ":" + pad2(now.getMinutes());
+        ssTimeSec.textContent = ":" + pad2(now.getSeconds()) + " " + ampm;
+        var dateLine = document.getElementById("dateLine");
+        if(dateLine && dateLine.textContent && dateLine.textContent !== "—") ssDate.textContent = dateLine.textContent;
+        var zeroLine = document.getElementById("zeroLine");
+        if(zeroLine && zeroLine.textContent){
+          var t = zeroLine.textContent.replace(/\s+/g, " ").trim();
+          if(t && t !== "—"){
+            ssCount.textContent = t;
+            ssCount.classList.toggle("ss-zero", t.indexOf("ZERO.ZERO") !== -1 || t.indexOf("ZERO DAY") !== -1);
+          }
+        }
+      }
+      // Burn-in protection: the whole composition drifts a few pixels on two
+      // long, incommensurate periods (~7 and ~11 minutes), so it eases
+      // continuously and never jumps.
+      function driftLoop(){
+        if(!active) return;
+        var t = Date.now();
+        var x = 7 * Math.sin(2 * Math.PI * t / 420000);
+        var y = 5 * Math.cos(2 * Math.PI * t / 660000);
+        inner.style.transform = "translate(" + x.toFixed(2) + "px," + y.toFixed(2) + "px)";
+        var now = new Date();
+        if(now.getSeconds() !== lastSec){ lastSec = now.getSeconds(); updateReadout(now); }
+        rafId = requestAnimationFrame(driftLoop);
+      }
+
+      function engage(){
+        if(active) return;
+        active = true; engagedAt = Date.now(); entryPoint = null; lastSec = -1;
+        slot.appendChild(faceWrap);
+        overlay.hidden = false;
+        document.body.classList.add("ss-on");
+        updateReadout(new Date());
+        requestWakeLock();
+        rafId = requestAnimationFrame(driftLoop);
+        clearTimeout(idleTimer);
+      }
+      function exit(){
+        if(!active) return;
+        active = false;
+        if(rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+        releaseWakeLock();
+        overlay.hidden = true;
+        document.body.classList.remove("ss-on");
+        inner.style.transform = "";
+        placeholder.parentNode.insertBefore(faceWrap, placeholder.nextSibling);
+        armIdle();
+      }
+
+      function armIdle(){
+        clearTimeout(idleTimer);
+        if(active) return;
+        idleTimer = setTimeout(function(){ engage(); }, IDLE_MS);
+      }
+      function noteInteraction(){
+        if(!active) armIdle();
+      }
+      ["pointerdown", "keydown", "touchstart", "wheel"].forEach(function(ev){
+        document.addEventListener(ev, noteInteraction, { passive:true });
+      });
+      var moveTick = 0;
+      document.addEventListener("pointermove", function(){
+        if(active) return;
+        var n = ++moveTick;
+        if(n % 12 === 0) armIdle(); // pointer drift counts as presence, throttled
+      }, { passive:true });
+
+      // Exit gestures — only while active, and only after the grace moment so
+      // the tap that opened the mode cannot close it again.
+      function pastGrace(){ return Date.now() - engagedAt > GRACE_MS; }
+      overlay.addEventListener("pointerdown", function(){ if(pastGrace()) exit(); });
+      overlay.addEventListener("click", function(){ if(pastGrace()) exit(); });
+      document.addEventListener("keydown", function(){ if(active && pastGrace()) exit(); });
+      document.addEventListener("pointermove", function(e){
+        if(!active || !pastGrace()) return;
+        if(!entryPoint){ entryPoint = { x:e.clientX, y:e.clientY }; return; }
+        var dx = e.clientX - entryPoint.x, dy = e.clientY - entryPoint.y;
+        if(dx * dx + dy * dy > MOVE_THRESHOLD * MOVE_THRESHOLD) exit();
+      }, { passive:true });
+
+      if(btn) btn.addEventListener("click", function(){ engage(); });
+      document.addEventListener("visibilitychange", function(){
+        if(document.visibilityState === "visible") noteInteraction();
+      });
+
+      // Verification / companion handle — the same code paths the button uses.
+      var api = {
+        engage: engage, exit: exit, isActive: function(){ return active; },
+        idleMs: IDLE_MS,
+        hasWakeLock: function(){ return !!wakeLock; }
+      };
+      window.Screensaver = api;
+      if(window.ThermalWatch) window.ThermalWatch.screensaver = api;
+
+      // Deep link: ?mode=screensaver opens directly in the mode.
+      var mode = null;
+      try { mode = new URLSearchParams(window.location.search).get("mode"); } catch(e){}
+      if(mode === "screensaver") engage(); else armIdle();
     })();
     </script>
   </body>
