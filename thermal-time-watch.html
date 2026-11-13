@@ -11,12 +11,12 @@
       * { box-sizing: border-box; }
       :root{
         --bg:#eef0ee; --ink:#16181d; --muted:#5a6068; --card:#ffffff; --line:#d8dcd8;
-        --gold:#b07d1e; --seam:#c7432b;
+        --gold:#b07d1e; --seam:#c7432b; --teal:#0d9488;
         --face-bg:#0d1117;
       }
       @media (prefers-color-scheme: dark){
         :root{ --bg:#0a0c10; --ink:#e8ebef; --muted:#9aa3ad; --card:#14181f; --line:#262c36;
-               --gold:#d9a441; --seam:#ff7a59; }
+               --gold:#d9a441; --seam:#ff7a59; --teal:#2dd4bf; }
       }
       html{ -webkit-text-size-adjust:100%; }
       body{
@@ -155,6 +155,8 @@
         margin-right:5px; vertical-align:-1px;
       }
       .hands-legend .sw-gold{ background:#d9a441; }
+      .hands-legend .sw-teal{ background:#14d8c4; }
+      .hands-legend .lg-teal{ color:var(--teal); }
       .hands-legend .sw-white{ background:#f4f7fb; border:1px solid var(--muted); }
       .viewing{
         text-align:center; margin-top:10px; font-size:13.5px; color:var(--muted); min-height:1.3em;
@@ -209,6 +211,7 @@
           <g id="ringG"></g>
           <g id="termsG"></g>
           <g id="countedG"></g>
+          <g id="thermalG"></g>
           <g id="seamG"></g>
           <g id="handsG">
             <g id="yearHand">
@@ -219,6 +222,11 @@
               <line x1="200" y1="212" x2="200" y2="149" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
               <path d="M200 135 L195 149 L205 149 Z" fill="#ffffff" stroke="#0d1117" stroke-width="0.8"/>
               <circle cx="200" cy="213" r="3.2" fill="none" stroke="#ffffff" stroke-width="2"/>
+            </g>
+            <g id="monthHand">
+              <line x1="200" y1="210" x2="200" y2="166" stroke="#16e0c8" stroke-width="3" stroke-linecap="round"/>
+              <path d="M200 154 L195.5 166 L204.5 166 Z" fill="#16e0c8" stroke="#0d1117" stroke-width="0.8"/>
+              <circle cx="200" cy="209" r="2.8" fill="none" stroke="#16e0c8" stroke-width="1.8"/>
             </g>
             <line id="hourHand" x1="200" y1="200" x2="200" y2="140" stroke="#e8edf5" stroke-width="7" stroke-linecap="round"/>
             <line id="minHand" x1="200" y1="200" x2="200" y2="112" stroke="#e8edf5" stroke-width="4.5" stroke-linecap="round"/>
@@ -238,7 +246,7 @@
       <p class="date-line" id="dateLine">—</p>
       <p class="civil-line" id="civilLine">—</p>
       <p class="solar-line" id="solarLine">—</p>
-      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, numbered 1–13 from the seam; on April 1 it parks at the seam — outside the count).</p>
+      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 1–13 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 13, 1–12 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 13.2, while TODAY parks at the seam).</p>
 
       <p class="equation" id="equationLine"><span class="eq-head">Today’s equation</span>—</p>
 
@@ -283,7 +291,7 @@
           <div class="cell"><div class="k">Longitude — lag field</div><div class="v" id="dLon">—</div><div class="s" id="dLonSub">—</div></div>
           <div class="cell"><div class="k">Thermal phase Θ</div><div class="v" id="dTheta">—</div><div class="s" id="dThetaSub">—</div></div>
           <div class="cell"><div class="k">Solar longitude λ</div><div class="v" id="dLambda">—</div><div class="s" id="dLambdaSub">—</div></div>
-          <div class="cell"><div class="k">The count</div><div class="v" id="dCount">—</div><div class="s">Counted year opens April 2 · 364 counted days</div></div>
+          <div class="cell"><div class="k">The count</div><div class="v" id="dCount">—</div><div class="s">Count states from 0 · April 2 = counted 0 · labels 0–363 · April 1 outside at Zero.zero 0.0</div></div>
           <div class="cell"><div class="k">Thermal clock drift today</div><div class="v" id="dDrift">—</div><div class="s">thermal elapsed vs solar elapsed at this longitude, since solar midnight there</div></div>
           <div class="cell"><div class="k">This module’s span</div><div class="v" id="dSpan">—</div><div class="s" id="dSpanSub">—</div></div>
           <div class="cell"><div class="k">Western zodiac — sign of λ</div><div class="v" id="dZodiac">—</div><div class="s" id="dZodiacSub">—</div></div>
@@ -331,14 +339,14 @@
         <h2>How this watch keeps time</h2>
         <p>The dial is arc: solar longitude λ runs 0° at the March equinox to 360° around the year. Riding on the arc is the equilibrium track T_eq(λ) — the temperature the Sun’s geometry is asking of Schoolcraft, Michigan. Thermal phase Θ accumulates at a rate proportional to that temperature, dΘ/dt = T_eq / T̄, and the thirteen modules are equal steps of Θ — so winter modules stretch over more days and more arc, and summer modules compress.</p>
         <p>The thin red hand is the thermal seconds hand. It sweeps at today’s rate r = T_eq / T̄: one thermal minute takes 60/r civil seconds. Deep January runs about 5% slow; July runs about 4.7% fast. The gold hand is the year hand — it points at today’s place on the module ring. The white hands read thermal time of day.</p>
-        <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: the origin of the count, standing outside the 364 counted days. The counted year opens April 2, inside March (module 13), the seam span that holds Zero.zero. Its solar address is March, week 13.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim. It is the great reset day of equilibrium: Auld Lang Syne is sung, the Lord's Prayer is prayed — forgive, and ask forgiveness — and Psalm 51:10 is read, “Create in me a clean heart, O God”: a brand new heart, every year.</p>
+        <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: standing outside the 364 counted days at address 0.0 — it is not counted 0. The count states from 0: the counted year opens April 2 as counted 0, and the labels run 0–363, inside March (module 13), the seam span that holds Zero.zero. Counted module 1 spans counted 0–27. The counted ring’s “0.0” engraving at the origin marks Zero.zero the address; counted 0 is the first counted day, April 2 — the two zeros are neighbours, never the same day. Its solar address is March, week 13.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim. It is the great reset day of equilibrium: Auld Lang Syne is sung, the Lord's Prayer is prayed — forgive, and ask forgiveness — and Psalm 51:10 is read, “Create in me a clean heart, O God”: a brand new heart, every year.</p>
         <p><strong>Longitude carries the track around the planet.</strong> Slide the longitude and the same day is re-read from a new arc position: solar time there shifts continuously — four minutes per degree, no zones and no steps. The day’s equilibrium track is the pinned Schoolcraft table carried around unchanged; what longitude changes is where that place sits in its day. Its temperature swing peaks three hours after its solar noon — the surface-inertia lag — so at any one instant, different longitudes carry different instantaneous temperatures, and the thermal hand runs at each longitude’s own rate r. One planet, one track, a continuous lag field.</p>
         <p><strong>Two more partitions ride the same road.</strong> The outer ring is the tropical zodiac — twelve equal 30° sectors of λ, Aries ♈ standardized first at the equinox. The inner green band is the Chinese calendar’s own partition: the 24 solar terms 节气, fifteen degrees each, anchored at the same equinox — so the solstice instant (λ 90°, the gate of Cancer) falls in June’s last days, and Sol is the high-summer span that opens on the solstice’s far side — the sun’s long reign at the top of the year — and Zero.zero sits some twelve degrees into Aries, inside March. The two boundary sets interleave against the thirteen thermal modules, and the sliding between the geometric partitions and the heat-equal modules is the year’s thermal lag drawn as rings. The animal year rides above them all as a year-count: it turns at Chinese New Year, not at January 1 and not by λ. Zodiac layers: partitions of the sun’s road and the year, shown for correlation — design study, NO CLAIM; no astrological meaning is claimed for them.</p>
         <p class="pair">Every hand is a relation between a pair: arc ↔ thermal, forcing ↔ lagged response, equilibrium ↔ gradient. A place is not a time zone; it is an arc position plus its own solar thermal lag.</p>
       </section>
 
       <footer>
-        <p>364 counted days divide clean — 13 × 4 × 7. The residual day stands outside the count at 0.0.</p>
+        <p>364 counted days divide clean — 13 × 4 × 7, counted 0–363 from April 2 (counted 0). The residual day stands outside the count at Zero.zero (0.0) — it is not counted 0.</p>
         <p class="fence">DESIGN STUDY — NO CLAIM · T5</p>
         <p>Civil time does not slow; Θ accumulates slower in winter by construction (rate ∝ T).</p>
         <p>13 thermal modules are not 13 moons: a year holds 12.368 lunations.</p>
@@ -458,13 +466,14 @@
                  mw:moduleNumber(m)+"."+(Math.floor(td/7)+1), theta:theta, moduleFrac:p };
       }
       function isBoundaryDay(date){ return date.getMonth()===3 && date.getDate()===1; }
-      // Day number in the count (April 2 = day 1; April 1 returns null — outside the count).
+      // Counted label, stated from 0 (April 2 = counted 0; labels run 0–363 across
+      // the 364 counted days; April 1 returns null — outside the count at Zero.zero).
       function countDay(date){
         if(isBoundaryDay(date)) return null;
         var originYear = (date >= new Date(date.getFullYear(), 3, 2)) ? date.getFullYear() : date.getFullYear()-1;
         var origin = Date.UTC(originYear, 3, 2);
         var cur = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-        return Math.round((cur - origin) / DAYMS) + 1;
+        return Math.round((cur - origin) / DAYMS);
       }
       function rateAt(date){ return (tempC(date) + 273.15) / TBAR; }
 
@@ -645,8 +654,9 @@
         // shares. Solid pale line, drawn in two runs so it never crosses the ZERO DAY
         // block (r 71–122) and stops clear of the counted ring's 0.0 label (r < 52).
         // It runs along the Pisces|Aries, February|March and 惊蛰|春分 boundaries and
-        // along the counted ring's zero (counted 13 closes, then 0.0, then counted 1).
-        var og1 = pt(200,200,52,0), og2 = pt(200,200,71,0), og3 = pt(200,200,122,0), og4 = pt(200,200,196,0);
+        // along the counted ring's zero (counted module 13 closes, then 0.0 — Zero.zero
+        // the address — then counted 0 opening counted module 1).
+        var og1 = pt(200,200,25,0), og2 = pt(200,200,71,0), og3 = pt(200,200,122,0), og4 = pt(200,200,196,0);
         var sg = '<line x1="'+og1[0].toFixed(1)+'" y1="'+og1[1].toFixed(1)+'" x2="'+og2[0].toFixed(1)+'" y2="'+og2[1].toFixed(1)+'" stroke="#cfd8e3" stroke-width="1.3" opacity="0.85"/>';
         sg += '<line x1="'+og3[0].toFixed(1)+'" y1="'+og3[1].toFixed(1)+'" x2="'+og4[0].toFixed(1)+'" y2="'+og4[1].toFixed(1)+'" stroke="#cfd8e3" stroke-width="1.3" opacity="0.85"/>';
         // Seam marker at April 1 — Zero.zero at its true solar position (λ ≈ 12°,
@@ -769,9 +779,10 @@
       // ---------- Counted ring: the counted date's own scale (13 × 28 = 364, uniform) ----------
       // Slim chapter ring inside the existing rings, on the same angular origin as
       // every other ring: 0° at the March equinox line (λ = 0), increasing clockwise.
-      // Counted module 13's block closes at that line, then 0.0, then counted day 1.
-      // Counted module k spans counted days (k-1)*28+1 … k*28; the counted year opens
-      // April 2 = counted day 1. This ring is NOT the thermal Θ ring outside it.
+      // Counted module 13's block closes at that line, then 0.0, then counted 0.
+      // Counted module k spans counted (k-1)*28 … k*28-1 (module 1 spans counted
+      // 0–27); the counted year opens April 2 = counted 0, labels run 0–363.
+      // This ring is NOT the thermal Θ ring outside it.
       var countedG = document.getElementById("countedG");
       function renderCountedRing(){
         var s = "", i, a0, a1, mid, p, d, a, t1, t2;
@@ -791,13 +802,49 @@
           p = pt(200,200,57,mid);
           s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="8" font-weight="700" fill="#eef2f8" text-anchor="middle" dominant-baseline="central">'+(i+1)+'</text>';
         }
-        // 0.0 — the counted zero, just inside the ring beside the origin line:
-        // counted day 0 (April 1) stands here, outside the count, before day 1.
-        s += '<text x="210" y="158" font-size="6" font-weight="700" fill="#e0705c" text-anchor="middle">0.0</text>';
-        s += '<text x="200" y="247" font-size="6.5" font-weight="700" letter-spacing="1.1" fill="#8b96a5" text-anchor="middle">COUNTED · 13 × 28</text>';
+        // 0.0 — just inside the ring beside the origin line: this engraving is
+        // Zero.zero, April 1's address (April 1 stands outside the count). It also
+        // marks where counted 0 — the first counted day, April 2 — opens module 1.
+        // Zero.zero-the-address and counted-0-the-first-day are not the same day.
+        s += '<text x="208" y="155" font-size="6" font-weight="700" fill="#e0705c" text-anchor="middle" dominant-baseline="central">0.0</text>';
+        s += '<text x="200" y="248" font-size="6.5" font-weight="700" letter-spacing="1.1" fill="#8b96a5" text-anchor="middle">COUNTED · 13 × 28</text>';
         countedG.innerHTML = s;
       }
       renderCountedRing();
+
+      // ---------- Thermal ring: the thermal month date's own scale (13 equal modules × 4 weeks) ----------
+      // Slim ring just inside the COUNTED ring, on the same angular origin as every
+      // other ring: 0° at the March equinox line (λ = 0), increasing clockwise.
+      // Unlike the irregular Θ spans of the outer module ring, these 13 modules are
+      // EQUAL — each is exactly 1/13 of the Θ year (4 weeks × 7 days) — so this ring
+      // reads the module.week.day address directly: solar-order module index m sits
+      // at m × 360/13. Numbers are the calendar's module numbers in solar order:
+      // March = 13 (opening at the origin), then April = 1 … February = 12.
+      var thermalG = document.getElementById("thermalG");
+      function renderThermalRing(){
+        var s = "", i, k, a0, a1, mid, p, wa, t1, t2;
+        for(i=0;i<13;i++){
+          a0 = i * 360/13; a1 = a0 + 360/13;
+          s += '<path d="'+sectorPath(a0+0.4, a1-0.4, 31, 43)+'" fill="'+(i % 2 ? "#12282b" : "#183438")+'" stroke="#2f6a66" stroke-width="0.7"/>';
+        }
+        // week ticks inside each module: one at each quarter of the module
+        // (weeks 2, 3 and 4 open there), drawn at the ring's inner edge.
+        for(i=0;i<13;i++){
+          for(k=1;k<4;k++){
+            wa = (i + k/4) * 360/13;
+            t1 = pt(200,200,31,wa); t2 = pt(200,200,35,wa);
+            s += '<line x1="'+t1[0].toFixed(1)+'" y1="'+t1[1].toFixed(1)+'" x2="'+t2[0].toFixed(1)+'" y2="'+t2[1].toFixed(1)+'" stroke="#57a99f" stroke-width="1"/>';
+          }
+        }
+        for(i=0;i<13;i++){
+          mid = (i + 0.5) * 360/13;
+          p = pt(200,200,37.5,mid);
+          s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="7.5" font-weight="700" fill="#d9f6f0" text-anchor="middle" dominant-baseline="central">'+moduleNumber(i)+'</text>';
+        }
+        s += '<text x="200" y="227" font-size="6.5" font-weight="700" letter-spacing="1.1" fill="#6fc7bb" text-anchor="middle">THERMAL · 13 × 4 WEEKS</text>';
+        thermalG.innerHTML = s;
+      }
+      renderThermalRing();
 
       // ---------- State & main loop ----------
       var viewDate = null; // null = live
@@ -849,11 +896,21 @@
         el("hourHand").setAttribute("transform", "rotate("+(tHour*30).toFixed(2)+" 200 200)");
         el("yearHand").setAttribute("transform", "rotate("+lamRel.toFixed(2)+" 200 200)");
         // White TODAY hand — the counted date on the counted ring, on the rings' origin:
-        // angle = (countedDay − 1 + dayFraction) / 364 × 360°. On April 1 (Zero.zero,
-        // outside the count) it parks at the seam (angle 0).
+        // angle = (counted + dayFraction) / 364 × 360°, with counted stated from 0
+        // (April 2 = counted 0) — identical positions to the old (oldLabel − 1 + frac)
+        // form. On April 1 (Zero.zero, outside the count) it parks at the seam (angle 0).
         var cdNow = countDay(eff);
-        var todayAngle = (boundary || cdNow === null) ? 0 : ((cdNow - 1 + th.frac) / 364) * 360;
+        var todayAngle = (boundary || cdNow === null) ? 0 : ((cdNow + th.frac) / 364) * 360;
         el("todayHand").setAttribute("transform", "rotate("+todayAngle.toFixed(2)+" 200 200)");
+        // Teal MONTH hand — the thermal month date (module.week.day) on the THERMAL
+        // ring, from the same origin: angle = ((solar-order module index [March = 0]
+        // + fraction through the module) / 13) × 360°, where the fraction runs over
+        // the module's 4 weeks × 7 days and the live day fraction sweeps within the
+        // day. It does NOT park on April 1: April 1's address is March 13.2, so the
+        // hand points inside March on the THERMAL ring while TODAY parks at 0.
+        var monthFrac = ((addr.week - 1) + (addr.day - 1 + th.frac) / 7) / 4;
+        var monthAngle = ((addr.module + monthFrac) / 13) * 360;
+        el("monthHand").setAttribute("transform", "rotate("+monthAngle.toFixed(2)+" 200 200)");
 
         renderRing(cyc, addr.module, boundary);
         renderTable(cyc, addr.module);
@@ -887,7 +944,7 @@
           var gate = lam < 90 ? "spring quarter" : lam < 180 ? "summer quarter" : lam < 270 ? "autumn quarter" : "winter quarter";
           el("dLambdaSub").textContent = gate + " · 0° = March equinox";
           var cd = countDay(eff);
-          el("dCount").textContent = boundary ? "Outside the count" : "Day " + cd + " of the count";
+          el("dCount").textContent = boundary ? "Outside the count — Zero.zero 0.0" : "Counted " + cd + " · of 0–363";
           var sp = cyc.spans[addr.module];
           el("dSpan").textContent = fmtDateShort(sp.first) + " – " + fmtDateShort(sp.after);
           el("dSpanSub").textContent = sp.days + " civil days · " + sp.arc.toFixed(1) + "° of arc for 1/13 of Θ";
@@ -903,7 +960,7 @@
           var greg = DOW[eff.getDay()] + ", " + MON[eff.getMonth()] + " " + eff.getDate() + ", " + eff.getFullYear();
           var thermalPart = boundary
             ? "ZERO.ZERO — Zero Day, the Clean Residual Day, outside the count (solar address " + addr.name + " " + addr.mw + ", day " + addr.day + ")"
-            : "<strong>" + addr.name + " " + addr.mw + "</strong>, day " + addr.day + " (counted day " + cd + ")";
+            : "<strong>" + addr.name + " " + addr.mw + "</strong>, day " + addr.day + " (counted " + cd + ")";
           el("equationLine").innerHTML = '<span class="eq-head">The equation — one day, every count</span>' +
             greg + " = " + thermalPart + " · <strong>" + zod.name + " " + zod.glyph + "</strong> (λ " + lam.toFixed(1) + "°) · " +
             "<strong>" + term.hanzi + " " + term.pinyin + "</strong> (" + term.en + ") · <strong>" + animal.label + " " + animal.hanzi + "</strong>";
@@ -975,13 +1032,27 @@
           var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
           var cd = countDay(d), b = isBoundaryDay(d);
           if(b || cd === null) return { boundary:true, countDay:null, angle:0, countedModule:null, dayInModule:null };
-          var ang = function(f){ return +(((cd - 1 + f) / 364) * 360).toFixed(2); };
+          var ang = function(f){ return +(((cd + f) / 364) * 360).toFixed(2); };
           var lam3 = solarLon(d), th3 = thetaAt(d), ad3 = addressFromTheta(th3.thetaAddr);
           return { boundary:false, countDay:cd, angleStart:ang(0), angleNoon:ang(0.5),
-                   countedModule:Math.floor((cd - 1) / 28) + 1, dayInModule:((cd - 1) % 28) + 1,
-                   weekInModule:Math.floor(((cd - 1) % 28) / 7) + 1,
+                   countedModule:Math.floor(cd / 28) + 1, dayInModule:(cd % 28) + 1,
+                   weekInModule:Math.floor((cd % 28) / 7) + 1,
                    goldLambda:+lam3.toFixed(1), goldAngle:+lam3.toFixed(2),
                    thermalModule:ad3.name, thermalMw:ad3.mw };
+        },
+        monthFor: function(dateStr){
+          var p = dateStr.split("-");
+          var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
+          var thM = thetaAt(d), aM = addressFromTheta(thM.thetaAddr);
+          var angM = function(f){ return ((aM.module + ((aM.week - 1) + (aM.day - 1 + f) / 7) / 4) / 13) * 360; };
+          var cdM = countDay(d), bM = isBoundaryDay(d);
+          var todayAng = function(f){ return (bM || cdM === null) ? 0 : ((cdM + f) / 364) * 360; };
+          var lamM = solarLon(d);
+          return { name:aM.name, module:moduleNumber(aM.module), solarIndex:aM.module,
+                   week:aM.week, day:aM.day, mw:aM.mw, boundary:bM, countDay:cdM,
+                   angle:+angM(0).toFixed(2), angleStart:+angM(0).toFixed(2), angleNoon:+angM(0.5).toFixed(2),
+                   todayAngle:+todayAng(0).toFixed(2), todayAngleStart:+todayAng(0).toFixed(2), todayAngleNoon:+todayAng(0.5).toFixed(2),
+                   goldLambda:+lamM.toFixed(1), goldAngle:+lamM.toFixed(2) };
         },
         HOME_LON: HOME_LON,
         getLongitude: function(){ return currentLon; },
