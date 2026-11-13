@@ -51,35 +51,12 @@
         text-align:center; margin:3px auto 0; max-width:452px;
         font-size:12px; letter-spacing:.08em; color:var(--muted);
       }
-      .center-readout{
-        position:absolute; left:50%; top:56%; transform:translate(-50%,-50%);
-        text-align:center; pointer-events:none; min-width:62%;
-        background:rgba(8,11,16,.58); border:1px solid rgba(255,255,255,.07);
-        border-radius:14px; padding:8px 14px 9px;
-      }
-      .center-readout .mod{
+      .date-line{
+        text-align:center; margin:14px auto 0;
         font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
-        font-size:clamp(24px, 7.4vw, 34px); line-height:1.05; color:#f4f7fa; font-weight:600;
-        white-space:nowrap;
-      }
-      .center-readout .addr{
-        margin-top:2px; font-size:clamp(14px, 4.2vw, 19px); color:#d9a441; font-weight:700; letter-spacing:.06em;
-        font-variant-numeric: tabular-nums; white-space:nowrap;
-      }
-      .center-readout .tsub{
-        margin-top:2px; font-size:clamp(10.5px, 3vw, 12.5px); color:#aeb9c6; white-space:nowrap;
+        font-size:clamp(20px, 5.6vw, 26px); font-weight:600; color:var(--ink);
         font-variant-numeric: tabular-nums;
       }
-      .center-readout .named{
-        margin-top:2px; font-size:clamp(10px, 2.8vw, 12px); color:#ffb4a2; white-space:nowrap;
-        letter-spacing:.02em;
-      }
-      .center-readout .named[hidden]{ display:none; }
-      .center-readout .zline{
-        margin-top:3px; font-size:clamp(10.5px, 3vw, 12.5px); color:#cfe3d8; white-space:nowrap;
-        letter-spacing:.02em;
-      }
-      .center-readout .zline .zg{ color:#ffd97a; }
       .equation{
         text-align:center; margin:12px auto 0; max-width:520px;
         background:var(--card); border:1px solid var(--gold); border-radius:12px;
@@ -94,8 +71,6 @@
         text-align:center; margin:10px auto 0; max-width:480px;
         font-size:12px; color:var(--muted); font-style:italic;
       }
-      .center-readout.boundary .mod{ color:#ff9d85; letter-spacing:.08em; }
-      .center-readout.boundary .addr{ color:#e8ebef; }
       .civil-line{
         text-align:center; margin:10px auto 0;
         font-size:12.5px; color:var(--muted); font-variant-numeric: tabular-nums; letter-spacing:.04em;
@@ -242,14 +217,8 @@
           <div class="l2">GLOBAL UNIFIED CALENDAR</div>
           <div class="l3">MODULAR THERMAL EQUILIBRIUM CALENDAR</div>
         </div>
-        <div class="center-readout" id="centerReadout">
-          <div class="mod" id="crMod">—</div>
-          <div class="addr" id="crAddr">—</div>
-          <div class="named" id="crNamed" hidden>also named: Thermal Equilibrium Day</div>
-          <div class="zline" id="crZodiac">—</div>
-          <div class="tsub" id="crSub">—</div>
-        </div>
       </div>
+      <p class="date-line" id="dateLine">—</p>
       <p class="civil-line" id="civilLine">—</p>
       <p class="solar-line" id="solarLine">—</p>
 
@@ -623,16 +592,15 @@
         var laf = (a1 - a0) > 180 ? 1 : 0;
         return "M"+p1[0].toFixed(2)+" "+p1[1].toFixed(2)+" A"+r+" "+r+" 0 "+laf+" 1 "+p2[0].toFixed(2)+" "+p2[1].toFixed(2);
       }
-      var renderedCycle = null, renderedModule = -1, renderedSeamHot = null;
+      var renderedCycle = null, renderedSeamHot = null;
       function renderRing(cyc, curModule, seamHot){
-        if(renderedCycle === cyc.year && renderedModule === curModule && renderedSeamHot === seamHot) return;
-        renderedCycle = cyc.year; renderedModule = curModule; renderedSeamHot = seamHot;
+        if(renderedCycle === cyc.year && renderedSeamHot === seamHot) return;
+        renderedCycle = cyc.year; renderedSeamHot = seamHot;
         var s = "", d = "", i, sp;
         for(i=0;i<13;i++){
           sp = cyc.spans[i];
-          var fill = (i === curModule) ? "#7a5a17" : (i % 2 ? "#1c2431" : "#232d3f");
-          var stroke = (i === curModule) ? "#d9a441" : "#39445a";
-          s += '<path d="'+sectorPath(sp.a0+0.35, sp.a1-0.35, 144, 168)+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+(i===curModule?1.6:0.8)+'"/>';
+          var fill = (i % 2 ? "#1c2431" : "#232d3f");
+          s += '<path d="'+sectorPath(sp.a0+0.35, sp.a1-0.35, 144, 168)+'" fill="'+fill+'" stroke="#39445a" stroke-width="0.8"/>';
           d += '<path id="arc'+i+'" d="'+arcPath(sp.a0+1.2, sp.a1-1.2, 156)+'" fill="none" stroke="none"/>';
           // boundary tick
           var t1 = pt(200,200,140,sp.a0), t2 = pt(200,200,144,sp.a0);
@@ -640,8 +608,7 @@
         }
         for(i=0;i<13;i++){
           sp = cyc.spans[i];
-          var cur = (i === curModule);
-          s += '<text font-size="10.5" font-weight="'+(cur?700:600)+'" letter-spacing="0.8" fill="'+(cur?"#ffd97a":"#c3cedd")+'">'+
+          s += '<text font-size="10.5" font-weight="600" letter-spacing="0.8" fill="#c3cedd">'+
                '<textPath href="#arc'+i+'" startOffset="50%" text-anchor="middle">'+sp.name.toUpperCase()+'</textPath></text>';
         }
         // quarter gates (absolute λ = 90 / 180 / 270)
@@ -674,25 +641,22 @@
       var renderedZodiacKey = "";
       function relA(cyc, absLam){ return ((absLam - cyc.lambda0) % 360 + 360) % 360; }
       function renderZodiacRings(cyc, curSign, curTerm){
-        var key = cyc.year + "|" + curSign + "|" + curTerm;
+        var key = String(cyc.year);
         if(key === renderedZodiacKey) return;
         renderedZodiacKey = key;
         var s = "", d = "", i, a0, a1;
         // Western zodiac: outer ring, r 170–192, glyph + name along the arc
         for(i=0;i<12;i++){
           a0 = relA(cyc, i*30); a1 = a0 + 30;
-          var curZ = (i === curSign);
-          var zfill = curZ ? "#7a5a17" : (i % 2 ? "#1c2431" : "#232d3f");
-          var zstroke = curZ ? "#d9a441" : "#39445a";
-          s += '<path d="'+sectorPath(a0+0.3, a1-0.3, 170, 192)+'" fill="'+zfill+'" stroke="'+zstroke+'" stroke-width="'+(curZ?1.6:0.8)+'"/>';
+          var zfill = (i % 2 ? "#1c2431" : "#232d3f");
+          s += '<path d="'+sectorPath(a0+0.3, a1-0.3, 170, 192)+'" fill="'+zfill+'" stroke="#39445a" stroke-width="0.8"/>';
           d += '<path id="zarc'+i+'" d="'+arcPath(a0+1.2, a1-1.2, 181)+'" fill="none" stroke="none"/>';
           var b1 = pt(200,200,168,a0), b2 = pt(200,200,170,a0);
           s += '<line x1="'+b1[0].toFixed(1)+'" y1="'+b1[1].toFixed(1)+'" x2="'+b2[0].toFixed(1)+'" y2="'+b2[1].toFixed(1)+'" stroke="#4a566b" stroke-width="1.2"/>';
         }
         for(i=0;i<12;i++){
           a0 = relA(cyc, i*30);
-          var curZ2 = (i === curSign);
-          s += '<text font-size="10" font-weight="'+(curZ2?700:600)+'" letter-spacing="0.6" fill="'+(curZ2?"#ffd97a":"#d5dde8")+'">'+
+          s += '<text font-size="10" font-weight="600" letter-spacing="0.6" fill="#d5dde8">'+
                '<textPath href="#zarc'+i+'" startOffset="50%" text-anchor="middle">'+ZODIAC[i].glyph+" "+ZODIAC[i].name.toUpperCase()+'</textPath></text>';
         }
         zodiacG.innerHTML = s + "<defs>" + d + "</defs>";
@@ -700,15 +664,12 @@
         var ts = "", td = "";
         for(i=0;i<24;i++){
           a0 = relA(cyc, i*15); a1 = a0 + 15;
-          var curT = (i === curTerm);
-          var tfill = curT ? "#2e5d43" : (i % 2 ? "#182620" : "#1d2f27");
-          var tstroke = curT ? "#7fc8a9" : "#33503f";
-          ts += '<path d="'+sectorPath(a0+0.25, a1-0.25, 122, 142)+'" fill="'+tfill+'" stroke="'+tstroke+'" stroke-width="'+(curT?1.5:0.7)+'"/>';
+          var tfill = (i % 2 ? "#182620" : "#1d2f27");
+          ts += '<path d="'+sectorPath(a0+0.25, a1-0.25, 122, 142)+'" fill="'+tfill+'" stroke="#33503f" stroke-width="0.7"/>';
           td += '<path id="tarc'+i+'" d="'+arcPath(a0+0.8, a1-0.8, 132)+'" fill="none" stroke="none"/>';
         }
         for(i=0;i<24;i++){
-          var curT2 = (i === curTerm);
-          ts += '<text font-size="9.5" font-weight="'+(curT2?700:500)+'" fill="'+(curT2?"#d9f5e6":"#a9c8b8")+'">'+
+          ts += '<text font-size="9.5" font-weight="500" fill="#a9c8b8">'+
                 '<textPath href="#tarc'+i+'" startOffset="50%" text-anchor="middle">'+TERMS[i].hanzi+'</textPath></text>';
         }
         termsG.innerHTML = ts + "<defs>" + td + "</defs>";
@@ -772,8 +733,7 @@
       // ---------- State & main loop ----------
       var viewDate = null; // null = live
       var el = function(id){ return document.getElementById(id); };
-      var crMod = el("crMod"), crAddr = el("crAddr"), crSub = el("crSub"), crNamed = el("crNamed"),
-          centerBox = el("centerReadout"), civilLine = el("civilLine"),
+      var dateLine = el("dateLine"), civilLine = el("civilLine"),
           rateLine = el("rateLine"), viewingLine = el("viewingLine"),
           faceSvg = el("face");
       var lastSecond = -1, lastAddrKey = "";
@@ -828,17 +788,6 @@
         var addrKey = cyc.year+"|"+addr.mw+"|"+addr.day+"|"+boundary+"|"+(viewDate?1:0)+"|"+eff.getDate()+"|"+currentLon.toFixed(1)+"|"+zod.idx+"|"+term.idx+"|"+animal.animal;
         if(addrKey !== lastAddrKey){
           lastAddrKey = addrKey;
-          if(boundary){
-            centerBox.classList.add("boundary");
-            crMod.textContent = "ZERO DAY";
-            crAddr.textContent = "Clean Residual Day · New Year Day";
-            crNamed.hidden = false;
-          } else {
-            centerBox.classList.remove("boundary");
-            crMod.textContent = addr.name;
-            crAddr.textContent = addr.mw + " · day " + addr.day;
-            crNamed.hidden = true;
-          }
           rateLine.innerHTML = rateSentence(r);
           // Details
           var solarAddr = addr.name + " · " + addr.mw + " · day " + addr.day;
@@ -868,7 +817,6 @@
           el("dSpan").textContent = fmtDateShort(sp.first) + " – " + fmtDateShort(sp.after);
           el("dSpanSub").textContent = sp.days + " civil days · " + sp.arc.toFixed(1) + "° of arc for 1/13 of Θ";
           // Zodiac layers
-          el("crZodiac").innerHTML = '<span class="zg">' + zod.name + " " + zod.glyph + "</span> · " + term.hanzi + " " + term.pinyin + " · " + animal.label + " " + animal.hanzi;
           el("dZodiac").textContent = zod.name + " " + zod.glyph;
           el("dZodiacSub").textContent = "λ " + lam.toFixed(1) + "° · " + zod.degIn.toFixed(1) + "° into " + zod.name + " · sector " + zod.start + "°–" + ((zod.start + 30) % 360) + "° · Aries ♈ at the equinox";
           el("dTerm").textContent = term.hanzi + " " + term.pinyin;
@@ -892,10 +840,9 @@
         }
         if(eff.getSeconds() !== lastSecond || viewDate){
           lastSecond = eff.getSeconds();
-          crSub.textContent = fmtClock(thermalElapsed) + " thermal";
+          dateLine.textContent = DOW[eff.getDay()] + ", " + MON[eff.getMonth()] + " " + eff.getDate() + ", " + eff.getFullYear();
           var civH = eff.getHours(), civAmpm = civH >= 12 ? "PM" : "AM", civH12 = civH % 12 || 12;
-          civilLine.textContent = DOW[eff.getDay()].slice(0,3) + " " + MON[eff.getMonth()].slice(0,3) + " " + eff.getDate() + ", " + eff.getFullYear() +
-            " · " + civH12 + ":" + pad2(eff.getMinutes()) + ":" + pad2(eff.getSeconds()) + " " + civAmpm + " civil";
+          civilLine.textContent = civH12 + ":" + pad2(eff.getMinutes()) + ":" + pad2(eff.getSeconds()) + " " + civAmpm + " civil · " + fmtClock(thermalElapsed) + " thermal";
           el("solarLine").textContent = fmtClock(lr.solarElapsed) + " solar at " + fmtLon(currentLon) + " · thermal lag peaks 3h after solar noon";
           // The instantaneous rate follows the longitude through the day — refresh it per second.
           rateLine.innerHTML = rateSentence(r);
