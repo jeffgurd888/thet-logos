@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
-    <title>Thermal Time Space Watch — Global Unified Calendar</title>
+    <title>Global Unity Clock — Modular Thermal Equilibrium Calendar</title>
     <style>
       button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.75rem; }
       * { box-sizing: border-box; }
@@ -89,6 +89,14 @@
         text-align:center; margin:10px auto 0; max-width:480px;
         font-size:12px; color:var(--muted); font-style:italic;
       }
+      .zero-line{
+        text-align:center; margin:8px auto 0; max-width:560px;
+        font-size:clamp(14.5px, 3.9vw, 17px); font-weight:700; color:var(--ink);
+        font-variant-numeric: tabular-nums; letter-spacing:.02em; line-height:1.5;
+      }
+      .zero-line .z00{ color:var(--seam); font-weight:800; }
+      .zero-line .zmod{ color:var(--gold); }
+      .zero-line .zsub{ display:block; margin-top:1px; font-size:12px; font-weight:600; color:var(--muted); letter-spacing:.04em; }
       .civil-line{
         text-align:center; margin:10px auto 0;
         font-size:12.5px; color:var(--muted); font-variant-numeric: tabular-nums; letter-spacing:.04em;
@@ -186,6 +194,8 @@
       .hands-legend .lg-teal{ color:var(--teal); }
       .hands-legend .sw-blue{ background:#2f7bff; }
       .hands-legend .lg-blue{ color:var(--blue); }
+      .hands-legend .sw-green{ background:#2fd35f; }
+      .hands-legend .lg-green{ color:#1d9e4b; }
       .hands-legend .sw-white{ background:#f4f7fb; border:1px solid var(--muted); }
       .viewing{
         text-align:center; margin-top:10px; font-size:13.5px; color:var(--muted); min-height:1.3em;
@@ -256,7 +266,7 @@
       <div class="sky-stage">
         <svg id="skySvg" viewBox="0 0 800 800" role="img" aria-label="Star chart — the sky over the observer, with the watch dial at its centre as the Earth"></svg>
       <div class="face-wrap">
-        <svg id="face" viewBox="0 0 400 400" role="img" aria-label="Thermal Time Space Watch face — Global Unified Calendar">
+        <svg id="face" viewBox="0 0 400 400" role="img" aria-label="Global Unity Clock face — Modular Thermal Equilibrium Calendar">
           <defs id="faceDefs"></defs>
           <circle cx="200" cy="200" r="199" fill="#05070a"/>
           <circle cx="200" cy="200" r="196" fill="#0d1117"/>
@@ -265,12 +275,18 @@
           <g id="zodiacG"></g>
           <g id="ringG"></g>
           <g id="termsG"></g>
+          <g id="weekdayG"></g>
           <g id="countedG"></g>
           <g id="thermalG"></g>
           <g id="lunarG"></g>
           <g id="phaseG"></g>
           <g id="seamG"></g>
           <g id="handsG">
+            <g id="weekdayHand">
+              <line x1="200" y1="210" x2="200" y2="88" stroke="#2fd35f" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M200 74 L194 88 L206 88 Z" fill="#2fd35f"/>
+              <circle cx="200" cy="211" r="3" fill="none" stroke="#2fd35f" stroke-width="1.8"/>
+            </g>
             <g id="yearHand">
               <line x1="200" y1="220" x2="200" y2="18" stroke="#d9a441" stroke-width="3.5" stroke-linecap="round"/>
               <path d="M200 7 L193 24 L207 24 Z" fill="#d9a441"/>
@@ -300,21 +316,22 @@
           </g>
         </svg>
         <div class="face-label" aria-hidden="true">
-          <div class="l1">THERMAL TIME — WATCH No. 1</div>
-          <div class="l2">GLOBAL UNIFIED CALENDAR</div>
-          <div class="l3">MODULAR THERMAL EQUILIBRIUM CALENDAR</div>
+          <div class="l1">GLOBAL UNITY CLOCK</div>
+          <div class="l2">MODULAR THERMAL EQUILIBRIUM CALENDAR</div>
+          <div class="l3">THERMAL TIME · WATCH No. 1</div>
         </div>
       </div>
       </div>
       <p class="date-line" id="dateLine">—</p>
+      <p class="zero-line" id="zeroLine" aria-label="Week and day count from Zero.zero">—</p>
       <p class="civil-line" id="civilLine">—</p>
       <p class="solar-line" id="solarLine">—</p>
-      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 1–13 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <strong style="color:#ed2817;">Red gate-seal</strong> — April’s opening, the first counted month · <strong>Zodiac ring</strong> — the thirteen signs are seated centred on the calendar months (Aries over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February, and Ophiuchus ⛎ — the Serpent-Bearer, the missing thirteenth sign — over March, the seam month); the sign boundaries fall mid-month at the bisectors between month centres, and both of Ophiuchus’s boundaries fall inside March · Ophiuchus is seated over March <strong>by declaration</strong> of the calendar’s maker, completing 13 signs for 13 modules; in the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 13, 1–12 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 13.2, while TODAY parks at the seam) · <span class="swatch sw-blue"></span><strong class="lg-blue">Blue LUNAR hand</strong> — the lunar month date, read on the <strong>LUNAR</strong> ring just inside the THERMAL ring (12.368266 lunations per tropical year — twelve full sectors plus a closing partial sector, numbered 1–13 from the same origin; lunation 1 is the lunation already running at the March equinox) · <span class="swatch sw-blue"></span><strong class="lg-blue">Phase ring</strong> — inside the LUNAR ring, one whole lunation drawn as a circle (NEW at the top, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, WAXING from new to full, WANING from full back to new); a small blue moon travels it at the day’s lunar age, dark at new, half-lit at the quarters, fully lit at full.</p>
+      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 1–13 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <strong style="color:#ed2817;">Red gate-seal</strong> — April’s opening, the first counted month · <strong>Zodiac ring</strong> — the thirteen signs are seated centred on the calendar months (Aries over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February, and Ophiuchus ⛎ — the Serpent-Bearer, the missing thirteenth sign — over March, the seam month); the sign boundaries fall mid-month at the bisectors between month centres, and both of Ophiuchus’s boundaries fall inside March · Ophiuchus is seated over March <strong>by declaration</strong> of the calendar’s maker, completing 13 signs for 13 modules; in the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 13, 1–12 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 13.2, while TODAY parks at the seam) · <span class="swatch sw-blue"></span><strong class="lg-blue">Blue LUNAR hand</strong> — the lunar month date, read on the <strong>LUNAR</strong> ring just inside the THERMAL ring (12.368266 lunations per tropical year — twelve full sectors plus a closing partial sector, numbered 1–13 from the same origin; lunation 1 is the lunation already running at the March equinox) · <span class="swatch sw-blue"></span><strong class="lg-blue">Phase ring</strong> — inside the LUNAR ring, one whole lunation drawn as a circle (NEW at the top, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, WAXING from new to full, WANING from full back to new); a small blue moon travels it at the day’s lunar age, dark at new, half-lit at the quarters, fully lit at full · <span class="swatch sw-green"></span><strong class="lg-green">Green WEEKDAY hand</strong> — the observer’s local weekday, read on the <strong>WEEKDAY</strong> ring in the open annulus inside the solar-terms band (SUNDAY–SATURDAY written out in full, Sunday’s sector opening at the equinox line at the top and the week running clockwise; green is the Z seat — Yield / Ground / Structure; the hand points at the current day’s sector centre, the current day’s sector is lit brighter, and the hand steps to the next day at local midnight).</p>
 
       <p class="equation" id="equationLine"><span class="eq-head">Today’s equation</span>—</p>
 
-      <p class="guc-label">Global Unified Calendar</p>
-      <p class="guc-sub">Modular Thermal Equilibrium Calendar · Watch No. 1</p>
+      <p class="guc-label">Global Unity Clock</p>
+      <p class="guc-sub">Modular Thermal Equilibrium Calendar · Thermal Time — Watch No. 1</p>
       <p class="zodiac-fence">Zodiac layers: partitions of the sun’s road and the year, shown for correlation — design study, NO CLAIM.</p>
 
       <p class="doctrine">“We don’t have time zones — we have solar thermal lag.”</p>
@@ -394,6 +411,7 @@
           <div class="cell"><div class="k">Thermal phase Θ</div><div class="v" id="dTheta">—</div><div class="s" id="dThetaSub">—</div></div>
           <div class="cell"><div class="k">Solar longitude λ</div><div class="v" id="dLambda">—</div><div class="s" id="dLambdaSub">—</div></div>
           <div class="cell"><div class="k">The count</div><div class="v" id="dCount">—</div><div class="s">Count states from 0 · April 2 = counted 0 · labels 0–363 · April 1 outside at Zero.zero 0.0</div></div>
+          <div class="cell"><div class="k">Weekday — local</div><div class="v" id="dWeekday">—</div><div class="s" id="dWeekdaySub">—</div></div>
           <div class="cell"><div class="k">Lunar month date</div><div class="v" id="dLunar">—</div><div class="s" id="dLunarSub">—</div></div>
           <div class="cell"><div class="k">Thermal clock drift today</div><div class="v" id="dDrift">—</div><div class="s">thermal elapsed vs solar elapsed at this longitude, since solar midnight there</div></div>
           <div class="cell"><div class="k">This module’s span</div><div class="v" id="dSpan">—</div><div class="s" id="dSpanSub">—</div></div>
@@ -440,72 +458,72 @@
       </section>
 
       <section aria-label="Unified translations">
-        <h2>One calendar, every tongue — unified translations</h2>
-        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">The same two face-lines, rendered in the world’s scripts — one text, every tongue. The translations are a design element, for a global feel; no claim is attached to them.</p>
+        <h2>One clock, every tongue — unified translations</h2>
+        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">The clock’s name, rendered in the world’s scripts — one text, every tongue. The translations are a design element, for a global feel; no claim is attached to them.</p>
         <table class="modules tongues">
           <tbody>
             <tr>
               <td class="lang"><span class="lang-en">English</span><span class="lang-native">reference</span></td>
-              <td class="tongue" lang="en"><span class="t1">Global Unified Calendar</span><span class="t2">Zero.zero — April 1</span></td>
+              <td class="tongue" lang="en"><span class="t1">Global Unity Clock</span><span class="t2">Zero.zero — April 1</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Arabic</span><span class="lang-native" lang="ar" dir="rtl">العربية</span></td>
-              <td class="tongue" lang="ar" dir="rtl"><span class="t1">التقويم العالمي الموحد</span><span class="t2">Zero.zero — 1 أبريل</span></td>
+              <td class="tongue" lang="ar" dir="rtl"><span class="t1">ساعة الوحدة العالمية</span><span class="t2">Zero.zero — 1 أبريل</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Hebrew</span><span class="lang-native" lang="he" dir="rtl">עברית</span></td>
-              <td class="tongue" lang="he" dir="rtl"><span class="t1">לוח השנה העולמי המאוחד</span><span class="t2">Zero.zero — 1 באפריל</span></td>
+              <td class="tongue" lang="he" dir="rtl"><span class="t1">שעון האחדות העולמי</span><span class="t2">Zero.zero — 1 באפריל</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Greek</span><span class="lang-native" lang="el">Ελληνικά</span></td>
-              <td class="tongue" lang="el"><span class="t1">Παγκόσμιο Ενιαίο Ημερολόγιο</span><span class="t2">Zero.zero — 1 Απριλίου</span></td>
+              <td class="tongue" lang="el"><span class="t1">Παγκόσμιο Ρολόι Ενότητας</span><span class="t2">Zero.zero — 1 Απριλίου</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Chinese</span><span class="lang-native" lang="zh-Hans">简体中文</span></td>
-              <td class="tongue" lang="zh-Hans"><span class="t1">全球统一历</span><span class="t2">Zero.zero — 4月1日</span></td>
+              <td class="tongue" lang="zh-Hans"><span class="t1">全球统一时钟</span><span class="t2">Zero.zero — 4月1日</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Japanese</span><span class="lang-native" lang="ja">日本語</span></td>
-              <td class="tongue" lang="ja"><span class="t1">世界統一カレンダー</span><span class="t2">Zero.zero — 4月1日</span></td>
+              <td class="tongue" lang="ja"><span class="t1">世界統一時計</span><span class="t2">Zero.zero — 4月1日</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Hindi</span><span class="lang-native" lang="hi">हिन्दी</span></td>
-              <td class="tongue" lang="hi"><span class="t1">वैश्विक एकीकृत कैलेंडर</span><span class="t2">Zero.zero — 1 अप्रैल</span></td>
+              <td class="tongue" lang="hi"><span class="t1">वैश्विक एकता घड़ी</span><span class="t2">Zero.zero — 1 अप्रैल</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Russian</span><span class="lang-native" lang="ru">Русский</span></td>
-              <td class="tongue" lang="ru"><span class="t1">Глобальный единый календарь</span><span class="t2">Zero.zero — 1 апреля</span></td>
+              <td class="tongue" lang="ru"><span class="t1">Глобальные часы единства</span><span class="t2">Zero.zero — 1 апреля</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Korean</span><span class="lang-native" lang="ko">한국어</span></td>
-              <td class="tongue" lang="ko"><span class="t1">글로벌 통합 달력</span><span class="t2">Zero.zero — 4월 1일</span></td>
+              <td class="tongue" lang="ko"><span class="t1">글로벌 유니티 시계</span><span class="t2">Zero.zero — 4월 1일</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Spanish</span><span class="lang-native" lang="es">Español</span></td>
-              <td class="tongue" lang="es"><span class="t1">Calendario Unificado Global</span><span class="t2">Zero.zero — 1 de abril</span></td>
+              <td class="tongue" lang="es"><span class="t1">Reloj de la Unidad Global</span><span class="t2">Zero.zero — 1 de abril</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">French</span><span class="lang-native" lang="fr">Français</span></td>
-              <td class="tongue" lang="fr"><span class="t1">Calendrier unifié mondial</span><span class="t2">Zero.zero — 1er avril</span></td>
+              <td class="tongue" lang="fr"><span class="t1">Horloge de l’unité mondiale</span><span class="t2">Zero.zero — 1er avril</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">German</span><span class="lang-native" lang="de">Deutsch</span></td>
-              <td class="tongue" lang="de"><span class="t1">Globaler Einheitskalender</span><span class="t2">Zero.zero — 1. April</span></td>
+              <td class="tongue" lang="de"><span class="t1">Globale Einheitsuhr</span><span class="t2">Zero.zero — 1. April</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Portuguese</span><span class="lang-native" lang="pt">Português</span></td>
-              <td class="tongue" lang="pt"><span class="t1">Calendário Unificado Global</span><span class="t2">Zero.zero — 1 de abril</span></td>
+              <td class="tongue" lang="pt"><span class="t1">Relógio da Unidade Global</span><span class="t2">Zero.zero — 1 de abril</span></td>
             </tr>
             <tr>
               <td class="lang"><span class="lang-en">Swahili</span><span class="lang-native" lang="sw">Kiswahili</span></td>
-              <td class="tongue" lang="sw"><span class="t1">Kalenda ya Umoja wa Dunia</span><span class="t2">Zero.zero — Aprili 1</span></td>
+              <td class="tongue" lang="sw"><span class="t1">Saa ya Umoja wa Dunia</span><span class="t2">Zero.zero — Aprili 1</span></td>
             </tr>
           </tbody>
         </table>
       </section>
 
       <section class="how" aria-label="How thermal time works">
-        <h2>How this watch keeps time</h2>
+        <h2>How this clock keeps time</h2>
         <p>The dial is arc: solar longitude λ runs 0° at the March equinox to 360° around the year. Riding on the arc is the equilibrium track T_eq(λ) — the temperature the Sun’s geometry is asking of Schoolcraft, Michigan. Thermal phase Θ accumulates at a rate proportional to that temperature, dΘ/dt = T_eq / T̄, and the thirteen modules are equal steps of Θ — so winter modules stretch over more days and more arc, and summer modules compress.</p>
         <p>The thin red hand is the thermal seconds hand. It sweeps at today’s rate r = T_eq / T̄: one thermal minute takes 60/r civil seconds. Deep January runs about 5% slow; July runs about 4.7% fast. The gold hand is the year hand — it points at today’s place on the module ring. The white hands read thermal time of day.</p>
         <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: standing outside the 364 counted days at address 0.0 — it is not counted 0. The count states from 0: the counted year opens April 2 as counted 0, and the labels run 0–363, inside March (module 13), the seam span that holds Zero.zero. Counted module 1 spans counted 0–27. The counted ring’s “0.0” engraving at the origin marks Zero.zero the address; counted 0 is the first counted day, April 2 — the two zeros are neighbours, never the same day. Its solar address is March, week 13.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim. It is the great reset day of equilibrium: Auld Lang Syne is sung, the Lord's Prayer is prayed — forgive, and ask forgiveness — and Psalm 51:10 is read, “Create in me a clean heart, O God”: a brand new heart, every year.</p>
@@ -1631,10 +1649,48 @@
       }
       renderPhaseRing();
 
+      // ---------- Weekday ring: SUNDAY–SATURDAY in full, with the green hand ----------
+      // Seven equal sectors in the open annulus inside the solar-terms band
+      // (r 88–120, between the COUNTED ring's outer edge at r 82 and the terms
+      // band's inner edge at r 128), on the dial's own convention: angles run
+      // clockwise from the top. Sunday's sector opens at the top (angle 0) and
+      // the week runs clockwise — Sunday, Monday, …, Saturday. The weekday is
+      // the observer's LOCAL weekday (Date.getDay() of the effective instant):
+      // the green hand points at the current day's sector centre all day and
+      // steps to the next sector at local midnight — local to the observer,
+      // like every other layer of the clock. Green is the Z seat of the house
+      // colour law (Yield / Ground / Structure). The ring group sits under the
+      // counted / thermal / lunar / seam groups in the SVG, so every existing
+      // inscription keeps its seat exactly as before.
+      var WEEKDAYS = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
+      var WD_SECTOR = 360 / 7;
+      var weekdayG = document.getElementById("weekdayG");
+      var renderedWeekday = -1;
+      function renderWeekdayRing(curWd){
+        if(renderedWeekday === curWd) return;
+        renderedWeekday = curWd;
+        var s = "", d = "", i, a0, a1, mid;
+        for(i = 0; i < 7; i++){
+          a0 = i * WD_SECTOR; a1 = a0 + WD_SECTOR;
+          var fill = (i === curWd) ? "#1e7a3c" : (i % 2 ? "#132618" : "#1a3320");
+          s += '<path d="'+sectorPath(a0+0.4, a1-0.4, 88, 120)+'" fill="'+fill+'" stroke="#2f6a3a" stroke-width="0.7"/>';
+          mid = a0 + WD_SECTOR / 2;
+          d += '<path id="warc'+i+'" d="'+arcPath(mid-22, mid+22, 104)+'" fill="none" stroke="none"/>';
+          var t1 = pt(200,200,120, a0), t2 = pt(200,200,124, a0);
+          s += '<line x1="'+t1[0].toFixed(1)+'" y1="'+t1[1].toFixed(1)+'" x2="'+t2[0].toFixed(1)+'" y2="'+t2[1].toFixed(1)+'" stroke="#3f8a4e" stroke-width="1.2"/>';
+        }
+        for(i = 0; i < 7; i++){
+          var cur = (i === curWd);
+          s += '<text font-size="'+(cur ? "10" : "9")+'" font-weight="'+(cur ? "800" : "700")+'" letter-spacing="0.5" fill="'+(cur ? "#ffffff" : "#cdeeda")+'">'+
+               '<textPath href="#warc'+i+'" startOffset="50%" text-anchor="middle">'+WEEKDAYS[i]+'</textPath></text>';
+        }
+        weekdayG.innerHTML = s + "<defs>" + d + "</defs>";
+      }
+
       // ---------- State & main loop ----------
       var viewDate = null; // null = live
       var el = function(id){ return document.getElementById(id); };
-      var dateLine = el("dateLine"), civilLine = el("civilLine"),
+      var dateLine = el("dateLine"), zeroLine = el("zeroLine"), civilLine = el("civilLine"),
           rateLine = el("rateLine"), viewingLine = el("viewingLine"),
           faceSvg = el("face");
       var lastSecond = -1, lastAddrKey = "";
@@ -1705,6 +1761,14 @@
         // lunarFor), mapped over the ring's 12.368266 lunations. It never parks:
         // the moon's count runs straight through Zero Day.
         el("lunarHand").setAttribute("transform", "rotate("+lun.angle.toFixed(2)+" 200 200)");
+        // Green WEEKDAY hand — the observer's local weekday on the WEEKDAY
+        // ring: angle = (weekday + ½) × 360/7, the current sector's centre.
+        // It holds that centre all day and steps at local midnight, when
+        // eff.getDay() rolls over (for a viewed date, that date's weekday).
+        var wdIndex = eff.getDay();
+        var wdAngle = (wdIndex + 0.5) * WD_SECTOR;
+        el("weekdayHand").setAttribute("transform", "rotate("+wdAngle.toFixed(2)+" 200 200)");
+        renderWeekdayRing(wdIndex);
         // Phase moon — travels the phase ring at the day's lunar age:
         // angle = age / synodic month × 360°, its lit part following the phase.
         var phaseDeg = lun.phaseFrac * 360;
@@ -1761,6 +1825,21 @@
           el("dLambdaSub").textContent = gate + " · 0° = March equinox";
           var cd = countDay(eff);
           el("dCount").textContent = boundary ? "Outside the count — Zero.zero 0.0" : "Counted " + cd + " · of 0–363";
+          // Restored face readout — the 0.0 week and day count, alongside the
+          // regular date above it: weeks and days reckoned from Zero.zero
+          // (April 1 = 0.0, outside the count; April 2 = counted 0, so
+          // counted 0–6 is week 1, counted 7–13 week 2, … 52 weeks in all).
+          if(boundary || cd === null){
+            zeroLine.innerHTML = '<span class="z00">0.0</span> — ZERO.ZERO · Zero Day, outside the count' +
+              '<span class="zsub">solar address ' + addr.name + ' ' + addr.mw + ', day ' + addr.day + ' · the count opens tomorrow at counted 0</span>';
+          } else {
+            var zw = Math.floor(cd / 7) + 1, zd = (cd % 7) + 1;
+            zeroLine.innerHTML = '<span class="z00">0.0</span> + Week ' + zw + ' · Day ' + zd +
+              ' — Counted ' + cd + ' of 0–363' +
+              '<span class="zsub">counted from Zero.zero (April 1) · thermal address <span class="zmod">' + addr.name + ' ' + addr.mw + ', day ' + addr.day + '</span></span>';
+          }
+          el("dWeekday").textContent = DOW[wdIndex];
+          el("dWeekdaySub").textContent = "green hand at " + wdAngle.toFixed(1) + "° on the WEEKDAY ring · local weekday, steps at local midnight";
           el("dLunar").textContent = "Lunation " + lun.number + " · day " + lun.ageDays.toFixed(1);
           el("dLunarSub").textContent = lun.phase + " · lunar age " + lun.ageDays.toFixed(1) + " d of 29.530589 · LUNAR hand " + lun.angle.toFixed(1) + "° on the LUNAR ring · phase moon " + phaseDeg.toFixed(0) + "° around its ring";
           var sp = cyc.spans[addr.module];
@@ -1783,7 +1862,7 @@
             greg + " = " + thermalPart + " · <strong>" + zod.name + " " + zod.glyph + "</strong> (λ " + lam.toFixed(1) + "°) · " +
             "<strong>" + term.hanzi + " " + term.pinyin + "</strong> (" + term.en + ") · <strong>" + animal.label + " " + animal.hanzi + "</strong>" +
             " · <strong><span style='color:#4da3ff'>Lunation " + lun.number + " · lunar day " + lun.ageDays.toFixed(1) + " · " + lun.phase + "</span></strong>";
-          faceSvg.setAttribute("aria-label", "Thermal Time Space Watch — Global Unified Calendar. " + (boundary ? "ZERO DAY — ZERO.ZERO, Clean Residual Day, New Year Day, the day of reflection, reassessment, realignment, also named Thermal Equilibrium Day by declaration. Solar address " + solarAddr + "." : "Address " + solarAddr + ".") + " Read at longitude " + fmtLon(currentLon) + ". Rate factor " + r.toFixed(3) + ".");
+          faceSvg.setAttribute("aria-label", "Global Unity Clock — Modular Thermal Equilibrium Calendar. " + (boundary ? "ZERO DAY — ZERO.ZERO, Clean Residual Day, New Year Day, the day of reflection, reassessment, realignment, also named Thermal Equilibrium Day by declaration. Solar address " + solarAddr + "." : "Address " + solarAddr + ".") + " Read at longitude " + fmtLon(currentLon) + ". Rate factor " + r.toFixed(3) + ".");
           viewingLine.innerHTML = viewDate
             ? "Viewing <strong>" + DOW[eff.getDay()] + ", " + fmtDate(eff) + "</strong> — hands run at that day’s rate."
             : '<span class="live-dot">● LIVE</span> — your local time, on the thermal dial.';
@@ -1937,6 +2016,22 @@
                    weekInModule:Math.floor((cd % 28) / 7) + 1,
                    goldLambda:+lam3.toFixed(1), goldAngle:+lam3.toFixed(2),
                    thermalModule:ad3.name, thermalMw:ad3.mw };
+        },
+        weekdayFor: function(dateStr){
+          var p = dateStr.split("-");
+          var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
+          var wd = d.getDay();
+          return { weekday:WEEKDAYS[wd], index:wd, angle:+((wd + 0.5) * WD_SECTOR).toFixed(2),
+                   sectorStart:+(wd * WD_SECTOR).toFixed(2), sectorEnd:+(((wd + 1) * WD_SECTOR) % 360).toFixed(2) };
+        },
+        zeroCountFor: function(dateStr){
+          var p = dateStr.split("-");
+          var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
+          var cd = countDay(d), b = isBoundaryDay(d);
+          var thZ = thetaAt(d), adZ = addressFromTheta(thZ.thetaAddr);
+          if(b || cd === null) return { boundary:true, countDay:null, week:null, dayInWeek:null, thermalName:adZ.name, thermalMw:adZ.mw, thermalDay:adZ.day };
+          return { boundary:false, countDay:cd, week:Math.floor(cd / 7) + 1, dayInWeek:(cd % 7) + 1,
+                   thermalName:adZ.name, thermalMw:adZ.mw, thermalDay:adZ.day };
         },
         monthFor: function(dateStr){
           var p = dateStr.split("-");
