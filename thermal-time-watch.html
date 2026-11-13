@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Thermal Time Watch — Global Unified Calendar</title>
+    <style>
+      button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.75rem; }
+      * { box-sizing: border-box; }
+      :root{
+        --bg:#eef0ee; --ink:#16181d; --muted:#5a6068; --card:#ffffff; --line:#d8dcd8;
+        --gold:#b07d1e; --seam:#c7432b;
+        --face-bg:#0d1117;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{ --bg:#0a0c10; --ink:#e8ebef; --muted:#9aa3ad; --card:#14181f; --line:#262c36;
+               --gold:#d9a441; --seam:#ff7a59; }
+      }
+      html{ -webkit-text-size-adjust:100%; }
+      body{
+        margin:0; background:var(--bg); color:var(--ink);
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height:1.45;
+      }
+      main{ max-width:600px; margin:0 auto; padding:20px 16px 40px; }
+      .face-wrap{
+        position:relative; width:min(92vw, 452px); margin:6px auto 0; aspect-ratio:1/1;
+      }
+      .face-wrap svg{ display:block; width:100%; height:100%; }
+      .face-label{
+        position:absolute; left:0; right:0; bottom:16.5%; text-align:center; pointer-events:none;
+        color:#aeb9c6; text-shadow:0 1px 6px rgba(0,0,0,.75);
+      }
+      .face-label .l1{
+        font-size:clamp(9.5px, 2.6vw, 11.5px); letter-spacing:.22em; text-indent:.22em; font-weight:700; color:#e6ecf3;
+      }
+      .face-label .l2{
+        margin-top:4px; font-size:clamp(8.5px, 2.3vw, 10.5px); letter-spacing:.20em; text-indent:.20em; font-weight:800; color:#d9a441;
+      }
+      .face-label .l3{
+        margin-top:3px; font-size:clamp(7px, 1.9vw, 8.5px); letter-spacing:.16em; text-indent:.16em; color:#8b96a5;
+      }
+      .guc-label{
+        text-align:center; margin:14px auto 0; max-width:452px;
+        font-size:13px; font-weight:800; letter-spacing:.24em; text-indent:.24em;
+        color:var(--gold); text-transform:uppercase;
+      }
+      .guc-sub{
+        text-align:center; margin:3px auto 0; max-width:452px;
+        font-size:12px; letter-spacing:.08em; color:var(--muted);
+      }
+      .center-readout{
+        position:absolute; left:50%; top:60%; transform:translate(-50%,-50%);
+        text-align:center; pointer-events:none; min-width:62%;
+        background:rgba(8,11,16,.58); border:1px solid rgba(255,255,255,.07);
+        border-radius:14px; padding:8px 14px 9px;
+      }
+      .center-readout .mod{
+        font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+        font-size:clamp(24px, 7.4vw, 34px); line-height:1.05; color:#f4f7fa; font-weight:600;
+        white-space:nowrap;
+      }
+      .center-readout .addr{
+        margin-top:2px; font-size:clamp(14px, 4.2vw, 19px); color:#d9a441; font-weight:700; letter-spacing:.06em;
+        font-variant-numeric: tabular-nums; white-space:nowrap;
+      }
+      .center-readout .tsub{
+        margin-top:2px; font-size:clamp(10.5px, 3vw, 12.5px); color:#aeb9c6; white-space:nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      .center-readout .named{
+        margin-top:2px; font-size:clamp(10px, 2.8vw, 12px); color:#ffb4a2; white-space:nowrap;
+        letter-spacing:.02em;
+      }
+      .center-readout .named[hidden]{ display:none; }
+      .center-readout.boundary .mod{ color:#ff9d85; letter-spacing:.08em; }
+      .center-readout.boundary .addr{ color:#e8ebef; }
+      .civil-line{
+        text-align:center; margin:10px auto 0;
+        font-size:12.5px; color:var(--muted); font-variant-numeric: tabular-nums; letter-spacing:.04em;
+      }
+      .doctrine{
+        text-align:center; margin:14px auto 0; max-width:452px;
+        font-family: Georgia, "Iowan Old Style", serif; font-style:italic;
+        font-size:15px; color:var(--muted);
+      }
+      .rate-line{
+        text-align:center; margin:8px auto 0; max-width:480px; font-size:15.5px;
+      }
+      .rate-line strong{ color:var(--gold); }
+      .stepper{
+        display:flex; gap:8px; justify-content:center; align-items:stretch; flex-wrap:wrap; margin:16px auto 0;
+      }
+      .stepper button{
+        font:inherit; font-size:15px; font-weight:600; cursor:pointer;
+        padding:8px 18px; border-radius:10px; border:1px solid var(--line);
+        background:var(--card); color:var(--ink); min-width:44px;
+      }
+      .stepper button:active{ transform:translateY(1px); }
+      .stepper button.today{ border-color:var(--gold); color:var(--gold); }
+      .stepper .jump{
+        display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--muted);
+        border:1px solid var(--line); border-radius:10px; background:var(--card); padding:0 10px 0 12px;
+      }
+      .stepper input[type="date"]{
+        font:inherit; font-size:14.5px; color:var(--ink); background:transparent; border:0; padding:6px 0;
+      }
+      button:focus-visible, input:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+      .lon-control{
+        margin:16px auto 0; max-width:480px; background:var(--card);
+        border:1px solid var(--line); border-radius:12px; padding:12px 14px 11px;
+      }
+      .lon-head{
+        display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap;
+      }
+      .lon-head label{
+        font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:700;
+      }
+      .lon-val{ font-size:15.5px; font-weight:700; color:var(--gold); font-variant-numeric:tabular-nums; }
+      .lon-control input[type="range"]{ width:100%; accent-color:var(--gold); cursor:pointer; }
+      .lon-scale{
+        display:flex; justify-content:space-between; font-size:11px; color:var(--muted);
+        font-variant-numeric:tabular-nums; margin-top:-2px;
+      }
+      .lon-lag{ margin:8px 0 0; font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; }
+      .lon-lag strong{ color:var(--ink); }
+      .lon-home{
+        font:inherit; font-size:13px; font-weight:600; cursor:pointer; margin-top:9px;
+        padding:6px 12px; border-radius:9px; border:1px solid var(--line);
+        background:transparent; color:var(--ink);
+      }
+      .lon-home:active{ transform:translateY(1px); }
+      .solar-line{
+        text-align:center; margin:3px auto 0;
+        font-size:12.5px; color:var(--gold); font-variant-numeric: tabular-nums; letter-spacing:.04em; font-weight:600;
+      }
+      .viewing{
+        text-align:center; margin-top:10px; font-size:13.5px; color:var(--muted); min-height:1.3em;
+      }
+      .viewing .live-dot{ color:#3d9e63; font-weight:700; }
+      section{ margin-top:26px; }
+      h2{
+        font-family: Georgia, "Iowan Old Style", serif; font-weight:600; font-size:19px; margin:0 0 10px;
+      }
+      .grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+      @media (max-width:430px){ .grid{ grid-template-columns:1fr; } }
+      .cell{
+        background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 12px;
+      }
+      .cell .k{ font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+      .cell .v{ margin-top:3px; font-size:16.5px; font-weight:600; font-variant-numeric: tabular-nums; }
+      .cell .s{ margin-top:1px; font-size:12.5px; color:var(--muted); }
+      table.modules{ width:100%; border-collapse:collapse; font-size:14px; font-variant-numeric: tabular-nums; }
+      table.modules th{
+        text-align:left; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+        padding:4px 8px; border-bottom:1px solid var(--line); font-weight:600;
+      }
+      table.modules td{ padding:6px 8px; border-bottom:1px solid var(--line); }
+      table.modules tr.cur td{ background:color-mix(in srgb, var(--gold) 13%, transparent); font-weight:600; }
+      table.modules .num{ color:var(--muted); width:2em; }
+      table.modules .tag{
+        font-size:10.5px; font-weight:700; letter-spacing:.06em; color:var(--gold);
+        border:1px solid currentColor; border-radius:20px; padding:1px 7px; margin-left:6px; white-space:nowrap;
+      }
+      table.modules .tag.seamtag{ color:var(--seam); }
+      .how p{ margin:0 0 9px; font-size:14.5px; color:var(--ink); }
+      .how p:last-child{ margin-bottom:0; }
+      .how .pair{ color:var(--muted); }
+      footer{
+        margin-top:30px; border-top:1px solid var(--line); padding-top:14px;
+        font-size:12px; color:var(--muted); text-align:center;
+      }
+      footer p{ margin:0 0 5px; }
+      footer .fence{ letter-spacing:.08em; font-weight:700; color:var(--ink); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="face-wrap">
+        <svg id="face" viewBox="0 0 400 400" role="img" aria-label="Thermal time watch face — Global Unified Calendar">
+          <defs id="faceDefs"></defs>
+          <circle cx="200" cy="200" r="197" fill="#05070a"/>
+          <circle cx="200" cy="200" r="193" fill="#0d1117"/>
+          <circle cx="200" cy="200" r="149" fill="#11161f"/>
+          <circle cx="200" cy="200" r="149" fill="none" stroke="#2a3242" stroke-width="1"/>
+          <g id="ringG"></g>
+          <g id="seamG"></g>
+          <g id="handsG">
+            <g id="yearHand">
+              <line x1="200" y1="218" x2="200" y2="58" stroke="#d9a441" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M200 44 L194 62 L206 62 Z" fill="#d9a441"/>
+            </g>
+            <line id="hourHand" x1="200" y1="200" x2="200" y2="126" stroke="#e8edf5" stroke-width="7" stroke-linecap="round"/>
+            <line id="minHand" x1="200" y1="200" x2="200" y2="94" stroke="#e8edf5" stroke-width="4.5" stroke-linecap="round"/>
+            <g id="secHand">
+              <line x1="200" y1="222" x2="200" y2="76" stroke="#e5484d" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="200" cy="222" r="4" fill="#e5484d"/>
+            </g>
+            <circle cx="200" cy="200" r="6.5" fill="#0d1117" stroke="#d9a441" stroke-width="2.5"/>
+          </g>
+        </svg>
+        <div class="face-label" aria-hidden="true">
+          <div class="l1">THERMAL TIME — WATCH No. 1</div>
+          <div class="l2">GLOBAL UNIFIED CALENDAR</div>
+          <div class="l3">MODULAR THERMAL EQUILIBRIUM CALENDAR</div>
+        </div>
+        <div class="center-readout" id="centerReadout">
+          <div class="mod" id="crMod">—</div>
+          <div class="addr" id="crAddr">—</div>
+          <div class="named" id="crNamed" hidden>also named: Thermal Equilibrium Day</div>
+          <div class="tsub" id="crSub">—</div>
+        </div>
+      </div>
+      <p class="civil-line" id="civilLine">—</p>
+      <p class="solar-line" id="solarLine">—</p>
+
+      <p class="guc-label">Global Unified Calendar</p>
+      <p class="guc-sub">Modular Thermal Equilibrium Calendar · Watch No. 1</p>
+
+      <p class="doctrine">“We don’t have time zones — we have solar thermal lag.”</p>
+      <p class="rate-line" id="rateLine">—</p>
+
+      <div class="lon-control" aria-label="Longitude — carry the thermal track around the planet">
+        <div class="lon-head">
+          <label for="lonRange">Longitude — solar thermal lag</label>
+          <span class="lon-val" id="lonVal">—</span>
+        </div>
+        <input type="range" id="lonRange" min="-180" max="180" step="0.1" value="-85.6"
+               aria-label="Longitude in degrees, minus 180 to plus 180" />
+        <div class="lon-scale"><span>180° W</span><span>Greenwich · 0°</span><span>180° E</span></div>
+        <p class="lon-lag" id="lonLag">—</p>
+        <button type="button" class="lon-home" id="btnHomeLon">Home — Schoolcraft · 85.6° W</button>
+      </div>
+
+      <div class="stepper">
+        <button type="button" id="btnPrev" aria-label="Previous day">− day</button>
+        <button type="button" id="btnToday" class="today">Today</button>
+        <button type="button" id="btnNext" aria-label="Next day">+ day</button>
+        <label class="jump">Jump to
+          <input type="date" id="dateJump" aria-label="Jump to a date" />
+        </label>
+      </div>
+      <p class="viewing" id="viewingLine"></p>
+
+      <section aria-label="Readings">
+        <h2>Readings</h2>
+        <div class="grid">
+          <div class="cell"><div class="k">Address</div><div class="v" id="dAddr">—</div><div class="s" id="dAddrSub">—</div></div>
+          <div class="cell"><div class="k">Rate factor r</div><div class="v" id="dRate">—</div><div class="s" id="dRateSub">—</div></div>
+          <div class="cell"><div class="k">T_eq — equilibrium track</div><div class="v" id="dTeq">—</div><div class="s" id="dTeqSub">Schoolcraft, Michigan · pinned monthly table, interpolated</div></div>
+          <div class="cell"><div class="k">Longitude — lag field</div><div class="v" id="dLon">—</div><div class="s" id="dLonSub">—</div></div>
+          <div class="cell"><div class="k">Thermal phase Θ</div><div class="v" id="dTheta">—</div><div class="s" id="dThetaSub">—</div></div>
+          <div class="cell"><div class="k">Solar longitude λ</div><div class="v" id="dLambda">—</div><div class="s" id="dLambdaSub">—</div></div>
+          <div class="cell"><div class="k">The count</div><div class="v" id="dCount">—</div><div class="s">Counted year opens April 2 · 364 counted days</div></div>
+          <div class="cell"><div class="k">Thermal clock drift today</div><div class="v" id="dDrift">—</div><div class="s">thermal elapsed vs solar elapsed at this longitude, since solar midnight there</div></div>
+          <div class="cell"><div class="k">This module’s span</div><div class="v" id="dSpan">—</div><div class="s" id="dSpanSub">—</div></div>
+        </div>
+      </section>
+
+      <section aria-label="The thirteen modules">
+        <h2>The thirteen modules</h2>
+        <table class="modules">
+          <thead><tr><th></th><th>Module</th><th>Span</th><th>Days</th><th>Arc</th></tr></thead>
+          <tbody id="modBody"></tbody>
+        </table>
+      </section>
+
+      <section class="how" aria-label="How thermal time works">
+        <h2>How this watch keeps time</h2>
+        <p>The dial is arc: solar longitude λ runs 0° at the March equinox to 360° around the year. Riding on the arc is the equilibrium track T_eq(λ) — the temperature the Sun’s geometry is asking of Schoolcraft, Michigan. Thermal phase Θ accumulates at a rate proportional to that temperature, dΘ/dt = T_eq / T̄, and the thirteen modules are equal steps of Θ — so winter modules stretch over more days and more arc, and summer modules compress.</p>
+        <p>The thin red hand is the thermal seconds hand. It sweeps at today’s rate r = T_eq / T̄: one thermal minute takes 60/r civil seconds. Deep January runs about 5% slow; July runs about 4.7% fast. The gold hand is the year hand — it points at today’s place on the module ring. The white hands read thermal time of day.</p>
+        <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: the origin of the count, standing outside the 364 counted days. The counted year opens April 2. Its solar address is unchanged — March, week 1.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim.</p>
+        <p><strong>Longitude carries the track around the planet.</strong> Slide the longitude and the same day is re-read from a new arc position: solar time there shifts continuously — four minutes per degree, no zones and no steps. The day’s equilibrium track is the pinned Schoolcraft table carried around unchanged; what longitude changes is where that place sits in its day. Its temperature swing peaks three hours after its solar noon — the surface-inertia lag — so at any one instant, different longitudes carry different instantaneous temperatures, and the thermal hand runs at each longitude’s own rate r. One planet, one track, a continuous lag field.</p>
+        <p class="pair">Every hand is a relation between a pair: arc ↔ thermal, forcing ↔ lagged response, equilibrium ↔ gradient. A place is not a time zone; it is an arc position plus its own solar thermal lag.</p>
+      </section>
+
+      <footer>
+        <p>364 counted days divide clean — 13 × 4 × 7. The residual day stands outside the count at 0.0.</p>
+        <p class="fence">DESIGN STUDY — NO CLAIM · T5</p>
+        <p>Civil time does not slow; Θ accumulates slower in winter by construction (rate ∝ T).</p>
+        <p>13 thermal modules are not 13 moons: a year holds 12.368 lunations.</p>
+      </footer>
+    </main>
+
+    <script>
+    (function(){
+      "use strict";
+      // ---------- Pinned design table: monthly mean °C, Schoolcraft MI (Jan..Dec) ----------
+      var MC = [-5.7,-4.3,1.1,7.8,13.9,19.2,21.4,20.3,16.1,9.7,3.1,-2.8];
+      var TK = MC.map(function(c){ return c + 273.15; });
+      var TBAR = TK.reduce(function(a,b){ return a+b; }, 0) / 12; // ≈ 281.47 K
+      var NAMES = ["March","April","May","June","Sol","July","August","September","October","November","December","January","February"];
+      var DAYMS = 86400000;
+
+      function pad2(n){ return (n<10?"0":"")+n; }
+      function keyOf(y,m,d){ return y+"-"+pad2(m+1)+"-"+pad2(d); }
+      function fmtDate(dt){
+        var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        return M[dt.getMonth()]+" "+dt.getDate()+", "+dt.getFullYear();
+      }
+      function fmtDateShort(dt){
+        var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        return M[dt.getMonth()]+" "+dt.getDate();
+      }
+
+      // T_eq (°C) at an instant: linear interpolation between monthly means seated at mid-month (15th, noon).
+      function tempC(date){
+        var y=date.getFullYear(), m=date.getMonth(), anchors=[], i, dm, ad, t=date.getTime();
+        for(dm=-2; dm<=2; dm++){
+          ad = new Date(y, m+dm, 15, 12, 0, 0);
+          anchors.push([ad.getTime(), MC[ad.getMonth()]]);
+        }
+        for(i=0;i<anchors.length-1;i++){
+          if(t>=anchors[i][0] && t<=anchors[i+1][0]){
+            return anchors[i][1] + (anchors[i+1][1]-anchors[i][1]) * (t-anchors[i][0]) / (anchors[i+1][0]-anchors[i][0]);
+          }
+        }
+        return MC[m];
+      }
+      // Apparent solar longitude λ (degrees, 0 at March equinox), standard low-precision form.
+      function solarLon(date){
+        var n = date.getTime()/DAYMS - 10957.5; // days since J2000.0
+        var L0 = 280.460 + 0.9856474*n;
+        var g = (357.528 + 0.9856003*n) * Math.PI/180;
+        var lam = L0 + 1.915*Math.sin(g) + 0.020*Math.sin(2*g);
+        return ((lam % 360) + 360) % 360;
+      }
+
+      // ---------- Cycle engine: walk Mar 20 → Mar 19, accumulate Θ per day ----------
+      var cycleCache = {};
+      function buildCycle(cy){
+        if(cycleCache[cy]) return cycleCache[cy];
+        var start = new Date(cy, 2, 20), end = new Date(cy+1, 2, 20);
+        var days = [], byKey = {}, cum = 0, d, rec;
+        for(d = new Date(start.getTime()); d < end; d = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1)){
+            var noon = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12, 0, 0);
+          var tk = tempC(noon) + 273.15;
+          rec = { date:new Date(d.getFullYear(), d.getMonth(), d.getDate()), tk:tk, cumBefore:cum };
+          days.push(rec); byKey[keyOf(d.getFullYear(), d.getMonth(), d.getDate())] = rec;
+          cum += tk;
+        }
+        var total = cum;
+        // Module assignment: a day belongs to the module its Θ-interval ends in (the boundary day opens the new module).
+        var spans = [], i, k;
+        for(k=0;k<13;k++) spans.push(null);
+        var modOfDay = days.map(function(r){
+          return Math.min(12, Math.floor((r.cumBefore + r.tk) / total * 13));
+        });
+        days.forEach(function(r, idx){ r.module = modOfDay[idx]; });
+        var lambda0 = solarLon(new Date(cy, 2, 20, 12, 0, 0));
+        function relAngle(dateNoon){ return ((solarLon(dateNoon) - lambda0) % 360 + 360) % 360; }
+        for(k=0;k<13;k++){
+          var idxs = [];
+          days.forEach(function(r, idx){ if(modOfDay[idx]===k) idxs.push(idx); });
+          var first = days[idxs[0]].date;
+          var after = (idxs[idxs.length-1] + 1 < days.length) ? days[idxs[idxs.length-1]+1].date : new Date(cy+1, 2, 20);
+          var a0 = relAngle(new Date(first.getFullYear(), first.getMonth(), first.getDate(), 12));
+          var a1 = relAngle(new Date(after.getFullYear(), after.getMonth(), after.getDate(), 12));
+          if(a1 <= a0) a1 += 360; // cycle-end longitude, not a forced 360 (365 civil days ≠ one tropical year)
+          spans[k] = { name:NAMES[k], first:first, after:after, days:idxs.length,
+                       a0:a0, a1:a1, arc:((a1-a0)%360+360)%360 };
+        }
+        var seamDate = new Date(cy, 3, 1);
+        var seamAngle = relAngle(new Date(cy, 3, 1, 12, 0, 0));
+        var cyc = { year:cy, days:days, byKey:byKey, total:total, spans:spans,
+                    lambda0:lambda0, seamDate:seamDate, seamAngle:seamAngle };
+        cycleCache[cy] = cyc;
+        return cyc;
+      }
+      function cycleYearOf(date){
+        var y = date.getFullYear();
+        return (date >= new Date(y, 2, 20)) ? y : y - 1;
+      }
+      function thetaAt(date){
+        var cy = cycleYearOf(date), cyc = buildCycle(cy);
+        var rec = cyc.byKey[keyOf(date.getFullYear(), date.getMonth(), date.getDate())];
+        var frac = (date.getHours()*3600 + date.getMinutes()*60 + date.getSeconds() + date.getMilliseconds()/1000) / 86400;
+        // thetaAddr: Θ at the date's midday — the address is a property of the civil date, read at its
+        // canonical midday instant, so it is stable all day (2026-11-12 → October 9.3 day 4 at any hour).
+        return { theta:(rec.cumBefore + rec.tk * frac) / cyc.total, thetaAddr:(rec.cumBefore + rec.tk * 0.5) / cyc.total, cycle:cyc, rec:rec, frac:frac };
+      }
+      function addressFromTheta(theta){
+        var pos = theta * 13;
+        var m = Math.min(12, Math.floor(pos));
+        var p = pos - m;
+        var td = Math.min(27, Math.floor(p * 28)); // 28 thermal days per module: 4 weeks × 7
+        return { module:m, name:NAMES[m], week:Math.floor(td/7)+1, day:(td % 7)+1,
+                 mw:(m+1)+"."+(Math.floor(td/7)+1), theta:theta, moduleFrac:p };
+      }
+      function isBoundaryDay(date){ return date.getMonth()===3 && date.getDate()===1; }
+      // Day number in the count (April 2 = day 1; April 1 returns null — outside the count).
+      function countDay(date){
+        if(isBoundaryDay(date)) return null;
+        var originYear = (date >= new Date(date.getFullYear(), 3, 2)) ? date.getFullYear() : date.getFullYear()-1;
+        var origin = Date.UTC(originYear, 3, 2);
+        var cur = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+        return Math.round((cur - origin) / DAYMS) + 1;
+      }
+      function rateAt(date){ return (tempC(date) + 273.15) / TBAR; }
+
+      // ---------- Longitude: the track carried around the planet ----------
+      // Doctrine: no time zones — a continuous solar thermal lag field.
+      // Each degree of longitude shifts local solar time by exactly 4 minutes.
+      // The pinned Schoolcraft T_eq track is carried around unchanged; longitude
+      // sets where a place sits in its day. Its diurnal swing peaks 3 h after its
+      // solar noon (surface-inertia lag), so the instantaneous rate r follows longitude.
+      var HOME_LON = -85.6; // Schoolcraft, Michigan ≈ 85.6° W
+      var currentLon = HOME_LON;
+      var DIURNAL_AMP_K = 5.0; // diurnal swing amplitude of the carried track (K)
+      var PEAK_HOUR = 15;      // temperature peak: solar noon + 3 h of thermal lag
+      function fmtLon(lon){
+        if(Math.abs(lon) < 0.05) return "0.0° — the Greenwich meridian";
+        return Math.abs(lon).toFixed(1) + "° " + (lon < 0 ? "W" : "E");
+      }
+      function wrapDeltaLon(d){ return ((d + 540) % 360) - 180; }
+      function fmtLagMins(mins){
+        var sign = mins < 0 ? "−" : "+"; mins = Math.abs(Math.round(mins));
+        var h = Math.floor(mins / 60), m = mins % 60;
+        return sign + h + "h " + pad2(m) + "m";
+      }
+      // Full longitude-dependent reading of an instant.
+      function lonReading(date, lon){
+        var tMeanC = tempC(date);
+        var tMeanK = tMeanC + 273.15;
+        // Solar elapsed at this longitude: UTC instant + 4 minutes per degree.
+        var solarMs = date.getTime() + lon * 240000;
+        var solarElapsed = ((solarMs % DAYMS) + DAYMS) % DAYMS / 1000; // seconds since solar midnight there
+        var solarHour = solarElapsed / 3600;
+        function phase(h){ return 2 * Math.PI * (h - PEAK_HOUR) / 24; }
+        var swingK = DIURNAL_AMP_K * Math.cos(phase(solarHour));
+        var tInstC = tMeanC + swingK;
+        var rInst = (tInstC + 273.15) / TBAR;
+        var rMean = tMeanK / TBAR;
+        // Thermal elapsed = exact integral of the instantaneous rate over the solar day,
+        // so the thin hand sweeps at precisely rInst at this longitude.
+        var thermalElapsed = solarElapsed * rMean +
+          (DIURNAL_AMP_K / TBAR) * (86400 / (2 * Math.PI)) *
+          (Math.sin(phase(solarHour)) - Math.sin(phase(0)));
+        return { tMeanC:tMeanC, tInstC:tInstC, swingK:swingK, rMean:rMean, rInst:rInst,
+                 solarElapsed:solarElapsed, solarHour:solarHour, thermalElapsed:thermalElapsed };
+      }
+      function rateAtLon(date, lon){ return lonReading(date, lon).rInst; }
+      function rateSentence(r){
+        var pct = (r - 1) * 100, a = Math.abs(pct);
+        var minCivil = 60 / r;
+        if(a < 0.05) return "Today thermal time runs <strong>at the year’s average rate</strong> — one thermal minute takes " + minCivil.toFixed(1) + " civil seconds.";
+        return "Today thermal time runs <strong>≈" + a.toFixed(1) + "% " + (pct < 0 ? "slow" : "fast") +
+               "</strong> vs the year’s average — one thermal minute takes " + minCivil.toFixed(1) + " civil seconds.";
+      }
+
+      // ---------- Face rendering ----------
+      var SVGNS = "http://www.w3.org/2000/svg";
+      var ringG = document.getElementById("ringG");
+      var seamG = document.getElementById("seamG");
+      var defs = document.getElementById("faceDefs");
+      function pt(cx, cy, r, aDeg){
+        var a = aDeg * Math.PI/180;
+        return [cx + r * Math.sin(a), cy - r * Math.cos(a)];
+      }
+      function sectorPath(a0, a1, rIn, rOut){
+        var p1 = pt(200,200,rOut,a0), p2 = pt(200,200,rOut,a1), p3 = pt(200,200,rIn,a1), p4 = pt(200,200,rIn,a0);
+        var laf = (a1 - a0) > 180 ? 1 : 0;
+        return "M"+p1[0].toFixed(2)+" "+p1[1].toFixed(2)+
+               " A"+rOut+" "+rOut+" 0 "+laf+" 1 "+p2[0].toFixed(2)+" "+p2[1].toFixed(2)+
+               " L"+p3[0].toFixed(2)+" "+p3[1].toFixed(2)+
+               " A"+rIn+" "+rIn+" 0 "+laf+" 0 "+p4[0].toFixed(2)+" "+p4[1].toFixed(2)+" Z";
+      }
+      function arcPath(a0, a1, r){
+        var p1 = pt(200,200,r,a0), p2 = pt(200,200,r,a1);
+        var laf = (a1 - a0) > 180 ? 1 : 0;
+        return "M"+p1[0].toFixed(2)+" "+p1[1].toFixed(2)+" A"+r+" "+r+" 0 "+laf+" 1 "+p2[0].toFixed(2)+" "+p2[1].toFixed(2);
+      }
+      var renderedCycle = null, renderedModule = -1, renderedSeamHot = null;
+      function renderRing(cyc, curModule, seamHot){
+        if(renderedCycle === cyc.year && renderedModule === curModule && renderedSeamHot === seamHot) return;
+        renderedCycle = cyc.year; renderedModule = curModule; renderedSeamHot = seamHot;
+        var s = "", d = "", i, sp;
+        for(i=0;i<13;i++){
+          sp = cyc.spans[i];
+          var fill = (i === curModule) ? "#7a5a17" : (i % 2 ? "#1c2431" : "#232d3f");
+          var stroke = (i === curModule) ? "#d9a441" : "#39445a";
+          s += '<path d="'+sectorPath(sp.a0+0.35, sp.a1-0.35, 152, 190)+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+(i===curModule?1.6:0.8)+'"/>';
+          d += '<path id="arc'+i+'" d="'+arcPath(sp.a0+1.2, sp.a1-1.2, 171)+'" fill="none" stroke="none"/>';
+          // boundary tick
+          var t1 = pt(200,200,148,sp.a0), t2 = pt(200,200,152,sp.a0);
+          s += '<line x1="'+t1[0].toFixed(1)+'" y1="'+t1[1].toFixed(1)+'" x2="'+t2[0].toFixed(1)+'" y2="'+t2[1].toFixed(1)+'" stroke="#4a566b" stroke-width="1.4"/>';
+        }
+        for(i=0;i<13;i++){
+          sp = cyc.spans[i];
+          var cur = (i === curModule);
+          s += '<text font-size="12" font-weight="'+(cur?700:600)+'" letter-spacing="1" fill="'+(cur?"#ffd97a":"#c3cedd")+'">'+
+               '<textPath href="#arc'+i+'" startOffset="50%" text-anchor="middle">'+sp.name.toUpperCase()+'</textPath></text>';
+        }
+        // quarter gates (absolute λ = 90 / 180 / 270)
+        [90,180,270].forEach(function(gate){
+          var a = ((gate - cyc.lambda0) % 360 + 360) % 360;
+          var t1 = pt(200,200,143,a), t2 = pt(200,200,152,a);
+          s += '<line x1="'+t1[0].toFixed(1)+'" y1="'+t1[1].toFixed(1)+'" x2="'+t2[0].toFixed(1)+'" y2="'+t2[1].toFixed(1)+'" stroke="#6b7a90" stroke-width="2"/>';
+        });
+        ringG.innerHTML = s;
+        defs.innerHTML = d;
+        // Seam marker at April 1
+        var sa = cyc.seamAngle;
+        var dp = pt(200,200,140,sa);
+        var g1 = pt(200,200,138,sa), g2 = pt(200,200,192,sa);
+        var hot = seamHot ? ' stroke-width="2.6"' : ' stroke-width="1.6"';
+        var sg = '<line x1="'+g1[0].toFixed(1)+'" y1="'+g1[1].toFixed(1)+'" x2="'+g2[0].toFixed(1)+'" y2="'+g2[1].toFixed(1)+'" stroke="#ff7a59"'+hot+' stroke-dasharray="3 2.4"/>';
+        sg += '<g transform="translate('+dp[0].toFixed(1)+' '+dp[1].toFixed(1)+') rotate('+sa.toFixed(1)+')">'+
+              '<rect x="-6.4" y="-6.4" width="12.8" height="12.8" fill="#0d1117" stroke="#ff7a59" stroke-width="'+(seamHot?2.6:2)+'"/></g>';
+        // seam label: ZERO DAY in the dial's open top, clear of the marker
+        sg += '<text x="205" y="90" font-size="11" font-weight="800" letter-spacing="1.6" fill="#ff9d85" text-anchor="middle">ZERO DAY</text>';
+        sg += '<text x="205" y="103" font-size="7" font-weight="600" letter-spacing="0.5" fill="#e0705c" text-anchor="middle">REFLECTION · REASSESSMENT · REALIGNMENT</text>';
+        sg += '<text x="205" y="115" font-size="7" font-weight="600" letter-spacing="0.9" fill="#c9573f" text-anchor="middle">ZERO.ZERO · APRIL 1 · AT 0.0</text>';
+        seamG.innerHTML = sg;
+      }
+
+      // ---------- Modules table ----------
+      var modBody = document.getElementById("modBody");
+      var tableCycle = null;
+      function renderTable(cyc, curModule){
+        if(tableCycle === cyc.year && renderTable._cur === curModule) return;
+        tableCycle = cyc.year; renderTable._cur = curModule;
+        var maxArc = Math.max.apply(null, cyc.spans.map(function(s){ return s.arc; }));
+        var minArc = Math.min.apply(null, cyc.spans.map(function(s){ return s.arc; }));
+        var html = "";
+        cyc.spans.forEach(function(sp, i){
+          var tag = "";
+          if(Math.abs(sp.arc - maxArc) < 0.001) tag = '<span class="tag">widest</span>';
+          else if(Math.abs(sp.arc - minArc) < 0.001) tag = '<span class="tag">narrowest</span>';
+          html += '<tr'+(i===curModule?' class="cur"':'')+'><td class="num">'+(i+1)+'</td><td>'+sp.name+tag+'</td>'+
+                  '<td>'+fmtDateShort(sp.first)+' – '+fmtDateShort(sp.after)+'</td><td>'+sp.days+'</td><td>'+sp.arc.toFixed(1)+'°</td></tr>';
+        });
+        // seam row
+        html += '<tr><td class="num">0.0</td><td>ZERO.ZERO<span class="tag seamtag">Clean Residual Day</span></td><td>Apr 1</td><td>—</td><td>λ '+(((solarLon(new Date(cyc.year,3,1,12))-cyc.lambda0)%360+360)%360).toFixed(1)+'°</td></tr>';
+        modBody.innerHTML = html;
+      }
+
+      // ---------- State & main loop ----------
+      var viewDate = null; // null = live
+      var el = function(id){ return document.getElementById(id); };
+      var crMod = el("crMod"), crAddr = el("crAddr"), crSub = el("crSub"), crNamed = el("crNamed"),
+          centerBox = el("centerReadout"), civilLine = el("civilLine"),
+          rateLine = el("rateLine"), viewingLine = el("viewingLine"),
+          faceSvg = el("face");
+      var lastSecond = -1, lastAddrKey = "";
+
+      function effectiveNow(){
+        var now = new Date();
+        if(!viewDate) return now;
+        return new Date(viewDate.getFullYear(), viewDate.getMonth(), viewDate.getDate(),
+                        now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+      }
+      function fmtClock(totalSec){
+        totalSec = ((Math.floor(totalSec) % 86400) + 86400) % 86400;
+        var h = Math.floor(totalSec/3600), m = Math.floor(totalSec%3600/60), s = totalSec%60;
+        return pad2(h)+":"+pad2(m)+":"+pad2(s);
+      }
+      function fmtDur(sec){
+        var sign = sec < 0 ? "−" : "+"; sec = Math.abs(Math.round(sec));
+        var h = Math.floor(sec/3600), m = Math.floor(sec%3600/60), s = sec%60;
+        return sign + (h ? h+"h " : "") + m + "m " + pad2(s) + "s";
+      }
+      var DOW = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      var MON = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+      function tick(){
+        var eff = effectiveNow();
+        var th = thetaAt(eff), cyc = th.cycle;
+        var addr = addressFromTheta(th.thetaAddr);
+        var boundary = isBoundaryDay(eff);
+        var lr = lonReading(eff, currentLon);
+        var r = lr.rInst;
+        var lam = solarLon(eff);
+        var lamRel = ((lam - cyc.lambda0) % 360 + 360) % 360;
+
+        // Hands — thermal time of day at the chosen longitude:
+        // solar elapsed there, accumulated at that longitude's own rate.
+        var civilElapsed = eff.getHours()*3600 + eff.getMinutes()*60 + eff.getSeconds() + eff.getMilliseconds()/1000;
+        var thermalElapsed = lr.thermalElapsed;
+        var tSec = thermalElapsed % 60, tMin = (thermalElapsed/60) % 60, tHour = (thermalElapsed/3600) % 12;
+        el("secHand").setAttribute("transform", "rotate("+(tSec*6).toFixed(2)+" 200 200)");
+        el("minHand").setAttribute("transform", "rotate("+(tMin*6).toFixed(2)+" 200 200)");
+        el("hourHand").setAttribute("transform", "rotate("+(tHour*30).toFixed(2)+" 200 200)");
+        el("yearHand").setAttribute("transform", "rotate("+lamRel.toFixed(2)+" 200 200)");
+
+        renderRing(cyc, addr.module, boundary);
+        renderTable(cyc, addr.module);
+
+        var addrKey = cyc.year+"|"+addr.mw+"|"+addr.day+"|"+boundary+"|"+(viewDate?1:0)+"|"+eff.getDate()+"|"+currentLon.toFixed(1);
+        if(addrKey !== lastAddrKey){
+          lastAddrKey = addrKey;
+          if(boundary){
+            centerBox.classList.add("boundary");
+            crMod.textContent = "ZERO DAY";
+            crAddr.textContent = "Clean Residual Day · New Year Day";
+            crNamed.hidden = false;
+          } else {
+            centerBox.classList.remove("boundary");
+            crMod.textContent = addr.name;
+            crAddr.textContent = addr.mw + " · day " + addr.day;
+            crNamed.hidden = true;
+          }
+          rateLine.innerHTML = rateSentence(r);
+          // Details
+          var solarAddr = addr.name + " · " + addr.mw + " · day " + addr.day;
+          el("dAddr").textContent = boundary ? "ZERO DAY — ZERO.ZERO · Clean Residual Day" : solarAddr;
+          el("dAddrSub").textContent = boundary ? ("solar address: " + solarAddr) : (DOW[eff.getDay()] + ", " + fmtDate(eff));
+          el("dRate").textContent = "× " + r.toFixed(4);
+          el("dRateSub").textContent = (r < 1 ? "≈" + Math.abs((r-1)*100).toFixed(1) + "% slow" : r > 1 ? "≈" + ((r-1)*100).toFixed(1) + "% fast" : "at the mean") + " · thermal minute = " + (60/r).toFixed(1) + " civil s · day’s mean rate × " + lr.rMean.toFixed(4);
+          el("dTeq").textContent = lr.tInstC.toFixed(1) + " °C · " + (lr.tInstC + 273.15).toFixed(1) + " K";
+          el("dTeqSub").textContent = "at " + fmtLon(currentLon) + " now · day’s mean " + lr.tMeanC.toFixed(1) + " °C · pinned Schoolcraft table, carried around the planet";
+          el("dLon").textContent = fmtLon(currentLon);
+          var dHome = wrapDeltaLon(currentLon - HOME_LON);
+          el("dLonSub").textContent = Math.abs(dHome) < 0.05
+            ? "home — the pinned track’s own meridian"
+            : "solar time " + fmtLagMins(dHome * 4) + " vs home · a continuous lag field, not a zone";
+          el("lonVal").textContent = fmtLon(currentLon) + (Math.abs(currentLon - HOME_LON) < 0.05 ? " — Schoolcraft, Michigan (home)" : "");
+          el("lonLag").innerHTML = "Solar time at this longitude runs <strong>" + fmtLagMins(currentLon * 4) + " vs Greenwich</strong>" +
+            (Math.abs(dHome) < 0.05 ? " — this is home: the track at its own meridian."
+                                    : ", <strong>" + fmtLagMins(dHome * 4) + " vs home</strong>. The lag moves 4 minutes per degree — no zones, no steps.");
+          el("dTheta").textContent = "Θ " + th.thetaAddr.toFixed(4);
+          el("dThetaSub").textContent = "at midday · module " + (addr.module+1) + " of 13 · " + (addr.moduleFrac*100).toFixed(0) + "% through " + addr.name;
+          el("dLambda").textContent = "λ " + lam.toFixed(1) + "°";
+          var gate = lam < 90 ? "spring quarter" : lam < 180 ? "summer quarter" : lam < 270 ? "autumn quarter" : "winter quarter";
+          el("dLambdaSub").textContent = gate + " · 0° = March equinox";
+          var cd = countDay(eff);
+          el("dCount").textContent = boundary ? "Outside the count" : "Day " + cd + " of the count";
+          var sp = cyc.spans[addr.module];
+          el("dSpan").textContent = fmtDateShort(sp.first) + " – " + fmtDateShort(sp.after);
+          el("dSpanSub").textContent = sp.days + " civil days · " + sp.arc.toFixed(1) + "° of arc for 1/13 of Θ";
+          faceSvg.setAttribute("aria-label", "Thermal time watch — Global Unified Calendar. " + (boundary ? "ZERO DAY — ZERO.ZERO, Clean Residual Day, New Year Day, the day of reflection, reassessment, realignment, also named Thermal Equilibrium Day by declaration. Solar address " + solarAddr + "." : "Address " + solarAddr + ".") + " Read at longitude " + fmtLon(currentLon) + ". Rate factor " + r.toFixed(3) + ".");
+          viewingLine.innerHTML = viewDate
+            ? "Viewing <strong>" + DOW[eff.getDay()] + ", " + fmtDate(eff) + "</strong> — hands run at that day’s rate."
+            : '<span class="live-dot">● LIVE</span> — your local time, on the thermal dial.';
+          el("dateJump").value = keyOf(eff.getFullYear(), eff.getMonth(), eff.getDate());
+        }
+        if(eff.getSeconds() !== lastSecond || viewDate){
+          lastSecond = eff.getSeconds();
+          crSub.textContent = fmtClock(thermalElapsed) + " thermal";
+          var civH = eff.getHours(), civAmpm = civH >= 12 ? "PM" : "AM", civH12 = civH % 12 || 12;
+          civilLine.textContent = DOW[eff.getDay()].slice(0,3) + " " + MON[eff.getMonth()].slice(0,3) + " " + eff.getDate() + ", " + eff.getFullYear() +
+            " · " + civH12 + ":" + pad2(eff.getMinutes()) + ":" + pad2(eff.getSeconds()) + " " + civAmpm + " civil";
+          el("solarLine").textContent = fmtClock(lr.solarElapsed) + " solar at " + fmtLon(currentLon) + " · thermal lag peaks 3h after solar noon";
+          // The instantaneous rate follows the longitude through the day — refresh it per second.
+          rateLine.innerHTML = rateSentence(r);
+          el("dRate").textContent = "× " + r.toFixed(4);
+          el("dRateSub").textContent = (r < 1 ? "≈" + Math.abs((r-1)*100).toFixed(1) + "% slow" : r > 1 ? "≈" + ((r-1)*100).toFixed(1) + "% fast" : "at the mean") + " · thermal minute = " + (60/r).toFixed(1) + " civil s · day’s mean rate × " + lr.rMean.toFixed(4);
+          el("dTeq").textContent = lr.tInstC.toFixed(1) + " °C · " + (lr.tInstC + 273.15).toFixed(1) + " K";
+          el("dDrift").textContent = fmtDur(thermalElapsed - lr.solarElapsed) + (thermalElapsed < lr.solarElapsed ? " (behind)" : thermalElapsed > lr.solarElapsed ? " (ahead)" : "");
+        }
+        requestAnimationFrame(tick);
+      }
+
+      // ---------- Stepper ----------
+      function setView(d){
+        viewDate = d ? new Date(d.getFullYear(), d.getMonth(), d.getDate()) : null;
+        lastAddrKey = ""; // force refresh
+      }
+      el("btnPrev").addEventListener("click", function(){
+        var base = viewDate || new Date();
+        setView(new Date(base.getFullYear(), base.getMonth(), base.getDate() - 1));
+      });
+      el("btnNext").addEventListener("click", function(){
+        var base = viewDate || new Date();
+        setView(new Date(base.getFullYear(), base.getMonth(), base.getDate() + 1));
+      });
+      el("btnToday").addEventListener("click", function(){ setView(null); });
+      el("dateJump").addEventListener("change", function(){
+        if(!this.value) return;
+        var p = this.value.split("-");
+        setView(new Date(+p[0], +p[1] - 1, +p[2]));
+      });
+
+      // ---------- Longitude control ----------
+      var lonRange = el("lonRange");
+      function setLon(lon){
+        currentLon = Math.max(-180, Math.min(180, +lon || 0));
+        if(document.activeElement !== lonRange) lonRange.value = currentLon;
+        lastAddrKey = ""; // force the readouts to re-read this day at the new longitude
+      }
+      lonRange.addEventListener("input", function(){ setLon(parseFloat(this.value)); });
+      el("btnHomeLon").addEventListener("click", function(){ lonRange.value = HOME_LON; setLon(HOME_LON); });
+
+      // ---------- Verification handle (engine check) ----------
+      window.ThermalWatch = {
+        TBAR: TBAR,
+        addressFor: function(dateStr){
+          var p = dateStr.split("-");
+          var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
+          var th = thetaAt(d), a = addressFromTheta(th.theta);
+          return { name:a.name, module:a.module + 1, week:a.week, day:a.day, mw:a.mw,
+                   theta:+th.theta.toFixed(4), boundary:isBoundaryDay(d), countDay:countDay(d),
+                   rate:+rateAt(d).toFixed(4) };
+        },
+        HOME_LON: HOME_LON,
+        getLongitude: function(){ return currentLon; },
+        setLongitude: function(lon){ setLon(lon); return currentLon; },
+        lonReadingFor: function(dateStr, lon){
+          var p = dateStr.split("-");
+          var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
+          var lr2 = lonReading(d, (lon === undefined ? currentLon : lon));
+          return { lon:(lon === undefined ? currentLon : lon), rate:+lr2.rInst.toFixed(4),
+                   meanRate:+lr2.rMean.toFixed(4), tInstC:+lr2.tInstC.toFixed(2),
+                   tMeanC:+lr2.tMeanC.toFixed(2), solarHour:+lr2.solarHour.toFixed(2) };
+        },
+        spansFor: function(cy){
+          return buildCycle(cy).spans.map(function(s, i){
+            return { n:i + 1, name:s.name, from:keyOf(s.first.getFullYear(), s.first.getMonth(), s.first.getDate()),
+                     to:keyOf(s.after.getFullYear(), s.after.getMonth(), s.after.getDate()),
+                     days:s.days, arc:+s.arc.toFixed(1) };
+          });
+        }
+      };
+
+      requestAnimationFrame(tick);
+    })();
+    </script>
+  </body>
+</html>
