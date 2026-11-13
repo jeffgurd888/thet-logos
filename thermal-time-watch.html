@@ -159,6 +159,15 @@
         background:transparent; color:var(--ink);
       }
       .lon-home:active{ transform:translateY(1px); }
+      .gps-actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; align-items:stretch; }
+      .gps-btn-primary{
+        font:inherit; font-size:13.5px; font-weight:800; letter-spacing:.05em; cursor:pointer;
+        padding:8px 14px; border-radius:9px; border:1px solid var(--gold);
+        background:var(--gold); color:#171106;
+      }
+      .gps-btn-primary:active{ transform:translateY(1px); }
+      .gps-actions .lon-home{ margin-top:0; }
+      .gps-privacy{ font-size:12.5px; }
       .solar-line{
         text-align:center; margin:3px auto 0;
         font-size:12.5px; color:var(--gold); font-variant-numeric: tabular-nums; letter-spacing:.04em; font-weight:600;
@@ -215,6 +224,21 @@
         .sky-stage .face-label .l1{ font-size:9px; }
         .sky-stage .face-label .l2{ margin-top:2px; font-size:8px; }
         .sky-stage .face-label .l3{ margin-top:1px; font-size:6.5px; }
+      }
+      table.tongues td.lang{ width:32%; vertical-align:top; }
+      table.tongues td.lang .lang-en{ font-weight:600; }
+      table.tongues td.lang .lang-native{ display:block; margin-top:1px; font-size:12.5px; color:var(--muted); line-height:1.6; }
+      table.tongues td.tongue{
+        vertical-align:top;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans",
+          "Noto Sans Arabic", "Noto Sans Hebrew", "Noto Sans Devanagari",
+          "Noto Sans CJK SC", "Noto Sans CJK JP", "Noto Sans CJK KR", Roboto, Helvetica, Arial, sans-serif;
+      }
+      table.tongues td.tongue .t1{ display:block; font-size:15.5px; font-weight:600; line-height:1.65; }
+      table.tongues td.tongue .t2{ display:block; font-size:13.5px; color:var(--muted); line-height:1.65; }
+      @media (max-width:480px){
+        table.tongues td.tongue .t1{ font-size:14.5px; }
+        table.tongues td.tongue .t2{ font-size:12.5px; }
       }
       .how p{ margin:0 0 9px; font-size:14.5px; color:var(--ink); }
       .how p:last-child{ margin-bottom:0; }
@@ -285,7 +309,7 @@
       <p class="date-line" id="dateLine">—</p>
       <p class="civil-line" id="civilLine">—</p>
       <p class="solar-line" id="solarLine">—</p>
-      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 1–13 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 13, 1–12 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 13.2, while TODAY parks at the seam) · <span class="swatch sw-blue"></span><strong class="lg-blue">Blue LUNAR hand</strong> — the lunar month date, read on the <strong>LUNAR</strong> ring just inside the THERMAL ring (12.368266 lunations per tropical year — twelve full sectors plus a closing partial sector, numbered 1–13 from the same origin; lunation 1 is the lunation already running at the March equinox) · <span class="swatch sw-blue"></span><strong class="lg-blue">Phase ring</strong> — inside the LUNAR ring, one whole lunation drawn as a circle (NEW at the top, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, WAXING from new to full, WANING from full back to new); a small blue moon travels it at the day’s lunar age, dark at new, half-lit at the quarters, fully lit at full.</p>
+      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 1–13 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <strong style="color:#ed2817;">Red gate-seal</strong> — April’s opening, the first counted month · <strong>Zodiac ring</strong> — the thirteen signs are seated centred on the calendar months (Aries over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February, and Ophiuchus ⛎ — the Serpent-Bearer, the missing thirteenth sign — over March, the seam month); the sign boundaries fall mid-month at the bisectors between month centres, and both of Ophiuchus’s boundaries fall inside March · Ophiuchus is seated over March <strong>by declaration</strong> of the calendar’s maker, completing 13 signs for 13 modules; in the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 13, 1–12 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 13.2, while TODAY parks at the seam) · <span class="swatch sw-blue"></span><strong class="lg-blue">Blue LUNAR hand</strong> — the lunar month date, read on the <strong>LUNAR</strong> ring just inside the THERMAL ring (12.368266 lunations per tropical year — twelve full sectors plus a closing partial sector, numbered 1–13 from the same origin; lunation 1 is the lunation already running at the March equinox) · <span class="swatch sw-blue"></span><strong class="lg-blue">Phase ring</strong> — inside the LUNAR ring, one whole lunation drawn as a circle (NEW at the top, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, WAXING from new to full, WANING from full back to new); a small blue moon travels it at the day’s lunar age, dark at new, half-lit at the quarters, fully lit at full.</p>
 
       <p class="equation" id="equationLine"><span class="eq-head">Today’s equation</span>—</p>
 
@@ -323,6 +347,20 @@
         <button type="button" class="lon-home" id="btnHomeLat">Home — Schoolcraft · 42.0° N</button>
       </div>
 
+      <div class="lon-control gps-control" aria-label="Precise location — GPS fix, local to the observer">
+        <div class="lon-head">
+          <label>Precise location — local to the observer</label>
+          <span class="lon-val" id="gpsVal">Home pinned</span>
+        </div>
+        <div class="gps-actions">
+          <button type="button" class="gps-btn-primary" id="btnGps">USE MY PRECISE LOCATION</button>
+          <button type="button" class="lon-home" id="btnRefix">RE-FIX</button>
+          <button type="button" class="lon-home" id="btnGpsHome">HOME</button>
+        </div>
+        <p class="lon-lag" id="gpsStatus" role="status" aria-live="polite">Home — Schoolcraft, Michigan · 42.0000° N, 85.6000° W (pinned location). Tap USE MY PRECISE LOCATION for a GPS fix — the sky, the Moon and tide axis, and the solar-thermal lag all recompute from where you stand.</p>
+        <p class="lon-lag gps-privacy">Your location is read only when you tap, and never leaves this device.</p>
+      </div>
+
       <div class="sky-panel" aria-label="The star chart">
         <div class="sky-title" id="skyTitle">THE SKY OVER SCHOOLCRAFT — STAR CHART</div>
         <p class="sky-live" id="skyLive">—</p>
@@ -331,7 +369,7 @@
         <p><strong>The Earth ring, the Moon, and the tide line.</strong> The blue/green ring around the outside of the dial frames the watch as the Earth. The Moon rides its orbit band at its modelled geocentric ecliptic longitude — advanced from the pinned anchor new moon of Feb 17, 2026 at the sidereal orbital period 27.321661 days, ecliptic latitude taken as 0° at this grade — placed for this observer, its disc shaded by the same phase the dial’s phase ring shows. The fitted blue curve wrapped around the Earth ring is the <strong>equilibrium tide</strong> — “the water surface the Moon’s pull alone would raise, in theory”: radius r(θ) = R·(1 + a·cos 2(θ − θ_axis)), two bulges on the Earth→Moon axis (sublunar and antipodal), minima at ±90° from it. Its amplitude breathes with the Sun’s tide: <strong>a = 0.038·(1 + 0.46·cos 2E)</strong>, E the Moon–Sun elongation — the 0.46 is the Sun’s tide-raising force relative to the Moon’s, so the line swells at new and full moon (springs) and slackens at the quarters (neaps). Drawn <strong>exaggerated, not to scale</strong>: the true equilibrium bulge is ≈ 0.36 m over the whole Earth. The real ocean answers with basin dynamics and a local lag — this model’s lag parameter is <strong>0° (pure theory)</strong>.</p>
         <p><strong>The sun-road and the planets.</strong> The fine gold curve is the ecliptic drawn through the real sky; the Sun rides it at the same λ the dial’s gold hand shows, and below the horizon it waits dimmed at the rim — night does not pretend the Sun is up. Mercury, Venus, Mars, Jupiter and Saturn ride the disc from Keplerian orbital elements (JPL approximate-elements grade): a design-study sky model, positions to a fraction of a degree.</p>
         <p><strong>The quasar frame.</strong> The crosshair markers are the classic fixed frame sources — 3C 273 (the brightest) with 3C 48, 3C 147, 3C 196, 3C 286 and 3C 295 — fixed for all measurable purposes: no proper motion, no parallax; every angle on this chart is ultimately measured against these, the triangulation layer behind the turning sky. Honestly: they are telescope and radio objects, far below naked-eye — frame markers, not visible stars.</p>
-        <p>Precession, shown not hidden: this chart is the <strong>real (sidereal) sky</strong>, standing some <strong>24° drifted</strong> from the dial’s tropical zodiac ring — twenty centuries of the Earth’s slow wobble separate where the signs are reckoned from and where the stars actually stand.</p>
+        <p>Precession, shown not hidden: this chart is the <strong>real (sidereal) sky</strong>, standing some <strong>24° drifted</strong> from the dial’s zodiac ring — twenty centuries of the Earth’s slow wobble separate where the signs are reckoned from and where the stars actually stand.</p>
       </div>
 
       <div class="stepper">
@@ -374,10 +412,11 @@
       </section>
 
       <section aria-label="The western zodiac">
-        <h2>The zodiac — twelve signs of λ</h2>
-        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">The tropical zodiac is the same road cut geometrically: twelve equal 30° sectors of solar longitude, standardized here with Aries ♈ first, opening at the March equinox — the same line where March opens. The gold year hand reads sign and module off the one angle.</p>
+        <h2>The zodiac — thirteen signs, centred on the months</h2>
+        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">The zodiac is seated centred on the calendar months: Aries ♈ over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February and Ophiuchus ⛎ — the Serpent-Bearer — over March, module 13, the seam month. Each sign’s sector is bounded by the bisectors between neighbouring month centres, so the boundaries fall mid-month and sector widths vary slightly with the thermal spans; Ophiuchus’s two boundaries — Pisces/Ophiuchus and Ophiuchus/Aries — both fall inside March. The gold year hand still reads the sun’s true λ off the one angle; the solar terms below remain the λ-true ring.</p>
+        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">Ophiuchus is seated over March <strong>by declaration</strong> of the calendar’s maker, completing 13 signs for 13 modules — design study, NO CLAIM. In the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius.</p>
         <table class="modules">
-          <thead><tr><th>Sign</th><th>λ from</th><th>λ to</th></tr></thead>
+          <thead><tr><th>Sign</th><th>Centred on</th><th>Sector λ from</th><th>Sector λ to</th></tr></thead>
           <tbody id="zodBody"></tbody>
         </table>
       </section>
@@ -400,15 +439,80 @@
         </table>
       </section>
 
+      <section aria-label="Unified translations">
+        <h2>One calendar, every tongue — unified translations</h2>
+        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">The same two face-lines, rendered in the world’s scripts — one text, every tongue. The translations are a design element, for a global feel; no claim is attached to them.</p>
+        <table class="modules tongues">
+          <tbody>
+            <tr>
+              <td class="lang"><span class="lang-en">English</span><span class="lang-native">reference</span></td>
+              <td class="tongue" lang="en"><span class="t1">Global Unified Calendar</span><span class="t2">Zero.zero — April 1</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Arabic</span><span class="lang-native" lang="ar" dir="rtl">العربية</span></td>
+              <td class="tongue" lang="ar" dir="rtl"><span class="t1">التقويم العالمي الموحد</span><span class="t2">Zero.zero — 1 أبريل</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Hebrew</span><span class="lang-native" lang="he" dir="rtl">עברית</span></td>
+              <td class="tongue" lang="he" dir="rtl"><span class="t1">לוח השנה העולמי המאוחד</span><span class="t2">Zero.zero — 1 באפריל</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Greek</span><span class="lang-native" lang="el">Ελληνικά</span></td>
+              <td class="tongue" lang="el"><span class="t1">Παγκόσμιο Ενιαίο Ημερολόγιο</span><span class="t2">Zero.zero — 1 Απριλίου</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Chinese</span><span class="lang-native" lang="zh-Hans">简体中文</span></td>
+              <td class="tongue" lang="zh-Hans"><span class="t1">全球统一历</span><span class="t2">Zero.zero — 4月1日</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Japanese</span><span class="lang-native" lang="ja">日本語</span></td>
+              <td class="tongue" lang="ja"><span class="t1">世界統一カレンダー</span><span class="t2">Zero.zero — 4月1日</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Hindi</span><span class="lang-native" lang="hi">हिन्दी</span></td>
+              <td class="tongue" lang="hi"><span class="t1">वैश्विक एकीकृत कैलेंडर</span><span class="t2">Zero.zero — 1 अप्रैल</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Russian</span><span class="lang-native" lang="ru">Русский</span></td>
+              <td class="tongue" lang="ru"><span class="t1">Глобальный единый календарь</span><span class="t2">Zero.zero — 1 апреля</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Korean</span><span class="lang-native" lang="ko">한국어</span></td>
+              <td class="tongue" lang="ko"><span class="t1">글로벌 통합 달력</span><span class="t2">Zero.zero — 4월 1일</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Spanish</span><span class="lang-native" lang="es">Español</span></td>
+              <td class="tongue" lang="es"><span class="t1">Calendario Unificado Global</span><span class="t2">Zero.zero — 1 de abril</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">French</span><span class="lang-native" lang="fr">Français</span></td>
+              <td class="tongue" lang="fr"><span class="t1">Calendrier unifié mondial</span><span class="t2">Zero.zero — 1er avril</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">German</span><span class="lang-native" lang="de">Deutsch</span></td>
+              <td class="tongue" lang="de"><span class="t1">Globaler Einheitskalender</span><span class="t2">Zero.zero — 1. April</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Portuguese</span><span class="lang-native" lang="pt">Português</span></td>
+              <td class="tongue" lang="pt"><span class="t1">Calendário Unificado Global</span><span class="t2">Zero.zero — 1 de abril</span></td>
+            </tr>
+            <tr>
+              <td class="lang"><span class="lang-en">Swahili</span><span class="lang-native" lang="sw">Kiswahili</span></td>
+              <td class="tongue" lang="sw"><span class="t1">Kalenda ya Umoja wa Dunia</span><span class="t2">Zero.zero — Aprili 1</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
       <section class="how" aria-label="How thermal time works">
         <h2>How this watch keeps time</h2>
         <p>The dial is arc: solar longitude λ runs 0° at the March equinox to 360° around the year. Riding on the arc is the equilibrium track T_eq(λ) — the temperature the Sun’s geometry is asking of Schoolcraft, Michigan. Thermal phase Θ accumulates at a rate proportional to that temperature, dΘ/dt = T_eq / T̄, and the thirteen modules are equal steps of Θ — so winter modules stretch over more days and more arc, and summer modules compress.</p>
         <p>The thin red hand is the thermal seconds hand. It sweeps at today’s rate r = T_eq / T̄: one thermal minute takes 60/r civil seconds. Deep January runs about 5% slow; July runs about 4.7% fast. The gold hand is the year hand — it points at today’s place on the module ring. The white hands read thermal time of day.</p>
         <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: standing outside the 364 counted days at address 0.0 — it is not counted 0. The count states from 0: the counted year opens April 2 as counted 0, and the labels run 0–363, inside March (module 13), the seam span that holds Zero.zero. Counted module 1 spans counted 0–27. The counted ring’s “0.0” engraving at the origin marks Zero.zero the address; counted 0 is the first counted day, April 2 — the two zeros are neighbours, never the same day. Its solar address is March, week 13.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim. It is the great reset day of equilibrium: Auld Lang Syne is sung, the Lord's Prayer is prayed — forgive, and ask forgiveness — and Psalm 51:10 is read, “Create in me a clean heart, O God”: a brand new heart, every year.</p>
         <p><strong>Longitude carries the track around the planet.</strong> Slide the longitude and the same day is re-read from a new arc position: solar time there shifts continuously — four minutes per degree, no zones and no steps. The day’s equilibrium track is the pinned Schoolcraft table carried around unchanged; what longitude changes is where that place sits in its day. Its temperature swing peaks three hours after its solar noon — the surface-inertia lag — so at any one instant, different longitudes carry different instantaneous temperatures, and the thermal hand runs at each longitude’s own rate r. One planet, one track, a continuous lag field.</p>
-        <p><strong>Two more partitions ride the same road.</strong> The outer ring is the tropical zodiac — twelve equal 30° sectors of λ, Aries ♈ standardized first at the equinox. The inner green band is the Chinese calendar’s own partition: the 24 solar terms 节气, fifteen degrees each, anchored at the same equinox — so the solstice instant (λ 90°, the gate of Cancer) falls in June’s last days, and Sol is the high-summer span that opens on the solstice’s far side — the sun’s long reign at the top of the year — and Zero.zero sits some twelve degrees into Aries, inside March. The two boundary sets interleave against the thirteen thermal modules, and the sliding between the geometric partitions and the heat-equal modules is the year’s thermal lag drawn as rings. The animal year rides above them all as a year-count: it turns at Chinese New Year, not at January 1 and not by λ. Zodiac layers: partitions of the sun’s road and the year, shown for correlation — design study, NO CLAIM; no astrological meaning is claimed for them.</p>
+        <p><strong>Two more partitions ride the same road.</strong> The outer ring is the zodiac, seated centred on the calendar months — Aries ♈ over April, then Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February and Ophiuchus ⛎, the Serpent-Bearer, over March — its sectors bounded by the bisectors between neighbouring month centres, so the boundaries fall mid-month, sector widths vary slightly with the thermal spans, and both of Ophiuchus’s boundaries fall inside March, the seam month: Pisces–Ophiuchus on one side, Ophiuchus–Aries on the other. Ophiuchus is seated over March by declaration of the calendar’s maker, completing 13 signs for 13 modules; in the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius. The inner green band is the Chinese calendar’s own partition: the 24 solar terms 节气, fifteen degrees each, anchored at the same equinox and still λ-true — so the solstice instant (λ 90°) falls in June’s last days, and Sol is the high-summer span that opens on the solstice’s far side — the sun’s long reign at the top of the year. The two boundary sets interleave against the thirteen thermal modules, and the sliding between the geometric partitions and the heat-equal modules is the year’s thermal lag drawn as rings. The animal year rides above them all as a year-count: it turns at Chinese New Year, not at January 1 and not by λ. Zodiac layers: partitions of the sun’s road and the year, shown for correlation — design study, NO CLAIM; no astrological meaning is claimed for them.</p>
         <p><strong>The moon keeps two more counts.</strong> The slim blue LUNAR ring just inside the THERMAL ring carries the year’s lunations: 12.368266 per tropical year, drawn as twelve full sectors and a closing partial sector (0.368266 of a sector), numbered 1–13 from the same equinox origin, engraved LUNAR · 12.368. Lunations count from the March equinox — lunation 1 is the lunation already running at the equinox (in 2026 it opened with the new moon of Mar 19) — and the blue LUNAR hand’s angle is the fractional lunations elapsed since the equinox, mapped over the ring’s 12.368266: that is, the days since the equinox plus the age the containing lunation had already reached at the equinox, all divided by the synodic month. Inside the LUNAR ring, the phase ring draws a single lunation as one full circle — NEW at the top on the shared origin line, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, the arc from new through full labelled WAXING and the arc from full back to new labelled WANING — and a small blue moon travels it at the day’s lunar age, its lit part growing through waxing and shrinking through waning. Lunar age is the days since the last new moon, 0 at new moon; the phase words are centred on their stations — New at the new moon, Waxing about the first quarter, Full at the full moon, Waning about the last quarter. New moons here are a design-study model, stated as such: counted from one pinned anchor new moon — Feb 17, 2026, Chinese New Year, the CNY table’s own date — at a pinned synodic month of 29.530589 days.</p>
-        <p><strong>The sky around the watch.</strong> The disc surrounding the dial is a planisphere-style star chart — the first brick of the Archimedes Universal Clock: digital, and local to the observer. The dial sits at its centre as the Earth. The chart projects the sky dome from the zenith (stereographic, so shapes hold their form): the centre is directly overhead, the radius grows as altitude falls, and the outer edge is the horizon, marked N · E · S · W. It carries a naked-eye bright-star set — the brightest stars, with the standard stick figures of the major constellations, each labelled at its figure — computed for the observer's latitude and longitude above, and it turns live at the sidereal rate as local sidereal time advances, so the sky wheels around the pole through the night. Stars below the horizon are not drawn. And the drift is shown, not hidden: the chart is the real, sidereal sky, standing some 24° of precession away from the dial's tropical zodiac ring.</p>
+        <p><strong>The sky around the watch.</strong> The disc surrounding the dial is a planisphere-style star chart — the first brick of the Archimedes Universal Clock: digital, and local to the observer. The dial sits at its centre as the Earth. The chart projects the sky dome from the zenith (stereographic, so shapes hold their form): the centre is directly overhead, the radius grows as altitude falls, and the outer edge is the horizon, marked N · E · S · W. It carries a naked-eye bright-star set — the brightest stars, with the standard stick figures of the major constellations, each labelled at its figure — computed for the observer's latitude and longitude above, and it turns live at the sidereal rate as local sidereal time advances, so the sky wheels around the pole through the night. Stars below the horizon are not drawn. And the drift is shown, not hidden: the chart is the real, sidereal sky, standing some 24° of precession away from the dial's zodiac ring.</p>
         <p><strong>The Earth, the Moon, and the tide — and the rest of the tourbillon.</strong> Brick two frames the dial with a blue/green Earth ring; the Moon rides an orbit band around it at its modelled longitude, and a fitted blue equilibrium-tide curve wraps the ring with its axis locked to the Moon — two bulges on the Earth→Moon line, breathing between springs and neaps by the stated solar factor, exaggerated and labelled as theory, its lag 0°. Brick three completes the surround: the gold ecliptic crosses the chart with the Sun riding it (dimmed at the rim below the horizon), the five naked-eye planets stand at their Keplerian places, and the quasar frame — 3C 273 and its five companions — rides as crosshair markers: the fixed frame every turning angle on the chart is ultimately measured against.</p>
         <p class="pair">Every hand is a relation between a pair: arc ↔ thermal, forcing ↔ lagged response, equilibrium ↔ gradient. A place is not a time zone; it is an arc position plus its own solar thermal lag.</p>
       </section>
@@ -581,17 +685,85 @@
       }
 
       // ---------- Zodiac layers: partitions of λ and of the year (design layer, T5) ----------
-      // Layer 1 — Western zodiac: 12 equal 30° sectors of λ, Aries first at the equinox (Zero's standard, 2026-11-12).
+      // Layer 1 — Western zodiac, REALIGNED (Zero's ruling, 2026-11-13): each sign is
+      // CENTRED over its calendar month — April↔Aries, May↔Taurus, June↔Gemini,
+      // Sol↔Cancer, July↔Leo, August↔Virgo, September↔Libra, October↔Scorpio,
+      // November↔Sagittarius, December↔Capricorn, January↔Aquarius, February↔Pisces.
+      // THE MISSING SIGN (Zero's ruling, 2026-11-13): OPHIUCHUS ⛎, the
+      // Serpent-Bearer — the 13th constellation on the Sun's road — is seated over
+      // MARCH (module 13, the seam month), completing the ring at 13 signs for
+      // 13 modules. Each sign's centre is the exact centre of its month module's
+      // span, taken from the cycle's own span data (the same spans that draw the
+      // module ring). Sector boundaries fall at the angular bisectors between
+      // adjacent month centres, all the way around — including across March,
+      // where the Pisces/Ophiuchus boundary falls at the bisector of February's
+      // and March's centres and the Ophiuchus/Aries boundary at the bisector of
+      // March's and April's centres. The other twelve signs, their centres, and
+      // all other boundaries are unchanged. Boundaries therefore fall mid-month,
+      // and sector widths vary slightly with the thermal spans. The gold hand
+      // and the solar terms stay λ-true; this ring alone is seated on the months.
+      // HONESTY FENCE: Ophiuchus is seated over March BY DECLARATION of the
+      // calendar's maker; in the sky itself the Sun crosses Ophiuchus
+      // Nov 30–Dec 17, between Scorpius and Sagittarius.
       var ZODIAC = [
         { name:"Aries", glyph:"♈" }, { name:"Taurus", glyph:"♉" }, { name:"Gemini", glyph:"♊" },
         { name:"Cancer", glyph:"♋" }, { name:"Leo", glyph:"♌" }, { name:"Virgo", glyph:"♍" },
         { name:"Libra", glyph:"♎" }, { name:"Scorpio", glyph:"♏" }, { name:"Sagittarius", glyph:"♐" },
-        { name:"Capricorn", glyph:"♑" }, { name:"Aquarius", glyph:"♒" }, { name:"Pisces", glyph:"♓" }
+        { name:"Capricorn", glyph:"♑" }, { name:"Aquarius", glyph:"♒" }, { name:"Pisces", glyph:"♓" },
+        { name:"Ophiuchus", glyph:"⛎" }
       ];
-      function zodiacFor(lam){
-        var idx = Math.min(11, Math.floor(((lam % 360) + 360) % 360 / 30));
-        var degIn = ((lam % 360) + 360) % 360 - idx * 30;
-        return { idx:idx, name:ZODIAC[idx].name, glyph:ZODIAC[idx].glyph, start:idx * 30, degIn:degIn };
+      // Zodiac index → NAMES (module span) index: Aries→April(1) … Pisces→February(12), Ophiuchus→March(0).
+      var ZODIAC_MONTH = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0];
+      var _zodPartCache = {};
+      function zodiacPartition(cyc){
+        if(!cyc) cyc = buildCycle(cycleYearOf(new Date()));
+        if(_zodPartCache[cyc.year]) return _zodPartCache[cyc.year];
+        var centres = ZODIAC_MONTH.map(function(mi){
+          var sp = cyc.spans[mi];
+          return (((sp.a0 + sp.a1) / 2) % 360 + 360) % 360;
+        });
+        // Unwrap the centres into one increasing run, April first; Ophiuchus
+        // (March's centre, last in the list) unwraps one turn up, past Pisces.
+        var unw = [], i, v;
+        for(i = 0; i < 13; i++){
+          v = centres[i];
+          if(i > 0){ while(v <= unw[i - 1]) v += 360; }
+          unw.push(v);
+        }
+        // Boundaries: the bisector between each pair of adjacent month centres.
+        // Sign 0 (Aries) opens at the bisector of Ophiuchus's centre (March,
+        // one turn back) and April's centre — inside March; the last sign
+        // (Ophiuchus) opens at the bisector of February's and March's centres.
+        var bounds = [];
+        for(i = 0; i < 13; i++){
+          bounds.push(i === 0 ? (unw[12] - 360 + unw[0]) / 2 : (unw[i - 1] + unw[i]) / 2);
+        }
+        var endLast = (unw[12] + unw[0] + 360) / 2;
+        var part = ZODIAC.map(function(z, i){
+          var start = bounds[i], end = (i < 12) ? bounds[i + 1] : endLast;
+          return { idx:i, name:z.name, glyph:z.glyph, month:NAMES[ZODIAC_MONTH[i]],
+                   centre:unw[i], centreMod:((unw[i] % 360) + 360) % 360,
+                   start:start, end:end,
+                   startMod:((start % 360) + 360) % 360, endMod:((end % 360) + 360) % 360,
+                   width:end - start };
+        });
+        _zodPartCache[cyc.year] = part;
+        return part;
+      }
+      function zodiacFor(lam, cyc){
+        var part = zodiacPartition(cyc);
+        var base = part[0].start;
+        var Lu = ((lam % 360) + 360) % 360;
+        while(Lu < base) Lu += 360;
+        while(Lu >= base + 360) Lu -= 360;
+        var idx = 12, i;
+        for(i = 0; i < 13; i++){
+          if(Lu >= part[i].start && Lu < part[i].end){ idx = i; break; }
+        }
+        var e = part[idx];
+        return { idx:idx, name:e.name, glyph:e.glyph, month:e.month,
+                 start:e.startMod, end:e.endMod, centre:e.centreMod, width:e.width,
+                 degIn:Lu - e.start };
       }
       // Layer 2 — The 24 solar terms: 15° sectors of the same λ, same equinox anchor.
       var TERMS = [
@@ -1078,6 +1250,29 @@
         if(dLst){ dLst.textContent = lstStr; dLstSub.textContent = "the sky turns at the sidereal rate — 360.9856° per day · Polaris alt " + pol.alt.toFixed(1) + "° ≈ latitude"; }
       }
 
+      // ---------- THERMAL ring rotation (Zero's ruling, 2026-11-13) ----------
+      // Rotate ONLY the THERMAL (month) ring — and with it the teal MONTH hand,
+      // which reads on it — so April 1's own graduation lands exactly on the
+      // April 1 seam line. The signed offset
+      // is the seam angle minus the ring's April-1 angle at day-start:
+      //   seam angle = λ at April 1's canonical noon (current cycle) = 11.7755°
+      //   April-1 (March 13.2) day-start angle on the unrotated ring = 11.8681°
+      //   THERMAL_ROT = 11.7755 − 11.8681 = −0.0927°
+      // It is derived from the engine itself, for the cycle in view at load, so
+      // it is exactly seamFor().seamAngle − monthFor(April 1).angleStart.
+      // Readings are untouched: the hand turns with its ring, so every
+      // module.week.day address reads exactly as before (April 1 = March 13.2;
+      // Nov 13 = October 8.3, day 5). No other ring, hand, marker or text
+      // moves.
+      var THERMAL_ROT = (function(){
+        var cyR = cycleYearOf(new Date());
+        var cycR = buildCycle(cyR);
+        var thR = thetaAt(new Date(cyR, 3, 1, 12, 0, 0));
+        var aR = addressFromTheta(thR.thetaAddr);
+        var startR = ((aR.module + ((aR.week - 1) + (aR.day - 1) / 7) / 4) / 13) * 360;
+        return cycR.seamAngle - startR;
+      })();
+
       // ---------- Face rendering ----------
       var SVGNS = "http://www.w3.org/2000/svg";
       var ringG = document.getElementById("ringG");
@@ -1130,7 +1325,7 @@
         // Origin line at λ = 0 — the March equinox line, the one origin every ring
         // shares. Solid pale line, drawn in two runs so it never crosses the ZERO DAY
         // block (r 71–122) and stops clear of the counted ring's 0.0 label (r < 52).
-        // It runs along the Pisces|Aries, February|March and 惊蛰|春分 boundaries and
+        // It runs along the February|March and 惊蛰|春分 boundaries and
         // along the counted ring's zero (counted module 13 closes, then 0.0 — Zero.zero
         // the address — then counted 0 opening counted module 1). The inner run now
         // starts at r 19, just outside the phase ring, with a stub inside it (r 7.5–
@@ -1144,8 +1339,7 @@
         // Seam marker at April 1 — Zero.zero at its true solar position (λ ≈ 12°,
         // inside March), NOT on the origin line. Dashed seam line in segments that
         // gap the label bands (terms hanzi r 122–142, MARCH lettering r 150–162,
-        // zodiac lettering r 176+), and a diamond seated on the module ring's outer
-        // edge (r 168) — clear of the MARCH text path at r 156, so MARCH reads whole.
+        // zodiac lettering r 176+).
         // RENDER COINCIDENCE (Zero's correction, 2026-11-13): the marker is drawn
         // EXACTLY as the gold hand is drawn — its geometry sits on the upward axis
         // inside a rotate(angle 200 200) group, the hand's own transform form — not
@@ -1153,14 +1347,30 @@
         // the gold hand's λ evaluated at April 1's canonical noon (cyc.seamAngle);
         // while April 1 itself is being viewed, tick() re-seats this group at the
         // gold hand's own live angle (lamRel, the identical value), so on Zero Day
-        // the gold hand lies along the seam line and through the diamond, exactly.
+        // the gold hand lies along the seam line, exactly.
         var sa = cyc.seamAngle;
         var hot = seamHot ? ' stroke-width="2.6"' : ' stroke-width="1.6"';
         sg += '<g id="seamMark" transform="rotate('+sa.toFixed(2)+' 200 200)">';
         [[118,126],[146,152],[170,180]].forEach(function(seg){
           sg += '<line x1="200" y1="'+(200-seg[1])+'" x2="200" y2="'+(200-seg[0])+'" stroke="#ff7a59"'+hot+' stroke-dasharray="3 2.4"/>';
         });
-        sg += '<polygon points="200,20.5 204.5,26 200,31.5 195.5,26" fill="#ff7a59" stroke="#0d1117" stroke-width="0.8"/>';
+        sg += '</g>';
+        // Red gate-seal — April's opening (Zero's hand-drawn mark, made permanent):
+        // a small peaked, house-shaped pentagon outline in true red
+        // (#ed2817) with a cross marked inside it, seated exactly on the April
+        // segment's opening divider line at the module ring — the March→April
+        // boundary (spans[1].a0, beside 清明 Qīngmíng at λ 15–30°) — centred at
+        // r 159, the module ring's own band (r 150–174). Drawn in the seam
+        // marker's own form (upward axis inside a rotate(angle 200 200) group)
+        // but as its own group: it does NOT re-seat with the seam marker on
+        // Zero Day, and it touches neither the APRIL label (centred a module
+        // half away) nor the 清明 glyph (on the terms band at r 138).
+        var gateAngle = ((cyc.spans[1].a0 % 360) + 360) % 360;
+        sg += '<g id="aprilGateSeal" transform="rotate('+gateAngle.toFixed(2)+' 200 200)">';
+        sg += '<title>Red gate-seal — April\u2019s opening, the first counted month</title>';
+        sg += '<polygon points="200,32 209,39 209,50 191,50 191,39" fill="#0d1117" fill-opacity="0.88" stroke="#ed2817" stroke-width="1.9" stroke-linejoin="round"/>';
+        sg += '<line x1="200" y1="39.5" x2="200" y2="47" stroke="#ed2817" stroke-width="1.3" stroke-linecap="round"/>';
+        sg += '<line x1="196.6" y1="42.8" x2="203.4" y2="42.8" stroke="#ed2817" stroke-width="1.3" stroke-linecap="round"/>';
         sg += '</g>';
         // seam label: ZERO DAY in the dial's open top, clear of the marker
         sg += '<text x="205" y="84" font-size="11" font-weight="800" letter-spacing="1.6" fill="#ff9d85" text-anchor="middle">ZERO DAY</text>';
@@ -1180,17 +1390,23 @@
         if(key === renderedZodiacKey) return;
         renderedZodiacKey = key;
         var s = "", d = "", i, a0, a1;
-        // Western zodiac: outer ring, r 170–192, glyph + name along the arc
-        for(i=0;i<12;i++){
-          a0 = relA(cyc, i*30); a1 = a0 + 30;
+        // Western zodiac: outer ring, r 176–196 — REALIGNED (Zero's ruling,
+        // 2026-11-13): sectors bounded by the bisectors between adjacent month
+        // centres, and each sign's glyph + name centred at its month module's
+        // own span centre, so sign and month labels are concentric on the dial.
+        // Ophiuchus ⛎ is centred over March: the Pisces/Ophiuchus and
+        // Ophiuchus/Aries boundaries fall inside March, on either side of it.
+        var part = zodiacPartition(cyc);
+        for(i=0;i<13;i++){
+          a0 = part[i].start; a1 = part[i].end;
           var zfill = (i % 2 ? "#1c2431" : "#232d3f");
           s += '<path d="'+sectorPath(a0+0.3, a1-0.3, 176, 196)+'" fill="'+zfill+'" stroke="#39445a" stroke-width="0.8"/>';
-          d += '<path id="zarc'+i+'" d="'+arcPath(a0+1.2, a1-1.2, 186)+'" fill="none" stroke="none"/>';
+          var halfW = Math.min(15, part[i].width/2 - 1.5);
+          d += '<path id="zarc'+i+'" d="'+arcPath(part[i].centre-halfW, part[i].centre+halfW, 186)+'" fill="none" stroke="none"/>';
           var b1 = pt(200,200,174,a0), b2 = pt(200,200,176,a0);
           s += '<line x1="'+b1[0].toFixed(1)+'" y1="'+b1[1].toFixed(1)+'" x2="'+b2[0].toFixed(1)+'" y2="'+b2[1].toFixed(1)+'" stroke="#4a566b" stroke-width="1.2"/>';
         }
-        for(i=0;i<12;i++){
-          a0 = relA(cyc, i*30);
+        for(i=0;i<13;i++){
           s += '<text font-size="10.5" font-weight="600" letter-spacing="0.6" fill="#d5dde8">'+
                '<textPath href="#zarc'+i+'" startOffset="50%" text-anchor="middle">'+ZODIAC[i].glyph+" "+ZODIAC[i].name.toUpperCase()+'</textPath></text>';
         }
@@ -1215,12 +1431,14 @@
       var termBody = document.getElementById("termBody");
       var animalBody = document.getElementById("animalBody");
       var zodTableKey = "", termTableKey = "", animalTableKey = "";
-      function renderZodiacTables(curSign, curTerm, animal){
-        if(zodTableKey !== String(curSign)){
-          zodTableKey = String(curSign);
+      function renderZodiacTables(curSign, curTerm, animal, cyc){
+        var zodKey = String(curSign) + "|" + (cyc ? cyc.year : "");
+        if(zodTableKey !== zodKey){
+          zodTableKey = zodKey;
+          var part = zodiacPartition(cyc);
           var zh = "";
-          ZODIAC.forEach(function(z, i){
-            zh += '<tr'+(i===curSign?' class="cur"':'')+'><td>'+z.glyph+" "+z.name+'</td><td>'+(i*30)+'°</td><td>'+(((i+1)*30)%360)+'°</td></tr>';
+          part.forEach(function(e, i){
+            zh += '<tr'+(i===curSign?' class="cur"':'')+'><td>'+e.glyph+" "+e.name+'</td><td>'+e.month+'</td><td>'+e.startMod.toFixed(1)+'°</td><td>'+e.endMod.toFixed(1)+'°</td></tr>';
           });
           zodBody.innerHTML = zh;
         }
@@ -1303,7 +1521,9 @@
 
       // ---------- Thermal ring: the thermal month date's own scale (13 equal modules × 4 weeks) ----------
       // Slim ring just inside the COUNTED ring, on the same angular origin as every
-      // other ring: 0° at the March equinox line (λ = 0), increasing clockwise.
+      // other ring: 0° at the March equinox line (λ = 0), increasing clockwise —
+      // then turned as one piece by THERMAL_ROT (−0.0927°, see its derivation
+      // above) so April 1's graduation registers exactly on the seam line.
       // Unlike the irregular Θ spans of the outer module ring, these 13 modules are
       // EQUAL — each is exactly 1/13 of the Θ year (4 weeks × 7 days) — so this ring
       // reads the module.week.day address directly: solar-order module index m sits
@@ -1311,7 +1531,11 @@
       // March = 13 (opening at the origin), then April = 1 … February = 12.
       var thermalG = document.getElementById("thermalG");
       function renderThermalRing(){
-        var s = "", i, k, a0, a1, mid, p, wa, t1, t2;
+        // The ring's sectors, week ticks and numerals — the ring itself — turn
+        // by THERMAL_ROT (see above) so April 1's graduation sits exactly on
+        // the seam line; the THERMAL engraving below is a label in the open
+        // annulus, not part of the ring, and does not turn.
+        var s = '<g transform="rotate('+THERMAL_ROT.toFixed(4)+' 200 200)">', i, k, a0, a1, mid, p, wa, t1, t2;
         for(i=0;i<13;i++){
           a0 = i * 360/13; a1 = a0 + 360/13;
           s += '<path d="'+sectorPath(a0+0.4, a1-0.4, 37, 54)+'" fill="'+(i % 2 ? "#12282b" : "#183438")+'" stroke="#2f6a66" stroke-width="0.7"/>';
@@ -1330,6 +1554,7 @@
           p = pt(200,200,45.5,mid);
           s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="9" font-weight="700" fill="#d9f6f0" text-anchor="middle" dominant-baseline="central">'+moduleNumber(i)+'</text>';
         }
+        s += '</g>';
         // The THERMAL engraving moves to the open annulus below the COUNTED ring
         // (y 276): its old seat inside the THERMAL ring is now the LUNAR ring.
         s += '<text x="200" y="305" font-size="7.5" font-weight="700" letter-spacing="1.1" fill="#6fc7bb" text-anchor="middle">THERMAL · 13 × 4 WEEKS</text>';
@@ -1442,7 +1667,7 @@
         var r = lr.rInst;
         var lam = solarLon(eff);
         var lamRel = lam; // gold hand angle = live λ from the shared origin (the equinox line)
-        var zod = zodiacFor(lam);
+        var zod = zodiacFor(lam, cyc);
         var term = termFor(lam);
         var animal = animalFor(eff);
         var lun = lunarFor(eff);
@@ -1470,7 +1695,10 @@
         // day. It does NOT park on April 1: April 1's address is March 13.2, so the
         // hand points inside March on the THERMAL ring while TODAY parks at 0.
         var monthFrac = ((addr.week - 1) + (addr.day - 1 + th.frac) / 7) / 4;
-        var monthAngle = ((addr.module + monthFrac) / 13) * 360;
+        // The hand turns WITH its ring by THERMAL_ROT, so it still reads the
+        // same module.week.day on the rotated THERMAL ring — and at April 1
+        // day-start it lies exactly on the seam line, on its own graduation.
+        var monthAngle = ((addr.module + monthFrac) / 13) * 360 + THERMAL_ROT;
         el("monthHand").setAttribute("transform", "rotate("+monthAngle.toFixed(2)+" 200 200)");
         // Blue LUNAR hand — the lunar month date on the LUNAR ring, from the same
         // origin: fractional lunations elapsed since the March equinox (see
@@ -1494,11 +1722,11 @@
         renderRing(cyc, addr.module, boundary);
         renderTable(cyc, addr.module);
         renderZodiacRings(cyc, zod.idx, term.idx);
-        renderZodiacTables(zod.idx, term.idx, animal);
+        renderZodiacTables(zod.idx, term.idx, animal, cyc);
         // Seam coincidence: while April 1 itself is in view, the seam marker takes
         // the gold hand's own live angle — lamRel, the identical value in the
         // identical rotate() form — so the rendered gold hand lies exactly along
-        // the dashed seam line and through the diamond. On all other days the
+        // the dashed seam line. On all other days the
         // marker stands at April 1's canonical noon λ (renderRing's seat).
         if(boundary){
           var seamMarkEl = document.getElementById("seamMark");
@@ -1540,7 +1768,7 @@
           el("dSpanSub").textContent = sp.days + " civil days · " + sp.arc.toFixed(1) + "° of arc for 1/13 of Θ";
           // Zodiac layers
           el("dZodiac").textContent = zod.name + " " + zod.glyph;
-          el("dZodiacSub").textContent = "λ " + lam.toFixed(1) + "° · " + zod.degIn.toFixed(1) + "° into " + zod.name + " · sector " + zod.start + "°–" + ((zod.start + 30) % 360) + "° · Aries ♈ at the equinox";
+          el("dZodiacSub").textContent = "λ " + lam.toFixed(1) + "° · " + zod.degIn.toFixed(1) + "° into " + zod.name + " · sector " + zod.start.toFixed(1) + "°–" + zod.end.toFixed(1) + "° · " + zod.name + " centred on " + zod.month;
           el("dTerm").textContent = term.hanzi + " " + term.pinyin;
           el("dTermSub").textContent = term.en + " · term begins at λ " + term.start + "° · " + term.degIn.toFixed(1) + "° into the term";
           el("dAnimal").textContent = animal.label + " " + animal.hanzi;
@@ -1621,6 +1849,71 @@
       el("btnHomeLat").addEventListener("click", function(){ latRange.value = HOME_LAT; setLat(HOME_LAT); });
       setLat(HOME_LAT);
 
+      // ---------- Precise location: the Archimedes axiom made real ----------
+      // The observer's own position, read ONLY when the user taps — no
+      // watchPosition, no background tracking, and the fix never leaves the
+      // device (it is applied to currentLat / currentLon in this page only).
+      // A successful fix goes through applyPreciseLocation — the one code path
+      // that sets the watch's location from a position — so the star chart's
+      // sky, the Moon and tide axis, the solar-thermal lag field and every
+      // location readout recompute from the fix on the next tick. A denied or
+      // unavailable fix is stated plainly and the previous location is kept;
+      // no position is ever faked. The hand-set sliders above stay untouched
+      // as the fallback, and HOME returns to the pinned Schoolcraft location.
+      var gpsFix = null; // { lat, lon, accuracy } of the last applied fix, or null
+      var gpsStatusEl = el("gpsStatus"), gpsValEl = el("gpsVal");
+      function fmtLat4(lat){ return Math.abs(lat).toFixed(4) + "° " + (lat < 0 ? "S" : "N"); }
+      function fmtLon4(lon){ return Math.abs(lon).toFixed(4) + "° " + (lon < 0 ? "W" : "E"); }
+      function fmtFixCoords(lat, lon){ return fmtLat4(lat) + ", " + fmtLon4(lon); }
+      function applyPreciseLocation(lat, lon, accuracy){
+        lat = +lat; lon = +lon;
+        if(!isFinite(lat) || !isFinite(lon)) return null;
+        setLat(lat);
+        setLon(lon);
+        var acc = (accuracy === undefined || accuracy === null || !isFinite(+accuracy)) ? null : Math.max(0, +accuracy);
+        gpsFix = { lat: currentLat, lon: currentLon, accuracy: acc };
+        if(gpsValEl) gpsValEl.textContent = "GPS fix" + (acc !== null ? " · ±" + Math.round(acc) + " m" : "");
+        if(gpsStatusEl) gpsStatusEl.textContent = "GPS fix: " + fmtFixCoords(currentLat, currentLon) +
+          (acc !== null ? " · ±" + Math.round(acc) + " m" : "") +
+          " — the sky, the Moon and tide axis, and the solar-thermal lag are now drawn for this place.";
+        lastSkyKey = ""; lastAddrKey = ""; // force every location-driven layer to recompute
+        return { lat: currentLat, lon: currentLon, accuracy: acc };
+      }
+      function gpsFail(message){
+        if(gpsValEl) gpsValEl.textContent = gpsFix ? "GPS fix" + (gpsFix.accuracy !== null ? " · ±" + Math.round(gpsFix.accuracy) + " m" : "") : "Home pinned";
+        if(gpsStatusEl) gpsStatusEl.textContent = message + " Keeping previous location: " + fmtFixCoords(currentLat, currentLon) + ".";
+      }
+      function requestPreciseLocation(){
+        if(!("geolocation" in navigator) || !navigator.geolocation){
+          gpsFail("Location unavailable — this device or browser offers no geolocation.");
+          return;
+        }
+        if(gpsStatusEl) gpsStatusEl.textContent = "Requesting a precise location fix…";
+        try {
+          navigator.geolocation.getCurrentPosition(function(pos){
+            applyPreciseLocation(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
+          }, function(err){
+            if(err && err.code === 1) gpsFail("Location denied — permission was refused, so no fix was taken.");
+            else if(err && err.code === 3) gpsFail("No fix available — the location request timed out.");
+            else gpsFail("No fix available — the device could not determine a position.");
+          }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+        } catch(e) {
+          gpsFail("Location unavailable — the location request could not start.");
+        }
+      }
+      function goHomePrecise(){
+        gpsFix = null;
+        latRange.value = HOME_LAT; lonRange.value = HOME_LON;
+        setLat(HOME_LAT); setLon(HOME_LON);
+        if(gpsValEl) gpsValEl.textContent = "Home pinned";
+        if(gpsStatusEl) gpsStatusEl.textContent = "Home — Schoolcraft, Michigan · " + fmtFixCoords(HOME_LAT, HOME_LON) + " (pinned location).";
+        lastSkyKey = ""; lastAddrKey = "";
+        return { lat: currentLat, lon: currentLon };
+      }
+      el("btnGps").addEventListener("click", requestPreciseLocation);
+      el("btnRefix").addEventListener("click", requestPreciseLocation);
+      el("btnGpsHome").addEventListener("click", goHomePrecise);
+
       // ---------- Verification handle (engine check) ----------
       window.ThermalWatch = {
         TBAR: TBAR,
@@ -1649,7 +1942,7 @@
           var p = dateStr.split("-");
           var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
           var thM = thetaAt(d), aM = addressFromTheta(thM.thetaAddr);
-          var angM = function(f){ return ((aM.module + ((aM.week - 1) + (aM.day - 1 + f) / 7) / 4) / 13) * 360; };
+          var angM = function(f){ return ((aM.module + ((aM.week - 1) + (aM.day - 1 + f) / 7) / 4) / 13) * 360 + THERMAL_ROT; };
           var cdM = countDay(d), bM = isBoundaryDay(d);
           var todayAng = function(f){ return (bM || cdM === null) ? 0 : ((cdM + f) / 364) * 360; };
           var lamM = solarLon(d);
@@ -1681,10 +1974,27 @@
           return { seamAngle:+cycS.seamAngle.toFixed(2), goldAngle:+solarLon(d).toFixed(2),
                    boundary:bS, markerAngle:+(bS ? solarLon(d) : cycS.seamAngle).toFixed(2) };
         },
+        thermalRotation: function(){ return +THERMAL_ROT.toFixed(4); },
+        gateSealFor: function(){
+          var cycG = buildCycle(cycleYearOf(new Date()));
+          var aG = ((cycG.spans[1].a0 % 360) + 360) % 360;
+          return { angle:+aG.toFixed(2), opens:cycG.spans[1].name, from:keyOf(cycG.spans[1].first.getFullYear(), cycG.spans[1].first.getMonth(), cycG.spans[1].first.getDate()), radius:159 };
+        },
         HOME_LON: HOME_LON,
         HOME_LAT: HOME_LAT,
         getLatitude: function(){ return currentLat; },
         setLatitude: function(lat){ setLat(lat); return currentLat; },
+        // Precise location: applyPreciseLocation is the SAME code path the
+        // USE MY PRECISE LOCATION / RE-FIX buttons use for a real GPS fix —
+        // a supplied test position (e.g. London) applied here drives the sky,
+        // Moon/tide axis, lag field and readouts exactly as a fix does.
+        applyPreciseLocation: function(lat, lon, accuracy){ return applyPreciseLocation(lat, lon, accuracy); },
+        applyGpsFix: function(lat, lon, accuracy){ return applyPreciseLocation(lat, lon, accuracy); },
+        applyTestLocation: function(lat, lon, accuracy){ return applyPreciseLocation(lat, lon, accuracy); },
+        requestPreciseLocation: function(){ requestPreciseLocation(); },
+        getPreciseFix: function(){ return gpsFix ? { lat: gpsFix.lat, lon: gpsFix.lon, accuracy: gpsFix.accuracy } : null; },
+        getLocation: function(){ return { lat: currentLat, lon: currentLon }; },
+        goHome: function(){ return goHomePrecise(); },
         skyStarFor: function(name, dateStr){
           var st = STAR_BY_NAME[name];
           if(!st) return null;
@@ -1718,13 +2028,23 @@
         zodiacFor: function(dateStr){
           var p = dateStr.split("-");
           var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
-          var lam2 = solarLon(d), z = zodiacFor(lam2), t = termFor(lam2), a = animalFor(d);
+          var lam2 = solarLon(d), cyc2 = buildCycle(cycleYearOf(d)), z = zodiacFor(lam2, cyc2), t = termFor(lam2), a = animalFor(d);
           var th2 = thetaAt(d), ad2 = addressFromTheta(th2.thetaAddr);
           return { gregorian: fmtDate(d), lambda:+lam2.toFixed(1),
                    module: ad2.name, mw: ad2.mw, day: ad2.day, countDay: countDay(d), boundary: isBoundaryDay(d),
                    sign: z.name, glyph: z.glyph, degInSign:+z.degIn.toFixed(1),
+                   signStart:+z.start.toFixed(2), signEnd:+z.end.toFixed(2),
+                   signCentre:+z.centre.toFixed(2), signMonth: z.month, signWidth:+z.width.toFixed(2),
                    termHanzi: t.hanzi, termPinyin: t.pinyin, termEn: t.en, termStart: t.start,
                    animalYear: a.label, animalHanzi: a.hanzi, animalSince: a.since };
+        },
+        zodiacSectors: function(cy){
+          var cyc3 = buildCycle(cy || cycleYearOf(new Date()));
+          return zodiacPartition(cyc3).map(function(e){
+            return { sign:e.name, glyph:e.glyph, month:e.month,
+                     centre:+e.centreMod.toFixed(2), start:+e.startMod.toFixed(2),
+                     end:+e.endMod.toFixed(2), width:+e.width.toFixed(2) };
+          });
         },
         moonOrbitFor: function(dateStr){
           var parts = String(dateStr).split("T");
