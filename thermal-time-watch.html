@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
-    <title>Thermal Time Watch — Global Unified Calendar</title>
+    <title>Thermal Time Space Watch — Global Unified Calendar</title>
     <style>
       button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.75rem; }
       * { box-sizing: border-box; }
@@ -232,7 +232,7 @@
       <div class="sky-stage">
         <svg id="skySvg" viewBox="0 0 800 800" role="img" aria-label="Star chart — the sky over the observer, with the watch dial at its centre as the Earth"></svg>
       <div class="face-wrap">
-        <svg id="face" viewBox="0 0 400 400" role="img" aria-label="Thermal time watch face — Global Unified Calendar">
+        <svg id="face" viewBox="0 0 400 400" role="img" aria-label="Thermal Time Space Watch face — Global Unified Calendar">
           <defs id="faceDefs"></defs>
           <circle cx="200" cy="200" r="199" fill="#05070a"/>
           <circle cx="200" cy="200" r="196" fill="#0d1117"/>
@@ -1555,7 +1555,7 @@
             greg + " = " + thermalPart + " · <strong>" + zod.name + " " + zod.glyph + "</strong> (λ " + lam.toFixed(1) + "°) · " +
             "<strong>" + term.hanzi + " " + term.pinyin + "</strong> (" + term.en + ") · <strong>" + animal.label + " " + animal.hanzi + "</strong>" +
             " · <strong><span style='color:#4da3ff'>Lunation " + lun.number + " · lunar day " + lun.ageDays.toFixed(1) + " · " + lun.phase + "</span></strong>";
-          faceSvg.setAttribute("aria-label", "Thermal time watch — Global Unified Calendar. " + (boundary ? "ZERO DAY — ZERO.ZERO, Clean Residual Day, New Year Day, the day of reflection, reassessment, realignment, also named Thermal Equilibrium Day by declaration. Solar address " + solarAddr + "." : "Address " + solarAddr + ".") + " Read at longitude " + fmtLon(currentLon) + ". Rate factor " + r.toFixed(3) + ".");
+          faceSvg.setAttribute("aria-label", "Thermal Time Space Watch — Global Unified Calendar. " + (boundary ? "ZERO DAY — ZERO.ZERO, Clean Residual Day, New Year Day, the day of reflection, reassessment, realignment, also named Thermal Equilibrium Day by declaration. Solar address " + solarAddr + "." : "Address " + solarAddr + ".") + " Read at longitude " + fmtLon(currentLon) + ". Rate factor " + r.toFixed(3) + ".");
           viewingLine.innerHTML = viewDate
             ? "Viewing <strong>" + DOW[eff.getDay()] + ", " + fmtDate(eff) + "</strong> — hands run at that day’s rate."
             : '<span class="live-dot">● LIVE</span> — your local time, on the thermal dial.';
