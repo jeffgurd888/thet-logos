@@ -271,7 +271,7 @@
         <h2>How this watch keeps time</h2>
         <p>The dial is arc: solar longitude λ runs 0° at the March equinox to 360° around the year. Riding on the arc is the equilibrium track T_eq(λ) — the temperature the Sun’s geometry is asking of Schoolcraft, Michigan. Thermal phase Θ accumulates at a rate proportional to that temperature, dΘ/dt = T_eq / T̄, and the thirteen modules are equal steps of Θ — so winter modules stretch over more days and more arc, and summer modules compress.</p>
         <p>The thin red hand is the thermal seconds hand. It sweeps at today’s rate r = T_eq / T̄: one thermal minute takes 60/r civil seconds. Deep January runs about 5% slow; July runs about 4.7% fast. The gold hand is the year hand — it points at today’s place on the module ring. The white hands read thermal time of day.</p>
-        <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: the origin of the count, standing outside the 364 counted days. The counted year opens April 2. Its solar address is unchanged — March, week 1.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim.</p>
+        <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: the origin of the count, standing outside the 364 counted days. The counted year opens April 2, inside Sol (module 13), the seam span that holds Zero.zero. Its solar address is Sol, week 13.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim.</p>
         <p><strong>Longitude carries the track around the planet.</strong> Slide the longitude and the same day is re-read from a new arc position: solar time there shifts continuously — four minutes per degree, no zones and no steps. The day’s equilibrium track is the pinned Schoolcraft table carried around unchanged; what longitude changes is where that place sits in its day. Its temperature swing peaks three hours after its solar noon — the surface-inertia lag — so at any one instant, different longitudes carry different instantaneous temperatures, and the thermal hand runs at each longitude’s own rate r. One planet, one track, a continuous lag field.</p>
         <p class="pair">Every hand is a relation between a pair: arc ↔ thermal, forcing ↔ lagged response, equilibrium ↔ gradient. A place is not a time zone; it is an arc position plus its own solar thermal lag.</p>
       </section>
@@ -291,7 +291,10 @@
       var MC = [-5.7,-4.3,1.1,7.8,13.9,19.2,21.4,20.3,16.1,9.7,3.1,-2.8];
       var TK = MC.map(function(c){ return c + 273.15; });
       var TBAR = TK.reduce(function(a,b){ return a+b; }, 0) / 12; // ≈ 281.47 K
-      var NAMES = ["March","April","May","June","Sol","July","August","September","October","November","December","January","February"];
+      var NAMES = ["Sol","April","May","June","Puff","July","August","September","October","November","December","January","February"];
+      // Display numbers (Zero's ruling 2026-11-12): seam span Sol = 13, then April = 1 … February = 12.
+      // Array order stays solar order from the equinox (index 0 = seam span).
+      function moduleNumber(idx){ return idx === 0 ? 13 : idx; }
       var DAYMS = 86400000;
 
       function pad2(n){ return (n<10?"0":"")+n; }
@@ -378,7 +381,7 @@
         var rec = cyc.byKey[keyOf(date.getFullYear(), date.getMonth(), date.getDate())];
         var frac = (date.getHours()*3600 + date.getMinutes()*60 + date.getSeconds() + date.getMilliseconds()/1000) / 86400;
         // thetaAddr: Θ at the date's midday — the address is a property of the civil date, read at its
-        // canonical midday instant, so it is stable all day (2026-11-12 → October 9.3 day 4 at any hour).
+        // canonical midday instant, so it is stable all day (2026-11-12 → October 8.3 day 4 at any hour).
         return { theta:(rec.cumBefore + rec.tk * frac) / cyc.total, thetaAddr:(rec.cumBefore + rec.tk * 0.5) / cyc.total, cycle:cyc, rec:rec, frac:frac };
       }
       function addressFromTheta(theta){
@@ -387,7 +390,7 @@
         var p = pos - m;
         var td = Math.min(27, Math.floor(p * 28)); // 28 thermal days per module: 4 weeks × 7
         return { module:m, name:NAMES[m], week:Math.floor(td/7)+1, day:(td % 7)+1,
-                 mw:(m+1)+"."+(Math.floor(td/7)+1), theta:theta, moduleFrac:p };
+                 mw:moduleNumber(m)+"."+(Math.floor(td/7)+1), theta:theta, moduleFrac:p };
       }
       function isBoundaryDay(date){ return date.getMonth()===3 && date.getDate()===1; }
       // Day number in the count (April 2 = day 1; April 1 returns null — outside the count).
@@ -529,7 +532,7 @@
           var tag = "";
           if(Math.abs(sp.arc - maxArc) < 0.001) tag = '<span class="tag">widest</span>';
           else if(Math.abs(sp.arc - minArc) < 0.001) tag = '<span class="tag">narrowest</span>';
-          html += '<tr'+(i===curModule?' class="cur"':'')+'><td class="num">'+(i+1)+'</td><td>'+sp.name+tag+'</td>'+
+          html += '<tr'+(i===curModule?' class="cur"':'')+'><td class="num">'+moduleNumber(i)+'</td><td>'+sp.name+tag+'</td>'+
                   '<td>'+fmtDateShort(sp.first)+' – '+fmtDateShort(sp.after)+'</td><td>'+sp.days+'</td><td>'+sp.arc.toFixed(1)+'°</td></tr>';
         });
         // seam row
@@ -621,7 +624,7 @@
             (Math.abs(dHome) < 0.05 ? " — this is home: the track at its own meridian."
                                     : ", <strong>" + fmtLagMins(dHome * 4) + " vs home</strong>. The lag moves 4 minutes per degree — no zones, no steps.");
           el("dTheta").textContent = "Θ " + th.thetaAddr.toFixed(4);
-          el("dThetaSub").textContent = "at midday · module " + (addr.module+1) + " of 13 · " + (addr.moduleFrac*100).toFixed(0) + "% through " + addr.name;
+          el("dThetaSub").textContent = "at midday · module " + moduleNumber(addr.module) + " of 13 · " + (addr.moduleFrac*100).toFixed(0) + "% through " + addr.name;
           el("dLambda").textContent = "λ " + lam.toFixed(1) + "°";
           var gate = lam < 90 ? "spring quarter" : lam < 180 ? "summer quarter" : lam < 270 ? "autumn quarter" : "winter quarter";
           el("dLambdaSub").textContent = gate + " · 0° = March equinox";
@@ -690,7 +693,7 @@
           var p = dateStr.split("-");
           var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
           var th = thetaAt(d), a = addressFromTheta(th.theta);
-          return { name:a.name, module:a.module + 1, week:a.week, day:a.day, mw:a.mw,
+          return { name:a.name, module:moduleNumber(a.module), week:a.week, day:a.day, mw:a.mw,
                    theta:+th.theta.toFixed(4), boundary:isBoundaryDay(d), countDay:countDay(d),
                    rate:+rateAt(d).toFixed(4) };
         },
@@ -707,7 +710,7 @@
         },
         spansFor: function(cy){
           return buildCycle(cy).spans.map(function(s, i){
-            return { n:i + 1, name:s.name, from:keyOf(s.first.getFullYear(), s.first.getMonth(), s.first.getDate()),
+            return { n:moduleNumber(i), name:s.name, from:keyOf(s.first.getFullYear(), s.first.getMonth(), s.first.getDate()),
                      to:keyOf(s.after.getFullYear(), s.after.getMonth(), s.after.getDate()),
                      days:s.days, arc:+s.arc.toFixed(1) };
           });
