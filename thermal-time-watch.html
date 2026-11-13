@@ -26,7 +26,7 @@
       }
       main{ max-width:600px; margin:0 auto; padding:20px 16px 40px; }
       .face-wrap{
-        position:relative; width:min(92vw, 452px); margin:6px auto 64px; aspect-ratio:1/1;
+        position:relative; width:min(94vw, 512px); margin:6px auto 64px; aspect-ratio:1/1;
       }
       .face-wrap svg{ display:block; width:100%; height:100%; }
       .face-label{
@@ -205,10 +205,10 @@
       <div class="face-wrap">
         <svg id="face" viewBox="0 0 400 400" role="img" aria-label="Thermal time watch face — Global Unified Calendar">
           <defs id="faceDefs"></defs>
-          <circle cx="200" cy="200" r="197" fill="#05070a"/>
-          <circle cx="200" cy="200" r="193" fill="#0d1117"/>
-          <circle cx="200" cy="200" r="120" fill="#11161f"/>
-          <circle cx="200" cy="200" r="120" fill="none" stroke="#2a3242" stroke-width="1"/>
+          <circle cx="200" cy="200" r="199" fill="#05070a"/>
+          <circle cx="200" cy="200" r="196" fill="#0d1117"/>
+          <circle cx="200" cy="200" r="126" fill="#11161f"/>
+          <circle cx="200" cy="200" r="126" fill="none" stroke="#2a3242" stroke-width="1"/>
           <g id="zodiacG"></g>
           <g id="ringG"></g>
           <g id="termsG"></g>
@@ -219,28 +219,28 @@
           <g id="seamG"></g>
           <g id="handsG">
             <g id="yearHand">
-              <line x1="200" y1="218" x2="200" y2="22" stroke="#d9a441" stroke-width="3.5" stroke-linecap="round"/>
-              <path d="M200 9 L193 29 L207 29 Z" fill="#d9a441"/>
+              <line x1="200" y1="220" x2="200" y2="18" stroke="#d9a441" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M200 7 L193 24 L207 24 Z" fill="#d9a441"/>
             </g>
             <g id="todayHand">
-              <line x1="200" y1="212" x2="200" y2="149" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-              <path d="M200 135 L195 149 L205 149 Z" fill="#ffffff" stroke="#0d1117" stroke-width="0.8"/>
+              <line x1="200" y1="212" x2="200" y2="130" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+              <path d="M200 114 L194.5 130 L205.5 130 Z" fill="#ffffff" stroke="#0d1117" stroke-width="0.8"/>
               <circle cx="200" cy="213" r="3.2" fill="none" stroke="#ffffff" stroke-width="2"/>
             </g>
             <g id="monthHand">
-              <line x1="200" y1="210" x2="200" y2="166" stroke="#16e0c8" stroke-width="3" stroke-linecap="round"/>
-              <path d="M200 154 L195.5 166 L204.5 166 Z" fill="#16e0c8" stroke="#0d1117" stroke-width="0.8"/>
+              <line x1="200" y1="210" x2="200" y2="156" stroke="#16e0c8" stroke-width="3" stroke-linecap="round"/>
+              <path d="M200 143 L194.5 156 L205.5 156 Z" fill="#16e0c8" stroke="#0d1117" stroke-width="0.8"/>
               <circle cx="200" cy="209" r="2.8" fill="none" stroke="#16e0c8" stroke-width="1.8"/>
             </g>
             <g id="lunarHand">
-              <line x1="200" y1="209" x2="200" y2="177" stroke="#2f7bff" stroke-width="2.6" stroke-linecap="round"/>
-              <path d="M200 169.5 L196 177 L204 177 Z" fill="#2f7bff" stroke="#0d1117" stroke-width="0.7"/>
+              <line x1="200" y1="209" x2="200" y2="171" stroke="#2f7bff" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M200 162.5 L195.5 171 L204.5 171 Z" fill="#2f7bff" stroke="#0d1117" stroke-width="0.7"/>
               <circle cx="200" cy="207.5" r="2.4" fill="none" stroke="#2f7bff" stroke-width="1.5"/>
             </g>
-            <line id="hourHand" x1="200" y1="200" x2="200" y2="140" stroke="#e8edf5" stroke-width="7" stroke-linecap="round"/>
-            <line id="minHand" x1="200" y1="200" x2="200" y2="112" stroke="#e8edf5" stroke-width="4.5" stroke-linecap="round"/>
+            <line id="hourHand" x1="200" y1="200" x2="200" y2="138" stroke="#e8edf5" stroke-width="7" stroke-linecap="round"/>
+            <line id="minHand" x1="200" y1="200" x2="200" y2="104" stroke="#e8edf5" stroke-width="4.5" stroke-linecap="round"/>
             <g id="secHand">
-              <line x1="200" y1="220" x2="200" y2="86" stroke="#e5484d" stroke-width="2" stroke-linecap="round"/>
+              <line x1="200" y1="220" x2="200" y2="78" stroke="#e5484d" stroke-width="2" stroke-linecap="round"/>
               <circle cx="200" cy="220" r="4" fill="#e5484d"/>
             </g>
             <circle cx="200" cy="200" r="6.5" fill="#0d1117" stroke="#d9a441" stroke-width="2.5"/>
@@ -677,21 +677,21 @@
         for(i=0;i<13;i++){
           sp = cyc.spans[i];
           var fill = (i % 2 ? "#1c2431" : "#232d3f");
-          s += '<path d="'+sectorPath(sp.a0+0.35, sp.a1-0.35, 144, 168)+'" fill="'+fill+'" stroke="#39445a" stroke-width="0.8"/>';
-          d += '<path id="arc'+i+'" d="'+arcPath(sp.a0+1.2, sp.a1-1.2, 156)+'" fill="none" stroke="none"/>';
+          s += '<path d="'+sectorPath(sp.a0+0.35, sp.a1-0.35, 150, 174)+'" fill="'+fill+'" stroke="#39445a" stroke-width="0.8"/>';
+          d += '<path id="arc'+i+'" d="'+arcPath(sp.a0+1.2, sp.a1-1.2, 162)+'" fill="none" stroke="none"/>';
           // boundary tick
-          var t1 = pt(200,200,140,sp.a0), t2 = pt(200,200,144,sp.a0);
+          var t1 = pt(200,200,146,sp.a0), t2 = pt(200,200,150,sp.a0);
           s += '<line x1="'+t1[0].toFixed(1)+'" y1="'+t1[1].toFixed(1)+'" x2="'+t2[0].toFixed(1)+'" y2="'+t2[1].toFixed(1)+'" stroke="#4a566b" stroke-width="1.4"/>';
         }
         for(i=0;i<13;i++){
           sp = cyc.spans[i];
-          s += '<text font-size="10.5" font-weight="600" letter-spacing="0.8" fill="#c3cedd">'+
+          s += '<text font-size="11.5" font-weight="600" letter-spacing="0.8" fill="#c3cedd">'+
                '<textPath href="#arc'+i+'" startOffset="50%" text-anchor="middle">'+sp.name.toUpperCase()+'</textPath></text>';
         }
         // quarter gates (absolute λ = 90 / 180 / 270 — dial angle is λ itself)
         [90,180,270].forEach(function(gate){
           var a = gate;
-          var t1 = pt(200,200,118,a), t2 = pt(200,200,144,a);
+          var t1 = pt(200,200,124,a), t2 = pt(200,200,150,a);
           s += '<line x1="'+t1[0].toFixed(1)+'" y1="'+t1[1].toFixed(1)+'" x2="'+t2[0].toFixed(1)+'" y2="'+t2[1].toFixed(1)+'" stroke="#6b7a90" stroke-width="2"/>';
         });
         ringG.innerHTML = s;
@@ -705,8 +705,8 @@
         // starts at r 19, just outside the phase ring, with a stub inside it (r 7.5–
         // 11.5), so the origin stays continuous across the LUNAR and phase rings too —
         // the phase ring's NEW station sits on this line.
-        var og1 = pt(200,200,19,0), og2 = pt(200,200,71,0), og3 = pt(200,200,122,0), og4 = pt(200,200,196,0);
-        var og5 = pt(200,200,7.5,0), og6 = pt(200,200,11.5,0);
+        var og1 = pt(200,200,25,0), og2 = pt(200,200,84,0), og3 = pt(200,200,129,0), og4 = pt(200,200,198,0);
+        var og5 = pt(200,200,7,0), og6 = pt(200,200,10,0);
         var sg = '<line x1="'+og1[0].toFixed(1)+'" y1="'+og1[1].toFixed(1)+'" x2="'+og2[0].toFixed(1)+'" y2="'+og2[1].toFixed(1)+'" stroke="#cfd8e3" stroke-width="1.3" opacity="0.85"/>';
         sg += '<line x1="'+og5[0].toFixed(1)+'" y1="'+og5[1].toFixed(1)+'" x2="'+og6[0].toFixed(1)+'" y2="'+og6[1].toFixed(1)+'" stroke="#cfd8e3" stroke-width="1.3" opacity="0.85"/>';
         sg += '<line x1="'+og3[0].toFixed(1)+'" y1="'+og3[1].toFixed(1)+'" x2="'+og4[0].toFixed(1)+'" y2="'+og4[1].toFixed(1)+'" stroke="#cfd8e3" stroke-width="1.3" opacity="0.85"/>';
@@ -726,16 +726,16 @@
         var sa = cyc.seamAngle;
         var hot = seamHot ? ' stroke-width="2.6"' : ' stroke-width="1.6"';
         sg += '<g id="seamMark" transform="rotate('+sa.toFixed(2)+' 200 200)">';
-        [[114,121],[143,149],[163,174]].forEach(function(seg){
+        [[118,126],[146,152],[170,180]].forEach(function(seg){
           sg += '<line x1="200" y1="'+(200-seg[1])+'" x2="200" y2="'+(200-seg[0])+'" stroke="#ff7a59"'+hot+' stroke-dasharray="3 2.4"/>';
         });
-        sg += '<polygon points="200,26.5 204,32 200,37.5 196,32" fill="#ff7a59" stroke="#0d1117" stroke-width="0.8"/>';
+        sg += '<polygon points="200,20.5 204.5,26 200,31.5 195.5,26" fill="#ff7a59" stroke="#0d1117" stroke-width="0.8"/>';
         sg += '</g>';
         // seam label: ZERO DAY in the dial's open top, clear of the marker
-        sg += '<text x="205" y="90" font-size="11" font-weight="800" letter-spacing="1.6" fill="#ff9d85" text-anchor="middle">ZERO DAY</text>';
-        sg += '<text x="205" y="103" font-size="7" font-weight="600" letter-spacing="0.5" fill="#e0705c" text-anchor="middle">REFLECTION · REASSESSMENT · REALIGNMENT</text>';
-        sg += '<text x="205" y="115" font-size="7" font-weight="600" letter-spacing="0.9" fill="#c9573f" text-anchor="middle">ZERO.ZERO · APRIL 1 · AT 0.0</text>';
-        sg += '<text x="205" y="127" font-size="6.5" font-weight="700" letter-spacing="0.7" fill="#d9a441" text-anchor="middle">THE GREAT RESET DAY OF EQUILIBRIUM</text>';
+        sg += '<text x="205" y="84" font-size="11" font-weight="800" letter-spacing="1.6" fill="#ff9d85" text-anchor="middle">ZERO DAY</text>';
+        sg += '<text x="205" y="94" font-size="7" font-weight="600" letter-spacing="0.5" fill="#e0705c" text-anchor="middle">REFLECTION · REASSESSMENT · REALIGNMENT</text>';
+        sg += '<text x="205" y="104" font-size="7" font-weight="600" letter-spacing="0.9" fill="#c9573f" text-anchor="middle">ZERO.ZERO · APRIL 1 · AT 0.0</text>';
+        sg += '<text x="205" y="113.5" font-size="6.5" font-weight="700" letter-spacing="0.7" fill="#d9a441" text-anchor="middle">THE GREAT RESET DAY OF EQUILIBRIUM</text>';
         seamG.innerHTML = sg;
       }
 
@@ -753,14 +753,14 @@
         for(i=0;i<12;i++){
           a0 = relA(cyc, i*30); a1 = a0 + 30;
           var zfill = (i % 2 ? "#1c2431" : "#232d3f");
-          s += '<path d="'+sectorPath(a0+0.3, a1-0.3, 170, 192)+'" fill="'+zfill+'" stroke="#39445a" stroke-width="0.8"/>';
-          d += '<path id="zarc'+i+'" d="'+arcPath(a0+1.2, a1-1.2, 181)+'" fill="none" stroke="none"/>';
-          var b1 = pt(200,200,168,a0), b2 = pt(200,200,170,a0);
+          s += '<path d="'+sectorPath(a0+0.3, a1-0.3, 176, 196)+'" fill="'+zfill+'" stroke="#39445a" stroke-width="0.8"/>';
+          d += '<path id="zarc'+i+'" d="'+arcPath(a0+1.2, a1-1.2, 186)+'" fill="none" stroke="none"/>';
+          var b1 = pt(200,200,174,a0), b2 = pt(200,200,176,a0);
           s += '<line x1="'+b1[0].toFixed(1)+'" y1="'+b1[1].toFixed(1)+'" x2="'+b2[0].toFixed(1)+'" y2="'+b2[1].toFixed(1)+'" stroke="#4a566b" stroke-width="1.2"/>';
         }
         for(i=0;i<12;i++){
           a0 = relA(cyc, i*30);
-          s += '<text font-size="10" font-weight="600" letter-spacing="0.6" fill="#d5dde8">'+
+          s += '<text font-size="10.5" font-weight="600" letter-spacing="0.6" fill="#d5dde8">'+
                '<textPath href="#zarc'+i+'" startOffset="50%" text-anchor="middle">'+ZODIAC[i].glyph+" "+ZODIAC[i].name.toUpperCase()+'</textPath></text>';
         }
         zodiacG.innerHTML = s + "<defs>" + d + "</defs>";
@@ -769,11 +769,11 @@
         for(i=0;i<24;i++){
           a0 = relA(cyc, i*15); a1 = a0 + 15;
           var tfill = (i % 2 ? "#182620" : "#1d2f27");
-          ts += '<path d="'+sectorPath(a0+0.25, a1-0.25, 122, 142)+'" fill="'+tfill+'" stroke="#33503f" stroke-width="0.7"/>';
-          td += '<path id="tarc'+i+'" d="'+arcPath(a0+0.8, a1-0.8, 132)+'" fill="none" stroke="none"/>';
+          ts += '<path d="'+sectorPath(a0+0.25, a1-0.25, 128, 148)+'" fill="'+tfill+'" stroke="#33503f" stroke-width="0.7"/>';
+          td += '<path id="tarc'+i+'" d="'+arcPath(a0+0.8, a1-0.8, 138)+'" fill="none" stroke="none"/>';
         }
         for(i=0;i<24;i++){
-          ts += '<text font-size="9.5" font-weight="500" fill="#a9c8b8">'+
+          ts += '<text font-size="10" font-weight="500" fill="#a9c8b8">'+
                 '<textPath href="#tarc'+i+'" startOffset="50%" text-anchor="middle">'+TERMS[i].hanzi+'</textPath></text>';
         }
         termsG.innerHTML = ts + "<defs>" + td + "</defs>";
@@ -846,26 +846,26 @@
         var s = "", i, a0, a1, mid, p, d, a, t1, t2;
         for(i=0;i<13;i++){
           a0 = i * 360/13; a1 = a0 + 360/13;
-          s += '<path d="'+sectorPath(a0+0.4, a1-0.4, 49, 65)+'" fill="'+(i % 2 ? "#1a2230" : "#232d3f")+'" stroke="#4a566b" stroke-width="0.7"/>';
+          s += '<path d="'+sectorPath(a0+0.4, a1-0.4, 58, 82)+'" fill="'+(i % 2 ? "#1a2230" : "#232d3f")+'" stroke="#4a566b" stroke-width="0.7"/>';
         }
         // week ticks: one every 7 counted days, just outside the ring
         for(d=7; d<364; d+=7){
           if(d % 28 === 0) continue;
           a = d / 364 * 360;
-          t1 = pt(200,200,65,a); t2 = pt(200,200,69,a);
+          t1 = pt(200,200,82,a); t2 = pt(200,200,85,a);
           s += '<line x1="'+t1[0].toFixed(1)+'" y1="'+t1[1].toFixed(1)+'" x2="'+t2[0].toFixed(1)+'" y2="'+t2[1].toFixed(1)+'" stroke="#6b7a90" stroke-width="1"/>';
         }
         for(i=0;i<13;i++){
           mid = (i + 0.5) * 360/13;
-          p = pt(200,200,57,mid);
-          s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="8" font-weight="700" fill="#eef2f8" text-anchor="middle" dominant-baseline="central">'+(i+1)+'</text>';
+          p = pt(200,200,70,mid);
+          s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="10.5" font-weight="700" fill="#eef2f8" text-anchor="middle" dominant-baseline="central">'+(i+1)+'</text>';
         }
         // 0.0 — just inside the ring beside the origin line: this engraving is
         // Zero.zero, April 1's address (April 1 stands outside the count). It also
         // marks where counted 0 — the first counted day, April 2 — opens module 1.
         // Zero.zero-the-address and counted-0-the-first-day are not the same day.
-        s += '<text x="208" y="155" font-size="6" font-weight="700" fill="#e0705c" text-anchor="middle" dominant-baseline="central">0.0</text>';
-        s += '<text x="200" y="248" font-size="6.5" font-weight="700" letter-spacing="1.1" fill="#8b96a5" text-anchor="middle">COUNTED · 13 × 28</text>';
+        s += '<text x="208" y="148" font-size="7" font-weight="700" fill="#e0705c" text-anchor="middle" dominant-baseline="central">0.0</text>';
+        s += '<text x="200" y="292" font-size="7.5" font-weight="700" letter-spacing="1.1" fill="#8b96a5" text-anchor="middle">COUNTED · 13 × 28</text>';
         countedG.innerHTML = s;
       }
       renderCountedRing();
@@ -883,25 +883,25 @@
         var s = "", i, k, a0, a1, mid, p, wa, t1, t2;
         for(i=0;i<13;i++){
           a0 = i * 360/13; a1 = a0 + 360/13;
-          s += '<path d="'+sectorPath(a0+0.4, a1-0.4, 31, 43)+'" fill="'+(i % 2 ? "#12282b" : "#183438")+'" stroke="#2f6a66" stroke-width="0.7"/>';
+          s += '<path d="'+sectorPath(a0+0.4, a1-0.4, 37, 54)+'" fill="'+(i % 2 ? "#12282b" : "#183438")+'" stroke="#2f6a66" stroke-width="0.7"/>';
         }
         // week ticks inside each module: one at each quarter of the module
         // (weeks 2, 3 and 4 open there), drawn at the ring's inner edge.
         for(i=0;i<13;i++){
           for(k=1;k<4;k++){
             wa = (i + k/4) * 360/13;
-            t1 = pt(200,200,31,wa); t2 = pt(200,200,35,wa);
+            t1 = pt(200,200,37,wa); t2 = pt(200,200,41,wa);
             s += '<line x1="'+t1[0].toFixed(1)+'" y1="'+t1[1].toFixed(1)+'" x2="'+t2[0].toFixed(1)+'" y2="'+t2[1].toFixed(1)+'" stroke="#57a99f" stroke-width="1"/>';
           }
         }
         for(i=0;i<13;i++){
           mid = (i + 0.5) * 360/13;
-          p = pt(200,200,37.5,mid);
-          s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="7.5" font-weight="700" fill="#d9f6f0" text-anchor="middle" dominant-baseline="central">'+moduleNumber(i)+'</text>';
+          p = pt(200,200,45.5,mid);
+          s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="9" font-weight="700" fill="#d9f6f0" text-anchor="middle" dominant-baseline="central">'+moduleNumber(i)+'</text>';
         }
         // The THERMAL engraving moves to the open annulus below the COUNTED ring
         // (y 276): its old seat inside the THERMAL ring is now the LUNAR ring.
-        s += '<text x="200" y="276" font-size="6.5" font-weight="700" letter-spacing="1.1" fill="#6fc7bb" text-anchor="middle">THERMAL · 13 × 4 WEEKS</text>';
+        s += '<text x="200" y="305" font-size="7.5" font-weight="700" letter-spacing="1.1" fill="#6fc7bb" text-anchor="middle">THERMAL · 13 × 4 WEEKS</text>';
         thermalG.innerHTML = s;
       }
       renderThermalRing();
@@ -918,16 +918,16 @@
         var s = "", i, a0, a1, mid, p;
         for(i=0;i<12;i++){
           a0 = i * LUN_SECTOR; a1 = a0 + LUN_SECTOR;
-          s += '<path d="'+sectorPath(a0+0.4, a1-0.4, 24, 30)+'" fill="'+(i % 2 ? "#182a47" : "#121e33")+'" stroke="#3a5a8c" stroke-width="0.7"/>';
+          s += '<path d="'+sectorPath(a0+0.4, a1-0.4, 26, 35)+'" fill="'+(i % 2 ? "#182a47" : "#121e33")+'" stroke="#3a5a8c" stroke-width="0.7"/>';
         }
         a0 = 12 * LUN_SECTOR;
-        s += '<path d="'+sectorPath(a0+0.4, 359.6, 24, 30)+'" fill="#2c4f8a" stroke="#7fb0ff" stroke-width="0.9"/>';
+        s += '<path d="'+sectorPath(a0+0.4, 359.6, 26, 35)+'" fill="#2c4f8a" stroke="#7fb0ff" stroke-width="0.9"/>';
         for(i=0;i<13;i++){
           mid = (i < 12) ? (i + 0.5) * LUN_SECTOR : a0 + (360 - a0) / 2;
-          p = pt(200,200,27,mid);
-          s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="'+(i<12?"5.5":"5")+'" font-weight="700" fill="#cfe2ff" text-anchor="middle" dominant-baseline="central">'+(i+1)+'</text>';
+          p = pt(200,200,30.5,mid);
+          s += '<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" transform="rotate('+mid.toFixed(1)+' '+p[0].toFixed(1)+' '+p[1].toFixed(1)+')" font-size="'+(i<12?"7":"6.5")+'" font-weight="700" fill="#cfe2ff" text-anchor="middle" dominant-baseline="central">'+(i+1)+'</text>';
         }
-        s += '<text x="200" y="221.5" font-size="5.2" font-weight="700" letter-spacing="0.9" fill="#7fb0ff" text-anchor="middle" dominant-baseline="central">LUNAR · 12.368</text>';
+        s += '<text x="200" y="317" font-size="7" font-weight="700" letter-spacing="0.9" fill="#7fb0ff" text-anchor="middle" dominant-baseline="central">LUNAR · 12.368</text>';
         lunarG.innerHTML = s;
       }
       renderLunarRing();
@@ -957,20 +957,20 @@
       }
       function renderPhaseRing(){
         var s = "";
-        s += '<circle cx="200" cy="200" r="18.5" fill="#131c2c" stroke="#33507e" stroke-width="0.8"/>';
-        s += '<circle cx="200" cy="200" r="12.5" fill="#11161f" stroke="#33507e" stroke-width="0.8"/>';
+        s += '<circle cx="200" cy="200" r="23" fill="#131c2c" stroke="#33507e" stroke-width="0.8"/>';
+        s += '<circle cx="200" cy="200" r="11" fill="#11161f" stroke="#33507e" stroke-width="0.8"/>';
         [0, 90, 180, 270].forEach(function(ang){
-          var p = pt(200,200,15.5,ang);
+          var p = pt(200,200,17,ang);
           s += '<g transform="translate('+p[0].toFixed(1)+' '+p[1].toFixed(1)+')">'+
-               '<circle r="2.7" fill="#0a0e14" stroke="#8fb4e8" stroke-width="0.5"/>'+
-               '<path d="'+moonLitPath(0,0,2.7,ang)+'" fill="#eaf2ff"/></g>';
+               '<circle r="3.3" fill="#0a0e14" stroke="#8fb4e8" stroke-width="0.5"/>'+
+               '<path d="'+moonLitPath(0,0,3.3,ang)+'" fill="#eaf2ff"/></g>';
         });
-        s += '<defs><path id="waxArc" d="'+arcPath(30,60,15.5)+'" fill="none" stroke="none"/>'+
-             '<path id="waneArc" d="'+arcPath(300,330,15.5)+'" fill="none" stroke="none"/></defs>';
-        s += '<text font-size="4.3" font-weight="700" letter-spacing="0.3" fill="#9db8dd"><textPath href="#waxArc" startOffset="50%" text-anchor="middle">WAXING</textPath></text>';
-        s += '<text font-size="4.3" font-weight="700" letter-spacing="0.3" fill="#9db8dd"><textPath href="#waneArc" startOffset="50%" text-anchor="middle">WANING</textPath></text>';
-        s += '<g id="phaseMoon"><circle r="3.7" fill="none" stroke="#2f7bff" stroke-width="1.1"/>'+
-             '<circle r="3.1" fill="#0a0e14"/><path id="phaseMoonLit" d="" fill="#eaf2ff"/></g>';
+        s += '<defs><path id="waxArc" d="'+arcPath(30,60,17)+'" fill="none" stroke="none"/>'+
+             '<path id="waneArc" d="'+arcPath(300,330,17)+'" fill="none" stroke="none"/></defs>';
+        s += '<text font-size="5.2" font-weight="700" letter-spacing="0.3" fill="#9db8dd"><textPath href="#waxArc" startOffset="50%" text-anchor="middle">WAXING</textPath></text>';
+        s += '<text font-size="5.2" font-weight="700" letter-spacing="0.3" fill="#9db8dd"><textPath href="#waneArc" startOffset="50%" text-anchor="middle">WANING</textPath></text>';
+        s += '<g id="phaseMoon"><circle r="4.4" fill="none" stroke="#2f7bff" stroke-width="1.3"/>'+
+             '<circle r="3.8" fill="#0a0e14"/><path id="phaseMoonLit" d="" fill="#eaf2ff"/></g>';
         phaseG.innerHTML = s;
       }
       renderPhaseRing();
@@ -1051,9 +1051,9 @@
         var phaseDeg = lun.phaseFrac * 360;
         var phaseMoonEl = el("phaseMoon");
         if(phaseMoonEl){
-          var pp = pt(200,200,15.5,phaseDeg);
+          var pp = pt(200,200,17,phaseDeg);
           phaseMoonEl.setAttribute("transform", "translate("+pp[0].toFixed(1)+" "+pp[1].toFixed(1)+")");
-          el("phaseMoonLit").setAttribute("d", moonLitPath(0,0,3.1,phaseDeg));
+          el("phaseMoonLit").setAttribute("d", moonLitPath(0,0,3.8,phaseDeg));
         }
 
         renderRing(cyc, addr.module, boundary);
