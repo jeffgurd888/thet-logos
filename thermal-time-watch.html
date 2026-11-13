@@ -86,6 +86,21 @@
         font-family: Georgia, "Iowan Old Style", serif; font-style:italic;
         font-size:15px; color:var(--muted);
       }
+      .reset-line{
+        text-align:center; margin:14px auto 0; max-width:480px;
+        padding:11px 14px 12px;
+        border-top:1px solid var(--gold); border-bottom:1px solid var(--gold);
+        font-family: Georgia, "Iowan Old Style", serif;
+        font-size:14px; line-height:1.55; color:var(--ink);
+      }
+      .reset-line .reset-head{
+        display:block; margin-bottom:3px;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size:11px; font-weight:800; letter-spacing:.18em; text-indent:.18em;
+        color:var(--seam);
+      }
+      .reset-line em{ font-style:italic; }
+      .reset-line .psalm{ white-space:nowrap; }
       .rate-line{
         text-align:center; margin:8px auto 0; max-width:480px; font-size:15.5px;
       }
@@ -220,6 +235,9 @@
       <p class="guc-sub">Modular Thermal Equilibrium Calendar · Watch No. 1</p>
 
       <p class="doctrine">“We don’t have time zones — we have solar thermal lag.”</p>
+
+      <p class="reset-line"><span class="reset-head">The Great Reset Day of Equilibrium</span>Auld Lang Syne is sung · forgive, and ask forgiveness · <em>“Create in me a clean heart, O God”</em> — <span class="psalm">Psalm 51:10</span> · a brand new heart, every year.</p>
+
       <p class="rate-line" id="rateLine">—</p>
 
       <div class="lon-control" aria-label="Longitude — carry the thermal track around the planet">
@@ -271,7 +289,7 @@
         <h2>How this watch keeps time</h2>
         <p>The dial is arc: solar longitude λ runs 0° at the March equinox to 360° around the year. Riding on the arc is the equilibrium track T_eq(λ) — the temperature the Sun’s geometry is asking of Schoolcraft, Michigan. Thermal phase Θ accumulates at a rate proportional to that temperature, dΘ/dt = T_eq / T̄, and the thirteen modules are equal steps of Θ — so winter modules stretch over more days and more arc, and summer modules compress.</p>
         <p>The thin red hand is the thermal seconds hand. It sweeps at today’s rate r = T_eq / T̄: one thermal minute takes 60/r civil seconds. Deep January runs about 5% slow; July runs about 4.7% fast. The gold hand is the year hand — it points at today’s place on the module ring. The white hands read thermal time of day.</p>
-        <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: the origin of the count, standing outside the 364 counted days. The counted year opens April 2, inside Sol (module 13), the seam span that holds Zero.zero. Its solar address is Sol, week 13.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim.</p>
+        <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: the origin of the count, standing outside the 364 counted days. The counted year opens April 2, inside Sol (module 13), the seam span that holds Zero.zero. Its solar address is Sol, week 13.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim. It is the great reset day of equilibrium: Auld Lang Syne is sung, the Lord's Prayer is prayed — forgive, and ask forgiveness — and Psalm 51:10 is read, “Create in me a clean heart, O God”: a brand new heart, every year.</p>
         <p><strong>Longitude carries the track around the planet.</strong> Slide the longitude and the same day is re-read from a new arc position: solar time there shifts continuously — four minutes per degree, no zones and no steps. The day’s equilibrium track is the pinned Schoolcraft table carried around unchanged; what longitude changes is where that place sits in its day. Its temperature swing peaks three hours after its solar noon — the surface-inertia lag — so at any one instant, different longitudes carry different instantaneous temperatures, and the thermal hand runs at each longitude’s own rate r. One planet, one track, a continuous lag field.</p>
         <p class="pair">Every hand is a relation between a pair: arc ↔ thermal, forcing ↔ lagged response, equilibrium ↔ gradient. A place is not a time zone; it is an arc position plus its own solar thermal lag.</p>
       </section>
@@ -516,6 +534,7 @@
         sg += '<text x="205" y="90" font-size="11" font-weight="800" letter-spacing="1.6" fill="#ff9d85" text-anchor="middle">ZERO DAY</text>';
         sg += '<text x="205" y="103" font-size="7" font-weight="600" letter-spacing="0.5" fill="#e0705c" text-anchor="middle">REFLECTION · REASSESSMENT · REALIGNMENT</text>';
         sg += '<text x="205" y="115" font-size="7" font-weight="600" letter-spacing="0.9" fill="#c9573f" text-anchor="middle">ZERO.ZERO · APRIL 1 · AT 0.0</text>';
+        sg += '<text x="205" y="127" font-size="6.5" font-weight="700" letter-spacing="0.7" fill="#d9a441" text-anchor="middle">THE GREAT RESET DAY OF EQUILIBRIUM</text>';
         seamG.innerHTML = sg;
       }
 
