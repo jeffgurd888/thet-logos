@@ -53,3 +53,4 @@ import ThetLogos.NavierStokesGalerkinEnergy
 import ThetLogos.GibbsGapFloor
 import ThetLogos.MetaDPin
 import ThetLogos.MetaDSeatB
+import ThetLogos.AdmissibilityPin

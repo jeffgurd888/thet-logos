@@ -2118,3 +2118,9 @@ ThetLogos.metaDExhibit_response
 ThetLogos.metaDExhibit_responseNull
 ThetLogos.metaDExhibit_exhibitsResponse
 ThetLogos.metaDSeparable_response_eq_responseNull
+import ThetLogos.AdmissibilityPin
+ThetLogos.AdmissibilityPin.convexMix_admissible
+ThetLogos.AdmissibilityPin.r3_holds
+ThetLogos.AdmissibilityPin.convexMix_deltaWeight
+ThetLogos.AdmissibilityPin.r1_holds
+ThetLogos.AdmissibilityPin.r2_holds
