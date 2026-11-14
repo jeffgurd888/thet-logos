@@ -127,6 +127,24 @@
         text-align:center; margin:10px auto 0;
         font-size:12.5px; color:var(--muted); font-variant-numeric: tabular-nums; letter-spacing:.04em;
       }
+      .digital-readout{
+        text-align:center; margin:14px auto 0; max-width:520px;
+        background:var(--card); border:1px solid var(--line); border-radius:12px;
+        padding:12px 14px 11px;
+      }
+      .digital-readout.is-lag{ border-color:var(--gold); }
+      .digital-label{
+        font-size:11.5px; font-weight:800; letter-spacing:.16em; text-indent:.16em;
+        text-transform:uppercase; color:var(--muted); line-height:1.45;
+      }
+      .digital-readout.is-lag .digital-label{ color:var(--gold); text-transform:none; letter-spacing:.04em; text-indent:0; font-size:13.5px; }
+      .digital-time{
+        margin-top:2px; font-size:clamp(38px, 10.5vw, 52px); font-weight:800; line-height:1.08;
+        color:var(--ink); font-variant-numeric:tabular-nums; letter-spacing:.02em;
+      }
+      .digital-time .dt-ampm{ font-size:.42em; font-weight:700; color:var(--muted); margin-left:6px; letter-spacing:.06em; }
+      .digital-readout .civil-line{ margin-top:6px; }
+      .digital-readout .solar-line{ margin-top:3px; }
       .doctrine{
         text-align:center; margin:14px auto 0; max-width:452px;
         font-family: Georgia, "Iowan Old Style", serif; font-style:italic;
@@ -396,8 +414,12 @@
       <p class="date-arm-line" id="dateArmLine" aria-label="Date arm — blue: month in the March-origin count; red: week and day of the month">—</p>
       <p class="date-arm-cap" id="dateArmCap">Date arm — <span class="cap-blue">🔵 month, March = 1</span> · <span class="cap-red">🔴 week.–day of the month</span></p>
       <p class="zero-line" id="zeroLine" aria-label="Week and day count from Zero.zero">—</p>
-      <p class="civil-line" id="civilLine">—</p>
-      <p class="solar-line" id="solarLine">—</p>
+      <div class="digital-readout" id="digitalReadout" aria-label="Digital time">
+        <div class="digital-label" id="digitalLabel">Digital time</div>
+        <div class="digital-time" id="digitalTime">--:--:--</div>
+        <p class="civil-line" id="civilLine">—</p>
+        <p class="solar-line" id="solarLine">—</p>
+      </div>
       <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 0–12 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <strong style="color:#ed2817;">Red gate-seal</strong> — April’s opening, the first counted month · <strong>Zodiac ring</strong> — the thirteen signs are seated centred on the calendar months (Aries over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February, and Ophiuchus ⛎ — the Serpent-Bearer, the missing thirteenth sign — over March, the seam month); the sign boundaries fall mid-month at the bisectors between month centres, and both of Ophiuchus’s boundaries fall inside March · Ophiuchus is seated over March <strong>by declaration</strong> of the calendar’s maker, completing 13 signs for 13 modules; in the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 12, 0–11 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 12.2, while TODAY parks at the seam) · <span class="swatch sw-blue"></span><strong class="lg-blue">Blue LUNAR hand</strong> — the lunar month date, read on the <strong>LUNAR</strong> ring just inside the THERMAL ring (12.368266 lunations per tropical year — twelve full sectors plus a closing partial sector, numbered 1–13 from the same origin; lunation 1 is the lunation already running at the March equinox) · <span class="swatch sw-blue"></span><strong class="lg-blue">Phase ring</strong> — inside the LUNAR ring, one whole lunation drawn as a circle (NEW at the top, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, WAXING from new to full, WANING from full back to new); a small blue moon travels it at the day’s lunar age, dark at new, half-lit at the quarters, fully lit at full · <span class="swatch sw-green"></span><strong class="lg-green">Green WEEKDAY hand</strong> — the observer’s local weekday, read on the <strong>WEEKDAY</strong> ring in the open annulus inside the solar-terms band (SUNDAY–SATURDAY written out in full, Sunday’s sector opening at the equinox line at the top and the week running clockwise; green is the Z seat — Yield / Ground / Structure; the hand points at the current day’s sector centre, the current day’s sector is lit brighter, and the hand steps to the next day at local midnight) · <strong>Date arm</strong> — the colour-corresponded readout under the civil date, (🔵 M. 🔴 W.-D): <span style="color:var(--arm-blue)"><strong>🔵 blue</strong></span> is the Gregorian month counted from March, the solar year’s opening (March 1, April 2, … November 9, … February 12), and <span style="color:var(--arm-red)"><strong>🔴 red</strong></span> is the week.–day of that month in 7-day blocks from the 1st — so Saturday, November 14, 2026 reads (🔵 9. 🔴 2.-7). One day carries no ordinary arm reading: April 1 — Zero.zero, the Boundary Day — reads <strong>0.0 — ZERO.ZERO</strong>, outside the count, on the arm as on every readout. The arm is a readout only: the seat numerals 0–12, the five hands and their colours are unchanged.</p>
 
       <p class="equation" id="equationLine"><span class="eq-head">Today’s equation</span>—</p>
@@ -479,6 +501,7 @@
       <section aria-label="Readings">
         <h2>Readings</h2>
         <div class="grid">
+          <div class="cell"><div class="k" id="dDigitalK">Digital time</div><div class="v" id="dDigital">—</div><div class="s" id="dDigitalSub">—</div></div>
           <div class="cell"><div class="k">Address</div><div class="v" id="dAddr">—</div><div class="s" id="dAddrSub">—</div></div>
           <div class="cell"><div class="k">Rate factor r</div><div class="v" id="dRate">—</div><div class="s" id="dRateSub">—</div></div>
           <div class="cell"><div class="k">T_eq — equilibrium track</div><div class="v" id="dTeq">—</div><div class="s" id="dTeqSub">Schoolcraft, Michigan · pinned monthly table, interpolated</div></div>
@@ -1835,6 +1858,15 @@
         var h = Math.floor(totalSec/3600), m = Math.floor(totalSec%3600/60), s = totalSec%60;
         return pad2(h)+":"+pad2(m)+":"+pad2(s);
       }
+      function fmtClock12(totalSec){
+        totalSec = ((Math.floor(totalSec) % 86400) + 86400) % 86400;
+        var h = Math.floor(totalSec/3600), m = Math.floor(totalSec%3600/60), s = totalSec%60;
+        var ampm = h >= 12 ? "PM" : "AM", h12 = h % 12 || 12;
+        return { h12:h12, m:m, s:s, ampm:ampm, text:h12+":"+pad2(m)+":"+pad2(s)+" "+ampm };
+      }
+      // The label the digital readout carries once a precise (GPS) location
+      // is enabled — Zero's wording, verbatim.
+      var LAG_LABEL = '"Time zone" \u2212 solar thermal lag adjusted';
       function fmtDur(sec){
         var sign = sec < 0 ? "−" : "+"; sec = Math.abs(Math.round(sec));
         var h = Math.floor(sec/3600), m = Math.floor(sec%3600/60), s = sec%60;
@@ -2017,8 +2049,50 @@
           dateLine.textContent = DOW[eff.getDay()] + ", " + MON[eff.getMonth()] + " " + eff.getDate() + ", " + eff.getFullYear();
           if(dateArmLine) dateArmLine.innerHTML = dateArmFor(eff).html;
           var civH = eff.getHours(), civAmpm = civH >= 12 ? "PM" : "AM", civH12 = civH % 12 || 12;
-          civilLine.textContent = civH12 + ":" + pad2(eff.getMinutes()) + ":" + pad2(eff.getSeconds()) + " " + civAmpm + " civil · " + fmtClock(thermalElapsed) + " thermal";
-          el("solarLine").textContent = fmtClock(lr.solarElapsed) + " solar at " + fmtLon(currentLon) + " · thermal lag peaks 3h after solar noon";
+          var civilText = civH12 + ":" + pad2(eff.getMinutes()) + ":" + pad2(eff.getSeconds()) + " " + civAmpm;
+          // Digital time readout — restored as a large, always-visible readout
+          // under the date (it had shrunk to a small muted caption line).
+          // Location off (no GPS fix): plain civil (time-zone) time, as before.
+          // Location enabled (GPS fix applied): the readout takes the label
+          // "Time zone" − solar thermal lag adjusted and its big time is the
+          // lag-adjusted time from the engine's own lag field — lonReading's
+          // thermalElapsed at the fix longitude (solar elapsed there,
+          // accumulated at that longitude's thermal rate), NOT raw zone time.
+          // The solar time at the longitude and the raw civil time stay on
+          // the sub-lines for comparison.
+          var locEnabled = (typeof gpsFix !== "undefined" && !!gpsFix);
+          var digBox = el("digitalReadout"), digLabel = el("digitalLabel"), digTime = el("digitalTime");
+          var lag12 = fmtClock12(thermalElapsed), solar12 = fmtClock12(lr.solarElapsed);
+          if(digBox && digLabel && digTime){
+            if(locEnabled){
+              digBox.classList.add("is-lag");
+              digBox.setAttribute("data-mode", "lag-adjusted");
+              digLabel.textContent = LAG_LABEL;
+              digTime.innerHTML = lag12.h12 + ":" + pad2(lag12.m) + ":" + pad2(lag12.s) + '<span class="dt-ampm">' + lag12.ampm + '</span>';
+              digTime.setAttribute("aria-label", LAG_LABEL + ": " + lag12.text);
+            } else {
+              digBox.classList.remove("is-lag");
+              digBox.setAttribute("data-mode", "civil");
+              digLabel.textContent = "Digital time";
+              digTime.innerHTML = civH12 + ":" + pad2(eff.getMinutes()) + ":" + pad2(eff.getSeconds()) + '<span class="dt-ampm">' + civAmpm + '</span>';
+              digTime.setAttribute("aria-label", "Digital time: " + civilText + " civil");
+            }
+          }
+          var dDig = el("dDigital"), dDigSub = el("dDigitalSub"), dDigK = el("dDigitalK");
+          if(dDig){
+            dDig.textContent = locEnabled ? lag12.text : (civilText + " civil");
+            if(dDigK) dDigK.textContent = locEnabled ? LAG_LABEL : "Digital time";
+            if(dDigSub) dDigSub.textContent = locEnabled
+              ? "lag-adjusted thermal time at " + fmtLon(currentLon) + " · solar " + fmtClock(lr.solarElapsed) + " there · civil " + civilText + " for comparison"
+              : "civil (time-zone) time · " + fmtClock(thermalElapsed) + " thermal · enable Precise Location for the lag-adjusted readout";
+          }
+          if(locEnabled){
+            civilLine.textContent = fmtClock(thermalElapsed) + " thermal — " + LAG_LABEL + " · " + fmtClock(lr.solarElapsed) + " solar at " + fmtLon(currentLon) + " · " + civilText + " civil";
+            el("solarLine").textContent = "Solar lag " + fmtLagMins(currentLon * 4) + " vs Greenwich at " + fmtLon(currentLon) + " · thermal lag peaks 3h after solar noon";
+          } else {
+            civilLine.textContent = civilText + " civil · " + fmtClock(thermalElapsed) + " thermal";
+            el("solarLine").textContent = fmtClock(lr.solarElapsed) + " solar at " + fmtLon(currentLon) + " · thermal lag peaks 3h after solar noon";
+          }
           // The instantaneous rate follows the longitude through the day — refresh it per second.
           rateLine.innerHTML = rateSentence(r);
           el("dRate").textContent = "× " + r.toFixed(4);
@@ -2100,7 +2174,7 @@
         if(gpsStatusEl) gpsStatusEl.textContent = "GPS fix: " + fmtFixCoords(currentLat, currentLon) +
           (acc !== null ? " · ±" + Math.round(acc) + " m" : "") +
           " — the sky, the Moon and tide axis, and the solar-thermal lag are now drawn for this place.";
-        lastSkyKey = ""; lastAddrKey = ""; // force every location-driven layer to recompute
+        lastSkyKey = ""; lastAddrKey = ""; lastSecond = -1; // force every location-driven layer + the digital readout to recompute
         return { lat: currentLat, lon: currentLon, accuracy: acc };
       }
       function gpsFail(message){
@@ -2131,7 +2205,7 @@
         setLat(HOME_LAT); setLon(HOME_LON);
         if(gpsValEl) gpsValEl.textContent = "Home pinned";
         if(gpsStatusEl) gpsStatusEl.textContent = "Home — Schoolcraft, Michigan · " + fmtFixCoords(HOME_LAT, HOME_LON) + " (pinned location).";
-        lastSkyKey = ""; lastAddrKey = "";
+        lastSkyKey = ""; lastAddrKey = ""; lastSecond = -1;
         return { lat: currentLat, lon: currentLon };
       }
       el("btnGps").addEventListener("click", requestPreciseLocation);
@@ -2241,6 +2315,26 @@
         applyTestLocation: function(lat, lon, accuracy){ return applyPreciseLocation(lat, lon, accuracy); },
         requestPreciseLocation: function(){ requestPreciseLocation(); },
         getPreciseFix: function(){ return gpsFix ? { lat: gpsFix.lat, lon: gpsFix.lon, accuracy: gpsFix.accuracy } : null; },
+        getDigitalReadout: function(){
+          var nowD = new Date();
+          var lrD = lonReading(nowD, currentLon);
+          var enabled = !!gpsFix;
+          var digLabelEl = document.getElementById("digitalLabel");
+          var digTimeEl = document.getElementById("digitalTime");
+          return {
+            locationEnabled: enabled,
+            label: digLabelEl ? digLabelEl.textContent : (enabled ? LAG_LABEL : "Digital time"),
+            expectedLabel: enabled ? LAG_LABEL : "Digital time",
+            time: digTimeEl ? digTimeEl.textContent.replace(/\s+/g, " ").trim() : "",
+            lagAdjusted: enabled ? fmtClock(lrD.thermalElapsed) : null,
+            lagAdjusted12: enabled ? fmtClock12(lrD.thermalElapsed).text : null,
+            solar: fmtClock(lrD.solarElapsed),
+            thermal: fmtClock(lrD.thermalElapsed),
+            civil: fmtClock12(nowD.getHours() * 3600 + nowD.getMinutes() * 60 + nowD.getSeconds()).text,
+            lon: currentLon,
+            fix: gpsFix ? { lat: gpsFix.lat, lon: gpsFix.lon, accuracy: gpsFix.accuracy } : null
+          };
+        },
         getLocation: function(){ return { lat: currentLat, lon: currentLon }; },
         goHome: function(){ return goHomePrecise(); },
         skyStarFor: function(name, dateStr){
@@ -2415,13 +2509,27 @@
       });
 
       function updateReadout(now){
-        var h = now.getHours(), ampm = h >= 12 ? "PM" : "AM", h12 = h % 12 || 12;
-        ssTimeMain.textContent = h12 + ":" + pad2(now.getMinutes());
-        ssTimeSec.textContent = ":" + pad2(now.getSeconds()) + " " + ampm;
+        // Follow the main digital readout when it exists — so with a GPS fix
+        // the screensaver shows the same lag-adjusted time and label, and
+        // without one it shows plain civil time, exactly as the face does.
+        var digTimeEl = document.getElementById("digitalTime");
+        var digText = digTimeEl ? digTimeEl.textContent.replace(/\s+/g, " ").trim() : "";
+        var dm = digText.match(/^(\d+:\d+):(\d+)\s*(AM|PM)?$/i);
+        if(dm){
+          ssTimeMain.textContent = dm[1];
+          ssTimeSec.textContent = ":" + dm[2] + (dm[3] ? " " + dm[3].toUpperCase() : "");
+        } else {
+          var h = now.getHours(), ampm = h >= 12 ? "PM" : "AM", h12 = h % 12 || 12;
+          ssTimeMain.textContent = h12 + ":" + pad2(now.getMinutes());
+          ssTimeSec.textContent = ":" + pad2(now.getSeconds()) + " " + ampm;
+        }
         var dateLine = document.getElementById("dateLine");
         if(dateLine && dateLine.textContent && dateLine.textContent !== "—") ssDate.textContent = dateLine.textContent;
         var armLine = document.getElementById("dateArmLine");
         if(armLine && armLine.textContent && armLine.textContent !== "—" && ssDate.textContent) ssDate.textContent = ssDate.textContent + "  ·  " + armLine.textContent.replace(/\s+/g, " ").trim();
+        var digBoxEl = document.getElementById("digitalReadout");
+        var digLabelEl = document.getElementById("digitalLabel");
+        if(digBoxEl && digLabelEl && digBoxEl.getAttribute("data-mode") === "lag-adjusted" && ssDate.textContent) ssDate.textContent = ssDate.textContent + "  ·  " + digLabelEl.textContent;
         var zeroLine = document.getElementById("zeroLine");
         if(zeroLine && zeroLine.textContent){
           var t = zeroLine.textContent.replace(/\s+/g, " ").trim();
