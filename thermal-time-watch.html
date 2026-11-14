@@ -394,11 +394,11 @@
       </div>
       <p class="date-line" id="dateLine">—</p>
       <p class="date-arm-line" id="dateArmLine" aria-label="Date arm — blue: month in the March-origin count; red: week and day of the month">—</p>
-      <p class="date-arm-cap">Date arm — <span class="cap-blue">🔵 month, March = 1</span> · <span class="cap-red">🔴 week.–day of the month</span></p>
+      <p class="date-arm-cap" id="dateArmCap">Date arm — <span class="cap-blue">🔵 month, March = 1</span> · <span class="cap-red">🔴 week.–day of the month</span></p>
       <p class="zero-line" id="zeroLine" aria-label="Week and day count from Zero.zero">—</p>
       <p class="civil-line" id="civilLine">—</p>
       <p class="solar-line" id="solarLine">—</p>
-      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 0–12 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <strong style="color:#ed2817;">Red gate-seal</strong> — April’s opening, the first counted month · <strong>Zodiac ring</strong> — the thirteen signs are seated centred on the calendar months (Aries over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February, and Ophiuchus ⛎ — the Serpent-Bearer, the missing thirteenth sign — over March, the seam month); the sign boundaries fall mid-month at the bisectors between month centres, and both of Ophiuchus’s boundaries fall inside March · Ophiuchus is seated over March <strong>by declaration</strong> of the calendar’s maker, completing 13 signs for 13 modules; in the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 12, 0–11 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 12.2, while TODAY parks at the seam) · <span class="swatch sw-blue"></span><strong class="lg-blue">Blue LUNAR hand</strong> — the lunar month date, read on the <strong>LUNAR</strong> ring just inside the THERMAL ring (12.368266 lunations per tropical year — twelve full sectors plus a closing partial sector, numbered 1–13 from the same origin; lunation 1 is the lunation already running at the March equinox) · <span class="swatch sw-blue"></span><strong class="lg-blue">Phase ring</strong> — inside the LUNAR ring, one whole lunation drawn as a circle (NEW at the top, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, WAXING from new to full, WANING from full back to new); a small blue moon travels it at the day’s lunar age, dark at new, half-lit at the quarters, fully lit at full · <span class="swatch sw-green"></span><strong class="lg-green">Green WEEKDAY hand</strong> — the observer’s local weekday, read on the <strong>WEEKDAY</strong> ring in the open annulus inside the solar-terms band (SUNDAY–SATURDAY written out in full, Sunday’s sector opening at the equinox line at the top and the week running clockwise; green is the Z seat — Yield / Ground / Structure; the hand points at the current day’s sector centre, the current day’s sector is lit brighter, and the hand steps to the next day at local midnight) · <strong>Date arm</strong> — the colour-corresponded readout under the civil date, (🔵 M. 🔴 W.-D): <span style="color:var(--arm-blue)"><strong>🔵 blue</strong></span> is the Gregorian month counted from March, the solar year’s opening (March 1, April 2, … November 9, … February 12), and <span style="color:var(--arm-red)"><strong>🔴 red</strong></span> is the week.–day of that month in 7-day blocks from the 1st — so Saturday, November 14, 2026 reads (🔵 9. 🔴 2.-7). The arm is a readout only: the seat numerals 0–12, the five hands and their colours are unchanged.</p>
+      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 0–12 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <strong style="color:#ed2817;">Red gate-seal</strong> — April’s opening, the first counted month · <strong>Zodiac ring</strong> — the thirteen signs are seated centred on the calendar months (Aries over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February, and Ophiuchus ⛎ — the Serpent-Bearer, the missing thirteenth sign — over March, the seam month); the sign boundaries fall mid-month at the bisectors between month centres, and both of Ophiuchus’s boundaries fall inside March · Ophiuchus is seated over March <strong>by declaration</strong> of the calendar’s maker, completing 13 signs for 13 modules; in the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 12, 0–11 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 12.2, while TODAY parks at the seam) · <span class="swatch sw-blue"></span><strong class="lg-blue">Blue LUNAR hand</strong> — the lunar month date, read on the <strong>LUNAR</strong> ring just inside the THERMAL ring (12.368266 lunations per tropical year — twelve full sectors plus a closing partial sector, numbered 1–13 from the same origin; lunation 1 is the lunation already running at the March equinox) · <span class="swatch sw-blue"></span><strong class="lg-blue">Phase ring</strong> — inside the LUNAR ring, one whole lunation drawn as a circle (NEW at the top, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, WAXING from new to full, WANING from full back to new); a small blue moon travels it at the day’s lunar age, dark at new, half-lit at the quarters, fully lit at full · <span class="swatch sw-green"></span><strong class="lg-green">Green WEEKDAY hand</strong> — the observer’s local weekday, read on the <strong>WEEKDAY</strong> ring in the open annulus inside the solar-terms band (SUNDAY–SATURDAY written out in full, Sunday’s sector opening at the equinox line at the top and the week running clockwise; green is the Z seat — Yield / Ground / Structure; the hand points at the current day’s sector centre, the current day’s sector is lit brighter, and the hand steps to the next day at local midnight) · <strong>Date arm</strong> — the colour-corresponded readout under the civil date, (🔵 M. 🔴 W.-D): <span style="color:var(--arm-blue)"><strong>🔵 blue</strong></span> is the Gregorian month counted from March, the solar year’s opening (March 1, April 2, … November 9, … February 12), and <span style="color:var(--arm-red)"><strong>🔴 red</strong></span> is the week.–day of that month in 7-day blocks from the 1st — so Saturday, November 14, 2026 reads (🔵 9. 🔴 2.-7). One day carries no ordinary arm reading: April 1 — Zero.zero, the Boundary Day — reads <strong>0.0 — ZERO.ZERO</strong>, outside the count, on the arm as on every readout. The arm is a readout only: the seat numerals 0–12, the five hands and their colours are unchanged.</p>
 
       <p class="equation" id="equationLine"><span class="eq-head">Today’s equation</span>—</p>
 
@@ -488,7 +488,7 @@
           <div class="cell"><div class="k">Thermal phase Θ</div><div class="v" id="dTheta">—</div><div class="s" id="dThetaSub">—</div></div>
           <div class="cell"><div class="k">Solar longitude λ</div><div class="v" id="dLambda">—</div><div class="s" id="dLambdaSub">—</div></div>
           <div class="cell"><div class="k">The count</div><div class="v" id="dCount">—</div><div class="s">Count states from 0 · April 2 = counted 0 · labels 0–363 · April 1 outside at Zero.zero 0.0</div></div>
-          <div class="cell"><div class="k">Date arm</div><div class="v" id="dDateArm">—</div><div class="s">🔵 month in the March-origin count (March 1 · April 2 · … · February 12) · 🔴 week.–day of the Gregorian month, in 7-day blocks from the 1st</div></div>
+          <div class="cell"><div class="k">Date arm</div><div class="v" id="dDateArm">—</div><div class="s">🔵 month in the March-origin count (March 1 · April 2 · … · February 12) · 🔴 week.–day of the Gregorian month, in 7-day blocks from the 1st · April 1 carries no ordinary reading — it reads 0.0 — ZERO.ZERO, outside the count</div></div>
           <div class="cell"><div class="k">Weekday — local</div><div class="v" id="dWeekday">—</div><div class="s" id="dWeekdaySub">—</div></div>
           <div class="cell"><div class="k">Lunar month date</div><div class="v" id="dLunar">—</div><div class="s" id="dLunarSub">—</div></div>
           <div class="cell"><div class="k">Thermal clock drift today</div><div class="v" id="dDrift">—</div><div class="s">thermal elapsed vs solar elapsed at this longitude, since solar midnight there</div></div>
@@ -777,11 +777,23 @@
         return { week: Math.floor((dom - 1) / 7) + 1, day: ((dom - 1) % 7) + 1 };
       }
       function dateArmFor(date){
+        // ZERO.ZERO FENCE (Logiclock, Zero's ruling): April 1 — Zero.zero,
+        // the Boundary Day — stands outside the count at 0.0 on EVERY
+        // readout, the date arm included. It carries NO ordinary
+        // (🔵 M. 🔴 W.-D) reading in any year; the arm renders the
+        // Zero.zero form instead. The civil date line may still say
+        // April 1 — that is the civil side. April 2 resumes the ordinary
+        // figures at counted 0.
+        if(isBoundaryDay(date)){
+          var zText = "0.0 \u2014 ZERO.ZERO \u00B7 Zero Day, outside the count";
+          var zHtml = '<span style="color:var(--seam); font-weight:800">0.0</span> \u2014 ZERO.ZERO \u00B7 Zero Day, outside the count';
+          return { boundary: true, month: null, week: null, day: null, text: zText, html: zHtml };
+        }
         var m = marchOriginMonth(date), wd = gregWeekDay(date);
         var text = "(\uD83D\uDD35 " + m + ". \uD83D\uDD34 " + wd.week + ".-" + wd.day + ")";
         var html = '<span class="arm-paren">(</span><span class="arm-blue">\uD83D\uDD35 ' + m + '.</span> ' +
                    '<span class="arm-red">\uD83D\uDD34 ' + wd.week + '.-' + wd.day + '</span><span class="arm-paren">)</span>';
-        return { month: m, week: wd.week, day: wd.day, text: text, html: html };
+        return { boundary: false, month: m, week: wd.week, day: wd.day, text: text, html: html };
       }
 
       // ---------- Lunar layer: the lunar month date + the phase of the day ----------
@@ -1945,7 +1957,18 @@
           var arm = dateArmFor(eff);
           if(dateArmLine) dateArmLine.innerHTML = arm.html;
           var dArmEl = el("dDateArm");
-          if(dArmEl) dArmEl.innerHTML = '<span style="color:var(--arm-blue)">\uD83D\uDD35 ' + arm.month + '.</span> <span style="color:var(--arm-red)">\uD83D\uDD34 ' + arm.week + '.-' + arm.day + '</span>';
+          if(dArmEl){
+            if(arm.boundary){ dArmEl.textContent = arm.text; }
+            else dArmEl.innerHTML = '<span style="color:var(--arm-blue)">\uD83D\uDD35 ' + arm.month + '.</span> <span style="color:var(--arm-red)">\uD83D\uDD34 ' + arm.week + '.-' + arm.day + '</span>';
+          }
+          var capEl = el("dateArmCap");
+          if(capEl){
+            if(arm.boundary){
+              capEl.innerHTML = 'Date arm \u2014 April 1 stands at <span style="color:var(--seam); font-weight:700">0.0 \u00B7 ZERO.ZERO</span>, outside the count \u2014 the ordinary month / week-day reading resumes April 2';
+            } else {
+              capEl.innerHTML = 'Date arm \u2014 <span class="cap-blue">\uD83D\uDD35 month, March = 1</span> \u00B7 <span class="cap-red">\uD83D\uDD34 week.\u2013day of the month</span>';
+            }
+          }
           // Restored face readout — the 0.0 week and day count, alongside the
           // regular date above it: weeks and days reckoned from Zero.zero
           // (April 1 = 0.0, outside the count; April 2 = counted 0, so
@@ -2150,7 +2173,8 @@
           var p = dateStr.split("-");
           var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
           var a = dateArmFor(d);
-          return { month: a.month, week: a.week, day: a.day, text: a.text,
+          return { month: a.month, week: a.week, day: a.day, text: a.text, html: a.html,
+                   boundary: !!a.boundary,
                    gregorian: fmtDate(d), weekday: DOW[d.getDay()] };
         },
         zeroCountFor: function(dateStr){
