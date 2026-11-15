@@ -54,3 +54,4 @@ import ThetLogos.GibbsGapFloor
 import ThetLogos.MetaDPin
 import ThetLogos.MetaDSeatB
 import ThetLogos.AdmissibilityPin
+import ThetLogos.ThetIdentity

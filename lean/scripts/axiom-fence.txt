@@ -2124,3 +2124,14 @@ ThetLogos.AdmissibilityPin.r3_holds
 ThetLogos.AdmissibilityPin.convexMix_deltaWeight
 ThetLogos.AdmissibilityPin.r1_holds
 ThetLogos.AdmissibilityPin.r2_holds
+import ThetLogos.ThetIdentity
+ThetLogos.ThetIdentity.identity_reflexive
+ThetLogos.ThetIdentity.identity_iff
+ThetLogos.ThetIdentity.identity_symmetric
+ThetLogos.ThetIdentity.equality_equivalence
+ThetLogos.ThetIdentity.mp_second
+ThetLogos.ThetIdentity.partial_isometry_moore_penrose
+ThetLogos.ThetIdentity.final_projection_idempotent
+ThetLogos.ThetIdentity.initial_projection_idempotent
+ThetLogos.ThetIdentity.final_projection_self_adjoint
+ThetLogos.ThetIdentity.initial_projection_self_adjoint
