@@ -61,3 +61,4 @@ import ThetLogos.Q1PresSweep
 import ThetLogos.AqftKmsGibbs
 import ThetLogos.AqftFiniteTT
 import ThetLogos.StringSeatPin
+import ThetLogos.TolmanCapstone

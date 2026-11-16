@@ -2333,3 +2333,16 @@ ThetLogos.StringSeatPin.heat_excites
 ThetLogos.StringSeatPin.cold_concentration
 ThetLogos.StringSeatPin.gibbsProb_straightConfig_gt
 ThetLogos.StringSeatPin.gibbsProb_pair_ne
+
+import ThetLogos.TolmanCapstone
+ThetLogos.exists_tolmanGrid_close
+ThetLogos.exists_grid_seq_tendsto
+ThetLogos.continuousAt_occSlope
+ThetLogos.tendsto_comp_continuousOn_Icc
+ThetLogos.exists_seq_lambda
+ThetLogos.seq_lambda_tendsto
+ThetLogos.slope_identity_of_seq_limit
+ThetLogos.seq_limit_iff_refinement_limit
+ThetLogos.tolman_capstone_coincidence
+ThetLogos.tolman_capstone_slope_ae
+ThetLogos.tolman_seq_limit_witness
