@@ -31,9 +31,10 @@ identity.
 **Charter fences (on the face).** NO CLAIM. A toy seat: an equilibrium
 characterization on `[0, 1]`, not a field theory, not a continuum
 limit of the lattice seats, **not Yang-Mills progress**, and not a
-gravity statement. Dials 0/4. M-U4 is already closed on the circle
-letter by Zero's ruling of 2026-11-16; this module does **not**
-re-close M-U4 or any milestone — it proves the non-degenerate Tolman
+gravity statement. Dials 0/4. M-U4 stands **open**: Zero closed it
+on the circle letter by his ruling of 2026-11-16 (11:19 EST) and
+cleared that ruling the same day (13:14 EST); this module does
+**not** close M-U4 or any milestone — it proves the non-degenerate Tolman
 correspondence the WP3 audit priced (S–M). The weight `a` is a bare
 positive weight at every level and in the limit (**K-TOL-PROXY**
 armed: no statement names or treats it as a metric, a metric
