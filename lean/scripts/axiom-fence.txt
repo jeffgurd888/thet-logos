@@ -2315,3 +2315,21 @@ ThetLogos.modConj_smul
 ThetLogos.modConj_leftMul
 ThetLogos.modConj_rightMul
 ThetLogos.jConj_image_eq_commutant
+
+import ThetLogos.StringSeatPin
+ThetLogos.StringSeatPin.bendCost_nonneg
+ThetLogos.StringSeatPin.bendCost_eq_zero_iff
+ThetLogos.StringSeatPin.bendEnergy_nonneg
+ThetLogos.StringSeatPin.bendEnergy_straightConfig
+ThetLogos.StringSeatPin.bendEnergy_eq_zero_iff
+ThetLogos.StringSeatPin.one_le_bendEnergy
+ThetLogos.StringSeatPin.partSum_strictAnti_of_nonneg
+ThetLogos.StringSeatPin.card_config
+ThetLogos.StringSeatPin.gibbsProb_zero
+ThetLogos.StringSeatPin.gibbsProb_straightConfig_eq
+ThetLogos.StringSeatPin.cold_straightens
+ThetLogos.StringSeatPin.meanEnergy_strictAnti_of_nonconstant
+ThetLogos.StringSeatPin.heat_excites
+ThetLogos.StringSeatPin.cold_concentration
+ThetLogos.StringSeatPin.gibbsProb_straightConfig_gt
+ThetLogos.StringSeatPin.gibbsProb_pair_ne
