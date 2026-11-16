@@ -58,3 +58,4 @@ import ThetLogos.ThetIdentity
 import ThetLogos.ResonanceTransport
 import ThetLogos.PartnerThermal
 import ThetLogos.Q1PresSweep
+import ThetLogos.AqftKmsGibbs
