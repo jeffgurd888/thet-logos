@@ -220,6 +220,28 @@
       .gps-btn-primary:active{ transform:translateY(1px); }
       .gps-actions .lon-home{ margin-top:0; }
       .gps-privacy{ font-size:12.5px; }
+      /* ---------- Leibniz ring toggle ---------- */
+      .leibniz-switch{
+        display:flex; align-items:center; justify-content:space-between; gap:10px;
+        cursor:pointer; min-height:2.75rem;
+      }
+      .leibniz-switch span{
+        font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:700;
+      }
+      .leibniz-switch input[type="checkbox"]{
+        width:24px; height:24px; flex:none; accent-color:var(--gold); cursor:pointer;
+      }
+      .leibniz-cap{ margin:2px 0 0; }
+      #leibnizCountRow{
+        display:flex; gap:7px; justify-content:center; align-items:center;
+        margin:10px auto 0; min-height:16px;
+      }
+      #leibnizCountRow[hidden]{ display:none; }
+      #leibnizCountRow .lz-dot{
+        width:15px; height:15px; flex:none; border-radius:50%;
+        border:2px solid var(--ink); background:transparent;
+      }
+      #leibnizCountRow .lz-dot.filled{ background:var(--ink); }
       .solar-line{
         text-align:center; margin:3px auto 0;
         font-size:12.5px; color:var(--gold); font-variant-numeric: tabular-nums; letter-spacing:.04em; font-weight:600;
@@ -368,6 +390,7 @@
           <g id="thermalG"></g>
           <g id="lunarG"></g>
           <g id="phaseG"></g>
+          <g id="leibnizG"></g>
           <g id="seamG"></g>
           <g id="handsG">
             <g id="weekdayHand">
@@ -414,6 +437,7 @@
       <p class="date-arm-line" id="dateArmLine" aria-label="Date arm — blue: month in the March-origin count; red: week and day of the month">—</p>
       <p class="date-arm-cap" id="dateArmCap">Date arm — <span class="cap-blue">🔵 month, March = 1</span> · <span class="cap-red">🔴 week.–day of the month</span></p>
       <p class="zero-line" id="zeroLine" aria-label="Week and day count from Zero.zero">—</p>
+      <div id="leibnizCountRow" hidden role="img" aria-label="Counted day in binary dots"></div>
       <div class="digital-readout" id="digitalReadout" aria-label="Digital time">
         <div class="digital-label" id="digitalLabel">Digital time</div>
         <div class="digital-time" id="digitalTime">--:--:--</div>
@@ -470,6 +494,13 @@
         </div>
         <p class="lon-lag" id="gpsStatus" role="status" aria-live="polite">Home — Schoolcraft, Michigan · 42.0000° N, 85.6000° W (pinned location). Tap USE MY PRECISE LOCATION for a GPS fix — the sky, the Moon and tide axis, and the solar-thermal lag all recompute from where you stand.</p>
         <p class="lon-lag gps-privacy">Your location is read only when you tap, and never leaves this device.</p>
+      </div>
+
+      <div class="lon-control leibniz-control" aria-label="Leibniz ring">
+        <label class="leibniz-switch" for="leibnizToggle"><span>Leibniz ring</span>
+          <input type="checkbox" id="leibnizToggle" aria-label="Leibniz ring" />
+        </label>
+        <p class="lon-lag leibniz-cap">Leibniz ring — binary dots after Leibniz's tactile clock (c. 1716): hollow 0, filled 1, weights 1·2·4·8 from the centre out.</p>
       </div>
 
       <div class="sky-panel" aria-label="The star chart">
@@ -2014,6 +2045,7 @@
               ' — Counted ' + cd + ' of 0–363' +
               '<span class="zsub">counted from Zero.zero (April 1) · thermal address <span class="zmod">' + addr.name + ' ' + addr.mw + ', day ' + addr.day + '</span></span>';
           }
+          renderLeibnizCount();
           el("dWeekday").textContent = DOW[wdIndex];
           el("dWeekdaySub").textContent = "green hand at " + wdAngle.toFixed(1) + "° on the WEEKDAY ring · local weekday, steps at local midnight";
           el("dLunar").textContent = "Lunation " + lun.number + " · day " + lun.ageDays.toFixed(1);
@@ -2102,6 +2134,73 @@
         }
         requestAnimationFrame(tick);
       }
+
+      // ---------- Leibniz ring: binary dots after Leibniz's tactile clock (c. 1716) ----------
+      // Design layer only, toggleable, default OFF — when off, nothing is
+      // drawn and the face is exactly as before. When on:
+      //  · each of the 13 module seats (seats 0–12, April = 0, the counted
+      //    ring's own numerals) carries a radial row of 4 dots between its
+      //    numeral and the centre, on a radial line inside its counted
+      //    sector: hollow dot = 0, filled dot = 1, bit weights 1, 2, 4, 8
+      //    read from the centre outward, encoding the seat number in binary
+      //    (seat 12 = weights 4 and 8 filled; seat 0 = all hollow).
+      //  · a 9-dot row beside the count readout encodes the counted day
+      //    (0–363) the same way, weights 1…256 left to right.
+      // ZERO.ZERO FENCE: on April 1 (Zero.zero, outside the count) the
+      // counted-day row is NOT rendered — no figures — while the seat
+      // dot-rows still render normally.
+      var leibnizOn = false;
+      var leibnizG = document.getElementById("leibnizG");
+      var LEIBNIZ_RADII = [33, 41, 49, 57]; // weights 1, 2, 4, 8 — centre outward
+      var LEIBNIZ_OFFSET = 9.5; // degrees clockwise from the seat numeral's own radius, inside its counted sector
+      function leibnizBits(value, n){
+        var b = [], i;
+        for(i = 0; i < n; i++) b.push((value >> i) & 1);
+        return b;
+      }
+      function renderLeibnizRing(){
+        if(!leibnizOn){ leibnizG.innerHTML = ""; renderLeibnizCount(); return; }
+        var s = "", seat, k, bits, p, filled;
+        for(seat = 0; seat < 13; seat++){
+          bits = leibnizBits(seat, 4);
+          var ang = (seat + 0.5) * 360 / 13 + LEIBNIZ_OFFSET;
+          s += '<g data-leibniz-seat="' + seat + '"><title>Seat ' + seat + ' — binary dots: weights 1, 2, 4, 8 from the centre out</title>';
+          for(k = 0; k < 4; k++){
+            filled = bits[k] === 1;
+            p = pt(200, 200, LEIBNIZ_RADII[k], ang);
+            s += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="2.6" ' +
+                 'data-weight="' + (1 << k) + '" data-bit="' + bits[k] + '" ' +
+                 (filled ? 'fill="#f6ecd7" stroke="#f6ecd7" stroke-width="1"'
+                         : 'fill="#0d1117" stroke="#f6ecd7" stroke-width="1.1"') + '/>';
+          }
+          s += '</g>';
+        }
+        leibnizG.innerHTML = s;
+        renderLeibnizCount();
+      }
+      function renderLeibnizCount(){
+        var row = document.getElementById("leibnizCountRow");
+        if(!row) return;
+        if(!leibnizOn){ row.hidden = true; row.innerHTML = ""; return; }
+        var eff = effectiveNow();
+        var cd = countDay(eff);
+        if(isBoundaryDay(eff) || cd === null){ row.hidden = true; row.innerHTML = ""; return; }
+        var bits = leibnizBits(cd, 9), html = "", k;
+        for(k = 0; k < 9; k++){
+          html += '<span class="lz-dot' + (bits[k] ? " filled" : "") + '" data-weight="' + (1 << k) + '" data-bit="' + bits[k] + '"></span>';
+        }
+        row.innerHTML = html;
+        row.setAttribute("aria-label", "Counted day " + cd + " in binary dots — hollow 0, filled 1, weights 1 to 256");
+        row.hidden = false;
+      }
+      function setLeibnizRing(on){
+        leibnizOn = !!on;
+        var tgl = document.getElementById("leibnizToggle");
+        if(tgl) tgl.checked = leibnizOn;
+        renderLeibnizRing();
+        return leibnizOn;
+      }
+      document.getElementById("leibnizToggle").addEventListener("change", function(){ setLeibnizRing(this.checked); });
 
       // ---------- Stepper ----------
       function setView(d){
@@ -2236,6 +2335,17 @@
                    goldLambda:+lam3.toFixed(1), goldAngle:+lam3.toFixed(2),
                    thermalModule:ad3.name, thermalMw:ad3.mw };
         },
+        leibnizFor: function(dateStr){
+          var p = dateStr.split("-");
+          var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
+          var seats = [], s;
+          for(s = 0; s < 13; s++) seats.push({ seat: s, bits: leibnizBits(s, 4) });
+          var cd = countDay(d), b = isBoundaryDay(d);
+          return { enabled: leibnizOn, seats: seats,
+                   counted: (b || cd === null) ? { boundary: true, countDay: null, bits: null }
+                                                : { boundary: false, countDay: cd, bits: leibnizBits(cd, 9) } };
+        },
+        setLeibnizRing: function(on){ return setLeibnizRing(on); },
         weekdayFor: function(dateStr){
           var p = dateStr.split("-");
           var d = new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0);
