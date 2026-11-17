@@ -64,3 +64,11 @@ import ThetLogos.StringSeatPin
 import ThetLogos.TolmanCapstone
 import ThetLogos.ThermalCalendarPin
 import ThetLogos.LeibnizPin
+import ThetLogos.OGPin
+import ThetLogos.OGExhibit
+import ThetLogos.ActionGravityPin
+import ThetLogos.MVStackPin
+import ThetLogos.AdjointedSumPin
+import ThetLogos.SeparationPin
+import ThetLogos.ThermalAcousticPin
+import ThetLogos.ReadingRulePin
