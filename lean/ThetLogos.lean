@@ -62,3 +62,5 @@ import ThetLogos.AqftKmsGibbs
 import ThetLogos.AqftFiniteTT
 import ThetLogos.StringSeatPin
 import ThetLogos.TolmanCapstone
+import ThetLogos.ThermalCalendarPin
+import ThetLogos.LeibnizPin
