@@ -99,3 +99,5 @@ import ThetLogos.StringResponsePin
 import ThetLogos.StringWindingPin
 import ThetLogos.StringChargeDensityPin
 import ThetLogos.StringChargeDensityBridge
+import ThetLogos.Span3SeatSchurGateWildN1Kill
+import ThetLogos.Span3SeatSchurGateWildReduce
