@@ -95,3 +95,7 @@ import ThetLogos.SMTripleCertificate
 import ThetLogos.IdensityCoincidence
 import ThetLogos.IdensityBoundary
 import ThetLogos.ColdLimitConcentration
+import ThetLogos.StringResponsePin
+import ThetLogos.StringWindingPin
+import ThetLogos.StringChargeDensityPin
+import ThetLogos.StringChargeDensityBridge

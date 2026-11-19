@@ -2548,3 +2548,58 @@ ThetLogos.mem_edgeCut
 ThetLogos.edgeCut_empty
 ThetLogos.cutWeight_empty
 ThetLogos.cutWeight_nonneg
+
+# ── StringResponsePin (INTEG-EVERYTHING T7, 2026-11-19) ──
+import ThetLogos.StringResponsePin
+ThetLogos.StringResponsePin.siteSum_eq
+ThetLogos.StringResponsePin.siteSum_zero
+ThetLogos.StringResponsePin.partSum_bendEnergy_eq
+ThetLogos.StringResponsePin.gibbsProb_straightConfig_siteSum
+ThetLogos.StringResponsePin.gibbsProb_straightConfig_zero
+ThetLogos.StringResponsePin.one_le_siteSum
+ThetLogos.StringResponsePin.siteSum_le_one_add
+ThetLogos.StringResponsePin.activity_le
+
+# ── StringWindingPin (INTEG-EVERYTHING T7, 2026-11-19) ──
+import ThetLogos.StringWindingPin
+ThetLogos.StringWindingPin.winding_abs_le
+ThetLogos.StringWindingPin.winding_abs_le_stepEnergy
+ThetLogos.StringWindingPin.exists_winding
+ThetLogos.StringWindingPin.winding_flip
+ThetLogos.StringWindingPin.stepEnergy_flip
+ThetLogos.StringWindingPin.partSum_sector_decomp
+ThetLogos.StringWindingPin.sectorPartSum_neg
+ThetLogos.StringWindingPin.gibbsProb_sector_zero
+ThetLogos.StringWindingPin.cold_unwinds
+
+# ── StringChargeDensityPin (INTEG-EVERYTHING T7, 2026-11-19) ──
+import ThetLogos.StringChargeDensityPin
+ThetLogos.StringChargeDensityPin.bendCost_nonneg
+ThetLogos.StringChargeDensityPin.bendCost_eq_zero_iff
+ThetLogos.StringChargeDensityPin.bendEnergy_nonneg
+ThetLogos.StringChargeDensityPin.bendEnergy_straightConfig
+ThetLogos.StringChargeDensityPin.bendEnergy_eq_zero_iff
+ThetLogos.StringChargeDensityPin.one_le_bendEnergy
+ThetLogos.StringChargeDensityPin.chargeAt_straightConfig
+ThetLogos.StringChargeDensityPin.density_sum
+ThetLogos.StringChargeDensityPin.density_zero
+ThetLogos.StringChargeDensityPin.density_neg
+ThetLogos.StringChargeDensityPin.cold_weight
+ThetLogos.StringChargeDensityPin.chargeAt_sub_abs_le
+ThetLogos.StringChargeDensityPin.density_deviation
+ThetLogos.StringChargeDensityPin.hot_cold_profile
+
+# ── StringChargeDensityBridge (INTEG-EVERYTHING T7, 2026-11-19) ──
+import ThetLogos.StringChargeDensityBridge
+ThetLogos.StringChargeDensityBridge.bendCost_eq
+ThetLogos.StringChargeDensityBridge.bendEnergy_eq
+ThetLogos.StringChargeDensityBridge.straightConfig_eq
+ThetLogos.StringChargeDensityBridge.gibbsProb_eq
+ThetLogos.StringChargeDensityBridge.partSum_eq
+ThetLogos.StringChargeDensityBridge.density_eq
+ThetLogos.StringChargeDensityBridge.density_sum_seat
+ThetLogos.StringChargeDensityBridge.density_zero_seat
+ThetLogos.StringChargeDensityBridge.density_neg_seat
+ThetLogos.StringChargeDensityBridge.density_deviation_seat
+ThetLogos.StringChargeDensityBridge.cold_weight_seat
+ThetLogos.StringChargeDensityBridge.hot_cold_profile_seat
