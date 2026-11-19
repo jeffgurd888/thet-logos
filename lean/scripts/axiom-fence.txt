@@ -2403,3 +2403,36 @@ ThetLogos.readingOf_mostGenerally_iff
 ThetLogos.needsAsk_reading
 ThetLogos.tetRuling_reading
 ThetLogos.jointCase_needsAsk
+
+import ThetLogos.PhaseRingSteps
+ThetLogos.PhaseRingRelax.step_eq_gstep
+ThetLogos.PhaseRingRelax.sum_gstep
+ThetLogos.PhaseRingRelax.stepMean_mul_card
+ThetLogos.PhaseRingRelax.sum_step_eq
+ThetLogos.PhaseRingRelax.sum_relaxGStep
+
+import ThetLogos.PhaseRingRelaxStep
+ThetLogos.PhaseRingRelax.relaxStep_Θ
+ThetLogos.PhaseRingRelax.relaxStep_step
+ThetLogos.PhaseRingRelax.relaxStep_winding
+ThetLogos.PhaseRingRelax.relaxStep_iterate_winding
+ThetLogos.PhaseRingRelax.slipShift_relaxStep_winding
+
+import ThetLogos.PhaseRingEnergy
+ThetLogos.PhaseRingRelax.liftEnergy_sub_floor
+ThetLogos.PhaseRingRelax.liftEnergy_nonneg
+ThetLogos.PhaseRingRelax.liftEnergy_ge
+ThetLogos.PhaseRingRelax.liftEnergy_eq_iff
+
+import ThetLogos.PhaseRingUniform
+ThetLogos.PhaseRingRelax.uniformLift_winding
+ThetLogos.PhaseRingRelax.uniformLift_step
+ThetLogos.PhaseRingRelax.uniformLift_isUniformTwist
+ThetLogos.PhaseRingRelax.liftEnergy_uniformLift
+ThetLogos.PhaseRingRelax.fourierLift_isUniformTwist
+ThetLogos.PhaseRingRelax.liftEnergy_fourierLift
+
+import ThetLogos.PhaseRingRelaxEnergy
+ThetLogos.PhaseRingRelax.liftEnergy_relaxStep
+ThetLogos.PhaseRingRelax.liftEnergy_relaxStep_le
+ThetLogos.PhaseRingRelax.relaxStep_fixed_iff

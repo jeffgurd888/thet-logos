@@ -72,3 +72,9 @@ import ThetLogos.AdjointedSumPin
 import ThetLogos.SeparationPin
 import ThetLogos.ThermalAcousticPin
 import ThetLogos.ReadingRulePin
+import ThetLogos.PhaseRingSteps
+import ThetLogos.PhaseRingRelaxStep
+import ThetLogos.PhaseRingEnergy
+import ThetLogos.PhaseRingUniform
+import ThetLogos.PhaseRingRelaxEnergy
+import ThetLogos.MVCompositePin
