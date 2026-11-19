@@ -78,3 +78,7 @@ import ThetLogos.PhaseRingEnergy
 import ThetLogos.PhaseRingUniform
 import ThetLogos.PhaseRingRelaxEnergy
 import ThetLogos.MVCompositePin
+import ThetLogos.GoldenRatioPin
+import ThetLogos.GoldenRatioLimit
+import ThetLogos.GoldenRatioNestedRadical
+import ThetLogos.GoldenRatioContinuedFraction

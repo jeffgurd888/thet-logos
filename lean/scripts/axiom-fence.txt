@@ -2436,3 +2436,25 @@ import ThetLogos.PhaseRingRelaxEnergy
 ThetLogos.PhaseRingRelax.liftEnergy_relaxStep
 ThetLogos.PhaseRingRelax.liftEnergy_relaxStep_le
 ThetLogos.PhaseRingRelax.relaxStep_fixed_iff
+
+import ThetLogos.GoldenRatioPin
+ThetLogos.goldenRatio_eq
+ThetLogos.goldenRatio_sq_eq
+ThetLogos.goldenRatio_inv_eq
+ThetLogos.goldenConj_eq
+ThetLogos.goldenRatio_cos_pi_div_five
+ThetLogos.golden_rectangle_proportion
+ThetLogos.goldenRatio_pow_fib
+ThetLogos.binet_formula
+
+import ThetLogos.GoldenRatioLimit
+ThetLogos.fib_ratio_tendsto_goldenRatio
+
+import ThetLogos.GoldenRatioNestedRadical
+ThetLogos.nestedRad_zero
+ThetLogos.nestedRad_succ
+ThetLogos.nestedRad_nonneg
+ThetLogos.nestedRad_mono
+ThetLogos.nestedRad_le_golden
+ThetLogos.nestedRad_tendsto
+ThetLogos.nestedRad_tendsto_goldenRatio
