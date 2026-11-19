@@ -2458,3 +2458,74 @@ ThetLogos.nestedRad_mono
 ThetLogos.nestedRad_le_golden
 ThetLogos.nestedRad_tendsto
 ThetLogos.nestedRad_tendsto_goldenRatio
+
+import ThetLogos.HotColdLimits
+ThetLogos.gibbsForm_diagonal_zero
+ThetLogos.coldPartition_pos
+ThetLogos.coldWeight_eq
+ThetLogos.coldWeight_ground_mono
+ThetLogos.coldWeight_le_exp_neg_gap
+ThetLogos.offGround_weight_le
+ThetLogos.hotState_ne_coldState
+
+import ThetLogos.ThermalDensityPin
+ThetLogos.coldWeight_pos
+ThetLogos.coldWeight_sum_one
+ThetLogos.covar_two_mul
+ThetLogos.covar_summand_nonpos
+ThetLogos.coldWeight_reweight
+ThetLogos.coldMeanEnergy_reweight
+ThetLogos.thermalDensity_antitone
+ThetLogos.thermalDensity_strictAnti
+ThetLogos.gibbsEntropy_eq
+ThetLogos.relEnt_gibbs_eq
+ThetLogos.relEnt_gibbs_nonneg
+ThetLogos.gibbsEntropy_antitone
+ThetLogos.gibbsEntropy_floor
+ThetLogos.thermal_pairing
+
+import ThetLogos.TetWitnessPin
+ThetLogos.tethWitness_bool_inhabited
+ThetLogos.tethWitness_empty_interaction
+ThetLogos.TethWitness.core_idempotent
+
+import ThetLogos.BinaryZeroPointPin
+ThetLogos.otherHalf_involutive
+ThetLogos.otherHalf_ne_self
+ThetLogos.eq_zeroPoint_or
+ThetLogos.binaryState_card
+ThetLogos.pair_eq_univ
+
+import ThetLogos.ThermalMetricPin
+ThetLogos.Tbar_pos
+ThetLogos.r_Tbar
+ThetLogos.r_zero
+ThetLogos.r_strictMono
+
+import ThetLogos.GapLinePin
+ThetLogos.GapLineForm.gapFloorOnly
+ThetLogos.GapLineForm.twoSidesOneLine
+ThetLogos.GapLineForm.nonTime
+
+import ThetLogos.SolarTimeRung
+ThetLogos.tableStep_eq_thetaStep
+ThetLogos.st1_segment_identification
+ThetLogos.st2_accumulation
+ThetLogos.st3_rate_ratio
+ThetLogos.st3_orientation
+ThetLogos.st4_conversion_contact
+
+import ThetLogos.KernelHeatPlanckBridge
+ThetLogos.modeWeight_eq_pow
+ThetLogos.modePartition_eq
+ThetLogos.modePartition_pos
+ThetLogos.tsum_modeWeight_mul
+ThetLogos.meanOccupation_eq_planck
+ThetLogos.heatTrace_eq_spectralHeatSum
+ThetLogos.heatTrace_pos
+ThetLogos.gibbsForm_eq_heatTrace
+ThetLogos.gibbsMeanEnergy_eq
+
+import ThetLogos.SMTripleCertificate
+ThetLogos.smGen_J_conjugation
+ThetLogos.smTripleCertificate

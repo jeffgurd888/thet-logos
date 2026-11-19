@@ -82,3 +82,13 @@ import ThetLogos.GoldenRatioPin
 import ThetLogos.GoldenRatioLimit
 import ThetLogos.GoldenRatioNestedRadical
 import ThetLogos.GoldenRatioContinuedFraction
+import ThetLogos.ColdHeatDualityPin
+import ThetLogos.HotColdLimits
+import ThetLogos.ThermalDensityPin
+import ThetLogos.TetWitnessPin
+import ThetLogos.BinaryZeroPointPin
+import ThetLogos.ThermalMetricPin
+import ThetLogos.GapLinePin
+import ThetLogos.SolarTimeRung
+import ThetLogos.KernelHeatPlanckBridge
+import ThetLogos.SMTripleCertificate
