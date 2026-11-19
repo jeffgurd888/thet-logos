@@ -2529,3 +2529,22 @@ ThetLogos.gibbsMeanEnergy_eq
 import ThetLogos.SMTripleCertificate
 ThetLogos.smGen_J_conjugation
 ThetLogos.smTripleCertificate
+
+# ── IdensityCoincidence (INTEG-EVERYTHING T6, 2026-11-19) ──
+import ThetLogos.IdensityCoincidence
+ThetLogos.entropyW_gibbsProb_eq
+ThetLogos.entropyW_gibbsProb_eq_beta_form
+ThetLogos.diagModularK_expectation_eq_entropyW
+
+# ── IdensityBoundary (INTEG-EVERYTHING T6, 2026-11-19) ──
+import ThetLogos.IdensityBoundary
+ThetLogos.mem_vertexBoundary
+ThetLogos.vertexBoundary_empty
+ThetLogos.vertexBoundary_univ
+ThetLogos.vertexBoundary_disjoint
+ThetLogos.boundaryCard_empty
+ThetLogos.boundaryCard_univ
+ThetLogos.mem_edgeCut
+ThetLogos.edgeCut_empty
+ThetLogos.cutWeight_empty
+ThetLogos.cutWeight_nonneg

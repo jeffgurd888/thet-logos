@@ -92,3 +92,6 @@ import ThetLogos.GapLinePin
 import ThetLogos.SolarTimeRung
 import ThetLogos.KernelHeatPlanckBridge
 import ThetLogos.SMTripleCertificate
+import ThetLogos.IdensityCoincidence
+import ThetLogos.IdensityBoundary
+import ThetLogos.ColdLimitConcentration
