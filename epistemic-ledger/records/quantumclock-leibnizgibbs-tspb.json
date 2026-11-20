@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 709,
+  "strict": 16152,
+  "total": 16795
+ },
+ "claim": "THE QUANTUM CLOCK, THE LEIBNIZ-GIBBS BRIDGE, AND THE THERMAL-STRING/PLANCK BRIDGE INTEGRATE (TRANCHE T9). QuantumClockPin (branch quantumclock @ 45be99d): 16 declarations / 13 theorems \u2014 QC-2 the tick spectrum, QC-3 the flow dichotomy, QC-1 the state-first clock. DISCLOSED RESIDUE, ON THIS RECORD'S FACE: QC-1's literal gibbsForm H-form identity is a NAMED OPEN RESIDUE on the module's face \u2014 the missing step is basis-independence of the spectral logarithm; it was not attempted and is not claimed, and the naive-periodicity form was pre-registered FALSE and never commissioned. LeibnizGibbsBridgePin (branch leibnizgibbs @ 4d6965c): 13 declarations / 12 theorems \u2014 heterogeneous factorization: two Gibbs systems combine into one joint Gibbs state only at a shared beta, the joint Gibbs weight being the product weight, with the entropy corollaries (the Landauer-shaped dyadic form is shape-only naming, on its face). ThermalStringPlanckBridge (branch tspb @ 37ac53f): 12 declarations / 6 theorems \u2014 a string seat's Gibbs entropy is at most (length / Planck length) * log(k+1), saturated at beta = 0; the Planck length enters as a labeled imported measured input (CODATA literal), never derived, and the pin's non-interference clause stands: its length fills no CPEC Planck-scale absence and is never quoted at gravity seats. Totals for this record: 41 declarations / 31 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-20",
+ "dossier": null,
+ "evidence": "Lanes: quantumclock @ 45be99d \u2014 QuantumClockPin.lean sha256 9dbf5ad022939160216e5d2a811aafc65f205835f5ecce653342402f2769cd63. leibnizgibbs @ 4d6965c \u2014 LeibnizGibbsBridgePin.lean sha256 6ae46aab47ba8c79b80676e4cc2b08fbbccca467d7aef6cbe6b6b1ad7893738c. tspb @ 37ac53f \u2014 ThermalStringPlanckBridge.lean sha256 0d817416ed3ddb243e1247d1807b2d1c04a1cd031718aab2157d8d4c50d13f06. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T9, 2026-11-20): transplant hash gate 58/58 (disk == branch-tip blob == freeze record, INTEG-T9-STATE.md). TARGETED BUILDS: PASS for all 26 items + the item-27 delta (build-targeted-integ-t9.log: run 1 banked items 1,2,6,7,3,4,5,8,23,11,25, then a VM restart killed the run during item 26, NO VERDICT for that item in run 1; build-targeted-integ-t9-resume1.log: items 26,9,10,12,13,14,15,16,17,18,19,20,21,22,24,27 PASS). ROOT BUILD: PASS 9,307 jobs, BUILD_EXIT:0 (build-root-integ-t9.log). Zero-sorry gate PASS, 724 files (check_no_sorry.py). AXIOM FENCE: PASS 2718/2718 (fence-integ-t9-a2.log / fence-integ-t9-a2.json; 2,718 entries, 0 failing, no sorryAx; attempt 1 VOID, killed by a VM restart ~9 min in, no verdict). CENSUS: strict 15,677 -> 16,152; modules 652 -> 709; stripped total 16,320 -> 16,795; FILES 667 -> 724; recount 15,651 -> 16,126 (count_house.py). Combined total after T9: 507,344 = 16,152 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "quantumclock-leibnizgibbs-tspb",
+ "kill_id": null,
+ "module": null,
+ "status": "standing",
+ "tier": "T1"
+}

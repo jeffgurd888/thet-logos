@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 709,
+  "strict": 16152,
+  "total": 16795
+ },
+ "claim": "THE THERMAL CALENDAR DAY-LEVEL BRICK 2 INTEGRATES AS A DELTA (TRANCHE T9). ThermalCalendarPin (branch daylevel @ 66a8633) grows in-tree from 36 to 41 declarations (22 -> 27 strict): the Brick 2 countedOf forms \u2014 countedOf_injective, countedOf_surjective, countedOf_mono, countedOf_strict_mono, card_complement_boundaryDay \u2014 added to the module's existing fence section (+5 names in the registry's growth 2,243 -> 2,718). The calendar remains a T5 design study, NO CLAIM, dial-ineligible; its standing priority is care, not grade. ITEM 28 FINDING, ON THIS RECORD'S FACE: LeibnizPin's lane blob is byte-identical to the in-tree module (sha256 e232ec9d... on both sides) \u2014 delta 0; nothing was transplanted and nothing is double-counted. NO CLAIM; dials 0/4.",
+ "date": "2026-11-20",
+ "dossier": null,
+ "evidence": "Lane: daylevel @ 66a8633 \u2014 ThermalCalendarPin.lean sha256 88b6dab9e8eceb6b9997ffd264ec2b24bf662bb96b25c910962aed0b0e7214e5 (in-tree pre-T9 form at b54e6dd: 22 strict / 36 total). LeibnizPin: branch leibnizpin @ d7b741c blob sha256 prefix e232ec9da09f == in-tree disk sha256 prefix e232ec9da09f. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T9, 2026-11-20): transplant hash gate 58/58 (disk == branch-tip blob == freeze record, INTEG-T9-STATE.md). TARGETED BUILDS: PASS for all 26 items + the item-27 delta (build-targeted-integ-t9.log: run 1 banked items 1,2,6,7,3,4,5,8,23,11,25, then a VM restart killed the run during item 26, NO VERDICT for that item in run 1; build-targeted-integ-t9-resume1.log: items 26,9,10,12,13,14,15,16,17,18,19,20,21,22,24,27 PASS). ROOT BUILD: PASS 9,307 jobs, BUILD_EXIT:0 (build-root-integ-t9.log). Zero-sorry gate PASS, 724 files (check_no_sorry.py). AXIOM FENCE: PASS 2718/2718 (fence-integ-t9-a2.log / fence-integ-t9-a2.json; 2,718 entries, 0 failing, no sorryAx; attempt 1 VOID, killed by a VM restart ~9 min in, no verdict). CENSUS: strict 15,677 -> 16,152; modules 652 -> 709; stripped total 16,320 -> 16,795; FILES 667 -> 724; recount 15,651 -> 16,126 (count_house.py). Combined total after T9: 507,344 = 16,152 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "thermal-calendar-brick2-delta",
+ "kill_id": null,
+ "module": "lean/ThetLogos/ThermalCalendarPin.lean",
+ "status": "standing",
+ "tier": "T1"
+}

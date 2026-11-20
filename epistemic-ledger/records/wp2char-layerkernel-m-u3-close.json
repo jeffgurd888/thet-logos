@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 709,
+  "strict": 16152,
+  "total": 16795
+ },
+ "claim": "WP2CHAR INTEGRATES AND M-U3 CLOSES AT CENSUS GRADE (TRANCHE T9). The twelve LayerKernel character-route modules (branch wp2char @ ed08e1b) \u2014 TensorContraction, TensorAverage, TensorChannel, WordContraction, WordDecomp, UnitaryDecomp, UnitaryModel, IrredFamily, ColumnExpansion, CharModel, CharSeparation, GramCertChar: 96 declarations / 65 theorems (Module A 30 + Module B 66 as scoped). With layerKernelPos_char now in the census, M-U3 is CLOSED at census grade on the character route (Zero's B4 ruling, 2026-11-19): at every finite (G, rho), every even N, every beta >= 0, the layer kernel is positive semidefinite, FACT-free, with no transport. NAMED AND OPEN, ON THIS RECORD'S FACE: DeltaGramGap is NOT part of this transplant, is proved nowhere, and remains named-and-open; Dial 2 stays 0 \u2014 no continuum statement and no gravity object is claimed by this close. OLEAN-ABSENCE DISCLOSURE (WP2Char, item 24 (12 files)): the lane's build tree was thinned after landing (standing storage practice), so no lane olean stood at the transplant freeze; the item was carried on its STATUS verdict (per-brick build PASS + axcheck on the standard three + hash MATCH recorded at landing in the lane STATUS) plus the freeze's re-derived blob hash and disk-source == blob check, and its integration targeted build in this tranche is its on-disk verdict \u2014 the T8 W-2-prime precedent (ledger record span3-wild-pair). Its targeted build PASSED and its olean now stands in the main tree. NO CLAIM; dials 0/4.",
+ "date": "2026-11-20",
+ "dossier": null,
+ "evidence": "Lane: wp2char @ ed08e1b \u2014 LayerKernel files sha256 prefixes: LayerKernelTensorContraction.lean fce56ee5, LayerKernelTensorAverage.lean d3fec096, LayerKernelTensorChannel.lean 08f39f30, LayerKernelWordContraction.lean 2b47e056, LayerKernelWordDecomp.lean 02a11157, LayerKernelUnitaryDecomp.lean ae65aee3, LayerKernelUnitaryModel.lean 66edd071, LayerKernelIrredFamily.lean e0248716, LayerKernelColumnExpansion.lean 8de7e6d2, LayerKernelCharModel.lean 0e723da8, LayerKernelCharSeparation.lean 577ade49, LayerKernelGramCertChar.lean 50f868ec. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T9, 2026-11-20): transplant hash gate 58/58 (disk == branch-tip blob == freeze record, INTEG-T9-STATE.md). TARGETED BUILDS: PASS for all 26 items + the item-27 delta (build-targeted-integ-t9.log: run 1 banked items 1,2,6,7,3,4,5,8,23,11,25, then a VM restart killed the run during item 26, NO VERDICT for that item in run 1; build-targeted-integ-t9-resume1.log: items 26,9,10,12,13,14,15,16,17,18,19,20,21,22,24,27 PASS). ROOT BUILD: PASS 9,307 jobs, BUILD_EXIT:0 (build-root-integ-t9.log). Zero-sorry gate PASS, 724 files (check_no_sorry.py). AXIOM FENCE: PASS 2718/2718 (fence-integ-t9-a2.log / fence-integ-t9-a2.json; 2,718 entries, 0 failing, no sorryAx; attempt 1 VOID, killed by a VM restart ~9 min in, no verdict). CENSUS: strict 15,677 -> 16,152; modules 652 -> 709; stripped total 16,320 -> 16,795; FILES 667 -> 724; recount 15,651 -> 16,126 (count_house.py). Combined total after T9: 507,344 = 16,152 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "wp2char-layerkernel-m-u3-close",
+ "kill_id": null,
+ "module": null,
+ "status": "standing",
+ "tier": "T1"
+}

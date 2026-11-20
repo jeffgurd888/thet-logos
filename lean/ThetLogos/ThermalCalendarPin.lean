@@ -582,4 +582,74 @@ theorem countedOf_last :
     countedOf ⟨364, by norm_num⟩ (by decide) = ⟨363, by norm_num⟩ :=
   Fin.ext rfl
 
+/-! ## §9 — the day-level API: the counted map on the
+complement (day-level Brick 2, Zero's relaunch
+2026-11-18)
+
+The elementary API of §8's enumeration: on the
+complement of the Boundary Day, `countedOf` is
+injective and surjective onto `Fin 364`, it preserves
+the enumeration order, and the complement carries
+exactly 364 days. This is civil enumeration API only —
+the assembly a bijection theorem would use, stated
+here as API. No Θ claim is made for individual days;
+the day level stays civil, not thermal, exactly as
+carded at §8. -/
+
+/-- The counted map is injective on the complement of
+the Boundary Day: two counted civil days carrying the
+same counted label are the same day. -/
+theorem countedOf_injective {d e : Fin 365} (hd : d ≠ boundaryDay)
+    (he : e ≠ boundaryDay) (h : countedOf d hd = countedOf e he) :
+    d = e := by
+  have hval : d.1 - 1 = e.1 - 1 := by
+    have hcon := congrArg Fin.val h
+    rwa [countedOf_val, countedOf_val] at hcon
+  have hd0 : d.1 ≠ 0 := fun h0 => hd (Fin.ext h0)
+  have he0 : e.1 ≠ 0 := fun h0 => he (Fin.ext h0)
+  exact Fin.ext (by omega)
+
+/-- The counted map is surjective onto the counted
+year: every counted label 0–363 is carried by a
+counted civil day — label `c` by the civil day at
+index `c + 1`. -/
+theorem countedOf_surjective (c : Fin 364) :
+    ∃ d : Fin 365, ∃ h : d ≠ boundaryDay, countedOf d h = c := by
+  have hc : c.1 < 364 := c.2
+  refine ⟨⟨c.1 + 1, by omega⟩, ?_, ?_⟩
+  · intro hcon
+    have hv : c.1 + 1 = 0 := congrArg Fin.val hcon
+    omega
+  · apply Fin.ext
+    rw [countedOf_val]
+    exact Nat.add_sub_cancel c.1 1
+
+/-- The counted map preserves the enumeration order:
+a counted civil day seated no later than another
+carries a counted label no larger. -/
+theorem countedOf_mono {d e : Fin 365} (hd : d ≠ boundaryDay)
+    (he : e ≠ boundaryDay) (h : d.1 ≤ e.1) :
+    (countedOf d hd).1 ≤ (countedOf e he).1 := by
+  rw [countedOf_val, countedOf_val]
+  omega
+
+/-- The counted map strictly preserves the enumeration
+order on the complement: a counted civil day seated
+strictly before another carries a strictly smaller
+counted label. -/
+theorem countedOf_strict_mono {d e : Fin 365} (hd : d ≠ boundaryDay)
+    (he : e ≠ boundaryDay) (h : d.1 < e.1) :
+    (countedOf d hd).1 < (countedOf e he).1 := by
+  have hd0 : d.1 ≠ 0 := fun h0 => hd (Fin.ext h0)
+  rw [countedOf_val, countedOf_val]
+  omega
+
+/-- The complement of the Boundary Day in the civil
+year carries exactly 364 days — the counted year,
+13 × 4 × 7. -/
+theorem card_complement_boundaryDay :
+    (Finset.univ \ {boundaryDay} : Finset (Fin 365)).card = 364 := by
+  rw [Finset.card_sdiff, Finset.inter_univ, Finset.card_univ, Fintype.card_fin,
+    Finset.card_singleton]
+
 end ThetLogos

@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 709,
+  "strict": 16152,
+  "total": 16795
+ },
+ "claim": "THE OG RESPONSE FAMILY AND MASSGIBBS INTEGRATE (TRANCHE T9, THE BANK). OGResponsePin (branch ogrl @ 3a8dd2e): 14 declarations (2 structures + 12 definitions), 0 theorems BY DESIGN (the response-law record pin). OGResponse (same tip): 33 declarations / 28 theorems \u2014 the OG response law proper. RECORD CORRECTION F-T9-1, ON THIS RECORD'S FACE: the integration brief's '33 decls' named OGResponse.lean alone; the family census is 47 declarations / 28 strict, and 47/28 is the figure of record. MassGibbs (branch massgibbs @ 2a990a4): MassGibbsPin 7 declarations / 6 theorems + MassGibbsPinOG 2/2 = 9 declarations / 8 strict \u2014 the Gibbs state of a mass configuration sees exactly the product beta*m (MG-5 the proved converse). MassGibbsPinOG's OGResponse dependency is satisfied by the in-tree OGResponse transplanted in this same tranche; the lane-local OGResponse copy was NOT transplanted. Totals for this record: 56 declarations / 36 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-20",
+ "dossier": null,
+ "evidence": "Lanes: ogrl @ 3a8dd2e \u2014 OGResponsePin.lean sha256 c7e84c7f0f2de6e600df6b5f9729b4ebe37ca5c430ffa1cf75881c56038359bb; OGResponse.lean sha256 d48c22b6906b0253447041db9e32b84ae41aa71ce21a1106e0a927514c505dd9. massgibbs @ 2a990a4 \u2014 MassGibbsPin.lean sha256 0f76d72fc7d261fc4aab650b81cdadbd5a8bf350e8343d57ec4a2b4bc3f18aaf; MassGibbsPinOG.lean sha256 f1d7bd0dd49e766d5fa5f52d0802266db2b2ef3b8d2f12042c870b470e5951cf. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T9, 2026-11-20): transplant hash gate 58/58 (disk == branch-tip blob == freeze record, INTEG-T9-STATE.md). TARGETED BUILDS: PASS for all 26 items + the item-27 delta (build-targeted-integ-t9.log: run 1 banked items 1,2,6,7,3,4,5,8,23,11,25, then a VM restart killed the run during item 26, NO VERDICT for that item in run 1; build-targeted-integ-t9-resume1.log: items 26,9,10,12,13,14,15,16,17,18,19,20,21,22,24,27 PASS). ROOT BUILD: PASS 9,307 jobs, BUILD_EXIT:0 (build-root-integ-t9.log). Zero-sorry gate PASS, 724 files (check_no_sorry.py). AXIOM FENCE: PASS 2718/2718 (fence-integ-t9-a2.log / fence-integ-t9-a2.json; 2,718 entries, 0 failing, no sorryAx; attempt 1 VOID, killed by a VM restart ~9 min in, no verdict). CENSUS: strict 15,677 -> 16,152; modules 652 -> 709; stripped total 16,320 -> 16,795; FILES 667 -> 724; recount 15,651 -> 16,126 (count_house.py). Combined total after T9: 507,344 = 16,152 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "ogresponse-massgibbs",
+ "kill_id": null,
+ "module": null,
+ "status": "standing",
+ "tier": "T1"
+}

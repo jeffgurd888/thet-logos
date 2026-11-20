@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 709,
+  "strict": 16152,
+  "total": 16795
+ },
+ "claim": "THERMAL LIFT, THE SLICE FOLD, ROPEPIN, AND THE FALL PIN INTEGRATE (TRANCHE T9). Thermal Lift (branch lift @ 361873a), six modules \u2014 ThermalLiftPin 8 declarations / 0 theorems and ThermalLiftFallPin 10/0 (record forms), ThermalLiftCold 5/5, ThermalLiftComposite 7/7, ThermalLiftFall 7/7, ThermalLiftSurface 8/8. BOOKKEEPING F-T9-3: the house census counts 45 declarations / 27 strict for the family; the lane's '46' includes one private theorem (profPartition_const), invisible to the census and the fence by the house method; it transplants with its file. StageSliceFoldPin (SLICE Seat 2; branch stageslice @ 53fcf39): 38 declarations / 31 theorems. RopePin (branch ropepin @ 62df2f4): 15 declarations / 9 theorems (the R-3 join law for weighted centers, with the splice). FallPin (FALL-1; branch fall1 @ 58b1464): 8 declarations / 6 theorems. Totals for this record: 106 declarations / 73 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-20",
+ "dossier": null,
+ "evidence": "Lanes: lift @ 361873a \u2014 ThermalLiftPin a73825bff1b4, ThermalLiftFallPin 1b5f6d545758, ThermalLiftCold 9d9026a08519, ThermalLiftComposite 33b88ff8c93f, ThermalLiftFall 6e3181f8980d, ThermalLiftSurface dcb1a04f57c7 (sha256 prefixes; full hashes in INTEG-T9-STATE.md freeze table). stageslice @ 53fcf39 \u2014 StageSliceFoldPin.lean sha256 d13205b2b38bf8b3e6aaf2f79053a43b08da40b339ab7d4f52bff83d5e5f4fa1. ropepin @ 62df2f4 \u2014 RopePin.lean sha256 2950f002d8323c3ec603860812f6a06584030c9381697497806921e05f6e7627. fall1 @ 58b1464 \u2014 FallPin.lean sha256 2f1fad0d1b69e8ca2073b1339672298730dbd8560119c0e617992dd95823c2e6. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T9, 2026-11-20): transplant hash gate 58/58 (disk == branch-tip blob == freeze record, INTEG-T9-STATE.md). TARGETED BUILDS: PASS for all 26 items + the item-27 delta (build-targeted-integ-t9.log: run 1 banked items 1,2,6,7,3,4,5,8,23,11,25, then a VM restart killed the run during item 26, NO VERDICT for that item in run 1; build-targeted-integ-t9-resume1.log: items 26,9,10,12,13,14,15,16,17,18,19,20,21,22,24,27 PASS). ROOT BUILD: PASS 9,307 jobs, BUILD_EXIT:0 (build-root-integ-t9.log). Zero-sorry gate PASS, 724 files (check_no_sorry.py). AXIOM FENCE: PASS 2718/2718 (fence-integ-t9-a2.log / fence-integ-t9-a2.json; 2,718 entries, 0 failing, no sorryAx; attempt 1 VOID, killed by a VM restart ~9 min in, no verdict). CENSUS: strict 15,677 -> 16,152; modules 652 -> 709; stripped total 16,320 -> 16,795; FILES 667 -> 724; recount 15,651 -> 16,126 (count_house.py). Combined total after T9: 507,344 = 16,152 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "thermal-lift-slice-rope-fall",
+ "kill_id": null,
+ "module": null,
+ "status": "standing",
+ "tier": "T1"
+}

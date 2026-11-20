@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 709,
+  "strict": 16152,
+  "total": 16795
+ },
+ "claim": "THE GENERIC SEPARATION CRITERION INTEGRATES (TRANCHE T9). GenericSeparationCriterionPin (branch mrb @ d553382): 8 declarations / 8 theorems \u2014 the clearing-denominators lemma and bound (for rational q and an integer polynomial P with P(q) nonzero, 1 <= q.den^(deg P) * |P(q)|, in rational and real faces), the headline criterion irrational_of_superapprox (generic alpha: if constants A, c > 0 and arbitrarily large m carry integer polynomials of degree at most A*m with no rational root and 0 < |P(alpha)| < exp(-c*m^2), then alpha is irrational), and the irreducible wrapper (an irreducible integer polynomial of degree at least 2 has no rational root, both faces). DISCLOSURE, ON THIS RECORD'S FACE: the first brick is a specialization \u2014 the clearing identity exists in Mathlib in general form (Polynomial.scaleRoots_eval_mul); the pin's contribution is the integrality specialization and the bound, which exist nowhere in Mathlib or the tree. The criterion is GENERIC: it spends no property of C_MRB, the polynomial family is assumed and never constructed, and the irrationality of C_MRB remains OPEN and unclaimed. NO CLAIM; dials 0/4.",
+ "date": "2026-11-20",
+ "dossier": null,
+ "evidence": "Lane: mrb @ d553382 \u2014 GenericSeparationCriterionPin.lean sha256 495ec83fe33982e57c02ef821cad37931d46d7e8900fcd2a5da9f1a806b2325e. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T9, 2026-11-20): transplant hash gate 58/58 (disk == branch-tip blob == freeze record, INTEG-T9-STATE.md). TARGETED BUILDS: PASS for all 26 items + the item-27 delta (build-targeted-integ-t9.log: run 1 banked items 1,2,6,7,3,4,5,8,23,11,25, then a VM restart killed the run during item 26, NO VERDICT for that item in run 1; build-targeted-integ-t9-resume1.log: items 26,9,10,12,13,14,15,16,17,18,19,20,21,22,24,27 PASS). ROOT BUILD: PASS 9,307 jobs, BUILD_EXIT:0 (build-root-integ-t9.log). Zero-sorry gate PASS, 724 files (check_no_sorry.py). AXIOM FENCE: PASS 2718/2718 (fence-integ-t9-a2.log / fence-integ-t9-a2.json; 2,718 entries, 0 failing, no sorryAx; attempt 1 VOID, killed by a VM restart ~9 min in, no verdict). CENSUS: strict 15,677 -> 16,152; modules 652 -> 709; stripped total 16,320 -> 16,795; FILES 667 -> 724; recount 15,651 -> 16,126 (count_house.py). Combined total after T9: 507,344 = 16,152 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "generic-separation-criterion",
+ "kill_id": null,
+ "module": "lean/ThetLogos/GenericSeparationCriterionPin.lean",
+ "status": "standing",
+ "tier": "T1"
+}

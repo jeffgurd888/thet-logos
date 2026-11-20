@@ -2370,6 +2370,12 @@ ThetLogos.weekAddress_last
 ThetLogos.countedOf_val
 ThetLogos.countedOf_first
 ThetLogos.countedOf_last
+# ── ThermalCalendarPin Brick 2 delta (INTEG-EVERYTHING T9, 2026-11-20) ──
+ThetLogos.countedOf_injective
+ThetLogos.countedOf_surjective
+ThetLogos.countedOf_mono
+ThetLogos.countedOf_strict_mono
+ThetLogos.card_complement_boundaryDay
 
 import ThetLogos.LeibnizPin
 ThetLogos.rowValue_castSucc
@@ -2603,3 +2609,629 @@ ThetLogos.StringChargeDensityBridge.density_neg_seat
 ThetLogos.StringChargeDensityBridge.density_deviation_seat
 ThetLogos.StringChargeDensityBridge.cold_weight_seat
 ThetLogos.StringChargeDensityBridge.hot_cold_profile_seat
+
+# ── OGResponse (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OGResponse
+ThetLogos.ogPotential_update
+ThetLogos.ogKinetic_update
+ThetLogos.ogAction_eq
+ThetLogos.ogAction_update
+ThetLogos.og_el_form
+ThetLogos.ogAction_scaling
+ThetLogos.ogStationary_scaling
+ThetLogos.ogWitnessPotential_zero
+ThetLogos.ogWitnessPotential_one
+ThetLogos.ogWitness_not_stationary
+ThetLogos.ogStationary_mass_congr
+ThetLogos.og_universality
+ThetLogos.ogWitnessDatum_w
+ThetLogos.ogWitnessChargePotential_zero
+ThetLogos.ogWitnessChargePotential_one
+ThetLogos.ogChargedAction_witness_path
+ThetLogos.ogChargedAction_witness_update
+ThetLogos.og_countermodel
+ThetLogos.ogShadowDatum_w
+ThetLogos.ogShadowPotential_ground
+ThetLogos.ogShadowPotential_mid
+ThetLogos.ogShadowPotential_source
+ThetLogos.og_exists_stationary
+ThetLogos.og_shadow_form
+ThetLogos.ogShadow_step_stationary
+ThetLogos.ogShadow_el_attraction
+ThetLogos.ogShadowNegPotential_source
+ThetLogos.ogShadowNeg_not_stationary
+
+# ── MassGibbsPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.MassGibbsPin
+ThetLogos.partSum_massEnergy
+ThetLogos.gibbsProb_massEnergy
+ThetLogos.gibbsExpect_massEnergy
+ThetLogos.gibbsVar_massEnergy
+ThetLogos.meanEnergy_massEnergy
+ThetLogos.mass_eq_of_gibbsProb_eq
+
+# ── MassGibbsPinOG (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.MassGibbsPinOG
+ThetLogos.ogAction_mass_smul
+ThetLogos.gibbsProb_ogAction_mass
+
+# ── QuantumClockPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.QuantumClockPin
+ThetLogos.mem_tickSpectrum
+ThetLogos.tickSpectrum_zero_mem
+ThetLogos.neg_mem_tickSpectrum
+ThetLogos.tickSpectrum_eq
+ThetLogos.exists_eigenvalue_ne_of_not_smul_one
+ThetLogos.exists_flow_ne
+ThetLogos.flow_eq_id_iff
+ThetLogos.stateModularK_isHermitian
+ThetLogos.exp_smul_stateModularK
+ThetLogos.stateFlow_eq_modularFlow_stateModularK
+ThetLogos.exp_neg_stateModularK
+ThetLogos.gibbsForm_stateModularK
+ThetLogos.state_kms_own
+
+# ── LeibnizGibbsBridgePin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LeibnizGibbsBridgePin
+ThetLogos.linkEnergy_apply
+ThetLogos.dyadic_card
+ThetLogos.partSum_linkEnergy
+ThetLogos.partSum_linkEnergy_identical
+ThetLogos.gibbsProb_linkEnergy
+ThetLogos.dyadic_z
+ThetLogos.isProbWeight_gibbsProb
+ThetLogos.entropyW_gibbs_linkEnergy
+ThetLogos.entropyW_gibbs_linkEnergy_identical
+ThetLogos.entropyW_dyadic_uniform
+ThetLogos.entropyW_gibbs_linkEnergy_zero
+ThetLogos.planck_dyadic_uniform
+
+# ── ThermalStringPlanckBridge (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.ThermalStringPlanckBridge
+ThetLogos.ThermalStringPlanckBridge.gibbsProb_bendEnergy_isProbWeight
+ThetLogos.ThermalStringPlanckBridge.stringGibbsEntropy_le
+ThetLogos.ThermalStringPlanckBridge.stringGibbsEntropy_perLength_le
+ThetLogos.ThermalStringPlanckBridge.stringGibbsEntropy_div_length_le
+ThetLogos.ThermalStringPlanckBridge.stringGibbsEntropy_zero
+ThetLogos.ThermalStringPlanckBridge.stringGibbsEntropy_perLength_zero
+
+# ── GroundedDirichletPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.GroundedDirichletPin
+ThetLogos.sum_source_mul_groundedPotential
+ThetLogos.groundedDirichlet_identity
+ThetLogos.groundedDirichlet_nonneg
+ThetLogos.groundedDirichlet_eq_zero_iff
+ThetLogos.ogPotential_dirichlet_identity
+ThetLogos.ogChargePotential_dirichlet_identity
+ThetLogos.ogPotential_dirichlet_nonneg
+
+# ── CenterCoincidencePin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.CenterCoincidencePin
+ThetLogos.thermalCenter_eq_gibbsExpect
+ThetLogos.massCenter_eq_thermalCenter_of_proportional
+ThetLogos.centers_differ_countermodel
+ThetLogos.gibbsProb_le_exp_neg_gap
+ThetLogos.thermalCenter_sub_abs_le
+ThetLogos.massCenter_eq_of_support_ground
+
+# ── GenericSeparationCriterionPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.GenericSeparationCriterionPin
+ThetLogos.GenericSeparationCriterionPin.clearing_exists_int
+ThetLogos.GenericSeparationCriterionPin.one_le_abs_clearing
+ThetLogos.GenericSeparationCriterionPin.aeval_rat_cast_real
+ThetLogos.GenericSeparationCriterionPin.one_le_den_pow_mul_abs_aeval_real
+ThetLogos.GenericSeparationCriterionPin.bound_contradiction
+ThetLogos.GenericSeparationCriterionPin.irrational_of_superapprox
+ThetLogos.GenericSeparationCriterionPin.no_rat_root_of_irreducible
+ThetLogos.GenericSeparationCriterionPin.no_rat_root_real_of_irreducible_map
+
+# ── CenterBridgePin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.CenterBridgePin
+ThetLogos.CenterBridgePin.sum_pos_of_pos
+ThetLogos.CenterBridgePin.gravWeight_pos
+ThetLogos.CenterBridgePin.bridge_uniform
+ThetLogos.CenterBridgePin.wCenter_const
+ThetLogos.CenterBridgePin.wCenter_const_config
+ThetLogos.CenterBridgePin.wCenter_between
+ThetLogos.CenterBridgePin.dumbbell_com_between
+ThetLogos.CenterBridgePin.dumbbell_cog_between
+ThetLogos.CenterBridgePin.dumbbell_split
+ThetLogos.CenterBridgePin.wCenter_deviation
+ThetLogos.CenterBridgePin.wCenter_deviation_le
+
+# ── RopePin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.RopePin
+ThetLogos.RopePin.splice
+ThetLogos.RopePin.tensionAt_top
+ThetLogos.RopePin.tensionAt_succ_add
+ThetLogos.RopePin.tensionAt_succ_lt
+ThetLogos.RopePin.tensionAt_bottom
+ThetLogos.RopePin.wCenter_bounds
+ThetLogos.RopePin.linkMid_mem_span
+ThetLogos.RopePin.ropeCenter_bounds
+ThetLogos.RopePin.ropeCenter_uniform
+
+# ── NewtonSeatPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.NewtonSeatPin
+ThetLogos.NewtonSeatPin.pairU_neg
+ThetLogos.NewtonSeatPin.pairU_swap
+ThetLogos.NewtonSeatPin.sepU_lt_sepU
+ThetLogos.NewtonSeatPin.pairU_attract
+ThetLogos.NewtonSeatPin.pairU_translation
+ThetLogos.NewtonSeatPin.pairU_eq_of_sep_eq
+ThetLogos.NewtonSeatPin.centerMass_pair_between
+ThetLogos.NewtonSeatPin.totalU_translation
+ThetLogos.NewtonSeatPin.wCenter_shift
+ThetLogos.NewtonSeatPin.centerMass_shift
+ThetLogos.NewtonSeatPin.totalU_neg
+ThetLogos.NewtonSeatPin.totalU_fin_two
+ThetLogos.NewtonSeatPin.sepEnergy_strictMono
+ThetLogos.NewtonSeatPin.sepEnergy_ground_strict
+ThetLogos.NewtonSeatPin.sepGap_pos
+ThetLogos.NewtonSeatPin.cold_collapse
+ThetLogos.NewtonSeatPin.hot_washout
+
+# ── AntiGravitySeatPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.AntiGravitySeatPin
+ThetLogos.AntiGravitySeatPin.antiSepU_eq_neg_sepU
+ThetLogos.AntiGravitySeatPin.antiPairU_eq_neg_pairU
+ThetLogos.AntiGravitySeatPin.antiPairU_pos
+ThetLogos.AntiGravitySeatPin.antiSepU_repulsion
+ThetLogos.AntiGravitySeatPin.antiPairU_repulsion
+ThetLogos.AntiGravitySeatPin.antiPairU_translation
+ThetLogos.AntiGravitySeatPin.antiSepEnergy_eq_neg_sepEnergy
+ThetLogos.AntiGravitySeatPin.antiSepEnergy_strictAnti
+ThetLogos.AntiGravitySeatPin.antiSepEnergy_top_strict
+ThetLogos.AntiGravitySeatPin.antiSepGap_pos
+ThetLogos.AntiGravitySeatPin.cold_anti_collapse
+ThetLogos.AntiGravitySeatPin.hot_washout_anti
+ThetLogos.AntiGravitySeatPin.witnessA_data
+ThetLogos.AntiGravitySeatPin.witnessB_data
+ThetLogos.AntiGravitySeatPin.data_not_injective
+
+# ── ThermalLiftCold (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.ThermalLiftCold
+ThetLogos.profWeight_ground_mono
+ThetLogos.profWeight_le_exp_neg_gap
+ThetLogos.offGround_profWeight_le
+ThetLogos.profWeight_max_at_ground
+ThetLogos.coldTieForm_holds
+
+# ── ThermalLiftComposite (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.ThermalLiftComposite
+ThetLogos.profThermalSource_const
+ThetLogos.profPoissonForm_holds
+ThetLogos.profContrastForm_holds
+ThetLogos.profThermalPotential_const
+ThetLogos.profThermalField_const
+ThetLogos.profThermalFlow_const
+ThetLogos.profReductionForm_holds
+
+# ── ThermalLiftFall (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.ThermalLiftFall
+ThetLogos.groundedThermal_descent_step
+ThetLogos.thermalDescentForm_holds
+ThetLogos.thermalFallPath_terminates
+ThetLogos.thermalTerminationForm_holds
+ThetLogos.groundedThermal_nonneg
+ThetLogos.thermalGroundForm_holds
+ThetLogos.thermal_countermodel_strands
+
+# ── ThermalLiftSurface (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.ThermalLiftSurface
+ThetLogos.cutEnergy_profThermalPotential
+ThetLogos.cutFieldForm_holds
+ThetLogos.cutEnergy_add_const
+ThetLogos.cutEnergy_empty
+ThetLogos.cutEnergy_univ
+ThetLogos.cutEnergy_compl
+ThetLogos.cutFlipForm_holds
+ThetLogos.cutEnergy_nonneg_of_le_across
+
+# ── StageSliceFoldPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.StageSliceFoldPin
+ThetLogos.measurable_phaseConfig
+ThetLogos.plaquette_phaseConfig
+ThetLogos.wilsonAction_phaseConfig
+ThetLogos.gibbsDensity_phaseConfig
+ThetLogos.measurePreserving_phaseConfig
+ThetLogos.configMeasure_map_phaseConfig
+ThetLogos.gibbsMeasure_map_phaseConfig
+ThetLogos.measurable_slicePhase
+ThetLogos.restrictConfig_phaseConfig
+ThetLogos.sliceMeasure_map_slicePhase
+ThetLogos.measurePreserving_slicePhase
+ThetLogos.slicePhase_mul
+ThetLogos.foldIsometry_inv_apply
+ThetLogos.foldUnitary_apply
+ThetLogos.foldUnitary_mul
+ThetLogos.foldUnitary_one_apply
+ThetLogos.foldUnitary_cube
+ThetLogos.foldUnitary_vacuum
+ThetLogos.exists_primitive_cube_root_circle
+ThetLogos.phaseConfig_nextConfig
+ThetLogos.coeFn_foldUnitary
+ThetLogos.coeFn_foldUnitary_symm
+ThetLogos.foldUnitary_comm_transferOp_apply
+ThetLogos.mem_invariantSector
+ThetLogos.invariantSector_isClosed
+ThetLogos.transferOp_mem_invariantSector
+ThetLogos.transferOp_mem_invariantSector_orth
+ThetLogos.osVacuum_mem_invariantSector
+ThetLogos.foldTransferOp_apply
+ThetLogos.folded_form_gap_circle
+ThetLogos.folded_sliceSpectralCorrespondence
+
+# ── BoltzmannShannonPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.BoltzmannShannonPin
+ThetLogos.gibbsEntropy_eq_log_two_mul_shannonEntropy
+ThetLogos.gibbsEntropy_uniform
+ThetLogos.shannonEntropy_uniform
+ThetLogos.planck_entropy_uniform
+ThetLogos.gibbsEntropy_nonneg
+
+# ── UnityAlignmentPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.UnityAlignmentPin
+ThetLogos.lunationSpan_235
+ThetLogos.metonic_residue_bounds
+ThetLogos.frameSpan_four
+ThetLogos.frameSpan_four_bounds
+ThetLogos.frameSpan_five
+ThetLogos.frameSpan_five_bounds
+ThetLogos.octaeteris_residue_bounds
+ThetLogos.cycle334_residue_abs_bound
+ThetLogos.synodicMonth_bounds
+ThetLogos.lunations_per_year_bounds
+
+# ── StringDensityPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.StringDensityPin
+ThetLogos.StringDensityPin.bendEnergy_cons
+ThetLogos.StringDensityPin.levelCount_succ_succ
+ThetLogos.StringDensityPin.levelCount_eq
+ThetLogos.StringDensityPin.levelCount_eq_zero_of_lt
+ThetLogos.StringDensityPin.levelCount_ratio_mul
+ThetLogos.StringDensityPin.levelCount_logConcave
+ThetLogos.StringDensityPin.levelCount_exists_max
+ThetLogos.StringDensityPin.partSum_bendEnergy_le
+
+# ── FallPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.FallPin
+ThetLogos.groundedPotential_descent_step
+ThetLogos.fallPath_terminates
+ThetLogos.groundedPotential_fallPath_terminates
+ThetLogos.groundedPotential_nonneg
+ThetLogos.groundedPotential_ground_isFallMin
+ThetLogos.fall_countermodel_strands
+
+# ── ChargeMassSeparationPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.ChargeMassSeparationPin
+ThetLogos.eg_charge_total_vanishes
+ThetLogos.eg_chargeResp_total_vanishes
+ThetLogos.eg_teCharge_add_const
+ThetLogos.eg_grounded_source_recovered
+ThetLogos.eg_grounded_detects_totalMass
+ThetLogos.eg_teCharge_no_const_shift
+ThetLogos.eg_unit_density_not_teCharge
+
+# ── DialOneDiagLiftKill (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.DialOneDiagLiftKill
+ThetLogos.DialOneDiagLiftKill.extractionLemma_implies_diagLift
+ThetLogos.DialOneDiagLiftKill.piU_det_one_3_neg1
+ThetLogos.DialOneDiagLiftKill.not_diagLift_piU
+ThetLogos.DialOneDiagLiftKill.not_forall_base_extractionLemma
+ThetLogos.DialOneDiagLiftKill.within_sign_diagonality_refuted
+
+# ── DialOneClassParam (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.DialOneClassParam
+ThetLogos.DialOneClassParam.yukClass_lt
+ThetLogos.DialOneClassParam.blk_seat
+ThetLogos.DialOneClassParam.loc_seat
+ThetLogos.DialOneClassParam.locv_seat
+ThetLogos.DialOneClassParam.seat_blk_loc
+ThetLogos.DialOneClassParam.seat_eq_iff
+ThetLogos.DialOneClassParam.blk_cases
+ThetLogos.DialOneClassParam.blk_dparSeat
+ThetLogos.DialOneClassParam.loc_dparSeat
+ThetLogos.DialOneClassParam.locv_dparSeat
+ThetLogos.DialOneClassParam.blk_partner
+ThetLogos.DialOneClassParam.loc_partner
+ThetLogos.DialOneClassParam.locv_partner
+ThetLogos.DialOneClassParam.dparSeat_seat
+ThetLogos.DialOneClassParam.partner_seat
+
+# ── OrbifoldGapPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapPin
+ThetLogos.OrbifoldGapPin.cyc_normSq
+ThetLogos.OrbifoldGapPin.cyc_iter3
+ThetLogos.OrbifoldGapPin.cyc_mem_ballFinset
+ThetLogos.OrbifoldGapPin.cyc_eq_self_iff
+ThetLogos.OrbifoldGapPin.cycBall_iter3
+ThetLogos.OrbifoldGapPin.cyc_coordSum
+ThetLogos.OrbifoldGapPin.cyc_mem_layerFinset
+ThetLogos.OrbifoldGapPin.cycSlice_iter3
+ThetLogos.OrbifoldGapPin.sliceW_symm
+ThetLogos.OrbifoldGapPin.sliceW_cyc
+ThetLogos.OrbifoldGapPin.sliceW_nonneg
+ThetLogos.OrbifoldGapPin.slice_card
+ThetLogos.OrbifoldGapPin.card_slice
+ThetLogos.OrbifoldGapPin.orbit_card_center
+ThetLogos.OrbifoldGapPin.orbit_card_rimA
+ThetLogos.OrbifoldGapPin.orbit_card_rimB
+ThetLogos.OrbifoldGapPin.orbitRel_symm
+ThetLogos.OrbifoldGapPin.orbitRel_trans
+ThetLogos.OrbifoldGapPin.orbitRel_equivalence
+ThetLogos.OrbifoldGapPin.fiber_sum_const
+ThetLogos.OrbifoldGapPin.fiber_sum_eq
+ThetLogos.OrbifoldGapPin.pullback_invariant
+ThetLogos.OrbifoldGapPin.pullback_descend
+ThetLogos.OrbifoldGapPin.intertwining
+ThetLogos.OrbifoldGapPin.sum_sub_sliceMean
+ThetLogos.OrbifoldGapPin.pullback_eigen
+ThetLogos.OrbifoldGapPin.laplacianOp_shifted_pullback
+ThetLogos.OrbifoldGapPin.shifted_pullback_ne_zero
+ThetLogos.OrbifoldGapPin.descend_eigen
+ThetLogos.OrbifoldGapPin.fiedler_slice_le_of_eigen_quotient
+ThetLogos.OrbifoldGapPin.fiedler_eq_iff_invariant_eigen
+
+# ── OrbifoldGapZF1 (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF1
+ThetLogos.OrbifoldGapPin.fiber_card_ne_zero
+ThetLogos.OrbifoldGapPin.quotW_mul_card
+ThetLogos.OrbifoldGapPin.quotW_totals
+ThetLogos.OrbifoldGapPin.quotW_symm_of_card_eq
+ThetLogos.OrbifoldGapPin.quotW_nonneg
+
+# ── OrbifoldGapZF2 (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF2
+ThetLogos.OrbifoldGapPin.layerFinset_two_one
+ThetLogos.OrbifoldGapPin.three_dvd_of_cyc_fixed
+ThetLogos.OrbifoldGapPin.no_cyc_fixed_two_one
+ThetLogos.OrbifoldGapPin.quot_exhaustion_two_one
+ThetLogos.OrbifoldGapPin.quot_distinct_two_one
+ThetLogos.OrbifoldGapPin.univ_quot_two_one
+ThetLogos.OrbifoldGapPin.fiber_card_two_one
+ThetLogos.OrbifoldGapPin.card_quot_two_one
+
+# ── OrbifoldGapZF3 (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF3
+ThetLogos.OrbifoldGapPin.quotW_symm_two_one
+ThetLogos.OrbifoldGapPin.quotient_fiedler_eigen_two_one
+ThetLogos.OrbifoldGapPin.fiedler_le_fiedler_quot_two_one
+ThetLogos.OrbifoldGapPin.fiedler_eq_iff_invariant_eigen_two_one
+
+# ── OrbifoldGapZF4 (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF4
+ThetLogos.OrbifoldGapPin.pullback_isometry
+ThetLogos.OrbifoldGapPin.quotW_weighted_self_adjoint
+
+# ── OrbifoldGapZF5 (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF5
+ThetLogos.OrbifoldGapPin.orbSize_pos
+ThetLogos.OrbifoldGapPin.wBilin_self
+ThetLogos.OrbifoldGapPin.wBilin_symm
+ThetLogos.OrbifoldGapPin.wEnergy_smul
+ThetLogos.OrbifoldGapPin.wEnergy_add_smul
+ThetLogos.OrbifoldGapPin.wEnergy_eq_slice_energy
+ThetLogos.OrbifoldGapPin.wEnergy_nonneg
+
+# ── OrbifoldGapZF5b (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF5b
+ThetLogos.OrbifoldGapPin.continuous_wEnergy
+ThetLogos.OrbifoldGapPin.isClosed_wAdmissible
+ThetLogos.OrbifoldGapPin.isBounded_wAdmissible
+ThetLogos.OrbifoldGapPin.isCompact_wAdmissible
+ThetLogos.OrbifoldGapPin.wAdmissible_nonempty
+ThetLogos.OrbifoldGapPin.exists_foldedGap_minimizer
+
+# ── OrbifoldGapZF5c (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF5c
+ThetLogos.OrbifoldGapPin.wBilin_eq_zero_of_minimizer
+ThetLogos.OrbifoldGapPin.foldedGap_eigen
+
+# ── OrbifoldGapZF6 (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF6
+ThetLogos.OrbifoldGapPin.weighted_sum_laplacianOp_zero
+ThetLogos.OrbifoldGapPin.foldedGap_le_of_mean_zero_eigenpair
+ThetLogos.OrbifoldGapPin.foldedGap_le_of_eigenpair
+ThetLogos.OrbifoldGapPin.foldedGap_isLeast
+ThetLogos.OrbifoldGapPin.fiedler_le_foldedGap
+ThetLogos.OrbifoldGapPin.fiedler_eq_foldedGap_iff
+
+# ── OrbifoldGapZF7 (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF7
+ThetLogos.OrbifoldGapPin.layerFinset_two_zero
+ThetLogos.OrbifoldGapPin.fiber_mk_eq_orbitFinset
+ThetLogos.OrbifoldGapPin.sum_sliceW_two_zero
+ThetLogos.OrbifoldGapPin.coord_fst_eigen
+ThetLogos.OrbifoldGapPin.fiedler_slice_two_zero_le_two
+
+# ── OrbifoldGapZF8 (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF8
+ThetLogos.OrbifoldGapPin.quot_exhaustion
+ThetLogos.OrbifoldGapPin.quot_distinct
+ThetLogos.OrbifoldGapPin.univ_quot_two_zero
+ThetLogos.OrbifoldGapPin.quotW_row_center
+ThetLogos.OrbifoldGapPin.quotW_row_rimA
+ThetLogos.OrbifoldGapPin.quotW_row_rimB
+
+# ── OrbifoldGapZF8b (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF8b
+ThetLogos.OrbifoldGapPin.laplacian_quot_two_zero
+ThetLogos.OrbifoldGapPin.orientFn_invariant
+ThetLogos.OrbifoldGapPin.orientFn_eigen
+ThetLogos.OrbifoldGapPin.eigenpair_five
+ThetLogos.OrbifoldGapPin.eigenpair_five_nonconst
+ThetLogos.OrbifoldGapPin.quot_floor_two_zero
+
+# ── OrbifoldGapZF9 (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.OrbifoldGapZF9
+ThetLogos.OrbifoldGapPin.quot_least_eigen_two_zero
+ThetLogos.OrbifoldGapPin.fiedler_strict_raise_two_zero
+ThetLogos.OrbifoldGapPin.no_quotient_eigen_at_fiedler_two_zero
+ThetLogos.OrbifoldGapPin.no_invariant_fiedler_eigen_two_zero
+
+# ── CymaticsBridgePin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.CymaticsBridgePin
+ThetLogos.CymaticsBridgePin.shellW_symm
+ThetLogos.CymaticsBridgePin.shellW_nonneg
+ThetLogos.CymaticsBridgePin.shellFinset_one
+ThetLogos.CymaticsBridgePin.shellFinset_one_card
+ThetLogos.CymaticsBridgePin.shell_one_card
+ThetLogos.CymaticsBridgePin.shell_one_cases
+ThetLogos.CymaticsBridgePin.normSq_shell
+ThetLogos.CymaticsBridgePin.antipode_val
+ThetLogos.CymaticsBridgePin.antipode_antipode
+ThetLogos.CymaticsBridgePin.antipode_ne_self
+ThetLogos.CymaticsBridgePin.shellW_self
+ThetLogos.CymaticsBridgePin.shellW_antipode
+ThetLogos.CymaticsBridgePin.shellW_eq_one_iff
+ThetLogos.CymaticsBridgePin.shellW_row_sum
+ThetLogos.CymaticsBridgePin.laplacianOp_shellW_apply
+ThetLogos.CymaticsBridgePin.coord_antipode
+ThetLogos.CymaticsBridgePin.coord_sum_zero
+ThetLogos.CymaticsBridgePin.coordX_eigen
+ThetLogos.CymaticsBridgePin.coordY_eigen
+ThetLogos.CymaticsBridgePin.coordZ_eigen
+ThetLogos.CymaticsBridgePin.fiedler_shellW_le_four
+ThetLogos.CymaticsBridgePin.energy_shellW
+ThetLogos.CymaticsBridgePin.four_le_energy_of_mean_zero
+ThetLogos.CymaticsBridgePin.sqCoord_sum
+ThetLogos.CymaticsBridgePin.modeXY_eigen
+ThetLogos.CymaticsBridgePin.modeXZ_eigen
+ThetLogos.CymaticsBridgePin.eigen_six
+ThetLogos.CymaticsBridgePin.fiedler_shellW_ge_four
+ThetLogos.CymaticsBridgePin.fiedler_shellW
+ThetLogos.CymaticsBridgePin.bilin_eigen_left
+ThetLogos.CymaticsBridgePin.cross_inner_zero
+ThetLogos.CymaticsBridgePin.exhibited_orthogonal
+ThetLogos.CymaticsBridgePin.coordX_pos
+ThetLogos.CymaticsBridgePin.coordX_neg
+ThetLogos.CymaticsBridgePin.coordX_zero
+ThetLogos.CymaticsBridgePin.coordX_zero_card
+ThetLogos.CymaticsBridgePin.sameDomain_sign
+ThetLogos.CymaticsBridgePin.nodal_two_domains
+ThetLogos.CymaticsBridgePin.modeEnergy_zero
+ThetLogos.CymaticsBridgePin.modeEnergy_fiedler
+ThetLogos.CymaticsBridgePin.modeEnergy_six
+ThetLogos.CymaticsBridgePin.modeEnergy_mono
+ThetLogos.CymaticsBridgePin.energy_ladder
+ThetLogos.CymaticsBridgePin.sum_shell
+ThetLogos.CymaticsBridgePin.fiedler_mode_form
+ThetLogos.CymaticsBridgePin.fiedler_mode_antipode_odd
+ThetLogos.CymaticsBridgePin.fiedler_mode_domains
+ThetLogos.CymaticsBridgePin.fiedler_mode_signs_nonempty
+ThetLogos.CymaticsBridgePin.every_fiedler_mode_two_domains
+
+# ── SpinChargeStringPin (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.SpinChargeStringPin
+ThetLogos.SpinChargeStringPin.totalEndpointCharge_abs_le
+ThetLogos.SpinChargeStringPin.inertia_nonneg
+ThetLogos.SpinChargeStringPin.effEnergy_zero
+ThetLogos.SpinChargeStringPin.gibbsProb_effEnergy_zero
+ThetLogos.SpinChargeStringPin.effEnergy_straightConfig
+ThetLogos.SpinChargeStringPin.effEnergy_sub_straightConfig
+ThetLogos.SpinChargeStringPin.gibbsProb_ratio
+ThetLogos.SpinChargeStringPin.flip_lt
+ThetLogos.SpinChargeStringPin.flip_eq
+ThetLogos.SpinChargeStringPin.flip_gt
+
+# ── LayerKernelTensorContraction (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelTensorContraction
+ThetLogos.tensorEntry_one
+ThetLogos.tensorEntry_mul
+ThetLogos.tensorEntry_star
+ThetLogos.tensorEntry_inv
+ThetLogos.tensorTrace_eq_prod
+ThetLogos.tensorAvg_absorb_left
+
+# ── LayerKernelTensorAverage (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelTensorAverage
+ThetLogos.tensor_inner_eq_sum
+ThetLogos.tensor_ext_of_inner_basis
+ThetLogos.tensorRepCLM_apply_basis
+ThetLogos.tensorRepCLM_inner_basis
+ThetLogos.tensorRepCLM_inner_basis_apply
+ThetLogos.tensorRepCLM_continuous
+ThetLogos.tensorRepCLM_unitary
+ThetLogos.tensorRepCLM_one
+ThetLogos.tensorRepCLM_mul
+
+# ── LayerKernelTensorChannel (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelTensorChannel
+ThetLogos.haarProb_real_singleton
+ThetLogos.integral_tensorEntry_haarProb
+ThetLogos.tensorAvg_eq_averagingOperator
+ThetLogos.tensorAvg_channel_form
+ThetLogos.tensorAvg_conj_symm
+
+# ── LayerKernelWordContraction (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelWordContraction
+ThetLogos.wordEntry_eq_tensorEntry
+ThetLogos.wordAvg_eq_tensorAvg
+ThetLogos.wordAvg_channel_form
+ThetLogos.wordAvg_conj_symm
+
+# ── LayerKernelWordDecomp (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelWordDecomp
+ThetLogos.charFn_conjRep
+ThetLogos.tensorRepCLM_trace
+ThetLogos.wordRep_trace
+ThetLogos.word_decomp
+
+# ── LayerKernelUnitaryDecomp (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelUnitaryDecomp
+ThetLogos.TInvariant_top
+ThetLogos.TInvariant.orthogonal
+ThetLogos.TInvariant.restrictHom_unitary
+ThetLogos.trace_add_orthogonal
+ThetLogos.exists_minimal_TInvariant
+ThetLogos.unitary_decomp_aux
+ThetLogos.unitary_decomp
+
+# ── LayerKernelUnitaryModel (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelUnitaryModel
+ThetLogos.unitaryModelMat_one
+ThetLogos.unitaryModelMat_mul
+ThetLogos.unitaryModelMat_mem_unitaryGroup
+ThetLogos.charFn_unitaryModel
+ThetLogos.unitaryModel_irreducible
+
+# ── LayerKernelIrredFamily (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelIrredFamily
+ThetLogos.unitaryRepOf_character
+ThetLogos.unitaryRepOf_isIrreducible
+ThetLogos.charFn_inv_star
+ThetLogos.charFn_pairing_eq
+ThetLogos.charFn_pairing_self
+ThetLogos.charFn_pairing_of_ne
+ThetLogos.irredCharSet_finite
+
+# ── LayerKernelColumnExpansion (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelColumnExpansion
+ThetLogos.wordMult_apply
+ThetLogos.wordMult_le
+ThetLogos.multSum_le
+ThetLogos.colTerm_abs
+ThetLogos.colTerm_bound
+ThetLogos.colCoeff_summable
+ThetLogos.colCoeff_nonneg
+ThetLogos.column_expansion
+
+# ── LayerKernelCharModel (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelCharModel
+ThetLogos.charModel_irreducible
+ThetLogos.charModel_charFn
+ThetLogos.charFn_word_expand
+
+# ── LayerKernelCharSeparation (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelCharSeparation
+ThetLogos.site_channel
+ThetLogos.siteChan_spec
+ThetLogos.siteTensorEntry
+ThetLogos.prod_site_regroup
+ThetLogos.sum_alpha_factor
+ThetLogos.char_separation
+
+# ── LayerKernelGramCertChar (INTEG-EVERYTHING T9, 2026-11-20) ──
+import ThetLogos.LayerKernelGramCertChar
+ThetLogos.layerKernelPos_char

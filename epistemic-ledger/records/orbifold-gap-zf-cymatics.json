@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 709,
+  "strict": 16152,
+  "total": 16795
+ },
+ "claim": "THE ORBIFOLD GAP PIN, THE ORB ZF FOLD, AND THE CYMATICS BRIDGE INTEGRATE (TRANCHE T9). OrbifoldGapPin (branch orbifoldgap @ bbbe0c9): 55 declarations / 31 theorems \u2014 the finite orbifold gap. The Orb ZF fold (same branch @ 8b63fdf), twelve modules OrbifoldGapZF1-ZF9 (including ZF5b, ZF5c, ZF8b): 70 declarations / 61 theorems \u2014 the Z3-fold form; DISCLOSED ON ITS FACE: its Brick-4 package is not simultaneously satisfiable at unequal orbit sizes (the intertwine form does not fire), and the gap proved is a finite graph gap, not a continuum gap. CymaticsBridgePin (branch cymaticsbridge @ d9e9af9): 60 declarations / 49 theorems \u2014 the cymatics bridge pin; it imports OrbifoldGapPin, transplanted in this same tranche ahead of it. Totals for this record: 185 declarations / 141 strict \u2014 the largest family in the tranche. NO CLAIM; dials 0/4.",
+ "date": "2026-11-20",
+ "dossier": null,
+ "evidence": "Lanes: orbifoldgap @ bbbe0c9 \u2014 OrbifoldGapPin.lean sha256 daf44794099aa450dc501353f5290575ee9591ccdfdf98fc8582cdef862352b2. orbifoldgap @ 8b63fdf \u2014 ZF files sha256 prefixes: OrbifoldGapZF1.lean b78f37f6, OrbifoldGapZF2.lean 5a1081ec, OrbifoldGapZF3.lean 748255df, OrbifoldGapZF4.lean 8382d280, OrbifoldGapZF5.lean 274b127b, OrbifoldGapZF5b.lean 8b54bdbe, OrbifoldGapZF5c.lean 725c2338, OrbifoldGapZF6.lean c2db8c0a, OrbifoldGapZF7.lean 2c3f224c, OrbifoldGapZF8.lean 65dede2b, OrbifoldGapZF8b.lean b52cecd8, OrbifoldGapZF9.lean ba6992ae. cymaticsbridge @ d9e9af9 \u2014 CymaticsBridgePin.lean sha256 3b338c4ad1bcebceafea004d4c17a158ffc712d5e9e53e3620994e7b9c128d33. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T9, 2026-11-20): transplant hash gate 58/58 (disk == branch-tip blob == freeze record, INTEG-T9-STATE.md). TARGETED BUILDS: PASS for all 26 items + the item-27 delta (build-targeted-integ-t9.log: run 1 banked items 1,2,6,7,3,4,5,8,23,11,25, then a VM restart killed the run during item 26, NO VERDICT for that item in run 1; build-targeted-integ-t9-resume1.log: items 26,9,10,12,13,14,15,16,17,18,19,20,21,22,24,27 PASS). ROOT BUILD: PASS 9,307 jobs, BUILD_EXIT:0 (build-root-integ-t9.log). Zero-sorry gate PASS, 724 files (check_no_sorry.py). AXIOM FENCE: PASS 2718/2718 (fence-integ-t9-a2.log / fence-integ-t9-a2.json; 2,718 entries, 0 failing, no sorryAx; attempt 1 VOID, killed by a VM restart ~9 min in, no verdict). CENSUS: strict 15,677 -> 16,152; modules 652 -> 709; stripped total 16,320 -> 16,795; FILES 667 -> 724; recount 15,651 -> 16,126 (count_house.py). Combined total after T9: 507,344 = 16,152 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "orbifold-gap-zf-cymatics",
+ "kill_id": null,
+ "module": null,
+ "status": "standing",
+ "tier": "T1"
+}

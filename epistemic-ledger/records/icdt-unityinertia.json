@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 709,
+  "strict": 16152,
+  "total": 16795
+ },
+ "claim": "UNITY-INERTIA AND THE INERTIA-COUPLED DENSITY TENSION PIN INTEGRATE (TRANCHE T9), WITH A KILL AT FULL RANK. UnityInertiaPin (U-INERTIA-0; branch uinertia0 @ 3da50a2): 6 definitions, 0 theorems BY DESIGN (the inertia record pin). ICDT (branch icdt @ 881fc7e), three modules: InertiaCoupledDensityTensionPin 3 definitions / 0 theorems (record pin, freezing the conditional forms); GroundedDirichletPin 7/7 \u2014 the grounded Dirichlet identity (a density's self-energy is its field's Dirichlet tension at the grounded seat); CenterCoincidencePin 8 declarations / 6 theorems. K-ICDT-CENTER FIRED: the general claim that the center of mass is the center of thermal equilibrium over separate data is FALSE, killed by the banked two-site countermodel in CenterCoincidencePin (uniform mass on two sites centers at exactly 1/2; the thermal center of the landscape [0,1] at beta = 1 is e^-1/(1+e^-1), about 0.269). What stands is the proportional form, labeled on its face as one center counted twice (mass a positive scalar multiple of the Gibbs weight), and the cold form in bound form only. NARROWING DISCLOSED (ICDT-1): the self-energy vanishes exactly when the source vanishes at every UNGROUNDED site \u2014 a source supported only at the ground site is absorbed (phi = 0 with rho nonzero there); the scope draft's '= 0 only at rho = 0' does not hold at the ground site. The identity form of 'gravity = inertia-coupled density tension' remains a PRICED OBSTRUCTION (no gravity object exists in the corpus; Dial 2 = 0). Totals for this record: 24 declarations / 13 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-20",
+ "dossier": null,
+ "evidence": "Lanes: uinertia0 @ 3da50a2 \u2014 UnityInertiaPin.lean sha256 b9f047f41534449b48712f300d35fe502f8cae104fe10e1ebeae7fc93de403a2. icdt @ 881fc7e \u2014 InertiaCoupledDensityTensionPin.lean sha256 c17cdbf15184ff306c542f97d356bd3d40a8f962333f57338609bac2b2e5a442; GroundedDirichletPin.lean sha256 4a3c07b1da00c40e6b05ba93b7fa47011a875f44608714346278373e6d0b9cc6; CenterCoincidencePin.lean sha256 8730b0aec9ecacb513c0f989889b69f078024a4e3d756da2419d512fd213c1db. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T9, 2026-11-20): transplant hash gate 58/58 (disk == branch-tip blob == freeze record, INTEG-T9-STATE.md). TARGETED BUILDS: PASS for all 26 items + the item-27 delta (build-targeted-integ-t9.log: run 1 banked items 1,2,6,7,3,4,5,8,23,11,25, then a VM restart killed the run during item 26, NO VERDICT for that item in run 1; build-targeted-integ-t9-resume1.log: items 26,9,10,12,13,14,15,16,17,18,19,20,21,22,24,27 PASS). ROOT BUILD: PASS 9,307 jobs, BUILD_EXIT:0 (build-root-integ-t9.log). Zero-sorry gate PASS, 724 files (check_no_sorry.py). AXIOM FENCE: PASS 2718/2718 (fence-integ-t9-a2.log / fence-integ-t9-a2.json; 2,718 entries, 0 failing, no sorryAx; attempt 1 VOID, killed by a VM restart ~9 min in, no verdict). CENSUS: strict 15,677 -> 16,152; modules 652 -> 709; stripped total 16,320 -> 16,795; FILES 667 -> 724; recount 15,651 -> 16,126 (count_house.py). Combined total after T9: 507,344 = 16,152 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "icdt-unityinertia",
+ "kill_id": null,
+ "module": null,
+ "status": "standing",
+ "tier": "T1"
+}
