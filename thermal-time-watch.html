@@ -2224,12 +2224,10 @@
       // ring's own dot style (hollow 0, filled 1, cream), weights ascending
       // left to right as in the counted-day row beside the readout:
       //  · the SEAT row (upper) — 4 dots, weights 1, 2, 4, 8, encoding the
-      //    current seat: the seat of the current month's NAME in the
-      //    April = 0 ring (April 0, May 1, June 2, July 4, August 5,
-      //    September 6, October 7, November 8, December 9, January 10,
-      //    February 11, March 12 — SOL, seat 3, is a module with no
-      //    Gregorian month, so July onward shift by one) — the same seat
-      //    the M.W-D address carries (Nov 14 = 8.2-7);
+      //    current seat: the THERMAL-MODULE seat of the day's Θ address in
+      //    the April = 0 ring (Zero's ruling, 2026-11-20 — the module the
+      //    day actually sits in: Nov 20 sits in the October module, seat 7;
+      //    April 1 sits inside March, seat 12);
       //  · the COUNTED row (lower) — 9 dots, weights 1…256, encoding the
       //    counted day (0–363).
       // A slim ring at the medallion's heart circles the hands' hub: gold on
@@ -2237,7 +2235,8 @@
       // Residual Day, outside the count) the heart ring turns seam-red —
       // the ZERO.ZERO seam marker at the medallion's heart — and the counted
       // row is NOT rendered (no counted number, exactly the count row's own
-      // fence); the words ZERO.ZERO stand at the counted row's seat instead.
+      // fence); the label 0.0 stands at the counted row's seat instead
+      // (Zero's label ruling, 2026-11-20: the zero.zero is labeled 0.0).
       // The seat row still renders on April 1, as the ring's seat rows do.
       function medallionRow(bits, y, rowName){
         var s = "", k, n = bits.length, pitch = 4.6, x0 = 200 - (n - 1) * pitch / 2;
@@ -2256,11 +2255,11 @@
         var eff = effectiveNow();
         var boundary = isBoundaryDay(eff);
         var cd = countDay(eff);
-        // The month-name seats in the April = 0 ring, by JS month (Jan…Dec):
-        // Jan 10, Feb 11, Mar 12, Apr 0, May 1, Jun 2, Jul 4, Aug 5, Sep 6,
-        // Oct 7, Nov 8, Dec 9 (SOL, seat 3, has no Gregorian month).
-        var MONTH_SEATS = [10, 11, 12, 0, 1, 2, 4, 5, 6, 7, 8, 9];
-        var seat = MONTH_SEATS[eff.getMonth()];
+        // Zero's ruling (2026-11-20): the medallion seat row reads the
+        // THERMAL-MODULE seat — moduleNumber of the day's Θ-address module
+        // (Nov 20: the October module, seat 7; on April 1 the address sits
+        // inside March, seat 12) — not the Gregorian month-name seat.
+        var seat = moduleNumber(addressFromTheta(thetaAt(eff).thetaAddr).module);
         var s = '<title>Leibniz clock \u2014 seat ' + seat +
                 (boundary ? ' \u00B7 ZERO.ZERO, outside the count' : ' \u00B7 counted ' + cd) +
                 ': hollow 0, filled 1</title>';
