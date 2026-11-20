@@ -71,6 +71,10 @@
       .face-label .l3{
         margin-top:3px; font-size:clamp(7px, 1.9vw, 8.5px); letter-spacing:.16em; text-indent:.16em; color:var(--muted);
       }
+      .face-label .l4{
+        margin:5px auto 0; max-width:520px; font-size:clamp(8px, 2.1vw, 10px); letter-spacing:.05em;
+        font-weight:600; color:var(--gold); line-height:1.45;
+      }
       .guc-label{
         text-align:center; margin:14px auto 0; max-width:452px;
         font-size:13px; font-weight:800; letter-spacing:.24em; text-indent:.24em;
@@ -430,6 +434,7 @@
           <div class="l1">ARCHIMEDEAN ANTIKYTHERA TOURBILLION</div>
           <div class="l2">AND GLOBAL UNITY CALENDAR</div>
           <div class="l3">THERMAL TIME · WATCH No. 1</div>
+          <div class="l4">Leibniz clock — binary dots after Leibniz's tactile clock (c. 1716): hollow 0, filled 1.</div>
         </div>
       </div>
       </div>
@@ -1528,11 +1533,13 @@
         // block (r 71–122) and stops clear of the counted ring's 0.0 label (r < 52).
         // It runs along the February|March and 惊蛰|春分 boundaries and
         // along the counted ring's zero (counted module 12 closes, then 0.0 — Zero.zero
-        // the address — then counted 0 opening counted module 0). The inner run now
-        // starts at r 19, just outside the phase ring, with a stub inside it (r 7.5–
-        // 11.5), so the origin stays continuous across the LUNAR and phase rings too —
-        // the phase ring's NEW station sits on this line.
-        var og1 = pt(200,200,25,0), og2 = pt(200,200,107,0), og3 = pt(200,200,140,0), og4 = pt(200,200,198,0);
+        // the address — then counted 0 opening counted module 0). The inner run
+        // starts at r 27, just outside the Leibniz medallion at the dial's heart
+        // (r 26), with a stub inside the medallion (r 7–10) pointing at its heart,
+        // so the origin stays continuous across the medallion, the phase ring on
+        // its rim and the LUNAR ring too — the phase ring's NEW station sits on
+        // this line at the medallion's rim.
+        var og1 = pt(200,200,27,0), og2 = pt(200,200,107,0), og3 = pt(200,200,140,0), og4 = pt(200,200,198,0);
         var og5 = pt(200,200,7,0), og6 = pt(200,200,10,0);
         var sg = '<line x1="'+og1[0].toFixed(1)+'" y1="'+og1[1].toFixed(1)+'" x2="'+og2[0].toFixed(1)+'" y2="'+og2[1].toFixed(1)+'" stroke="#cfd8e3" stroke-width="1.3" opacity="0.85"/>';
         sg += '<line x1="'+og5[0].toFixed(1)+'" y1="'+og5[1].toFixed(1)+'" x2="'+og6[0].toFixed(1)+'" y2="'+og6[1].toFixed(1)+'" stroke="#cfd8e3" stroke-width="1.3" opacity="0.85"/>';
@@ -1790,13 +1797,18 @@
       renderLunarRing();
 
       // ---------- Phase ring: one whole lunation as a circle ----------
-      // Inside the LUNAR ring (band r 12.5–18.5, stations at r 15.5), its zero —
-      // NEW — on the shared origin line at the top, so every zero on the dial
-      // points the same way. One synodic cycle (29.530589 d) runs the full 360°:
-      // NEW 0°, FIRST QUARTER 90°, FULL 180°, LAST QUARTER 270°; WAXING labels the
-      // arc from new through full, WANING the arc from full back to new. Station
-      // discs show the lit part at their phase; a small blue-ringed moon travels
-      // the ring at the day's lunar age, its own shading following the phase.
+      // The phase ring rides the rim of the Leibniz clock medallion at the
+      // dial's centre (stations at r 23, on the medallion's gold rim), inside
+      // the LUNAR ring, its zero — NEW — on the shared origin line at the top,
+      // so every zero on the dial points the same way. One synodic cycle
+      // (29.530589 d) runs the full 360°: NEW 0°, FIRST QUARTER 90°, FULL
+      // 180°, LAST QUARTER 270°; WAXING labels the arc from new through full,
+      // WANING the arc from full back to new. Station discs show the lit part
+      // at their phase; a small blue-ringed moon travels the ring at the
+      // day's lunar age, its own shading following the phase. The medallion
+      // the ring rides on carries the Leibniz clock's dot rows at the dial's
+      // heart (renderMedallion, in the Leibniz section below), and the LUNAR
+      // ring wraps the pair — moon rings around the central Leibniz dots.
       var phaseG = document.getElementById("phaseG");
       // Lit region of a moon disc at phase angle phi (0 = new, 180 = full):
       // the lit limb (right side while waxing, left while waning) plus the
@@ -1814,23 +1826,30 @@
       }
       function renderPhaseRing(){
         var s = "";
-        s += '<circle cx="200" cy="200" r="23" fill="#131c2c" stroke="#33507e" stroke-width="0.8"/>';
-        s += '<circle cx="200" cy="200" r="11" fill="#11161f" stroke="#33507e" stroke-width="0.8"/>';
+        // The Leibniz clock medallion's body: a gold-rimmed disc at the dial's
+        // heart (r 26), its inner field (r 19.5) carrying the clock's dot rows
+        // — drawn by renderMedallion into #medallionDots — and the phase ring
+        // riding the medallion's rim as its bezel: station discs at r 23.
+        s += '<title>The Leibniz clock medallion at the dial\u2019s centre, the phase ring on its rim</title>';
+        s += '<circle cx="200" cy="200" r="26" fill="#131c2c" stroke="#d9a441" stroke-width="1.6"/>';
+        s += '<circle cx="200" cy="200" r="19.5" fill="#11161f" stroke="#33507e" stroke-width="0.7"/>';
         [0, 90, 180, 270].forEach(function(ang){
-          var p = pt(200,200,17,ang);
+          var p = pt(200,200,23,ang);
           s += '<g transform="translate('+p[0].toFixed(1)+' '+p[1].toFixed(1)+')">'+
-               '<circle r="3.3" fill="#0a0e14" stroke="#8fb4e8" stroke-width="0.5"/>'+
-               '<path d="'+moonLitPath(0,0,3.3,ang)+'" fill="#eaf2ff"/></g>';
+               '<circle r="2.2" fill="#0a0e14" stroke="#8fb4e8" stroke-width="0.5"/>'+
+               '<path d="'+moonLitPath(0,0,2.2,ang)+'" fill="#eaf2ff"/></g>';
         });
-        s += '<defs><path id="waxArc" d="'+arcPath(30,60,17)+'" fill="none" stroke="none"/>'+
-             '<path id="waneArc" d="'+arcPath(300,330,17)+'" fill="none" stroke="none"/></defs>';
+        s += '<defs><path id="waxArc" d="'+arcPath(22,68,23)+'" fill="none" stroke="none"/>'+
+             '<path id="waneArc" d="'+arcPath(292,338,23)+'" fill="none" stroke="none"/></defs>';
         s += '<text font-size="5.2" font-weight="700" letter-spacing="0.3" fill="#9db8dd"><textPath href="#waxArc" startOffset="50%" text-anchor="middle">WAXING</textPath></text>';
         s += '<text font-size="5.2" font-weight="700" letter-spacing="0.3" fill="#9db8dd"><textPath href="#waneArc" startOffset="50%" text-anchor="middle">WANING</textPath></text>';
-        s += '<g id="phaseMoon"><circle r="4.4" fill="none" stroke="#2f7bff" stroke-width="1.3"/>'+
-             '<circle r="3.8" fill="#0a0e14"/><path id="phaseMoonLit" d="" fill="#eaf2ff"/></g>';
+        s += '<g id="phaseMoon"><circle r="2.8" fill="none" stroke="#2f7bff" stroke-width="1.1"/>'+
+             '<circle r="2.4" fill="#0a0e14"/><path id="phaseMoonLit" d="" fill="#eaf2ff"/></g>';
+        s += '<g id="medallionDots"></g>';
         phaseG.innerHTML = s;
       }
       renderPhaseRing();
+      renderMedallion();
 
       // ---------- Weekday ring: SUNDAY–SATURDAY in full, with the green hand ----------
       // Seven equal sectors in the open annulus inside the solar-terms band
@@ -1966,9 +1985,9 @@
         var phaseDeg = lun.phaseFrac * 360;
         var phaseMoonEl = el("phaseMoon");
         if(phaseMoonEl){
-          var pp = pt(200,200,17,phaseDeg);
+          var pp = pt(200,200,23,phaseDeg);
           phaseMoonEl.setAttribute("transform", "translate("+pp[0].toFixed(1)+" "+pp[1].toFixed(1)+")");
-          el("phaseMoonLit").setAttribute("d", moonLitPath(0,0,3.8,phaseDeg));
+          el("phaseMoonLit").setAttribute("d", moonLitPath(0,0,2.4,phaseDeg));
         }
         // Star chart — recomputed on the same tick, at most once per second:
         // the sky wheels around the pole at the sidereal rate.
@@ -2046,6 +2065,7 @@
               '<span class="zsub">counted from Zero.zero (April 1) · thermal address <span class="zmod">' + addr.name + ' ' + addr.mw + ', day ' + addr.day + '</span></span>';
           }
           renderLeibnizCount();
+          renderMedallion();
           el("dWeekday").textContent = DOW[wdIndex];
           el("dWeekdaySub").textContent = "green hand at " + wdAngle.toFixed(1) + "° on the WEEKDAY ring · local weekday, steps at local midnight";
           el("dLunar").textContent = "Lunation " + lun.number + " · day " + lun.ageDays.toFixed(1);
@@ -2192,6 +2212,68 @@
         row.innerHTML = html;
         row.setAttribute("aria-label", "Counted day " + cd + " in binary dots — hollow 0, filled 1, weights 1 to 256");
         row.hidden = false;
+      }
+
+      // ---------- Leibniz clock medallion: the dial's centre ----------
+      // Always on (unlike the toggleable Leibniz ring above): the Leibniz
+      // clock sits at the centre of the Tourbillion, in a gold-rimmed
+      // medallion whose body is drawn with the phase ring (renderPhaseRing —
+      // the phase ring rides the medallion's rim, and the LUNAR ring wraps
+      // the pair: moon rings around the central Leibniz dots). Two dot rows,
+      // LIVE from the same engine values the readouts show, in the Leibniz
+      // ring's own dot style (hollow 0, filled 1, cream), weights ascending
+      // left to right as in the counted-day row beside the readout:
+      //  · the SEAT row (upper) — 4 dots, weights 1, 2, 4, 8, encoding the
+      //    current seat: the seat of the current month's NAME in the
+      //    April = 0 ring (April 0, May 1, June 2, July 4, August 5,
+      //    September 6, October 7, November 8, December 9, January 10,
+      //    February 11, March 12 — SOL, seat 3, is a module with no
+      //    Gregorian month, so July onward shift by one) — the same seat
+      //    the M.W-D address carries (Nov 14 = 8.2-7);
+      //  · the COUNTED row (lower) — 9 dots, weights 1…256, encoding the
+      //    counted day (0–363).
+      // A slim ring at the medallion's heart circles the hands' hub: gold on
+      // ordinary days. ZERO.ZERO FENCE: on April 1 (Zero.zero, the Clean
+      // Residual Day, outside the count) the heart ring turns seam-red —
+      // the ZERO.ZERO seam marker at the medallion's heart — and the counted
+      // row is NOT rendered (no counted number, exactly the count row's own
+      // fence); the words ZERO.ZERO stand at the counted row's seat instead.
+      // The seat row still renders on April 1, as the ring's seat rows do.
+      function medallionRow(bits, y, rowName){
+        var s = "", k, n = bits.length, pitch = 4.6, x0 = 200 - (n - 1) * pitch / 2;
+        for(k = 0; k < n; k++){
+          var filled = bits[k] === 1;
+          s += '<circle cx="' + (x0 + k * pitch).toFixed(1) + '" cy="' + y + '" r="2.1" ' +
+               'data-row="' + rowName + '" data-weight="' + (1 << k) + '" data-bit="' + bits[k] + '" ' +
+               (filled ? 'fill="#f6ecd7" stroke="#f6ecd7" stroke-width="1"'
+                       : 'fill="#11161f" stroke="#f6ecd7" stroke-width="1.1"') + '/>';
+        }
+        return s;
+      }
+      function renderMedallion(){
+        var g = document.getElementById("medallionDots");
+        if(!g) return;
+        var eff = effectiveNow();
+        var boundary = isBoundaryDay(eff);
+        var cd = countDay(eff);
+        // The month-name seats in the April = 0 ring, by JS month (Jan…Dec):
+        // Jan 10, Feb 11, Mar 12, Apr 0, May 1, Jun 2, Jul 4, Aug 5, Sep 6,
+        // Oct 7, Nov 8, Dec 9 (SOL, seat 3, has no Gregorian month).
+        var MONTH_SEATS = [10, 11, 12, 0, 1, 2, 4, 5, 6, 7, 8, 9];
+        var seat = MONTH_SEATS[eff.getMonth()];
+        var s = '<title>Leibniz clock \u2014 seat ' + seat +
+                (boundary ? ' \u00B7 ZERO.ZERO, outside the count' : ' \u00B7 counted ' + cd) +
+                ': hollow 0, filled 1</title>';
+        s += '<circle cx="200" cy="200" r="8.2" fill="none" stroke="' + (boundary ? '#ff7a59' : '#d9a441') +
+             '" stroke-width="' + (boundary ? '1.8' : '1.1') + '"' + (boundary ? '' : ' opacity="0.55"') +
+             ' data-medallion-heart="' + (boundary ? 'zero' : 'hub') + '"/>';
+        s += medallionRow(leibnizBits(seat, 4), 190.5, "seat");
+        if(boundary || cd === null){
+          s += '<text x="200" y="210.5" font-size="6.5" font-weight="800" letter-spacing="1.2" fill="#ff7a59" text-anchor="middle" dominant-baseline="central" data-medallion-zero="1">ZERO.ZERO</text>';
+        } else {
+          s += medallionRow(leibnizBits(cd, 9), 210.5, "counted");
+        }
+        g.innerHTML = s;
       }
       function setLeibnizRing(on){
         leibnizOn = !!on;
