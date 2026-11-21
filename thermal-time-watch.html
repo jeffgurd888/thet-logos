@@ -1747,7 +1747,7 @@
       // WANING the arc from full back to new. Station discs show the lit part
       // at their phase; a small blue-ringed moon travels the ring at the
       // day's lunar age, its own shading following the phase. The medallion
-      // the ring rides on carries the Leibniz clock's dot rows at the dial's
+      // the ring rides on carries the Leibniz clock's circular dot ring at the dial's
       // heart (renderMedallion, in the Leibniz section below), and the LUNAR
       // ring wraps the pair — moon rings around the central Leibniz dots.
       var phaseG = document.getElementById("phaseG");
@@ -1768,7 +1768,7 @@
       function renderPhaseRing(){
         var s = "";
         // The Leibniz clock medallion's body: a gold-rimmed disc at the dial's
-        // heart (r 78), its inner field (r 58.4) carrying the clock's dot rows
+        // heart (r 78), its inner field (r 58.4) carrying the clock's circular dot ring
         // — drawn by renderMedallion into #medallionDots — and the phase ring
         // riding the medallion's rim as its bezel: station discs at r 68.9.
         s += '<title>The Leibniz clock medallion at the dial\u2019s centre, the phase ring on its rim</title>';
@@ -2096,7 +2096,7 @@
       var leibnizOn = false;
       var leibnizG = document.getElementById("leibnizG");
       var LEIBNIZ_RADII = [84.5, 91.5, 98.5, 105.5]; // weights 1, 2, 4, 8 — centre outward; since the 2026-11-20 centre expansions these ride the LUNAR ring band (r 81-108) that wraps the medallion
-      var LEIBNIZ_OFFSET = 9.5; // degrees clockwise from the seat numeral's own radius, inside its counted sector
+      var LEIBNIZ_OFFSET = 9.5; // degrees clockwise from the seat numeral's own radius, inside its equal sector
       function leibnizBits(value, n){
         var b = [], i;
         for(i = 0; i < n; i++) b.push((value >> i) & 1);
@@ -2143,43 +2143,36 @@
       // clock sits at the centre of the Tourbillion, in a gold-rimmed
       // medallion whose body is drawn with the phase ring (renderPhaseRing —
       // the phase ring rides the medallion's rim, and the LUNAR ring wraps
-      // the pair: moon rings around the central Leibniz dots). Two dot rows,
-      // LIVE from the same engine values the readouts show, in the Leibniz
-      // ring's own dot style (hollow 0, filled 1, cream), weights ascending
-      // left to right as in the counted-day row beside the readout:
-      //  · the SEAT row (upper) — 4 dots, weights 1, 2, 4, 8, encoding the
-      //    current seat: the THERMAL-MODULE seat of the day's Θ address in
-      //    the April = 0 ring (Zero's ruling, 2026-11-20 — the module the
-      //    day actually sits in: Nov 20 sits in the October module, seat 7;
-      //    April 1 sits inside March, seat 12);
-      //  · the COUNTED row (lower) — 9 dots, weights 1…256, encoding the
-      //    counted day (0–363).
+      // the pair: moon rings around the central Leibniz dots).
+      // THE CIRCULAR DOT CLOCK (Zero, 2026-11-20 — the Leibniz Calendar
+      // poster's form, commissioned as "alignment for the center of the
+      // LogiClock" once the COUNTED and THERMAL rings came off the face):
+      // thirteen seats around the medallion, ALIGNED TO THE SEAM — seat 0
+      // (April) opens on the origin line, the seats run clockwise in counted
+      // order through the equal sectors ((seat + 0.5) x 360/13, the counted
+      // ring's own anchor), and seat 12 (March) closes back to the seam.
+      // Every seat spells its own number in four dots, weights 1, 2, 4, 8
+      // from the centre out (bands r 31, 39.5, 48, 56.5), in the Leibniz dot
+      // style (hollow 0, filled 1, cream). The LIVE seat — the THERMAL-MODULE
+      // seat of the day's theta address (Zero's ruling, 2026-11-20: Nov 20
+      // sits in the October module, seat 7; April 1 inside March, seat 12)
+      // — is ringed in seam red-orange. The straight seat/counted rows the
+      // medallion carried before are gone; the counted day reads in the
+      // text readouts and the counted-day dot row beside them.
       // A slim ring at the medallion's heart circles the hands' hub: gold on
       // ordinary days. ZERO.ZERO FENCE: on April 1 (Zero.zero, the Clean
       // Residual Day, outside the count) the heart ring turns seam-red —
-      // the ZERO.ZERO seam marker at the medallion's heart — and the counted
-      // row is NOT rendered (no counted number, exactly the count row's own
-      // fence); the label 0.0 stands at the counted row's seat instead
-      // (Zero's label ruling, 2026-11-20: the zero.zero is labeled 0.0).
-      // The seat row still renders on April 1, as the ring's seat rows do.
-      function medallionRow(bits, y, rowName){
-        var s = "", k, n = bits.length, pitch = 13.8, x0 = 200 - (n - 1) * pitch / 2;
-        for(k = 0; k < n; k++){
-          var filled = bits[k] === 1;
-          s += '<circle cx="' + (x0 + k * pitch).toFixed(1) + '" cy="' + y + '" r="6.4" ' +
-               'data-row="' + rowName + '" data-weight="' + (1 << k) + '" data-bit="' + bits[k] + '" ' +
-               (filled ? 'fill="#f6ecd7" stroke="#f6ecd7" stroke-width="3.0"'
-                       : 'fill="#11161f" stroke="#f6ecd7" stroke-width="3.3"') + '/>';
-        }
-        return s;
-      }
+      // the ZERO.ZERO seam marker at the medallion's heart — and the label
+      // 0.0 stands inside the heart (Zero's label ruling, 2026-11-20: the
+      // zero.zero is labeled 0.0). The seat ring still renders on April 1,
+      // live seat 12, as the poster's ring does.
       function renderMedallion(){
         var g = document.getElementById("medallionDots");
         if(!g) return;
         var eff = effectiveNow();
         var boundary = isBoundaryDay(eff);
         var cd = countDay(eff);
-        // Zero's ruling (2026-11-20): the medallion seat row reads the
+        // Zero's ruling (2026-11-20): the medallion's live seat reads the
         // THERMAL-MODULE seat — moduleNumber of the day's Θ-address module
         // (Nov 20: the October module, seat 7; on April 1 the address sits
         // inside March, seat 12) — not the Gregorian month-name seat.
@@ -2190,11 +2183,25 @@
         s += '<circle cx="200" cy="200" r="24.6" fill="none" stroke="' + (boundary ? '#ff7a59' : '#d9a441') +
              '" stroke-width="' + (boundary ? '5.4' : '3.3') + '"' + (boundary ? '' : ' opacity="0.55"') +
              ' data-medallion-heart="' + (boundary ? 'zero' : 'hub') + '"/>';
-        s += medallionRow(leibnizBits(seat, 4), 171.6, "seat");
+        var CBANDS = [31, 39.5, 48, 56.5], cs, ck, cbits, cang, cp, cfilled;
+        for(cs = 0; cs < 13; cs++){
+          cbits = leibnizBits(cs, 4);
+          cang = (cs + 0.5) * 360 / 13;
+          s += '<g data-centre-seat="' + cs + '"><title>Seat ' + cs + ' \u2014 binary dots: weights 1, 2, 4, 8 from the centre out</title>';
+          for(ck = 0; ck < 4; ck++){
+            cfilled = cbits[ck] === 1;
+            cp = pt(200, 200, CBANDS[ck], cang);
+            s += '<circle cx="' + cp[0].toFixed(1) + '" cy="' + cp[1].toFixed(1) + '" r="4.4" ' +
+                 'data-weight="' + (1 << ck) + '" data-bit="' + cbits[ck] + '" ' +
+                 (cfilled ? 'fill="#f6ecd7" stroke="#f6ecd7" stroke-width="3.0"'
+                          : 'fill="#11161f" stroke="#f6ecd7" stroke-width="3.3"') + '/>';
+          }
+          s += '</g>';
+        }
+        var hp = pt(200, 200, 43.75, (seat + 0.5) * 360 / 13);
+        s += '<circle cx="' + hp[0].toFixed(1) + '" cy="' + hp[1].toFixed(1) + '" r="17.5" fill="none" stroke="#e0705c" stroke-width="2.4" data-centre-live-seat="' + seat + '"><title>Live seat ' + seat + '</title></circle>';
         if(boundary || cd === null){
-          s += '<text x="200" y="231.4" font-size="19.5" font-weight="800" letter-spacing="1.2" fill="#ff7a59" text-anchor="middle" dominant-baseline="central" data-medallion-zero="1">0.0</text>';
-        } else {
-          s += medallionRow(leibnizBits(cd, 9), 231.4, "counted");
+          s += '<text x="200" y="213" font-size="13.5" font-weight="800" letter-spacing="1" fill="#ff7a59" text-anchor="middle" dominant-baseline="central" data-medallion-zero="1">0.0</text>';
         }
         g.innerHTML = s;
       }
