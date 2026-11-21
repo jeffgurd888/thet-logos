@@ -396,30 +396,11 @@
           <g id="phaseG"></g>
           <g id="seamG"></g>
           <g id="handsG">
-            <g id="weekdayHand">
-              <line x1="200" y1="210" x2="200" y2="78.5" stroke="#2fd35f" stroke-width="3.5" stroke-linecap="round"/>
-              <path d="M200 63 L194 78.5 L206 78.5 Z" fill="#2fd35f"/>
-              <circle cx="200" cy="211" r="3" fill="none" stroke="#2fd35f" stroke-width="1.8"/>
-            </g>
-            <g id="yearHand">
-              <line x1="200" y1="220" x2="200" y2="18" stroke="#d9a441" stroke-width="3.5" stroke-linecap="round"/>
-              <path d="M200 7 L193 24 L207 24 Z" fill="#d9a441"/>
-            </g>
-            <g id="todayHand">
-              <line x1="200" y1="212" x2="200" y2="102" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-              <path d="M200 89 L194.5 102 L205.5 102 Z" fill="#ffffff" stroke="#0d1117" stroke-width="0.8"/>
-              <circle cx="200" cy="213" r="3.2" fill="none" stroke="#ffffff" stroke-width="2"/>
-            </g>
-            <g id="monthHand">
-              <line x1="200" y1="210" x2="200" y2="120.5" stroke="#16e0c8" stroke-width="3" stroke-linecap="round"/>
-              <path d="M200 110 L194.5 120.5 L205.5 120.5 Z" fill="#16e0c8" stroke="#0d1117" stroke-width="0.8"/>
-              <circle cx="200" cy="209" r="2.8" fill="none" stroke="#16e0c8" stroke-width="1.8"/>
-            </g>
-            <g id="lunarHand">
-              <line x1="200" y1="209" x2="200" y2="168.5" stroke="#2f7bff" stroke-width="2.6" stroke-linecap="round"/>
-              <path d="M200 160.5 L195.5 168.5 L204.5 168.5 Z" fill="#2f7bff" stroke="#0d1117" stroke-width="0.7"/>
-              <circle cx="200" cy="207.5" r="2.4" fill="none" stroke="#2f7bff" stroke-width="1.5"/>
-            </g>
+            <g id="weekdayDot"><title>Weekday — marker dot on the WEEKDAY ring</title><circle cx="200" cy="78.5" r="4.2" fill="#2fd35f" stroke="#0d1117" stroke-width="1.2"/></g>
+            <g id="yearDot"><title>The sun (λ) — marker dot on the module ring</title><circle cx="200" cy="38" r="4.6" fill="#d9a441" stroke="#0d1117" stroke-width="1.2"/></g>
+            <g id="todayDot"><title>Today — marker dot on the COUNTED ring</title><circle cx="200" cy="102" r="4.2" fill="#ffffff" stroke="#0d1117" stroke-width="1.2"/></g>
+            <g id="monthDot"><title>Thermal month date — marker dot on the THERMAL ring</title><circle cx="200" cy="120.5" r="4.2" fill="#16e0c8" stroke="#0d1117" stroke-width="1.2"/></g>
+            <g id="lunarDot"><title>Lunar month date — marker dot on the LUNAR ring</title><circle cx="200" cy="140.5" r="4.2" fill="#2f7bff" stroke="#0d1117" stroke-width="1.2"/></g>
             <line id="hourHand" x1="200" y1="200" x2="200" y2="138" stroke="#e8edf5" stroke-width="7" stroke-linecap="round" opacity="1"/>
             <line id="minHand" x1="200" y1="200" x2="200" y2="104" stroke="#e8edf5" stroke-width="4.5" stroke-linecap="round" opacity="1"/>
             <g id="secHand">
@@ -449,7 +430,7 @@
         <p class="civil-line" id="civilLine">—</p>
         <p class="solar-line" id="solarLine">—</p>
       </div>
-      <p class="hands-legend"><span class="swatch sw-gold"></span><strong class="lg-gold">Gold hand</strong> — the sun (λ) · <span class="swatch sw-white"></span><strong>White TODAY hand</strong> — the counted date, read on the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 0–12 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <strong style="color:#ed2817;">Red gate-seal</strong> — April’s opening, the first counted month · <strong>Zodiac ring</strong> — the thirteen signs are seated centred on the calendar months (Aries over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February, and Ophiuchus ⛎ — the Serpent-Bearer, the missing thirteenth sign — over March, the seam month); the sign boundaries fall mid-month at the bisectors between month centres, and both of Ophiuchus’s boundaries fall inside March · Ophiuchus is seated over March <strong>by declaration</strong> of the calendar’s maker, completing 13 signs for 13 modules; in the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH hand</strong> — the thermal month date (module.week.day), read on the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 12, 0–11 in solar order from the same origin; on April 1 it does not park — it points inside March, at March 12.2, while TODAY parks at the seam) · <span class="swatch sw-blue"></span><strong class="lg-blue">Blue LUNAR hand</strong> — the lunar month date, read on the <strong>LUNAR</strong> ring just inside the THERMAL ring (12.368266 lunations per tropical year — twelve full sectors plus a closing partial sector, numbered 1–13 from the same origin; lunation 1 is the lunation already running at the March equinox) · <span class="swatch sw-blue"></span><strong class="lg-blue">Phase ring</strong> — inside the LUNAR ring, one whole lunation drawn as a circle (NEW at the top, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, WAXING from new to full, WANING from full back to new); a small blue moon travels it at the day’s lunar age, dark at new, half-lit at the quarters, fully lit at full · <span class="swatch sw-green"></span><strong class="lg-green">Green WEEKDAY hand</strong> — the observer’s local weekday, read on the <strong>WEEKDAY</strong> ring in the open annulus inside the solar-terms band (SUNDAY–SATURDAY written out in full, Sunday’s sector opening at the equinox line at the top and the week running clockwise; green is the Z seat — Yield / Ground / Structure; the hand points at the current day’s sector centre, the current day’s sector is lit brighter, and the hand steps to the next day at local midnight) · <strong>Date arm</strong> — the colour-corresponded readout under the civil date, (🔵 M. 🔴 W.-D): <span style="color:var(--arm-blue)"><strong>🔵 blue</strong></span> is the Gregorian month counted from March, the solar year’s opening (March 1, April 2, … November 9, … February 12), and <span style="color:var(--arm-red)"><strong>🔴 red</strong></span> is the week.–day of that month in 7-day blocks from the 1st — so Saturday, November 14, 2026 reads (🔵 9. 🔴 2.-7). One day carries no ordinary arm reading: April 1 — Zero.zero, the Boundary Day — reads <strong>0.0 — ZERO.ZERO</strong>, outside the count, on the arm as on every readout. The arm is a readout only: the seat numerals 0–12, the five hands and their colours are unchanged.</p>
+      <p class="hands-legend">The dial’s only hands are the <strong>white hour and minute hands</strong> and the <strong>red second hand</strong> — thermal time of day. Every ring is read by a marker dot riding the ring itself. <span class="swatch sw-gold"></span><strong class="lg-gold">Gold marker dot</strong> — the sun (λ), riding the module ring · <span class="swatch sw-white"></span><strong>White TODAY marker dot</strong> — the counted date, riding the inner <strong>COUNTED</strong> ring (13 counted modules × 28 days = 364, modules numbered 0–12 from the seam; the count states from 0 — April 2 = counted 0, labels run 0–363; on April 1 it parks at the seam — April 1 stands outside the count at Zero.zero, address 0.0, and is not counted 0) · <strong style="color:#ed2817;">Red gate-seal</strong> — April’s opening, the first counted month · <strong>Zodiac ring</strong> — the thirteen signs are seated centred on the calendar months (Aries over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February, and Ophiuchus ⛎ — the Serpent-Bearer, the missing thirteenth sign — over March, the seam month); the sign boundaries fall mid-month at the bisectors between month centres, and both of Ophiuchus’s boundaries fall inside March · Ophiuchus is seated over March <strong>by declaration</strong> of the calendar’s maker, completing 13 signs for 13 modules; in the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius · <span class="swatch sw-teal"></span><strong class="lg-teal">Teal MONTH marker dot</strong> — the thermal month date (module.week.day), riding the <strong>THERMAL</strong> ring (13 equal modules × 4 weeks, numbered 12, 0–11 in solar order from the same origin; on April 1 it does not park — it sits inside March, at March 12.2, while TODAY parks at the seam) · <span class="swatch sw-blue"></span><strong class="lg-blue">Blue LUNAR marker dot</strong> — the lunar month date, riding the <strong>LUNAR</strong> ring just inside the THERMAL ring (12.368266 lunations per tropical year — twelve full sectors plus a closing partial sector, numbered 1–13 from the same origin; lunation 1 is the lunation already running at the March equinox) · <span class="swatch sw-blue"></span><strong class="lg-blue">Phase ring</strong> — inside the LUNAR ring, one whole lunation drawn as a circle (NEW at the top, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, WAXING from new to full, WANING from full back to new); a small blue moon travels it at the day’s lunar age, dark at new, half-lit at the quarters, fully lit at full · <span class="swatch sw-green"></span><strong class="lg-green">Green WEEKDAY marker dot</strong> — the observer’s local weekday, riding the <strong>WEEKDAY</strong> ring in the open annulus inside the solar-terms band (SUNDAY–SATURDAY written out in full, Sunday’s sector opening at the equinox line at the top and the week running clockwise; green is the Z seat — Yield / Ground / Structure; the dot sits at the current day’s sector centre, the current day’s sector is lit brighter, and the dot steps to the next sector at local midnight) · <strong>Date arm</strong> — the colour-corresponded readout under the civil date, (🔵 M. 🔴 W.-D): <span style="color:var(--arm-blue)"><strong>🔵 blue</strong></span> is the Gregorian month counted from March, the solar year’s opening (March 1, April 2, … November 9, … February 12), and <span style="color:var(--arm-red)"><strong>🔴 red</strong></span> is the week.–day of that month in 7-day blocks from the 1st — so Saturday, November 14, 2026 reads (🔵 9. 🔴 2.-7). One day carries no ordinary arm reading: April 1 — Zero.zero, the Boundary Day — reads <strong>0.0 — ZERO.ZERO</strong>, outside the count, on the arm as on every readout. The arm is a readout only: the seat numerals 0–12 and the marker dots’ colours are unchanged.</p>
 
       <p class="equation" id="equationLine"><span class="eq-head">Today’s equation</span>—</p>
 
@@ -514,7 +495,7 @@
         <p class="sky-live" id="tideLive">—</p>
         <p>A design-study sky model — bright stars only, naked-eye grade. The disc around the dial is the sky dome projected from the zenith: the centre is overhead, the outer edge is the horizon, and stars below the horizon are not drawn. The dial sits at its centre as the Earth; the chart is local to the observer and turns at the sidereal rate.</p>
         <p><strong>The Earth ring, the Moon, and the tide line.</strong> The blue/green ring around the outside of the dial frames the watch as the Earth. The Moon rides its orbit band at its modelled geocentric ecliptic longitude — advanced from the pinned anchor new moon of Feb 17, 2026 at the sidereal orbital period 27.321661 days, ecliptic latitude taken as 0° at this grade — placed for this observer, its disc shaded by the same phase the dial’s phase ring shows. The fitted blue curve wrapped around the Earth ring is the <strong>equilibrium tide</strong> — “the water surface the Moon’s pull alone would raise, in theory”: radius r(θ) = R·(1 + a·cos 2(θ − θ_axis)), two bulges on the Earth→Moon axis (sublunar and antipodal), minima at ±90° from it. Its amplitude breathes with the Sun’s tide: <strong>a = 0.038·(1 + 0.46·cos 2E)</strong>, E the Moon–Sun elongation — the 0.46 is the Sun’s tide-raising force relative to the Moon’s, so the line swells at new and full moon (springs) and slackens at the quarters (neaps). Drawn <strong>exaggerated, not to scale</strong>: the true equilibrium bulge is ≈ 0.36 m over the whole Earth. The real ocean answers with basin dynamics and a local lag — this model’s lag parameter is <strong>0° (pure theory)</strong>.</p>
-        <p><strong>The sun-road and the planets.</strong> The fine gold curve is the ecliptic drawn through the real sky; the Sun rides it at the same λ the dial’s gold hand shows, and below the horizon it waits dimmed at the rim — night does not pretend the Sun is up. Mercury, Venus, Mars, Jupiter and Saturn ride the disc from Keplerian orbital elements (JPL approximate-elements grade): a design-study sky model, positions to a fraction of a degree.</p>
+        <p><strong>The sun-road and the planets.</strong> The fine gold curve is the ecliptic drawn through the real sky; the Sun rides it at the same λ the dial’s gold dot shows, and below the horizon it waits dimmed at the rim — night does not pretend the Sun is up. Mercury, Venus, Mars, Jupiter and Saturn ride the disc from Keplerian orbital elements (JPL approximate-elements grade): a design-study sky model, positions to a fraction of a degree.</p>
         <p><strong>The quasar frame.</strong> The crosshair markers are the classic fixed frame sources — 3C 273 (the brightest) with 3C 48, 3C 147, 3C 196, 3C 286 and 3C 295 — fixed for all measurable purposes: no proper motion, no parallax; every angle on this chart is ultimately measured against these, the triangulation layer behind the turning sky. Honestly: they are telescope and radio objects, far below naked-eye — frame markers, not visible stars.</p>
         <p>Precession, shown not hidden: this chart is the <strong>real (sidereal) sky</strong>, standing some <strong>24° drifted</strong> from the dial’s zodiac ring — twenty centuries of the Earth’s slow wobble separate where the signs are reckoned from and where the stars actually stand.</p>
       </div>
@@ -568,7 +549,7 @@
 
       <section aria-label="The western zodiac">
         <h2>The zodiac — thirteen signs, centred on the months</h2>
-        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">The zodiac is seated centred on the calendar months: Aries ♈ over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February and Ophiuchus ⛎ — the Serpent-Bearer — over March, module 12, the seam month. Each sign’s sector is bounded by the bisectors between neighbouring month centres, so the boundaries fall mid-month and sector widths vary slightly with the thermal spans; Ophiuchus’s two boundaries — Pisces/Ophiuchus and Ophiuchus/Aries — both fall inside March. The gold year hand still reads the sun’s true λ off the one angle; the solar terms below remain the λ-true ring.</p>
+        <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">The zodiac is seated centred on the calendar months: Aries ♈ over April, Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February and Ophiuchus ⛎ — the Serpent-Bearer — over March, module 12, the seam month. Each sign’s sector is bounded by the bisectors between neighbouring month centres, so the boundaries fall mid-month and sector widths vary slightly with the thermal spans; Ophiuchus’s two boundaries — Pisces/Ophiuchus and Ophiuchus/Aries — both fall inside March. The gold year dot still reads the sun’s true λ off the one angle; the solar terms below remain the λ-true ring.</p>
         <p style="margin:0 0 9px; font-size:14px; color:var(--muted);">Ophiuchus is seated over March <strong>by declaration</strong> of the calendar’s maker, completing 13 signs for 13 modules — design study, NO CLAIM. In the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius.</p>
         <table class="modules">
           <thead><tr><th>Sign</th><th>Centred on</th><th>Sector λ from</th><th>Sector λ to</th></tr></thead>
@@ -662,11 +643,11 @@
       <section class="how" aria-label="How thermal time works">
         <h2>How this clock keeps time</h2>
         <p>The dial is arc: solar longitude λ runs 0° at the March equinox to 360° around the year. Riding on the arc is the equilibrium track T_eq(λ) — the temperature the Sun’s geometry is asking of Schoolcraft, Michigan. Thermal phase Θ accumulates at a rate proportional to that temperature, dΘ/dt = T_eq / T̄, and the thirteen modules are equal steps of Θ — so winter modules stretch over more days and more arc, and summer modules compress.</p>
-        <p>The thin red hand is the thermal seconds hand. It sweeps at today’s rate r = T_eq / T̄: one thermal minute takes 60/r civil seconds. Deep January runs about 5% slow; July runs about 4.7% fast. The gold hand is the year hand — it points at today’s place on the module ring. The white hands read thermal time of day.</p>
+        <p>The thin red hand is the thermal seconds hand. It sweeps at today’s rate r = T_eq / T̄: one thermal minute takes 60/r civil seconds. Deep January runs about 5% slow; July runs about 4.7% fast. The gold dot is the year marker — it rides the module ring at today’s place on it. The white hands read thermal time of day.</p>
         <p>April 1 is <strong>ZERO.ZERO</strong> — the Clean Residual Day, the calendar’s New Year Day: standing outside the 364 counted days at address 0.0 — it is not counted 0. The count states from 0: the counted year opens April 2 as counted 0, and the labels run 0–363, inside March (module 12), the seam span that holds Zero.zero. Counted module 0 spans counted 0–27. The counted ring’s “0.0” engraving at the origin marks Zero.zero the address; counted 0 is the first counted day, April 2 — the two zeros are neighbours, never the same day. Its solar address is March, week 12.2, day 6 — the seam is in the count, not in the Sun. April 1 — Zero.zero, the Clean Residual Day, New Year Day — is named Thermal Equilibrium Day by its author's declaration; the name is a designation, not a thermal claim. It is the great reset day of equilibrium: Auld Lang Syne is sung, the Lord's Prayer is prayed — forgive, and ask forgiveness — and Psalm 51:10 is read, “Create in me a clean heart, O God”: a brand new heart, every year.</p>
         <p><strong>Longitude carries the track around the planet.</strong> Slide the longitude and the same day is re-read from a new arc position: solar time there shifts continuously — four minutes per degree, no zones and no steps. The day’s equilibrium track is the pinned Schoolcraft table carried around unchanged; what longitude changes is where that place sits in its day. Its temperature swing peaks three hours after its solar noon — the surface-inertia lag — so at any one instant, different longitudes carry different instantaneous temperatures, and the thermal hand runs at each longitude’s own rate r. One planet, one track, a continuous lag field.</p>
         <p><strong>Two more partitions ride the same road.</strong> The outer ring is the zodiac, seated centred on the calendar months — Aries ♈ over April, then Taurus over May, Gemini over June, Cancer over Sol, Leo over July, Virgo over August, Libra over September, Scorpio over October, Sagittarius over November, Capricorn over December, Aquarius over January, Pisces over February and Ophiuchus ⛎, the Serpent-Bearer, over March — its sectors bounded by the bisectors between neighbouring month centres, so the boundaries fall mid-month, sector widths vary slightly with the thermal spans, and both of Ophiuchus’s boundaries fall inside March, the seam month: Pisces–Ophiuchus on one side, Ophiuchus–Aries on the other. Ophiuchus is seated over March by declaration of the calendar’s maker, completing 13 signs for 13 modules; in the sky itself the Sun crosses Ophiuchus Nov 30–Dec 17, between Scorpius and Sagittarius. The inner green band is the Chinese calendar’s own partition: the 24 solar terms 节气, fifteen degrees each, anchored at the same equinox and still λ-true — so the solstice instant (λ 90°) falls in June’s last days, and Sol is the high-summer span that opens on the solstice’s far side — the sun’s long reign at the top of the year. The two boundary sets interleave against the thirteen thermal modules, and the sliding between the geometric partitions and the heat-equal modules is the year’s thermal lag drawn as rings. The animal year rides above them all as a year-count: it turns at Chinese New Year, not at January 1 and not by λ. Zodiac layers: partitions of the sun’s road and the year, shown for correlation — design study, NO CLAIM; no astrological meaning is claimed for them.</p>
-        <p><strong>The moon keeps two more counts.</strong> The slim blue LUNAR ring just inside the THERMAL ring carries the year’s lunations: 12.368266 per tropical year, drawn as twelve full sectors and a closing partial sector (0.368266 of a sector), numbered 1–13 from the same equinox origin, engraved LUNAR · 12.368. Lunations count from the March equinox — lunation 1 is the lunation already running at the equinox (in 2026 it opened with the new moon of Mar 19) — and the blue LUNAR hand’s angle is the fractional lunations elapsed since the equinox, mapped over the ring’s 12.368266: that is, the days since the equinox plus the age the containing lunation had already reached at the equinox, all divided by the synodic month. Inside the LUNAR ring, the phase ring draws a single lunation as one full circle — NEW at the top on the shared origin line, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, the arc from new through full labelled WAXING and the arc from full back to new labelled WANING — and a small blue moon travels it at the day’s lunar age, its lit part growing through waxing and shrinking through waning. Lunar age is the days since the last new moon, 0 at new moon; the phase words are centred on their stations — New at the new moon, Waxing about the first quarter, Full at the full moon, Waning about the last quarter. New moons here are a design-study model, stated as such: counted from one pinned anchor new moon — Feb 17, 2026, Chinese New Year, the CNY table’s own date — at a pinned synodic month of 29.530589 days.</p>
+        <p><strong>The moon keeps two more counts.</strong> The slim blue LUNAR ring just inside the THERMAL ring carries the year’s lunations: 12.368266 per tropical year, drawn as twelve full sectors and a closing partial sector (0.368266 of a sector), numbered 1–13 from the same equinox origin, engraved LUNAR · 12.368. Lunations count from the March equinox — lunation 1 is the lunation already running at the equinox (in 2026 it opened with the new moon of Mar 19) — and the blue LUNAR dot’s angle is the fractional lunations elapsed since the equinox, mapped over the ring’s 12.368266: that is, the days since the equinox plus the age the containing lunation had already reached at the equinox, all divided by the synodic month. Inside the LUNAR ring, the phase ring draws a single lunation as one full circle — NEW at the top on the shared origin line, FIRST QUARTER at 90°, FULL at 180°, LAST QUARTER at 270°, the arc from new through full labelled WAXING and the arc from full back to new labelled WANING — and a small blue moon travels it at the day’s lunar age, its lit part growing through waxing and shrinking through waning. Lunar age is the days since the last new moon, 0 at new moon; the phase words are centred on their stations — New at the new moon, Waxing about the first quarter, Full at the full moon, Waning about the last quarter. New moons here are a design-study model, stated as such: counted from one pinned anchor new moon — Feb 17, 2026, Chinese New Year, the CNY table’s own date — at a pinned synodic month of 29.530589 days.</p>
         <p><strong>The sky around the watch.</strong> The disc surrounding the dial is a planisphere-style star chart — the first brick of the Archimedes Universal Clock: digital, and local to the observer. The dial sits at its centre as the Earth. The chart projects the sky dome from the zenith (stereographic, so shapes hold their form): the centre is directly overhead, the radius grows as altitude falls, and the outer edge is the horizon, marked N · E · S · W. It carries a naked-eye bright-star set — the brightest stars, with the standard stick figures of the major constellations, each labelled at its figure — computed for the observer's latitude and longitude above, and it turns live at the sidereal rate as local sidereal time advances, so the sky wheels around the pole through the night. Stars below the horizon are not drawn. And the drift is shown, not hidden: the chart is the real, sidereal sky, standing some 24° of precession away from the dial's zodiac ring.</p>
         <p><strong>The Earth, the Moon, and the tide — and the rest of the tourbillon.</strong> Brick two frames the dial with a blue/green Earth ring; the Moon rides an orbit band around it at its modelled longitude, and a fitted blue equilibrium-tide curve wraps the ring with its axis locked to the Moon — two bulges on the Earth→Moon line, breathing between springs and neaps by the stated solar factor, exaggerated and labelled as theory, its lag 0°. Brick three completes the surround: the gold ecliptic crosses the chart with the Sun riding it (dimmed at the rim below the horizon), the five naked-eye planets stand at their Keplerian places, and the quasar frame — 3C 273 and its five companions — rides as crosshair markers: the fixed frame every turning angle on the chart is ultimately measured against.</p>
         <p><strong>Screensaver and the lock screen.</strong> The Screensaver button puts this clock into an in-app screensaver mode: the live face, dimmed, with the time and the 0.0 count, drifting slowly against burn-in and holding the screen awake while it runs — the clock’s ambient face for a phone propped or docked with the app open. Android does not let a web app replace the system lock screen or the system Daydream screensaver service, so this page cannot take those over; a true lock-screen or Daydream version would be a small native companion app.</p>
@@ -864,7 +845,7 @@
       // cycle's first day, Mar 20, at its canonical noon): lunation 1 is the lunation
       // already running at the equinox, so the fractional lunations elapsed at an
       // instant = (days since the equinox + the containing lunation's age at the
-      // equinox) / synodic month. The LUNAR hand maps that count over the ring's
+      // equinox) / synodic month. The LUNAR dot maps that count over the ring's
       // 12.368266 lunations per tropical year (12.368266 × 29.530589 ≈ 365.2422 d).
       var SYNODIC = 29.530589;
       var LUN_PER_YEAR = 12.368266;
@@ -906,7 +887,7 @@
       // and March's centres and the Ophiuchus/Aries boundary at the bisector of
       // March's and April's centres. The other twelve signs, their centres, and
       // all other boundaries are unchanged. Boundaries therefore fall mid-month,
-      // and sector widths vary slightly with the thermal spans. The gold hand
+      // and sector widths vary slightly with the thermal spans. The gold dot
       // and the solar terms stay λ-true; this ring alone is seated on the months.
       // HONESTY FENCE: Ophiuchus is seated over March BY DECLARATION of the
       // calendar's maker; in the sky itself the Sun crosses Ophiuchus
@@ -1457,7 +1438,7 @@
       }
 
       // ---------- THERMAL ring rotation (Zero's ruling, 2026-11-13) ----------
-      // Rotate ONLY the THERMAL (month) ring — and with it the teal MONTH hand,
+      // Rotate ONLY the THERMAL (month) ring — and with it the teal MONTH dot,
       // which reads on it — so April 1's own graduation lands exactly on the
       // April 1 seam line. The signed offset
       // is the seam angle minus the ring's April-1 angle at day-start:
@@ -1466,7 +1447,7 @@
       //   THERMAL_ROT = 11.7755 − 11.8681 = −0.0927°
       // It is derived from the engine itself, for the cycle in view at load, so
       // it is exactly seamFor().seamAngle − monthFor(April 1).angleStart.
-      // Readings are untouched: the hand turns with its ring, so every
+      // Readings are untouched: the dot turns with its ring, so every
       // module.week.day address reads exactly as renumbered (April 1 = March 12.2;
       // Nov 13 = October 7.3, day 5). No other ring, hand, marker or text
       // moves.
@@ -1549,13 +1530,13 @@
         // gap the label bands (terms hanzi r 122–142, MARCH lettering r 150–162,
         // zodiac lettering r 176+).
         // RENDER COINCIDENCE (Zero's correction, 2026-11-13): the marker is drawn
-        // EXACTLY as the gold hand is drawn — its geometry sits on the upward axis
-        // inside a rotate(angle 200 200) group, the hand's own transform form — not
+        // EXACTLY as the gold dot is placed — its geometry sits on the upward axis
+        // inside a rotate(angle 200 200) group, the marker's own transform form — not
         // through pt() coordinates, the separate path it used before. The angle is
-        // the gold hand's λ evaluated at April 1's canonical noon (cyc.seamAngle);
+        // the gold dot's λ evaluated at April 1's canonical noon (cyc.seamAngle);
         // while April 1 itself is being viewed, tick() re-seats this group at the
-        // gold hand's own live angle (lamRel, the identical value), so on Zero Day
-        // the gold hand lies along the seam line, exactly.
+        // gold dot's own live angle (lamRel, the identical value), so on Zero Day
+        // the gold dot lies along the seam line, exactly.
         var sa = cyc.seamAngle;
         var hot = seamHot ? ' stroke-width="2.6"' : ' stroke-width="1.6"';
         sg += '<g id="seamMark" transform="rotate('+sa.toFixed(2)+' 200 200)">';
@@ -1855,14 +1836,14 @@
       renderPhaseRing();
       renderMedallion();
 
-      // ---------- Weekday ring: SUNDAY–SATURDAY in full, with the green hand ----------
+      // ---------- Weekday ring: SUNDAY–SATURDAY in full, with the green marker dot ----------
       // Seven equal sectors in the open annulus inside the solar-terms band
       // (r 88–120, between the COUNTED ring's outer edge at r 82 and the terms
       // band's inner edge at r 128), on the dial's own convention: angles run
       // clockwise from the top. Sunday's sector opens at the top (angle 0) and
       // the week runs clockwise — Sunday, Monday, …, Saturday. The weekday is
       // the observer's LOCAL weekday (Date.getDay() of the effective instant):
-      // the green hand points at the current day's sector centre all day and
+      // the green dot sits at the current day's sector centre all day and
       // steps to the next sector at local midnight — local to the observer,
       // like every other layer of the clock. Green is the Z seat of the house
       // colour law (Yield / Ground / Structure). The ring group sits under the
@@ -1937,7 +1918,7 @@
         var lr = lonReading(eff, currentLon);
         var r = lr.rInst;
         var lam = solarLon(eff);
-        var lamRel = lam; // gold hand angle = live λ from the shared origin (the equinox line)
+        var lamRel = lam; // gold dot angle = live λ from the shared origin (the equinox line)
         var zod = zodiacFor(lam, cyc);
         var term = termFor(lam);
         var animal = animalFor(eff);
@@ -1951,38 +1932,38 @@
         el("secHand").setAttribute("transform", "rotate("+(tSec*6).toFixed(2)+" 200 200)");
         el("minHand").setAttribute("transform", "rotate("+(tMin*6).toFixed(2)+" 200 200)");
         el("hourHand").setAttribute("transform", "rotate("+(tHour*30).toFixed(2)+" 200 200)");
-        el("yearHand").setAttribute("transform", "rotate("+lamRel.toFixed(2)+" 200 200)");
-        // White TODAY hand — the counted date on the counted ring, on the rings' origin:
+        el("yearDot").setAttribute("transform", "rotate("+lamRel.toFixed(2)+" 200 200)");
+        // White TODAY dot — the counted date's marker on the counted ring, on the rings' origin:
         // angle = (counted + dayFraction) / 364 × 360°, with counted stated from 0
         // (April 2 = counted 0) — identical positions to the old (oldLabel − 1 + frac)
         // form. On April 1 (Zero.zero, outside the count) it parks at the seam (angle 0).
         var cdNow = countDay(eff);
         var todayAngle = (boundary || cdNow === null) ? 0 : ((cdNow + th.frac) / 364) * 360;
-        el("todayHand").setAttribute("transform", "rotate("+todayAngle.toFixed(2)+" 200 200)");
-        // Teal MONTH hand — the thermal month date (module.week.day) on the THERMAL
+        el("todayDot").setAttribute("transform", "rotate("+todayAngle.toFixed(2)+" 200 200)");
+        // Teal MONTH dot — the thermal month date (module.week.day) on the THERMAL
         // ring, from the same origin: angle = ((solar-order module index [March = 0]
         // + fraction through the module) / 13) × 360°, where the fraction runs over
         // the module's 4 weeks × 7 days and the live day fraction sweeps within the
         // day. It does NOT park on April 1: April 1's address is March 12.2, so the
-        // hand points inside March on the THERMAL ring while TODAY parks at 0.
+        // dot sits inside March on the THERMAL ring while TODAY parks at 0.
         var monthFrac = ((addr.week - 1) + (addr.day - 1 + th.frac) / 7) / 4;
-        // The hand turns WITH its ring by THERMAL_ROT, so it still reads the
+        // The dot turns WITH its ring by THERMAL_ROT, so it still reads the
         // same module.week.day on the rotated THERMAL ring — and at April 1
         // day-start it lies exactly on the seam line, on its own graduation.
         var monthAngle = ((addr.module + monthFrac) / 13) * 360 + THERMAL_ROT;
-        el("monthHand").setAttribute("transform", "rotate("+monthAngle.toFixed(2)+" 200 200)");
-        // Blue LUNAR hand — the lunar month date on the LUNAR ring, from the same
+        el("monthDot").setAttribute("transform", "rotate("+monthAngle.toFixed(2)+" 200 200)");
+        // Blue LUNAR dot — the lunar month date's marker on the LUNAR ring, from the same
         // origin: fractional lunations elapsed since the March equinox (see
         // lunarFor), mapped over the ring's 12.368266 lunations. It never parks:
         // the moon's count runs straight through Zero Day.
-        el("lunarHand").setAttribute("transform", "rotate("+lun.angle.toFixed(2)+" 200 200)");
-        // Green WEEKDAY hand — the observer's local weekday on the WEEKDAY
+        el("lunarDot").setAttribute("transform", "rotate("+lun.angle.toFixed(2)+" 200 200)");
+        // Green WEEKDAY dot — the observer's local weekday on the WEEKDAY
         // ring: angle = (weekday + ½) × 360/7, the current sector's centre.
         // It holds that centre all day and steps at local midnight, when
         // eff.getDay() rolls over (for a viewed date, that date's weekday).
         var wdIndex = eff.getDay();
         var wdAngle = (wdIndex + 0.5) * WD_SECTOR;
-        el("weekdayHand").setAttribute("transform", "rotate("+wdAngle.toFixed(2)+" 200 200)");
+        el("weekdayDot").setAttribute("transform", "rotate("+wdAngle.toFixed(2)+" 200 200)");
         renderWeekdayRing(wdIndex);
         // Phase moon — travels the phase ring at the day's lunar age:
         // angle = age / synodic month × 360°, its lit part following the phase.
@@ -2003,8 +1984,8 @@
         renderZodiacRings(cyc, zod.idx, term.idx);
         renderZodiacTables(zod.idx, term.idx, animal, cyc);
         // Seam coincidence: while April 1 itself is in view, the seam marker takes
-        // the gold hand's own live angle — lamRel, the identical value in the
-        // identical rotate() form — so the rendered gold hand lies exactly along
+        // the gold dot's own live angle — lamRel, the identical value in the
+        // identical rotate() form — so the rendered gold dot lies exactly along
         // the dashed seam line. On all other days the
         // marker stands at April 1's canonical noon λ (renderRing's seat).
         if(boundary){
@@ -2071,9 +2052,9 @@
           renderLeibnizCount();
           renderMedallion();
           el("dWeekday").textContent = DOW[wdIndex];
-          el("dWeekdaySub").textContent = "green hand at " + wdAngle.toFixed(1) + "° on the WEEKDAY ring · local weekday, steps at local midnight";
+          el("dWeekdaySub").textContent = "green dot at " + wdAngle.toFixed(1) + "° on the WEEKDAY ring · local weekday, steps at local midnight";
           el("dLunar").textContent = "Lunation " + lun.number + " · day " + lun.ageDays.toFixed(1);
-          el("dLunarSub").textContent = lun.phase + " · lunar age " + lun.ageDays.toFixed(1) + " d of 29.530589 · LUNAR hand " + lun.angle.toFixed(1) + "° on the LUNAR ring · phase moon " + phaseDeg.toFixed(0) + "° around its ring";
+          el("dLunarSub").textContent = lun.phase + " · lunar age " + lun.ageDays.toFixed(1) + " d of 29.530589 · LUNAR dot " + lun.angle.toFixed(1) + "° on the LUNAR ring · phase moon " + phaseDeg.toFixed(0) + "° around its ring";
           var sp = cyc.spans[addr.module];
           el("dSpan").textContent = fmtDateShort(sp.first) + " – " + fmtDateShort(sp.after);
           el("dSpanSub").textContent = sp.days + " civil days · " + sp.arc.toFixed(1) + "° of arc for 1/13 of Θ";
@@ -2486,7 +2467,7 @@
           var cycS = buildCycle(cycleYearOf(d));
           var bS = isBoundaryDay(d);
           // markerAngle = the angle the seam marker is rendered at while this date
-          // is in view: on April 1 it is the gold hand's own angle at that instant;
+          // is in view: on April 1 it is the gold dot's own angle at that instant;
           // on any other day it stands at April 1's canonical noon λ (seamAngle).
           return { seamAngle:+cycS.seamAngle.toFixed(2), goldAngle:+solarLon(d).toFixed(2),
                    boundary:bS, markerAngle:+(bS ? solarLon(d) : cycS.seamAngle).toFixed(2) };
