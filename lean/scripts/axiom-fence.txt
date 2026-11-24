@@ -3235,3 +3235,257 @@ ThetLogos.char_separation
 # ── LayerKernelGramCertChar (INTEG-EVERYTHING T9, 2026-11-20) ──
 import ThetLogos.LayerKernelGramCertChar
 ThetLogos.layerKernelPos_char
+
+# ── HarmonicBalancePin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.HarmonicBalancePin
+ThetLogos.variational_gibbs_le
+ThetLogos.variational_gibbs_eq_iff
+ThetLogos.gibbsProb_inj_beta
+ThetLogos.meanEnergy_antitone
+ThetLogos.exists_balance_beta
+ThetLogos.balance_beta_unique
+ThetLogos.entropyW_gibbs_le_of_balance
+ThetLogos.balance_entropy_ge
+ThetLogos.balance_entropy_eq_iff
+ThetLogos.balance_step_fixed_iff
+ThetLogos.partSum_prod_energy
+ThetLogos.gibbsProb_prod_energy
+ThetLogos.greedy_step_entropy_change
+ThetLogos.greedy_step_increases
+ThetLogos.exhibit_marginals
+ThetLogos.exhibit_entropy_values
+ThetLogos.undamped_full_step_oscillates
+ThetLogos.damped_step_balances_exhibit
+
+# ── RefractiveThermalEntropyPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.RefractiveThermalEntropyPin
+ThetLogos.refIndex_ge_one
+ThetLogos.refIndex_eq_one_of_forall_eq
+ThetLogos.bentWeight_ratio
+ThetLogos.snell_ratio_of_equal_weights
+ThetLogos.bentStep_eq_plain_of_index_one
+ThetLogos.exhibit_index_values
+ThetLogos.exhibit_bends
+ThetLogos.exhibit_plain_stationary
+ThetLogos.exhibit_bent_stationary
+ThetLogos.exhibit_uniform_not_bent_stationary
+ThetLogos.exhibit_rest_point_moved
+ThetLogos.exhibit_bentStep_values
+ThetLogos.exhibit_pulse_closed_form
+ThetLogos.exhibit_pulse_first_steps
+ThetLogos.exhibit_pulse_converges
+ThetLogos.exhibit_driven_standing
+ThetLogos.exhibit_drive_moves_pattern
+
+# ── ReverseNablaEntropyPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.ReverseNablaEntropyPin
+ThetLogos.seatEntropy_moveMass_sub
+ThetLogos.revStep_of_marginal
+ThetLogos.exhibit_revStep_to_corner
+ThetLogos.exhibit_flat_rest_countermodel
+ThetLogos.landEntropy_moveMass_sub
+ThetLogos.landRevStep_of_marginal
+ThetLogos.exhibit_bowl_center_rest
+ThetLogos.exhibit_bowl_undeadlocks
+ThetLogos.exhibit_bowl_unique_rest
+ThetLogos.exhibit_graded_corner_rest
+ThetLogos.exhibit_graded_center_rest
+ThetLogos.exhibit_graded_step_to_corner
+ThetLogos.exhibit_graded_thermal_center
+ThetLogos.exhibit_graded_rest_centers
+ThetLogos.exhibit_graded_rest_countermodel
+
+# ── ComposedBalancePin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.ComposedBalancePin
+ThetLogos.seatEntropy_fin_two
+ThetLogos.fwdStep_of_marginal
+ThetLogos.exhibit_balanced_split_not_balance
+ThetLogos.exhibit_balance_flat
+ThetLogos.exhibit_deltas_not_balance
+ThetLogos.exhibit_uniform_not_balance
+ThetLogos.exhibit_adjacent_not_balance
+ThetLogos.isBalance_iff
+ThetLogos.balance_sum_le
+ThetLogos.margEntropy_hbExhibit_strictAnti
+ThetLogos.exhibit_fin3_balance_unique_total_two
+ThetLogos.exhibit_fin3_no_balance_total_three
+
+# ── IllPosedNablaEntropyPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.IllPosedNablaEntropyPin
+ThetLogos.landBalance_move_neutral
+ThetLogos.exhibit_graded_no_land_balance
+ThetLogos.exhibit_bowl_no_land_balance
+ThetLogos.isRevRest_iff
+ThetLogos.exhibit_flat_rest_set_total_two
+ThetLogos.exhibit_revStep_two_futures
+ThetLogos.exhibit_revRest_two_pasts
+
+# ── ThermalExpansionPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.ThermalExpansionPin
+ThetLogos.bentStep_fin_two_swap
+ThetLogos.swapIter_closed_form
+ThetLogos.swap_error_multiplier
+ThetLogos.swap_not_settling
+ThetLogos.exhibit_bentWeight_values
+ThetLogos.exhibit_expansion_factors
+ThetLogos.exhibit_rawIter_symmetric
+ThetLogos.exhibit_rawIter_closed_form
+ThetLogos.exhibit_raw_mass_growth
+ThetLogos.exhibit_bentStep_antisymmetric_mode
+ThetLogos.exhibit_kernelIter_converges
+ThetLogos.fin_two_only_boundary
+
+# ── IdensityDefinition (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.IdensityDefinition
+ThetLogos.margExpect_eq
+ThetLogos.margExpect_const
+ThetLogos.margExpect_const_of_isProbWeight
+ThetLogos.margExpect_add
+ThetLogos.margExpect_affine
+ThetLogos.regionRefModularEnergy_eq
+ThetLogos.regionRefModularEnergy_beta_form
+ThetLogos.regionRefModularEnergy_eq_regionEntropy
+ThetLogos.cutWeight_univ
+ThetLogos.idensity_fst
+ThetLogos.idensity_snd
+ThetLogos.idensity_fst_nonneg
+ThetLogos.idensity_eq_of_marg_eq_gibbs
+
+# ── TridentityPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.TridentityPin
+ThetLogos.vertexBoundary_eq_of_agree_out_in
+ThetLogos.boundaryCard_eq_of_agree_out_in
+ThetLogos.edgeCut_eq_of_agree_in_out
+ThetLogos.cutWeight_eq_of_agree_in_out
+ThetLogos.seatIdentityData_eq
+ThetLogos.univ_sdiff_vertexBoundary_eq
+ThetLogos.eq_of_seatIdentityData_eq
+ThetLogos.seatIdentityData_not_determining
+
+# ── IdensityFlowPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.IdensityFlowPin
+ThetLogos.regionEntropy_eq_of_marg_eq
+ThetLogos.regionRefModularEnergy_eq_of_marg_eq
+ThetLogos.idensity_eq_of_marg_eq
+ThetLogos.idensity_denom_invariant
+ThetLogos.diagFlow
+ThetLogos.flowWeight_fixed
+ThetLogos.margWeightSet_ownSeat_flow_fixed
+ThetLogos.idensity_ownSeat_flow_invariant
+ThetLogos.regionEntropy_flowWeight_eq
+ThetLogos.regionEntropy_ownSeat_conserved
+ThetLogos.idensity_fst_ownSeat_conserved
+ThetLogos.pushWeight_apply
+ThetLogos.pushWeight_eq_of_isStationary
+ThetLogos.idensity_push_denom
+ThetLogos.idensity_invariant_of_marg_preserved
+ThetLogos.idensity_invariant_of_stationary_marg
+ThetLogos.flowExhibit_boundaryCard
+ThetLogos.flowExhibit_push_apply
+ThetLogos.flowExhibit_marg_uniform
+ThetLogos.flowExhibit_marg_pushed
+ThetLogos.flowExhibit_entropy_uniform
+ThetLogos.flowExhibit_entropy_pushed
+ThetLogos.idensity_not_flow_invariant
+
+# ── TetPrimitivePin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.TetPrimitivePin
+ThetLogos.tetSeat_bool_inhabited
+ThetLogos.tetSeat_empty_interaction
+ThetLogos.TetSeat.core_idempotent
+ThetLogos.troDomain_meet
+ThetLogos.TetSeat.equation_ternary
+ThetLogos.TetSeat.core_ternary_self
+ThetLogos.tetGradedPrimitive_bool
+ThetLogos.tetGradedPrimitive_tro
+
+# ── YangMillsStatementPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.YangMillsStatementPin
+ThetLogos.SpectrumHasGapAbove.mono_set
+ThetLogos.SpectrumHasGapAbove.anti_delta
+ThetLogos.hasMassGap_iff
+ThetLogos.YangMillsStatement.gap_pos
+
+# ── RiemannStatementPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.RiemannStatementPin
+ThetLogos.riemannHypothesisTarget_iff
+ThetLogos.criticalStripTarget_of_target
+ThetLogos.riemannHypothesisTarget_iff_zerosSet
+
+# ── SliceHfBridgePin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.SliceHfBridgePin
+ThetLogos.sliceModeEnergy_mono
+ThetLogos.sliceModeEnergy_strictMono
+ThetLogos.sliceGapEnergy_le_of_quotient_eigen
+ThetLogos.sliceGapEnergy_priced_eq_iff
+
+# ── AlbedoLossGapPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.AlbedoLossGapPin
+ThetLogos.refIndex_eq_one_of_forall_eq_slice
+ThetLogos.totalThermalAlbedoLoss_of_forall_eq
+ThetLogos.refIndex_two_level
+ThetLogos.reflFrac_two_level
+ThetLogos.refIndex_sharp_centerNode
+ThetLogos.refIndex_sharp_rimANode
+ThetLogos.totalReflected_sharp_pos
+ThetLogos.totalThermalAlbedoLoss_sharp_lt_one
+ThetLogos.albedoLoss_not_determined_by_gap
+ThetLogos.stepProb_smul
+ThetLogos.refIndex_smul
+ThetLogos.reflFrac_smul_le
+ThetLogos.totalThermalAlbedoLoss_two_smul_sharp_lt
+ThetLogos.fiedler_smul
+ThetLogos.sliceFiedlerGap_pos
+ThetLogos.albedoLoss_antitracks_gap_scaling
+ThetLogos.gap_not_determined_by_loss
+ThetLogos.albedo_gap_independence
+
+# ── FallFloorPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.FallFloorPin
+ThetLogos.isFallMin_global
+ThetLogos.fallPath_terminates_at_floor
+ThetLogos.groundedPotential_floor_value
+ThetLogos.groundedPotential_fallPath_hits_floor
+ThetLogos.groundedPotential_unique_floor_of_pos
+ThetLogos.groundedPotential_eq_zero_of_source_vanishes
+ThetLogos.fall_floor_not_unique
+ThetLogos.groundedPotential_minimizes_fallEnergy
+ThetLogos.groundedPotential_unique_minimizer_fallEnergy
+
+# ── GravAtomPin (INTEG-EVERYTHING T10, 2026-11-22) ──
+import ThetLogos.GravAtomPin
+ThetLogos.atomWell_floor_value
+ThetLogos.atomWell_unique_floor
+ThetLogos.atomWell_unique_minimizer
+ThetLogos.atomWell_eq_zero_of_source_vanishes
+ThetLogos.gravAtomSeat_well
+ThetLogos.gravAtomSeat_floor_unique
+ThetLogos.gravAtomSeat_fallEnergy
+ThetLogos.gravAtomSeat_flat_floor
+ThetLogos.atomGap_pos
+ThetLogos.gravAtomSeat_energy_identity
+ThetLogos.gravAtomSeat_gap
+ThetLogos.gravAtomSeat_degeneracy
+ThetLogos.gravAtom_kernel_eq_const
+ThetLogos.gravLevel_excitation_ratio
+ThetLogos.gravAtomSeat_eigenvalue_mem
+ThetLogos.gravPathSeat_ladder
+ThetLogos.atomWell_energy_identity
+ThetLogos.atomWell_energy_ge_gap
+ThetLogos.atomWell_stability
+
+# ── CenterBridgePin — T10 delta names (INTEG-EVERYTHING T10, 2026-11-22) ──
+ThetLogos.CenterBridgePin.centrifugal_eq_centerGrav
+ThetLogos.CenterBridgePin.moment_variance
+ThetLogos.CenterBridgePin.centerMass_le_centerCentrifugal
+ThetLogos.CenterBridgePin.centerCentrifugal_eq_centerMass_iff
+ThetLogos.CenterBridgePin.centerCentrifugal_gap_fin_two
+
+# ── DialOneClassParam — T10 delta names (INTEG-EVERYTHING T10, 2026-11-22) ──
+ThetLogos.DialOneClassParam.gammaF_diag
+ThetLogos.DialOneClassParam.bsign_eq_iff
+ThetLogos.DialOneClassParam.dcoef_apply
+ThetLogos.DialOneClassParam.dcoef_eq_of_class_eq
+ThetLogos.DialOneClassParam.dcoef_one
+ThetLogos.DialOneClassParam.exists_dcoef_one_zero
+

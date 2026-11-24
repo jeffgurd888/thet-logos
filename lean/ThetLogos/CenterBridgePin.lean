@@ -22,6 +22,16 @@ What is proved here:
   share `w 1 / (w 0 + w 1)` of the span, bounded by `w 1 / w 0` of the span —
   as the far weight's share shrinks, the weighted center walks to the
   ground site (the GAPFLOOR shape).
+- the **centrifugal leg** (`centerCentrifugal`, Brick 3): in a frame
+  rotating about the axis `x = 0`, the pull `g i = ω² * x i` has its `ω²`
+  cancel in the ratio (`centrifugal_eq_centerGrav`), leaving the pure
+  moment ratio `(∑ m i * x i ^ 2) / (∑ m i * x i)`; it always lies at or
+  beyond the center of mass (`centerMass_le_centerCentrifugal`, the
+  variance / Cauchy–Schwarz step), with equality exactly when all the
+  mass sits at one radius (`centerCentrifugal_eq_centerMass_iff`), and
+  the two-site gap has the closed form
+  `m 0 * m 1 * (x 1 - x 0) ^ 2` over the product of the two denominators
+  (`centerCentrifugal_gap_fin_two`).
 
 Fences (read before citing):
 - This pin proves an algebraic identity about CENTERS. It is NOT a gravity
@@ -39,6 +49,9 @@ Fences (read before citing):
   real case, and it imports nothing from the tree.
 - The GR center problem (no unique center of mass for an extended body in
   curved spacetime) is FRONTIER and untouched.
+- The centrifugal leg is moment algebra about a frame-born effective
+  field. It is NOT a gravity object (Dial 2 = 0, G-READ only); Mach's
+  principle and frame-dragging stay Register 2 → FRONTIER.
 
 Charter: T5 for the seeing; the theorems below are T1 lane grade when
 proved. Working label only — the public name is Zero's to coin.
@@ -197,5 +210,177 @@ theorem wCenter_deviation_le {w x : Fin 2 → ℚ} (hw : ∀ i, 0 < w i)
     nlinarith [mul_pos (hw 0) (hw 1), hw 1]
   rw [wCenter_deviation hw hx]
   exact mul_le_mul_of_nonneg_right hshare (abs_nonneg _)
+
+/-! ## Brick 3 — the centrifugal leg
+
+A frame-born effective field: in a frame rotating with angular speed `ω`
+about an axis, a site at distance `x ≥ 0` from the axis feels the pull
+`g i = ω² * x i`. The `ω²` cancels in the weighted-average ratio, so the
+centrifugal center is the pure moment ratio
+`(∑ m i * x i ^ 2) / (∑ m i * x i)` — no `ω` anywhere. It always lies at
+or beyond the center of mass (`centerMass_le_centerCentrifugal`, the
+Cauchy–Schwarz / variance step), with equality exactly when all the mass
+sits at one radius (`centerCentrifugal_eq_centerMass_iff`), and the
+two-site gap has the closed form `m 0 * m 1 * (x 1 - x 0) ^ 2` over the
+product of the two denominators (`centerCentrifugal_gap_fin_two`).
+
+Fence: this is moment algebra about a frame-born effective field. It is
+NOT a gravity object (Dial 2 = 0, G-READ only); Mach's principle and
+frame-dragging stay Register 2 → FRONTIER. -/
+
+/-- The centrifugal center: the moment ratio
+`(∑ m i * x i ^ 2) / (∑ m i * x i)` — the center of gravity in a frame
+rotating about the axis `x = 0`, after the common factor `ω²` cancels.
+Positions are distances from the axis, so `x i ≥ 0`. -/
+def centerCentrifugal (m x : ι → ℚ) : ℚ :=
+  (∑ i, m i * x i ^ 2) / (∑ i, m i * x i)
+
+/-- The `ω²` cancels: the center of gravity under the centrifugal pull
+`g i = c * x i` (any `c > 0`, the `ω²` role) is exactly the moment ratio. -/
+theorem centrifugal_eq_centerGrav {m x : ι → ℚ} {c : ℚ} (hc : 0 < c) :
+    centerGrav m (fun i => c * x i) x = centerCentrifugal m x := by
+  have hc0 : c ≠ 0 := ne_of_gt hc
+  have hnum : (∑ i, (m i * (c * x i)) * x i) = c * (∑ i, m i * x i ^ 2) := by
+    calc (∑ i, (m i * (c * x i)) * x i) = ∑ i, c * (m i * x i ^ 2) :=
+          Finset.sum_congr rfl (fun i _ => by ring)
+    _ = c * (∑ i, m i * x i ^ 2) := by rw [Finset.mul_sum]
+  have hden : (∑ i, m i * (c * x i)) = c * (∑ i, m i * x i) := by
+    calc (∑ i, m i * (c * x i)) = ∑ i, c * (m i * x i) :=
+          Finset.sum_congr rfl (fun i _ => by ring)
+    _ = c * (∑ i, m i * x i) := by rw [Finset.mul_sum]
+  unfold centerGrav centerCentrifugal wCenter
+  rw [hnum, hden, mul_div_mul_left _ _ hc0]
+
+/-- **The variance identity.** The second moment minus the squared first
+moment, scaled by the total mass, is the mass-weighted sum of squared
+deviations from the center of mass — hence nonnegative. The
+Cauchy–Schwarz step behind the centrifugal inequality. -/
+theorem moment_variance {m x : ι → ℚ} (hm : ∀ i, 0 < m i) :
+    (∑ i, m i * x i ^ 2) * (∑ i, m i) - (∑ i, m i * x i) ^ 2
+      = (∑ i, m i * (x i - centerMass m x) ^ 2) * (∑ i, m i) := by
+  have hS : (∑ i, m i) ≠ 0 := ne_of_gt (sum_pos_of_pos hm)
+  have hμS : centerMass m x * (∑ i, m i) = ∑ i, m i * x i := by
+    unfold centerMass wCenter
+    rw [div_mul_cancel₀ _ hS]
+  have hexp : (∑ i, m i * (x i - centerMass m x) ^ 2)
+      = (∑ i, m i * x i ^ 2) - (2 * centerMass m x) * (∑ i, m i * x i)
+        + (centerMass m x) ^ 2 * (∑ i, m i) := by
+    have hterm : ∀ i, m i * (x i - centerMass m x) ^ 2
+        = m i * x i ^ 2 - (2 * centerMass m x) * (m i * x i)
+          + (centerMass m x) ^ 2 * m i := fun i => by ring
+    rw [Finset.sum_congr rfl (fun i _ => hterm i), Finset.sum_add_distrib,
+      Finset.sum_sub_distrib, ← Finset.mul_sum, ← Finset.mul_sum]
+  rw [hexp]
+  symm
+  calc ((∑ i, m i * x i ^ 2) - (2 * centerMass m x) * (∑ i, m i * x i)
+        + (centerMass m x) ^ 2 * (∑ i, m i)) * (∑ i, m i)
+      = (∑ i, m i * x i ^ 2) * (∑ i, m i)
+        - 2 * (centerMass m x * (∑ i, m i)) * (∑ i, m i * x i)
+        + (centerMass m x * (∑ i, m i)) ^ 2 := by ring
+    _ = (∑ i, m i * x i ^ 2) * (∑ i, m i)
+        - 2 * (∑ i, m i * x i) * (∑ i, m i * x i)
+        + (∑ i, m i * x i) ^ 2 := by rw [hμS]
+    _ = (∑ i, m i * x i ^ 2) * (∑ i, m i) - (∑ i, m i * x i) ^ 2 := by ring
+
+/-- The centrifugal center lies at or beyond the center of mass: the
+moment ratio `(∑ m i * x i ^ 2) / (∑ m i * x i)` is at least the
+mass-weighted average, because the second moment exceeds the squared
+first moment by the variance (a sum of nonnegative terms). -/
+theorem centerMass_le_centerCentrifugal {m x : ι → ℚ} (hm : ∀ i, 0 < m i)
+    (hx : ∀ i, 0 ≤ x i) (hxpos : ∃ i, 0 < x i) :
+    centerMass m x ≤ centerCentrifugal m x := by
+  have hS : 0 < ∑ i, m i := sum_pos_of_pos hm
+  have hT : 0 < ∑ i, m i * x i := by
+    apply Finset.sum_pos' (fun i _ => mul_nonneg (hm i).le (hx i))
+    obtain ⟨i, hi⟩ := hxpos
+    exact ⟨i, Finset.mem_univ i, mul_pos (hm i) hi⟩
+  have hvar : 0 ≤ (∑ i, m i * x i ^ 2) * (∑ i, m i) - (∑ i, m i * x i) ^ 2 := by
+    rw [moment_variance hm]
+    exact mul_nonneg (Finset.sum_nonneg (fun i _ =>
+      mul_nonneg (hm i).le (sq_nonneg _))) hS.le
+  unfold centerMass centerCentrifugal wCenter
+  rw [div_le_div_iff₀ hS hT]
+  linarith [hvar]
+
+/-- **Equality case.** The centrifugal center equals the center of mass
+exactly when all the mass sits at one radius: every site's position is
+the center of mass. (If any site were off the common radius, its
+variance term would be strictly positive and the moment ratio strictly
+larger.) -/
+theorem centerCentrifugal_eq_centerMass_iff {m x : ι → ℚ} (hm : ∀ i, 0 < m i)
+    (hx : ∀ i, 0 ≤ x i) (hxpos : ∃ i, 0 < x i) :
+    centerCentrifugal m x = centerMass m x ↔ ∀ i, x i = centerMass m x := by
+  have hS : 0 < ∑ i, m i := sum_pos_of_pos hm
+  have hS0 : (∑ i, m i) ≠ 0 := ne_of_gt hS
+  have hT : 0 < ∑ i, m i * x i := by
+    apply Finset.sum_pos' (fun i _ => mul_nonneg (hm i).le (hx i))
+    obtain ⟨i, hi⟩ := hxpos
+    exact ⟨i, Finset.mem_univ i, mul_pos (hm i) hi⟩
+  have hT0 : (∑ i, m i * x i) ≠ 0 := ne_of_gt hT
+  have hvar : (∑ i, m i * x i ^ 2) * (∑ i, m i) - (∑ i, m i * x i) ^ 2
+      = (∑ i, m i * (x i - centerMass m x) ^ 2) * (∑ i, m i) :=
+    moment_variance hm
+  constructor
+  · intro heq
+    have hUS : (∑ i, m i * x i ^ 2) * (∑ i, m i) = (∑ i, m i * x i) ^ 2 := by
+      have h := heq
+      unfold centerCentrifugal centerMass wCenter at h
+      rw [div_eq_div_iff hT0 hS0] at h
+      calc (∑ i, m i * x i ^ 2) * (∑ i, m i)
+          = (∑ i, m i * x i) * (∑ i, m i * x i) := h
+        _ = (∑ i, m i * x i) ^ 2 := by ring
+    have hsum0 : (∑ i, m i * (x i - centerMass m x) ^ 2) = 0 := by
+      have h0 : (∑ i, m i * (x i - centerMass m x) ^ 2) * (∑ i, m i) = 0 := by
+        rw [← hvar, hUS]; exact sub_self _
+      rcases mul_eq_zero.mp h0 with h | h
+      · exact h
+      · exact absurd h hS0
+    intro i
+    have hterm0 : m i * (x i - centerMass m x) ^ 2 = 0 :=
+      (Finset.sum_eq_zero_iff_of_nonneg (fun j _ =>
+        mul_nonneg (hm j).le (sq_nonneg _))).mp hsum0 i (Finset.mem_univ i)
+    have hsq0 : (x i - centerMass m x) ^ 2 = 0 := by
+      rcases mul_eq_zero.mp hterm0 with h | h
+      · exact absurd h (ne_of_gt (hm i))
+      · exact h
+    have hdiff : x i - centerMass m x = 0 := sq_eq_zero_iff.mp hsq0
+    exact eq_of_sub_eq_zero hdiff
+  · intro hall
+    obtain ⟨i0, hi0⟩ := hxpos
+    have hμ : 0 < centerMass m x := by rw [← hall i0]; exact hi0
+    have hμ0 : centerMass m x ≠ 0 := ne_of_gt hμ
+    have hU : (∑ i, m i * x i ^ 2) = (centerMass m x) ^ 2 * (∑ i, m i) := by
+      rw [Finset.mul_sum]
+      exact Finset.sum_congr rfl (fun j _ => by rw [hall j]; ring)
+    have hT' : (∑ i, m i * x i) = centerMass m x * (∑ i, m i) := by
+      rw [Finset.mul_sum]
+      exact Finset.sum_congr rfl (fun j _ => by rw [hall j]; ring)
+    unfold centerCentrifugal centerMass wCenter
+    rw [hU, hT']
+    have hcast : (centerMass m x) ^ 2 * (∑ i, m i)
+        = centerMass m x * (centerMass m x * (∑ i, m i)) := by ring
+    rw [hcast, mul_div_mul_left _ _ hμ0]
+
+/-- **The two-site closed form.** On a dumbbell, the centrifugal center
+exceeds the center of mass by exactly
+`m 0 * m 1 * (x 1 - x 0) ^ 2` over the product of the two denominators —
+the gap is the product of the two masses times the squared span, so it
+vanishes exactly when the two sites coincide. -/
+theorem centerCentrifugal_gap_fin_two {m x : Fin 2 → ℚ} (hm : ∀ i, 0 < m i)
+    (hx0 : 0 ≤ x 0) (hx1 : 0 < x 1) :
+    centerCentrifugal m x - centerMass m x
+      = (m 0 * m 1 * (x 1 - x 0) ^ 2)
+        / ((m 0 * x 0 + m 1 * x 1) * (m 0 + m 1)) := by
+  have hS : 0 < m 0 + m 1 := add_pos (hm 0) (hm 1)
+  have hT : 0 < m 0 * x 0 + m 1 * x 1 :=
+    add_pos_of_nonneg_of_pos (mul_nonneg (hm 0).le hx0) (mul_pos (hm 1) hx1)
+  have hS0 : (m 0 + m 1) ≠ 0 := ne_of_gt hS
+  have hT0 : (m 0 * x 0 + m 1 * x 1) ≠ 0 := ne_of_gt hT
+  have hTS0 : (m 0 * x 0 + m 1 * x 1) * (m 0 + m 1) ≠ 0 :=
+    mul_ne_zero hT0 hS0
+  unfold centerCentrifugal centerMass wCenter
+  simp only [Fin.sum_univ_two]
+  field_simp
+  ring
 
 end ThetLogos.CenterBridgePin

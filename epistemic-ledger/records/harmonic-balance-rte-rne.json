@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 727,
+  "strict": 16353,
+  "total": 16996
+ },
+ "claim": "HARMONIC BALANCE, REFRACTIVE THERMAL ENTROPY, AND THE REVERSED NABLA ENTROPY LINE INTEGRATE (TRANCHE T10). HarmonicBalancePin (hb): 22 declarations / 18 theorems \u2014 K-HB-OSCILLATE FIRED. RefractiveThermalEntropyPin (hb): 26 declarations / 17 theorems \u2014 K-RTE-REST and K-RTE-DRIVE FIRED; its refIndex (w phi i = 1 + sum j, w i j * |phi i - phi j|) is the senior in-tree form (see the Albedo record's reconciliation). ReverseNablaEntropyPin (hb, the RNE line complete): 25 declarations / 15 theorems \u2014 K-RNE-FLAT FIRED (on the flat seat the reversed flow does not collect at the centre) and K-RNE-THERMAL FIRED (on the graded seat the landscaped reversed flow rests at the landscape's minimum set; a centre is earned exactly when the minimum is the centre alone). Totals for this record: 73 declarations / 50 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-24",
+ "dossier": null,
+ "evidence": "Lane hb \u2014 HarmonicBalancePin.lean sha256 f0c9fcb8139c3adebe9e484ebb673d9b024c04d9c9aba8e02928fc244c7522e6; RefractiveThermalEntropyPin.lean sha256 7160a7b58395deba7527f9e948e60a6c6ca684f0f3b15c3fecc1fdf4ec8caaef; ReverseNablaEntropyPin.lean sha256 7d77635e392f030549f825fce645e891d9b752932cca03d916f52f110a3168c9. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T10, 2026-11-24): remote gate f503eada verified via GitHub API; bank reconciliation STRICT DELTA = +201 EXACT (freeze table in INTEG-T10-STATE.md, per-item blob sha256 + house-method counts). TARGETED BUILDS: PASS for all 20 items (build-targeted-integ-t10.log; attempts 1-15 killed in sequence by VM restarts and one OOM kill on AlbedoLossGapPin \u2014 every kill environmental, NO VERDICT each time, banked items re-verified on disk after each restart; final two items CenterBridgePin + DialOneClassParam banked by the replacement coordinator after the first coordinator died of a context-length error). ROOT BUILD: PASS 9,328 jobs, BUILD_EXIT:0 (build-root-integ-t10.log attempt 2; attempt 1 killed by a VM restart during the final root-module compile, all dependency oleans banked). Zero-sorry gate PASS, 742 files (check_no_sorry.py). AXIOM FENCE: PASS 2919/2919 (fence-integ-t10.log / fence-integ-t10.json; 2,919 entries, 0 failing, no sorryAx). CENSUS: strict 16,152 -> 16,353; modules 709 -> 727; stripped total 16,795 -> 16,996; FILES 724 -> 742; FILES_WITH_DECLS 667 -> 683; recount 16,126 -> 16,327 (count_house.py). Combined total after T10: 507,545 = 16,353 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "harmonic-balance-rte-rne",
+ "kill_id": null,
+ "module": null,
+ "status": "standing",
+ "tier": "T1"
+}

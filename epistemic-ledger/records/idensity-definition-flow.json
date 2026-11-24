@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 727,
+  "strict": 16353,
+  "total": 16996
+ },
+ "claim": "THE IDENSITY DEFINITION AND THE IDENSITY TEMPORAL FLOW LINE INTEGRATE (TRANCHE T10). IdensityDefinition (hb, line complete): 17 declarations / 13 theorems \u2014 Idensity is the ordered pair (regionEntropy/boundaryCard, <K_ref>/boundaryCard), never a sum. IdensityFlowPin (hb, the TF line complete): 29 declarations / 23 theorems \u2014 K-IDENSITY-FLOW FIRED: blanket flow-invariance of Idensity is FALSE by proof (Fin 2 exhibit: the marginal moves uniform to delta and the region entropy log 2 to 0); TF-1/TF-3 own-seat invariance and TF-2a marginal-preserving ambient invariance survive exactly. Totals for this record: 46 declarations / 36 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-24",
+ "dossier": null,
+ "evidence": "Lane hb \u2014 IdensityDefinition.lean sha256 59bc45954a1b2361a5aaf01379c823634828a097487453e1ead393f1956992e9; IdensityFlowPin.lean sha256 06bc56043a6092314109b3b9d72d32f913a5054a4922eceff3c2c8cbda4765e7. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T10, 2026-11-24): remote gate f503eada verified via GitHub API; bank reconciliation STRICT DELTA = +201 EXACT (freeze table in INTEG-T10-STATE.md, per-item blob sha256 + house-method counts). TARGETED BUILDS: PASS for all 20 items (build-targeted-integ-t10.log; attempts 1-15 killed in sequence by VM restarts and one OOM kill on AlbedoLossGapPin \u2014 every kill environmental, NO VERDICT each time, banked items re-verified on disk after each restart; final two items CenterBridgePin + DialOneClassParam banked by the replacement coordinator after the first coordinator died of a context-length error). ROOT BUILD: PASS 9,328 jobs, BUILD_EXIT:0 (build-root-integ-t10.log attempt 2; attempt 1 killed by a VM restart during the final root-module compile, all dependency oleans banked). Zero-sorry gate PASS, 742 files (check_no_sorry.py). AXIOM FENCE: PASS 2919/2919 (fence-integ-t10.log / fence-integ-t10.json; 2,919 entries, 0 failing, no sorryAx). CENSUS: strict 16,152 -> 16,353; modules 709 -> 727; stripped total 16,795 -> 16,996; FILES 724 -> 742; FILES_WITH_DECLS 667 -> 683; recount 16,126 -> 16,327 (count_house.py). Combined total after T10: 507,545 = 16,353 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "idensity-definition-flow",
+ "kill_id": null,
+ "module": null,
+ "status": "standing",
+ "tier": "T1"
+}

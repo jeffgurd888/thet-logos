@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 727,
+  "strict": 16353,
+  "total": 16996
+ },
+ "claim": "GRAVITY SHADOW S-0 INTEGRATES AS A REGISTRATION PIN (TRANCHE T10). GravityShadowPin (hb @ 0c37c33): 4 definitions, 0 theorems BY DESIGN \u2014 gravShadowWeight (unit off-diagonal on Fin 3), gravShadowPotential, gravShadowField (= dropVec of the potential, the finite shadow of lowercase g), gravShadowSource. AUDIT VERDICT CARRIED ON THE MODULE'S FACE: the naive adjoint pairing <dropVec phi, X> = <phi, diverge X> is FALSE as stated under the tree's conventions \u2014 the true form carries an outflow correction, and for antisymmetric fields a factor of 2. dropVec is the finite nabla stencil; it is NOT G (capital G appears nowhere in this module) and NOT g. Shadow S-1 (+4 strict) is banked in the lane and is NOT part of this tranche; it heads the T11 bank. Dial 2 stays 0 under every outcome. Totals for this record: 4 declarations / 0 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-24",
+ "dossier": null,
+ "evidence": "Lane hb @ 0c37c33 \u2014 GravityShadowPin.lean sha256 64b1ee2f0933e5c135b6b6dcc2af505c3c66d91a19764b42a44b596a2eeba81a (== lane record MATCH 64b1ee2f). INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T10, 2026-11-24): remote gate f503eada verified via GitHub API; bank reconciliation STRICT DELTA = +201 EXACT (freeze table in INTEG-T10-STATE.md, per-item blob sha256 + house-method counts). TARGETED BUILDS: PASS for all 20 items (build-targeted-integ-t10.log; attempts 1-15 killed in sequence by VM restarts and one OOM kill on AlbedoLossGapPin \u2014 every kill environmental, NO VERDICT each time, banked items re-verified on disk after each restart; final two items CenterBridgePin + DialOneClassParam banked by the replacement coordinator after the first coordinator died of a context-length error). ROOT BUILD: PASS 9,328 jobs, BUILD_EXIT:0 (build-root-integ-t10.log attempt 2; attempt 1 killed by a VM restart during the final root-module compile, all dependency oleans banked). Zero-sorry gate PASS, 742 files (check_no_sorry.py). AXIOM FENCE: PASS 2919/2919 (fence-integ-t10.log / fence-integ-t10.json; 2,919 entries, 0 failing, no sorryAx). CENSUS: strict 16,152 -> 16,353; modules 709 -> 727; stripped total 16,795 -> 16,996; FILES 724 -> 742; FILES_WITH_DECLS 667 -> 683; recount 16,126 -> 16,327 (count_house.py). Combined total after T10: 507,545 = 16,353 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "gravity-shadow-s0",
+ "kill_id": null,
+ "module": "lean/ThetLogos/GravityShadowPin.lean",
+ "status": "standing",
+ "tier": "T1"
+}

@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 727,
+  "strict": 16353,
+  "total": 16996
+ },
+ "claim": "THE FALL FLOOR PIN AND THE GRAVITATIONAL ATOM FAMILY INTEGRATE (TRANCHE T10). FallFloorPin (fall1): 10 declarations / 9 theorems \u2014 FF-6 exhibits K-FALL-FLOOR-DUP on Fin 2 with zero source. GravAtomPin (fall1): 25 declarations / 19 theorems \u2014 K-GA-RHYME FIRED. GravAtomContinuum (fall1): 5 definitions, 0 theorems BY DESIGN (the Brick 1 / Form 1 statement register) \u2014 GravAtomPin IMPORTS it, so it transplants with the family. RECORD CORRECTION F-T10-1, ON THIS RECORD'S FACE: the lane record 'GravAtomPin 30 decls' is a FAMILY count (GravAtomPin 25 + GravAtomContinuum 5); family total 30 declarations / 19 strict \u2014 the gated strict number is exact either way (the T9 OGResponsePin pattern). The gravitational atom remains a finite-seat pin; no continuum statement, no gravity object, G nowhere in the family. Totals for this record: 40 declarations / 28 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-24",
+ "dossier": null,
+ "evidence": "Lane fall1 \u2014 FallFloorPin.lean sha256 32edb2e737f44ef2c0160ed0c1130e7858624bf200c924186b157024dfc0bd98; GravAtomPin.lean sha256 898bc0f18ff94a228de40ba4e22e14a77a1e57f9d2f9522c2eb959543b98c965; GravAtomContinuum.lean sha256 188206d85effd7a2c93d54faf49467a3196df5a52baaa9e03b9729f2b43c27fd. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T10, 2026-11-24): remote gate f503eada verified via GitHub API; bank reconciliation STRICT DELTA = +201 EXACT (freeze table in INTEG-T10-STATE.md, per-item blob sha256 + house-method counts). TARGETED BUILDS: PASS for all 20 items (build-targeted-integ-t10.log; attempts 1-15 killed in sequence by VM restarts and one OOM kill on AlbedoLossGapPin \u2014 every kill environmental, NO VERDICT each time, banked items re-verified on disk after each restart; final two items CenterBridgePin + DialOneClassParam banked by the replacement coordinator after the first coordinator died of a context-length error). ROOT BUILD: PASS 9,328 jobs, BUILD_EXIT:0 (build-root-integ-t10.log attempt 2; attempt 1 killed by a VM restart during the final root-module compile, all dependency oleans banked). Zero-sorry gate PASS, 742 files (check_no_sorry.py). AXIOM FENCE: PASS 2919/2919 (fence-integ-t10.log / fence-integ-t10.json; 2,919 entries, 0 failing, no sorryAx). CENSUS: strict 16,152 -> 16,353; modules 709 -> 727; stripped total 16,795 -> 16,996; FILES 724 -> 742; FILES_WITH_DECLS 667 -> 683; recount 16,126 -> 16,327 (count_house.py). Combined total after T10: 507,545 = 16,353 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "fall-floor-gravatom",
+ "kill_id": null,
+ "module": null,
+ "status": "standing",
+ "tier": "T1"
+}

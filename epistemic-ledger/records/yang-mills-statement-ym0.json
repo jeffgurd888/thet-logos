@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 727,
+  "strict": 16353,
+  "total": 16996
+ },
+ "claim": "THE YANG-MILLS STATEMENT PIN (YM-0) INTEGRATES (TRANCHE T10). YangMillsStatementPin (l2): 8 declarations / 4 theorems \u2014 STATEMENT SHAPE ONLY, NO CLAIM: the pin states the spectral mass-gap form over a self-adjoint operator; it proves no mass gap and DeltaGramGap remains named-and-open, proved nowhere. BLOCKER RESOLUTION DISCLOSED, ON THIS RECORD'S FACE: the lane form's operator-side predicate ThetLogos.HasMassGap collided with ClayStatement.lean's theory-side ThetLogos.HasMassGap (a predicate on a QuantumYangMillsTheory); at transplant the operator form was renamed YangMillsHasMassGap in-tree (def + all uses + doc references; disclosure note on the module's face), statement and proof content unchanged. Totals for this record: 8 declarations / 4 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-24",
+ "dossier": null,
+ "evidence": "Lane l2 \u2014 YangMillsStatementPin.lean sha256 2ec77a0492c46c1f42bae4717c4b6888507031a9200923407cdf3658133595e2 (in-tree post-rename form; pre-edit lane blob d9a496dedae5). INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T10, 2026-11-24): remote gate f503eada verified via GitHub API; bank reconciliation STRICT DELTA = +201 EXACT (freeze table in INTEG-T10-STATE.md, per-item blob sha256 + house-method counts). TARGETED BUILDS: PASS for all 20 items (build-targeted-integ-t10.log; attempts 1-15 killed in sequence by VM restarts and one OOM kill on AlbedoLossGapPin \u2014 every kill environmental, NO VERDICT each time, banked items re-verified on disk after each restart; final two items CenterBridgePin + DialOneClassParam banked by the replacement coordinator after the first coordinator died of a context-length error). ROOT BUILD: PASS 9,328 jobs, BUILD_EXIT:0 (build-root-integ-t10.log attempt 2; attempt 1 killed by a VM restart during the final root-module compile, all dependency oleans banked). Zero-sorry gate PASS, 742 files (check_no_sorry.py). AXIOM FENCE: PASS 2919/2919 (fence-integ-t10.log / fence-integ-t10.json; 2,919 entries, 0 failing, no sorryAx). CENSUS: strict 16,152 -> 16,353; modules 709 -> 727; stripped total 16,795 -> 16,996; FILES 724 -> 742; FILES_WITH_DECLS 667 -> 683; recount 16,126 -> 16,327 (count_house.py). Combined total after T10: 507,545 = 16,353 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "yang-mills-statement-ym0",
+ "kill_id": null,
+ "module": "lean/ThetLogos/YangMillsStatementPin.lean",
+ "status": "standing",
+ "tier": "T1"
+}

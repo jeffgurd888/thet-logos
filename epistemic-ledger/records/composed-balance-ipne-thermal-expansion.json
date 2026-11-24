@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 727,
+  "strict": 16353,
+  "total": 16996
+ },
+ "claim": "COMPOSED BALANCE, THE ILL-POSED NABLA ENTROPY PIN, AND THE THERMAL EXPANSION PIN INTEGRATE (TRANCHE T10). ComposedBalancePin (hb, line complete): 16 declarations / 12 theorems \u2014 K-BAL-HB3 FIRED (the HB-3 exhibit rests forward but collapses under a reversed step, so it is not a balance), K-BAL-CENTER FIRED (composed balance on the flat seat exists and the centre is EMPTY \u2014 symmetry across an empty centre; no concentrated single-seat configuration balances at all), K-BAL-ALWAYS FIRED. IllPosedNablaEntropyPin (hb): 10 declarations / 7 theorems \u2014 on the flat seat alone the static equilibrium is a fixed point, its own reverse; on a landscaped seat the static equilibrium is empty. ThermalExpansionPin (hb): 15 declarations / 12 theorems \u2014 the finite bent flow (swap kernel, error multiplier -1, period-2 forever) and the differential expansion (growth 1 + sqrt 13); nabla chaos of thermal expansion is NOT exhibited and stays FRONTIER. Totals for this record: 41 declarations / 31 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-24",
+ "dossier": null,
+ "evidence": "Lane hb \u2014 ComposedBalancePin.lean sha256 fd3a2273b3041bcc6c5af2e8dd77d547f63fb17f76d1784c5a496cc8820bf4f9; IllPosedNablaEntropyPin.lean sha256 3c7e03130385ae3e7a37394596683f648039159aa65f039f88804ac90d52d26b; ThermalExpansionPin.lean sha256 a22aa64a7f844f98cdef7c636957c14829b01dedf818717f87a653cb5dbee45c. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T10, 2026-11-24): remote gate f503eada verified via GitHub API; bank reconciliation STRICT DELTA = +201 EXACT (freeze table in INTEG-T10-STATE.md, per-item blob sha256 + house-method counts). TARGETED BUILDS: PASS for all 20 items (build-targeted-integ-t10.log; attempts 1-15 killed in sequence by VM restarts and one OOM kill on AlbedoLossGapPin \u2014 every kill environmental, NO VERDICT each time, banked items re-verified on disk after each restart; final two items CenterBridgePin + DialOneClassParam banked by the replacement coordinator after the first coordinator died of a context-length error). ROOT BUILD: PASS 9,328 jobs, BUILD_EXIT:0 (build-root-integ-t10.log attempt 2; attempt 1 killed by a VM restart during the final root-module compile, all dependency oleans banked). Zero-sorry gate PASS, 742 files (check_no_sorry.py). AXIOM FENCE: PASS 2919/2919 (fence-integ-t10.log / fence-integ-t10.json; 2,919 entries, 0 failing, no sorryAx). CENSUS: strict 16,152 -> 16,353; modules 709 -> 727; stripped total 16,795 -> 16,996; FILES 724 -> 742; FILES_WITH_DECLS 667 -> 683; recount 16,126 -> 16,327 (count_house.py). Combined total after T10: 507,545 = 16,353 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "composed-balance-ipne-thermal-expansion",
+ "kill_id": null,
+ "module": null,
+ "status": "standing",
+ "tier": "T1"
+}

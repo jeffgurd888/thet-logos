@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 727,
+  "strict": 16353,
+  "total": 16996
+ },
+ "claim": "THE TET PRIMITIVE LINE R0-R3 INTEGRATES (TRANCHE T10). TetPrimitivePin (l2): 20 declarations / 8 theorems \u2014 Tet seated at the PRIMITIVE seat under Zero's re-grade (2026-11-21), base seat named TetSeat, equality-shaped only; the Bool seat carries no axioms, the TRO seat exactly the standard three. K-TET-VALUE HELD throughout: Tet is never seated as a value (the 2026-10-16 ruling stands ABSOLUTE). Totals for this record: 20 declarations / 8 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-24",
+ "dossier": null,
+ "evidence": "Lane l2 \u2014 TetPrimitivePin.lean sha256 024f4d97e4faace71b178d82fdea6c5c22e320b3b663132eff5c7ec1dbe5a59f. INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T10, 2026-11-24): remote gate f503eada verified via GitHub API; bank reconciliation STRICT DELTA = +201 EXACT (freeze table in INTEG-T10-STATE.md, per-item blob sha256 + house-method counts). TARGETED BUILDS: PASS for all 20 items (build-targeted-integ-t10.log; attempts 1-15 killed in sequence by VM restarts and one OOM kill on AlbedoLossGapPin \u2014 every kill environmental, NO VERDICT each time, banked items re-verified on disk after each restart; final two items CenterBridgePin + DialOneClassParam banked by the replacement coordinator after the first coordinator died of a context-length error). ROOT BUILD: PASS 9,328 jobs, BUILD_EXIT:0 (build-root-integ-t10.log attempt 2; attempt 1 killed by a VM restart during the final root-module compile, all dependency oleans banked). Zero-sorry gate PASS, 742 files (check_no_sorry.py). AXIOM FENCE: PASS 2919/2919 (fence-integ-t10.log / fence-integ-t10.json; 2,919 entries, 0 failing, no sorryAx). CENSUS: strict 16,152 -> 16,353; modules 709 -> 727; stripped total 16,795 -> 16,996; FILES 724 -> 742; FILES_WITH_DECLS 667 -> 683; recount 16,126 -> 16,327 (count_house.py). Combined total after T10: 507,545 = 16,353 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "tet-primitive-r0-r3",
+ "kill_id": null,
+ "module": "lean/ThetLogos/TetPrimitivePin.lean",
+ "status": "standing",
+ "tier": "T1"
+}

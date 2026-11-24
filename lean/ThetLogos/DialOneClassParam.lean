@@ -206,4 +206,79 @@ theorem partner_seat (r : Fin 4) (a : Fin 8) :
   · show a = loc (partner (seat r a))
     rw [loc_partner, loc_seat]
 
+/-! ## §2. The gammaF diagonal and the dcoef class form -/
+
+/-- The grading sign of a block: `+1` on blocks `0, 3`, `-1` on
+blocks `1, 2`. -/
+def bsign (r : ℕ) : ℂ := if r = 0 ∨ r = 3 then 1 else -1
+
+theorem gammaF_diag (i : Fin 32) : gammaF i i = bsign (blk i) := by
+  have h1 : i.val < 32 := i.isLt
+  by_cases h8 : i.val < 8
+  · have gi : gammaF i i = 1 := by unfold gammaF; simp [h8]
+    have hblk : blk i = 0 := by unfold blk; omega
+    rw [gi, hblk]; simp [bsign]
+  · by_cases h16 : i.val < 16
+    · have gi : gammaF i i = -1 := by unfold gammaF; simp [h8, h16]
+      have hblk : blk i = 1 := by unfold blk; omega
+      rw [gi, hblk]; simp [bsign]
+    · by_cases h24 : i.val < 24
+      · have gi : gammaF i i = -1 := by
+          unfold gammaF
+          rw [dite_eq_ite, ite_eq_left rfl, ite_eq_right h8,
+            ite_eq_right h16, ite_eq_left h24]
+        have hblk : blk i = 2 := by unfold blk; omega
+        rw [gi, hblk]; simp [bsign]
+      · have gi : gammaF i i = 1 := by
+          unfold gammaF
+          rw [dite_eq_ite, ite_eq_left rfl, ite_eq_right h8,
+            ite_eq_right h16, ite_eq_right h24]
+        have hblk : blk i = 3 := by unfold blk; omega
+        rw [gi, hblk]; simp [bsign]
+
+/-- On block indices `0..3`, grading signs agree iff the blocks
+are equal or opposite (`r + s = 3`). -/
+theorem bsign_eq_iff {r s : ℕ} (hr : r ≤ 3) (hs : s ≤ 3) :
+    (bsign r = bsign s ↔ r = s ∨ r + s = 3) := by
+  interval_cases r <;> interval_cases s <;> simp [bsign] <;> norm_num
+
+/-- `dcoef` reads the Yukawa parameter of the seat's type
+class: the class form of `dcoef`'s defining case split. -/
+theorem dcoef_apply (Ynu Ye Yu Yd : ℝ) (i : Fin 32) :
+    dcoef Ynu Ye Yu Yd i
+      = if yukClass (locv i) = 0 then (Ynu : ℂ)
+        else if yukClass (locv i) = 1 then (Ye : ℂ)
+        else if yukClass (locv i) = 2 then (Yu : ℂ)
+        else (Yd : ℂ) := by
+  unfold dcoef yukClass locv
+  split_ifs <;> simp_all <;> omega
+
+/-- `dcoef` depends only on the seat's type class. -/
+theorem dcoef_eq_of_class_eq {i j : Fin 32}
+    (h : yukClass (locv i) = yukClass (locv j)) (Ynu Ye Yu Yd : ℝ) :
+    dcoef Ynu Ye Yu Yd i = dcoef Ynu Ye Yu Yd j := by
+  rw [dcoef_apply, dcoef_apply, h]
+
+/-- At the all-ones Yukawa point, every `dcoef` is `1`. -/
+theorem dcoef_one (i : Fin 32) : dcoef 1 1 1 1 i = 1 := by
+  rw [dcoef_apply]
+  split_ifs <;> simp
+
+/-- At seats of different type classes, a Yukawa point exists
+with `dcoef` values `1` and `0`: the unit vector at the first
+seat's class. -/
+theorem exists_dcoef_one_zero {i j : Fin 32}
+    (h : yukClass (locv i) ≠ yukClass (locv j)) :
+    ∃ Ynu Ye Yu Yd : ℝ, dcoef Ynu Ye Yu Yd i = 1
+      ∧ dcoef Ynu Ye Yu Yd j = 0 := by
+  have hltj := yukClass_lt (locv j)
+  rcases (by
+    have hlt := yukClass_lt (locv i)
+    omega : yukClass (locv i) = 0 ∨ yukClass (locv i) = 1
+      ∨ yukClass (locv i) = 2 ∨ yukClass (locv i) = 3) with hc | hc | hc | hc
+  · refine ⟨1, 0, 0, 0, ?_, ?_⟩ <;> rw [dcoef_apply] <;> split_ifs <;> simp_all <;> omega
+  · refine ⟨0, 1, 0, 0, ?_, ?_⟩ <;> rw [dcoef_apply] <;> split_ifs <;> simp_all <;> omega
+  · refine ⟨0, 0, 1, 0, ?_, ?_⟩ <;> rw [dcoef_apply] <;> split_ifs <;> simp_all <;> omega
+  · refine ⟨0, 0, 0, 1, ?_, ?_⟩ <;> rw [dcoef_apply] <;> split_ifs <;> simp_all <;> omega
+
 end ThetLogos.DialOneClassParam
