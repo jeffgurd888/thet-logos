@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 736,
+  "strict": 16431,
+  "total": 17074
+ },
+ "claim": "THE EINSTEIN-PLANCK-GIBBS WELD PIN (EPG 0-2) INTEGRATES COMPLETE (TRANCHE T11). EinsteinPlanckGibbsWeldPin (l3 @ 4544aab): 11 declarations / 7 theorems. EPG 0: the registration brick \u2014 NO c OBJECT EXISTS IN-TREE and a valued c is refused on the module's face; the weld delivers nothing to the Einstein slot (K-EPG-DERIVE fence stands). EPG 1: the priced shell (modes 2h x3, h*sqrt6 x2) and its mean energy U_shell(beta,h) = 6h/(e^{2 beta h} - 1) + 2h sqrt6/(e^{beta h sqrt6} - 1) (shellMeanEnergy_eq). EPG 2: the finite-site closed form and the STATISTICS FORK: U_P - U_F = 2 * U_P(2 beta) (planck_sub_site_eq) \u2014 the Planck and Fermi readings of the same site are NOT one function (siteMeanEnergy_ne_planck), and both readings are the same function of the product beta*m (fork_mass_reading). Totals for this record: 11 declarations / 7 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-24",
+ "dossier": null,
+ "evidence": "Lane l3 @ 4544aab \u2014 EinsteinPlanckGibbsWeldPin.lean sha256 ccf6820c681fe1773bd0a76bc97e8ae641dfb8c7badbfc6e0b40eb07313cc04a (== lane record MATCH ccf6820c). INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T11, 2026-11-24): remote gate 673c29fe verified via GitHub API (remote master tip == T10 pushed SHA exactly; zero commits since). Bank reconciliation (freeze table in T11-STATE.md, per-file blob sha256 + house-method counts): STRICT DELTA = +78 BY THE HOUSE CENSUS METHOD \u2014 see finding F-T11-1 on the RH-2 record's face for the +75-vs-+78 reconciliation (the lane-grade strict tally excluded 3 registration-grade RH theorems; the house method, the same ruler that reproduces the 16,353 baseline exactly, counts every col-0 theorem). TARGETED BUILDS: PASS for all 10 items (build-targeted-integ-t11.log, single run, no kills; EinsteinPlanckGibbsWeldPin the long pole at ~21 min under host CPU throttle). ROOT BUILD: PASS 9,337 jobs, BUILD_EXIT:0 (build-root-integ-t11.log, single run). Zero-sorry gate PASS, 751 files (check_no_sorry.py). AXIOM FENCE: PASS 2997/2997 (fence-integ-t11.log / fence-integ-t11.json; 2,997 entries, 0 failing, no sorryAx; attempt 1 VOID \u2014 killed mid-compile by a runtime restart, environmental, NO VERDICT; attempt 2 the verdict of record). CENSUS: strict 16,353 -> 16,431; modules 727 -> 736; stripped total 16,996 -> 17,074; FILES 742 -> 751; FILES_WITH_DECLS 683 -> 692; recount 16,327 -> 16,405 (count_house.py). Combined total after T11: 507,623 = 16,431 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "einstein-planck-gibbs-weld",
+ "kill_id": null,
+ "module": "lean/ThetLogos/EinsteinPlanckGibbsWeldPin.lean",
+ "status": "standing",
+ "tier": "T1"
+}

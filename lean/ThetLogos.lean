@@ -176,3 +176,12 @@ import ThetLogos.AlbedoLossGapPin
 import ThetLogos.FallFloorPin
 import ThetLogos.GravAtomContinuum
 import ThetLogos.GravAtomPin
+import ThetLogos.VortexAdjointPin
+import ThetLogos.ShapedRimPin
+import ThetLogos.EinsteinPlanckGibbsWeldPin
+import ThetLogos.DeltaGramGapAttackPin
+import ThetLogos.LayerKernelGramCertPSD
+import ThetLogos.RiemannDirichletBridgePin
+import ThetLogos.RiemannDirichletTargetPin
+import ThetLogos.RiemannThetaAdoptionPin
+import ThetLogos.RiemannDedekindRegistrationPin

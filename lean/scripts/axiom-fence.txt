@@ -3489,3 +3489,108 @@ ThetLogos.DialOneClassParam.dcoef_eq_of_class_eq
 ThetLogos.DialOneClassParam.dcoef_one
 ThetLogos.DialOneClassParam.exists_dcoef_one_zero
 
+
+# ── GravityShadowPin — T11 names (INTEG-EVERYTHING T11, 2026-11-24) ──
+import ThetLogos.GravityShadowPin
+ThetLogos.gravShadowPointSource_sum_eq_zero
+ThetLogos.gravShadowExhibitPotential_values
+ThetLogos.gravShadowSource_exhibitPotential
+ThetLogos.gravShadowExhibit_weld
+ThetLogos.gravShadowPairing_corrected
+ThetLogos.gravShadowPairing_antisymm
+ThetLogos.gravShadowDivergence_rim
+ThetLogos.gravShadowSource_rimFlux
+ThetLogos.gravShadowCycleFlow_antisymm
+ThetLogos.gravShadowCycleFlow_diverge_zero
+ThetLogos.gravShadowCirculation_cycleFlow
+ThetLogos.gravShadowCirculation_dropVec
+ThetLogos.gravShadowHelmholtz
+ThetLogos.gravShadowField_eq_zero_iff
+ThetLogos.gravShadowField_eq_iff
+ThetLogos.gravShadowRelations_universal
+ThetLogos.gravShadowIdentityClaim_false
+
+# ── VortexAdjointPin — T11 names (INTEG-EVERYTHING T11, 2026-11-24) ──
+import ThetLogos.VortexAdjointPin
+ThetLogos.vortexPairing_dropVec_corrected
+ThetLogos.vortexPairing_dropVec_antisymm
+ThetLogos.vortexOrthogonal
+ThetLogos.vortexCycleFlow_antisymm
+ThetLogos.vortexCycleFlow_diverge_zero
+ThetLogos.vortexComponent_square_cycleFlow
+ThetLogos.vortexCycleFlow_not_dropVec
+ThetLogos.vortexCycleFlow_quarterTurn
+ThetLogos.vortexPairing_exhibitPair
+ThetLogos.vortexGravityIdentityClaim_false
+ThetLogos.vortexStaticPointwiseClaim_false
+
+# ── ShapedRimPin — T11 names (INTEG-EVERYTHING T11, 2026-11-24) ──
+import ThetLogos.ShapedRimPin
+ThetLogos.shapedRimSwap_antisymm
+ThetLogos.shapedRimSwap_diverge
+ThetLogos.shapedRimExact_single_iff
+ThetLogos.shapedRimPinned_exact_iff
+ThetLogos.shapedRimPinnedAnti_exact_iff
+ThetLogos.shapedRimPinnedAnti_field_vanishes
+ThetLogos.shapedRimPinned_trivial
+ThetLogos.shapedRimPump_total
+ThetLogos.shapedRimPumpedPairing_exact
+ThetLogos.shapedRimPumpedPairing_sub
+ThetLogos.shapedRimPump_not_seat_datum
+ThetLogos.shapedRimDiag_diverge
+ThetLogos.shapedRimPairing_diag
+ThetLogos.shapedRimExistsClaim_false
+ThetLogos.shapedRimWeightAnti_unique
+ThetLogos.shapedRimVerdict
+
+# ── EinsteinPlanckGibbsWeldPin — T11 names (INTEG-EVERYTHING T11, 2026-11-24) ──
+import ThetLogos.EinsteinPlanckGibbsWeldPin
+ThetLogos.modeEnergy_four
+ThetLogos.pricedShellModes_pos
+ThetLogos.shellMeanEnergy_eq
+ThetLogos.siteMeanEnergy_eq
+ThetLogos.planck_sub_site_eq
+ThetLogos.siteMeanEnergy_ne_planck
+ThetLogos.fork_mass_reading
+
+# ── LayerKernelGramCertPSD — T11 names (INTEG-EVERYTHING T11, 2026-11-24) ──
+import ThetLogos.LayerKernelGramCertPSD
+ThetLogos.sosCert_sum_pairing_eq
+ThetLogos.layerKernel_isHermitian
+ThetLogos.dotProduct_mulVec_eq_sum_pairing
+ThetLogos.layerKernel_sum_pairing_re_nonneg
+ThetLogos.layerKernel_posSemidef
+ThetLogos.dggKernelMatrix_posSemidef
+ThetLogos.posSemidef_gram_factor
+ThetLogos.gramPadFeat_of_not_mem
+ThetLogos.gramPadFeat_apply_embedding
+ThetLogos.gram_factor_pad
+ThetLogos.layerKernel_gram_factor_padded
+ThetLogos.deltaGramGap_beta_nonneg
+ThetLogos.dggTarget_proved
+ThetLogos.layerKernelPos_via_deltaGramGap
+
+# ── RiemannDirichletBridgePin — T11 names (INTEG-EVERYTHING T11, 2026-11-24) ──
+import ThetLogos.RiemannDirichletBridgePin
+ThetLogos.dirichletLFunction_eq_LSeries
+ThetLogos.dirichletLFunction_modOne_eq
+ThetLogos.dirichletLSeries_modOne_eq
+ThetLogos.riemannZeta_eq_LSeries_one
+
+# ── RiemannDirichletTargetPin — T11 names (INTEG-EVERYTHING T11, 2026-11-24) ──
+import ThetLogos.RiemannDirichletTargetPin
+ThetLogos.dirichletRiemannHypothesis_iff
+ThetLogos.dirichletRiemannHypothesis_pole_guard
+ThetLogos.dirichletRiemannHypothesis_falsified_by_offline_zero
+
+# ── RiemannThetaAdoptionPin — T11 names (INTEG-EVERYTHING T11, 2026-11-24) ──
+import ThetLogos.RiemannThetaAdoptionPin
+ThetLogos.jacobiTheta_eq_jacobiTheta₂
+ThetLogos.jacobiTheta_eq_tsum_nat
+ThetLogos.jacobiTheta_S_smul
+
+# ── RiemannDedekindRegistrationPin — T11 names (INTEG-EVERYTHING T11, 2026-11-24) ──
+import ThetLogos.RiemannDedekindRegistrationPin
+ThetLogos.dedekindZeta_eq_LSeries
+ThetLogos.dedekindZeta_eq_zero_of_not_LSeriesSummable
+ThetLogos.tendsto_sub_one_mul_dedekindZeta_nhdsGT
