@@ -185,3 +185,8 @@ import ThetLogos.RiemannDirichletBridgePin
 import ThetLogos.RiemannDirichletTargetPin
 import ThetLogos.RiemannThetaAdoptionPin
 import ThetLogos.RiemannDedekindRegistrationPin
+import ThetLogos.ShapedRimFourPin
+import ThetLogos.ShapedRimFivePin
+import ThetLogos.ShapedRimVerdictPin
+import ThetLogos.ShadowRingWeldPin
+import ThetLogos.SwimMemoryPin

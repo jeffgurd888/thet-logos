@@ -3594,3 +3594,49 @@ import ThetLogos.RiemannDedekindRegistrationPin
 ThetLogos.dedekindZeta_eq_LSeries
 ThetLogos.dedekindZeta_eq_zero_of_not_LSeriesSummable
 ThetLogos.tendsto_sub_one_mul_dedekindZeta_nhdsGT
+
+# ── ShapedRimFourPin — T12 names (INTEG-EVERYTHING T12, 2026-11-27) ──
+import ThetLogos.ShapedRimFourPin
+ThetLogos.shapedRim4Split_region
+ThetLogos.shapedRim4Split_rim
+ThetLogos.shapedRim4Split_interiorPairs_nonempty
+ThetLogos.shapedRim4FaceSplit_not_region
+ThetLogos.shapedRimGenSwap_antisymm
+ThetLogos.shapedRimGenSwap_diverge
+ThetLogos.shapedRimGenDiag_diverge
+ThetLogos.shapedRimGenPairing_diag
+ThetLogos.shapedRimGenExact_single_iff
+ThetLogos.shapedRimGenPinned_exact_iff
+ThetLogos.shapedRimGen_no_weight
+ThetLogos.shapedRimGenWeightAnti_unique
+ThetLogos.shapedRim4_no_weight
+ThetLogos.shapedRim4WeightAnti_unique
+ThetLogos.shapedRim4Pinned_exact_iff
+ThetLogos.shapedRim4Pinned_trivial
+ThetLogos.shapedRim4F1Verdict
+
+# ── ShapedRimFivePin — T12 names (INTEG-EVERYTHING T12, 2026-11-27) ──
+import ThetLogos.ShapedRimFivePin
+ThetLogos.shapedRim5_interior_exists
+ThetLogos.shapedRim5Support_facts
+ThetLogos.shapedRim5Cross_supported
+ThetLogos.shapedRim5Cross_pairing
+ThetLogos.shapedRim5Cross_diverge
+ThetLogos.shapedRim5Cross_rhs
+ThetLogos.shapedRim5_exact_forces_interior_zero
+ThetLogos.shapedRim5_no_pinned
+ThetLogos.shapedRim5F2Verdict
+
+# ── ShapedRimVerdictPin — T12 names (INTEG-EVERYTHING T12, 2026-11-27) ──
+import ThetLogos.ShapedRimVerdictPin
+ThetLogos.shapedRimFin3Preserved
+ThetLogos.shapedRimNoWeight_seatGeneral
+ThetLogos.shapedRimLineVerdict
+
+# ── ShadowRingWeldPin — T12 names (INTEG-EVERYTHING T12, 2026-11-27) ──
+import ThetLogos.ShadowRingWeldPin
+ThetLogos.potential_sector_ring_blind
+ThetLogos.cycleHol_eq_of_gaugeConn
+ThetLogos.ring_data_eq_of_cycleHol_eq
+ThetLogos.zero_field_tables_trivial
+ThetLogos.shadow_data_factors_through_cycleHol

@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 741,
+  "strict": 16465,
+  "total": 17108
+ },
+ "claim": "THE SHADOW RING WELD PIN INTEGRATES (TRANCHE T12) \u2014 THE WELD HOLDS IN THE CONNECTION DIALECT; THE GAP STAYS ON ITS FACE. ShadowRingWeldPin (shadow1 @ 8257722): 6 declarations (1 definition + 5 theorems). faceHolTable registers a connection's ring-sector shadow data (its face-holonomy table). potential_sector_ring_blind: every potential's circulation around every face is zero, universally (BridgeCompletion.circulation_eq_zero cited). cycleHol_eq_of_gaugeConn: forward determination via cycleHol_gauge. ring_data_eq_of_cycleHol_eq: equal fundamental-cycle holonomy tables give equal face-holonomy tables, via cycleHol_readings. zero_field_tables_trivial: the weld check at theta = 1. HEADLINE shadow_data_factors_through_cycleHol: at a general finite seat with tree datum + face structure, equal cycle-holonomy tables force equal face-holonomy tables, equal magLin spectrum, and equal heat trace, while the potential sector contributes zero circulation data for every potential. THE GAP, AT FULL RANK ON THE MODULE'S FACE: GravityShadowPin (S-4) and VortexAdjointPin (V-1 Helmholtz orthogonality) were NOT in the lane tree (main-tree only, landed at T11 after the lane was cut at census 13,266), so the FULL REAL-VALUED HELMHOLTZ FORM of the weld is NOT proved and NOT claimed \u2014 the weld is proved in the connection dialect plus the real circulation-blindness half. K-SHADOW-RING STAYS ARMED. Totals for this record: 6 declarations / 5 strict. NO CLAIM; dials 0/4.",
+ "date": "2026-11-27",
+ "dossier": null,
+ "evidence": "Lane shadow1 @ 8257722 \u2014 ShadowRingWeldPin.lean sha256 bb8b65f8ab3abbbf419872980340386c7022864503d65c8f08ee34c58519ed3a (== lane-tip blob). INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T12, 2026-11-27): authorized by Zero 2026-11-26 ('run that after the reset'; fired after the Fri Nov 27 2026 15:14 EST usage reset). Bank reconciliation (freeze table in T12-STATE.md, per-file blob sha256 + house-method counts): STRICT DELTA = +34 BY THE HOUSE CENSUS METHOD \u2014 see finding F-T12-1 on the shaped-rim-fin4plus record's face for the +24-vs-+34 reconciliation (the lane-grade strict tally excluded 10 receipt theorems the lanes labeled '0 strict by design' inside registration bricks; the house method, the same ruler that reproduces the 16,431 baseline exactly, counts every col-0 theorem). TARGETED BUILDS: PASS for all 5 modules (build-targeted-integ-t12.log, single run, no kills; all 5 oleans verified on disk). ROOT BUILD: PASS 9,344 jobs, BUILD_EXIT:0 (build-root-integ-t12.log, single run). Zero-sorry gate PASS, 756 files (check_no_sorry.py). AXIOM FENCE: PASS 3031/3031 (fence-integ-t12.log / fence-integ-t12.json; 3,031 entries, 0 failing, no sorryAx). CENSUS: strict 16,431 -> 16,465; modules 736 -> 741; stripped total 17,074 -> 17,108; FILES 751 -> 756; FILES_WITH_DECLS 692 -> 696; recount 16,405 -> 16,439 (count_house.py). Combined total after T12: 507,657 = 16,465 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "shadow-ring-weld-pin",
+ "kill_id": null,
+ "module": "lean/ThetLogos/ShadowRingWeldPin.lean",
+ "status": "standing",
+ "tier": "T1"
+}

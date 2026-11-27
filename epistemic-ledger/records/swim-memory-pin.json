@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 741,
+  "strict": 16465,
+  "total": 17108
+ },
+ "claim": "SWIM BRICK 0 INTEGRATES AT REGISTRATION GRADE (TRANCHE T12) \u2014 DEFINITIONS ONLY, 0 STRICT BY DESIGN. SwimMemoryPin (hb @ b73edad): 10 declarations, all definitions. The bistable cell (swimStep: asymmetric thresholds lo/hi, stay-where-history-put-it between; swimRun: state as a fold over the finite input history; swimCellRun: the registered cell, lo = 0, hi = 1, starts low); the projection (swimReadout, swimProjection); the two failable pins in statement form only (swimMemoryClaim = the Q-memory claim; swimKernel = the Q-limits kernel relation); Amendment A registrations (swimMixStep, swimMagReadout \u2014 dissolved carriers only, definitions only); Amendment B registration (swimFlowPairing \u2014 circulation sector only, K-VORTEX-GRAVITY on the face). The three territories are carried on the module's face (established physics as citable context only; contested EZ-water interpretation never ground; the toy itself), and the stopping condition is discharged on the face: the definitions are built from Bool / Q / lists / finite sums alone, with no territory-(b)/(c) vocabulary. Kills K-SWIM-EMPTY / K-SWIM-STATELESS / K-SWIM-IMPORT / K-SWIM-DISSOLVE-EMPTY / K-SWIM-DISSOLVE-ERASE / K-SWIM-CIRC-EMPTY armed, none fired. Brick 1 is NOT part of this integration and remains gated on Zero's word. Totals for this record: 10 declarations / 0 strict by design. NO CLAIM \u2014 about real water, real ice, or any physical system, under every outcome; dials 0/4.",
+ "date": "2026-11-27",
+ "dossier": null,
+ "evidence": "Lane hb @ b73edad \u2014 SwimMemoryPin.lean sha256 a6893d0a10295694f1fcceecb1258c455adb04a7d8505debfd6240d3ecbe8816 (== lane record MATCH a6893d0a). INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T12, 2026-11-27): authorized by Zero 2026-11-26 ('run that after the reset'; fired after the Fri Nov 27 2026 15:14 EST usage reset). Bank reconciliation (freeze table in T12-STATE.md, per-file blob sha256 + house-method counts): STRICT DELTA = +34 BY THE HOUSE CENSUS METHOD \u2014 see finding F-T12-1 on the shaped-rim-fin4plus record's face for the +24-vs-+34 reconciliation (the lane-grade strict tally excluded 10 receipt theorems the lanes labeled '0 strict by design' inside registration bricks; the house method, the same ruler that reproduces the 16,431 baseline exactly, counts every col-0 theorem). TARGETED BUILDS: PASS for all 5 modules (build-targeted-integ-t12.log, single run, no kills; all 5 oleans verified on disk). ROOT BUILD: PASS 9,344 jobs, BUILD_EXIT:0 (build-root-integ-t12.log, single run). Zero-sorry gate PASS, 756 files (check_no_sorry.py). AXIOM FENCE: PASS 3031/3031 (fence-integ-t12.log / fence-integ-t12.json; 3,031 entries, 0 failing, no sorryAx). CENSUS: strict 16,431 -> 16,465; modules 736 -> 741; stripped total 17,074 -> 17,108; FILES 751 -> 756; FILES_WITH_DECLS 692 -> 696; recount 16,405 -> 16,439 (count_house.py). Combined total after T12: 507,657 = 16,465 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "swim-memory-pin",
+ "kill_id": null,
+ "module": "lean/ThetLogos/SwimMemoryPin.lean",
+ "status": "standing",
+ "tier": "T1"
+}
