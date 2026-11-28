@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 760,
+  "strict": 16513,
+  "total": 17156
+ },
+ "claim": "THE NEGATIVE DENSITY PIN (NED BRICK 0) INTEGRATES AT REGISTRATION GRADE (TRANCHE T13) \u2014 DEFINITIONS ONLY, 0 THEOREMS. NegativeDensityPin (continuum lane base, from the ned lane): 8 declarations, all definitions. The functionals of the NED line are registered here: nedEntropy (REUSED, the in-tree gibbsEntropy of BoltzmannShannonPin), nedCharge (weight-expectation of the integer microstate charge), nedDensity, and the official statement in statement form only \u2014 nedExtremalCharacterization: the density functional attains its negative extreme exactly at the maximal-entropy, zero-charge configurations (Zero's seeing, verbatim on the module's face, 2026-11-26: 'negative energy density can only mean maximal thermal entropy with 0 static charge'). AT FULL RANK: this tranche carries ONLY the Brick-0 pin, which entered as a mechanical dependency of ContinuumCyclePin. The NED line's later modules (NegativeDensityExhibit, NegativeDensityFinOne, NegativeDensityKill \u2014 where K-NED fired in proved form at lane grade) are NOT part of T13 and remain lane-grade in the ned lane. K-NED's census-grade status is unchanged by this record. Totals for this record: 8 declarations / 0 strict by design. NO CLAIM \u2014 T5 as physics under every outcome; no gravity object; dials 0/4.",
+ "date": "2026-11-28",
+ "dossier": null,
+ "evidence": "Lane continuum @ 19b6bce \u2014 NegativeDensityPin.lean sha256 aad26a5f9246668e1da722aefe56c999f2dc038bcd7199167d2765e582a030e7 (== lane-tip blob). INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T13, 2026-11-28): authorized by Zero 2026-11-28 ('do all of them' \u2014 phase 1 of the four-phase bench program). Bank reconciliation (freeze table in bench-program-2026-11-28.md, per-file blob sha256 + house-method counts): STRICT DELTA = +48 BY THE HOUSE CENSUS METHOD \u2014 see finding F-T13-1 on the pair-primitive-pin record's face for the +40-vs-+48 reconciliation (the 9 continuum run modules carry exactly the 40 proved theorems of the lane manifest; the import closure mechanically requires PairPrimitivePin, whose own 8 proved theorems the same ruler counts). TARGETED BUILDS: PASS for all 19 modules (build-targeted-integ-t13.log, single serialized run, no kills; all 19 oleans verified on disk). ROOT BUILD: PASS 9,363 jobs, BUILD_EXIT:0 (build-root-integ-t13.log, single run). Zero-sorry gate PASS, 775 files (check_no_sorry.py). AXIOM FENCE: PASS 3079/3079 (fence-integ-t13.log / fence-integ-t13.json; 3,079 entries, 0 failing, no sorryAx). CENSUS: strict 16,465 -> 16,513; modules 741 -> 760; stripped total 17,108 -> 17,156; FILES 756 -> 775; FILES_WITH_DECLS 696 -> 705; recount 16,439 -> 16,487 (count_house.py). Combined total after T13: 507,705 = 16,513 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "negative-density-pin",
+ "kill_id": null,
+ "module": "lean/ThetLogos/NegativeDensityPin.lean",
+ "status": "standing",
+ "tier": "T1"
+}

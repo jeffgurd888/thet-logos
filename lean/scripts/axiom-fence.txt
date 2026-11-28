@@ -3640,3 +3640,78 @@ ThetLogos.cycleHol_eq_of_gaugeConn
 ThetLogos.ring_data_eq_of_cycleHol_eq
 ThetLogos.zero_field_tables_trivial
 ThetLogos.shadow_data_factors_through_cycleHol
+
+# ── PairPrimitivePin — T13 names (INTEG-EVERYTHING T13, 2026-11-28) ──
+import ThetLogos.PairPrimitivePin
+ThetLogos.pairBalanceLocus_fin3
+ThetLogos.pairIdentityLocus_fin3
+ThetLogos.pairExhibit_coincide
+ThetLogos.pairGen_eq_iff
+ThetLogos.pairBalanced_iff
+ThetLogos.pairFinReading_injective
+ThetLogos.pairCoincidence_holds
+ThetLogos.pairFin_coincidence
+
+# ── ContinuumCycleBrick1 — T13 names (INTEG-EVERYTHING T13, 2026-11-28) ──
+import ThetLogos.ContinuumCycleBrick1
+ThetLogos.cycleCloses_finTwo
+ThetLogos.snap_split
+ThetLogos.snap_motion
+ThetLogos.snap_condenses
+
+# ── ContinuumCycleBrick2 — T13 names (INTEG-EVERYTHING T13, 2026-11-28) ──
+import ThetLogos.ContinuumCycleBrick2
+ThetLogos.forced_teeth
+ThetLogos.forced_kill
+
+# ── EntropyArrowBrick1 — T13 names (INTEG-EVERYTHING T13, 2026-11-28) ──
+import ThetLogos.EntropyArrowBrick1
+ThetLogos.ring_entropy
+ThetLogos.balanced_half
+ThetLogos.arrow_lower_entropy
+ThetLogos.arrow_kill
+ThetLogos.charge_comp_swap
+ThetLogos.arrow_charge_pm
+ThetLogos.arrow_forward_kill
+
+# ── GeometryForcesBrick1 — T13 names (INTEG-EVERYTHING T13, 2026-11-28) ──
+import ThetLogos.GeometryForcesBrick1
+ThetLogos.geom_entropy_kill
+ThetLogos.geom_tunnel_eq
+ThetLogos.tunnel_charge_along
+ThetLogos.tunnel_joined_B
+ThetLogos.tunnel_not_joined_A
+ThetLogos.geom_tunnel_kill
+
+# ── ThreeRoutesBrick1 — T13 names (INTEG-EVERYTHING T13, 2026-11-28) ──
+import ThetLogos.ThreeRoutesBrick1
+ThetLogos.gibbsJumpNorm_pos
+ThetLogos.gibbsJumpReach_iff
+ThetLogos.RouteSphereSeat.ofGibbs_jumpRel
+ThetLogos.derivedJumpRel_weight
+ThetLogos.routeJump_weight
+
+# ── ThreeRoutesBrick2 — T13 names (INTEG-EVERYTHING T13, 2026-11-28) ──
+import ThetLogos.ThreeRoutesBrick2
+ThetLogos.standing_subset_step
+ThetLogos.frozen_charge_along
+ThetLogos.frozen_jump_exhibit
+ThetLogos.frozen_strictness
+ThetLogos.frozen_not_routeOrder
+ThetLogos.jumpRel_independent
+ThetLogos.routeJump_distant_independent
+
+# ── TriunityInstancePin — T13 names (INTEG-EVERYTHING T13, 2026-11-28) ──
+import ThetLogos.TriunityInstancePin
+ThetLogos.instanceGrain_separated
+ThetLogos.instanceDischarges
+
+# ── RecursiveTurmoilBrick1 — T13 names (INTEG-EVERYTHING T13, 2026-11-28) ──
+import ThetLogos.RecursiveTurmoilBrick1
+ThetLogos.no_fixed_shore_all
+ThetLogos.no_exit_all
+ThetLogos.turmoil_turn_exhibit
+ThetLogos.turmoil_orbit_exhibit
+ThetLogos.iterate_dichotomy
+ThetLogos.geom_orbit_fin
+ThetLogos.turmoil_unbound_kill

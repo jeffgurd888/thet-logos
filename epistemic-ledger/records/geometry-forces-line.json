@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 760,
+  "strict": 16513,
+  "total": 17156
+ },
+ "claim": "THE GEOMETRY FORCES LINE INTEGRATES (TRANCHE T13) \u2014 THE RETURN DIRECTION DIES ON ALL THREE ARMS TESTED. Two modules: GeometryForcesPin (10 declarations, registration only \u2014 geometry as orbits / components / condensation locus via geomOf, nedEntropy occurring in none of the geometry definitions; geomForcesEntropy and geomForcesTunneling stated unproved), GeometryForcesBrick1 (9 declarations / 6 theorems). geom_entropy_kill \u2014 K-GEOM-ENTROPY FIRES via arm 2: on the identity-exchange Fin 3 seat (locus = everything), ![1/2,1/2,0] is normalised, zero-charge and standing but NOT balanced (![1/3,1/3,1/3] has entropy log 3 > log 2). geom_tunnel_eq: geomOf of the two test seats is equal by rfl (geomOf never reads the charge); tunnel_joined_B + tunnel_not_joined_A + tunnel_charge_along: the pair ![1,0,0] / ![1,5,1] is tunneling-joined on seat B and NOT on seat A. geom_tunnel_kill \u2014 K-GEOM-TUNNEL FIRES, and K-GEOM-COSTUME FIRES in the same exhibit: at fixed geometry the channels flip with the charge. REGISTERED SILENCE CARRIED INTO CENSUS: arms 1 and 3 of geomForcesEntropy were untested at banking (arm 2 alone killed the statement); their tests are phase 3 of the authorizing bench program. Totals for this record: 19 declarations / 6 theorems. NO CLAIM; T5 charter; FRONTIER as physics; dials 0/4.",
+ "date": "2026-11-28",
+ "dossier": null,
+ "evidence": "Lane continuum @ 19b6bce \u2014 GeometryForcesPin.lean sha256 b020498bc08e15a7cbaf45444124a3a75131894d6e43298e5a3b3554719cc97e; GeometryForcesBrick1.lean sha256 43cbc8c74a5c81ea0c3a7c7ad304a946bce46bd30e7e1bf2e65ade35aa132e00 (== lane-tip blobs). INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T13, 2026-11-28): authorized by Zero 2026-11-28 ('do all of them' \u2014 phase 1 of the four-phase bench program). Bank reconciliation (freeze table in bench-program-2026-11-28.md, per-file blob sha256 + house-method counts): STRICT DELTA = +48 BY THE HOUSE CENSUS METHOD \u2014 see finding F-T13-1 on the pair-primitive-pin record's face for the +40-vs-+48 reconciliation (the 9 continuum run modules carry exactly the 40 proved theorems of the lane manifest; the import closure mechanically requires PairPrimitivePin, whose own 8 proved theorems the same ruler counts). TARGETED BUILDS: PASS for all 19 modules (build-targeted-integ-t13.log, single serialized run, no kills; all 19 oleans verified on disk). ROOT BUILD: PASS 9,363 jobs, BUILD_EXIT:0 (build-root-integ-t13.log, single run). Zero-sorry gate PASS, 775 files (check_no_sorry.py). AXIOM FENCE: PASS 3079/3079 (fence-integ-t13.log / fence-integ-t13.json; 3,079 entries, 0 failing, no sorryAx). CENSUS: strict 16,465 -> 16,513; modules 741 -> 760; stripped total 17,108 -> 17,156; FILES 756 -> 775; FILES_WITH_DECLS 696 -> 705; recount 16,439 -> 16,487 (count_house.py). Combined total after T13: 507,705 = 16,513 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "geometry-forces-line",
+ "kill_id": null,
+ "module": "lean/ThetLogos/GeometryForcesBrick1.lean",
+ "status": "standing",
+ "tier": "T1"
+}

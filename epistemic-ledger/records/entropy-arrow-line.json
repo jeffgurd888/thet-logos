@@ -1,0 +1,16 @@
+{
+ "census_at_landing": {
+  "modules": 760,
+  "strict": 16513,
+  "total": 17156
+ },
+ "claim": "THE ENTROPY ARROW LINE INTEGRATES (TRANCHE T13) \u2014 THE PINNED ARROW CONJECTURE DIES BOTH DIRECTIONS ON THE SMALLEST SEAT. Two modules: EntropyArrowPin (6 declarations, registration only \u2014 arrowStep DERIVED from the two banked relational dynamics cycleRingMotion and cycleCondensed, nedEntropy occurring in no step definition; arrowConjecture stated unproved), EntropyArrowBrick1 (9 declarations / 7 theorems). ring_entropy PROVED: a bijective exchange permutes weights, so nedEntropy is invariant under ring motion (no involution needed). balanced_half PROVED (the Fin 2 balanced point). arrow_kill \u2014 K-ARROW FIRES: arrowNoBackwardReturn is FALSE on the Fin 2 seat \u2014 a one-step condensation history ![1/2,1/2] -> ![2,2] carries entropy log 2 -> -4 log 2 (arrow_lower_path / arrow_lower_entropy); condensation as pinned is entropy-blind downward. arrow_forward_kill \u2014 K-ARROW-FORWARD FIRES: arrowForwardExists is FALSE on the same seat by a CHARGE obstruction \u2014 ring motion negates nedCharge (charge_comp_swap), condensation preserves it, so histories from ![1,0] keep charge in {1,-1} (arrow_charge_pm) while the balanced point has charge 0; no path reaches it. Both arms of Zero's entropy-arrow conjecture are dead as formalized on the smallest seats, for two different named reasons. K-ARROW-TRIVIAL did not fire (arrowStep untouched). Totals for this record: 15 declarations / 7 theorems. NO CLAIM; T5 charter; dials 0/4.",
+ "date": "2026-11-28",
+ "dossier": null,
+ "evidence": "Lane continuum @ 19b6bce \u2014 EntropyArrowPin.lean sha256 e8a6b458c7fae3cbd66789217b5da3cfe157ae14760a239a6f097b7dadfbb424; EntropyArrowBrick1.lean sha256 f49f0c78200452b49a2c1deaab669996addbd0b210dbed2822b9ab8d3a8b657e (== lane-tip blobs). INTEGRATION (parent sequence, INTEG-EVERYTHING tranche T13, 2026-11-28): authorized by Zero 2026-11-28 ('do all of them' \u2014 phase 1 of the four-phase bench program). Bank reconciliation (freeze table in bench-program-2026-11-28.md, per-file blob sha256 + house-method counts): STRICT DELTA = +48 BY THE HOUSE CENSUS METHOD \u2014 see finding F-T13-1 on the pair-primitive-pin record's face for the +40-vs-+48 reconciliation (the 9 continuum run modules carry exactly the 40 proved theorems of the lane manifest; the import closure mechanically requires PairPrimitivePin, whose own 8 proved theorems the same ruler counts). TARGETED BUILDS: PASS for all 19 modules (build-targeted-integ-t13.log, single serialized run, no kills; all 19 oleans verified on disk). ROOT BUILD: PASS 9,363 jobs, BUILD_EXIT:0 (build-root-integ-t13.log, single run). Zero-sorry gate PASS, 775 files (check_no_sorry.py). AXIOM FENCE: PASS 3079/3079 (fence-integ-t13.log / fence-integ-t13.json; 3,079 entries, 0 failing, no sorryAx). CENSUS: strict 16,465 -> 16,513; modules 741 -> 760; stripped total 17,108 -> 17,156; FILES 756 -> 775; FILES_WITH_DECLS 696 -> 705; recount 16,439 -> 16,487 (count_house.py). Combined total after T13: 507,705 = 16,513 strict ours + 491,192 cited external. NO CLAIM; dials 0/4.",
+ "id": "entropy-arrow-line",
+ "kill_id": null,
+ "module": "lean/ThetLogos/EntropyArrowBrick1.lean",
+ "status": "standing",
+ "tier": "T1"
+}
